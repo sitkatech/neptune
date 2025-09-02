@@ -4,7 +4,7 @@ import * as L from "leaflet";
 import "leaflet-gesture-handling";
 import "leaflet.fullscreen";
 import "leaflet-loading";
-import "leaflet.markercluster";
+
 import { BoundingBoxDto, DelineationDto, ProjectDto, TreatmentBMPDisplayDto } from "src/app/shared/generated/model/models";
 import { CustomCompileService } from "src/app/shared/services/custom-compile.service";
 import { environment } from "src/environments/environment";
@@ -43,25 +43,25 @@ import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet
     templateUrl: "./planning-map.component.html",
     styleUrls: ["./planning-map.component.scss"],
     imports: [
-    AlertDisplayComponent,
-    ExpandCollapseDirective,
-    NgSelectModule,
-    FormsModule,
-    FieldDefinitionComponent,
-    RouterLink,
-    AgGridModule,
-    NeptuneGridComponent,
-    PageHeaderComponent,
-    IconComponent,
-    NeptuneMapComponent,
-    RegionalSubbasinsLayerComponent,
-    DelineationsLayerComponent,
-    JurisdictionsLayerComponent,
-    WqmpsLayerComponent,
-    StormwaterNetworkLayerComponent,
-    InventoriedBMPsLayerComponent,
-    AsyncPipe
-]
+        AlertDisplayComponent,
+        ExpandCollapseDirective,
+        NgSelectModule,
+        FormsModule,
+        FieldDefinitionComponent,
+        RouterLink,
+        AgGridModule,
+        NeptuneGridComponent,
+        PageHeaderComponent,
+        IconComponent,
+        NeptuneMapComponent,
+        RegionalSubbasinsLayerComponent,
+        DelineationsLayerComponent,
+        JurisdictionsLayerComponent,
+        WqmpsLayerComponent,
+        StormwaterNetworkLayerComponent,
+        InventoriedBMPsLayerComponent,
+        AsyncPipe,
+    ],
 })
 export class PlanningMapComponent implements OnInit {
     public customRichTextTypeID = NeptunePageTypeEnum.HippocampPlanningMap;

@@ -13,7 +13,6 @@ import { ColDef } from "ag-grid-community";
 import { UtilityFunctionsService } from "src/app/services/utility-functions.service";
 import { NeptuneMapComponent, NeptuneMapInitEvent } from "../../../../shared/components/leaflet/neptune-map/neptune-map.component";
 import * as L from "leaflet";
-import "leaflet-draw";
 import "leaflet.fullscreen";
 import { TransectLineLayerComponent } from "../../../../shared/components/leaflet/layers/transect-line-layer/transect-line-layer.component";
 import { ModalService, ModalSizeEnum, ModalThemeEnum } from "src/app/shared/services/modal/modal.service";
@@ -32,19 +31,19 @@ import { OvtaAreaLayerComponent } from "../../../../shared/components/leaflet/la
 @Component({
     selector: "trash-ovta-area-detail",
     imports: [
-    PageHeaderComponent,
-    AlertDisplayComponent,
-    AsyncPipe,
-    FieldDefinitionComponent,
-    NeptuneGridComponent,
-    NeptuneMapComponent,
-    TransectLineLayerComponent,
-    RouterLink,
-    LoadingDirective,
-    OvtaAreaLayerComponent
-],
+        PageHeaderComponent,
+        AlertDisplayComponent,
+        AsyncPipe,
+        FieldDefinitionComponent,
+        NeptuneGridComponent,
+        NeptuneMapComponent,
+        TransectLineLayerComponent,
+        RouterLink,
+        LoadingDirective,
+        OvtaAreaLayerComponent,
+    ],
     templateUrl: "./trash-ovta-area-detail.component.html",
-    styleUrl: "./trash-ovta-area-detail.component.scss"
+    styleUrl: "./trash-ovta-area-detail.component.scss",
 })
 export class TrashOvtaAreaDetailComponent {
     public onlandVisualTrashAssessmentArea$: Observable<OnlandVisualTrashAssessmentAreaDetailDto>;

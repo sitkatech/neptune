@@ -1,7 +1,6 @@
 import { ApplicationRef, ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import * as L from "leaflet";
-import "leaflet-draw";
 import "leaflet.fullscreen";
 import { forkJoin, Observable, switchMap } from "rxjs";
 import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto";

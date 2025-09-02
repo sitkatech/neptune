@@ -8,7 +8,7 @@ import * as L from "leaflet";
 import "leaflet-gesture-handling";
 import "leaflet.fullscreen";
 import "leaflet-loading";
-import "leaflet.markercluster";
+
 import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
 import { AlertDisplayComponent } from "../../../../shared/components/alert-display/alert-display.component";
 import { OvtaObservationLayerComponent } from "../../../../shared/components/leaflet/layers/ovta-observation-layer/ovta-observation-layer.component";
