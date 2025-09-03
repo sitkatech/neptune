@@ -39,7 +39,7 @@
                             "node_modules/leaflet-draw/dist/leaflet.draw.css",
                             "node_modules/leaflet-loading/src/Control.Loading.css"
                         ],
-                        "scripts": [],
+                        "scripts": ["src/scripts/leaflet.groupedlayercontrol.js"],
                         "extractLicenses": false,
                         "sourceMap": true,
                         "optimization": false,
