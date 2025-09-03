@@ -48,7 +48,6 @@
         "angular-oauth2-oidc-jwks": "^20.0.0",
         "core-js": "^3.43.0",
         "esri-leaflet": "^3.0.10",
-        "esri-leaflet-renderers": "^3.0.0",
         "font-awesome": "^4.7.0",
         "leaflet": "^1.9.4",
         "leaflet-arrowheads": "1.2.3",
