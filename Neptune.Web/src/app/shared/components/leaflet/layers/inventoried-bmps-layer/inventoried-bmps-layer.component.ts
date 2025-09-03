@@ -16,18 +16,6 @@ import { IFeature } from "src/app/shared/generated/model/i-feature";
     styleUrls: ["./inventoried-bmps-layer.component.scss"],
 })
 export class InventoriedBMPsLayerComponent extends MapLayerBase implements OnChanges {
-    public layer: L.markerClusterGroup = L.markerClusterGroup({
-        iconCreateFunction: function (cluster) {
-            var childCount = cluster.getChildCount();
-
-            return new L.DivIcon({
-                html: "<div><span>" + childCount + "</span></div>",
-                className: "treatment-bmp-cluster",
-                iconSize: new L.Point(40, 40),
-            });
-        },
-    });
-
     public treatmentBMPs$: Observable<IFeature[]>;
 
     constructor(private treatmentBMPService: TreatmentBMPService) {
@@ -47,6 +35,17 @@ export class InventoriedBMPsLayerComponent extends MapLayerBase implements OnCha
                                 feature.properties.TreatmentBMPName
                             }</a><br>` + `<b>Type:</b> ${feature.properties.TreatmentBMPTypeName}`
                         );
+                    },
+                });
+                this.layer = L.markerClusterGroup({
+                    iconCreateFunction: function (cluster) {
+                        var childCount = cluster.getChildCount();
+
+                        return new L.DivIcon({
+                            html: "<div><span>" + childCount + "</span></div>",
+                            className: "treatment-bmp-cluster",
+                            iconSize: new L.Point(40, 40),
+                        });
                     },
                 });
                 this.layer.addLayer(inventoriedTreatmentBMPsLayer);
