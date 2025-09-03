@@ -1,7 +1,7 @@
 import { ApplicationRef, ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import * as L from "leaflet";
-import "leaflet.fullscreen";
+import "leaflet-draw";
 import { forkJoin, Observable, switchMap } from "rxjs";
 import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto";
 import { DelineationUpsertDto } from "src/app/shared/generated/model/delineation-upsert-dto";
@@ -484,8 +484,8 @@ export class DelineationsComponent implements OnInit {
         forkJoin({
             delineations: this.projectService.projectsProjectIDDelineationsPut(this.projectID, updatedDelineations),
             treatmentBMPs: this.projectService.projectsProjectIDTreatmentBmpsUpdateLocationsPut(this.projectID, this.projectTreatmentBMPs),
-        }).subscribe(
-            ({ delineations, treatmentBMPs }) => {
+        }).subscribe({
+            next: ({ delineations, treatmentBMPs }) => {
                 window.scroll(0, 0);
                 this.isLoadingSubmit = false;
                 this.projectWorkflowProgressService.updateProgress(this.projectID);
@@ -505,12 +505,12 @@ export class DelineationsComponent implements OnInit {
                     this.alertService.pushAlert(new Alert("Your Delineation changes have been saved.", AlertContext.Success, true));
                 });
             },
-            (error) => {
+            error: (error) => {
                 this.isLoadingSubmit = false;
                 window.scroll(0, 0);
                 this.cdr.detectChanges();
-            }
-        );
+            },
+        });
     }
 
     public getFullyQualifiedJSONGeometryForDelineations(delineations: DelineationUpsertDto[]) {

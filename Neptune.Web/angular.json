@@ -39,11 +39,7 @@
                             "node_modules/leaflet-draw/dist/leaflet.draw.css",
                             "node_modules/leaflet-loading/src/Control.Loading.css"
                         ],
-                        "scripts": [
-                            "src/scripts/leaflet.groupedlayercontrol.js",
-                            "node_modules/leaflet-draw/dist/leaflet.draw.js",
-                            "node_modules/leaflet.markercluster/dist/leaflet.markercluster.js"
-                        ],
+                        "scripts": ["src/scripts/leaflet.groupedlayercontrol.js"],
                         "extractLicenses": false,
                         "sourceMap": true,
                         "optimization": false,

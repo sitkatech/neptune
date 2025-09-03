@@ -2,6 +2,7 @@ import { CommonModule } from "@angular/common";
 import { Component, OnChanges } from "@angular/core";
 import { environment } from "src/environments/environment";
 import * as L from "leaflet";
+import "leaflet.markercluster";
 import { MapLayerBase } from "../map-layer-base.component";
 import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
 import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.service";
