@@ -138,8 +138,6 @@ export class DelineationsComponent implements OnInit {
 
     constructor(
         private treatmentBMPService: TreatmentBMPService,
-        private appRef: ApplicationRef,
-        private compileService: CustomCompileService,
         private route: ActivatedRoute,
         private router: Router,
         private alertService: AlertService,
@@ -167,7 +165,6 @@ export class DelineationsComponent implements OnInit {
                 return this.projectService.projectsProjectIDBoundingBoxGet(this.projectID);
             })
         );
-        this.compileService.configure(this.appRef);
     }
 
     ngOnDestroy() {
@@ -201,10 +198,12 @@ export class DelineationsComponent implements OnInit {
                 this.originalDelineations = JSON.stringify(this.mapDelineationsToGeoJson(this.delineations));
 
                 this.initializeMap();
+                this.cdr.detectChanges();
             });
         }
 
         this.registerClickEvents();
+        this.cdr.detectChanges();
     }
 
     public initializeMap(): void {
