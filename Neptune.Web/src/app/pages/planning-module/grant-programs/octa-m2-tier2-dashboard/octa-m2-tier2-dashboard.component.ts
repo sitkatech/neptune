@@ -1,9 +1,6 @@
 import { ApplicationRef, Component, OnInit } from "@angular/core";
 import { combineLatest, Observable, tap } from "rxjs";
 import * as L from "leaflet";
-import "leaflet-gesture-handling";
-import "leaflet.fullscreen";
-import "leaflet-loading";
 import { BoundingBoxDto, DelineationDto, ProjectDto, TreatmentBMPDisplayDto } from "src/app/shared/generated/model/models";
 import { CustomCompileService } from "src/app/shared/services/custom-compile.service";
 import { environment } from "src/environments/environment";
@@ -45,26 +42,26 @@ import { DropdownToggleDirective } from "src/app/shared/directives/dropdown-togg
     templateUrl: "./octa-m2-tier2-dashboard.component.html",
     styleUrls: ["./octa-m2-tier2-dashboard.component.scss"],
     imports: [
-    AlertDisplayComponent,
-    NgSelectModule,
-    FormsModule,
-    FieldDefinitionComponent,
-    RouterLink,
-    AgGridModule,
-    NeptuneGridComponent,
-    PageHeaderComponent,
-    IconComponent,
-    ExpandCollapseDirective,
-    NeptuneMapComponent,
-    RegionalSubbasinsLayerComponent,
-    DelineationsLayerComponent,
-    JurisdictionsLayerComponent,
-    WqmpsLayerComponent,
-    StormwaterNetworkLayerComponent,
-    AsyncPipe,
-    InventoriedBMPsLayerComponent,
-    DropdownToggleDirective
-]
+        AlertDisplayComponent,
+        NgSelectModule,
+        FormsModule,
+        FieldDefinitionComponent,
+        RouterLink,
+        AgGridModule,
+        NeptuneGridComponent,
+        PageHeaderComponent,
+        IconComponent,
+        ExpandCollapseDirective,
+        NeptuneMapComponent,
+        RegionalSubbasinsLayerComponent,
+        DelineationsLayerComponent,
+        JurisdictionsLayerComponent,
+        WqmpsLayerComponent,
+        StormwaterNetworkLayerComponent,
+        AsyncPipe,
+        InventoriedBMPsLayerComponent,
+        DropdownToggleDirective,
+    ],
 })
 export class OCTAM2Tier2DashboardComponent implements OnInit {
     public mapIsReady: boolean = false;

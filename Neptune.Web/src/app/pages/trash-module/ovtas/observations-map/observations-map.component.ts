@@ -1,6 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from "@angular/core";
 import * as L from "leaflet";
-import "leaflet.fullscreen";
 import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto";
 import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
 
@@ -17,7 +16,7 @@ import { TransectLineLayerComponent } from "src/app/shared/components/leaflet/la
     selector: "observations-map",
     templateUrl: "./observations-map.component.html",
     styleUrls: ["./observations-map.component.scss"],
-    imports: [NeptuneMapComponent, LandUseBlockLayerComponent, TransectLineLayerComponent, OvtaAreaLayerComponent]
+    imports: [NeptuneMapComponent, LandUseBlockLayerComponent, TransectLineLayerComponent, OvtaAreaLayerComponent],
 })
 export class ObservationsMapComponent {
     @ViewChild("ovtaObservations") ovtaObservations: ElementRef;

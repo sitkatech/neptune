@@ -1,6 +1,5 @@
 import { ApplicationRef, Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import * as L from "leaflet";
-import "leaflet.fullscreen";
 import { forkJoin } from "rxjs";
 import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto";
 import { DelineationUpsertDto } from "src/app/shared/generated/model/delineation-upsert-dto";
@@ -11,7 +10,8 @@ import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.
 import { FieldDefinitionTypeEnum } from "src/app/shared/generated/enum/field-definition-type-enum";
 import { TreatmentBMPModelingTypeEnum } from "src/app/shared/generated/enum/treatment-b-m-p-modeling-type-enum";
 import { TreatmentBMPTypeWithModelingAttributesDto } from "src/app/shared/generated/model/treatment-bmp-type-with-modeling-attributes-dto";
-import { TreatmentBmpsComponent } from "src/app/pages/planning-module/projects/project-workflow/treatment-bmps/treatment-bmps.component";
+import { TreatmentBMPModelingAttributeDefinitionDto } from "src/app/shared/generated/model/treatment-bmp-modeling-attribute-definition-dto";
+import { TreatmentBmpsComponent } from "src/app/pages/planning-module/project-workflow/treatment-bmps/treatment-bmps.component";
 import { TreatmentBMPDisplayDto } from "src/app/shared/generated/model/treatment-bmp-display-dto";
 import { FieldDefinitionComponent } from "src/app/shared/components/field-definition/field-definition.component";
 import { DecimalPipe } from "@angular/common";
@@ -46,7 +46,6 @@ import { CustomAttributeTypeDto } from "src/app/shared/generated/model/custom-at
         WqmpsLayerComponent,
         StormwaterNetworkLayerComponent,
         InventoriedBMPsLayerComponent,
-        PopperDirective,
     ],
 })
 export class ProjectMapComponent implements OnInit {

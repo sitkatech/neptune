@@ -43,6 +43,7 @@ export class HomeIndexComponent implements OnInit {
                 this.router.navigateByUrl(sessionStorage.getItem("authRedirectUrl")).then(() => {
                     sessionStorage.removeItem("authRedirectUrl");
                 });
+                return;
             }
 
             this.router.navigate(["./trash"]);
@@ -50,7 +51,7 @@ export class HomeIndexComponent implements OnInit {
     }
 
     public login(): void {
-        this.authenticationService.login();
+        this.authenticationService.login(true);
     }
 
     public createAccount(): void {

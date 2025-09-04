@@ -55,10 +55,9 @@ namespace Neptune.Common.Services.GDAL
                 var result = await response.Content.ReadAsByteArrayAsync();
                 return result;
             }
-            else
-            {
-                throw new Exception($"Ogr2OgrGdbToGeoJson request failed: {response.Content}");
-            }
+
+            var content = await response.Content.ReadAsStringAsync();
+            throw new Exception($"Ogr2OgrGdbToGeoJson request failed: {content}");
         }
 
         public async Task<List<FeatureClassInfo>> OgrInfoGdbToFeatureClassInfo(IFormFile formFile)

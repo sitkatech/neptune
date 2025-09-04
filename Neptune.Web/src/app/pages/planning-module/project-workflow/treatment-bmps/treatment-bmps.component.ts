@@ -1,6 +1,5 @@
 import { ApplicationRef, ChangeDetectorRef, Component, ComponentRef, OnInit, ViewChild } from "@angular/core";
 import * as L from "leaflet";
-import "leaflet.fullscreen";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ProjectService } from "src/app/shared/generated/api/project.service";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
@@ -72,7 +71,6 @@ import { TreatmentBMPTypeCustomAttributeTypeService } from "src/app/shared/gener
         WqmpsLayerComponent,
         StormwaterNetworkLayerComponent,
         InventoriedBMPsLayerComponent,
-        PopperDirective,
     ],
 })
 export class TreatmentBmpsComponent implements OnInit {

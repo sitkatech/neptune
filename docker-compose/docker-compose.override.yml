@@ -118,7 +118,7 @@ services:
 
   neptune.celeryworker:
     container_name: nereid_celeryworker
-    image: containersesaqa.azurecr.io/neptune/celeryworker:v0.10.1
+    image: containersesaqa.azurecr.io/neptune/celeryworker:v0.11.0
     environment:
       CELERY_BROKER_URL: redis://nereid_redis:6379/0
       CELERY_RESULT_BACKEND: redis://nereid_redis:6379/0
@@ -129,14 +129,14 @@ services:
 
   neptune.flower:
     container_name: nereid_flower
-    image: containersesaqa.azurecr.io/neptune/flower:v0.10.1
+    image: containersesaqa.azurecr.io/neptune/flower:v0.11.0
     environment:
       CELERY_BROKER_URL: redis://nereid_redis:6379/0
       CELERY_RESULT_BACKEND: redis://nereid_redis:6379/0
 
   neptune.nereid:
     container_name: nereid
-    image: containersesaqa.azurecr.io/neptune/nereid:v0.10.1
+    image: containersesaqa.azurecr.io/neptune/nereid:v0.11.0
     hostname: nereid
     command: bash /start-reload.sh
     volumes:
@@ -150,7 +150,7 @@ services:
 
   neptune.nereid-tests:
     container_name: nereid_tests
-    image: containersesaqa.azurecr.io/neptune/nereid-tests:v0.10.1
+    image: containersesaqa.azurecr.io/neptune/nereid-tests:v0.11.0
     environment:
       CELERY_BROKER_URL: redis://nereid_redis:6379/0
       CELERY_RESULT_BACKEND: redis://nereid_redis:6379/0
@@ -160,4 +160,4 @@ services:
 
   neptune.redis:
     container_name: nereid_redis
-    image: containersesaqa.azurecr.io/neptune/redis:v0.10.1
+    image: containersesaqa.azurecr.io/neptune/redis:v0.11.0

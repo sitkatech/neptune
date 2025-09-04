@@ -1,8 +1,9 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { Control, LeafletEvent, Map, MapOptions, DomUtil, ControlPosition } from "leaflet";
-import * as L from "leaflet";
 import "src/scripts/leaflet.groupedlayercontrol.js";
+import "leaflet.fullscreen";
+import * as L from "leaflet";
 import GestureHandling from "leaflet-gesture-handling";
 import { LeafletHelperService } from "src/app/shared/services/leaflet-helper.service";
 import { BoundingBoxDto } from "src/app/shared/generated/model/models";
@@ -72,10 +73,6 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.map = L.map(this.mapID, mapOptions);
         L.Map.addInitHook("addHandler", "gestureHandling", GestureHandling);
-        var loadingControl = L.Control.loading({
-            separate: true,
-        });
-        this.map.addControl(loadingControl);
 
         this.layerControl = new L.control.groupedLayers(this.tileLayers, LeafletHelperService.GetDefaultOverlayTileLayers(), { collapsed: false }).addTo(this.map);
 

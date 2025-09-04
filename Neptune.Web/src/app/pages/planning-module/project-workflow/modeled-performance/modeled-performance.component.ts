@@ -6,7 +6,6 @@ import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
 import { AlertService } from "src/app/shared/services/alert.service";
 import { CustomCompileService } from "src/app/shared/services/custom-compile.service";
 import * as L from "leaflet";
-import "leaflet.fullscreen";
 import { combineLatest, map, Observable, pipe, switchMap, tap } from "rxjs";
 import { environment } from "src/environments/environment";
 import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
@@ -35,22 +34,22 @@ import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet
     templateUrl: "./modeled-performance.component.html",
     styleUrls: ["./modeled-performance.component.scss"],
     imports: [
-    CustomRichTextComponent,
-    AsyncPipe,
-    FieldDefinitionComponent,
-    ModelResultsComponent,
-    GrantScoresComponent,
-    PageHeaderComponent,
-    WorkflowBodyComponent,
-    AlertDisplayComponent,
-    NeptuneMapComponent,
-    RegionalSubbasinsLayerComponent,
-    DelineationsLayerComponent,
-    JurisdictionsLayerComponent,
-    WqmpsLayerComponent,
-    StormwaterNetworkLayerComponent,
-    InventoriedBMPsLayerComponent
-]
+        CustomRichTextComponent,
+        AsyncPipe,
+        FieldDefinitionComponent,
+        ModelResultsComponent,
+        GrantScoresComponent,
+        PageHeaderComponent,
+        WorkflowBodyComponent,
+        AlertDisplayComponent,
+        NeptuneMapComponent,
+        RegionalSubbasinsLayerComponent,
+        DelineationsLayerComponent,
+        JurisdictionsLayerComponent,
+        WqmpsLayerComponent,
+        StormwaterNetworkLayerComponent,
+        InventoriedBMPsLayerComponent,
+    ],
 })
 export class ModeledPerformanceComponent implements OnInit {
     public ProjectNetworkHistoryStatusTypeEnum = ProjectNetworkSolveHistoryStatusTypeEnum;
