@@ -1,6 +1,5 @@
 import { ApplicationRef, Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import * as L from "leaflet";
-import "leaflet.fullscreen";
 import { forkJoin } from "rxjs";
 import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto";
 import { DelineationUpsertDto } from "src/app/shared/generated/model/delineation-upsert-dto";

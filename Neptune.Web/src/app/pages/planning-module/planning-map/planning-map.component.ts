@@ -1,10 +1,6 @@
 import { ApplicationRef, ChangeDetectorRef, Component, OnInit } from "@angular/core";
 import { combineLatest, Observable, tap } from "rxjs";
 import * as L from "leaflet";
-import "leaflet-gesture-handling";
-import "leaflet.fullscreen";
-import "leaflet-loading";
-
 import { BoundingBoxDto, DelineationDto, ProjectDto, TreatmentBMPDisplayDto } from "src/app/shared/generated/model/models";
 import { CustomCompileService } from "src/app/shared/services/custom-compile.service";
 import { environment } from "src/environments/environment";
