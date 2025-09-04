@@ -142,11 +142,12 @@ namespace Neptune.WebMvc.Controllers
             }
             catch (Exception e)
             {
+                //Unsure that the message is this transparent outside of running locally, but worth having
                 if (e.Message.Contains("Unrecognized field name",
                         StringComparison.InvariantCultureIgnoreCase))
                 {
                     ModelState.AddModelError("",
-                        "The columns in the uploaded file did not match the Delineation schema. The file is invalid and cannot be uploaded.");
+                        "The columns in the uploaded file did not match the Delineation schema. The file is invalid and cannot be uploaded. Ensure that your field names entered above match the GDB exactly, and if DelineationStatus is not present in the GDB ensure that field is left blank.");
                 }
                 else if (e.Message.Contains("Centralized",
                         StringComparison.InvariantCultureIgnoreCase))
@@ -156,7 +157,7 @@ namespace Neptune.WebMvc.Controllers
                 else
                 {
                     ModelState.AddModelError("",
-                        $"There was a problem processing the Feature Class \"{featureClassName}\". The file may be corrupted or invalid.");
+                        $"There was a problem processing the Feature Class \"{featureClassName}\". The file may be corrupted or invalid. Ensure that your field names entered above match the GDB exactly, and if DelineationStatus is not present in the GDB ensure that field is left blank.");
                 }
                 return ViewUpdateDelineationGeometryErrors(viewModel);
             }

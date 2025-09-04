@@ -1,6 +1,5 @@
 import { ApplicationRef, Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import * as L from "leaflet";
-import "leaflet.fullscreen";
 import { forkJoin } from "rxjs";
 import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto";
 import { DelineationUpsertDto } from "src/app/shared/generated/model/delineation-upsert-dto";
@@ -13,7 +12,7 @@ import { FieldDefinitionTypeEnum } from "src/app/shared/generated/enum/field-def
 import { TreatmentBMPModelingTypeEnum } from "src/app/shared/generated/enum/treatment-b-m-p-modeling-type-enum";
 import { TreatmentBMPTypeWithModelingAttributesDto } from "src/app/shared/generated/model/treatment-bmp-type-with-modeling-attributes-dto";
 import { TreatmentBMPModelingAttributeDefinitionDto } from "src/app/shared/generated/model/treatment-bmp-modeling-attribute-definition-dto";
-import { TreatmentBmpsComponent } from "src/app/pages/planning-module/projects/project-workflow/treatment-bmps/treatment-bmps.component";
+import { TreatmentBmpsComponent } from "src/app/pages/planning-module/project-workflow/treatment-bmps/treatment-bmps.component";
 import { TreatmentBMPDisplayDto } from "src/app/shared/generated/model/treatment-bmp-display-dto";
 import { FieldDefinitionComponent } from "src/app/shared/components/field-definition/field-definition.component";
 import { DecimalPipe } from "@angular/common";
@@ -32,16 +31,16 @@ import { TreatmentBMPTypeService } from "src/app/shared/generated/api/treatment-
     templateUrl: "./project-map.component.html",
     styleUrls: ["./project-map.component.scss"],
     imports: [
-    FieldDefinitionComponent,
-    DecimalPipe,
-    NeptuneMapComponent,
-    RegionalSubbasinsLayerComponent,
-    DelineationsLayerComponent,
-    JurisdictionsLayerComponent,
-    WqmpsLayerComponent,
-    StormwaterNetworkLayerComponent,
-    InventoriedBMPsLayerComponent
-]
+        FieldDefinitionComponent,
+        DecimalPipe,
+        NeptuneMapComponent,
+        RegionalSubbasinsLayerComponent,
+        DelineationsLayerComponent,
+        JurisdictionsLayerComponent,
+        WqmpsLayerComponent,
+        StormwaterNetworkLayerComponent,
+        InventoriedBMPsLayerComponent,
+    ],
 })
 export class ProjectMapComponent implements OnInit {
     @Input("projectID") projectID: number;

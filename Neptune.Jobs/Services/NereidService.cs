@@ -202,7 +202,11 @@ public class NereidService : BaseAPIService<NereidService>
 
                 if (previousNodeResults != null)
                 {
-                    node.PreviousResults = GeoJsonSerializer.Deserialize<JsonObject>(previousNodeResults);
+                    var previousResults = GeoJsonSerializer.Deserialize<JsonObject>(previousNodeResults);
+                    //In terms of running a delta solve, this means we likely already have results for a large number of nodes. So, the current results start as the previous results.
+                    //This is important for ensuring we don't overwrite good values down the line if they aren't actually being solved for.
+                    node.Results = previousResults;
+                    node.PreviousResults = previousResults;
                     node.PreviousResults["node_errors"] = "";
                     node.PreviousResults["node_warnings"] = "";
                 }

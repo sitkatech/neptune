@@ -12,7 +12,7 @@ import { Observable } from "rxjs";
     selector: "header-nav",
     templateUrl: "./header-nav.component.html",
     styleUrls: ["./header-nav.component.scss"],
-    imports: [RouterLink, RouterLinkActive, AsyncPipe, DropdownToggleDirective, IconComponent]
+    imports: [RouterLink, RouterLinkActive, AsyncPipe, DropdownToggleDirective, IconComponent],
 })
 export class HeaderNavComponent implements OnInit {
     @Input() moduleTitle: string;
@@ -29,10 +29,14 @@ export class HeaderNavComponent implements OnInit {
     }
 
     public login(): void {
-        this.authenticationService.login();
+        this.authenticationService.login(true);
     }
 
     public logout(): void {
+        //MP 8/28/25 While we are in this half SPA half MVC state, redirect people to the home page of where they came from
+        const url = new URL(window.location.href);
+        const firstPathPart = url.pathname.split("/")[1];
+        sessionStorage["authRedirectUrl"] = `/${firstPathPart}`;
         this.authenticationService.logout();
     }
 

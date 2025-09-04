@@ -960,7 +960,6 @@ namespace Neptune.WebMvc.Controllers
         }
 
         [HttpGet("{waterQualityManagementPlanPrimaryKey}")]
-        [WaterQualityManagementPlanViewFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("waterQualityManagementPlanPrimaryKey")]
         public JsonResult GetModelResults([FromRoute] WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {

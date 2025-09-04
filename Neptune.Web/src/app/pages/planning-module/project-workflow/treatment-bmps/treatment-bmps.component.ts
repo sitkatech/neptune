@@ -1,6 +1,5 @@
 import { ApplicationRef, ChangeDetectorRef, Component, ComponentRef, OnInit, ViewChild } from "@angular/core";
 import * as L from "leaflet";
-import "leaflet.fullscreen";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ProjectService } from "src/app/shared/generated/api/project.service";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
@@ -51,21 +50,21 @@ import { TreatmentBMPTypeService } from "src/app/shared/generated/api/treatment-
     templateUrl: "./treatment-bmps.component.html",
     styleUrls: ["./treatment-bmps.component.scss"],
     imports: [
-    AsyncPipe,
-    CustomRichTextComponent,
-    FormsModule,
-    FieldDefinitionComponent,
-    PageHeaderComponent,
-    WorkflowBodyComponent,
-    AlertDisplayComponent,
-    NeptuneMapComponent,
-    RegionalSubbasinsLayerComponent,
-    DelineationsLayerComponent,
-    JurisdictionsLayerComponent,
-    WqmpsLayerComponent,
-    StormwaterNetworkLayerComponent,
-    InventoriedBMPsLayerComponent
-]
+        AsyncPipe,
+        CustomRichTextComponent,
+        FormsModule,
+        FieldDefinitionComponent,
+        PageHeaderComponent,
+        WorkflowBodyComponent,
+        AlertDisplayComponent,
+        NeptuneMapComponent,
+        RegionalSubbasinsLayerComponent,
+        DelineationsLayerComponent,
+        JurisdictionsLayerComponent,
+        WqmpsLayerComponent,
+        StormwaterNetworkLayerComponent,
+        InventoriedBMPsLayerComponent,
+    ],
 })
 export class TreatmentBmpsComponent implements OnInit {
     public projectID: number;

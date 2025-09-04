@@ -40,4 +40,6 @@ GO
 GO
 :r ".\016 - Load 4326 Geometries into LoadGeneratingUnit table.sql"
 GO
+:r ".\017 - Recalculate Baseline and Progress OVTA Scores.sql"
+GO
 
