@@ -106,3 +106,5 @@ Source/Neptune.GeoServer/data_dir/logs/
 /Neptune.Web/wwwroot
 
 .vs/neptune/CopilotIndices
+.vs/CopilotSnapshots
+.vs/Neptune/copilot-chat
