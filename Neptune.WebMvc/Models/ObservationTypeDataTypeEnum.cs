@@ -32,8 +32,8 @@ public static class ObservationTypeDataTypeEnumExtensions
         switch (dataType)
         {
             case ObservationTypeDataTypeEnum.PassFail:
-                if (value is not null && (value.ToUpperInvariant() == "PASS" || value.ToUpperInvariant() == "FAIL"))
-                    return new ObservationTypeDataTypeValidationResult { IsValid = true, ParsedValue = value.ToUpperInvariant() == "PASS" ? "true" : "false" };
+                if (value is not null && (value.ToUpperInvariant().Trim() == "PASS" || value.ToUpperInvariant().Trim() == "FAIL"))
+                    return new ObservationTypeDataTypeValidationResult { IsValid = true, ParsedValue = value.ToUpperInvariant().Trim() == "PASS" ? "true" : "false" };
                 return new ObservationTypeDataTypeValidationResult { IsValid = false, ErrorMessage = "Value must be 'PASS' or 'FAIL'." };
 
             case ObservationTypeDataTypeEnum.Numeric:
