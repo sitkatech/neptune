@@ -23,6 +23,7 @@ export class CustomAttributeTypeDto {
     MeasurementUnitDisplayName?: string | null;
     Purpose?: string | null;
     CustomAttributeTypeSortOrder?: number | null;
+    CustomAttributeTypeDefaultValue?: string | null;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
@@ -41,6 +42,7 @@ export interface CustomAttributeTypeDtoForm {
     MeasurementUnitDisplayName?: FormControl<string>;
     Purpose?: FormControl<string>;
     CustomAttributeTypeSortOrder?: FormControl<number>;
+    CustomAttributeTypeDefaultValue?: FormControl<string>;
 }
 
 export class CustomAttributeTypeDtoFormControls { 
@@ -155,6 +157,16 @@ export class CustomAttributeTypeDtoFormControls {
         }
     );
     public static CustomAttributeTypeSortOrder = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static CustomAttributeTypeDefaultValue = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {

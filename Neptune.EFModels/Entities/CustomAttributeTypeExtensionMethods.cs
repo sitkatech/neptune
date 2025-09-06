@@ -19,7 +19,8 @@ public static partial class CustomAttributeTypeExtensionMethods
             DataTypeDisplayName = customAttributeType.CustomAttributeDataType.CustomAttributeDataTypeDisplayName,
             MeasurementUnitDisplayName = customAttributeType.GetMeasurementUnitDisplayName(),
             Purpose = customAttributeType.CustomAttributeTypePurpose
-                .CustomAttributeTypePurposeDisplayName
+                .CustomAttributeTypePurposeDisplayName,
+            CustomAttributeTypeDefaultValue = customAttributeType.CustomAttributeTypeDefaultValue
         };
         return dto;
     }

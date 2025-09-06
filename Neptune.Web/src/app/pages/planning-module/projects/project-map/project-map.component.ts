@@ -8,10 +8,7 @@ import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
 import { ProjectService } from "src/app/shared/generated/api/project.service";
 import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.service";
 import { FieldDefinitionTypeEnum } from "src/app/shared/generated/enum/field-definition-type-enum";
-import { TreatmentBMPModelingTypeEnum } from "src/app/shared/generated/enum/treatment-b-m-p-modeling-type-enum";
 import { TreatmentBMPTypeWithModelingAttributesDto } from "src/app/shared/generated/model/treatment-bmp-type-with-modeling-attributes-dto";
-import { TreatmentBMPModelingAttributeDefinitionDto } from "src/app/shared/generated/model/treatment-bmp-modeling-attribute-definition-dto";
-import { TreatmentBmpsComponent } from "src/app/pages/planning-module/project-workflow/treatment-bmps/treatment-bmps.component";
 import { TreatmentBMPDisplayDto } from "src/app/shared/generated/model/treatment-bmp-display-dto";
 import { FieldDefinitionComponent } from "src/app/shared/components/field-definition/field-definition.component";
 import { DecimalPipe } from "@angular/common";
@@ -27,8 +24,9 @@ import { TreatmentBMPTypeCustomAttributeTypeDto } from "src/app/shared/generated
 import { TreatmentBMPTypeCustomAttributeTypeService } from "src/app/shared/generated/api/treatment-bmp-type-custom-attribute-type.service";
 import { CustomAttributeTypePurposeEnum } from "src/app/shared/generated/enum/custom-attribute-type-purpose-enum";
 import { CustomAttributeDataTypeEnum } from "src/app/shared/generated/enum/custom-attribute-data-type-enum";
-import { PopperDirective } from "src/app/shared/directives/popper.directive";
 import { CustomAttributeTypeDto } from "src/app/shared/generated/model/custom-attribute-type-dto";
+import { PopperComponent } from "src/app/shared/components/popper/popper.component";
+import { PopperDirective } from "src/app/shared/directives/popper.directive";
 
 //This component could use a fair amount of cleanup. It should likely be sent in the treatment bmps and delineations instead of grabbing them itself
 @Component({
@@ -46,6 +44,7 @@ import { CustomAttributeTypeDto } from "src/app/shared/generated/model/custom-at
         WqmpsLayerComponent,
         StormwaterNetworkLayerComponent,
         InventoriedBMPsLayerComponent,
+        PopperDirective,
     ],
 })
 export class ProjectMapComponent implements OnInit {

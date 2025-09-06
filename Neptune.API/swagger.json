@@ -4435,6 +4435,10 @@
             "type": "integer",
             "format": "int32",
             "nullable": true
+          },
+          "CustomAttributeTypeDefaultValue": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -4489,6 +4493,10 @@
           "CustomAttributeTypeSortOrder": {
             "type": "integer",
             "format": "int32",
+            "nullable": true
+          },
+          "CustomAttributeTypeDefaultValue": {
+            "type": "string",
             "nullable": true
           },
           "TreatmentBMPTypeIDs": {

@@ -6,9 +6,7 @@ import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-
 import { forkJoin, Observable, switchMap } from "rxjs";
 import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.service";
 import { FieldDefinitionTypeEnum } from "src/app/shared/generated/enum/field-definition-type-enum";
-import { TimeOfConcentrationEnum } from "src/app/shared/generated/enum/time-of-concentration-enum";
 import { TreatmentBMPModelingTypeEnum } from "src/app/shared/generated/enum/treatment-b-m-p-modeling-type-enum";
-import { UnderlyingHydrologicSoilGroupEnum } from "src/app/shared/generated/enum/underlying-hydrologic-soil-group-enum";
 import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto";
 import { DelineationUpsertDto } from "src/app/shared/generated/model/delineation-upsert-dto";
 import { ProjectUpsertDto } from "src/app/shared/generated/model/project-upsert-dto";
@@ -23,7 +21,7 @@ import { ProjectDto, TreatmentBMPDisplayDto } from "src/app/shared/generated/mod
 import { FieldDefinitionComponent } from "src/app/shared/components/field-definition/field-definition.component";
 import { FormsModule } from "@angular/forms";
 import { CustomRichTextComponent } from "src/app/shared/components/custom-rich-text/custom-rich-text.component";
-import { AsyncPipe } from "@angular/common";
+import { AsyncPipe, CommonModule } from "@angular/common";
 import { PageHeaderComponent } from "src/app/shared/components/page-header/page-header.component";
 import { WorkflowBodyComponent } from "src/app/shared/components/workflow-body/workflow-body.component";
 import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
@@ -42,15 +40,13 @@ import { routeParams } from "src/app/app.routes";
 import { GroupByPipe } from "src/app/shared/pipes/group-by.pipe";
 import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet/layers/inventoried-bmps-layer/inventoried-bmps-layer.component";
 import { TreatmentBMPTypeService } from "src/app/shared/generated/api/treatment-bmp-type.service";
-import { CustomAttributeTypeService } from "src/app/shared/generated/api/custom-attribute-type.service";
-import { CustomAttributeTypePurposeEnum, CustomAttributeTypePurposes } from "src/app/shared/generated/enum/custom-attribute-type-purpose-enum";
+import { CustomAttributeTypePurposeEnum } from "src/app/shared/generated/enum/custom-attribute-type-purpose-enum";
 import { CustomAttributeTypeDto } from "src/app/shared/generated/model/custom-attribute-type-dto";
-import { CustomAttributeTypeWithTreatmentBMPTypeIDsDto } from "src/app/shared/generated/model/custom-attribute-type-with-treatment-bmp-type-ids-dto";
 import { CustomAttributeDataTypeEnum } from "src/app/shared/generated/enum/custom-attribute-data-type-enum";
-import { PopperDirective } from "src/app/shared/directives/popper.directive";
 import { CustomAttributeUpsertDto } from "src/app/shared/generated/model/custom-attribute-upsert-dto";
-import { TreatmentBMPTypeCustomAttributeTypeDto, TreatmentBMPTypeCustomAttributeTypeDtoForm } from "src/app/shared/generated/model/treatment-bmp-type-custom-attribute-type-dto";
+import { TreatmentBMPTypeCustomAttributeTypeDto } from "src/app/shared/generated/model/treatment-bmp-type-custom-attribute-type-dto";
 import { TreatmentBMPTypeCustomAttributeTypeService } from "src/app/shared/generated/api/treatment-bmp-type-custom-attribute-type.service";
+import { PopperDirective } from "src/app/shared/directives/popper.directive";
 
 @Component({
     selector: "treatment-bmps",
@@ -71,6 +67,8 @@ import { TreatmentBMPTypeCustomAttributeTypeService } from "src/app/shared/gener
         WqmpsLayerComponent,
         StormwaterNetworkLayerComponent,
         InventoriedBMPsLayerComponent,
+        PopperDirective,
+        CommonModule,
     ],
 })
 export class TreatmentBmpsComponent implements OnInit {
@@ -334,15 +332,27 @@ export class TreatmentBmpsComponent implements OnInit {
         }
         let treatmentBMPTypeCustomAttributeTypes = this.getTreatmentBMPTypeCustomAttributeTypesForTreatmentBMPType(this.selectedTreatmentBMP.TreatmentBMPTypeID);
         for (let treatmentBMPTypeCustomAttributeType of treatmentBMPTypeCustomAttributeTypes) {
-            if (this.selectedTreatmentBMP.ModelingAttributes.findIndex((x) => x.CustomAttributeTypeID == treatmentBMPTypeCustomAttributeType.CustomAttributeTypeID) == -1) {
+            debugger;
+            let index = this.selectedTreatmentBMP.ModelingAttributes.findIndex((x) => x.CustomAttributeTypeID == treatmentBMPTypeCustomAttributeType.CustomAttributeTypeID);
+            if (index == -1) {
                 this.selectedTreatmentBMP.ModelingAttributes.push(
                     new CustomAttributeUpsertDto({
                         TreatmentBMPID: this.selectedTreatmentBMP.TreatmentBMPID,
                         TreatmentBMPTypeID: this.selectedTreatmentBMP.TreatmentBMPTypeID,
                         TreatmentBMPTypeCustomAttributeTypeID: treatmentBMPTypeCustomAttributeType.TreatmentBMPTypeCustomAttributeTypeID,
                         CustomAttributeTypeID: treatmentBMPTypeCustomAttributeType.CustomAttributeTypeID,
-                        CustomAttributeValues: new Array(),
+                        CustomAttributeValues: new Array(treatmentBMPTypeCustomAttributeType.CustomAttributeType.CustomAttributeTypeDefaultValue),
                     })
+                );
+            } else if (
+                treatmentBMPTypeCustomAttributeType.CustomAttributeType.CustomAttributeTypeDefaultValue != null &&
+                (this.selectedTreatmentBMP.ModelingAttributes[index].CustomAttributeValues == null ||
+                    this.selectedTreatmentBMP.ModelingAttributes[index].CustomAttributeValues.length == 0 ||
+                    this.selectedTreatmentBMP.ModelingAttributes[index].CustomAttributeValues[0] == null ||
+                    this.selectedTreatmentBMP.ModelingAttributes[index].CustomAttributeValues[0] == "")
+            ) {
+                this.selectedTreatmentBMP.ModelingAttributes[index].CustomAttributeValues = new Array(
+                    treatmentBMPTypeCustomAttributeType.CustomAttributeType.CustomAttributeTypeDefaultValue
                 );
             }
         }
@@ -371,7 +381,12 @@ export class TreatmentBmpsComponent implements OnInit {
     }
 
     public getDropdownItemsForCustomAttributeType(optionsSchema: string): string[] {
-        return optionsSchema.replaceAll("[", "").replaceAll("]", "").replaceAll('"', "").split(",");
+        return optionsSchema
+            .replaceAll("[", "")
+            .replaceAll("]", "")
+            .replaceAll('"', "")
+            .split(",")
+            .map((x) => x.trim());
     }
 
     public getIndexOfCustomAttribute(customAttributeTypeID: number): number {
