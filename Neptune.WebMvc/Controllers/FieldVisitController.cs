@@ -1178,18 +1178,18 @@ namespace Neptune.WebMvc.Controllers
                             }
 
                             errors = await UpdateOrCreateSingleValueObservationFromDataTableRow(row,
-                                treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, treatmentBMPType, INLET, true,
+                                treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, treatmentBMPType, INLET, ObservationTypeDataTypeEnum.PassFail,
                                 false, _dbContext, errors);
                             errors = await UpdateOrCreateSingleValueObservationFromDataTableRow(row,
-                                treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, treatmentBMPType, OUTLET, true, false, _dbContext, errors);
+                                treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, treatmentBMPType, OUTLET, ObservationTypeDataTypeEnum.PassFail, false, _dbContext, errors);
                             errors = await UpdateOrCreateSingleValueObservationFromDataTableRow(row,
                                 treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, treatmentBMPType, OPERABILITY,
-                                true, false, _dbContext, errors);
+                                ObservationTypeDataTypeEnum.PassFail, false, _dbContext, errors);
                             errors = await UpdateOrCreateSingleValueObservationFromDataTableRow(row,
-                                treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, treatmentBMPType, NUISANCE, true, false, _dbContext, errors);
+                                treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, treatmentBMPType, NUISANCE, ObservationTypeDataTypeEnum.PassFail, false, _dbContext, errors);
                             errors = await UpdateOrCreateSingleValueObservationFromDataTableRow(row,
                                 treatmentBMPAssessmentObservationTypeDictionary, i, initialAssessment, treatmentBMPType, ACCUMULATION,
-                                false, false, _dbContext, errors);
+                                ObservationTypeDataTypeEnum.Numeric, false, _dbContext, errors);
 
                             try
                             {
@@ -1262,12 +1262,12 @@ namespace Neptune.WebMvc.Controllers
                                 await _dbContext.TreatmentBMPAssessments.AddAsync(postMaintenanceAssessment);
                             }
 
-                            errors = await UpdateOrCreateSingleValueObservationFromDataTableRow(row, treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, treatmentBMPType, INLET, true, true, _dbContext, errors);
-                            errors = await UpdateOrCreateSingleValueObservationFromDataTableRow(row, treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, treatmentBMPType, OUTLET, true, true, _dbContext, errors);
+                            errors = await UpdateOrCreateSingleValueObservationFromDataTableRow(row, treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, treatmentBMPType, INLET, ObservationTypeDataTypeEnum.PassFail, true, _dbContext, errors);
+                            errors = await UpdateOrCreateSingleValueObservationFromDataTableRow(row, treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, treatmentBMPType, OUTLET, ObservationTypeDataTypeEnum.PassFail, true, _dbContext, errors);
                             errors = await UpdateOrCreateSingleValueObservationFromDataTableRow(row, treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment,
-                                treatmentBMPType, OPERABILITY, true, true, _dbContext, errors);
-                            errors = await UpdateOrCreateSingleValueObservationFromDataTableRow(row, treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, treatmentBMPType, NUISANCE, true, true, _dbContext, errors);
-                            errors = await UpdateOrCreateSingleValueObservationFromDataTableRow(row, treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, treatmentBMPType, ACCUMULATION, false, true, _dbContext, errors);
+                                treatmentBMPType, OPERABILITY, ObservationTypeDataTypeEnum.PassFail, true, _dbContext, errors);
+                            errors = await UpdateOrCreateSingleValueObservationFromDataTableRow(row, treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, treatmentBMPType, NUISANCE, ObservationTypeDataTypeEnum.PassFail, true, _dbContext, errors);
+                            errors = await UpdateOrCreateSingleValueObservationFromDataTableRow(row, treatmentBMPAssessmentObservationTypeDictionary, i, postMaintenanceAssessment, treatmentBMPType, ACCUMULATION, ObservationTypeDataTypeEnum.Numeric, true, _dbContext, errors);
 
                             if (errors.Count == 0)
                             {
@@ -1454,25 +1454,16 @@ namespace Neptune.WebMvc.Controllers
         private static async Task<List<string>> UpdateOrCreateSingleValueObservationFromDataTableRow(DataRow row,
             Dictionary<string, TreatmentBMPAssessmentObservationType> treatmentBMPAssessmentObservationTypeDictionary,
             int rowNumber, TreatmentBMPAssessment assessment, TreatmentBMPType treatmentBMPType,
-            string observationTypeName, bool isPassFail, bool isPostMaintenance, NeptuneDbContext dbContext,
+            string observationTypeName, ObservationTypeDataTypeEnum dataType, bool isPostMaintenance, NeptuneDbContext dbContext,
             List<string> errors)
         {
             var suffix = isPostMaintenance ? " (Post-Maintenance)" : "";
-            var rawInletCondition = row[$"{observationTypeName}{suffix}"].ToString()?.ToUpperInvariant().Trim();
+            var rawInletValidationResult = dataType.ValidateAndParse(row[$"{observationTypeName}{suffix}"].ToString());
             var rawInletConditionNotes = row[$"{observationTypeName} Notes{suffix}"].ToString();
-            string inletConditionObservationValue;
-            if (isPassFail)
-            {
-                inletConditionObservationValue = rawInletCondition == "PASS" ? "true" : (rawInletCondition == "FAIL" ? "false" : "invalid");
-            }
-            else
-            {
-                inletConditionObservationValue = rawInletCondition;
-            }
 
-            if (inletConditionObservationValue == "invalid")
+            if (!rawInletValidationResult.IsValid)
             {
-                errors.Add($"Invalid {observationTypeName} at row {rowNumber + 2}");
+                errors.Add($"Invalid {observationTypeName}{suffix} at row {rowNumber + 2}. Message: {rawInletValidationResult.ErrorMessage}");
                 return errors;
             }
 
@@ -1483,7 +1474,7 @@ namespace Neptune.WebMvc.Controllers
                     new
                     {
                         PropertyObserved = observationTypeName,
-                        ObservationValue = inletConditionObservationValue,
+                        ObservationValue = rawInletValidationResult.ParsedValue,
                         Notes = rawInletConditionNotes
                     }
                 }
