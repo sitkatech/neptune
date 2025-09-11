@@ -44,9 +44,34 @@
 
     @RenderSection("JavascriptAndStylesContent", false)
 
+    <style>
+        .environmentBanner {
+            margin: 0;
+            padding: 1.6rem;
+            background: black;
+            text-align: center;
+            color: white;
+            z-index: 1;
+            position: relative;
+
+        }
+
+            .environmentBanner span.glyphicon {
+                padding-right: 1rem;
+                color: #ed6969;
+            }
+
+    </style>
+
 </head>
 <body>
     <div class="expandToFillScreen">
+        <environment include="Development">
+            <div class="environmentBanner"><span class="glyphicon glyphicon-exclamation-sign"></span>Dev Environment</div>
+        </environment>
+        <environment include="Staging">
+            <div class="environmentBanner"><span class="glyphicon glyphicon-exclamation-sign"></span>QA Environment</div>
+        </environment>
         <header class="neptuneHeader">
             @{ Html.RenderRazorSitkaPartial<NeptuneNavBar, NeptuneNavBarViewData>(ViewDataTyped.NeptuneNavBarViewData);}            
         </header>
