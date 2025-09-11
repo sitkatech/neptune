@@ -29,6 +29,13 @@
 @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
 
 <form method="post" enctype="multipart/form-data">
+    <div id="progressBar" style="display:none; padding-top: 1rem">
+        <div class="progress">
+            <div class="progress-bar progress-bar-info progress-bar-striped active text-center" role="progressbar" style="width: 100%">
+                Uploading &hellip;
+            </div>
+        </div>
+    </div>
     <div class="form-horizontal">
 
         <div class="form-group ">
@@ -46,3 +53,9 @@
 </form>
 
 <a href="@ViewDataTyped.TemplateDownloadUrl" class="btn btn-neptune" download>@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon glyphicon-download-alt") Download Template</a>
+
+<script>
+document.querySelector('form').addEventListener('submit', function() {
+    document.getElementById('progressBar').style.display = 'block';
+});
+</script>
