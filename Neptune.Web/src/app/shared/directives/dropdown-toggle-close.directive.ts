@@ -3,7 +3,6 @@ import { DropdownToggleDirective } from "./dropdown-toggle.directive";
 
 @Directive({
     selector: "[dropdownToggleClose]",
-    standalone: true,
 })
 export class DropdownToggleCloseDirective {
     @Input() dropdownToggleClose: DropdownToggleDirective;

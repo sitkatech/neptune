@@ -23,7 +23,7 @@ public partial class CustomAttributeType
 
     public bool IsRequired { get; set; }
 
-    [StringLength(200)]
+    [StringLength(500)]
     [Unicode(false)]
     public string? CustomAttributeTypeDescription { get; set; }
 
@@ -31,6 +31,10 @@ public partial class CustomAttributeType
 
     [Unicode(false)]
     public string? CustomAttributeTypeOptionsSchema { get; set; }
+
+    [StringLength(1000)]
+    [Unicode(false)]
+    public string? CustomAttributeTypeDefaultValue { get; set; }
 
     [InverseProperty("CustomAttributeType")]
     public virtual ICollection<CustomAttribute> CustomAttributes { get; set; } = new List<CustomAttribute>();

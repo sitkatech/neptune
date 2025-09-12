@@ -19,9 +19,11 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using Neptune.WebMvc.Views.Shared.EditAttributes;
+
 namespace Neptune.WebMvc.Views.TreatmentBMP
 {
-    public abstract class EditModelingAttributes : Common.Mvc.TypedWebViewPage<EditModelingAttributesViewData, EditModelingAttributesViewModel>
+    public abstract class EditModelingAttributes : Common.Mvc.TypedWebViewPage<EditModelingAttributesViewData, EditAttributesViewModel>
     {
     }
 }

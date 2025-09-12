@@ -42,4 +42,6 @@ GO
 GO
 :r ".\017 - Recalculate Baseline and Progress OVTA Scores.sql"
 GO
+:r ".\018 - Add CustomAttributeType, TreatmentBMPCustomAttributeType, CustomAttribute and CustomAttributeValues for modeling attributes.sql"
+GO
 

@@ -1,11 +1,13 @@
-﻿using System.Globalization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Neptune.EFModels.Entities;
 using Neptune.Jobs.Hangfire;
 using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Models;
 using Neptune.WebMvc.Services;
+using System.Collections.Specialized;
+using System.Globalization;
 
 namespace Neptune.WebMvc.Controllers
 {
@@ -26,10 +28,11 @@ namespace Neptune.WebMvc.Controllers
         public JsonResult TreatmentBMPParameterizationSummary([ParameterDescription("Authorization Token")] WebServiceToken webServiceToken)
         {
             var delineations = vTreatmentBMPUpstreams.ListWithDelineationAsDictionary(_dbContext);
+            var treatmentBMPModelingAttributes = vTreatmentBMPModelingAttributes.ListAsDictionary(_dbContext);
             var data = TreatmentBMPs.GetNonPlanningModuleBMPs(_dbContext)
                 .Where(x => x.TreatmentBMPType.IsAnalyzedInModelingModule).ToList().Select(x =>
                 {
-                    var isFullyParameterized = x.IsFullyParameterized(delineations[x.TreatmentBMPID]) ? "Yes" : "No";
+                    var isFullyParameterized = x.IsFullyParameterized(delineations[x.TreatmentBMPID], treatmentBMPModelingAttributes.TryGetValue(x.TreatmentBMPID, out var attribute) ? attribute : null) ? "Yes" : "No";
                     return new
                     {
                         x.TreatmentBMPID,
@@ -68,7 +71,6 @@ namespace Neptune.WebMvc.Controllers
                 Watershed = x.Watershed,
                 DelineationType = x.DelineationType,
                 WaterQualityManagementPlanID = x.WaterQualityManagementPlanID,
-                TreatmentBMPModelingAttributeID = x.TreatmentBMPModelingAttributeID,
                 TreatmentBMPID = x.TreatmentBMPID,
                 TreatmentBMPTypeName = x.TreatmentBMPTypeName,
                 UpstreamTreatmentBMPID = x.UpstreamTreatmentBMPID,
@@ -85,15 +87,15 @@ namespace Neptune.WebMvc.Controllers
                 InfiltrationSurfaceArea = x.InfiltrationSurfaceArea,
                 MediaBedFootprint = x.MediaBedFootprint,
                 PermanentPoolorWetlandVolume = x.PermanentPoolOrWetlandVolume,
-                RoutingConfigurationID = x.RoutingConfigurationID,
+                RoutingConfiguration = x.RoutingConfiguration ?? RoutingConfiguration.Online.RoutingConfigurationDisplayName,
                 StorageVolumeBelowLowestOutletElevation = x.StorageVolumeBelowLowestOutletElevation,
                 SummerHarvestedWaterDemand = x.SummerHarvestedWaterDemand,
-                TimeOfConcentrationID = x.TimeOfConcentrationID,
+                TimeOfConcentration = x.TimeOfConcentration ?? TimeOfConcentration.FiveMinutes.TimeOfConcentrationDisplayName,
                 DrawdownTimeForDetentionVolume = x.DrawdownTimeForDetentionVolume,
                 TotalEffectiveBMPVolume = x.TotalEffectiveBMPVolume,
                 TotalEffectiveDrywellBMPVolume = x.TotalEffectiveDrywellBMPVolume,
                 TreatmentRate = x.TreatmentRate,
-                UnderlyingHydrologicSoilGroupID = x.UnderlyingHydrologicSoilGroupID,
+                UnderlyingHydrologicSoilGroup = x.UnderlyingHydrologicSoilGroup,
                 UnderlyingInfiltrationRate = x.UnderlyingInfiltrationRate,
                 WaterQualityDetentionVolume = x.WaterQualityDetentionVolume,
                 WettedFootprint = x.WettedFootprint,
@@ -246,7 +248,6 @@ namespace Neptune.WebMvc.Controllers
         public double? LocationLat { get; set; }
         public string Watershed { get; set; }
         public int? WaterQualityManagementPlanID { get; set; }
-        public int? TreatmentBMPModelingAttributeID { get; set; }
         public int TreatmentBMPID { get; set; }
         public int? UpstreamTreatmentBMPID { get; set; }
         public double? AverageDivertedFlowrate { get; set; }
@@ -262,15 +263,15 @@ namespace Neptune.WebMvc.Controllers
         public double? InfiltrationSurfaceArea { get; set; }
         public double? MediaBedFootprint { get; set; }
         public double? PermanentPoolorWetlandVolume { get; set; }
-        public int? RoutingConfigurationID { get; set; }
+        public string? RoutingConfiguration { get; set; }
         public double? StorageVolumeBelowLowestOutletElevation { get; set; }
         public double? SummerHarvestedWaterDemand { get; set; }
-        public int? TimeOfConcentrationID { get; set; }
+        public string? TimeOfConcentration { get; set; }
         public double? DrawdownTimeForDetentionVolume { get; set; }
         public double? TotalEffectiveBMPVolume { get; set; }
         public double? TotalEffectiveDrywellBMPVolume { get; set; }
         public double? TreatmentRate { get; set; }
-        public int? UnderlyingHydrologicSoilGroupID { get; set; }
+        public string? UnderlyingHydrologicSoilGroup { get; set; }
         public double? UnderlyingInfiltrationRate { get; set; }
         public double? WaterQualityDetentionVolume { get; set; }
         public double? WettedFootprint { get; set; }

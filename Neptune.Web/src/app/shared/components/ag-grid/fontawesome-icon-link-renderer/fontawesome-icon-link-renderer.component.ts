@@ -7,7 +7,6 @@ import { NgIf } from "@angular/common";
     selector: "qanat-fontawesome-icon-link-renderer",
     templateUrl: "./fontawesome-icon-link-renderer.component.html",
     styleUrls: ["./fontawesome-icon-link-renderer.component.scss"],
-    standalone: true,
     imports: [NgIf, RouterLink],
 })
 export class FontAwesomeIconLinkRendererComponent implements AgRendererComponent {

@@ -7,17 +7,16 @@ public static class TreatmentFacilityExtensions
 {
     public static TreatmentFacility ToTreatmentFacility(this TreatmentBMP treatmentBMP,
         Dictionary<int, Delineation?> delineations, bool isBaselineCondition,
-        Dictionary<int, int> modelBasins, Dictionary<int, double> precipitationZones)
+        Dictionary<int, int> modelBasins, Dictionary<int, double> precipitationZones,
+        vTreatmentBMPModelingAttribute? treatmentBMPModelingAttribute)
     {
         var treatmentBMPNodeID = NereidUtilities.TreatmentBMPNodeID(treatmentBMP.TreatmentBMPID);
         var modelBasinKey = treatmentBMP.ModelBasinID.HasValue && modelBasins.TryGetValue(treatmentBMP.ModelBasinID.Value, out var modelBasinID) ? modelBasinID.ToString() : null;
         var delineation = delineations[treatmentBMP.TreatmentBMPID];
-        var isFullyParameterized = treatmentBMP.IsFullyParameterized(delineation);
+        var isFullyParameterized = treatmentBMP.IsFullyParameterized(delineation, treatmentBMPModelingAttribute);
         double? treatmentRate = null;
         double? area = null;
         double? designCapacity = null;
-
-        var treatmentBMPModelingAttribute = treatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP;
 
         // in the baseline condition, anything built after 2003 is treated as if it doesn't exist.
         var designStormwaterDepth =  treatmentBMP.PrecipitationZoneID.HasValue && precipitationZones.TryGetValue(treatmentBMP.PrecipitationZoneID.Value, out var designStormwaterDepthInInches) ? designStormwaterDepthInInches : (double?)null;
@@ -30,7 +29,7 @@ public static class TreatmentFacilityExtensions
                 FacilityType = "NoTreatment",
                 ReferenceDataKey = modelBasinKey,
                 DesignStormwaterDepth = designStormwaterDepth ?? .8,
-                EliminateAllDryWeatherFlowOverride = treatmentBMPModelingAttribute?.DryWeatherFlowOverrideID == DryWeatherFlowOverride.Yes.DryWeatherFlowOverrideID
+                EliminateAllDryWeatherFlowOverride = treatmentBMPModelingAttribute?.DryWeatherFlowOverride == DryWeatherFlowOverride.Yes.DryWeatherFlowOverrideDisplayName
             };
         }
 
@@ -107,29 +106,30 @@ public static class TreatmentFacilityExtensions
             ReferenceDataKey = modelBasinKey,
             DesignStormwaterDepth = designStormwaterDepth,
             DesignCapacity = designCapacity,
-            DesignMediaFiltrationRate = treatmentBMPModelingAttribute.DesignMediaFiltrationRate,
+            DesignMediaFiltrationRate = treatmentBMPModelingAttribute?.DesignMediaFiltrationRate,
             //convert Days to Hours for this field.
-            DiversionRate = treatmentBMPModelingAttribute.DiversionRate,
-            DrawdownTimeforWQDetentionVolume = treatmentBMPModelingAttribute.DrawdownTimeForWQDetentionVolume,
+            DiversionRate = treatmentBMPModelingAttribute?.DiversionRate,
+            DrawdownTimeforWQDetentionVolume = treatmentBMPModelingAttribute?.DrawdownTimeForWQDetentionVolume,
             Area = area,
-            EffectiveRetentionDepth = treatmentBMPModelingAttribute.EffectiveRetentionDepth,
-            MonthsOfOperation = treatmentBMPModelingAttribute.MonthsOfOperation?.MonthsOfOperationNereidAlias ?? MonthsOfOperation.Both.MonthsOfOperationNereidAlias,
-            PermanentPoolorWetlandVolume = treatmentBMPModelingAttribute.PermanentPoolOrWetlandVolume,
-            RoutingConfiguration = treatmentBMPModelingAttribute.RoutingConfigurationID == RoutingConfiguration.Online.RoutingConfigurationID,
-            StorageVolumeBelowLowestOutletElevation = treatmentBMPModelingAttribute.StorageVolumeBelowLowestOutletElevation,
+            EffectiveRetentionDepth = treatmentBMPModelingAttribute?.EffectiveRetentionDepth,
+            MonthsOfOperation = (treatmentBMPModelingAttribute?.ModeledMonthsOfOperation ?? MonthsOfOperation.Both.MonthsOfOperationNereidAlias).ToLower(),
+            PermanentPoolorWetlandVolume = treatmentBMPModelingAttribute?.PermanentPoolOrWetlandVolume,
+            //Prior to the moving away from the TreatmentBMPModelingAttribute table, the RoutingConfiguration was always set to Online. So, unless otherwise stated, we assume the RoutingConfiguration is Online.
+            RoutingConfiguration = treatmentBMPModelingAttribute != null && treatmentBMPModelingAttribute.RoutingConfiguration != null ? treatmentBMPModelingAttribute?.RoutingConfiguration == RoutingConfiguration.Online.RoutingConfigurationDisplayName : true,
+            StorageVolumeBelowLowestOutletElevation = treatmentBMPModelingAttribute?.StorageVolumeBelowLowestOutletElevation,
             // SummerHarvestedWaterDemand is collected in GPD, so convert to CFS
-            SummerHarvestedWaterDemand = treatmentBMPModelingAttribute.SummerHarvestedWaterDemand  * Constants.GPD_TO_CFS,
-            TimeOfConcentration = treatmentBMPModelingAttribute.TimeOfConcentration?.TimeOfConcentrationDisplayName ?? TimeOfConcentration.FiveMinutes.TimeOfConcentrationDisplayName,
-            TotalDrawdownTime = treatmentBMPModelingAttribute.DrawdownTimeForWQDetentionVolume,
-            TotalEffectiveBMPVolume = treatmentBMPModelingAttribute.TotalEffectiveBMPVolume,
+            SummerHarvestedWaterDemand = treatmentBMPModelingAttribute?.SummerHarvestedWaterDemand  * Constants.GPD_TO_CFS,
+            TimeOfConcentration = treatmentBMPModelingAttribute?.TimeOfConcentration ?? TimeOfConcentration.FiveMinutes.TimeOfConcentrationDisplayName,
+            TotalDrawdownTime = treatmentBMPModelingAttribute?.DrawdownTimeForWQDetentionVolume,
+            TotalEffectiveBMPVolume = treatmentBMPModelingAttribute?.TotalEffectiveBMPVolume,
             TreatmentRate = treatmentRate,
-            UnderlyingHydrologicSoilGroup = treatmentBMPModelingAttribute.UnderlyingHydrologicSoilGroup?.UnderlyingHydrologicSoilGroupDisplayName.ToLower() ?? UnderlyingHydrologicSoilGroup.D.UnderlyingHydrologicSoilGroupDisplayName.ToLower(),
-            UnderlyingInfiltrationRate = treatmentBMPModelingAttribute.UnderlyingInfiltrationRate,
-            UpstreamBMP = treatmentBMPModelingAttribute.UpstreamTreatmentBMPID.HasValue ? NereidUtilities.TreatmentBMPNodeID(treatmentBMPModelingAttribute.UpstreamTreatmentBMPID.Value) : null,
-            WaterQualityDetentionVolume = treatmentBMPModelingAttribute.WaterQualityDetentionVolume,
+            UnderlyingHydrologicSoilGroup = treatmentBMPModelingAttribute?.UnderlyingHydrologicSoilGroup?.ToLower() ?? UnderlyingHydrologicSoilGroup.D.UnderlyingHydrologicSoilGroupDisplayName.ToLower(),
+            UnderlyingInfiltrationRate = treatmentBMPModelingAttribute?.UnderlyingInfiltrationRate,
+            UpstreamBMP = treatmentBMPModelingAttribute != null && treatmentBMPModelingAttribute.UpstreamBMPID.HasValue ? NereidUtilities.TreatmentBMPNodeID(treatmentBMPModelingAttribute.UpstreamBMPID.Value) : null,
+            WaterQualityDetentionVolume = treatmentBMPModelingAttribute?.WaterQualityDetentionVolume,
             // WinterHarvestedWaterDemand is collected in GPD, so convert to CFS
-            WinterHarvestedWaterDemand = treatmentBMPModelingAttribute.WinterHarvestedWaterDemand * Constants.GPD_TO_CFS,
-            EliminateAllDryWeatherFlowOverride = treatmentBMPModelingAttribute.DryWeatherFlowOverrideID == DryWeatherFlowOverride.Yes.DryWeatherFlowOverrideID
+            WinterHarvestedWaterDemand = treatmentBMPModelingAttribute?.WinterHarvestedWaterDemand * Constants.GPD_TO_CFS,
+            EliminateAllDryWeatherFlowOverride = treatmentBMPModelingAttribute?.DryWeatherFlowOverride == DryWeatherFlowOverride.Yes.DryWeatherFlowOverrideDisplayName
         };
         return treatmentFacility;
     }

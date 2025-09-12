@@ -31,6 +31,8 @@
     }
 
     $scope.submit = function () {
+        const elements = document.querySelectorAll('[disabled]');
+        elements.forEach(element => element.removeAttribute('disabled'));
         $scope.AngularModel.CustomAttributeTypeOptionsSchema = JSON.stringify($scope.OptionsSchema);
     }
 

@@ -27,7 +27,8 @@ export enum MeasurementUnitTypeEnum {
   GallonsPerDay = 19,
   Pounds = 20,
   Tons = 21,
-  CubicYards = 22
+  CubicYards = 22,
+  Hours = 23
 }
 
 export const MeasurementUnitTypes: LookupTableEntry[]  = [
@@ -52,6 +53,7 @@ export const MeasurementUnitTypes: LookupTableEntry[]  = [
   { Name: "GallonsPerDay", DisplayName: "gallons per day", Value: 19 },
   { Name: "Pounds", DisplayName: "pounds", Value: 20 },
   { Name: "Tons", DisplayName: "tons", Value: 21 },
-  { Name: "CubicYards", DisplayName: "cubic yards", Value: 22 }
+  { Name: "CubicYards", DisplayName: "cubic yards", Value: 22 },
+  { Name: "Hours", DisplayName: "hours", Value: 23 }
 ];
 export const MeasurementUnitTypesAsSelectDropdownOptions = MeasurementUnitTypes.map((x) => ({ Value: x.Value, Label: x.DisplayName } as SelectDropdownOption));

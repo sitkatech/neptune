@@ -6,7 +6,6 @@ import { NgFor } from "@angular/common";
     selector: "tag-renderer",
     templateUrl: "./tag-renderer.component.html",
     styleUrl: "./tag-renderer.component.scss",
-    standalone: true,
     imports: [NgFor],
 })
 export class TagRendererComponent {

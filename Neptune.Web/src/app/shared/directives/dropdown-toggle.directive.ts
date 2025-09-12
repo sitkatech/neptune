@@ -5,7 +5,6 @@ import { Subscription } from "rxjs";
 @Directive({
     selector: "[dropdownToggle]",
     exportAs: "dropdownToggleName",
-    standalone: true,
 })
 export class DropdownToggleDirective implements OnDestroy {
     private routerNavigationEndSubscription = Subscription.EMPTY;

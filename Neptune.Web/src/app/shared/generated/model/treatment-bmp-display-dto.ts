@@ -7,7 +7,8 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { TreatmentBMPModelingAttributeSimpleDto } from './treatment-bmp-modeling-attribute-simple-dto';
+import { VTreatmentBMPModelingAttributeDto } from './v-treatment-bmp-modeling-attribute-dto';
+import { CustomAttributeUpsertDto } from './custom-attribute-upsert-dto';
 
 
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
@@ -21,9 +22,11 @@ export class TreatmentBMPDisplayDto {
     ProjectID?: number | null;
     InventoryIsVerified?: boolean;
     IsFullyParameterized?: boolean;
-    TreatmentBMPModelingAttribute?: TreatmentBMPModelingAttributeSimpleDto;
+    TreatmentBMPModelingAttribute?: VTreatmentBMPModelingAttributeDto;
+    CustomAttributes?: Array<CustomAttributeUpsertDto> | null;
     WatershedName?: string | null;
     Notes?: string | null;
+    TreatmentBMPTypeID?: number;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
@@ -39,9 +42,11 @@ export interface TreatmentBMPDisplayDtoForm {
     ProjectID?: FormControl<number>;
     InventoryIsVerified?: FormControl<boolean>;
     IsFullyParameterized?: FormControl<boolean>;
-    TreatmentBMPModelingAttribute?: FormControl<TreatmentBMPModelingAttributeSimpleDto>;
+    TreatmentBMPModelingAttribute?: FormControl<VTreatmentBMPModelingAttributeDto>;
+    CustomAttributes?: FormControl<Array<CustomAttributeUpsertDto>>;
     WatershedName?: FormControl<string>;
     Notes?: FormControl<string>;
+    TreatmentBMPTypeID?: FormControl<number>;
 }
 
 export class TreatmentBMPDisplayDtoFormControls { 
@@ -135,7 +140,17 @@ export class TreatmentBMPDisplayDtoFormControls {
             ],
         }
     );
-    public static TreatmentBMPModelingAttribute = (value: FormControlState<TreatmentBMPModelingAttributeSimpleDto> | TreatmentBMPModelingAttributeSimpleDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<TreatmentBMPModelingAttributeSimpleDto>(
+    public static TreatmentBMPModelingAttribute = (value: FormControlState<VTreatmentBMPModelingAttributeDto> | VTreatmentBMPModelingAttributeDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<VTreatmentBMPModelingAttributeDto>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static CustomAttributes = (value: FormControlState<Array<CustomAttributeUpsertDto>> | Array<CustomAttributeUpsertDto> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<CustomAttributeUpsertDto>>(
         value,
         formControlOptions ?? 
         {
@@ -156,6 +171,16 @@ export class TreatmentBMPDisplayDtoFormControls {
         }
     );
     public static Notes = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static TreatmentBMPTypeID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
         {

@@ -84,11 +84,16 @@ namespace Neptune.WebMvc.Views.CustomAttributeType
 
         public void UpdateModel(EFModels.Entities.CustomAttributeType customAttributeType, Person currentPerson)
         {
+            if (customAttributeType.CustomAttributeTypePurposeID == (int)CustomAttributeTypePurposeEnum.Modeling)
+            {
+                customAttributeType.CustomAttributeTypeDescription = CustomAttributeTypeDesription;
+                return;
+            }
             customAttributeType.CustomAttributeTypeName = CustomAttributeTypeName;
             customAttributeType.CustomAttributeDataTypeID = CustomAttributeDataTypeID.Value;
             customAttributeType.MeasurementUnitTypeID = MeasurementUnitTypeID;
             customAttributeType.IsRequired = IsRequired.GetValueOrDefault();
-            customAttributeType.CustomAttributeTypePurposeID = CustomAttributeTypePurposeID.GetValueOrDefault();
+            customAttributeType.CustomAttributeTypePurposeID = CustomAttributeTypePurposeID != (int)CustomAttributeTypePurposeEnum.Modeling ? CustomAttributeTypePurposeID.GetValueOrDefault() : customAttributeType.CustomAttributeTypePurposeID;
             customAttributeType.CustomAttributeTypeDescription = CustomAttributeTypeDesription;
 
             var customAttributeDataType = CustomAttributeDataType.AllLookupDictionary[CustomAttributeDataTypeID.Value];

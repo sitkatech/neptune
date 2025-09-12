@@ -2,7 +2,6 @@ import { Pipe, PipeTransform } from "@angular/core";
 
 @Pipe({
     name: "groupBy",
-    standalone: true,
 })
 export class GroupByPipe implements PipeTransform {
     transform<T>(array: any[], property: string): ReadonlyMap<string, T[]> {

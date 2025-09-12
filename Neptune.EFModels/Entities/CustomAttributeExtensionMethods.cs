@@ -9,7 +9,8 @@ public static partial class CustomAttributeExtensionMethods
     {
         var customAttributeUpsertDto = new CustomAttributeUpsertDto(
             customAttribute.TreatmentBMPTypeCustomAttributeTypeID, customAttribute.CustomAttributeTypeID,
-            customAttribute.CustomAttributeValues.Select(x => x.AttributeValue).ToList());
+            customAttribute.CustomAttributeValues.Select(x => x.AttributeValue).ToList(), 
+            customAttribute.CustomAttributeID, customAttribute.TreatmentBMPID, customAttribute.TreatmentBMPTypeID);
         return customAttributeUpsertDto;
     }
 }

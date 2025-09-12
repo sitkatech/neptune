@@ -26,6 +26,11 @@
 
 <form method="POST" action="@ViewDataTyped.SubmitUrl" ng-app="NeptuneApp" id="EditCustomAttributeTypeControllerApp" ng-controller="EditCustomAttributeTypeController" ng-submit="submit()" name="customAttributeTypeForm" ng-cloak>
     <div class="formPage">
+        @if (ViewDataTyped.IsModelingAttribute) {
+          <div class="alert alert-info">
+            Because of their necessity in internal system calculations, Modeling attribute editing is limited. Please contact a system admin if you require further assistance.
+                </div>
+        }
         <div class="row">
             <div class="col-xs-12">
                 <div class="validationError">
@@ -41,7 +46,7 @@
                             @Html.LabelWithSugarFor(m => m.CustomAttributeTypeName)
                         </div>
                         <div class="col-sm-4">
-                            @Html.TextBoxFor(m => m.CustomAttributeTypeName, new { @class = "form-control", style = "width:100%" })
+                            @Html.TextBoxFor(m => m.CustomAttributeTypeName,ViewDataTyped.TextBoxForHTMLAttributes )
                             @Html.ValidationMessageFor(m => m.CustomAttributeTypeName)
                         </div>
                     </div>
@@ -50,7 +55,7 @@
                             @Html.LabelWithSugarFor(m => m.IsRequired)
                         </div>
                         <div class="col-sm-9">
-                            @Html.DropDownListFor(m => m.IsRequired, ViewDataTyped.YesNos, new Dictionary<string, object>() { { "style", "width: auto" }, { "class", "form-control" } })
+                            @Html.DropDownListFor(m => m.IsRequired, ViewDataTyped.YesNos, ViewDataTyped.DropDownListForHTMLAttributes)
                             @Html.ValidationMessageFor(m => m.IsRequired)
                         </div>
                     </div>
@@ -59,15 +64,15 @@
                             @Html.LabelWithSugarFor(m => m.CustomAttributeTypePurposeID)
                         </div>
                         <div class="col-sm-9">
-                            @Html.DropDownListFor(m => m.CustomAttributeTypePurposeID, ViewDataTyped.CustomAttributeTypePurposes, new Dictionary<string, object>() { { "style", "width: auto" }, { "class", "form-control" } })
+                            @Html.DropDownListFor(m => m.CustomAttributeTypePurposeID, ViewDataTyped.CustomAttributeTypePurposes, ViewDataTyped.DropDownListForHTMLAttributes)
                             @Html.ValidationMessageFor(m => m.CustomAttributeTypePurposeID)
                             <p class="systemText" style="margin-top: 10px;">
-                                
+
                                 The attribute purpose controls where the attribute is used:
                                 <ul>
-                                <li class="systemText">Performance / Modeling Attributes are properties of a BMP; these attributes can be used to quantify performance of the BMP for hydraulic/hydrologic modeling and pollutant load estimation</li>
-                                <li class="systemText">Other Design Attributes are properties of a BMP; these attributes hold other interesting information about a BMP that is not related to modeling or pollutant load estimation</li>
-                                <li class="systemText">Maintenance Attributes are properties of a Maintenance Activity; these attributes are used to track specific details of the maintenance activity, such as pounds of trash removed from a trash capture device</li>
+                                    <li class="systemText">Performance / Modeling Attributes are properties of a BMP; these attributes can be used to quantify performance of the BMP for hydraulic/hydrologic modeling and pollutant load estimation</li>
+                                    <li class="systemText">Other Design Attributes are properties of a BMP; these attributes hold other interesting information about a BMP that is not related to modeling or pollutant load estimation</li>
+                                    <li class="systemText">Maintenance Attributes are properties of a Maintenance Activity; these attributes are used to track specific details of the maintenance activity, such as pounds of trash removed from a trash capture device</li>
                                 </ul>
                             </p>
                         </div>
@@ -87,6 +92,7 @@
                         </div>
                         <div class="col-sm-9">
                             <select class="form-control"
+                            @ViewDataTyped.ModelingAttributeDisabledClass
                                     style="width: auto"
                                     name="CustomAttributeDataTypeID"
                                     ng-model="CustomAttributeDataTypeSelected"
@@ -99,20 +105,20 @@
                         </div>
                     </div>
                     <div ng-if="CustomAttributeDataTypeSelected == null">
-                        <hr />
+                        <hr/>
                         <div class="help-block">
                             Select a @FieldDefinitionType.CustomAttributeDataType.GetFieldDefinitionLabel() to enter the required information
                         </div>
                     </div>
                     <div ng-if="CustomAttributeDataTypeSelected != null">
-                        
+
                         <div ng-if="selectedCustomAttributeDataTypeHasMeasurementUnit()">
                             <div class="form-group">
                                 <div class="col-sm-3 control-label">
                                     @Html.LabelWithSugarFor(m => m.MeasurementUnitTypeID, true)
                                 </div>
                                 <div class="col-sm-9">
-                                    @Html.DropDownListFor(x => x.MeasurementUnitTypeID, ViewDataTyped.MeasurementUnitTypes, new Dictionary<string, object>() { { "style", "width: auto" }, { "class", "form-control" } })
+                                    @Html.DropDownListFor(x => x.MeasurementUnitTypeID, ViewDataTyped.MeasurementUnitTypes, ViewDataTyped.DropDownListForHTMLAttributes)
                                     @Html.ValidationMessageFor(m => m.MeasurementUnitTypeID)
                                 </div>
                             </div>
@@ -126,6 +132,7 @@
                                     <div class="row">
                                         <div ng-repeat="item in OptionsSchema track by $index" style="margin-bottom: 4px" class="col-xs-12 col-sm-4">
                                             <input class="form-control"
+                                                   @ViewDataTyped.ModelingAttributeDisabledClass
                                                    ng-model="OptionsSchema[$index]"
                                                    style="width: 85%"
                                                    type="text"
@@ -140,7 +147,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
             </div>

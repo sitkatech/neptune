@@ -3,16 +3,12 @@ import * as L from "leaflet";
 import { forkJoin } from "rxjs";
 import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto";
 import { DelineationUpsertDto } from "src/app/shared/generated/model/delineation-upsert-dto";
-import { TreatmentBMPModelingAttributeDropdownItemDto } from "src/app/shared/generated/model/treatment-bmp-modeling-attribute-dropdown-item-dto";
 import { CustomCompileService } from "src/app/shared/services/custom-compile.service";
 import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
 import { ProjectService } from "src/app/shared/generated/api/project.service";
 import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.service";
 import { FieldDefinitionTypeEnum } from "src/app/shared/generated/enum/field-definition-type-enum";
-import { TreatmentBMPModelingTypeEnum } from "src/app/shared/generated/enum/treatment-b-m-p-modeling-type-enum";
 import { TreatmentBMPTypeWithModelingAttributesDto } from "src/app/shared/generated/model/treatment-bmp-type-with-modeling-attributes-dto";
-import { TreatmentBMPModelingAttributeDefinitionDto } from "src/app/shared/generated/model/treatment-bmp-modeling-attribute-definition-dto";
-import { TreatmentBmpsComponent } from "src/app/pages/planning-module/project-workflow/treatment-bmps/treatment-bmps.component";
 import { TreatmentBMPDisplayDto } from "src/app/shared/generated/model/treatment-bmp-display-dto";
 import { FieldDefinitionComponent } from "src/app/shared/components/field-definition/field-definition.component";
 import { DecimalPipe } from "@angular/common";
@@ -24,6 +20,13 @@ import { WqmpsLayerComponent } from "src/app/shared/components/leaflet/layers/wq
 import { NeptuneMapComponent, NeptuneMapInitEvent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
 import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet/layers/inventoried-bmps-layer/inventoried-bmps-layer.component";
 import { TreatmentBMPTypeService } from "src/app/shared/generated/api/treatment-bmp-type.service";
+import { TreatmentBMPTypeCustomAttributeTypeDto } from "src/app/shared/generated/model/treatment-bmp-type-custom-attribute-type-dto";
+import { TreatmentBMPTypeCustomAttributeTypeService } from "src/app/shared/generated/api/treatment-bmp-type-custom-attribute-type.service";
+import { CustomAttributeTypePurposeEnum } from "src/app/shared/generated/enum/custom-attribute-type-purpose-enum";
+import { CustomAttributeDataTypeEnum } from "src/app/shared/generated/enum/custom-attribute-data-type-enum";
+import { CustomAttributeTypeDto } from "src/app/shared/generated/model/custom-attribute-type-dto";
+import { PopperComponent } from "src/app/shared/components/popper/popper.component";
+import { PopperDirective } from "src/app/shared/directives/popper.directive";
 
 //This component could use a fair amount of cleanup. It should likely be sent in the treatment bmps and delineations instead of grabbing them itself
 @Component({
@@ -40,6 +43,7 @@ import { TreatmentBMPTypeService } from "src/app/shared/generated/api/treatment-
         WqmpsLayerComponent,
         StormwaterNetworkLayerComponent,
         InventoriedBMPsLayerComponent,
+        PopperDirective,
     ],
 })
 export class ProjectMapComponent implements OnInit {
@@ -80,21 +84,21 @@ export class ProjectMapComponent implements OnInit {
         opacity: 1,
     };
 
-    public treatmentBMPModelingTypeEnum = TreatmentBMPModelingTypeEnum;
     public fieldDefinitionTypeEnum = FieldDefinitionTypeEnum;
-    public modelingAttributeDropdownItems: Array<TreatmentBMPModelingAttributeDropdownItemDto>;
     public treatmentBMPTypes: Array<TreatmentBMPTypeWithModelingAttributesDto>;
 
     public delineations: DelineationUpsertDto[];
 
     public projectTreatmentBMPs: Array<TreatmentBMPDisplayDto>;
+    public treatmentBMPTypeCustomAttributeTypes: TreatmentBMPTypeCustomAttributeTypeDto[];
 
     constructor(
         private projectService: ProjectService,
         private treatmentBMPService: TreatmentBMPService,
         private treatmentBMPTypeService: TreatmentBMPTypeService,
         private appRef: ApplicationRef,
-        private compileService: CustomCompileService
+        private compileService: CustomCompileService,
+        private treatmentBMPTypeCustomAttributeTypeService: TreatmentBMPTypeCustomAttributeTypeService
     ) {}
 
     public ngOnInit(): void {
@@ -104,13 +108,15 @@ export class ProjectMapComponent implements OnInit {
                 delineations: this.projectService.projectsProjectIDDelineationsGet(this.projectID),
                 boundingBox: this.projectService.projectsProjectIDBoundingBoxGet(this.projectID),
                 treatmentBMPTypes: this.treatmentBMPTypeService.treatmentBmpTypesGet(),
-                modelingAttributeDropdownItems: this.treatmentBMPService.treatmentBmpsModelingAttributeDropdownItemsGet(),
-            }).subscribe(({ treatmentBMPs, delineations, boundingBox, treatmentBMPTypes, modelingAttributeDropdownItems }) => {
+                treatmentBMPTypeCustomAttributeTypes: this.treatmentBMPTypeCustomAttributeTypeService.treatmentBmpTypeCustomAttributeTypesPurposeCustomAttributeTypePurposeIDGet(
+                    CustomAttributeTypePurposeEnum.Modeling
+                ),
+            }).subscribe(({ treatmentBMPs, delineations, boundingBox, treatmentBMPTypes, treatmentBMPTypeCustomAttributeTypes }) => {
                 this.projectTreatmentBMPs = treatmentBMPs;
                 this.delineations = delineations;
                 this.boundingBox = boundingBox;
                 this.treatmentBMPTypes = treatmentBMPTypes;
-                this.modelingAttributeDropdownItems = modelingAttributeDropdownItems;
+                this.treatmentBMPTypeCustomAttributeTypes = treatmentBMPTypeCustomAttributeTypes;
             });
         }
 
@@ -246,17 +252,23 @@ export class ProjectMapComponent implements OnInit {
         }
     }
 
-    public isFieldWithDropdown(fieldName: string): boolean {
-        return TreatmentBmpsComponent.modelingAttributeFieldsWithDropdown.indexOf(fieldName) > -1;
+    public getTreatmentBMPTypeCustomAttributeTypesForTreatmentBMPType(treatmentBMPTypeID: number) {
+        return this.treatmentBMPTypeCustomAttributeTypes.filter((x) => x.TreatmentBMPTypeID == treatmentBMPTypeID);
     }
 
-    public getModelingAttributeFieldsToDisplay(treatmentBMPTypeName: string): Array<TreatmentBMPModelingAttributeDefinitionDto> {
-        return this.treatmentBMPTypes.find((x) => x.TreatmentBMPTypeName == treatmentBMPTypeName).TreatmentBMPModelingAttributes ?? [];
+    public getCustomAttributeFieldsToDisplay(treatmentBMPTypeID: number): Array<CustomAttributeTypeDto> {
+        return this.getTreatmentBMPTypeCustomAttributeTypesForTreatmentBMPType(treatmentBMPTypeID)
+            .sort((a, b) => a.SortOrder - b.SortOrder)
+            .map((x) => x.CustomAttributeType);
     }
 
-    public getDropdownItemNameByFieldNameAndItemID(fieldName: string, itemID: number): string {
-        const dropdownItem = this.modelingAttributeDropdownItems.find((x) => x.FieldName == fieldName && x.ItemID == itemID);
-        return dropdownItem ? dropdownItem.ItemName : "";
+    public isFieldWithDropdown(customAttributeDataTypeID: number): boolean {
+        return customAttributeDataTypeID == CustomAttributeDataTypeEnum.PickFromList;
+    }
+
+    public getIndexOfCustomAttribute(customAttributeTypeID: number): number {
+        let value = this.selectedTreatmentBMP.CustomAttributes.findIndex((x) => x.CustomAttributeTypeID == customAttributeTypeID);
+        return value;
     }
 
     private clearSelectedItem() {

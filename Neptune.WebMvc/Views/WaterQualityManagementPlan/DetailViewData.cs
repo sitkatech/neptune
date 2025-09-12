@@ -73,7 +73,8 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
         public bool HasWaterQualityManagementPlanBoundary { get; }
         public List<EFModels.Entities.WaterQualityManagementPlanDocument> WaterQualityManagementPlanDocuments { get; }
 
-        public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson,
+        public DetailViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration,
+            Person currentPerson,
             EFModels.Entities.WaterQualityManagementPlan waterQualityManagementPlan,
             WaterQualityManagementPlanVerify? waterQualityManagementPlanVerifyDraft, MapInitJson mapInitJson,
             List<EFModels.Entities.TreatmentBMP> treatmentBMPs,
@@ -83,7 +84,12 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
             HRUCharacteristicsViewData hruCharacteristicsViewData,
             List<WaterQualityManagementPlanModelingApproach> waterQualityManagementPlanModelingApproaches,
             ModeledPerformanceViewData modeledPerformanceViewData,
-            IEnumerable<IGrouping<int, SourceControlBMP>> sourceControlBMPs, List<QuickBMP> quickBMPs, QuickBMPGridSpec quickBMPGridSpec, bool hasWaterQualityManagementPlanBoundary, Dictionary<int, EFModels.Entities.Delineation?> treatmentBMPDelineationsDict, List<EFModels.Entities.WaterQualityManagementPlanDocument> waterQualityManagementPlanDocuments, double calculatedWqmpAcreage)
+            IEnumerable<IGrouping<int, SourceControlBMP>> sourceControlBMPs, List<QuickBMP> quickBMPs,
+            QuickBMPGridSpec quickBMPGridSpec, bool hasWaterQualityManagementPlanBoundary,
+            Dictionary<int, EFModels.Entities.Delineation?> treatmentBMPDelineationsDict,
+            List<EFModels.Entities.WaterQualityManagementPlanDocument> waterQualityManagementPlanDocuments,
+            double calculatedWqmpAcreage,
+            Dictionary<int, vTreatmentBMPModelingAttribute> treatmentBmpModelingAttributes)
             : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             WaterQualityManagementPlan = waterQualityManagementPlan;
@@ -198,10 +204,12 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
                                            WaterQualityManagementPlanModelingApproach.Detailed
                                                .WaterQualityManagementPlanModelingApproachID;
 
+            TreatmentBmpModelingAttributes = treatmentBmpModelingAttributes;
+
             if (UsesDetailedModelingApproach)
             {
-                AnyDetailedBMPsNotFullyParameterized = TreatmentBMPs.Any(x => !x.IsFullyParameterized(treatmentBMPDelineationsDict[x.TreatmentBMPID]));
-                AllDetailedBMPsNotFullyParameterized = TreatmentBMPs.All(x => !x.IsFullyParameterized(treatmentBMPDelineationsDict[x.TreatmentBMPID]));
+                AnyDetailedBMPsNotFullyParameterized = TreatmentBMPs.Any(x => !x.IsFullyParameterized(treatmentBMPDelineationsDict[x.TreatmentBMPID], treatmentBmpModelingAttributes.TryGetValue(x.TreatmentBMPID, out var attribute) ? attribute : null));
+                AllDetailedBMPsNotFullyParameterized = TreatmentBMPs.All(x => !x.IsFullyParameterized(treatmentBMPDelineationsDict[x.TreatmentBMPID], treatmentBmpModelingAttributes.TryGetValue(x.TreatmentBMPID, out var attribute) ? attribute : null));
                 // this is redundant but I just want to make this perfectly clear.
                 AnySimpleBMPsNotFullyParameterized = false;
                 AllSimpleBMPsNotFullyParameterized = false;
@@ -216,6 +224,8 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
             }
         }
 
+        public Dictionary<int, vTreatmentBMPModelingAttribute> TreatmentBmpModelingAttributes { get; set; }
+
         //There are more errors to come I believe, that's why this is producing a list
         public List<HtmlString> CheckForParameterizationErrors(EFModels.Entities.WaterQualityManagementPlan waterQualityManagement)
         {
@@ -229,9 +239,13 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
             return parameterizationErrors;
         }
 
-        public string DisplayDryWeatherFlowOverride(EFModels.Entities.TreatmentBMP treatmentBMP)
+        public string DisplayDryWeatherFlowOverride(int treatmentBMPID)
         {
-            return treatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP != null ? treatmentBMP.TreatmentBMPModelingAttributeTreatmentBMP?.DryWeatherFlowOverride?.DryWeatherFlowOverrideDisplayName : DryWeatherFlowOverride.No.DryWeatherFlowOverrideDisplayName;
+            var dryWeatherFlowOverrideVal =
+                TreatmentBmpModelingAttributes.TryGetValue(treatmentBMPID, out var attribute)
+                    ? attribute.DryWeatherFlowOverride
+                    : null;
+            return  dryWeatherFlowOverrideVal ?? DryWeatherFlowOverride.No.DryWeatherFlowOverrideDisplayName;
         }
 
         public string DisplayDryWeatherFlowOverride(QuickBMP quickBMP)

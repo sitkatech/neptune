@@ -11,13 +11,12 @@ import { FieldDefinitionTypeEnum } from "src/app/shared/generated/enum/field-def
 import { PopperDirective } from "src/app/shared/directives/popper.directive";
 import { FormsModule } from "@angular/forms";
 
-
 @Component({
     selector: "field-definition",
     templateUrl: "./field-definition.component.html",
     styleUrls: ["./field-definition.component.scss"],
     imports: [EditorComponent, FormsModule, PopperDirective],
-    providers: [{ provide: TINYMCE_SCRIPT_SRC, useValue: "tinymce/tinymce.min.js" }]
+    providers: [{ provide: TINYMCE_SCRIPT_SRC, useValue: "tinymce/tinymce.min.js" }],
 })
 export class FieldDefinitionComponent implements OnInit, AfterViewInit, OnDestroy {
     @Input() fieldDefinitionType: string;

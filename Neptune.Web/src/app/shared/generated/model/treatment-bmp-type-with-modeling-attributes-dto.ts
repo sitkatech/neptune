@@ -7,7 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { TreatmentBMPModelingAttributeDefinitionDto } from './treatment-bmp-modeling-attribute-definition-dto';
+import { CustomAttributeTypeDto } from './custom-attribute-type-dto';
 
 
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
@@ -15,7 +15,7 @@ export class TreatmentBMPTypeWithModelingAttributesDto {
     TreatmentBMPTypeID?: number;
     TreatmentBMPTypeName?: string | null;
     TreatmentBMPModelingTypeID?: number | null;
-    TreatmentBMPModelingAttributes?: Array<TreatmentBMPModelingAttributeDefinitionDto> | null;
+    TreatmentBMPModelingAttributes?: Array<CustomAttributeTypeDto> | null;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
@@ -25,7 +25,7 @@ export interface TreatmentBMPTypeWithModelingAttributesDtoForm {
     TreatmentBMPTypeID?: FormControl<number>;
     TreatmentBMPTypeName?: FormControl<string>;
     TreatmentBMPModelingTypeID?: FormControl<number>;
-    TreatmentBMPModelingAttributes?: FormControl<Array<TreatmentBMPModelingAttributeDefinitionDto>>;
+    TreatmentBMPModelingAttributes?: FormControl<Array<CustomAttributeTypeDto>>;
 }
 
 export class TreatmentBMPTypeWithModelingAttributesDtoFormControls { 
@@ -59,7 +59,7 @@ export class TreatmentBMPTypeWithModelingAttributesDtoFormControls {
             ],
         }
     );
-    public static TreatmentBMPModelingAttributes = (value: FormControlState<Array<TreatmentBMPModelingAttributeDefinitionDto>> | Array<TreatmentBMPModelingAttributeDefinitionDto> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<TreatmentBMPModelingAttributeDefinitionDto>>(
+    public static TreatmentBMPModelingAttributes = (value: FormControlState<Array<CustomAttributeTypeDto>> | Array<CustomAttributeTypeDto> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<CustomAttributeTypeDto>>(
         value,
         formControlOptions ?? 
         {

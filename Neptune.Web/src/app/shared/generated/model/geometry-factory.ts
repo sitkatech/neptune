@@ -8,6 +8,7 @@
  * Do not edit the class manually.
  */
 import { CoordinateSequenceFactory } from './coordinate-sequence-factory';
+import { ElevationModel } from './elevation-model';
 import { PrecisionModel } from './precision-model';
 import { NtsGeometryServices } from './nts-geometry-services';
 
@@ -17,6 +18,7 @@ export class GeometryFactory {
     PrecisionModel?: PrecisionModel;
     CoordinateSequenceFactory?: CoordinateSequenceFactory;
     readonly SRID?: number;
+    ElevationModel?: ElevationModel;
     GeometryServices?: NtsGeometryServices;
     constructor(obj?: any) {
         Object.assign(this, obj);
@@ -27,6 +29,7 @@ export interface GeometryFactoryForm {
     PrecisionModel?: FormControl<PrecisionModel>;
     CoordinateSequenceFactory?: FormControl<CoordinateSequenceFactory>;
     SRID?: FormControl<number>;
+    ElevationModel?: FormControl<ElevationModel>;
     GeometryServices?: FormControl<NtsGeometryServices>;
 }
 
@@ -52,6 +55,16 @@ export class GeometryFactoryFormControls {
         }
     );
     public static SRID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static ElevationModel = (value: FormControlState<ElevationModel> | ElevationModel = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<ElevationModel>(
         value,
         formControlOptions ?? 
         {

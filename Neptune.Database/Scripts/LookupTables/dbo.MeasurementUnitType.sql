@@ -21,7 +21,8 @@ USING (VALUES
 (19, 'GallonsPerDay', 'gallons per day', 'gpd', 'gallon per day', 1, 1),
 (20, 'Pounds', 'pounds', 'lb', 'pound', 1, 1),
 (21, 'Tons', 'tons', 'cfs', 'cfs', 1, 1),
-(22, 'CubicYards', 'cubic yards', 'cu yd', 'cubic yard', 1, 1)
+(22, 'CubicYards', 'cubic yards', 'cu yd', 'cubic yard', 1, 1),
+(23, 'Hours', 'hours', 'h', 'Hour', 0, 1)
 )
 AS Source (MeasurementUnitTypeID, MeasurementUnitTypeName, MeasurementUnitTypeDisplayName, LegendDisplayName, SingularDisplayName, NumberOfSignificantDigits, IncludeSpaceBeforeLegendLabel)
 ON Target.MeasurementUnitTypeID = Source.MeasurementUnitTypeID

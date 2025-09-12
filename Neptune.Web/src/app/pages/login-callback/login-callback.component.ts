@@ -6,7 +6,6 @@ import { AuthenticationService } from "src/app/services/authentication.service";
     selector: "login-callback",
     templateUrl: "./login-callback.component.html",
     styleUrls: ["./login-callback.component.scss"],
-    standalone: true,
 })
 export class LoginCallbackComponent implements OnInit, OnDestroy {
     constructor(private router: Router, private authenticationService: AuthenticationService) {}

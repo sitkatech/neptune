@@ -27,7 +27,7 @@ import { AuthenticationService } from "src/app/services/authentication.service";
     selector: "project-basics",
     templateUrl: "./project-basics.component.html",
     styleUrls: ["./project-basics.component.scss"],
-    imports: [AsyncPipe, ReactiveFormsModule, FormsModule, FormFieldComponent, NgSelectModule, PageHeaderComponent, WorkflowBodyComponent, AlertDisplayComponent]
+    imports: [AsyncPipe, ReactiveFormsModule, FormsModule, FormFieldComponent, NgSelectModule, PageHeaderComponent, WorkflowBodyComponent, AlertDisplayComponent],
 })
 export class ProjectBasicsComponent implements OnInit {
     public FormFieldType = FormFieldType;
@@ -130,7 +130,7 @@ export class ProjectBasicsComponent implements OnInit {
     public save(andContinue: boolean = false) {
         this.isLoadingSubmit = true;
         if (this.projectID) {
-            this.projectService.projectsProjectIDUpdatePost(this.projectID, this.formGroup.getRawValue()).subscribe((response) => {
+            this.projectService.projectsProjectIDUpdatePut(this.projectID, this.formGroup.getRawValue()).subscribe((response) => {
                 this.isLoadingSubmit = false;
                 this.alertService.clearAlerts();
                 this.alertService.pushAlert(new Alert("Your project was successfully updated.", AlertContext.Success));

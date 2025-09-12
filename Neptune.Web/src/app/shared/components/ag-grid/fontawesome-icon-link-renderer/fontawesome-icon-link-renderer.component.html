@@ -1,8 +1,7 @@
-<ng-container *ngIf="params && !params.isSpan">
-    <a [routerLink]="[params.inRouterLink, params.value]" *ngIf="params">
-        <span class="fas fa-{{ params.fontawesomeIconName }}"></span>
-    </a>
-</ng-container>
-<ng-container *ngIf="params && params.isSpan">
-    <span class="fas fa-{{ params.fontawesomeIconName }}" style="cursor: pointer"></span>
-</ng-container>
+@if (params && !params.isSpan) {
+<a [routerLink]="[params.inRouterLink, params.value]">
+    <span class="fas fa-{{ params.fontawesomeIconName }}"></span>
+</a>
+} @else {
+<span class="fas fa-{{ params.fontawesomeIconName }}" style="cursor: pointer"></span>
+}

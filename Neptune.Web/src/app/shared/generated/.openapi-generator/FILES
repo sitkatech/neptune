@@ -1,6 +1,7 @@
 .gitignore
 api.base.service.ts
 api.module.ts
+api/custom-attribute-type.service.ts
 api/custom-rich-text.service.ts
 api/delineation.service.ts
 api/field-definition.service.ts
@@ -18,6 +19,7 @@ api/stormwater-jurisdiction.service.ts
 api/system-info.service.ts
 api/trash-generating-unit-by-stormwater-jurisdiction.service.ts
 api/trash-generating-unit.service.ts
+api/treatment-bmp-type-custom-attribute-type.service.ts
 api/treatment-bmp-type.service.ts
 api/treatment-bmp.service.ts
 api/user-claims.service.ts
@@ -30,9 +32,13 @@ model/coordinate-dto.ts
 model/coordinate-sequence-factory.ts
 model/coordinate-sequence.ts
 model/coordinate.ts
+model/custom-attribute-type-dto.ts
+model/custom-attribute-type-with-treatment-bmp-type-ids-dto.ts
+model/custom-attribute-upsert-dto.ts
 model/delineation-dto.ts
 model/delineation-upsert-dto.ts
 model/dimension.ts
+model/elevation-model.ts
 model/envelope.ts
 model/field-definition-dto.ts
 model/field-definition-type-simple-dto.ts
@@ -92,12 +98,12 @@ model/system-info-dto.ts
 model/trash-generating-unit-dto.ts
 model/trash-generating-unit-grid-dto.ts
 model/treatment-bmp-display-dto.ts
-model/treatment-bmp-modeling-attribute-definition-dto.ts
-model/treatment-bmp-modeling-attribute-dropdown-item-dto.ts
-model/treatment-bmp-modeling-attribute-simple-dto.ts
+model/treatment-bmp-type-custom-attribute-type-dto.ts
 model/treatment-bmp-type-with-modeling-attributes-dto.ts
 model/treatment-bmp-upsert-dto.ts
 model/treatment-bmphru-characteristics-summary-simple-dto.ts
+model/v-treatment-bmp-modeling-attribute-dto.ts
 model/workflow-step-status.ts
 param.ts
+provide-api.ts
 variables.ts
