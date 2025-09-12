@@ -72,6 +72,9 @@ public partial class Person
     [InverseProperty("UploadedByPerson")]
     public virtual ICollection<LandUseBlockStaging> LandUseBlockStagings { get; set; } = new List<LandUseBlockStaging>();
 
+    [InverseProperty("UpdatePerson")]
+    public virtual ICollection<LandUseBlock> LandUseBlocks { get; set; } = new List<LandUseBlock>();
+
     [InverseProperty("Person")]
     public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
 

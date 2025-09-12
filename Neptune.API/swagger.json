@@ -460,6 +460,45 @@
             }
           }
         }
+      },
+      "put": {
+        "tags": [
+          "LandUseBlock"
+        ],
+        "parameters": [
+          {
+            "name": "landUseBlockID",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LandUseBlockUpsertDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LandUseBlockUpsertDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LandUseBlockUpsertDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
       }
     },
     "/nereid/delta-solve": {
@@ -4960,6 +4999,11 @@
             "type": "integer",
             "format": "int32"
           },
+          "PriorityLandUseTypeID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
           "PriorityLandUseTypeName": {
             "type": "string",
             "nullable": true
@@ -4995,6 +5039,10 @@
             "type": "string",
             "nullable": true
           },
+          "PermitTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
           "PermitTypeName": {
             "type": "string",
             "nullable": true
@@ -5006,6 +5054,45 @@
           "TrashGeneratingArea": {
             "type": "number",
             "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "LandUseBlockUpsertDto": {
+        "required": [
+          "PermitTypeID",
+          "PriorityLandUseTypeID",
+          "TrashGenerationRate"
+        ],
+        "type": "object",
+        "properties": {
+          "PriorityLandUseTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TrashGenerationRate": {
+            "maximum": 999.9,
+            "minimum": 0,
+            "type": "number",
+            "format": "double"
+          },
+          "LandUseDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "MedianHouseholdIncomeResidential": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "MedianHouseholdIncomeRetail": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "PermitTypeID": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false

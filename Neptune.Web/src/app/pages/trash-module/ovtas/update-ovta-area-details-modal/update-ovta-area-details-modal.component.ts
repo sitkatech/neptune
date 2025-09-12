@@ -1,4 +1,4 @@
-import { Component, ComponentRef, OnInit } from "@angular/core";
+import { Component, ComponentRef, inject, OnInit } from "@angular/core";
 import { FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { FormFieldComponent, FormFieldType } from "src/app/shared/components/forms/form-field/form-field.component";
 import { ModalComponent } from "src/app/shared/components/modal/modal.component";
@@ -10,17 +10,17 @@ import { OnlandVisualTrashAssessmentAreaService } from "src/app/shared/generated
 import { Alert } from "src/app/shared/models/alert";
 import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
 import { OnlandVisualTrashAssessmentAreaSimpleDtoForm, OnlandVisualTrashAssessmentAreaSimpleDtoFormControls } from "src/app/shared/generated/model/models";
+import { DialogRef } from "@ngneat/dialog";
 
 @Component({
     selector: "update-ovta-area-details-modal",
     imports: [ReactiveFormsModule, FormFieldComponent, AlertDisplayComponent],
     templateUrl: "./update-ovta-area-details-modal.component.html",
-    styleUrl: "./update-ovta-area-details-modal.component.scss"
+    styleUrl: "./update-ovta-area-details-modal.component.scss",
 })
 export class UpdateOvtaAreaDetailsModalComponent implements OnInit {
+    public ref: DialogRef<UpdateOvtaAreaModalContext, boolean> = inject(DialogRef);
     public FormFieldType = FormFieldType;
-    public modalComponentRef: ComponentRef<ModalComponent>;
-    public modalContext: UpdateOvtaAreaModalContext;
 
     public formGroup = new FormGroup<OnlandVisualTrashAssessmentAreaSimpleDtoForm>({
         OnlandVisualTrashAssessmentAreaID: OnlandVisualTrashAssessmentAreaSimpleDtoFormControls.OnlandVisualTrashAssessmentAreaID(),
@@ -31,9 +31,10 @@ export class UpdateOvtaAreaDetailsModalComponent implements OnInit {
     constructor(private modalService: ModalService, private alertService: AlertService, private onlandVisualTrashAssessmentAreaService: OnlandVisualTrashAssessmentAreaService) {}
 
     ngOnInit(): void {
-        this.formGroup.controls.OnlandVisualTrashAssessmentAreaID.setValue(this.modalContext.OnlandVisualTrashAssessmentAreaID);
-        this.formGroup.controls.OnlandVisualTrashAssessmentAreaName.setValue(this.modalContext.OnlandVisualTrashAssessmentAreaName);
-        this.formGroup.controls.AssessmentAreaDescription.setValue(this.modalContext.AssessmentAreaDescription);
+        this.alertService.clearAlerts();
+        this.formGroup.controls.OnlandVisualTrashAssessmentAreaID.setValue(this.ref.data.OnlandVisualTrashAssessmentAreaID);
+        this.formGroup.controls.OnlandVisualTrashAssessmentAreaName.setValue(this.ref.data.OnlandVisualTrashAssessmentAreaName);
+        this.formGroup.controls.AssessmentAreaDescription.setValue(this.ref.data.AssessmentAreaDescription);
     }
 
     save(): void {
@@ -42,12 +43,12 @@ export class UpdateOvtaAreaDetailsModalComponent implements OnInit {
             .subscribe(() => {
                 this.alertService.clearAlerts();
                 this.alertService.pushAlert(new Alert("Successfully updated OVTA area.", AlertContext.Success));
-                this.modalService.close(this.modalComponentRef, true);
+                this.ref.close(true);
             });
     }
 
     cancel(): void {
-        this.modalService.close(this.modalComponentRef, null);
+        this.ref.close(null);
     }
 }
 
