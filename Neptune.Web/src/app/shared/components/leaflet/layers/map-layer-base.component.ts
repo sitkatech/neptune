@@ -2,7 +2,6 @@ import { Component, Input, OnDestroy, TemplateRef, ViewChild } from "@angular/co
 
 @Component({
     template: "",
-    standalone: true,
 })
 export class MapLayerBase implements IMapLayer, OnDestroy {
     @Input() map: any;

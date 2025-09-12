@@ -33,7 +33,6 @@ import { PopperDirective } from "src/app/shared/directives/popper.directive";
     selector: "project-map",
     templateUrl: "./project-map.component.html",
     styleUrls: ["./project-map.component.scss"],
-    standalone: true,
     imports: [
         FieldDefinitionComponent,
         DecimalPipe,

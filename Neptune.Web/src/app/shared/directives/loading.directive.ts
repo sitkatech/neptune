@@ -3,7 +3,6 @@ import { OnInit, Directive, Input, ElementRef, Renderer2 } from "@angular/core";
 
 @Directive({
     selector: "[loadingSpinner]",
-    standalone: true,
 })
 export class LoadingDirective implements OnInit {
     @Input()
@@ -21,11 +20,7 @@ export class LoadingDirective implements OnInit {
 
     private loadingDiv: HTMLElement;
 
-    constructor(
-        private el: ElementRef,
-        private builder: AnimationBuilder,
-        private renderer: Renderer2
-    ) {
+    constructor(private el: ElementRef, private builder: AnimationBuilder, private renderer: Renderer2) {
         this.loadingDiv = this.renderer.createElement("div");
         this.renderer.addClass(this.el.nativeElement, "has-spinner");
 

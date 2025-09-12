@@ -4,7 +4,6 @@ import { AgGridHelper } from "../helpers/ag-grid-helper";
 
 @Directive({
     selector: "[defaultGridOptions]",
-    standalone: true,
 })
 export class DefaultGridOptionsDirective {
     constructor(private grid: AgGridAngular) {

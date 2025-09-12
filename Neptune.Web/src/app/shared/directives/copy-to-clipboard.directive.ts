@@ -2,7 +2,6 @@ import { AfterViewInit, Directive, ElementRef, HostBinding, HostListener, Input,
 
 @Directive({
     selector: "[copyToClipboard]",
-    standalone: true,
 })
 export class CopyToClipboardDirective implements AfterViewInit {
     @Input("copyToClipboard") enabled: boolean = true;

@@ -2,7 +2,6 @@ import { Directive, HostBinding, HostListener, Input, Renderer2 } from "@angular
 
 @Directive({
     selector: "[expandCollapse]",
-    standalone: true,
 })
 export class ExpandCollapseDirective {
     @Input() expandCollapse: HTMLElement;

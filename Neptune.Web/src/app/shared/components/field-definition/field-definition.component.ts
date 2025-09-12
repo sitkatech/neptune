@@ -15,7 +15,6 @@ import { FormsModule } from "@angular/forms";
     selector: "field-definition",
     templateUrl: "./field-definition.component.html",
     styleUrls: ["./field-definition.component.scss"],
-    standalone: true,
     imports: [EditorComponent, FormsModule, PopperDirective],
     providers: [{ provide: TINYMCE_SCRIPT_SRC, useValue: "tinymce/tinymce.min.js" }],
 })

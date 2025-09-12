@@ -2,7 +2,6 @@ import { Pipe, PipeTransform } from "@angular/core";
 
 @Pipe({
     name: "zipCode",
-    standalone: true,
 })
 export class ZipCodePipe implements PipeTransform {
     transform(value: string): string {

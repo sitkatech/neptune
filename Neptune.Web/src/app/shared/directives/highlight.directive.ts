@@ -3,7 +3,6 @@ import { DomSanitizer } from "@angular/platform-browser";
 
 @Directive({
     selector: "[highlight]",
-    standalone: true,
 })
 export class HighlightDirective implements OnChanges {
     @Input("highlight") searchTerm: string;
@@ -12,10 +11,7 @@ export class HighlightDirective implements OnChanges {
 
     @HostBinding("innerHTML")
     content: string;
-    constructor(
-        private el: ElementRef,
-        private sanitizer: DomSanitizer
-    ) {}
+    constructor(private el: ElementRef, private sanitizer: DomSanitizer) {}
 
     ngOnChanges(changes: SimpleChanges) {
         if (this.el?.nativeElement) {

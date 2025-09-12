@@ -6,7 +6,6 @@ import { PopperService } from "../services/popper.service";
 
 @Directive({
     selector: "[popper]",
-    standalone: true,
 })
 export class PopperDirective {
     @Input() popper: TemplateRef<any>;

@@ -4,7 +4,6 @@ import TinyMCEHelpers from "../helpers/tiny-mce-helpers";
 
 @Pipe({
     name: "tinyMceConfig",
-    standalone: true,
 })
 /**
  * Pipe to transform the TinyMCE editor configuration.
