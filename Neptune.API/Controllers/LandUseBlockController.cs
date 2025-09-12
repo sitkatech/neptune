@@ -22,14 +22,14 @@ public class LandUseBlockController(
     [HttpGet]
     public ActionResult<List<LandUseBlockGridDto>> List()
     {
-        var landUseBlockGridDtos = LandUseBlocks.List(DbContext);
+        var landUseBlockGridDtos = LandUseBlocks.List(dbContext);
         return landUseBlockGridDtos;
     }
 
     [HttpPut]
     public async Task<IActionResult> Update(int landUseBlockID, LandUseBlockUpsertDto landUseBlockUpsertDto)
     {
-        var landUseBlock = LandUseBlocks.GetByIDWithChangeTracking(DbContext, landUseBlockID);
+        var landUseBlock = LandUseBlocks.GetByIDWithChangeTracking(dbContext, landUseBlockID);
         await LandUseBlocks.Update(DbContext, landUseBlock, landUseBlockUpsertDto, CallingUser.PersonID);
         return Ok();
     }
