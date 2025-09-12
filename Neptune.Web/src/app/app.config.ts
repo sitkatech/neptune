@@ -18,6 +18,7 @@ import { CookieStorageService } from "./shared/services/cookies/cookie-storage.s
 import { OAuthStorage, OAuthModule } from "angular-oauth2-oidc";
 import { PhonePipe } from "./shared/pipes/phone.pipe";
 import { GroupByPipe } from "./shared/pipes/group-by.pipe";
+import { provideDialogConfig } from "@ngneat/dialog";
 
 export const appConfig: ApplicationConfig = {
     providers: [
@@ -47,9 +48,9 @@ export const appConfig: ApplicationConfig = {
         CookieService,
         AppInitService,
         provideAppInitializer(() => {
-        const initializerFn = (init_app)(inject(AppInitService));
-        return initializerFn();
-      }),
+            const initializerFn = init_app(inject(AppInitService));
+            return initializerFn();
+        }),
         { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
         {
             provide: HTTP_INTERCEPTORS,
@@ -69,6 +70,20 @@ export const appConfig: ApplicationConfig = {
             provide: OAuthStorage,
             useClass: CookieStorageService,
         },
+        provideDialogConfig({
+            sizes: {
+                sm: {
+                    width: "100%",
+                    maxWidth: "540px",
+                    maxHeight: "90vh",
+                },
+                lg: {
+                    width: "100%",
+                    maxWidth: "1280px",
+                    maxHeight: "90vh",
+                },
+            },
+        }),
     ],
 };
 

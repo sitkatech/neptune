@@ -26,6 +26,7 @@ import { Alert } from "src/app/shared/models/alert";
 import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
 import { OnlandVisualTrashAssessmentStatusEnum } from "src/app/shared/generated/enum/onland-visual-trash-assessment-status-enum";
 import { OvtaAreaLayerComponent } from "../../../../shared/components/leaflet/layers/ovta-area-layer/ovta-area-layer.component";
+import { DialogService } from "@ngneat/dialog";
 
 @Component({
     selector: "trash-ovta-area-detail",
@@ -68,7 +69,8 @@ export class TrashOvtaAreaDetailComponent {
         private modalService: ModalService,
         private confirmService: ConfirmService,
         private router: Router,
-        private datePipe: DatePipe
+        private datePipe: DatePipe,
+        private dialogService: DialogService
     ) {}
 
     ngOnInit(): void {
@@ -207,19 +209,21 @@ export class TrashOvtaAreaDetailComponent {
     }
 
     updateOVTAAreaDetails(ovtaAreaDto: OnlandVisualTrashAssessmentAreaDetailDto) {
-        this.modalService
-            .open(UpdateOvtaAreaDetailsModalComponent, null, { CloseOnClickOut: false, TopLayer: false, ModalSize: ModalSizeEnum.Medium, ModalTheme: ModalThemeEnum.Light }, {
+        const dialogRef = this.dialogService.open(UpdateOvtaAreaDetailsModalComponent, {
+            data: {
                 OnlandVisualTrashAssessmentAreaID: ovtaAreaDto.OnlandVisualTrashAssessmentAreaID,
                 OnlandVisualTrashAssessmentAreaName: ovtaAreaDto.OnlandVisualTrashAssessmentAreaName,
                 AssessmentAreaDescription: ovtaAreaDto.AssessmentAreaDescription,
-            } as UpdateOvtaAreaModalContext)
-            .instance.result.then((result) => {
-                if (result) {
-                    this.alertService.clearAlerts();
-                    this.alertService.pushAlert(new Alert("Successfully updated Assessment Area.", AlertContext.Success));
-                    this.refreshOVTAAreasTrigger.next();
-                }
-            });
+            } as UpdateOvtaAreaModalContext,
+        });
+
+        dialogRef.afterClosed$.subscribe((result) => {
+            if (result) {
+                this.alertService.clearAlerts();
+                this.alertService.pushAlert(new Alert("Successfully updated Assessment Area.", AlertContext.Success));
+                this.refreshOVTAAreasTrigger.next();
+            }
+        });
     }
 
     public getLastAssessmentDate(onlandVisualTrashAssessments: OnlandVisualTrashAssessmentGridDto[]): string {
