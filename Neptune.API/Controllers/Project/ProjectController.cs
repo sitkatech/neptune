@@ -43,7 +43,7 @@ namespace Neptune.API.Controllers
 
         [HttpPost]
         [JurisdictionEditFeature]
-        public async Task<ActionResult<ProjectDto>> New([FromBody] ProjectUpsertDto projectCreateDto)
+        public async Task<ActionResult<ProjectDto>> Create([FromBody] ProjectUpsertDto projectCreateDto)
         {
             if (!CallingUser.CanEditJurisdiction(projectCreateDto.StormwaterJurisdictionID.Value, DbContext))
             {
@@ -63,7 +63,7 @@ namespace Neptune.API.Controllers
         [HttpGet("{projectID}")]
         [EntityNotFound(typeof(Project), "projectID")]
         [UserViewFeature]
-        public ActionResult<ProjectDto> GetByID([FromRoute] int projectID)
+        public ActionResult<ProjectDto> Get([FromRoute] int projectID)
         {
             var projectDto = Projects.GetByIDAsDto(DbContext, projectID);
 
@@ -98,7 +98,7 @@ namespace Neptune.API.Controllers
             return projectWorkflowProgressDto;
         }
 
-        [HttpPost("{projectID}/update")]
+        [HttpPut("{projectID}/update")]
         [EntityNotFound(typeof(Project), "projectID")]
         [JurisdictionEditFeature]
         public async Task<IActionResult> Update([FromRoute] int projectID, [FromBody] ProjectUpsertDto projectCreateDto)
@@ -241,30 +241,42 @@ namespace Neptune.API.Controllers
                 return BadRequest(ModelState);
             }
 
+            //Clearing out previous Nereid results for the project since Treatment BMPs are changing
             await Projects.DeleteProjectNereidResultsAndGrantScores(DbContext, projectID);
-            var existingProjectTreatmentBMPs = DbContext.TreatmentBMPs
-                .Include(x => x.CustomAttributes)
-                .ThenInclude(x => x.CustomAttributeValues)
-                .Include(x => x.CustomAttributes)
-                .ThenInclude(x => x.CustomAttributeType).Where(x => x.ProjectID == project.ProjectID).ToList();
-            
-            var existingProjectTreatmentBMPModelingAttributes = existingProjectTreatmentBMPs
-                .Where(x => x.CustomAttributes.Any() && x.CustomAttributes.Any(y => y.CustomAttributeType.CustomAttributeTypePurposeID == (int)CustomAttributeTypePurposeEnum.Modeling))
-                .SelectMany(x => x.CustomAttributes.Where(x => x.CustomAttributeType.CustomAttributeTypePurposeID == (int)CustomAttributeTypePurposeEnum.Modeling).ToList()).ToList();
 
-            var updatedTreatmentBMPs = treatmentBMPUpsertDtos.Select(x => TreatmentBMPs.TreatmentBMPFromUpsertDtoAndProject(DbContext, x, project)).ToList();
-
-            await DbContext.TreatmentBMPs.AddRangeAsync(updatedTreatmentBMPs.Where(x => x.TreatmentBMPID == 0));
-            await DbContext.SaveChangesAsync();
+            await MergeTreatmentBMPs(project, treatmentBMPUpsertDtos);
 
             // update upsert dtos with new TreatmentBMPIDs
-            foreach (var treatmentBMPUpsertDto in treatmentBMPUpsertDtos.Where(x => x.TreatmentBMPID == 0))
+            var existingProjectTreatmentBMPs = DbContext.TreatmentBMPs
+                .Where(x => x.ProjectID == project.ProjectID).ToList();
+            foreach (var treatmentBMPUpsertDto in treatmentBMPUpsertDtos.Where(x => x.TreatmentBMPID <= 0))
             {
-                treatmentBMPUpsertDto.TreatmentBMPID = existingProjectTreatmentBMPs
+                var treatmentBMPID = existingProjectTreatmentBMPs
                     .Single(x => x.TreatmentBMPName == treatmentBMPUpsertDto.TreatmentBMPName).TreatmentBMPID;
+                treatmentBMPUpsertDto.TreatmentBMPID = treatmentBMPID;
+                foreach (var modelingAttribute in treatmentBMPUpsertDto.ModelingAttributes)
+                {
+                    modelingAttribute.TreatmentBMPID = treatmentBMPID;
+                }
             }
 
-            // update TreatmentBMP and TreatmentBMPModelingAttribute records
+            await MergeCustomAttributes(projectID, treatmentBMPUpsertDtos);
+
+            await CascadeDeleteTreatmentBMPsNoLongerAssociatedToProject(projectID, treatmentBMPUpsertDtos);
+
+            return Ok();
+        }
+
+        private async Task MergeTreatmentBMPs(Project project, List<TreatmentBMPUpsertDto> treatmentBMPUpsertDtos)
+        {
+            var updatedTreatmentBMPs = treatmentBMPUpsertDtos.Select(x => TreatmentBMPs.TreatmentBMPFromUpsertDtoAndProject(DbContext, x, project)).ToList();
+
+            await DbContext.TreatmentBMPs.AddRangeAsync(updatedTreatmentBMPs.Where(x => x.TreatmentBMPID <= 0));
+            await DbContext.SaveChangesAsync();
+
+            // Update existing Treatment BMPs
+            var existingProjectTreatmentBMPs = DbContext.TreatmentBMPs
+                .Where(x => x.ProjectID == project.ProjectID).ToList();
             existingProjectTreatmentBMPs.MergeUpdate(updatedTreatmentBMPs,
                 (x, y) => x.TreatmentBMPID == y.TreatmentBMPID,
                 (x, y) =>
@@ -279,12 +291,38 @@ namespace Neptune.API.Controllers
                     x.Notes = y.Notes;
                 });
 
+            // if the location of a Treatment BMP changed, we need to delete any existing centralized delineations for that Treatment BMP
+            var treatmentBMPsWhoseLocationChanged = existingProjectTreatmentBMPs
+                .Where(x => updatedTreatmentBMPs.Any(y =>
+                    x.TreatmentBMPID == y.TreatmentBMPID && (!x.LocationPoint4326.Equals(y.LocationPoint4326))))
+                .Select(x => x.TreatmentBMPID).ToList();
+
+            if (treatmentBMPsWhoseLocationChanged.Any())
+            {
+                await DbContext.Delineations
+                    .Where(x => x.DelineationTypeID == (int)DelineationTypeEnum.Centralized &&
+                                treatmentBMPsWhoseLocationChanged.Contains(x.TreatmentBMPID)).ExecuteDeleteAsync();
+            }
+
             await DbContext.SaveChangesAsync();
+        }
 
-            //Update Modeling Attributes
-            dbContext.RemoveRange(existingProjectTreatmentBMPModelingAttributes.SelectMany(x => x.CustomAttributeValues));
-            await dbContext.SaveChangesAsync();
+        private async Task MergeCustomAttributes(int projectID, List<TreatmentBMPUpsertDto> treatmentBMPUpsertDtos)
+        {
+            //Purge all Custom Attribute values that pertain to modeling attributes for this project
+            await dbContext.CustomAttributeValues.Include(x => x.CustomAttribute).ThenInclude(x => x.TreatmentBMP)
+                .Include(x => x.CustomAttribute)
+                .ThenInclude(x => x.CustomAttributeType)
+                .Where(x => x.CustomAttribute.TreatmentBMP.ProjectID == projectID &&
+                            x.CustomAttribute.CustomAttributeType.CustomAttributeTypePurposeID ==
+                            (int)CustomAttributeTypePurposeEnum.Modeling).ExecuteDeleteAsync();
 
+
+            var existingProjectTreatmentBMPModelingAttributes = dbContext.CustomAttributes
+                .Include(x => x.TreatmentBMP)
+                .Where(x => x.TreatmentBMP.ProjectID == projectID).ToList();
+
+            //Get all Custom Attribute Types so we can validate values against their data types
             var allCustomAttributeTypes = CustomAttributeTypes.List(dbContext);
             var customAttributeUpsertDtos = treatmentBMPUpsertDtos.SelectMany(x => x.ModelingAttributes).Where(x => x.CustomAttributeValues != null && x.CustomAttributeValues.Count > 0).ToList();
             var customAttributeValuesToUpdate = new List<CustomAttributeValue>();
@@ -306,7 +344,8 @@ namespace Neptune.API.Controllers
 
                 foreach (var value in customAttributeUpsertDto.CustomAttributeValues)
                 {
-                    var valueParsedForDataType = allCustomAttributeTypes.Single(y => y.CustomAttributeTypeID == customAttributeUpsertDto.CustomAttributeTypeID).CustomAttributeDataType.ValueParsedForDataType(value);
+                    //Ensure that the value can be parsed for the required data type
+                    var valueParsedForDataType = allCustomAttributeTypes.Single(x => x.CustomAttributeTypeID == customAttributeUpsertDto.CustomAttributeTypeID).CustomAttributeDataType.ValueParsedForDataType(value);
                     var customAttributeValue = new CustomAttributeValue
                     {
                         CustomAttribute = customAttribute,
@@ -316,26 +355,24 @@ namespace Neptune.API.Controllers
                 }
             }
 
-            foreach (var customAttribute in existingProjectTreatmentBMPModelingAttributes)
-            {
-                var customAttributeUpsertDto = customAttributeUpsertDtos.SingleOrDefault(y =>
-                    customAttribute.TreatmentBMPID == y.TreatmentBMPID &&
-                    customAttribute.TreatmentBMPTypeCustomAttributeTypeID == y.TreatmentBMPTypeCustomAttributeTypeID);
-                if (customAttributeUpsertDto == null)
-                {
-                    dbContext.Remove(customAttribute);
-                }
-            }
+            var bmpIds = customAttributeUpsertDtos.Select(y => y.TreatmentBMPID).ToHashSet();
+            var typeIds = customAttributeUpsertDtos.Select(y => y.TreatmentBMPTypeCustomAttributeTypeID).ToHashSet();
+
+            await dbContext.CustomAttributes
+                .Where(x => x.TreatmentBMP.ProjectID == projectID &&
+                            (!bmpIds.Contains(x.TreatmentBMPID) ||
+                             !typeIds.Contains(x.TreatmentBMPTypeCustomAttributeTypeID)))
+                .ExecuteDeleteAsync();
+            
             dbContext.AddRange(customAttributeValuesToUpdate);
             await DbContext.SaveChangesAsync();
-
-            await MergeDeleteTreatmentBMPs(existingProjectTreatmentBMPs, updatedTreatmentBMPs);
-
-            return Ok();
         }
 
-        private async Task MergeDeleteTreatmentBMPs(List<TreatmentBMP> existingProjectTreatmentBMPs, List<TreatmentBMP> updatedTreatmentBMPs)
+        private async Task CascadeDeleteTreatmentBMPsNoLongerAssociatedToProject(int projectID, List<TreatmentBMPUpsertDto> updatedTreatmentBMPs)
         {
+            var existingProjectTreatmentBMPs = DbContext.TreatmentBMPs
+                .Where(x => x.ProjectID == projectID).ToList();
+
             var treatmentBMPIDsWhoAreBeingDeleted = existingProjectTreatmentBMPs.Select(x => x.TreatmentBMPID)
                 .Where(x => updatedTreatmentBMPs.All(y => x != y.TreatmentBMPID)).ToList();
             // delete all the Delineation related entities
@@ -361,18 +398,6 @@ namespace Neptune.API.Controllers
                 .ExecuteDeleteAsync();
             await DbContext.TreatmentBMPs.Where(x => treatmentBMPIDsWhoAreBeingDeleted.Contains(x.TreatmentBMPID))
                 .ExecuteDeleteAsync();
-
-            var treatmentBMPsWhoseLocationChanged = existingProjectTreatmentBMPs
-                .Where(x => updatedTreatmentBMPs.Any(y =>
-                    x.TreatmentBMPID == y.TreatmentBMPID && (!x.LocationPoint4326.Equals(y.LocationPoint4326))))
-                .Select(x => x.TreatmentBMPID).ToList();
-
-            if (treatmentBMPsWhoseLocationChanged.Any())
-            {
-                await DbContext.Delineations
-                    .Where(x => x.DelineationTypeID == (int)DelineationTypeEnum.Centralized &&
-                                treatmentBMPsWhoseLocationChanged.Contains(x.TreatmentBMPID)).ExecuteDeleteAsync();
-            }
         }
 
         [HttpGet("{projectID}/project-network-solve-histories")]

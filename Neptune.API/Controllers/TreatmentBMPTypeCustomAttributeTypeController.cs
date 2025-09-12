@@ -20,25 +20,25 @@ public class TreatmentBMPTypeCustomAttributeTypeController(
     [HttpGet]
     public ActionResult<List<TreatmentBMPTypeCustomAttributeTypeDto>> List()
     {
-        var TreatmentBMPTypeCustomAttributeTypeDtos = TreatmentBMPTypeCustomAttributeTypes.ListAsDto(DbContext);
-        return TreatmentBMPTypeCustomAttributeTypeDtos;
+        var treatmentBMPTypeCustomAttributeTypeDtos = TreatmentBMPTypeCustomAttributeTypes.ListAsDto(DbContext);
+        return treatmentBMPTypeCustomAttributeTypeDtos;
     }
 
 
     [HttpGet("{treatmentBMPTypeCustomAttributeTypeID}")]
     public ActionResult<TreatmentBMPTypeCustomAttributeTypeDto> Get([FromRoute] int treatmentBMPTypeCustomAttributeTypeID)
     {
-        var TreatmentBMPTypeCustomAttributeTypeDto = TreatmentBMPTypeCustomAttributeTypes.GetByIDAsDto(DbContext, treatmentBMPTypeCustomAttributeTypeID);
-        return RequireNotNullThrowNotFound(TreatmentBMPTypeCustomAttributeTypeDto, "TreatmentBMPTypeCustomAttributeType", treatmentBMPTypeCustomAttributeTypeID);
+        var treatmentBMPTypeCustomAttributeTypeDto = TreatmentBMPTypeCustomAttributeTypes.GetByIDAsDto(DbContext, treatmentBMPTypeCustomAttributeTypeID);
+        return RequireNotNullThrowNotFound(treatmentBMPTypeCustomAttributeTypeDto, "TreatmentBMPTypeCustomAttributeType", treatmentBMPTypeCustomAttributeTypeID);
     }
 
     [HttpGet("purpose/{customAttributeTypePurposeID}")]
     public ActionResult<List<TreatmentBMPTypeCustomAttributeTypeDto>> GetTreatmentBMPTypeCustomAttributeTypeByCustomAttributePurposeID(
         [FromRoute] int customAttributeTypePurposeID)
     {
-        var TreatmentBMPTypeCustomAttributeTypeDtos =
+        var treatmentBMPTypeCustomAttributeTypeDtos =
             TreatmentBMPTypeCustomAttributeTypes.GetByCustomAttributeTypePurposeAsDto(DbContext, customAttributeTypePurposeID);
 
-        return TreatmentBMPTypeCustomAttributeTypeDtos;
+        return treatmentBMPTypeCustomAttributeTypeDtos;
     }
 }

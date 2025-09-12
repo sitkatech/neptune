@@ -494,13 +494,12 @@ export class TreatmentBmpsComponent implements OnInit {
     }
 
     public save(continueToNextStep?: boolean) {
-        debugger;
         this.isLoadingSubmit = true;
         this.alertService.clearAlerts();
 
         this.project.DoesNotIncludeTreatmentBMPs = this.project.DoesNotIncludeTreatmentBMPs && (this.projectTreatmentBMPs == null || this.projectTreatmentBMPs.length == 0);
         this.clearNonApplicableModelingAttributesForTreatmentBMPs();
-        this.projectService.projectsProjectIDUpdatePost(this.projectID, this.project).subscribe(
+        this.projectService.projectsProjectIDUpdatePut(this.projectID, this.project).subscribe(
             () => {
                 this.projectService.projectsProjectIDTreatmentBmpsPut(this.projectID, this.projectTreatmentBMPs).subscribe(
                     () => {

@@ -2134,7 +2134,7 @@
       }
     },
     "/projects/{projectID}/update": {
-      "post": {
+      "put": {
         "tags": [
           "Project"
         ],
