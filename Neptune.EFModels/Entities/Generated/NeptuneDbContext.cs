@@ -461,6 +461,8 @@ public partial class NeptuneDbContext : DbContext
             entity.HasKey(e => e.LandUseBlockID).HasName("PK_LandUseBlock_LandUseBlockID");
 
             entity.HasOne(d => d.StormwaterJurisdiction).WithMany(p => p.LandUseBlocks).OnDelete(DeleteBehavior.ClientSetNull);
+
+            entity.HasOne(d => d.UpdatePerson).WithMany(p => p.LandUseBlocks).HasConstraintName("FK_LandUseBlock_Person_UpdatePersonID_PersonID");
         });
 
         modelBuilder.Entity<LandUseBlockStaging>(entity =>
