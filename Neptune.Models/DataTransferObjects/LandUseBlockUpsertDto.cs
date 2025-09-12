@@ -6,9 +6,10 @@ public class LandUseBlockUpsertDto
 {
     [Display(Name = "Land Use Type")]
     [Required]
-    public int LandUseTypeID { get; set; }
+    public int PriorityLandUseTypeID { get; set; }
     [Display(Name = "Trash Generation Rate")]
     [Required]
+    [Range(0, 999.9, ErrorMessage = "Trash Generation Rate must be between 0 and 999.9.")]
     public decimal? TrashGenerationRate { get; set; }
     public string LandUseDescription { get; set; }
     public decimal? MedianHouseholdIncomeResidential { get; set; }

@@ -10,6 +10,7 @@ public static partial class LandUseBlockExtensionMethods
         var dto = new LandUseBlockGridDto()
         {
             LandUseBlockID = landUseBlock.LandUseBlockID,
+            PriorityLandUseTypeID = landUseBlock.PriorityLandUseTypeID,
             PriorityLandUseTypeName = landUseBlock.PriorityLandUseType?.PriorityLandUseTypeDisplayName,
             LandUseDescription = landUseBlock.LandUseDescription,
             TrashGenerationRate = landUseBlock.TrashGenerationRate,
@@ -18,6 +19,7 @@ public static partial class LandUseBlockExtensionMethods
             MedianHouseholdIncomeRetail = landUseBlock.MedianHouseholdIncomeRetail,
             StormwaterJurisdictionID = landUseBlock.StormwaterJurisdictionID,
             StormwaterJurisdictionName = landUseBlock.StormwaterJurisdiction.GetOrganizationDisplayName(),
+            PermitTypeID = landUseBlock.PermitTypeID,
             PermitTypeName = landUseBlock.PermitType.PermitTypeDisplayName,
             Area = landUseBlock.LandUseBlockGeometry.Area * Constants.SquareMetersToAcres,
             TrashGeneratingArea = landUseBlock.TrashGeneratingUnits.Sum(y => y.TrashGeneratingUnitGeometry.Area) * Constants.SquareMetersToAcres,

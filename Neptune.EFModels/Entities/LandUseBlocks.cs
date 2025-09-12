@@ -26,10 +26,9 @@ public static class LandUseBlocks
 
     public static async Task Update(NeptuneDbContext dbContext, LandUseBlock landUseBlock, LandUseBlockUpsertDto landUseBlockUpsertDto, int personID)
     {
-        landUseBlock.PriorityLandUseTypeID = landUseBlockUpsertDto.LandUseTypeID;
+        landUseBlock.PriorityLandUseTypeID = landUseBlockUpsertDto.PriorityLandUseTypeID;
         landUseBlock.TrashGenerationRate = landUseBlockUpsertDto.TrashGenerationRate;
         landUseBlock.LandUseDescription = landUseBlockUpsertDto.LandUseDescription;
-        //There might need to be additional validation here, I don't think they can both have a non-zero value
         landUseBlock.MedianHouseholdIncomeResidential = landUseBlockUpsertDto.MedianHouseholdIncomeResidential;
         landUseBlock.MedianHouseholdIncomeRetail = landUseBlockUpsertDto.MedianHouseholdIncomeRetail;
         landUseBlock.PermitTypeID = landUseBlockUpsertDto.PermitTypeID;

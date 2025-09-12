@@ -4,8 +4,7 @@ import { AlertDisplayComponent } from "../../../shared/components/alert-display/
 import { Observable, tap } from "rxjs";
 import { LandUseBlockService } from "../../../shared/generated/api/land-use-block.service";
 import { UtilityFunctionsService } from "../../../services/utility-functions.service";
-import { ColDef } from "ag-grid-community";
-import { NeptuneGridComponent } from "../../../shared/components/neptune-grid/neptune-grid.component";
+import { ColDef, RowNode } from "ag-grid-community";
 import { AsyncPipe } from "@angular/common";
 import { LandUseBlockGridDto } from "../../../shared/generated/model/land-use-block-grid-dto";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
@@ -22,6 +21,13 @@ import { SelectedLandUseBlockLayerComponent } from "src/app/shared/components/le
 import { DelineationsLayerComponent } from "src/app/shared/components/leaflet/layers/delineations-layer/delineations-layer.component";
 import { JurisdictionsLayerComponent } from "src/app/shared/components/leaflet/layers/jurisdictions-layer/jurisdictions-layer.component";
 import { WqmpsLayerComponent } from "src/app/shared/components/leaflet/layers/wqmps-layer/wqmps-layer.component";
+import { TrashLandUseBlockAttributesEditModalComponent } from "src/app/shared/components/trash-land-use-blocks/modals/trash-land-use-block-attributes-edit-modal/trash-land-use-block-attributes-edit-modal.component";
+import { DialogService } from "@ngneat/dialog";
+import { PriorityLandUseTypeEnum } from "src/app/shared/generated/enum/priority-land-use-type-enum";
+import { PermitTypeEnum } from "src/app/shared/generated/enum/permit-type-enum";
+import { Alert } from "src/app/shared/models/alert";
+import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
+import { AlertService } from "src/app/shared/services/alert.service";
 
 @Component({
     selector: "trash-land-use-block-index",
@@ -55,15 +61,24 @@ export class TrashLandUseBlockIndexComponent {
     public mapIsReady: boolean = false;
     public boundingBox$: Observable<BoundingBoxDto>;
 
+    public priorityLandUseTypes = PriorityLandUseTypeEnum;
+    public permitTypes = PermitTypeEnum;
+
     constructor(
         private landUseBlockService: LandUseBlockService,
         private utilityFunctionsService: UtilityFunctionsService,
         private authenticationService: AuthenticationService,
-        private stormwaterJurisdictionService: StormwaterJurisdictionService
+        private stormwaterJurisdictionService: StormwaterJurisdictionService,
+        private dialogService: DialogService
     ) {}
 
     ngOnInit() {
         this.landUseBlockColumnDefs = [
+            this.utilityFunctionsService.createActionsColumnDef((params: any) => {
+                return [
+                    { ActionName: "Update Attributes", ActionIcon: "fas fa-info-circle", ActionHandler: () => this.updateAttributesModal(params.data.LandUseBlockID, params.node) },
+                ];
+            }),
             this.utilityFunctionsService.createBasicColumnDef("Block ID", "LandUseBlockID"),
             this.utilityFunctionsService.createBasicColumnDef("Land Use Type", "PriorityLandUseTypeName", {
                 CustomDropdownFilterField: "PriorityLandUseTypeName",
@@ -116,5 +131,35 @@ export class TrashLandUseBlockIndexComponent {
 
     public handleLayerBoundsCalculated(bounds: any) {
         this.bounds = bounds;
+    }
+
+    public updateAttributesModal(landUseBlockID: number, rowNode: RowNode) {
+        const dialogRef = this.dialogService.open(TrashLandUseBlockAttributesEditModalComponent, {
+            data: {
+                LandUseBlockID: landUseBlockID,
+                PriorityLandUseTypeID: rowNode.data.PriorityLandUseTypeID,
+                TrashGenerationRate: rowNode.data.TrashGenerationRate,
+                LandUseDescription: rowNode.data.LandUseDescription,
+                MedianHouseholdIncomeResidential: rowNode.data.MedianHouseholdIncomeResidential,
+                MedianHouseholdIncomeRetail: rowNode.data.MedianHouseholdIncomeRetail,
+                PermitTypeID: rowNode.data.PermitTypeID,
+            },
+            size: "sm",
+        });
+
+        dialogRef.afterClosed$.subscribe((result) => {
+            if (result) {
+                let rowNodeUpdated = rowNode.data;
+                rowNodeUpdated.PriorityLandUseTypeID = result.PriorityLandUseTypeID;
+                rowNodeUpdated.PriorityLandUseTypeName = this.priorityLandUseTypes[result.PriorityLandUseTypeID];
+                rowNodeUpdated.TrashGenerationRate = result.TrashGenerationRate;
+                rowNodeUpdated.LandUseDescription = result.LandUseDescription;
+                rowNodeUpdated.MedianHouseholdIncomeResidential = result.MedianHouseholdIncomeResidential;
+                rowNodeUpdated.MedianHouseholdIncomeRetail = result.MedianHouseholdIncomeRetail;
+                rowNodeUpdated.PermitTypeID = result.PermitTypeID;
+                rowNodeUpdated.PermitTypeName = this.permitTypes[result.PermitTypeID];
+                rowNode.setData(rowNodeUpdated);
+            }
+        });
     }
 }

@@ -4999,6 +4999,11 @@
             "type": "integer",
             "format": "int32"
           },
+          "PriorityLandUseTypeID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
           "PriorityLandUseTypeName": {
             "type": "string",
             "nullable": true
@@ -5034,6 +5039,10 @@
             "type": "string",
             "nullable": true
           },
+          "PermitTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
           "PermitTypeName": {
             "type": "string",
             "nullable": true
@@ -5051,17 +5060,19 @@
       },
       "LandUseBlockUpsertDto": {
         "required": [
-          "LandUseTypeID",
           "PermitTypeID",
+          "PriorityLandUseTypeID",
           "TrashGenerationRate"
         ],
         "type": "object",
         "properties": {
-          "LandUseTypeID": {
+          "PriorityLandUseTypeID": {
             "type": "integer",
             "format": "int32"
           },
           "TrashGenerationRate": {
+            "maximum": 999.9,
+            "minimum": 0,
             "type": "number",
             "format": "double"
           },
