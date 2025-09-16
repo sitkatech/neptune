@@ -4,7 +4,9 @@ using Microsoft.Extensions.Options;
 using Neptune.API.Services;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
+using ProjNet.CoordinateSystems;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Neptune.API.Controllers;
 
@@ -20,7 +22,15 @@ public class LandUseBlockController(
     [HttpGet]
     public ActionResult<List<LandUseBlockGridDto>> List()
     {
-        var landUseBlockGridDtos = LandUseBlocks.List(DbContext);
+        var landUseBlockGridDtos = LandUseBlocks.List(dbContext);
         return landUseBlockGridDtos;
+    }
+
+    [HttpPut]
+    public async Task<IActionResult> Update(int landUseBlockID, LandUseBlockUpsertDto landUseBlockUpsertDto)
+    {
+        var landUseBlock = LandUseBlocks.GetByIDWithChangeTracking(dbContext, landUseBlockID);
+        await LandUseBlocks.Update(DbContext, landUseBlock, landUseBlockUpsertDto, CallingUser.PersonID);
+        return Ok();
     }
 }

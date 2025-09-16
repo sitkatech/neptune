@@ -325,14 +325,12 @@ export class TreatmentBmpsComponent implements OnInit {
     }
 
     public updateModelingAttributesForSelectedTreatmentBMP(): void {
-        debugger;
         if (!this.selectedTreatmentBMP || this.selectedTreatmentBMP.TreatmentBMPTypeID == null) return;
         if (this.selectedTreatmentBMP.ModelingAttributes == null) {
             this.selectedTreatmentBMP.ModelingAttributes = new Array<CustomAttributeUpsertDto>();
         }
         let treatmentBMPTypeCustomAttributeTypes = this.getTreatmentBMPTypeCustomAttributeTypesForTreatmentBMPType(this.selectedTreatmentBMP.TreatmentBMPTypeID);
         for (let treatmentBMPTypeCustomAttributeType of treatmentBMPTypeCustomAttributeTypes) {
-            debugger;
             let index = this.selectedTreatmentBMP.ModelingAttributes.findIndex((x) => x.CustomAttributeTypeID == treatmentBMPTypeCustomAttributeType.CustomAttributeTypeID);
             if (index == -1) {
                 this.selectedTreatmentBMP.ModelingAttributes.push(

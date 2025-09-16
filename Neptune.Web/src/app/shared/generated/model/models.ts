@@ -21,6 +21,7 @@ export * from './geometry-geo-json-and-area-dto';
 export * from './i-attributes-table';
 export * from './i-feature';
 export * from './land-use-block-grid-dto';
+export * from './land-use-block-upsert-dto';
 export * from './load-results-dto';
 export * from './neptune-page-dto';
 export * from './neptune-page-type-simple-dto';

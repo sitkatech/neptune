@@ -12,6 +12,7 @@
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class LandUseBlockGridDto { 
     LandUseBlockID?: number;
+    PriorityLandUseTypeID?: number | null;
     PriorityLandUseTypeName?: string | null;
     LandUseDescription?: string | null;
     TrashGenerationRate?: number | null;
@@ -20,6 +21,7 @@ export class LandUseBlockGridDto {
     MedianHouseholdIncomeRetail?: number | null;
     StormwaterJurisdictionID?: number;
     StormwaterJurisdictionName?: string | null;
+    PermitTypeID?: number;
     PermitTypeName?: string | null;
     Area?: number;
     TrashGeneratingArea?: number;
@@ -30,6 +32,7 @@ export class LandUseBlockGridDto {
 
 export interface LandUseBlockGridDtoForm { 
     LandUseBlockID?: FormControl<number>;
+    PriorityLandUseTypeID?: FormControl<number>;
     PriorityLandUseTypeName?: FormControl<string>;
     LandUseDescription?: FormControl<string>;
     TrashGenerationRate?: FormControl<number>;
@@ -38,6 +41,7 @@ export interface LandUseBlockGridDtoForm {
     MedianHouseholdIncomeRetail?: FormControl<number>;
     StormwaterJurisdictionID?: FormControl<number>;
     StormwaterJurisdictionName?: FormControl<string>;
+    PermitTypeID?: FormControl<number>;
     PermitTypeName?: FormControl<string>;
     Area?: FormControl<number>;
     TrashGeneratingArea?: FormControl<number>;
@@ -45,6 +49,16 @@ export interface LandUseBlockGridDtoForm {
 
 export class LandUseBlockGridDtoFormControls { 
     public static LandUseBlockID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static PriorityLandUseTypeID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
         {
@@ -125,6 +139,16 @@ export class LandUseBlockGridDtoFormControls {
         }
     );
     public static StormwaterJurisdictionName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static PermitTypeID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
         {

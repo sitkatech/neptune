@@ -10,6 +10,8 @@ CREATE TABLE [dbo].[LandUseBlock](
 	[StormwaterJurisdictionID] [int] NOT NULL CONSTRAINT [FK_LandUseBlock_StormwaterJurisdiction_StormwaterJurisdictionID] FOREIGN KEY REFERENCES [dbo].[StormwaterJurisdiction] ([StormwaterJurisdictionID]),
 	[PermitTypeID] [int] NOT NULL CONSTRAINT [FK_LandUseBlock_PermitType_PermitTypeID] FOREIGN KEY REFERENCES [dbo].[PermitType] ([PermitTypeID]),
 	[LandUseBlockGeometry4326] [geometry] NULL,
+    [UpdatePersonID] [int] NULL CONSTRAINT [FK_LandUseBlock_Person_UpdatePersonID_PersonID] FOREIGN KEY REFERENCES [dbo].[Person] ([PersonID]),
+    [DateUpdated] [datetime] NULL
 )
 GO
 
