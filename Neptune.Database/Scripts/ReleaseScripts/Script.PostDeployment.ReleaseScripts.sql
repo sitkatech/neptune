@@ -44,4 +44,6 @@ GO
 GO
 :r ".\018 - Add CustomAttributeType, TreatmentBMPCustomAttributeType, CustomAttribute and CustomAttributeValues for modeling attributes.sql"
 GO
+:r ".\019 - Add Dry Weather Flow Override custom attribute for all Modeled Treatment BMPs without it.sql"
+GO
 

@@ -433,6 +433,7 @@
     <None Include="Scripts\ReleaseScripts\017 - Recalculate Baseline and Progress OVTA Scores.sql" />
     <None Include="Scripts\ReleaseScripts\018 - Add CustomAttributeType, TreatmentBMPCustomAttributeType, CustomAttribute and CustomAttributeValues for modeling attributes.sql" />
     <Build Include="dbo\Views\dbo.vTreatmentBMPModelingAttribute.sql" />
+    <None Include="Scripts\ReleaseScripts\019 - Add Dry Weather Flow Override custom attribute for all Modeled Treatment BMPs without it.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="Neptune.Database.refactorlog" />
