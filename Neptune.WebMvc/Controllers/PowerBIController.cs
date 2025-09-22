@@ -97,7 +97,7 @@ namespace Neptune.WebMvc.Controllers
                 TreatmentRate = x.TreatmentRate,
                 UnderlyingHydrologicSoilGroup = x.UnderlyingHydrologicSoilGroup,
                 UnderlyingInfiltrationRate = x.UnderlyingInfiltrationRate,
-                WaterQualityDetentionVolume = x.WaterQualityDetentionVolume,
+                WaterQualityDetentionVolume = x.ExtendedDetentionSurchargeVolume,
                 WettedFootprint = x.WettedFootprint,
                 WinterHarvestedWaterDemand = x.WinterHarvestedWaterDemand
             });

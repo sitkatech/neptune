@@ -104,7 +104,7 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
         public FieldDefinitionType FieldDefinitionForUnderlyingHydrologicSoilGroupHSG { get; }
         public FieldDefinitionType FieldDefinitionForUnderlyingInfiltrationRate { get; }
         public FieldDefinitionType FieldDefinitionForUpstreamBMP { get; }
-        public FieldDefinitionType FieldDefinitionForWaterQualityDetentionVolume { get; }
+        public FieldDefinitionType FieldDefinitionForExtendedDetentionSurchargeVolume { get; }
         public FieldDefinitionType FieldDefinitionForWettedFootprint { get; }
         public FieldDefinitionType FieldDefinitionForWinterHarvestedWaterDemand { get; }
         public FieldDefinitionType FieldDefinitionForWatershed { get; }
@@ -290,7 +290,7 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
             FieldDefinitionForUnderlyingHydrologicSoilGroupHSG = FieldDefinitionType.UnderlyingHydrologicSoilGroupID;
             FieldDefinitionForUnderlyingInfiltrationRate = FieldDefinitionType.UnderlyingInfiltrationRate;
             FieldDefinitionForUpstreamBMP = FieldDefinitionType.UpstreamBMP;
-            FieldDefinitionForWaterQualityDetentionVolume = FieldDefinitionType.WaterQualityDetentionVolume;
+            FieldDefinitionForExtendedDetentionSurchargeVolume = FieldDefinitionType.ExtendedDetentionSurchargeVolume;
             FieldDefinitionForWettedFootprint = FieldDefinitionType.WettedFootprint;
             FieldDefinitionForWinterHarvestedWaterDemand = FieldDefinitionType.WinterHarvestedWaterDemand;
             FieldDefinitionForDesignStormwaterDepth = FieldDefinitionType.DesignStormwaterDepth;

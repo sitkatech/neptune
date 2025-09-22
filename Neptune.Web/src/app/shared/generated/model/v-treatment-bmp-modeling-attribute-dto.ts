@@ -36,7 +36,7 @@ export class VTreatmentBMPModelingAttributeDto {
     TreatmentRate?: number | null;
     UnderlyingHydrologicSoilGroup?: string | null;
     UnderlyingInfiltrationRate?: number | null;
-    WaterQualityDetentionVolume?: number | null;
+    ExtendedDetentionSurchargeVolume?: number | null;
     WettedFootprint?: number | null;
     WinterHarvestedWaterDemand?: number | null;
     MonthsOfOperation?: string | null;
@@ -72,7 +72,7 @@ export interface VTreatmentBMPModelingAttributeDtoForm {
     TreatmentRate?: FormControl<number>;
     UnderlyingHydrologicSoilGroup?: FormControl<string>;
     UnderlyingInfiltrationRate?: FormControl<number>;
-    WaterQualityDetentionVolume?: FormControl<number>;
+    ExtendedDetentionSurchargeVolume?: FormControl<number>;
     WettedFootprint?: FormControl<number>;
     WinterHarvestedWaterDemand?: FormControl<number>;
     MonthsOfOperation?: FormControl<string>;
@@ -330,7 +330,7 @@ export class VTreatmentBMPModelingAttributeDtoFormControls {
             ],
         }
     );
-    public static WaterQualityDetentionVolume = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+    public static ExtendedDetentionSurchargeVolume = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
         {

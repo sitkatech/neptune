@@ -7936,7 +7936,7 @@
             "format": "double",
             "nullable": true
           },
-          "WaterQualityDetentionVolume": {
+          "ExtendedDetentionSurchargeVolume": {
             "type": "number",
             "format": "double",
             "nullable": true

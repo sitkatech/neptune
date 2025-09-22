@@ -27,7 +27,7 @@ public partial class vTreatmentBMPModelingAttributeDto
     public double? TreatmentRate { get; set; }
     public string? UnderlyingHydrologicSoilGroup { get; set; }
     public double? UnderlyingInfiltrationRate { get; set; }
-    public double? WaterQualityDetentionVolume { get; set; }
+    public double? ExtendedDetentionSurchargeVolume { get; set; }
     public double? WettedFootprint { get; set; }
     public double? WinterHarvestedWaterDemand { get; set; }
     public string? MonthsOfOperation { get; set; }

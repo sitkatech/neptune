@@ -57,6 +57,8 @@ public partial class vPowerBITreatmentBMP
 
     public double? EffectiveRetentionDepth { get; set; }
 
+    public double? ExtendedDetentionSurchargeVolume { get; set; }
+
     public double? InfiltrationDischargeRate { get; set; }
 
     public double? InfiltrationSurfaceArea { get; set; }
@@ -91,15 +93,13 @@ public partial class vPowerBITreatmentBMP
 
     public double? UnderlyingInfiltrationRate { get; set; }
 
-    public double? WaterQualityDetentionVolume { get; set; }
-
     public double? WettedFootprint { get; set; }
 
     public double? WinterHarvestedWaterDemand { get; set; }
 
     [StringLength(1000)]
     [Unicode(false)]
-    public string? ModeledMonthsOfOperation { get; set; }
+    public string? MonthsOperational { get; set; }
 
     [StringLength(1000)]
     [Unicode(false)]

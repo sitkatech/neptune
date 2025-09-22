@@ -22,7 +22,7 @@ values ('Average Diverted Flowrate',3, 19, 1, 'Average actual diverted flowrate 
 ('Infiltration Discharge Rate',3,18, 1, 'Design or tested infiltration flowrate of the drywell. This is specified in cubic feet per section, rather than inches per hour.', 1, null, null),
 ('Infiltration Surface Area',3,2, 1, 'Surface area through which infiltration can occur in the system. If infiltration will occur into the sidewalls of a BMP, it is appropriate to include half of the sidewall area as as part of the infiltration surface area.', 1, null, null),
 ('Media Bed Footprint',3,2, 1, 'Surface area of the media bed of the BMP.', 1, null, null),
-('Modeled Months Of Operation',5, null, 1, 'This defines the months that the facility is operational. For modeling purposes, this can be "Summer," "Winter," or "Both."', 1, '["Both", "Summer", "Winter"]', 'Both'),
+('Months Operational',5, null, 1, 'This defines the months that the facility is operational. For modeling purposes, this can be "Summer," "Winter," or "Both."', 1, '["Both", "Summer", "Winter"]', 'Both'),
 ('Permanent Pool Or Wetland Volume',3, 15, 1, 'Constructed wetland or permanent pool volume below discharge elevation.', 1, null, null),
 ('Storage Volume Below Lowest Outlet Elevation',3, 15, 1, 'The volume of water stored below the lowest outlet (e.g., underdrain, orifice) of the system.', 1, null, null),
 ('Summer Harvested Water Demand',3, 19, 1, 'Average daily harvested water demand from May through October.', 1, null, null),
@@ -32,7 +32,7 @@ values ('Average Diverted Flowrate',3, 19, 1, 'Average actual diverted flowrate 
 ('Treatment Rate',3,18, 1, 'The flowrate at which the BMP can provide treatment of runoff.', 1, null, null),
 ('Underlying Hydrologic Soil Group',5, null, 0, 'Choose the soil group that best represents the soils underlying the BMP. This is used to estimate a default infiltration rate (A = XX, B = XX, C=XX, D=XX)', 1,'["A", "B", "C", "D", "Liner"]', 'D'),
 ('Underlying Infiltration Rate',3, 10, 1, 'The underlying infiltration rate below the BMP. This refers to the underlying soil, not engineered media.', 1, null, null),
-('Water Quality Detention Volume',3, 15, 1, 'Extended detention surcharge storage above permanent pool volume. Extended detention is > 24-hour drawdown time.', 1, null, null),
+('Extended Detention Surcharge Volume',3, 15, 1, 'Extended detention surcharge storage above permanent pool volume. Extended detention is > 24-hour drawdown time.', 1, null, null),
 ('Wetted Footprint',3,2, 1, 'Wetted footprint when BMP is half full.', 1, null, null),
 ('Winter Harvested Water Demand',3, 19, 1, 'Average daily harvested water demand from November through April. This should be averaged to account for any shutdowns during wet weather and reduction in demand during the winter season.', 1, null, null)
 
