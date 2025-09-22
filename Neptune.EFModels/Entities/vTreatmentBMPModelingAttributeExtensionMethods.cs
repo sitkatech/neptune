@@ -33,7 +33,7 @@ public static partial class vTreatmentBMPModelingAttributeExtensionMethods
             TreatmentRate = treatmentBMPModelingAttribute.TreatmentRate,
             UnderlyingHydrologicSoilGroup = treatmentBMPModelingAttribute.UnderlyingHydrologicSoilGroup,
             UnderlyingInfiltrationRate = treatmentBMPModelingAttribute.UnderlyingInfiltrationRate,
-            WaterQualityDetentionVolume = treatmentBMPModelingAttribute.WaterQualityDetentionVolume,
+            ExtendedDetentionSurchargeVolume = treatmentBMPModelingAttribute.ExtendedDetentionSurchargeVolume,
             WettedFootprint = treatmentBMPModelingAttribute.WettedFootprint,
             WinterHarvestedWaterDemand = treatmentBMPModelingAttribute.WinterHarvestedWaterDemand,
             MonthsOfOperation = treatmentBMPModelingAttribute.MonthsOperational,

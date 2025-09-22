@@ -57,6 +57,8 @@ public partial class vPowerBITreatmentBMP
 
     public double? EffectiveRetentionDepth { get; set; }
 
+    public double? ExtendedDetentionSurchargeVolume { get; set; }
+
     public double? InfiltrationDischargeRate { get; set; }
 
     public double? InfiltrationSurfaceArea { get; set; }
@@ -90,8 +92,6 @@ public partial class vPowerBITreatmentBMP
     public string? UnderlyingHydrologicSoilGroup { get; set; }
 
     public double? UnderlyingInfiltrationRate { get; set; }
-
-    public double? WaterQualityDetentionVolume { get; set; }
 
     public double? WettedFootprint { get; set; }
 

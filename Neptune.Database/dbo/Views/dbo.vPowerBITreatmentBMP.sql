@@ -14,11 +14,11 @@ select
 --    att.UpstreamTreatmentBMPID, 
     att.AverageDivertedFlowrate, att.AverageTreatmentFlowrate, 
     att.DesignDryWeatherTreatmentCapacity, att.DesignLowFlowDiversionCapacity, att.DesignMediaFiltrationRate, att.DiversionRate, 
-    att.DrawdownTimeForWQDetentionVolume, att.EffectiveFootprint, att.EffectiveRetentionDepth, 
+    att.DrawdownTimeForWQDetentionVolume, att.EffectiveFootprint, att.EffectiveRetentionDepth, att.ExtendedDetentionSurchargeVolume,
     att.InfiltrationDischargeRate, att.InfiltrationSurfaceArea, att.MediaBedFootprint, att.PermanentPoolOrWetlandVolume, 
     att.RoutingConfiguration, att.StorageVolumeBelowLowestOutletElevation, att.SummerHarvestedWaterDemand, 
     att.TimeOfConcentration, att.DrawdownTimeForDetentionVolume, att.TotalEffectiveBMPVolume, att.TotalEffectiveDrywellBMPVolume, att.TreatmentRate, 
-    att.UnderlyingHydrologicSoilGroup, att.UnderlyingInfiltrationRate, att.WaterQualityDetentionVolume, 
+    att.UnderlyingHydrologicSoilGroup, att.UnderlyingInfiltrationRate, 
     att.WettedFootprint, att.WinterHarvestedWaterDemand, att.MonthsOperational, att.DryWeatherFlowOverride
 
 from

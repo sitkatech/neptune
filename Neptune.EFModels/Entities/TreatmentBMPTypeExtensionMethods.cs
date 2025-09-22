@@ -84,7 +84,7 @@ public static class TreatmentBMPTypeExtensionMethods
                     CheckFieldIsRequired(missingRequiredFields, "Permanent Pool or Wetland Volume",
                         treatmentBMPModelingAttribute.PermanentPoolOrWetlandVolume);
                     CheckFieldIsRequired(missingRequiredFields, "Extended Detention Surcharge Volume",
-                        treatmentBMPModelingAttribute.WaterQualityDetentionVolume);
+                        treatmentBMPModelingAttribute.ExtendedDetentionSurchargeVolume);
                     break;
                 case TreatmentBMPModelingTypeEnum.DryExtendedDetentionBasin:
                 case TreatmentBMPModelingTypeEnum.FlowDurationControlBasin:

@@ -126,7 +126,7 @@ public static class TreatmentFacilityExtensions
             UnderlyingHydrologicSoilGroup = treatmentBMPModelingAttribute?.UnderlyingHydrologicSoilGroup?.ToLower() ?? UnderlyingHydrologicSoilGroup.D.UnderlyingHydrologicSoilGroupDisplayName.ToLower(),
             UnderlyingInfiltrationRate = treatmentBMPModelingAttribute?.UnderlyingInfiltrationRate,
             UpstreamBMP = treatmentBMPModelingAttribute != null && treatmentBMPModelingAttribute.UpstreamBMPID.HasValue ? NereidUtilities.TreatmentBMPNodeID(treatmentBMPModelingAttribute.UpstreamBMPID.Value) : null,
-            WaterQualityDetentionVolume = treatmentBMPModelingAttribute?.WaterQualityDetentionVolume,
+            WaterQualityDetentionVolume = treatmentBMPModelingAttribute?.ExtendedDetentionSurchargeVolume,
             // WinterHarvestedWaterDemand is collected in GPD, so convert to CFS
             WinterHarvestedWaterDemand = treatmentBMPModelingAttribute?.WinterHarvestedWaterDemand * Constants.GPD_TO_CFS,
             EliminateAllDryWeatherFlowOverride = treatmentBMPModelingAttribute?.DryWeatherFlowOverride == DryWeatherFlowOverride.Yes.DryWeatherFlowOverrideDisplayName
