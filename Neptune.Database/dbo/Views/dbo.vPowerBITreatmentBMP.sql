@@ -19,7 +19,7 @@ select
     att.RoutingConfiguration, att.StorageVolumeBelowLowestOutletElevation, att.SummerHarvestedWaterDemand, 
     att.TimeOfConcentration, att.DrawdownTimeForDetentionVolume, att.TotalEffectiveBMPVolume, att.TotalEffectiveDrywellBMPVolume, att.TreatmentRate, 
     att.UnderlyingHydrologicSoilGroup, att.UnderlyingInfiltrationRate, att.WaterQualityDetentionVolume, 
-    att.WettedFootprint, att.WinterHarvestedWaterDemand, att.ModeledMonthsOfOperation, att.DryWeatherFlowOverride
+    att.WettedFootprint, att.WinterHarvestedWaterDemand, att.MonthsOperational, att.DryWeatherFlowOverride
 
 from
 	dbo.TreatmentBMP bmp 

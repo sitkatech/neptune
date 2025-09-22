@@ -112,7 +112,7 @@ public static class TreatmentFacilityExtensions
             DrawdownTimeforWQDetentionVolume = treatmentBMPModelingAttribute?.DrawdownTimeForWQDetentionVolume,
             Area = area,
             EffectiveRetentionDepth = treatmentBMPModelingAttribute?.EffectiveRetentionDepth,
-            MonthsOfOperation = (treatmentBMPModelingAttribute?.ModeledMonthsOfOperation ?? MonthsOfOperation.Both.MonthsOfOperationNereidAlias).ToLower(),
+            MonthsOfOperation = (treatmentBMPModelingAttribute?.MonthsOperational ?? MonthsOfOperation.Both.MonthsOfOperationNereidAlias).ToLower(),
             PermanentPoolorWetlandVolume = treatmentBMPModelingAttribute?.PermanentPoolOrWetlandVolume,
             //Prior to the moving away from the TreatmentBMPModelingAttribute table, the RoutingConfiguration was always set to Online. So, unless otherwise stated, we assume the RoutingConfiguration is Online.
             RoutingConfiguration = treatmentBMPModelingAttribute != null && treatmentBMPModelingAttribute.RoutingConfiguration != null ? treatmentBMPModelingAttribute?.RoutingConfiguration == RoutingConfiguration.Online.RoutingConfigurationDisplayName : true,

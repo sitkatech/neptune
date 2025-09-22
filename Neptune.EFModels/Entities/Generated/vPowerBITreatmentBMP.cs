@@ -99,7 +99,7 @@ public partial class vPowerBITreatmentBMP
 
     [StringLength(1000)]
     [Unicode(false)]
-    public string? ModeledMonthsOfOperation { get; set; }
+    public string? MonthsOperational { get; set; }
 
     [StringLength(1000)]
     [Unicode(false)]

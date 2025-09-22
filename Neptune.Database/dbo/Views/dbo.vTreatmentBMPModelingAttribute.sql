@@ -18,7 +18,7 @@ select tbmp.TreatmentBMPID, UpstreamBMPID,
 	cast(max(case when cat.CustomAttributeTypeName = 'Infiltration Discharge Rate' then cav.AttributeValue else null end) as float) as InfiltrationDischargeRate,
 	cast(max(case when cat.CustomAttributeTypeName = 'Infiltration Surface Area' then cav.AttributeValue else null end) as float) as InfiltrationSurfaceArea,
 	cast(max(case when cat.CustomAttributeTypeName = 'Media Bed Footprint' then cav.AttributeValue else null end) as float) as MediaBedFootprint,
-	max(case when cat.CustomAttributeTypeName = 'Modeled Months Of Operation' then cav.AttributeValue else null end) as ModeledMonthsOfOperation,
+	max(case when cat.CustomAttributeTypeName = 'Months Operational' then cav.AttributeValue else null end) as MonthsOperational,
 	cast(max(case when cat.CustomAttributeTypeName = 'Permanent Pool Or Wetland Volume' then cav.AttributeValue else null end) as float) as PermanentPoolOrWetlandVolume,
 	--MP 8/21/25 We haven't been allowing people to change this prior to the update back to CustomAttributes, but it's worth keeping to feed Nereid and I suppose display in our ModelingAttributes table
 	--For now, always Online

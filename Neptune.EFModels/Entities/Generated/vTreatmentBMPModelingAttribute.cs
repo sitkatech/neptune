@@ -45,7 +45,7 @@ public partial class vTreatmentBMPModelingAttribute
 
     [StringLength(1000)]
     [Unicode(false)]
-    public string? ModeledMonthsOfOperation { get; set; }
+    public string? MonthsOperational { get; set; }
 
     public double? PermanentPoolOrWetlandVolume { get; set; }
 

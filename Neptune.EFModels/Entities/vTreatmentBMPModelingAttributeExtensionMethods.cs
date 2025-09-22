@@ -36,7 +36,7 @@ public static partial class vTreatmentBMPModelingAttributeExtensionMethods
             WaterQualityDetentionVolume = treatmentBMPModelingAttribute.WaterQualityDetentionVolume,
             WettedFootprint = treatmentBMPModelingAttribute.WettedFootprint,
             WinterHarvestedWaterDemand = treatmentBMPModelingAttribute.WinterHarvestedWaterDemand,
-            MonthsOfOperation = treatmentBMPModelingAttribute.ModeledMonthsOfOperation,
+            MonthsOfOperation = treatmentBMPModelingAttribute.MonthsOperational,
             DryWeatherFlowOverride = treatmentBMPModelingAttribute.DryWeatherFlowOverride
         };
         return dto;
