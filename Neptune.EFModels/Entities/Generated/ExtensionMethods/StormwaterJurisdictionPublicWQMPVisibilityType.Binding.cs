@@ -5,7 +5,6 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Neptune.Models.DataTransferObjects;
 
 
 namespace Neptune.EFModels.Entities
