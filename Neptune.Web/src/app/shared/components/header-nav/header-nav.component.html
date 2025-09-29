@@ -1,106 +1,109 @@
 <div>
-  @if (showTestingWarning()) {
+    @if (showTestingWarning()) {
     <div class="qa-warning">
-      <span class="fa fa-warning"></span>
-      {{ testingWarningText() }}
+        <span class="fa fa-warning"></span>
+        {{ testingWarningText() }}
     </div>
-  }
+    }
 </div>
 
 <nav class="admin-nav">
-  <div class="admin-nav__wrapper">
-    <ul class="admin-nav__links admin-nav__main">
-      <li class="admin-nav__item home">
-        <a
-          href="javascript:void(0);"
-          [dropdownToggle]="moduleSwitcherToggle"
-          class="dropdown-toggle nav-link"
-          role="button"
-          data-toggle="dropdown"
-          aria-haspopup="true"
-          aria-expanded="false">
-          <img src="assets/main/logos/hippocamp_logo.png" class="navbarLogo" alt="Orange County Stormwater Tools" style="height: 100px" />
-          <div class="site-explorer-area-link">
-            {{ moduleTitle }}
-          </div>
-          <span class="nav-link__label">
-            <icon icon="AngleDown"></icon>
-          </span>
-        </a>
-      </li>
-      <li class="nav-item dropdown moduleSwitcher" routerLinkActive="active">
-        <div #moduleSwitcherToggle class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-          <a href="{{ ocStormwaterToolsMainUrl() }}" class="dropdown-item"> OC Stormwater Tools Home </a>
-          <div class="dropdown-divider"></div>
-          <a href="{{ ocStormwaterToolsMainUrl() }}/#welcome" class="dropdown-item">
-            <img src="assets/main/icons/inventoryIcon.png" style="height: 35px; padding-right: 15px" />
-            Inventory Module
-          </a>
-          <a href="{{ ocStormwaterToolsMainUrl() }}/Home/Modeling" class="dropdown-item">
-            <img src="assets/main/icons/modelingIcon.png" style="height: 35px; padding-right: 15px" />
-            Modeling Module
-          </a>
-          <a [routerLink]="['/planning']" class="dropdown-item">
-            <img src="assets/main/icons/planningIcon.png" style="height: 35px; padding-right: 15px" />
-            Planning Module
-          </a>
-          <a [routerLink]="['/trash']" class="dropdown-item">
-            <img src="assets/main/icons/trashIcon.png" style="height: 35px; padding-right: 15px" />
-            Trash Module
-          </a>
-        </div>
-      </li>
-    </ul>
-    <ul class="admin-nav__links admin-nav__utilities">
-      @if (!isAuthenticated()) {
-        <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" href="javascript:void(0);" (click)="login()" routerLinkActive="active">Sign In</a>
-        </li>
-      }
-      @if (currentUser$ | async; as currentUser) {
-        <li class="nav-item dropdown welcomeUser" routerLinkActive="active">
-          <a
-            href="javascript:void(0);"
-            [dropdownToggle]="userToggle"
-            class="dropdown-toggle nav-link"
-            role="button"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false">
-            <span class="username nav-link__label">
-              Welcome {{ currentUser.FirstName }} {{ currentUser.LastName }}
-              <icon icon="AngleDown"></icon>
-            </span>
-          </a>
-          <div #userToggle class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-            <a href="javascript:void(0);" (click)="logout()" class="dropdown-item"> Sign Out </a>
-          </div>
-        </li>
-      }
-      <li class="nav-item" routerLinkActive="active">
-        <a [routerLink]="['/about']" class="nav-link"> About </a>
-      </li>
-      <li class="nav-item dropdown" routerLinkActive="active">
-        <a
-          href="javascript:void(0);"
-          [dropdownToggle]="helpToggle"
-          class="dropdown-toggle nav-link"
-          role="button"
-          data-toggle="dropdown"
-          aria-haspopup="true"
-          aria-expanded="false">
-          <icon icon="Info"></icon>
-          <span class="nav-link__label">
-            Help
-            <icon icon="AngleDown"></icon>
-          </span>
-        </a>
+    <div class="admin-nav__wrapper">
+        <ul class="admin-nav__links admin-nav__main">
+            <li class="admin-nav__item home">
+                <a
+                    href="javascript:void(0);"
+                    [dropdownToggle]="moduleSwitcherToggle"
+                    class="dropdown-toggle nav-link"
+                    role="button"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false">
+                    <img src="assets/main/logos/hippocamp_logo.png" class="navbarLogo" alt="Orange County Stormwater Tools" style="height: 100px" />
+                    <div class="site-explorer-area-link">
+                        {{ moduleTitle }}
+                    </div>
+                    <span class="nav-link__label">
+                        <icon icon="AngleDown"></icon>
+                    </span>
+                </a>
+            </li>
+            <li class="nav-item dropdown moduleSwitcher" routerLinkActive="active">
+                <div #moduleSwitcherToggle class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                    <a href="{{ ocStormwaterToolsMainUrl() }}" class="dropdown-item"> OC Stormwater Tools Home </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="{{ ocStormwaterToolsMainUrl() }}/#welcome" class="dropdown-item">
+                        <img src="assets/main/icons/inventoryIcon.png" style="height: 35px; padding-right: 15px" />
+                        Inventory Module
+                    </a>
+                    <a href="{{ ocStormwaterToolsMainUrl() }}/Home/Modeling" class="dropdown-item">
+                        <img src="assets/main/icons/modelingIcon.png" style="height: 35px; padding-right: 15px" />
+                        Modeling Module
+                    </a>
+                    <a [routerLink]="['/planning']" class="dropdown-item">
+                        <img src="assets/main/icons/planningIcon.png" style="height: 35px; padding-right: 15px" />
+                        Planning Module
+                    </a>
+                    <a [routerLink]="['/trash']" class="dropdown-item">
+                        <img src="assets/main/icons/trashIcon.png" style="height: 35px; padding-right: 15px" />
+                        Trash Module
+                    </a>
+                    <a [routerLink]="['/ai']" class="dropdown-item">
+                        <img src="assets/main/icons/ai-icon.png" style="height: 35px; padding-right: 15px" />
+                        AI Module
+                    </a>
+                </div>
+            </li>
+        </ul>
+        <ul class="admin-nav__links admin-nav__utilities">
+            @if (!isAuthenticated()) {
+            <li class="nav-item" routerLinkActive="active">
+                <a class="nav-link" href="javascript:void(0);" (click)="login()" routerLinkActive="active">Sign In</a>
+            </li>
+            } @if (currentUser$ | async; as currentUser) {
+            <li class="nav-item dropdown welcomeUser" routerLinkActive="active">
+                <a
+                    href="javascript:void(0);"
+                    [dropdownToggle]="userToggle"
+                    class="dropdown-toggle nav-link"
+                    role="button"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false">
+                    <span class="username nav-link__label">
+                        Welcome {{ currentUser.FirstName }} {{ currentUser.LastName }}
+                        <icon icon="AngleDown"></icon>
+                    </span>
+                </a>
+                <div #userToggle class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                    <a href="javascript:void(0);" (click)="logout()" class="dropdown-item"> Sign Out </a>
+                </div>
+            </li>
+            }
+            <li class="nav-item" routerLinkActive="active">
+                <a [routerLink]="['/about']" class="nav-link"> About </a>
+            </li>
+            <li class="nav-item dropdown" routerLinkActive="active">
+                <a
+                    href="javascript:void(0);"
+                    [dropdownToggle]="helpToggle"
+                    class="dropdown-toggle nav-link"
+                    role="button"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false">
+                    <icon icon="Info"></icon>
+                    <span class="nav-link__label">
+                        Help
+                        <icon icon="AngleDown"></icon>
+                    </span>
+                </a>
 
-        <div #helpToggle class="dropdown-menu dropdown-menu__help" aria-labelledby="navbarDropdown">
-          <div class="dropdown-divider"></div>
-          <a href="{{ ocStormwaterToolsMainUrl() }}/Help/Support" class="dropdown-item"> Request Support </a>
-        </div>
-      </li>
-    </ul>
-  </div>
+                <div #helpToggle class="dropdown-menu dropdown-menu__help" aria-labelledby="navbarDropdown">
+                    <div class="dropdown-divider"></div>
+                    <a href="{{ ocStormwaterToolsMainUrl() }}/Help/Support" class="dropdown-item"> Request Support </a>
+                </div>
+            </li>
+        </ul>
+    </div>
 </nav>

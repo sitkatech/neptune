@@ -14,6 +14,18 @@ export const routeParams = {
 
 export const routes: Routes = [
     {
+        path: "ai",
+        title: "AI Module",
+        loadComponent: () => import("./pages/ai-module/ai-site-layout.component").then((m) => m.AiSiteLayoutComponent),
+        children: [
+            {
+                path: "",
+                title: "AI Home",
+                loadComponent: () => import("./pages/ai-module/ai-home/ai-home.component").then((m) => m.AiHomeComponent),
+            },
+        ],
+    },
+    {
         path: `planning`,
         title: "Stormwater Tools",
         loadComponent: () => import("./pages/planning-module/planning-site-layout/planning-site-layout.component").then((m) => m.PlanningSiteLayoutComponent),
