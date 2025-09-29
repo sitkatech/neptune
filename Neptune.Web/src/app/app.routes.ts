@@ -14,6 +14,178 @@ export const routeParams = {
 
 export const routes: Routes = [
     {
+        path: "inventory",
+        title: "New Inventory Module",
+        loadComponent: () => import("./pages/inventory-module/inventory-site-layout.component").then((m) => m.InventorySiteLayoutComponent),
+        children: [
+            {
+                path: "",
+                title: "Inventory Home",
+                loadComponent: () => import("./pages/inventory-module/inventory-home/inventory-home.component").then((m) => m.InventoryHomeComponent),
+            },
+            // BMP Inventory
+            {
+                path: "bmp-inventory/jurisdictions",
+                title: "Jurisdictions",
+                loadComponent: () => import("./pages/inventory-module/bmp-inventory/jurisdictions.component").then((m) => m.JurisdictionsComponent),
+            },
+            {
+                path: "bmp-inventory/find-bmp",
+                title: "Find a BMP",
+                loadComponent: () => import("./pages/inventory-module/bmp-inventory/find-bmp.component").then((m) => m.FindBmpComponent),
+            },
+            {
+                path: "bmp-inventory/modeling-parameters",
+                title: "Modeling Parameters",
+                loadComponent: () => import("./pages/inventory-module/bmp-inventory/modeling-parameters.component").then((m) => m.ModelingParametersComponent),
+            },
+            {
+                path: "bmp-inventory/view-all-bmps",
+                title: "View All BMPs",
+                loadComponent: () => import("./pages/inventory-module/bmp-inventory/view-all-bmps.component").then((m) => m.ViewAllBmpsComponent),
+            },
+            {
+                path: "bmp-inventory/latest-bmp-assessments",
+                title: "View Latest BMP Assessments",
+                loadComponent: () => import("./pages/inventory-module/bmp-inventory/latest-bmp-assessments.component").then((m) => m.LatestBmpAssessmentsComponent),
+            },
+            {
+                path: "bmp-inventory/field-records",
+                title: "View All Field Records",
+                loadComponent: () => import("./pages/inventory-module/bmp-inventory/field-records.component").then((m) => m.FieldRecordsComponent),
+            },
+            {
+                path: "bmp-inventory/wqmps",
+                title: "Water Quality Management Plans",
+                loadComponent: () => import("./pages/inventory-module/bmp-inventory/wqmps.component").then((m) => m.WqmpsComponent),
+            },
+            {
+                path: "bmp-inventory/wqmp-map",
+                title: "WQMP Map",
+                loadComponent: () => import("./pages/inventory-module/bmp-inventory/wqmp-map.component").then((m) => m.WqmpMapComponent),
+            },
+            {
+                path: "bmp-inventory/wqmp-annual-report",
+                title: "WQMP Annual Report",
+                loadComponent: () => import("./pages/inventory-module/bmp-inventory/wqmp-annual-report.component").then((m) => m.WqmpAnnualReportComponent),
+            },
+            {
+                path: "bmp-inventory/parcels",
+                title: "Parcels",
+                loadComponent: () => import("./pages/inventory-module/bmp-inventory/parcels.component").then((m) => m.ParcelsComponent),
+            },
+            // Program Info
+            {
+                path: "program-info/observation-types",
+                title: "Observation Types",
+                loadComponent: () => import("./pages/inventory-module/program-info/observation-types.component").then((m) => m.ObservationTypesComponent),
+            },
+            {
+                path: "program-info/treatment-bmp-types",
+                title: "Treatment BMP Types",
+                loadComponent: () => import("./pages/inventory-module/program-info/treatment-bmp-types.component").then((m) => m.TreatmentBmpTypesComponent),
+            },
+            {
+                path: "program-info/funding-sources",
+                title: "Funding Sources",
+                loadComponent: () => import("./pages/inventory-module/program-info/funding-sources.component").then((m) => m.FundingSourcesComponent),
+            },
+            // Dashboard
+            {
+                path: "dashboard",
+                title: "Dashboard",
+                loadComponent: () => import("./pages/inventory-module/dashboard/dashboard.component").then((m) => m.DashboardComponent),
+            },
+            // Delineation
+            {
+                path: "delineation/delineation-map",
+                title: "Delineation Map",
+                loadComponent: () => import("./pages/inventory-module/delineation/delineation-map.component").then((m) => m.DelineationMapComponent),
+            },
+            {
+                path: "delineation/delineation-reconciliation-report",
+                title: "Delineation Reconciliation Report",
+                loadComponent: () =>
+                    import("./pages/inventory-module/delineation/delineation-reconciliation-report.component").then((m) => m.DelineationReconciliationReportComponent),
+            },
+            // Data Hub
+            { path: "data-hub", title: "Data Hub", loadComponent: () => import("./pages/inventory-module/data-hub/data-hub.component").then((m) => m.DataHubComponent) },
+            // Manage
+            {
+                path: "manage/homepage-configuration",
+                title: "Homepage Configuration",
+                loadComponent: () => import("./pages/inventory-module/manage/homepage-configuration.component").then((m) => m.HomepageConfigurationComponent),
+            },
+            {
+                path: "manage/page-content",
+                title: "Page Content",
+                loadComponent: () => import("./pages/inventory-module/manage/page-content.component").then((m) => m.PageContentComponent),
+            },
+            {
+                path: "manage/custom-labels-definitions",
+                title: "Custom Labels & Definitions",
+                loadComponent: () => import("./pages/inventory-module/manage/custom-labels-definitions.component").then((m) => m.CustomLabelsDefinitionsComponent),
+            },
+            { path: "manage/users", title: "Users", loadComponent: () => import("./pages/inventory-module/manage/users.component").then((m) => m.UsersComponent) },
+            {
+                path: "manage/organizations",
+                title: "Organizations",
+                loadComponent: () => import("./pages/inventory-module/manage/organizations.component").then((m) => m.OrganizationsComponent),
+            },
+            {
+                path: "manage/jurisdictions",
+                title: "Jurisdictions (Manage)",
+                loadComponent: () => import("./pages/inventory-module/manage/jurisdictions.component").then((m) => m.ManageJurisdictionsComponent),
+            },
+            {
+                path: "manage/observation-types-manage",
+                title: "Observation Types (Manage)",
+                loadComponent: () => import("./pages/inventory-module/manage/observation-types-manage.component").then((m) => m.ObservationTypesManageComponent),
+            },
+            {
+                path: "manage/treatment-bmp-types-manage",
+                title: "Treatment BMP Types (Manage)",
+                loadComponent: () => import("./pages/inventory-module/manage/treatment-bmp-types-manage.component").then((m) => m.TreatmentBmpTypesManageComponent),
+            },
+            {
+                path: "manage/custom-attributes",
+                title: "Custom Attributes",
+                loadComponent: () => import("./pages/inventory-module/manage/custom-attributes.component").then((m) => m.CustomAttributesComponent),
+            },
+            {
+                path: "manage/load-generating-units",
+                title: "Load Generating Units",
+                loadComponent: () => import("./pages/inventory-module/manage/load-generating-units.component").then((m) => m.LoadGeneratingUnitsComponent),
+            },
+            {
+                path: "manage/hru-characteristics",
+                title: "HRU Characteristics",
+                loadComponent: () => import("./pages/inventory-module/manage/hru-characteristics.component").then((m) => m.HruCharacteristicsComponent),
+            },
+            {
+                path: "manage/regional-subbasins",
+                title: "Regional Subbasins",
+                loadComponent: () => import("./pages/inventory-module/manage/regional-subbasins.component").then((m) => m.RegionalSubbasinsComponent),
+            },
+            {
+                path: "manage/regional-subbasin-grid",
+                title: "Regional Subbasin Grid",
+                loadComponent: () => import("./pages/inventory-module/manage/regional-subbasin-grid.component").then((m) => m.RegionalSubbasinGridComponent),
+            },
+            {
+                path: "manage/regional-subbasin-revision-requests",
+                title: "Regional Subbasin Revision Requests",
+                loadComponent: () =>
+                    import("./pages/inventory-module/manage/regional-subbasin-revision-requests.component").then((m) => m.RegionalSubbasinRevisionRequestsComponent),
+            },
+            {
+                path: "manage/wqmp-lgu-audit",
+                title: "Water Quality Management Plan LGU Audit",
+                loadComponent: () => import("./pages/inventory-module/manage/wqmp-lgu-audit.component").then((m) => m.WqmpLguAuditComponent),
+            },
+        ],
+    },
+    {
         path: "ai",
         title: "AI Module",
         loadComponent: () => import("./pages/ai-module/ai-site-layout.component").then((m) => m.AiSiteLayoutComponent),
