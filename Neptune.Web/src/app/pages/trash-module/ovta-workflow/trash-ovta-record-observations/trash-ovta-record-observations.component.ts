@@ -4,8 +4,8 @@ import { PageHeaderComponent } from "../../../../shared/components/page-header/p
 import { NeptuneMapComponent, NeptuneMapInitEvent } from "../../../../shared/components/leaflet/neptune-map/neptune-map.component";
 import { AsyncPipe } from "@angular/common";
 import { Observable, switchMap, tap } from "rxjs";
-import { ActivatedRoute, Router } from "@angular/router";
-import { routeParams } from "src/app/app.routes";
+import { Router } from "@angular/router";
+import { Input } from "@angular/core";
 import { OnlandVisualTrashAssessmentDetailDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-detail-dto";
 import { OnlandVisualTrashAssessmentService } from "src/app/shared/generated/api/onland-visual-trash-assessment.service";
 import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
@@ -33,22 +33,22 @@ import { TransectLineLayerComponent } from "src/app/shared/components/leaflet/la
 @Component({
     selector: "trash-ovta-record-observations",
     imports: [
-    PageHeaderComponent,
-    NeptuneMapComponent,
-    DropdownToggleDirective,
-    AsyncPipe,
-    FormFieldComponent,
-    ReactiveFormsModule,
-    FormsModule,
-    AlertDisplayComponent,
-    WorkflowBodyComponent,
-    LandUseBlockLayerComponent,
-    ParcelLayerComponent,
-    TransectLineLayerComponent,
-    OvtaAreaLayerComponent
-],
+        PageHeaderComponent,
+        NeptuneMapComponent,
+        DropdownToggleDirective,
+        AsyncPipe,
+        FormFieldComponent,
+        ReactiveFormsModule,
+        FormsModule,
+        AlertDisplayComponent,
+        WorkflowBodyComponent,
+        LandUseBlockLayerComponent,
+        ParcelLayerComponent,
+        TransectLineLayerComponent,
+        OvtaAreaLayerComponent,
+    ],
     templateUrl: "./trash-ovta-record-observations.component.html",
-    styleUrl: "./trash-ovta-record-observations.component.scss"
+    styleUrl: "./trash-ovta-record-observations.component.scss",
 })
 export class TrashOvtaRecordObservationsComponent {
     public FormFieldType = FormFieldType;
@@ -56,7 +56,6 @@ export class TrashOvtaRecordObservationsComponent {
     public layerControl: L.Control.Layers;
     public mapIsReady = false;
     public isLoadingSubmit = false;
-    public ovtaID: number;
     public ovtaObservationLayer: L.GeoJSON<any>;
     public uploadFormField: FormControl<Blob> = new FormControl<Blob>(null);
     public formGroup: FormGroup<OnlandVisualTrashAssessmentObservationsUpsertDtoCustomForm> = new FormGroup<OnlandVisualTrashAssessmentObservationsUpsertDtoCustomForm>({
@@ -70,10 +69,11 @@ export class TrashOvtaRecordObservationsComponent {
 
     public onlandVisualTrashAssessment$: Observable<OnlandVisualTrashAssessmentDetailDto>;
 
+    @Input() onlandVisualTrashAssessmentID!: number;
+
     constructor(
         private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService,
         private onlandVisualTrashAssessmentObservationService: OnlandVisualTrashAssessmentObservationService,
-        private route: ActivatedRoute,
         private alertService: AlertService,
         private ovtaWorkflowProgressService: OvtaWorkflowProgressService,
         private router: Router,
@@ -82,11 +82,8 @@ export class TrashOvtaRecordObservationsComponent {
     ) {}
 
     ngOnInit() {
-        this.onlandVisualTrashAssessment$ = this.route.params.pipe(
-            switchMap((params) => {
-                this.ovtaID = params[routeParams.onlandVisualTrashAssessmentID];
-                return this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDGet(params[routeParams.onlandVisualTrashAssessmentID]);
-            })
+        this.onlandVisualTrashAssessment$ = this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDGet(
+            this.onlandVisualTrashAssessmentID
         );
         this.onlandVisualTrashAssessmentObservations$ = this.onlandVisualTrashAssessment$.pipe(
             switchMap((onlandVisualTrashAssessment) => {
@@ -106,7 +103,6 @@ export class TrashOvtaRecordObservationsComponent {
                         FileResourceID: onlandVisualTrashAssessmentObservation.FileResourceID,
                         FileResourceGUID: onlandVisualTrashAssessmentObservation.FileResourceGUID,
                     });
-
                     formArray.push(observation);
                 });
             })
@@ -154,7 +150,7 @@ export class TrashOvtaRecordObservationsComponent {
         this.uploadFormField.reset();
         let observation = this.formBuilder.group<OnlandVisualTrashAssessmentObservationWithPhotoDto>({
             OnlandVisualTrashAssessmentObservationID: this.newObservationIDIndex,
-            OnlandVisualTrashAssessmentID: this.ovtaID,
+            OnlandVisualTrashAssessmentID: this.onlandVisualTrashAssessmentID,
             Note: null,
             Latitude: latlng.lat,
             Longitude: latlng.lng,
@@ -196,21 +192,23 @@ export class TrashOvtaRecordObservationsComponent {
 
     save(andContinue: boolean = false) {
         this.onlandVisualTrashAssessmentObservationService
-            .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsPost(this.ovtaID, this.formGroup.value)
+            .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsPost(this.onlandVisualTrashAssessmentID, this.formGroup.value)
             .subscribe(() => {
                 this.isLoadingSubmit = false;
                 this.alertService.clearAlerts();
                 this.alertService.pushAlert(new Alert("Your observations were successfully updated.", AlertContext.Success));
-                this.ovtaWorkflowProgressService.updateProgress(this.ovtaID);
+                this.ovtaWorkflowProgressService.updateProgress(this.onlandVisualTrashAssessmentID);
 
                 if (andContinue) {
-                    this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDProgressGet(this.ovtaID).subscribe((response) => {
-                        if (response.Steps.RefineAssessmentArea.Disabled) {
-                            this.router.navigate([`../../${this.ovtaID}/review-and-finalize`], { relativeTo: this.route });
-                        } else {
-                            this.router.navigate([`../../${this.ovtaID}/add-or-remove-parcels`], { relativeTo: this.route });
-                        }
-                    });
+                    this.onlandVisualTrashAssessmentService
+                        .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDProgressGet(this.onlandVisualTrashAssessmentID)
+                        .subscribe((response) => {
+                            if (response.Steps.RefineAssessmentArea.Disabled) {
+                                this.router.navigate([`/trash/onland-visual-trash-assessments/edit/${this.onlandVisualTrashAssessmentID}/review-and-finalize`]);
+                            } else {
+                                this.router.navigate([`/trash/onland-visual-trash-assessments/edit/${this.onlandVisualTrashAssessmentID}/add-or-remove-parcels`]);
+                            }
+                        });
                 }
             });
     }
@@ -274,7 +272,7 @@ export class TrashOvtaRecordObservationsComponent {
         if (typeof this.uploadFormField.value != typeof "string") {
             this.isLoadingSubmit = true;
             this.onlandVisualTrashAssessmentObservationService
-                .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsObservationPhotoPost(this.ovtaID, this.uploadFormField.value)
+                .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsObservationPhotoPost(this.onlandVisualTrashAssessmentID, this.uploadFormField.value)
                 .subscribe((response) => {
                     const observation = this.formGroup.controls.Observations.controls[index].value;
                     observation.FileResourceID = response.FileResourceID;
@@ -293,7 +291,10 @@ export class TrashOvtaRecordObservationsComponent {
         const observation = this.formGroup.controls.Observations.controls[index].value;
         if (observation.FileResourceID) {
             this.onlandVisualTrashAssessmentObservationService
-                .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsObservationPhotosFileResourceIDDelete(this.ovtaID, observation.FileResourceID)
+                .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsObservationPhotosFileResourceIDDelete(
+                    this.onlandVisualTrashAssessmentID,
+                    observation.FileResourceID
+                )
                 .subscribe((x) => {
                     observation.FileResourceID = null;
                     observation.FileResourceGUID = null;

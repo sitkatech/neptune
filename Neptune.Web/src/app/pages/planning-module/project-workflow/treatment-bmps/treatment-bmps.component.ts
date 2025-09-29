@@ -1,9 +1,10 @@
 import { ApplicationRef, ChangeDetectorRef, Component, ComponentRef, OnInit, ViewChild } from "@angular/core";
 import * as L from "leaflet";
-import { ActivatedRoute, Router } from "@angular/router";
+import { Router } from "@angular/router";
+import { Input } from "@angular/core";
 import { ProjectService } from "src/app/shared/generated/api/project.service";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
-import { forkJoin, Observable, switchMap } from "rxjs";
+import { forkJoin, Observable } from "rxjs";
 import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.service";
 import { FieldDefinitionTypeEnum } from "src/app/shared/generated/enum/field-definition-type-enum";
 import { TreatmentBMPModelingTypeEnum } from "src/app/shared/generated/enum/treatment-b-m-p-modeling-type-enum";
@@ -36,8 +37,6 @@ import { StormwaterNetworkLayerComponent } from "src/app/shared/components/leafl
 import { WqmpsLayerComponent } from "src/app/shared/components/leaflet/layers/wqmps-layer/wqmps-layer.component";
 import { NeptuneMapComponent, NeptuneMapInitEvent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
 import { ProjectWorkflowProgressService } from "src/app/shared/services/project-workflow-progress.service";
-import { routeParams } from "src/app/app.routes";
-import { GroupByPipe } from "src/app/shared/pipes/group-by.pipe";
 import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet/layers/inventoried-bmps-layer/inventoried-bmps-layer.component";
 import { TreatmentBMPTypeService } from "src/app/shared/generated/api/treatment-bmp-type.service";
 import { CustomAttributeTypePurposeEnum } from "src/app/shared/generated/enum/custom-attribute-type-purpose-enum";
@@ -72,7 +71,7 @@ import { PopperDirective } from "src/app/shared/directives/popper.directive";
     ],
 })
 export class TreatmentBmpsComponent implements OnInit {
-    public projectID: number;
+    @Input() projectID!: number;
     public customRichTextTypeID = NeptunePageTypeEnum.HippocampTreatmentBMPs;
 
     public mapIsReady: boolean = false;
@@ -118,7 +117,6 @@ export class TreatmentBmpsComponent implements OnInit {
     public treatmentBMPTypeCustomAttributeTypes: TreatmentBMPTypeCustomAttributeTypeDto[];
 
     constructor(
-        private route: ActivatedRoute,
         private cdr: ChangeDetectorRef,
         private projectService: ProjectService,
         private treatmentBMPService: TreatmentBMPService,
@@ -130,7 +128,6 @@ export class TreatmentBmpsComponent implements OnInit {
         private projectWorkflowProgressService: ProjectWorkflowProgressService,
         private router: Router,
         private confirmService: ConfirmService,
-        private groupByPipe: GroupByPipe,
         private treatmentBMPTypeCustomAttributeTypeService: TreatmentBMPTypeCustomAttributeTypeService
     ) {}
 
@@ -142,12 +139,7 @@ export class TreatmentBmpsComponent implements OnInit {
     }
 
     public ngOnInit(): void {
-        this.boundingBox$ = this.route.params.pipe(
-            switchMap((params) => {
-                this.projectID = parseInt(params[routeParams.projectID]);
-                return this.projectService.projectsProjectIDBoundingBoxGet(this.projectID);
-            })
-        );
+        this.boundingBox$ = this.projectService.projectsProjectIDBoundingBoxGet(this.projectID);
         this.compileService.configure(this.appRef);
     }
 
@@ -160,14 +152,12 @@ export class TreatmentBmpsComponent implements OnInit {
         this.layerControl = event.layerControl;
         this.mapIsReady = true;
 
-        const projectID = this.route.snapshot.paramMap.get("projectID");
-        if (projectID) {
-            this.projectService.projectsProjectIDGet(parseInt(projectID)).subscribe((project) => {
+        if (this.projectID) {
+            this.projectService.projectsProjectIDGet(this.projectID).subscribe((project) => {
                 // redirect to review step if project is shared with OCTA grant program
                 if (project.ShareOCTAM2Tier2Scores) {
-                    this.router.navigateByUrl(`/planning/projects/edit/${projectID}/review-and-share`);
+                    this.router.navigateByUrl(`/planning/projects/edit/${this.projectID}/review-and-share`);
                 } else {
-                    this.projectID = parseInt(projectID);
                     this.mapProjectDtoToProject(project);
                     forkJoin({
                         projectTreatmentBMPs: this.projectService.projectsProjectIDTreatmentBmpsAsUpsertDtosGet(this.projectID),

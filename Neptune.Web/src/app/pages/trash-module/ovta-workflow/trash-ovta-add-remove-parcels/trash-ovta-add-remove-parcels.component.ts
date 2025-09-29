@@ -1,9 +1,9 @@
 import { Component } from "@angular/core";
 import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
 import { AlertDisplayComponent } from "../../../../shared/components/alert-display/alert-display.component";
-import { Router, ActivatedRoute } from "@angular/router";
+import { Router } from "@angular/router";
+import { Input } from "@angular/core";
 import { Observable, of, switchMap, tap } from "rxjs";
-import { routeParams } from "src/app/app.routes";
 import { NeptuneMapInitEvent, NeptuneMapComponent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
 import { WfsService } from "src/app/shared/services/wfs.service";
 import * as L from "leaflet";
@@ -23,25 +23,25 @@ import { ParcelLayerComponent } from "../../../../shared/components/leaflet/laye
 @Component({
     selector: "trash-ovta-add-remove-parcels",
     imports: [
-    PageHeaderComponent,
-    AlertDisplayComponent,
-    NeptuneMapComponent,
-    AsyncPipe,
-    OvtaObservationLayerComponent,
-    LandUseBlockLayerComponent,
-    WorkflowBodyComponent,
-    TransectLineLayerComponent,
-    ParcelLayerComponent
-],
+        PageHeaderComponent,
+        AlertDisplayComponent,
+        NeptuneMapComponent,
+        AsyncPipe,
+        OvtaObservationLayerComponent,
+        LandUseBlockLayerComponent,
+        WorkflowBodyComponent,
+        TransectLineLayerComponent,
+        ParcelLayerComponent,
+    ],
     templateUrl: "./trash-ovta-add-remove-parcels.component.html",
-    styleUrl: "./trash-ovta-add-remove-parcels.component.scss"
+    styleUrl: "./trash-ovta-add-remove-parcels.component.scss",
 })
 export class TrashOvtaAddRemoveParcelsComponent {
+    @Input() onlandVisualTrashAssessmentID!: number;
     public onlandVisualTrashAssessment$: Observable<OnlandVisualTrashAssessmentAddRemoveParcelsDto>;
     public map: L.Map;
     public layerControl: L.Control.Layers;
     public mapIsReady = false;
-    public ovtaID: number;
     public isLoadingSubmit = false;
     public isLoading: boolean = false;
 
@@ -58,7 +58,6 @@ export class TrashOvtaAddRemoveParcelsComponent {
     constructor(
         private router: Router,
         private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService,
-        private route: ActivatedRoute,
         private wfsService: WfsService,
         private alertService: AlertService,
         private ovtaWorkflowProgressService: OvtaWorkflowProgressService
@@ -66,18 +65,14 @@ export class TrashOvtaAddRemoveParcelsComponent {
 
     ngOnInit(): void {
         this.isLoading = true;
-        this.onlandVisualTrashAssessment$ = this.route.params.pipe(
-            switchMap((params) => {
-                return this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDParcelsGet(
-                    params[routeParams.onlandVisualTrashAssessmentID]
-                );
-            }),
-            tap((ovta) => {
-                this.ovtaID = ovta.OnlandVisualTrashAssessmentID;
-                this.selectedParcelIDs = ovta.SelectedParcelIDs;
-                this.isLoading = false;
-            })
-        );
+        this.onlandVisualTrashAssessment$ = this.onlandVisualTrashAssessmentService
+            .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDParcelsGet(this.onlandVisualTrashAssessmentID)
+            .pipe(
+                tap((ovta) => {
+                    this.selectedParcelIDs = ovta.SelectedParcelIDs;
+                    this.isLoading = false;
+                })
+            );
     }
 
     public handleMapReady(event: NeptuneMapInitEvent, onlandVisualTrashAssessment: OnlandVisualTrashAssessmentAddRemoveParcelsDto): void {
@@ -102,23 +97,27 @@ export class TrashOvtaAddRemoveParcelsComponent {
     }
 
     public save(andContinue: boolean = false) {
-        this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDParcelsPost(this.ovtaID, this.selectedParcelIDs).subscribe(() => {
-            this.alertService.clearAlerts();
-            this.alertService.pushAlert(new Alert("Your observations were successfully updated.", AlertContext.Success));
-            this.ovtaWorkflowProgressService.updateProgress(this.ovtaID);
-            if (andContinue) {
-                this.router.navigate([`../../${this.ovtaID}/refine-assessment-area`], { relativeTo: this.route });
-            }
-        });
+        this.onlandVisualTrashAssessmentService
+            .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDParcelsPost(this.onlandVisualTrashAssessmentID, this.selectedParcelIDs)
+            .subscribe(() => {
+                this.alertService.clearAlerts();
+                this.alertService.pushAlert(new Alert("Your observations were successfully updated.", AlertContext.Success));
+                this.ovtaWorkflowProgressService.updateProgress(this.onlandVisualTrashAssessmentID);
+                if (andContinue) {
+                    this.router.navigate([`/trash/onland-visual-trash-assessments/edit/${this.onlandVisualTrashAssessmentID}/refine-assessment-area`]);
+                }
+            });
     }
 
     public refreshParcels() {
-        this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDRefreshParcelsPost(this.ovtaID).subscribe((ovta) => {
-            this.selectedParcelIDs = ovta.SelectedParcelIDs;
-            this.addSelectedParcelsToMap();
-            this.enableDisableParcelClickEvent(ovta);
-            this.onlandVisualTrashAssessment$ = of(ovta);
-        });
+        this.onlandVisualTrashAssessmentService
+            .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDRefreshParcelsPost(this.onlandVisualTrashAssessmentID)
+            .subscribe((ovta) => {
+                this.selectedParcelIDs = ovta.SelectedParcelIDs;
+                this.addSelectedParcelsToMap();
+                this.enableDisableParcelClickEvent(ovta);
+                this.onlandVisualTrashAssessment$ = of(ovta);
+            });
     }
 
     private enableDisableParcelClickEvent(ovta: OnlandVisualTrashAssessmentAddRemoveParcelsDto) {

@@ -5,9 +5,9 @@ import { NeptuneMapComponent, NeptuneMapInitEvent } from "../../../../shared/com
 import * as L from "leaflet";
 import { LandUseBlockLayerComponent } from "../../../../shared/components/leaflet/layers/land-use-block-layer/land-use-block-layer.component";
 import { AsyncPipe } from "@angular/common";
-import { ActivatedRoute, Router, RouterLink } from "@angular/router";
-import { Observable, switchMap } from "rxjs";
-import { routeParams } from "src/app/app.routes";
+import { Router, RouterLink } from "@angular/router";
+import { Input } from "@angular/core";
+import { Observable } from "rxjs";
 import { OnlandVisualTrashAssessmentAreaService } from "src/app/shared/generated/api/onland-visual-trash-assessment-area.service";
 import { OnlandVisualTrashAssessmentAreaDetailDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-area-detail-dto";
 import { TransectLineLayerComponent } from "../../../../shared/components/leaflet/layers/transect-line-layer/transect-line-layer.component";
@@ -96,10 +96,10 @@ export class TrashOvtaAreaEditLocationComponent {
         },
     };
 
+    @Input() onlandVisualTrashAssessmentAreaID!: number;
     constructor(
         private router: Router,
         private onlandVisualTrashAssessmentAreaService: OnlandVisualTrashAssessmentAreaService,
-        private route: ActivatedRoute,
         private wfsService: WfsService,
         private groupByPipe: GroupByPipe
     ) {}
@@ -115,12 +115,8 @@ export class TrashOvtaAreaEditLocationComponent {
     }
 
     ngOnInit(): void {
-        this.onlandVisualTrashAssessmentArea$ = this.route.params.pipe(
-            switchMap((params) => {
-                return this.onlandVisualTrashAssessmentAreaService.onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDGet(
-                    params[routeParams.onlandVisualTrashAssessmentAreaID]
-                );
-            })
+        this.onlandVisualTrashAssessmentArea$ = this.onlandVisualTrashAssessmentAreaService.onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDGet(
+            this.onlandVisualTrashAssessmentAreaID
         );
     }
 
@@ -143,7 +139,7 @@ export class TrashOvtaAreaEditLocationComponent {
         this.onlandVisualTrashAssessmentAreaService
             .onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDParcelGeometriesPost(ovtaAreaID, ovtaGeometryDto)
             .subscribe((x) => {
-                this.router.navigate(["../"], { relativeTo: this.route });
+                this.router.navigate(["../"]);
             });
     }
 

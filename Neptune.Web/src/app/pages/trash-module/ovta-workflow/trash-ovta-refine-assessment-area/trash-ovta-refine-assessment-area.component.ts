@@ -1,11 +1,10 @@
-import { Component } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import { Component, Input } from "@angular/core";
+import { Router } from "@angular/router";
 import { Observable, switchMap, tap } from "rxjs";
-import { routeParams } from "src/app/app.routes";
 import { NeptuneMapInitEvent, NeptuneMapComponent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
 import { OnlandVisualTrashAssessmentService } from "src/app/shared/generated/api/onland-visual-trash-assessment.service";
+import "leaflet-draw";
 import * as L from "leaflet";
-
 import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
 import { AlertDisplayComponent } from "../../../../shared/components/alert-display/alert-display.component";
 import { OvtaObservationLayerComponent } from "../../../../shared/components/leaflet/layers/ovta-observation-layer/ovta-observation-layer.component";
@@ -39,8 +38,8 @@ import { WfsService } from "src/app/shared/services/wfs.service";
     styleUrl: "./trash-ovta-refine-assessment-area.component.scss",
 })
 export class TrashOvtaRefineAssessmentAreaComponent {
+    @Input() onlandVisualTrashAssessmentID!: number;
     public customRichTextTypeID = NeptunePageTypeEnum.EditOVTAArea;
-    public ovtaID: number;
     public isLoading: boolean = false;
 
     public onlandVisualTrashAssessment$: Observable<OnlandVisualTrashAssessmentDetailDto>;
@@ -86,7 +85,6 @@ export class TrashOvtaRefineAssessmentAreaComponent {
 
     constructor(
         private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService,
-        private route: ActivatedRoute,
         private router: Router,
         private alertService: AlertService,
         private wfsService: WfsService,
@@ -95,17 +93,15 @@ export class TrashOvtaRefineAssessmentAreaComponent {
 
     ngOnInit(): void {
         this.isLoading = true;
-        this.onlandVisualTrashAssessment$ = this.route.params.pipe(
-            switchMap((params) => {
-                this.ovtaID = params[routeParams.onlandVisualTrashAssessmentID];
-                return this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDGet(this.ovtaID);
-            }),
-            tap(() => (this.isLoading = false))
-        );
+        this.onlandVisualTrashAssessment$ = this.onlandVisualTrashAssessmentService
+            .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDGet(this.onlandVisualTrashAssessmentID)
+            .pipe(tap(() => (this.isLoading = false)));
 
         this.onlandVisualTrashAssessmentArea$ = this.onlandVisualTrashAssessment$.pipe(
-            switchMap((params) => {
-                return this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDAreaAsFeatureCollectionGet(this.ovtaID);
+            switchMap(() => {
+                return this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDAreaAsFeatureCollectionGet(
+                    this.onlandVisualTrashAssessmentID
+                );
             })
         );
     }
@@ -122,20 +118,20 @@ export class TrashOvtaRefineAssessmentAreaComponent {
 
     public save(andContinue = false) {
         var onlandVisualTrashAssessmentRefineArea = new OnlandVisualTrashAssessmentRefineAreaDto();
-        onlandVisualTrashAssessmentRefineArea.OnlandVisualTrashAssessmentID = this.ovtaID;
+        onlandVisualTrashAssessmentRefineArea.OnlandVisualTrashAssessmentID = this.onlandVisualTrashAssessmentID;
         this.layer.eachLayer((layer) => {
             onlandVisualTrashAssessmentRefineArea.GeometryAsGeoJson = JSON.stringify(layer.toGeoJSON());
         });
 
         this.onlandVisualTrashAssessmentService
-            .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDRefineAreaPost(this.ovtaID, onlandVisualTrashAssessmentRefineArea)
+            .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDRefineAreaPost(this.onlandVisualTrashAssessmentID, onlandVisualTrashAssessmentRefineArea)
             .subscribe(() => {
                 this.isLoadingSubmit = false;
                 this.alertService.clearAlerts();
                 this.alertService.pushAlert(new Alert("Successfully updated Assessment Area.", AlertContext.Success));
-                this.ovtaWorkflowProgressService.updateProgress(this.ovtaID);
+                this.ovtaWorkflowProgressService.updateProgress(this.onlandVisualTrashAssessmentID);
                 if (andContinue) {
-                    this.router.navigate([`../../${this.ovtaID}/review-and-finalize`], { relativeTo: this.route });
+                    this.router.navigate([`/trash/onland-visual-trash-assessments/edit/${this.onlandVisualTrashAssessmentID}/review-and-finalize`]);
                 }
             });
     }

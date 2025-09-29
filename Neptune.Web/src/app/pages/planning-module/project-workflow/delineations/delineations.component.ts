@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import { Router } from "@angular/router";
+import { Input } from "@angular/core";
 import "leaflet-draw";
 import * as L from "leaflet";
 import { forkJoin, Observable, switchMap } from "rxjs";
@@ -28,7 +29,6 @@ import { RegionalSubbasinsLayerComponent } from "src/app/shared/components/leafl
 import { StormwaterNetworkLayerComponent } from "src/app/shared/components/leaflet/layers/stormwater-network-layer/stormwater-network-layer.component";
 import { WqmpsLayerComponent } from "src/app/shared/components/leaflet/layers/wqmps-layer/wqmps-layer.component";
 import { NeptuneMapComponent, NeptuneMapInitEvent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
-import { routeParams } from "src/app/app.routes";
 import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet/layers/inventoried-bmps-layer/inventoried-bmps-layer.component";
 
 @Component({
@@ -99,7 +99,7 @@ export class DelineationsComponent implements OnInit {
         fillOpacity: 0,
         opacity: 0,
     };
-    public projectID: number;
+    @Input() projectID!: number;
     public customRichTextTypeID = NeptunePageTypeEnum.HippocampDelineations;
 
     public isPerformingDrawAction: boolean = false;
@@ -137,7 +137,6 @@ export class DelineationsComponent implements OnInit {
 
     constructor(
         private treatmentBMPService: TreatmentBMPService,
-        private route: ActivatedRoute,
         private router: Router,
         private alertService: AlertService,
         private cdr: ChangeDetectorRef,
@@ -158,12 +157,7 @@ export class DelineationsComponent implements OnInit {
     }
 
     public ngOnInit(): void {
-        this.boundingBox$ = this.route.params.pipe(
-            switchMap((params) => {
-                this.projectID = parseInt(params[routeParams.projectID]);
-                return this.projectService.projectsProjectIDBoundingBoxGet(this.projectID);
-            })
-        );
+        this.boundingBox$ = this.projectService.projectsProjectIDBoundingBoxGet(this.projectID);
     }
 
     ngOnDestroy() {
@@ -175,10 +169,7 @@ export class DelineationsComponent implements OnInit {
         this.layerControl = event.layerControl;
         this.mapIsReady = true;
 
-        const projectID = this.route.snapshot.paramMap.get("projectID");
-        if (projectID) {
-            this.projectID = parseInt(projectID);
-
+        if (this.projectID) {
             forkJoin({
                 project: this.projectService.projectsProjectIDGet(this.projectID),
                 treatmentBMPs: this.projectService.projectsProjectIDTreatmentBmpsGet(this.projectID),
@@ -186,7 +177,7 @@ export class DelineationsComponent implements OnInit {
             }).subscribe(({ project, treatmentBMPs, delineations }) => {
                 // redirect to review step if project is shared with OCTA grant program
                 if (project.ShareOCTAM2Tier2Scores) {
-                    this.router.navigateByUrl(`/planning/projects/edit/${projectID}/review-and-share`);
+                    this.router.navigateByUrl(`/planning/projects/edit/${this.projectID}/review-and-share`);
                 }
                 if (treatmentBMPs.length == 0) {
                     this.router.navigateByUrl(`/planning/projects/edit/${this.projectID}`);

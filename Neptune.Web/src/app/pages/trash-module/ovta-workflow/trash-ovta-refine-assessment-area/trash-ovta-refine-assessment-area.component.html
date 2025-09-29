@@ -16,8 +16,8 @@
         @if (mapIsReady) {
         <land-use-block-layer [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></land-use-block-layer>
         <parcel-layer [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="20" styles="parcel_alt"></parcel-layer>
-        <ovta-observation-layer [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="30" [ovtaID]="ovtaID"></ovta-observation-layer>
-        <transect-line-layer [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="25" [ovtaID]="ovtaID"></transect-line-layer>
+        <ovta-observation-layer [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="30" [ovtaID]="onlandVisualTrashAssessmentID"></ovta-observation-layer>
+        <transect-line-layer [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="25" [ovtaID]="onlandVisualTrashAssessmentID"></transect-line-layer>
         }
     </neptune-map>
     }

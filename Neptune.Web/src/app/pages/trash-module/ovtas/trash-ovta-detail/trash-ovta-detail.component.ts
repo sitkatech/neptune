@@ -1,8 +1,8 @@
-import { AsyncPipe, DatePipe, KeyValuePipe, NgClass } from "@angular/common";
+import { AsyncPipe, DatePipe } from "@angular/common";
 import { Component } from "@angular/core";
-import { ActivatedRoute, Router, RouterLink } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
+import { Input } from "@angular/core";
 import { Observable, switchMap } from "rxjs";
-import { routeParams } from "src/app/app.routes";
 import { OnlandVisualTrashAssessmentService } from "src/app/shared/generated/api/onland-visual-trash-assessment.service";
 import { OnlandVisualTrashAssessmentDetailDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-detail-dto";
 import { AlertDisplayComponent } from "../../../../shared/components/alert-display/alert-display.component";
@@ -22,19 +22,17 @@ import { ConfirmService } from "src/app/shared/services/confirm/confirm.service"
     selector: "trash-ovta-detail",
     imports: [AsyncPipe, AlertDisplayComponent, PageHeaderComponent, FieldDefinitionComponent, DatePipe, ObservationsMapComponent, RouterLink],
     templateUrl: "./trash-ovta-detail.component.html",
-    styleUrl: "./trash-ovta-detail.component.scss"
+    styleUrl: "./trash-ovta-detail.component.scss",
 })
 export class TrashOvtaDetailComponent {
     public onlandVisualTrashAssessment$: Observable<OnlandVisualTrashAssessmentDetailDto>;
     public onlandVisualTrashAssessmentObservations$: Observable<OnlandVisualTrashAssessmentObservationWithPhotoDto[]>;
     public PreliminarySourceIdentificationCategories = PreliminarySourceIdentificationCategories;
 
-    public ovtaID: number;
-
+    @Input() onlandVisualTrashAssessmentID!: number;
     constructor(
         private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService,
         private onlandVisualTrashAssessmentObservationService: OnlandVisualTrashAssessmentObservationService,
-        private route: ActivatedRoute,
         private alertService: AlertService,
         private confirmService: ConfirmService,
         private router: Router,
@@ -42,11 +40,8 @@ export class TrashOvtaDetailComponent {
     ) {}
 
     ngOnInit(): void {
-        this.onlandVisualTrashAssessment$ = this.route.params.pipe(
-            switchMap((params) => {
-                this.ovtaID = params[routeParams.onlandVisualTrashAssessmentID];
-                return this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDGet(params[routeParams.onlandVisualTrashAssessmentID]);
-            })
+        this.onlandVisualTrashAssessment$ = this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDGet(
+            this.onlandVisualTrashAssessmentID
         );
         this.onlandVisualTrashAssessmentObservations$ = this.onlandVisualTrashAssessment$.pipe(
             switchMap((onlandVisualTrashAssessment) => {

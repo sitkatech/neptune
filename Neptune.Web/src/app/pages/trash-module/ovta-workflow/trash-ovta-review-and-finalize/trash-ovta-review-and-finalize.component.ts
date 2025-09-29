@@ -4,9 +4,9 @@ import { OnlandVisualTrashAssessmentService } from "src/app/shared/generated/api
 import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
 import { FormFieldComponent, FormFieldType, FormInputOption } from "src/app/shared/components/forms/form-field/form-field.component";
 import { OnlandVisualTrashAssessmentScoresAsSelectDropdownOptions } from "src/app/shared/generated/enum/onland-visual-trash-assessment-score-enum";
-import { ActivatedRoute, Router } from "@angular/router";
+import { Router } from "@angular/router";
+import { Input } from "@angular/core";
 import { Observable, switchMap, tap } from "rxjs";
-import { routeParams } from "src/app/app.routes";
 import { AsyncPipe } from "@angular/common";
 import { OnlandVisualTrashAssessmentObservationWithPhotoDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-observation-with-photo-dto";
 import { PreliminarySourceIdentificationCategories } from "src/app/shared/generated/enum/preliminary-source-identification-category-enum";
@@ -29,25 +29,14 @@ import { ModalService, ModalSizeEnum, ModalThemeEnum } from "src/app/shared/serv
 
 @Component({
     selector: "trash-ovta-review-and-finalize",
-    imports: [
-    PageHeaderComponent,
-    FormFieldComponent,
-    ReactiveFormsModule,
-    AsyncPipe,
-    FormsModule,
-    ObservationsMapComponent,
-    WorkflowBodyComponent,
-    AlertDisplayComponent
-],
+    imports: [PageHeaderComponent, FormFieldComponent, ReactiveFormsModule, AsyncPipe, FormsModule, ObservationsMapComponent, WorkflowBodyComponent, AlertDisplayComponent],
     templateUrl: "./trash-ovta-review-and-finalize.component.html",
-    styleUrl: "./trash-ovta-review-and-finalize.component.scss"
+    styleUrl: "./trash-ovta-review-and-finalize.component.scss",
 })
 export class TrashOvtaReviewAndFinalizeComponent {
     public isLoadingSubmit = false;
     public FormFieldType = FormFieldType;
     public PreliminarySourceIdentificationCategories = PreliminarySourceIdentificationCategories;
-
-    public ovtaID: number;
 
     public onlandVisualTrashAssessment$: Observable<OnlandVisualTrashAssessmentReviewAndFinalizeDto>;
     public onlandVisualTrashAssessmentObservations$: Observable<OnlandVisualTrashAssessmentObservationWithPhotoDto[]>;
@@ -73,8 +62,9 @@ export class TrashOvtaReviewAndFinalizeComponent {
         OnlandVisualTrashAssessmentStatusID: OnlandVisualTrashAssessmentReviewAndFinalizeDtoFormControls.OnlandVisualTrashAssessmentStatusID(),
     });
 
+    @Input() onlandVisualTrashAssessmentID!: number;
+
     constructor(
-        private route: ActivatedRoute,
         private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService,
         private onlandVisualTrashAssessmentObservationService: OnlandVisualTrashAssessmentObservationService,
         private router: Router,
@@ -85,17 +75,12 @@ export class TrashOvtaReviewAndFinalizeComponent {
     ) {}
 
     ngOnInit(): void {
-        this.onlandVisualTrashAssessment$ = this.route.params.pipe(
-            switchMap((params) => {
-                return this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDReviewAndFinalizeGet(
-                    params[routeParams.onlandVisualTrashAssessmentID]
-                );
-            })
+        this.onlandVisualTrashAssessment$ = this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDReviewAndFinalizeGet(
+            this.onlandVisualTrashAssessmentID
         );
 
         this.onlandVisualTrashAssessmentObservations$ = this.onlandVisualTrashAssessment$.pipe(
             tap((ovta) => {
-                this.ovtaID = ovta.OnlandVisualTrashAssessmentID;
                 this.formGroup.controls.OnlandVisualTrashAssessmentID.setValue(ovta.OnlandVisualTrashAssessmentID);
                 this.formGroup.controls.OnlandVisualTrashAssessmentAreaID.setValue(ovta.OnlandVisualTrashAssessmentAreaID);
                 this.formGroup.controls.OnlandVisualTrashAssessmentAreaName.setValue(ovta.OnlandVisualTrashAssessmentAreaName);
@@ -159,13 +144,13 @@ export class TrashOvtaReviewAndFinalizeComponent {
             andContinue ? OnlandVisualTrashAssessmentStatusEnum.Complete : OnlandVisualTrashAssessmentStatusEnum.InProgress
         );
         this.onlandVisualTrashAssessmentService
-            .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDReviewAndFinalizePost(this.ovtaID, this.formGroup.getRawValue())
+            .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDReviewAndFinalizePost(this.onlandVisualTrashAssessmentID, this.formGroup.getRawValue())
             .subscribe(() => {
                 this.alertService.clearAlerts();
                 this.alertService.pushAlert(new Alert("Assessment successfully updated.", AlertContext.Success));
-                this.ovtaWorkflowProgressService.updateProgress(this.ovtaID);
+                this.ovtaWorkflowProgressService.updateProgress(this.onlandVisualTrashAssessmentID);
                 if (andContinue) {
-                    this.router.navigate([`../../../${this.ovtaID}`], { relativeTo: this.route });
+                    this.router.navigate([`/trash/onland-visual-trash-assessments/${this.onlandVisualTrashAssessmentID}`]);
                 }
             });
     }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
-import { combineLatest, map, Observable, of, pipe, switchMap, tap } from "rxjs";
+import { Router } from "@angular/router";
+import { Input } from "@angular/core";
+import { combineLatest, map, Observable, of, tap } from "rxjs";
 import { Alert } from "src/app/shared/models/alert";
 import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
 import { ProjectUpsertDtoForm, ProjectUpsertDtoFormControls } from "src/app/shared/generated/model/models";
@@ -17,7 +18,6 @@ import { AsyncPipe } from "@angular/common";
 import { PageHeaderComponent } from "src/app/shared/components/page-header/page-header.component";
 import { WorkflowBodyComponent } from "src/app/shared/components/workflow-body/workflow-body.component";
 import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
-import { routeParams } from "src/app/app.routes";
 import { FormFieldComponent, FormFieldType } from "src/app/shared/components/forms/form-field/form-field.component";
 import { SelectDropdownOption } from "src/app/shared/components/forms/form-field/form-field.component";
 import { ProjectWorkflowProgressService } from "src/app/shared/services/project-workflow-progress.service";
@@ -32,7 +32,7 @@ import { AuthenticationService } from "src/app/services/authentication.service";
 export class ProjectBasicsComponent implements OnInit {
     public FormFieldType = FormFieldType;
 
-    public projectID: number;
+    @Input() projectID!: number;
     public organizationOptions$: Observable<SelectDropdownOption[]>;
     public userOptions$: Observable<SelectDropdownOption[]>;
     public stormwaterJurisdictionOptions$: Observable<SelectDropdownOption[]>;
@@ -55,7 +55,6 @@ export class ProjectBasicsComponent implements OnInit {
 
     constructor(
         private authenticationService: AuthenticationService,
-        private route: ActivatedRoute,
         private router: Router,
         private alertService: AlertService,
         private organizationService: OrganizationService,
@@ -70,34 +69,28 @@ export class ProjectBasicsComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.projectBasicInfo$ = this.route.params.pipe(
-            switchMap((params) => {
-                this.projectID = params[routeParams.projectID] ? parseInt(params[routeParams.projectID]) : null;
-                return combineLatest({
-                    CurrentUser: this.authenticationService.getCurrentUser(),
-                    Project: this.projectID ? this.projectService.projectsProjectIDGet(params[routeParams.projectID]) : of(new ProjectDto()),
-                });
-            }),
-            pipe(
-                tap((value) => {
-                    if (value.Project.ProjectID) {
-                        // redirect to review step if project is shared with OCTA grant program
-                        if (value.Project.ShareOCTAM2Tier2Scores) {
-                            this.router.navigateByUrl(`/planning/projects/edit/${value.Project.ProjectID}/review-and-share`);
-                        }
-                        this.formGroup.controls.ProjectName.setValue(value.Project.ProjectName);
-                        this.formGroup.controls.ProjectDescription.setValue(value.Project.ProjectDescription);
-                        this.formGroup.controls.OrganizationID.setValue(value.Project.OrganizationID);
-                        this.formGroup.controls.StormwaterJurisdictionID.setValue(value.Project.StormwaterJurisdictionID);
-                        this.formGroup.controls.PrimaryContactPersonID.setValue(value.Project.PrimaryContactPersonID);
-                        this.formGroup.controls.AdditionalContactInformation.setValue(value.Project.AdditionalContactInformation);
-                        this.formGroup.controls.CalculateOCTAM2Tier2Scores.setValue(value.Project.CalculateOCTAM2Tier2Scores);
-                        this.isLoadingSubmit = false;
-                    } else {
-                        this.formGroup.controls.PrimaryContactPersonID.setValue(value.CurrentUser.PersonID);
+        this.projectBasicInfo$ = combineLatest({
+            CurrentUser: this.authenticationService.getCurrentUser(),
+            Project: this.projectID ? this.projectService.projectsProjectIDGet(this.projectID) : of(new ProjectDto()),
+        }).pipe(
+            tap((value) => {
+                if (value.Project.ProjectID) {
+                    // redirect to review step if project is shared with OCTA grant program
+                    if (value.Project.ShareOCTAM2Tier2Scores) {
+                        this.router.navigateByUrl(`/planning/projects/edit/${value.Project.ProjectID}/review-and-share`);
                     }
-                })
-            ),
+                    this.formGroup.controls.ProjectName.setValue(value.Project.ProjectName);
+                    this.formGroup.controls.ProjectDescription.setValue(value.Project.ProjectDescription);
+                    this.formGroup.controls.OrganizationID.setValue(value.Project.OrganizationID);
+                    this.formGroup.controls.StormwaterJurisdictionID.setValue(value.Project.StormwaterJurisdictionID);
+                    this.formGroup.controls.PrimaryContactPersonID.setValue(value.Project.PrimaryContactPersonID);
+                    this.formGroup.controls.AdditionalContactInformation.setValue(value.Project.AdditionalContactInformation);
+                    this.formGroup.controls.CalculateOCTAM2Tier2Scores.setValue(value.Project.CalculateOCTAM2Tier2Scores);
+                    this.isLoadingSubmit = false;
+                } else {
+                    this.formGroup.controls.PrimaryContactPersonID.setValue(value.CurrentUser.PersonID);
+                }
+            }),
             map((value) => {
                 return value.Project;
             })
@@ -138,7 +131,7 @@ export class ProjectBasicsComponent implements OnInit {
                 //this.formGroup.patchValue(response);
                 this.formGroup.markAsPristine();
                 if (andContinue) {
-                    this.router.navigate(["../stormwater-treatments/treatment-bmps"], { relativeTo: this.route });
+                    this.router.navigate([`/planning/projects/edit/${this.projectID}/stormwater-treatments/treatment-bmps`]);
                 }
             });
         } else {
@@ -150,7 +143,7 @@ export class ProjectBasicsComponent implements OnInit {
                 this.formGroup.patchValue(response);
                 this.formGroup.markAsPristine();
                 if (andContinue) {
-                    this.router.navigate([`../../edit/${response.ProjectID}/stormwater-treatments/treatment-bmps`], { relativeTo: this.route });
+                    this.router.navigate([`/planning/projects/edit/${response.ProjectID}/stormwater-treatments/treatment-bmps`]);
                 }
             });
         }

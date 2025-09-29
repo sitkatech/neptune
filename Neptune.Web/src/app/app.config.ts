@@ -1,5 +1,5 @@
 import { ApplicationConfig, ErrorHandler, importProvidersFrom, inject, provideAppInitializer } from "@angular/core";
-import { RouterModule, TitleStrategy, provideRouter } from "@angular/router";
+import { RouterModule, TitleStrategy, provideRouter, withComponentInputBinding } from "@angular/router";
 
 import { routes } from "./app.routes";
 import { DecimalPipe, CurrencyPipe, DatePipe } from "@angular/common";
@@ -22,7 +22,7 @@ import { provideDialogConfig } from "@ngneat/dialog";
 
 export const appConfig: ApplicationConfig = {
     providers: [
-        provideRouter(routes),
+        provideRouter(routes, withComponentInputBinding()),
         importProvidersFrom(
             ApiModule.forRoot(() => {
                 return new Configuration({

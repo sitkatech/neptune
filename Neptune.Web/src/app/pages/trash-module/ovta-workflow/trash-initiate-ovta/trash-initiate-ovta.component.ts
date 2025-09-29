@@ -29,20 +29,20 @@ import { NgSelectModule } from "@ng-select/ng-select";
 @Component({
     selector: "trash-initiate-ovta",
     imports: [
-    PageHeaderComponent,
-    ReactiveFormsModule,
-    FormsModule,
-    FormFieldComponent,
-    AsyncPipe,
-    NeptuneMapComponent,
-    LandUseBlockLayerComponent,
-    ParcelLayerComponent,
-    WorkflowBodyComponent,
-    AlertDisplayComponent,
-    NgSelectModule
-],
+        PageHeaderComponent,
+        ReactiveFormsModule,
+        FormsModule,
+        FormFieldComponent,
+        AsyncPipe,
+        NeptuneMapComponent,
+        LandUseBlockLayerComponent,
+        ParcelLayerComponent,
+        WorkflowBodyComponent,
+        AlertDisplayComponent,
+        NgSelectModule,
+    ],
     templateUrl: "./trash-initiate-ovta.component.html",
-    styleUrl: "./trash-initiate-ovta.component.scss"
+    styleUrl: "./trash-initiate-ovta.component.scss",
 })
 export class TrashInitiateOvtaComponent {
     public FormFieldType = FormFieldType;
@@ -138,7 +138,7 @@ export class TrashInitiateOvtaComponent {
             this.alertService.pushAlert(new Alert("Your OVTA was successfully created.", AlertContext.Success));
             this.ovtaWorkflowProgressService.updateProgress(response.OnlandVisualTrashAssessmentID);
             if (andContinue) {
-                this.router.navigate([`../../edit/${response.OnlandVisualTrashAssessmentID}/record-observations`], { relativeTo: this.route });
+                this.router.navigate([`/trash/onland-visual-trash-assessments/edit/${response.OnlandVisualTrashAssessmentID}/record-observations`]);
             }
         });
     }
