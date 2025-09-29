@@ -20,6 +20,8 @@ import { GeometryGeoJSONAndAreaDto } from '../model/geometry-geo-json-and-area-d
 import { IFeature } from '../model/i-feature';
 // @ts-ignore
 import { TreatmentBMPDisplayDto } from '../model/treatment-bmp-display-dto';
+// @ts-ignore
+import { TreatmentBMPIndexGridDto } from '../model/treatment-bmp-index-grid-dto';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -41,9 +43,9 @@ export class TreatmentBMPService extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public treatmentBmpsGet(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<TreatmentBMPDisplayDto>>;
-    public treatmentBmpsGet(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<TreatmentBMPDisplayDto>>>;
-    public treatmentBmpsGet(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<TreatmentBMPDisplayDto>>>;
+    public treatmentBmpsGet(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<TreatmentBMPIndexGridDto>>;
+    public treatmentBmpsGet(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<TreatmentBMPIndexGridDto>>>;
+    public treatmentBmpsGet(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<TreatmentBMPIndexGridDto>>>;
     public treatmentBmpsGet(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
@@ -75,7 +77,7 @@ export class TreatmentBMPService extends BaseService {
 
         let localVarPath = `/treatment-bmps`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<TreatmentBMPDisplayDto>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<TreatmentBMPIndexGridDto>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

@@ -3655,7 +3655,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
+                    "$ref": "#/components/schemas/TreatmentBMPIndexGridDto"
                   }
                 }
               },
@@ -3663,7 +3663,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
+                    "$ref": "#/components/schemas/TreatmentBMPIndexGridDto"
                   }
                 }
               },
@@ -3671,7 +3671,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
+                    "$ref": "#/components/schemas/TreatmentBMPIndexGridDto"
                   }
                 }
               }
@@ -7676,6 +7676,125 @@
           "ImperviousCover": {
             "type": "number",
             "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TreatmentBMPIndexGridDto": {
+        "type": "object",
+        "properties": {
+          "TreatmentBMPID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TreatmentBMPName": {
+            "type": "string",
+            "nullable": true
+          },
+          "TreatmentBMPTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TreatmentBMPTypeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "StormwaterJurisdictionID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OrganizationName": {
+            "type": "string",
+            "nullable": true
+          },
+          "OwnerOrganizationID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OwnerOrganizationName": {
+            "type": "string",
+            "nullable": true
+          },
+          "YearBuilt": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Notes": {
+            "type": "string",
+            "nullable": true
+          },
+          "LatestAssessmentDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "LatestAssessmentScore": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "NumberOfAssessments": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "LatestMaintenanceDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "NumberOfMaintenanceRecords": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "BenchmarkAndThresholdSet": {
+            "type": "boolean"
+          },
+          "TreatmentBMPLifespanTypeDisplayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "TreatmentBMPLifespanEndDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "RequiredFieldVisitsPerYear": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "RequiredPostStormFieldVisitsPerYear": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "SizingBasisTypeDisplayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "TrashCaptureStatusTypeDisplayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "TrashCaptureEffectiveness": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "DelineationTypeDisplayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "Latitude": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "Longitude": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
           }
         },
         "additionalProperties": false

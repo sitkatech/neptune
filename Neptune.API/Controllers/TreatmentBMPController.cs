@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
-using Neptune.Models.DataTransferObjects;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Neptune.API.Services;
 using Neptune.API.Services.Authorization;
 using Neptune.EFModels.Entities;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using Neptune.Models.DataTransferObjects;
 using NetTopologySuite.Features;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Neptune.API.Controllers
 {
@@ -20,11 +21,16 @@ namespace Neptune.API.Controllers
         : SitkaController<TreatmentBMPController>(dbContext, logger, keystoneService, neptuneConfiguration)
     {
         [HttpGet]
-        [JurisdictionEditFeature]
-        public ActionResult<List<TreatmentBMPDisplayDto>> ListByPersonID()
+        [LoggedInUnclassifiedFeature]
+        public ActionResult<List<TreatmentBMPIndexGridDto>> List()
         {
-            var treatmentBMPDisplayDtos = TreatmentBMPs.ListByPersonAsDisplayDto(DbContext, CallingUser);
-            return Ok(treatmentBMPDisplayDtos);
+            var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonIDForBMPs(dbContext, CallingUser.PersonID);
+            var treatmentBMPs = dbContext.vTreatmentBMPDetaileds
+                .Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID))
+                .ToList()
+                .Select(x => x.AsDto())
+                .ToList();
+            return Ok(treatmentBMPs);
         }
 
         [HttpGet("verified/feature-collection")]

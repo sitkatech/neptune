@@ -71,6 +71,7 @@ export * from './trash-generating-unit-dto';
 export * from './trash-generating-unit-grid-dto';
 export * from './treatment-bmp-display-dto';
 export * from './treatment-bmphru-characteristics-summary-simple-dto';
+export * from './treatment-bmp-index-grid-dto';
 export * from './treatment-bmp-type-custom-attribute-type-dto';
 export * from './treatment-bmp-type-with-modeling-attributes-dto';
 export * from './treatment-bmp-upsert-dto';

@@ -93,4 +93,8 @@ public partial class vTreatmentBMPDetailed
     public int NumberOfBenchmarkAndThresholdsEntered { get; set; }
 
     public int? TrashCaptureEffectiveness { get; set; }
+
+    public double? Latitude { get; set; }
+
+    public double? Longitude { get; set; }
 }

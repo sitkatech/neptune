@@ -42,7 +42,7 @@ export const routes: Routes = [
             {
                 path: "bmp-inventory/view-all-bmps",
                 title: "View All BMPs",
-                loadComponent: () => import("./pages/inventory-module/bmp-inventory/view-all-bmps.component").then((m) => m.ViewAllBmpsComponent),
+                loadComponent: () => import("./pages/inventory-module/bmp-inventory/view-all-bmps/view-all-bmps.component").then((m) => m.ViewAllBmpsComponent),
             },
             {
                 path: "bmp-inventory/latest-bmp-assessments",
