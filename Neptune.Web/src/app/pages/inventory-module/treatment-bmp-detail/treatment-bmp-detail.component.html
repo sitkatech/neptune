@@ -46,8 +46,47 @@
                         <dt class="g-col-4"><field-definition fieldDefinitionType="TreatmentBMPType"></field-definition></dt>
                         <dd class="g-col-8">{{ treatmentBMP.TreatmentBMPTypeName }}</dd>
                         <dt class="g-col-4">Jurisdiction</dt>
-                        <dd class="g-col-8">{{ treatmentBMP.StormwaterJurisdictionName }}</dd>
-                        <!-- TODO: Add more fields as needed -->
+                        <dd class="g-col-8">
+                            <a [routerLink]="['/jurisdictions', treatmentBMP.StormwaterJurisdictionID]">{{ treatmentBMP.StormwaterJurisdictionName }}</a>
+                        </dd>
+                        <dt class="g-col-4">Owner</dt>
+                        <dd class="g-col-8">
+                            <a [routerLink]="['/organizations', treatmentBMP.OwnerOrganizationID]">{{ treatmentBMP.OwnerOrganizationName }}</a>
+                        </dd>
+                        <dt class="g-col-4">Year Built</dt>
+                        <dd class="g-col-8">{{ treatmentBMP.YearBuilt }}</dd>
+                        <dt class="g-col-4">ID in System of Record</dt>
+                        <dd class="g-col-8">{{ treatmentBMP.SystemOfRecordID }}</dd>
+                        <dt class="g-col-4">Water Quality<br />Management Plan</dt>
+                        <dd class="g-col-8">
+                            @if (treatmentBMP.WaterQualityManagementPlan) {
+                            <a [routerLink]="['/wqmps', treatmentBMP.WaterQualityManagementPlanID]">{{ treatmentBMP.WaterQualityManagementPlan.WaterQualityManagementPlanName }}</a>
+                            } @else {
+                            <em class="text-muted">Has not been linked to a WQMP</em>
+                            }
+                        </dd>
+                        <dt class="g-col-4"><field-definition fieldDefinitionType="SizingBasis"></field-definition></dt>
+                        <dd class="g-col-8">{{ treatmentBMP.SizingBasisType.SizingBasisTypeDisplayName }}</dd>
+                        <dt class="g-col-4"><field-definition fieldDefinitionType="TrashCaptureStatus"></field-definition></dt>
+                        <dd class="g-col-8">{{ treatmentBMP.TrashCaptureStatusType.TrashCaptureStatusTypeDisplayName }}</dd>
+                        @if (false) {
+                        <dt class="g-col-4">Trash Capture Effectiveness</dt>
+                        <dd class="g-col-8">{{ treatmentBMP.TrashCaptureEffectiveness }}</dd>
+                        }
+                        <dt class="g-col-4"><field-definition fieldDefinitionType="RequiredLifespanOfInstallation"></field-definition></dt>
+                        <dd class="g-col-8">
+                            @if (treatmentBMP.TreatmentBMPLifespanType.TreatmentBMPLifeSpanTypeID == TreatmentBMPLifespanTypeEnum.FixedEndDate) { Maintain until at least
+                            {{ treatmentBMP.TreatmentBMPLifespanEndDate | date : "MM/dd/yyyy" }}
+                            } @else {
+                            {{ treatmentBMP.TreatmentBMPLifespanType.TreatmentBMPLifeSpanTypeDisplayName || "Unknown" }}
+                            }
+                        </dd>
+                        <dt class="g-col-4"><field-definition fieldDefinitionType="RequiredFieldVisitsPerYear"></field-definition></dt>
+                        <dd class="g-col-8">{{ treatmentBMP.RequiredFieldVisitsPerYear }}</dd>
+                        <dt class="g-col-4"><field-definition fieldDefinitionType="RequiredPostStormFieldVisitsPerYear"></field-definition></dt>
+                        <dd class="g-col-8">{{ treatmentBMP.RequiredPostStormFieldVisitsPerYear }}</dd>
+                        <dt class="g-col-4">Notes</dt>
+                        <dd class="g-col-8">{{ treatmentBMP.Notes }}</dd>
                     </dl>
                 </div>
             </div>

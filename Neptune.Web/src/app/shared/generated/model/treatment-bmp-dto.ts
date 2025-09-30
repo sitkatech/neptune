@@ -7,42 +7,92 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { VTreatmentBMPModelingAttributeDto } from './v-treatment-bmp-modeling-attribute-dto';
+import { ProjectDto } from './project-dto';
+import { WaterQualityManagementPlanDto } from './water-quality-management-plan-dto';
+import { WatershedDto } from './watershed-dto';
+import { RegionalSubbasinRevisionRequestDto } from './regional-subbasin-revision-request-dto';
+import { TreatmentBMPAssessmentDto } from './treatment-bmp-assessment-dto';
 import { CustomAttributeUpsertDto } from './custom-attribute-upsert-dto';
+import { SizingBasisTypeDto } from './sizing-basis-type-dto';
+import { MaintenanceRecordDto } from './maintenance-record-dto';
+import { OrganizationDto } from './organization-dto';
+import { TreatmentBMPDocumentDto } from './treatment-bmp-document-dto';
+import { TreatmentBMPImageDto } from './treatment-bmp-image-dto';
+import { WaterQualityManagementPlanVerifyTreatmentBMPDto } from './water-quality-management-plan-verify-treatment-bmp-dto';
+import { DelineationDto } from './delineation-dto';
+import { VTreatmentBMPModelingAttributeDto } from './v-treatment-bmp-modeling-attribute-dto';
+import { NereidResultDto } from './nereid-result-dto';
+import { ProjectNereidResultDto } from './project-nereid-result-dto';
+import { TreatmentBMPBenchmarkAndThresholdDto } from './treatment-bmp-benchmark-and-threshold-dto';
+import { StormwaterJurisdictionDto } from './stormwater-jurisdiction-dto';
+import { TrashCaptureStatusTypeDto } from './trash-capture-status-type-dto';
+import { TreatmentBMPLifeSpanTypeDto } from './treatment-bmp-life-span-type-dto';
 
 
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class TreatmentBMPDto { 
-    TreatmentBMPID?: number;
+    TreatmentBMPID?: number | null;
     TreatmentBMPName?: string | null;
-    TreatmentBMPTypeID?: number;
+    TreatmentBMPTypeID?: number | null;
     TreatmentBMPTypeName?: string | null;
-    StormwaterJurisdictionID?: number;
+    StormwaterJurisdictionID?: number | null;
     StormwaterJurisdictionName?: string | null;
     OwnerOrganizationID?: number | null;
     OwnerOrganizationName?: string | null;
     YearBuilt?: number | null;
     Notes?: string | null;
-    InventoryIsVerified?: boolean;
+    InventoryIsVerified?: boolean | null;
     ProjectID?: number | null;
     Latitude?: number | null;
     Longitude?: number | null;
-    IsFullyParameterized?: boolean;
-    HasModelingAttributes?: boolean;
+    SystemOfRecordID?: string | null;
+    WaterQualityManagementPlanID?: number | null;
+    TreatmentBMPLifespanEndDate?: string | null;
+    RequiredFieldVisitsPerYear?: number | null;
+    RequiredPostStormFieldVisitsPerYear?: number | null;
+    InventoryIsVerifiedByPerson?: boolean | null;
+    DateOfLastInventoryVerification?: string | null;
+    InventoryVerifiedByPersonID?: number | null;
+    InventoryLastChangedDate?: string | null;
+    TrashCaptureStatusTypeID?: number | null;
+    SizingBasisTypeID?: number | null;
     TrashCaptureEffectiveness?: string | null;
+    WatershedID?: number | null;
+    ModelBasinID?: number | null;
+    PrecipitationZoneID?: number | null;
+    UpstreamBMPID?: number | null;
+    RegionalSubbasinID?: number | null;
+    LastNereidLogID?: number | null;
+    IsFullyParameterized?: boolean | null;
+    HasModelingAttributes?: boolean | null;
     TreatmentBMPModelingAttribute?: VTreatmentBMPModelingAttributeDto;
     HRUCharacteristics?: any | null;
     ModeledPerformance?: any | null;
-    OtherTreatmentBmpsExistInSubbasin?: boolean;
+    OtherTreatmentBmpsExistInSubbasin?: boolean | null;
     CustomAttributes?: Array<CustomAttributeUpsertDto> | null;
-    Delineation?: any | null;
-    UpstreamestBMP?: any | null;
-    IsUpstreamestBMPAnalyzedInModelingModule?: boolean;
-    RegionalSubbasinRevisionRequest?: any | null;
-    Watershed?: any | null;
+    Delineation?: DelineationDto;
+    UpstreamBMP?: TreatmentBMPDto;
+    IsUpstreamestBMPAnalyzedInModelingModule?: boolean | null;
+    RegionalSubbasinRevisionRequests?: Array<RegionalSubbasinRevisionRequestDto> | null;
+    Watershed?: WatershedDto;
     WatershedFieldDefinitionText?: string | null;
+    Project?: ProjectDto;
+    OwnerOrganization?: OrganizationDto;
+    StormwaterJurisdiction?: StormwaterJurisdictionDto;
+    WaterQualityManagementPlan?: WaterQualityManagementPlanDto;
+    MaintenanceRecords?: Array<MaintenanceRecordDto> | null;
+    TreatmentBMPAssessments?: Array<TreatmentBMPAssessmentDto> | null;
+    TreatmentBMPBenchmarkAndThresholds?: Array<TreatmentBMPBenchmarkAndThresholdDto> | null;
+    TreatmentBMPDocuments?: Array<TreatmentBMPDocumentDto> | null;
+    TreatmentBMPImages?: Array<TreatmentBMPImageDto> | null;
+    NereidResults?: Array<NereidResultDto> | null;
+    ProjectNereidResults?: Array<ProjectNereidResultDto> | null;
+    WaterQualityManagementPlanVerifyTreatmentBMPs?: Array<WaterQualityManagementPlanVerifyTreatmentBMPDto> | null;
     DelineationErrors?: Array<string> | null;
     ParameterizationErrors?: Array<string> | null;
+    SizingBasisType?: SizingBasisTypeDto;
+    TrashCaptureStatusType?: TrashCaptureStatusTypeDto;
+    TreatmentBMPLifespanType?: TreatmentBMPLifeSpanTypeDto;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
@@ -63,22 +113,54 @@ export interface TreatmentBMPDtoForm {
     ProjectID?: FormControl<number>;
     Latitude?: FormControl<number>;
     Longitude?: FormControl<number>;
+    SystemOfRecordID?: FormControl<string>;
+    WaterQualityManagementPlanID?: FormControl<number>;
+    TreatmentBMPLifespanEndDate?: FormControl<string>;
+    RequiredFieldVisitsPerYear?: FormControl<number>;
+    RequiredPostStormFieldVisitsPerYear?: FormControl<number>;
+    InventoryIsVerifiedByPerson?: FormControl<boolean>;
+    DateOfLastInventoryVerification?: FormControl<string>;
+    InventoryVerifiedByPersonID?: FormControl<number>;
+    InventoryLastChangedDate?: FormControl<string>;
+    TrashCaptureStatusTypeID?: FormControl<number>;
+    SizingBasisTypeID?: FormControl<number>;
+    TrashCaptureEffectiveness?: FormControl<string>;
+    WatershedID?: FormControl<number>;
+    ModelBasinID?: FormControl<number>;
+    PrecipitationZoneID?: FormControl<number>;
+    UpstreamBMPID?: FormControl<number>;
+    RegionalSubbasinID?: FormControl<number>;
+    LastNereidLogID?: FormControl<number>;
     IsFullyParameterized?: FormControl<boolean>;
     HasModelingAttributes?: FormControl<boolean>;
-    TrashCaptureEffectiveness?: FormControl<string>;
     TreatmentBMPModelingAttribute?: FormControl<VTreatmentBMPModelingAttributeDto>;
     HRUCharacteristics?: FormControl<any>;
     ModeledPerformance?: FormControl<any>;
     OtherTreatmentBmpsExistInSubbasin?: FormControl<boolean>;
     CustomAttributes?: FormControl<Array<CustomAttributeUpsertDto>>;
-    Delineation?: FormControl<any>;
-    UpstreamestBMP?: FormControl<any>;
+    Delineation?: FormControl<DelineationDto>;
+    UpstreamBMP?: FormControl<TreatmentBMPDto>;
     IsUpstreamestBMPAnalyzedInModelingModule?: FormControl<boolean>;
-    RegionalSubbasinRevisionRequest?: FormControl<any>;
-    Watershed?: FormControl<any>;
+    RegionalSubbasinRevisionRequests?: FormControl<Array<RegionalSubbasinRevisionRequestDto>>;
+    Watershed?: FormControl<WatershedDto>;
     WatershedFieldDefinitionText?: FormControl<string>;
+    Project?: FormControl<ProjectDto>;
+    OwnerOrganization?: FormControl<OrganizationDto>;
+    StormwaterJurisdiction?: FormControl<StormwaterJurisdictionDto>;
+    WaterQualityManagementPlan?: FormControl<WaterQualityManagementPlanDto>;
+    MaintenanceRecords?: FormControl<Array<MaintenanceRecordDto>>;
+    TreatmentBMPAssessments?: FormControl<Array<TreatmentBMPAssessmentDto>>;
+    TreatmentBMPBenchmarkAndThresholds?: FormControl<Array<TreatmentBMPBenchmarkAndThresholdDto>>;
+    TreatmentBMPDocuments?: FormControl<Array<TreatmentBMPDocumentDto>>;
+    TreatmentBMPImages?: FormControl<Array<TreatmentBMPImageDto>>;
+    NereidResults?: FormControl<Array<NereidResultDto>>;
+    ProjectNereidResults?: FormControl<Array<ProjectNereidResultDto>>;
+    WaterQualityManagementPlanVerifyTreatmentBMPs?: FormControl<Array<WaterQualityManagementPlanVerifyTreatmentBMPDto>>;
     DelineationErrors?: FormControl<Array<string>>;
     ParameterizationErrors?: FormControl<Array<string>>;
+    SizingBasisType?: FormControl<SizingBasisTypeDto>;
+    TrashCaptureStatusType?: FormControl<TrashCaptureStatusTypeDto>;
+    TreatmentBMPLifespanType?: FormControl<TreatmentBMPLifeSpanTypeDto>;
 }
 
 export class TreatmentBMPDtoFormControls { 
@@ -222,6 +304,186 @@ export class TreatmentBMPDtoFormControls {
             ],
         }
     );
+    public static SystemOfRecordID = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static WaterQualityManagementPlanID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static TreatmentBMPLifespanEndDate = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static RequiredFieldVisitsPerYear = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static RequiredPostStormFieldVisitsPerYear = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static InventoryIsVerifiedByPerson = (value: FormControlState<boolean> | boolean = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<boolean>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static DateOfLastInventoryVerification = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static InventoryVerifiedByPersonID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static InventoryLastChangedDate = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static TrashCaptureStatusTypeID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static SizingBasisTypeID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static TrashCaptureEffectiveness = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static WatershedID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static ModelBasinID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static PrecipitationZoneID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static UpstreamBMPID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static RegionalSubbasinID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static LastNereidLogID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
     public static IsFullyParameterized = (value: FormControlState<boolean> | boolean = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<boolean>(
         value,
         formControlOptions ?? 
@@ -233,16 +495,6 @@ export class TreatmentBMPDtoFormControls {
         }
     );
     public static HasModelingAttributes = (value: FormControlState<boolean> | boolean = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<boolean>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static TrashCaptureEffectiveness = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {
@@ -302,7 +554,7 @@ export class TreatmentBMPDtoFormControls {
             ],
         }
     );
-    public static Delineation = (value: FormControlState<any> | any = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<any>(
+    public static Delineation = (value: FormControlState<DelineationDto> | DelineationDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<DelineationDto>(
         value,
         formControlOptions ?? 
         {
@@ -312,7 +564,7 @@ export class TreatmentBMPDtoFormControls {
             ],
         }
     );
-    public static UpstreamestBMP = (value: FormControlState<any> | any = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<any>(
+    public static UpstreamBMP = (value: FormControlState<TreatmentBMPDto> | TreatmentBMPDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<TreatmentBMPDto>(
         value,
         formControlOptions ?? 
         {
@@ -332,7 +584,7 @@ export class TreatmentBMPDtoFormControls {
             ],
         }
     );
-    public static RegionalSubbasinRevisionRequest = (value: FormControlState<any> | any = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<any>(
+    public static RegionalSubbasinRevisionRequests = (value: FormControlState<Array<RegionalSubbasinRevisionRequestDto>> | Array<RegionalSubbasinRevisionRequestDto> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<RegionalSubbasinRevisionRequestDto>>(
         value,
         formControlOptions ?? 
         {
@@ -342,7 +594,7 @@ export class TreatmentBMPDtoFormControls {
             ],
         }
     );
-    public static Watershed = (value: FormControlState<any> | any = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<any>(
+    public static Watershed = (value: FormControlState<WatershedDto> | WatershedDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<WatershedDto>(
         value,
         formControlOptions ?? 
         {
@@ -353,6 +605,126 @@ export class TreatmentBMPDtoFormControls {
         }
     );
     public static WatershedFieldDefinitionText = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static Project = (value: FormControlState<ProjectDto> | ProjectDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<ProjectDto>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static OwnerOrganization = (value: FormControlState<OrganizationDto> | OrganizationDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<OrganizationDto>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static StormwaterJurisdiction = (value: FormControlState<StormwaterJurisdictionDto> | StormwaterJurisdictionDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<StormwaterJurisdictionDto>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static WaterQualityManagementPlan = (value: FormControlState<WaterQualityManagementPlanDto> | WaterQualityManagementPlanDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<WaterQualityManagementPlanDto>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static MaintenanceRecords = (value: FormControlState<Array<MaintenanceRecordDto>> | Array<MaintenanceRecordDto> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<MaintenanceRecordDto>>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static TreatmentBMPAssessments = (value: FormControlState<Array<TreatmentBMPAssessmentDto>> | Array<TreatmentBMPAssessmentDto> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<TreatmentBMPAssessmentDto>>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static TreatmentBMPBenchmarkAndThresholds = (value: FormControlState<Array<TreatmentBMPBenchmarkAndThresholdDto>> | Array<TreatmentBMPBenchmarkAndThresholdDto> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<TreatmentBMPBenchmarkAndThresholdDto>>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static TreatmentBMPDocuments = (value: FormControlState<Array<TreatmentBMPDocumentDto>> | Array<TreatmentBMPDocumentDto> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<TreatmentBMPDocumentDto>>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static TreatmentBMPImages = (value: FormControlState<Array<TreatmentBMPImageDto>> | Array<TreatmentBMPImageDto> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<TreatmentBMPImageDto>>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static NereidResults = (value: FormControlState<Array<NereidResultDto>> | Array<NereidResultDto> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<NereidResultDto>>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static ProjectNereidResults = (value: FormControlState<Array<ProjectNereidResultDto>> | Array<ProjectNereidResultDto> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<ProjectNereidResultDto>>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static WaterQualityManagementPlanVerifyTreatmentBMPs = (value: FormControlState<Array<WaterQualityManagementPlanVerifyTreatmentBMPDto>> | Array<WaterQualityManagementPlanVerifyTreatmentBMPDto> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<WaterQualityManagementPlanVerifyTreatmentBMPDto>>(
         value,
         formControlOptions ?? 
         {
@@ -373,6 +745,36 @@ export class TreatmentBMPDtoFormControls {
         }
     );
     public static ParameterizationErrors = (value: FormControlState<Array<string>> | Array<string> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<string>>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static SizingBasisType = (value: FormControlState<SizingBasisTypeDto> | SizingBasisTypeDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<SizingBasisTypeDto>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static TrashCaptureStatusType = (value: FormControlState<TrashCaptureStatusTypeDto> | TrashCaptureStatusTypeDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<TrashCaptureStatusTypeDto>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static TreatmentBMPLifespanType = (value: FormControlState<TreatmentBMPLifeSpanTypeDto> | TreatmentBMPLifeSpanTypeDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<TreatmentBMPLifeSpanTypeDto>(
         value,
         formControlOptions ?? 
         {

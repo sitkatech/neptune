@@ -60,7 +60,7 @@ export class ViewAllBmpsComponent {
                 },
             ]),
             this.utilityFunctionsService.createLinkColumnDef("Name", "TreatmentBMPName", "TreatmentBMPID", {
-                InRouterLink: "../",
+                InRouterLink: "../treatment-bmp-detail/",
             }),
             this.utilityFunctionsService.createBasicColumnDef("Jurisdiction", "JurisdictionName"),
             this.utilityFunctionsService.createBasicColumnDef("Owner Organization", "OwnerOrganizationName"),

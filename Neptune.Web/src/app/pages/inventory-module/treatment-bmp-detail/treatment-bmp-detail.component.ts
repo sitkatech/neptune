@@ -2,13 +2,13 @@ import { Component, OnInit, ViewChild, TemplateRef, Input } from "@angular/core"
 import { Router, RouterLink } from "@angular/router";
 import { DatePipe, AsyncPipe, CommonModule } from "@angular/common";
 import { Observable } from "rxjs";
-import { map, switchMap } from "rxjs/operators";
 import { PageHeaderComponent } from "src/app/shared/components/page-header/page-header.component";
 import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
 // TODO: Import the correct services and models for Treatment BMP
 import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.service";
 import { TreatmentBMPDto } from "src/app/shared/generated/model/treatment-bmp-dto";
 import { FieldDefinitionComponent } from "src/app/shared/components/field-definition/field-definition.component";
+import { TreatmentBMPLifespanTypeEnum } from "src/app/shared/generated/enum/treatment-b-m-p-lifespan-type-enum";
 
 @Component({
     selector: "treatment-bmp-detail",
@@ -38,6 +38,8 @@ export class TreatmentBmpDetailComponent implements OnInit {
     isAnalyzedInModelingModule = false;
     isSitkaAdmin = false;
     // TODO: Add more properties as needed
+
+    public TreatmentBMPLifespanTypeEnum = TreatmentBMPLifespanTypeEnum;
 
     constructor(private router: Router, private treatmentBMPService: TreatmentBMPService) {}
 

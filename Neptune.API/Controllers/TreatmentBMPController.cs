@@ -102,26 +102,8 @@ namespace Neptune.API.Controllers
         public ActionResult<TreatmentBMPDto> GetByID([FromRoute] int treatmentBMPID)
         {
             var treatmentBMP = TreatmentBMPs.GetByID(DbContext, treatmentBMPID);
-            // TODO: Implement mapping from TreatmentBMP to TreatmentBMPDto
-            // This is a placeholder. Replace with actual mapping logic as needed.
-            var dto = new TreatmentBMPDto
-            {
-                TreatmentBMPID = treatmentBMP.TreatmentBMPID,
-                TreatmentBMPName = treatmentBMP.TreatmentBMPName,
-                TreatmentBMPTypeID = treatmentBMP.TreatmentBMPTypeID,
-                TreatmentBMPTypeName = treatmentBMP.TreatmentBMPType?.TreatmentBMPTypeName,
-                StormwaterJurisdictionID = treatmentBMP.StormwaterJurisdictionID,
-                StormwaterJurisdictionName = treatmentBMP.StormwaterJurisdiction?.Organization?.OrganizationName,
-                OwnerOrganizationID = treatmentBMP.OwnerOrganizationID,
-                OwnerOrganizationName = treatmentBMP.OwnerOrganization?.OrganizationName,
-                YearBuilt = treatmentBMP.YearBuilt,
-                Notes = treatmentBMP.Notes,
-                InventoryIsVerified = treatmentBMP.InventoryIsVerified,
-                ProjectID = treatmentBMP.ProjectID,
-                Latitude = treatmentBMP.LocationPoint4326?.Coordinate.Y,
-                Longitude = treatmentBMP.LocationPoint4326?.Coordinate.X,
-                // Add additional mappings as needed
-            };
+            // Use the new extension method for mapping
+            var dto = treatmentBMP.AsDto();
             return Ok(dto);
         }
 

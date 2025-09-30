@@ -21,5 +21,14 @@ namespace Neptune.EFModels.Entities
             };
             return dto;
         }
+
+        public static WaterQualityManagementPlanVerifyTreatmentBMPDto AsDto(this WaterQualityManagementPlanVerifyTreatmentBMP entity)
+        {
+            return new WaterQualityManagementPlanVerifyTreatmentBMPDto
+            {
+                WaterQualityManagementPlanVerifyTreatmentBMPID = entity.WaterQualityManagementPlanVerifyTreatmentBMPID,
+                Name = null
+            };
+        }
     }
 }

@@ -44,4 +44,38 @@ public static partial class WaterQualityManagementPlanExtensionMethods
         };
         return dto;
     }
+
+    public static WaterQualityManagementPlanSimpleDto AsDto(this WaterQualityManagementPlan plan)
+    {
+        return new WaterQualityManagementPlanSimpleDto
+        {
+            WaterQualityManagementPlanID = plan.WaterQualityManagementPlanID,
+            StormwaterJurisdictionID = plan.StormwaterJurisdictionID,
+            WaterQualityManagementPlanLandUseID = plan.WaterQualityManagementPlanLandUseID,
+            WaterQualityManagementPlanPriorityID = plan.WaterQualityManagementPlanPriorityID,
+            WaterQualityManagementPlanStatusID = plan.WaterQualityManagementPlanStatusID,
+            WaterQualityManagementPlanDevelopmentTypeID = plan.WaterQualityManagementPlanDevelopmentTypeID,
+            WaterQualityManagementPlanName = plan.WaterQualityManagementPlanName,
+            ApprovalDate = plan.ApprovalDate,
+            MaintenanceContactName = plan.MaintenanceContactName,
+            MaintenanceContactOrganization = plan.MaintenanceContactOrganization,
+            MaintenanceContactPhone = plan.MaintenanceContactPhone,
+            MaintenanceContactAddress1 = plan.MaintenanceContactAddress1,
+            MaintenanceContactAddress2 = plan.MaintenanceContactAddress2,
+            MaintenanceContactCity = plan.MaintenanceContactCity,
+            MaintenanceContactState = plan.MaintenanceContactState,
+            MaintenanceContactZip = plan.MaintenanceContactZip,
+            WaterQualityManagementPlanPermitTermID = plan.WaterQualityManagementPlanPermitTermID,
+            HydromodificationAppliesTypeID = plan.HydromodificationAppliesTypeID,
+            DateOfConstruction = plan.DateOfConstruction,
+            HydrologicSubareaID = plan.HydrologicSubareaID,
+            RecordNumber = plan.RecordNumber,
+            RecordedWQMPAreaInAcres = plan.RecordedWQMPAreaInAcres,
+            TrashCaptureStatusTypeID = plan.TrashCaptureStatusTypeID,
+            TrashCaptureEffectiveness = plan.TrashCaptureEffectiveness,
+            WaterQualityManagementPlanModelingApproachID = plan.WaterQualityManagementPlanModelingApproachID,
+            LastNereidLogID = plan.LastNereidLogID,
+            WaterQualityManagementPlanBoundaryNotes = plan.WaterQualityManagementPlanBoundaryNotes
+        };
+    }
 }
