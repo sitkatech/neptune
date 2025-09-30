@@ -51,7 +51,7 @@ export class TrashOvtaRefineAssessmentAreaComponent {
     public bounds: any;
     public isLoadingSubmit: boolean = false;
 
-    public drawnItems: L.featureGroup;
+    public drawnItems: L.FeatureGroup;
     public drawControl: L.Control;
     public isPerformingDrawAction: boolean = false;
     public layer: L.FeatureGroup = new L.FeatureGroup();
@@ -62,26 +62,26 @@ export class TrashOvtaRefineAssessmentAreaComponent {
         opacity: 0,
     };
 
-    private defaultDrawControlSpec: L.Control.DrawConstructorOptions = {
-        polyline: false,
-        rectangle: false,
-        circle: false,
-        marker: false,
-        circlemarker: false,
-        polygon: {
-            allowIntersection: true, // Restricts shapes to simple polygons
-        },
-    };
-    private defaultEditControlSpec: L.Control.DrawConstructorOptions = {
-        featureGroup: this.layer,
-        remove: true,
-        edit: {
-            featureGroup: this.layer,
-        },
-        poly: {
-            allowIntersection: true, // Restricts shapes to simple polygons
-        },
-    };
+    // private defaultDrawControlSpec: L.Control.DrawConstructorOptions = {
+    //     polyline: false,
+    //     rectangle: false,
+    //     circle: false,
+    //     marker: false,
+    //     circlemarker: false,
+    //     polygon: {
+    //         allowIntersection: true, // Restricts shapes to simple polygons
+    //     },
+    // };
+    // private defaultEditControlSpec: L.Control.DrawConstructorOptions = {
+    //     featureGroup: this.layer,
+    //     remove: true,
+    //     edit: {
+    //         featureGroup: this.layer,
+    //     },
+    //     poly: {
+    //         allowIntersection: true, // Restricts shapes to simple polygons
+    //     },
+    // };
 
     constructor(
         private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService,
@@ -119,7 +119,7 @@ export class TrashOvtaRefineAssessmentAreaComponent {
     public save(andContinue = false) {
         var onlandVisualTrashAssessmentRefineArea = new OnlandVisualTrashAssessmentRefineAreaDto();
         onlandVisualTrashAssessmentRefineArea.OnlandVisualTrashAssessmentID = this.onlandVisualTrashAssessmentID;
-        this.layer.eachLayer((layer) => {
+        this.layer.eachLayer((layer: L.Layer & { toGeoJSON: () => GeoJSON.Feature }) => {
             onlandVisualTrashAssessmentRefineArea.GeometryAsGeoJson = JSON.stringify(layer.toGeoJSON());
         });
 
@@ -136,49 +136,48 @@ export class TrashOvtaRefineAssessmentAreaComponent {
             });
     }
 
-    public addOrRemoveDrawControl(turnOn: boolean) {
-        if (turnOn) {
-            var drawOptions = {
-                draw: Object.assign({}, this.defaultDrawControlSpec),
-                edit: Object.assign({}, this.defaultEditControlSpec),
-            };
-            this.drawControl = new L.Control.Draw(drawOptions);
-            this.map.addControl(this.drawControl);
-            return;
-        }
-        this.drawControl.remove();
-    }
+    // public addOrRemoveDrawControl(turnOn: boolean) {
+    //     if (turnOn) {
+    //         var drawOptions = {
+    //             draw: Object.assign({}, this.defaultDrawControlSpec),
+    //             edit: Object.assign({}, this.defaultEditControlSpec),
+    //         };
+    //         this.drawControl = new L.Control.Draw(drawOptions);
+    //         this.map.addControl(this.drawControl);
+    //         return;
+    //     }
+    //     this.drawControl.remove();
+    // }
 
     public setControl(): void {
-        L.EditToolbar.Delete.include({
-            removeAllLayers: false,
-        });
-
-        this.map
-            .on(L.Draw.Event.CREATED, (event) => {
-                this.isPerformingDrawAction = false;
-                const layer = (event as L.DrawEvents.Created).layer;
-                this.layer.addLayer(layer);
-                this.selectFeatureImpl();
-            })
-            .on(L.Draw.Event.EDITED, (event) => {
-                this.isPerformingDrawAction = false;
-                const layers = (event as L.DrawEvents.Edited).layers;
-                this.selectFeatureImpl();
-            })
-            .on(L.Draw.Event.DELETED, (event) => {
-                this.isPerformingDrawAction = false;
-                const layers = (event as L.DrawEvents.Deleted).layers;
-                this.selectFeatureImpl();
-            })
-            .on(L.Draw.Event.DRAWSTART, () => {})
-            .on(L.Draw.Event.TOOLBAROPENED, () => {
-                this.isPerformingDrawAction = true;
-            })
-            .on(L.Draw.Event.TOOLBARCLOSED, () => {
-                this.isPerformingDrawAction = false;
-            });
-        this.addOrRemoveDrawControl(true);
+        // L.EditToolbar.Delete.include({
+        //     removeAllLayers: false,
+        // });
+        // this.map
+        //     .on(L.Draw.Event.CREATED, (event) => {
+        //         this.isPerformingDrawAction = false;
+        //         const layer = (event as L.DrawEvents.Created).layer;
+        //         this.layer.addLayer(layer);
+        //         this.selectFeatureImpl();
+        //     })
+        //     .on(L.Draw.Event.EDITED, (event) => {
+        //         this.isPerformingDrawAction = false;
+        //         const layers = (event as L.DrawEvents.Edited).layers;
+        //         this.selectFeatureImpl();
+        //     })
+        //     .on(L.Draw.Event.DELETED, (event) => {
+        //         this.isPerformingDrawAction = false;
+        //         const layers = (event as L.DrawEvents.Deleted).layers;
+        //         this.selectFeatureImpl();
+        //     })
+        //     .on(L.Draw.Event.DRAWSTART, () => {})
+        //     .on(L.Draw.Event.TOOLBAROPENED, () => {
+        //         this.isPerformingDrawAction = true;
+        //     })
+        //     .on(L.Draw.Event.TOOLBARCLOSED, () => {
+        //         this.isPerformingDrawAction = false;
+        //     });
+        // this.addOrRemoveDrawControl(true);
     }
 
     public selectFeatureImpl() {
@@ -187,7 +186,7 @@ export class TrashOvtaRefineAssessmentAreaComponent {
         }
         this.map.removeControl(this.drawControl);
         this.layer.setStyle(this.defaultStyle).bringToFront();
-        this.addOrRemoveDrawControl(true);
+        // this.addOrRemoveDrawControl(true);
     }
 
     public addFeatureCollectionToFeatureGroup(featureCollection: any, featureGroup: L.FeatureGroup) {

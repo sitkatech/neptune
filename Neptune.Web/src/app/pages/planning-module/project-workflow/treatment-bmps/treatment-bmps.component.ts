@@ -212,14 +212,14 @@ export class TreatmentBmpsComponent implements OnInit {
         let hasFlownToSelectedObject = false;
 
         const treatmentBMPsGeoJson = this.mapTreatmentBMPsToGeoJson(this.projectTreatmentBMPs);
-        this.treatmentBMPsLayer = new L.GeoJSON(treatmentBMPsGeoJson, {
+        this.treatmentBMPsLayer = new L.GeoJSON(treatmentBMPsGeoJson as any, {
             pointToLayer: (feature, latlng) => {
                 return L.marker(latlng, { icon: MarkerHelper.treatmentBMPMarker });
             },
             filter: (feature) => {
                 return this.selectedTreatmentBMP == null || feature.properties.TreatmentBMPID != this.selectedTreatmentBMP.TreatmentBMPID;
             },
-            onEachFeature: (feature, layer) => {
+            onEachFeature: (feature, layer: L.Marker) => {
                 if (this.selectedTreatmentBMP != null && this.zoomOnSelection && !hasFlownToSelectedObject) {
                     if (layer.feature.properties.TreatmentBMPID != this.selectedTreatmentBMP.TreatmentBMPID) {
                         return;
@@ -262,14 +262,14 @@ export class TreatmentBmpsComponent implements OnInit {
     }
 
     public registerClickEvents(): void {
-        this.map.on("click", (event: L.LeafletEvent) => {
+        this.map.on("click", (event: L.LeafletMouseEvent) => {
             if (!this.isEditingLocation) {
                 return;
             }
             if (this.selectedObjectMarker) {
                 this.map.removeLayer(this.selectedObjectMarker);
             }
-            this.selectedObjectMarker = new L.marker(event.latlng, { icon: MarkerHelper.selectedMarker, zIndexOffset: 1000 });
+            this.selectedObjectMarker = L.marker(event.latlng, { icon: MarkerHelper.selectedMarker, zIndexOffset: 1000 });
 
             this.selectedObjectMarker.addTo(this.map);
 
@@ -299,7 +299,7 @@ export class TreatmentBmpsComponent implements OnInit {
         ];
 
         if (this.selectedTreatmentBMP && this.selectedTreatmentBMP.Latitude && this.selectedTreatmentBMP.Longitude) {
-            this.selectedObjectMarker = new L.marker(
+            this.selectedObjectMarker = L.marker(
                 { lat: this.selectedTreatmentBMP.Latitude, lng: this.selectedTreatmentBMP.Longitude },
                 { icon: MarkerHelper.selectedMarker, zIndexOffset: 1000 }
             );

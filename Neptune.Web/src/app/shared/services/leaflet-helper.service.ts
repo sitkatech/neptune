@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { BoundingBoxDto } from "../generated/model/bounding-box-dto";
 import * as L from "leaflet";
+import { Layer } from "leaflet";
 
 @Injectable({
     providedIn: "root",
@@ -85,12 +86,12 @@ export class LeafletHelperService {
         });
     }
 
-    public fitMapToDefaultBoundingBox(map: L.map) {
+    public fitMapToDefaultBoundingBox(map: L.Map) {
         const defaultBoundingBox = LeafletHelperService.defaultBoundingBox;
         this.fitMapToBoundingBox(map, defaultBoundingBox);
     }
 
-    public fitMapToBoundingBox(map: L.map, boundingBox: BoundingBoxDto) {
+    public fitMapToBoundingBox(map: L.Map, boundingBox: BoundingBoxDto) {
         map.fitBounds([
             [boundingBox.Bottom, boundingBox.Left],
             [boundingBox.Top, boundingBox.Right],
@@ -156,5 +157,33 @@ export class LeafletHelperService {
                 }),
             },
         };
+    }
+
+    /**
+     * Type guard for layers with a _url property.
+     */
+    public static hasUrl(layer: Layer): layer is Layer & { _url: string } {
+        return typeof (layer as any)._url === "string";
+    }
+
+    /**
+     * Type-safe getter for _url property.
+     */
+    public static getLayerUrl(layer: Layer): string | undefined {
+        return LeafletHelperService.hasUrl(layer) ? layer._url : undefined;
+    }
+
+    /**
+     * Type guard for layers with a legendHtml property.
+     */
+    public static hasLegendHtml(layer: Layer): layer is Layer & { legendHtml: string } {
+        return typeof (layer as any).legendHtml === "string";
+    }
+
+    /**
+     * Type-safe getter for legendHtml property.
+     */
+    public static getLegendHtml(layer: Layer): string | undefined {
+        return LeafletHelperService.hasLegendHtml(layer) ? layer.legendHtml : undefined;
     }
 }

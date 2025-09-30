@@ -1,4 +1,3 @@
-
 import { Component, OnChanges } from "@angular/core";
 import { environment } from "src/environments/environment";
 import * as L from "leaflet";
@@ -7,7 +6,7 @@ import { MapLayerBase } from "../map-layer-base.component";
     selector: "wqmps-layer",
     imports: [],
     templateUrl: "./wqmps-layer.component.html",
-    styleUrls: ["./wqmps-layer.component.scss"]
+    styleUrls: ["./wqmps-layer.component.scss"],
 })
 export class WqmpsLayerComponent extends MapLayerBase implements OnChanges {
     constructor() {
@@ -22,7 +21,7 @@ export class WqmpsLayerComponent extends MapLayerBase implements OnChanges {
             transparent: true,
             format: "image/png",
             tiled: true,
-        };
+        } as any;
 
         this.layer = L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", this.wmsOptions);
         this.initLayer();

@@ -16,6 +16,7 @@ import { LegendItem } from "src/app/shared/models/legend-item";
 import { Feature, FeatureCollection } from "geojson";
 import { DomSanitizer } from "@angular/platform-browser";
 import { RegionalSubbasinTraceFromPointComponent } from "../features/regional-subbasin-trace-from-point/regional-subbasin-trace-from-point.component";
+import { GroupedLayers } from "src/scripts/leaflet.groupedlayercontrol";
 
 @Component({
     selector: "neptune-map",
@@ -35,7 +36,7 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
     public legendID: string = this.mapID + "Legend";
     public map: Map;
     public tileLayers: { [key: string]: any } = LeafletHelperService.GetDefaultTileLayers();
-    public layerControl: L.groupedlayercontrol;
+    public layerControl: GroupedLayers;
     @Input() boundingBox: BoundingBoxDto;
     @Input() mapHeight: string = "500px";
     @Input() selectedTileLayer: string = "Terrain";
@@ -74,7 +75,7 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
         this.map = L.map(this.mapID, mapOptions);
         L.Map.addInitHook("addHandler", "gestureHandling", GestureHandling);
 
-        this.layerControl = new L.control.groupedLayers(this.tileLayers, LeafletHelperService.GetDefaultOverlayTileLayers(), { collapsed: false }).addTo(this.map);
+        this.layerControl = new GroupedLayers(this.tileLayers, LeafletHelperService.GetDefaultOverlayTileLayers(), { collapsed: false }).addTo(this.map);
 
         this.map.on("load", (event: LeafletEvent) => {
             this.onMapLoad.emit(new NeptuneMapInitEvent(this.map, this.layerControl));
@@ -117,7 +118,8 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
             }).addTo(this.map);
             this.map["showLegend"] = true;
         }
-        this.map.fullscreenControl.getContainer().classList.add("leaflet-custom-controls");
+
+        //this.map.fullscreenControl.getContainer().classList.add("leaflet-custom-controls");
 
         this.searchResults$ = this.searchString.valueChanges.pipe(
             debounce((x) => {
@@ -164,18 +166,19 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
     private createLegendItems(): LegendItem[] {
         const legendItems = [];
 
-        this.layerControl._layers.forEach((obj) => {
-            debugger;
+        this.layerControl.getLayers().forEach((obj) => {
             // Check if it's an overlay and added to the map
             if (obj.overlay && this.map.hasLayer(obj.layer)) {
                 const legendItem = new LegendItem();
                 legendItem.Title = obj.group && obj.group.name ? obj.group.name : obj.name;
-                if (obj.layer.legendHtml) {
-                    legendItem.LegendHtml = this.sanitizer.bypassSecurityTrustHtml(obj.layer.legendHtml);
-                } else if (obj.layer._url) {
-                    legendItem.WmsUrl = obj.layer._url;
-                    legendItem.WmsLayerName = obj.layer.options.layers;
-                    legendItem.WmsLayerStyle = obj.layer.wmsParams.styles;
+                if (LeafletHelperService.hasLegendHtml(obj.layer)) {
+                    const legendHtml = obj.layer.legendHtml;
+                    legendItem.LegendHtml = this.sanitizer.bypassSecurityTrustHtml(legendHtml);
+                } else if (LeafletHelperService.hasUrl(obj.layer)) {
+                    legendItem.WmsUrl = LeafletHelperService.getLayerUrl(obj.layer);
+                    const wmsParams = (obj.layer as unknown as L.TileLayer.WMS).wmsParams;
+                    legendItem.WmsLayerName = wmsParams ? wmsParams.layers : undefined;
+                    legendItem.WmsLayerStyle = wmsParams ? wmsParams.styles : undefined;
                 }
 
                 if (legendItem.Title && (legendItem.LegendHtml || legendItem.WmsUrl) && !legendItems.some((item) => item.Title === legendItem.Title)) {
@@ -187,10 +190,10 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     legendToggle(): void {
-        if (this.legendControl._container.classList.contains("leaflet-control-layers-expanded")) {
-            this.legendControl._container.className = this.legendControl._container.className.replace(" leaflet-control-layers-expanded", "");
+        if (this.legendControl.getContainer().classList.contains("leaflet-control-layers-expanded")) {
+            this.legendControl.getContainer().className = this.legendControl.getContainer().className.replace(" leaflet-control-layers-expanded", "");
         } else {
-            this.legendControl._container.classList.add("leaflet-control-layers-expanded");
+            this.legendControl.getContainer().classList.add("leaflet-control-layers-expanded");
         }
     }
 

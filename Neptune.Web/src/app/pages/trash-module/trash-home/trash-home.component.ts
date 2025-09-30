@@ -235,7 +235,7 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
                     this.layerControl.removeLayer(this.treatmentBMPClusterLayer);
                 }
 
-                const inventoriedTreatmentBMPsLayer = new L.GeoJSON(treatmentBMPs, {
+                const inventoriedTreatmentBMPsLayer = new L.GeoJSON(treatmentBMPs as any, {
                     pointToLayer: (feature, latlng) => {
                         var iconSrc = "./assets/main/map-icons/marker-icon-orange.png";
                         switch (feature.properties["TrashCaptureStatusTypeID"]) {
@@ -294,7 +294,7 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
         const wfsService = this.wfsService;
         const self = this;
         this.map.on("click", (event: L.LeafletMouseEvent): void => {
-            wfsService.getTrashGeneratingUnitByCoordinate(event.latlng.lng, event.latlng.lat).subscribe((tguFeatureCollection: L.FeatureCollection) => {
+            wfsService.getTrashGeneratingUnitByCoordinate(event.latlng.lng, event.latlng.lat).subscribe((tguFeatureCollection: GeoJSON.FeatureCollection) => {
                 if (tguFeatureCollection.features.length == 0) {
                     this.tguDto$ = null;
                     if (this.tguLayer) {
@@ -332,7 +332,7 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
                         return 0;
                     });
 
-                featuresInRenderedOrder.forEach((feature: L.Feature) => {
+                featuresInRenderedOrder.forEach((feature: GeoJSON.Feature) => {
                     this.tguDto$ = this.trashGeneratingUnitService.trashGeneratingUnitsTrashGeneratingUnitIDGet(feature.properties.TrashGeneratingUnitID);
                     const geoJson = L.geoJSON(feature, {
                         style: this.highlightStyle,
@@ -358,7 +358,7 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
                     if (this.selectedStormwaterJurisdictionLayer) {
                         this.map.removeLayer(this.selectedStormwaterJurisdictionLayer);
                     }
-                    this.selectedStormwaterJurisdictionLayer = L.geoJSON(response, { style: this.selectedJurisdictionStyle });
+                    this.selectedStormwaterJurisdictionLayer = L.geoJSON(response as any, { style: this.selectedJurisdictionStyle });
                     this.selectedStormwaterJurisdictionLayer.addTo(this.map);
                 }
             });

@@ -52,7 +52,7 @@ export class TrashInitiateOvtaComponent {
     public layerControl: L.Control.Layers;
     public mapIsReady = false;
     public isLoadingSubmit = false;
-    public layer: L.featureGroup = new L.featureGroup();
+    public layer: L.FeatureGroup = L.featureGroup();
 
     public selectedOVTAArea: FormControl = new FormControl("");
     public selectedOVTAAreaID: number;
@@ -150,9 +150,9 @@ export class TrashInitiateOvtaComponent {
             .getGeoserverWFSLayerWithCQLFilter("OCStormwater:OnlandVisualTrashAssessmentAreas", cql_filter, "OnlandVisualTrashAssessmentAreaID")
             .subscribe((response) => {
                 if (response.length == 0) return;
-                this.layer = new L.GeoJSON(response, {
+                this.layer = new L.GeoJSON(response as any, {
                     style: this.defaultStyle,
-                    onEachFeature: (feature, layer) => {
+                    onEachFeature: (feature, layer: L.Polygon) => {
                         layer.on("mouseover", (e) => {
                             layer.setStyle({ fillOpacity: 0.5 });
                         });
@@ -174,7 +174,7 @@ export class TrashInitiateOvtaComponent {
         this.wfsService
             .getGeoserverWFSLayerWithCQLFilter("OCStormwater:Jurisdictions", `StormwaterJurisdictionID = ${jurisdictionID}`, "StormwaterJurisdictionID")
             .subscribe((response) => {
-                this.map.fitBounds(L.geoJson(response).getBounds());
+                this.map.fitBounds(L.geoJson(response as any).getBounds());
             });
     }
 
@@ -188,7 +188,7 @@ export class TrashInitiateOvtaComponent {
     }
 
     private highlightSelectedOVTAArea() {
-        this.layer.eachLayer((layer) => {
+        this.layer.eachLayer((layer: L.Polygon) => {
             if (layer.feature.properties.OnlandVisualTrashAssessmentAreaID == this.formGroup.controls.OnlandVisualTrashAssessmentAreaID.value) {
                 layer.setStyle(this.highlightStyle);
                 this.map.fitBounds(layer.getBounds());

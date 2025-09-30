@@ -11,7 +11,7 @@ export class MarkerHelper {
     static pinkMarker = MarkerHelper.buildDefaultLeafletMarkerFromMarkerPath("/assets/main/map-icons/marker-icon-F2BBE0.png");
 
     public static fixMarkerPath() {
-        delete L.Icon.Default.prototype._getIconUrl;
+        //delete L.Icon.Default.prototype._getIconUrl;
 
         L.Icon.Default.mergeOptions({
             iconRetinaUrl: "assets/main/map-icons/marker-icon-2x-black.png",
