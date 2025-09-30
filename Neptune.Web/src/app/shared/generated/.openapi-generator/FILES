@@ -99,6 +99,7 @@ model/system-info-dto.ts
 model/trash-generating-unit-dto.ts
 model/trash-generating-unit-grid-dto.ts
 model/treatment-bmp-display-dto.ts
+model/treatment-bmp-dto.ts
 model/treatment-bmp-index-grid-dto.ts
 model/treatment-bmp-type-custom-attribute-type-dto.ts
 model/treatment-bmp-type-with-modeling-attributes-dto.ts

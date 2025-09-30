@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Neptune.API.Common;
+using Neptune.API.Services.Attributes;
 
 namespace Neptune.API.Controllers
 {
@@ -93,6 +94,35 @@ namespace Neptune.API.Controllers
             var regionalSubbasin = RegionalSubbasins.GetFirstByContainsGeometry(DbContext, treatmentBMP.LocationPoint);
 
             return Ok(RegionalSubbasins.GetUpstreamCatchmentGeometry4326GeoJSONAndArea(DbContext, regionalSubbasin.RegionalSubbasinID, treatmentBMPID, delineation?.DelineationID));
+        }
+
+        [HttpGet("{treatmentBMPID}")]
+        [EntityNotFound(typeof(TreatmentBMP), "treatmentBMPID")]
+        [UserViewFeature]
+        public ActionResult<TreatmentBMPDto> GetByID([FromRoute] int treatmentBMPID)
+        {
+            var treatmentBMP = TreatmentBMPs.GetByID(DbContext, treatmentBMPID);
+            // TODO: Implement mapping from TreatmentBMP to TreatmentBMPDto
+            // This is a placeholder. Replace with actual mapping logic as needed.
+            var dto = new TreatmentBMPDto
+            {
+                TreatmentBMPID = treatmentBMP.TreatmentBMPID,
+                TreatmentBMPName = treatmentBMP.TreatmentBMPName,
+                TreatmentBMPTypeID = treatmentBMP.TreatmentBMPTypeID,
+                TreatmentBMPTypeName = treatmentBMP.TreatmentBMPType?.TreatmentBMPTypeName,
+                StormwaterJurisdictionID = treatmentBMP.StormwaterJurisdictionID,
+                StormwaterJurisdictionName = treatmentBMP.StormwaterJurisdiction?.Organization?.OrganizationName,
+                OwnerOrganizationID = treatmentBMP.OwnerOrganizationID,
+                OwnerOrganizationName = treatmentBMP.OwnerOrganization?.OrganizationName,
+                YearBuilt = treatmentBMP.YearBuilt,
+                Notes = treatmentBMP.Notes,
+                InventoryIsVerified = treatmentBMP.InventoryIsVerified,
+                ProjectID = treatmentBMP.ProjectID,
+                Latitude = treatmentBMP.LocationPoint4326?.Coordinate.Y,
+                Longitude = treatmentBMP.LocationPoint4326?.Coordinate.X,
+                // Add additional mappings as needed
+            };
+            return Ok(dto);
         }
 
         [HttpDelete("{treatmentBMPID}")]

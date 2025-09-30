@@ -6,23 +6,16 @@ import { map, switchMap } from "rxjs/operators";
 import { PageHeaderComponent } from "src/app/shared/components/page-header/page-header.component";
 import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
 // TODO: Import the correct services and models for Treatment BMP
-// import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.service";
-// import { TreatmentBMPUpsertDto, ProjectDocumentDto } from "src/app/shared/generated/model/models";
+import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.service";
+import { TreatmentBMPDto } from "src/app/shared/generated/model/treatment-bmp-dto";
+import { FieldDefinitionComponent } from "src/app/shared/components/field-definition/field-definition.component";
 
 @Component({
     selector: "treatment-bmp-detail",
     templateUrl: "./treatment-bmp-detail.component.html",
     styleUrls: ["./treatment-bmp-detail.component.scss"],
     standalone: true,
-    imports: [
-        CommonModule,
-        RouterLink,
-        DatePipe,
-        AsyncPipe,
-        PageHeaderComponent,
-        AlertDisplayComponent,
-        // TODO: Add shared components as needed
-    ],
+    imports: [CommonModule, RouterLink, DatePipe, AsyncPipe, PageHeaderComponent, AlertDisplayComponent, FieldDefinitionComponent],
 })
 export class TreatmentBmpDetailComponent implements OnInit {
     @ViewChild("templateRight", { static: true }) templateRight!: TemplateRef<any>;
@@ -30,7 +23,7 @@ export class TreatmentBmpDetailComponent implements OnInit {
     @Input() treatmentBMPID!: number;
 
     // Observables for async pipe
-    treatmentBMP$!: Observable<any>; // TODO: Replace 'any' with correct model
+    treatmentBMP$!: Observable<TreatmentBMPDto>;
     attachments$!: Observable<any[]>; // TODO: Replace 'any' with ProjectDocumentDto
 
     // Placeholder properties for template bindings
@@ -46,12 +39,12 @@ export class TreatmentBmpDetailComponent implements OnInit {
     isSitkaAdmin = false;
     // TODO: Add more properties as needed
 
-    constructor(private router: Router) {} // private treatmentBMPService: TreatmentBMPService
+    constructor(private router: Router, private treatmentBMPService: TreatmentBMPService) {}
 
     ngOnInit(): void {
         // treatmentBMPID will be set via input binding from the route param (withComponentInputBinding)
         // Example: Fetch detail data using the treatmentBMPID
-        // this.treatmentBMP$ = this.treatmentBMPService.treatmentBmpsTreatmentBMPIDGet(this.treatmentBMPID);
+        this.treatmentBMP$ = this.treatmentBMPService.treatmentBmpsTreatmentBMPIDGet(this.treatmentBMPID);
         // this.attachments$ = this.treatmentBMP$.pipe(
         //     switchMap(bmp => this.treatmentBMPService.treatmentBmpsTreatmentBMPIDAttachmentsGet(bmp.TreatmentBMPID))
         // );

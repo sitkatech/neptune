@@ -3936,6 +3936,44 @@
       }
     },
     "/treatment-bmps/{treatmentBMPID}": {
+      "get": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "parameters": [
+          {
+            "name": "treatmentBMPID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPDto"
+                }
+              }
+            }
+          }
+        }
+      },
       "delete": {
         "tags": [
           "TreatmentBMP"
@@ -7673,6 +7711,134 @@
           "TreatmentBMPTypeID": {
             "type": "integer",
             "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TreatmentBMPDto": {
+        "type": "object",
+        "properties": {
+          "TreatmentBMPID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TreatmentBMPName": {
+            "type": "string",
+            "nullable": true
+          },
+          "TreatmentBMPTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TreatmentBMPTypeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "StormwaterJurisdictionID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "StormwaterJurisdictionName": {
+            "type": "string",
+            "nullable": true
+          },
+          "OwnerOrganizationID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "OwnerOrganizationName": {
+            "type": "string",
+            "nullable": true
+          },
+          "YearBuilt": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Notes": {
+            "type": "string",
+            "nullable": true
+          },
+          "InventoryIsVerified": {
+            "type": "boolean"
+          },
+          "ProjectID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Latitude": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "Longitude": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "IsFullyParameterized": {
+            "type": "boolean"
+          },
+          "HasModelingAttributes": {
+            "type": "boolean"
+          },
+          "TrashCaptureEffectiveness": {
+            "type": "string",
+            "nullable": true
+          },
+          "TreatmentBMPModelingAttribute": {
+            "$ref": "#/components/schemas/vTreatmentBMPModelingAttributeDto"
+          },
+          "HRUCharacteristics": {
+            "nullable": true
+          },
+          "ModeledPerformance": {
+            "nullable": true
+          },
+          "OtherTreatmentBmpsExistInSubbasin": {
+            "type": "boolean"
+          },
+          "CustomAttributes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CustomAttributeUpsertDto"
+            },
+            "nullable": true
+          },
+          "Delineation": {
+            "nullable": true
+          },
+          "UpstreamestBMP": {
+            "nullable": true
+          },
+          "IsUpstreamestBMPAnalyzedInModelingModule": {
+            "type": "boolean"
+          },
+          "RegionalSubbasinRevisionRequest": {
+            "nullable": true
+          },
+          "Watershed": {
+            "nullable": true
+          },
+          "WatershedFieldDefinitionText": {
+            "type": "string",
+            "nullable": true
+          },
+          "DelineationErrors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "ParameterizationErrors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
