@@ -165,6 +165,7 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
         const legendItems = [];
 
         this.layerControl._layers.forEach((obj) => {
+            debugger;
             // Check if it's an overlay and added to the map
             if (obj.overlay && this.map.hasLayer(obj.layer)) {
                 const legendItem = new LegendItem();
