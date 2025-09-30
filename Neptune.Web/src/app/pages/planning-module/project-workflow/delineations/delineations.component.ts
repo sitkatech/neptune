@@ -1,8 +1,8 @@
 import { ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from "@angular/core";
 import { Router } from "@angular/router";
 import { Input } from "@angular/core";
-import "leaflet-draw";
-import * as L from "leaflet";
+import L, { PM } from "leaflet";
+import "@geoman-io/leaflet-geoman-free";
 import { forkJoin, Observable, switchMap } from "rxjs";
 import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto";
 import { DelineationUpsertDto } from "src/app/shared/generated/model/delineation-upsert-dto";
@@ -103,32 +103,6 @@ export class DelineationsComponent implements OnInit {
     public customRichTextTypeID = NeptunePageTypeEnum.HippocampDelineations;
 
     public isPerformingDrawAction: boolean = false;
-    // private defaultDrawControlSpec: L.Control.DrawConstructorOptions = {
-    //     polyline: false,
-    //     rectangle: false,
-    //     circle: false,
-    //     marker: false,
-    //     circlemarker: false,
-    //     polygon: {
-    //         allowIntersection: false, // Restricts shapes to simple polygons
-    //         drawError: {
-    //             color: "#E1E100", // Color the shape will turn when intersects
-    //             message: "Self-intersecting polygons are not allowed.", // Message that will show when intersect
-    //         },
-    //     },
-    // };
-    // private defaultEditControlSpec: L.Control.DrawConstructorOptions = {
-    //     featureGroup: this.editableDelineationFeatureGroup,
-    //     remove: true,
-    //     poly: {
-    //         allowIntersection: false, // Restricts shapes to simple polygons
-    //         drawError: {
-    //             color: "#E1E100", // Color the shape will turn when intersects
-    //             message: "Self-intersecting polygons are not allowed.", // Message that will show when intersect
-    //         },
-    //     },
-    // };
-    // private drawControl: L.Control.Draw;
     private newDelineationID: number = -1;
     public isLoadingSubmit: boolean = false;
     public isEditingLocation = false;
@@ -263,88 +237,107 @@ export class DelineationsComponent implements OnInit {
         }
     }
 
-    // public addOrRemoveDrawControl(turnOn: boolean) {
-    //     if (turnOn) {
-    //         var drawOptions = {
-    //             draw: Object.assign({}, this.defaultDrawControlSpec),
-    //             edit: Object.assign({}, this.defaultEditControlSpec),
-    //         };
-    //         if (this.selectedDelineation?.Geometry == null || this.drawMapClicked) {
-    //             drawOptions.edit = false;
-    //         } else {
-    //             drawOptions.draw = false;
-    //             if (this.selectedDelineation.DelineationTypeID == DelineationTypeEnum.Centralized) {
-    //                 drawOptions.edit.edit = false;
-    //             }
-    //         }
-    //         this.drawControl = new L.Control.Draw(drawOptions);
-    //         this.drawControl.addTo(this.map);
-    //         return;
-    //     }
-    //     this.drawControl.remove();
-    // }
+    public addOrRemoveGeomanControl(turnOn: boolean) {
+        if (turnOn) {
+            let edit = true;
+            let draw = true;
+
+            if (this.selectedDelineation?.Geometry == null || this.drawMapClicked) {
+                edit = false;
+            } else {
+                draw = false;
+                if (this.selectedDelineation.DelineationTypeID == DelineationTypeEnum.Centralized) {
+                    edit = false;
+                }
+            }
+
+            this.map.pm.addControls({
+                position: "topleft",
+                drawMarker: false,
+                drawText: false,
+                drawCircleMarker: false,
+                drawPolyline: false,
+                drawRectangle: false,
+                drawPolygon: draw,
+                drawCircle: false,
+                editMode: edit,
+                dragMode: false,
+                cutPolygon: false,
+                removalMode: false,
+                rotateMode: false,
+                snappingOption: true,
+            });
+
+            this.map.pm.setGlobalOptions({ allowSelfIntersection: false });
+
+            this.map.pm.setLang(
+                "en",
+                {
+                    buttonTitles: { drawPolyButton: "Add Delineation" },
+                },
+                "en"
+            );
+            return;
+        }
+        this.map.pm.removeControls();
+    }
 
     public setControl(): void {
-        // this.map
-        //     .on(L.Draw.Event.CREATED, (event) => {
-        //         this.isPerformingDrawAction = false;
-        //         const layer = (event as L.DrawEvents.Created).layer;
-        //         var delineationUpsertDto = this.delineations.find((x) => this.selectedTreatmentBMP.TreatmentBMPID == x.TreatmentBMPID);
-        //         if (delineationUpsertDto == null) {
-        //             delineationUpsertDto = new DelineationUpsertDto({
-        //                 DelineationID: this.newDelineationID,
-        //                 TreatmentBMPID: this.selectedTreatmentBMP.TreatmentBMPID,
-        //             });
-        //             this.delineations = this.delineations.concat(delineationUpsertDto);
-        //             this.newDelineationID--;
-        //         }
-        //         delineationUpsertDto.DelineationTypeID = DelineationTypeEnum.Distributed;
-        //         const geometry = layer.toGeoJSON();
-        //         geometry.properties = {
-        //             TreatmentBMPID: this.selectedTreatmentBMP.TreatmentBMPID,
-        //             DelineationID: this.newDelineationID,
-        //         };
-        //         delineationUpsertDto.Geometry = JSON.stringify(geometry);
-        //         delineationUpsertDto.DelineationArea = +(L.GeometryUtil.geodesicArea(layer.getLatLngs()[0]) / this.squareMetersToAcreDivisor).toFixed(2);
-        //         this.resetDelineationFeatureGroups();
-        //         this.selectFeatureImpl(this.selectedTreatmentBMP.TreatmentBMPID);
-        //     })
-        //     .on(L.Draw.Event.EDITED, (event) => {
-        //         this.isPerformingDrawAction = false;
-        //         const layers = (event as L.DrawEvents.Edited).layers;
-        //         layers.eachLayer((layer) => {
-        //             var delineationUpsertDto = this.delineations.find((x) => layer.feature.properties.TreatmentBMPID == x.TreatmentBMPID);
-        //             delineationUpsertDto.Geometry = JSON.stringify(layer.toGeoJSON());
-        //             delineationUpsertDto.DelineationArea = +(L.GeometryUtil.geodesicArea(layer.getLatLngs()[0]) / this.squareMetersToAcreDivisor).toFixed(2);
-        //         });
-        //         this.resetDelineationFeatureGroups();
-        //         this.selectFeatureImpl(this.selectedTreatmentBMP.TreatmentBMPID);
-        //     })
-        //     .on(L.Draw.Event.DELETED, (event) => {
-        //         this.isPerformingDrawAction = false;
-        //         const layers = (event as L.DrawEvents.Deleted).layers;
-        //         layers.eachLayer((layer) => {
-        //             var delineationUpsertDto = this.delineations.find((x) => layer.feature.properties.TreatmentBMPID == x.TreatmentBMPID);
-        //             delineationUpsertDto.Geometry = null;
-        //             delineationUpsertDto.DelineationArea = null;
-        //         });
-        //         this.resetDelineationFeatureGroups();
-        //         this.selectFeatureImpl(this.selectedTreatmentBMP.TreatmentBMPID);
-        //     })
-        //     .on(L.Draw.Event.DRAWSTART, () => {
-        //         if (this.selectedDelineation != null && this.selectedDelineation.DelineationTypeID == DelineationTypeEnum.Centralized) {
-        //             this.editableDelineationFeatureGroup.clearLayers();
-        //         }
-        //     })
-        //     .on(L.Draw.Event.TOOLBAROPENED, () => {
-        //         this.isPerformingDrawAction = true;
-        //         this.preStartEditingEditableDelineationFeatureGroup = JSON.stringify(this.editableDelineationFeatureGroup.getLayers().map((x) => x.getLatLngs()));
-        //     })
-        //     .on(L.Draw.Event.TOOLBARCLOSED, () => {
-        //         this.isPerformingDrawAction = false;
-        //         this.preStartEditingEditableDelineationFeatureGroup = "";
-        //     });
-        // this.addOrRemoveDrawControl(true);
+        this.map
+            .on("pm:create", (event: { shape: PM.SUPPORTED_SHAPES; layer: L.Polygon & { toGeoJSON: () => GeoJSON.Feature } }) => {
+                this.isPerformingDrawAction = false;
+                const layer = event.layer;
+                var delineationUpsertDto = this.delineations.find((x) => this.selectedTreatmentBMP.TreatmentBMPID == x.TreatmentBMPID);
+                if (delineationUpsertDto == null) {
+                    delineationUpsertDto = new DelineationUpsertDto({
+                        DelineationID: this.newDelineationID,
+                        TreatmentBMPID: this.selectedTreatmentBMP.TreatmentBMPID,
+                    });
+                    this.delineations = this.delineations.concat(delineationUpsertDto);
+                    this.newDelineationID--;
+                }
+                delineationUpsertDto.DelineationTypeID = DelineationTypeEnum.Distributed;
+                const geometry = layer.toGeoJSON();
+                geometry.properties = {
+                    TreatmentBMPID: this.selectedTreatmentBMP.TreatmentBMPID,
+                    DelineationID: this.newDelineationID,
+                };
+                delineationUpsertDto.Geometry = JSON.stringify(geometry);
+                delineationUpsertDto.DelineationArea = +(GeometryUtil.geodesicArea(layer.getLatLngs()[0]) / this.squareMetersToAcreDivisor).toFixed(2);
+                this.resetDelineationFeatureGroups();
+                this.selectFeatureImpl(this.selectedTreatmentBMP.TreatmentBMPID);
+            })
+            .on("pm:edit", (event) => {
+                this.isPerformingDrawAction = false;
+                const layer = event.layer as L.Polygon;
+                var delineationUpsertDto = this.delineations.find((x) => layer.feature.properties.TreatmentBMPID == x.TreatmentBMPID);
+                delineationUpsertDto.Geometry = JSON.stringify(layer.toGeoJSON());
+                delineationUpsertDto.DelineationArea = +(GeometryUtil.geodesicArea(layer.getLatLngs()[0]) / this.squareMetersToAcreDivisor).toFixed(2);
+                //this.resetDelineationFeatureGroups();
+                this.selectFeatureImpl(this.selectedTreatmentBMP.TreatmentBMPID);
+            })
+            .on("pm:remove", (event) => {
+                this.isPerformingDrawAction = false;
+                const layer = event.layer as L.Polygon;
+                var delineationUpsertDto = this.delineations.find((x) => layer.feature.properties.TreatmentBMPID == x.TreatmentBMPID);
+                delineationUpsertDto.Geometry = null;
+                delineationUpsertDto.DelineationArea = null;
+                this.selectFeatureImpl(this.selectedTreatmentBMP.TreatmentBMPID);
+            })
+            .on("pm:drawstart", () => {
+                if (this.selectedDelineation != null && this.selectedDelineation.DelineationTypeID == DelineationTypeEnum.Centralized) {
+                    this.editableDelineationFeatureGroup.clearLayers();
+                }
+            });
+        // .on("pm:toolbaropened", () => {
+        //     this.isPerformingDrawAction = true;
+        //     this.preStartEditingEditableDelineationFeatureGroup = JSON.stringify(this.editableDelineationFeatureGroup.getLayers().map((x) => x.getLatLngs()));
+        // })
+        // .on("pm:toolbarclosed", () => {
+        //     this.isPerformingDrawAction = false;
+        //     this.preStartEditingEditableDelineationFeatureGroup = "";
+        // });
+        this.addOrRemoveGeomanControl(true);
         this.afterSetControl.emit(this.layerControl);
     }
 
@@ -373,7 +366,8 @@ export class DelineationsComponent implements OnInit {
 
         let hasFlownToSelectedObject = false;
 
-        // this.drawControl.remove();
+        this.map.pm.removeControls();
+
         if (this.selectedListItem) {
             this.selectedListItem = null;
         }
@@ -411,7 +405,7 @@ export class DelineationsComponent implements OnInit {
                 this.map.flyTo(layer.getLatLng(), 18);
             }
         });
-        //this.addOrRemoveDrawControl(true);
+        this.addOrRemoveGeomanControl(true);
 
         if (this.drawMapClicked) {
             if (this.isEditingLocation) {
