@@ -4,20 +4,49 @@ import { DatePipe, AsyncPipe, CommonModule } from "@angular/common";
 import { Observable } from "rxjs";
 import { PageHeaderComponent } from "src/app/shared/components/page-header/page-header.component";
 import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
-// TODO: Import the correct services and models for Treatment BMP
+import * as L from "leaflet";
+import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
 import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.service";
 import { TreatmentBMPDto } from "src/app/shared/generated/model/treatment-bmp-dto";
 import { FieldDefinitionComponent } from "src/app/shared/components/field-definition/field-definition.component";
+import { NeptuneMapComponent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
+import { RegionalSubbasinsLayerComponent } from "src/app/shared/components/leaflet/layers/regional-subbasins-layer/regional-subbasins-layer.component";
+import { StormwaterNetworkLayerComponent } from "src/app/shared/components/leaflet/layers/stormwater-network-layer/stormwater-network-layer.component";
+import { JurisdictionsLayerComponent } from "src/app/shared/components/leaflet/layers/jurisdictions-layer/jurisdictions-layer.component";
+import { WqmpsLayerComponent } from "src/app/shared/components/leaflet/layers/wqmps-layer/wqmps-layer.component";
+import { DelineationsLayerComponent } from "src/app/shared/components/leaflet/layers/delineations-layer/delineations-layer.component";
+import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet/layers/inventoried-bmps-layer/inventoried-bmps-layer.component";
 import { TreatmentBMPLifespanTypeEnum } from "src/app/shared/generated/enum/treatment-b-m-p-lifespan-type-enum";
+import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto";
 
 @Component({
     selector: "treatment-bmp-detail",
     templateUrl: "./treatment-bmp-detail.component.html",
     styleUrls: ["./treatment-bmp-detail.component.scss"],
     standalone: true,
-    imports: [CommonModule, RouterLink, DatePipe, AsyncPipe, PageHeaderComponent, AlertDisplayComponent, FieldDefinitionComponent],
+    imports: [
+        CommonModule,
+        RouterLink,
+        DatePipe,
+        AsyncPipe,
+        PageHeaderComponent,
+        AlertDisplayComponent,
+        FieldDefinitionComponent,
+        NeptuneMapComponent,
+        RegionalSubbasinsLayerComponent,
+        StormwaterNetworkLayerComponent,
+        JurisdictionsLayerComponent,
+        WqmpsLayerComponent,
+        DelineationsLayerComponent,
+        InventoriedBMPsLayerComponent,
+    ],
 })
 export class TreatmentBmpDetailComponent implements OnInit {
+    // Neptune map integration
+    boundingBox: any;
+    map: any;
+    layerControl: any;
+    mapIsReady = false;
     @ViewChild("templateRight", { static: true }) templateRight!: TemplateRef<any>;
     @ViewChild("templateAbove", { static: true }) templateAbove!: TemplateRef<any>;
     @Input() treatmentBMPID!: number;
@@ -50,6 +79,34 @@ export class TreatmentBmpDetailComponent implements OnInit {
         // this.attachments$ = this.treatmentBMP$.pipe(
         //     switchMap(bmp => this.treatmentBMPService.treatmentBmpsTreatmentBMPIDAttachmentsGet(bmp.TreatmentBMPID))
         // );
+        // Fetch bounding box for map display (replace with actual service if needed)
+        this.treatmentBMP$.subscribe((bmp) => {
+            if (bmp && bmp.Latitude && bmp.Longitude) {
+                // Use BoundingBoxDto properties: Left, Bottom, Right, Top
+                this.boundingBox = new BoundingBoxDto({
+                    Left: bmp.Longitude - 0.001,
+                    Right: bmp.Longitude + 0.001,
+                    Bottom: bmp.Latitude - 0.001,
+                    Top: bmp.Latitude + 0.001,
+                });
+            }
+        });
+    }
+    // Handler for Neptune map load event
+    handleMapReady(event: any): void {
+        this.map = event.map;
+        this.layerControl = event.layerControl;
+        this.mapIsReady = true;
+        // Add marker for BMP location
+        this.treatmentBMP$.subscribe((bmp) => {
+            if (bmp && bmp.Latitude && bmp.Longitude && this.map) {
+                const marker = L.marker([bmp.Latitude, bmp.Longitude], {
+                    icon: MarkerHelper.treatmentBMPMarker,
+                });
+                marker.addTo(this.map);
+                marker.bindPopup(bmp.TreatmentBMPName || "BMP Location");
+            }
+        });
     }
 
     getEditLink(treatmentBMP: any): string {
