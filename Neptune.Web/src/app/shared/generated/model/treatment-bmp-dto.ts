@@ -16,8 +16,6 @@ import { CustomAttributeUpsertDto } from './custom-attribute-upsert-dto';
 import { SizingBasisTypeDto } from './sizing-basis-type-dto';
 import { MaintenanceRecordDto } from './maintenance-record-dto';
 import { OrganizationDto } from './organization-dto';
-import { TreatmentBMPDocumentDto } from './treatment-bmp-document-dto';
-import { TreatmentBMPImageDto } from './treatment-bmp-image-dto';
 import { WaterQualityManagementPlanVerifyTreatmentBMPDto } from './water-quality-management-plan-verify-treatment-bmp-dto';
 import { DelineationDto } from './delineation-dto';
 import { VTreatmentBMPModelingAttributeDto } from './v-treatment-bmp-modeling-attribute-dto';
@@ -83,8 +81,6 @@ export class TreatmentBMPDto {
     MaintenanceRecords?: Array<MaintenanceRecordDto> | null;
     TreatmentBMPAssessments?: Array<TreatmentBMPAssessmentDto> | null;
     TreatmentBMPBenchmarkAndThresholds?: Array<TreatmentBMPBenchmarkAndThresholdDto> | null;
-    TreatmentBMPDocuments?: Array<TreatmentBMPDocumentDto> | null;
-    TreatmentBMPImages?: Array<TreatmentBMPImageDto> | null;
     NereidResults?: Array<NereidResultDto> | null;
     ProjectNereidResults?: Array<ProjectNereidResultDto> | null;
     WaterQualityManagementPlanVerifyTreatmentBMPs?: Array<WaterQualityManagementPlanVerifyTreatmentBMPDto> | null;
@@ -151,8 +147,6 @@ export interface TreatmentBMPDtoForm {
     MaintenanceRecords?: FormControl<Array<MaintenanceRecordDto>>;
     TreatmentBMPAssessments?: FormControl<Array<TreatmentBMPAssessmentDto>>;
     TreatmentBMPBenchmarkAndThresholds?: FormControl<Array<TreatmentBMPBenchmarkAndThresholdDto>>;
-    TreatmentBMPDocuments?: FormControl<Array<TreatmentBMPDocumentDto>>;
-    TreatmentBMPImages?: FormControl<Array<TreatmentBMPImageDto>>;
     NereidResults?: FormControl<Array<NereidResultDto>>;
     ProjectNereidResults?: FormControl<Array<ProjectNereidResultDto>>;
     WaterQualityManagementPlanVerifyTreatmentBMPs?: FormControl<Array<WaterQualityManagementPlanVerifyTreatmentBMPDto>>;
@@ -675,26 +669,6 @@ export class TreatmentBMPDtoFormControls {
         }
     );
     public static TreatmentBMPBenchmarkAndThresholds = (value: FormControlState<Array<TreatmentBMPBenchmarkAndThresholdDto>> | Array<TreatmentBMPBenchmarkAndThresholdDto> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<TreatmentBMPBenchmarkAndThresholdDto>>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static TreatmentBMPDocuments = (value: FormControlState<Array<TreatmentBMPDocumentDto>> | Array<TreatmentBMPDocumentDto> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<TreatmentBMPDocumentDto>>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static TreatmentBMPImages = (value: FormControlState<Array<TreatmentBMPImageDto>> | Array<TreatmentBMPImageDto> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<TreatmentBMPImageDto>>(
         value,
         formControlOptions ?? 
         {

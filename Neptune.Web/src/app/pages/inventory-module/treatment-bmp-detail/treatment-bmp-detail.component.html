@@ -106,6 +106,14 @@
         <!-- Map and Images -->
         <div class="g-col-6">
             <div class="card">
+                <div class="card-header"><span class="card-title">Images</span></div>
+                <div class="card-body" [loadingSpinner]="{ isLoading: imagesLoading, loadingHeight: 100 }">
+                    @if (treatmentBMPImages$ | async; as images) {
+                    <image-carousel [images]="images" [noImagesMessage]="'No images available for this BMP.'"></image-carousel>
+                    }
+                </div>
+            </div>
+            <div class="card mt-2">
                 <div class="card-header"><span class="card-title">Location & Map</span></div>
                 <div class="card-body">
                     @if (treatmentBMP$ | async; as treatmentBMP) {
@@ -125,12 +133,6 @@
                         }
                     </neptune-map>
                     }
-                </div>
-            </div>
-            <div class="card mt-2">
-                <div class="card-header"><span class="card-title">Images</span></div>
-                <div class="card-body">
-                    <!-- TODO: Add image carousel/gallery here -->
                 </div>
             </div>
         </div>

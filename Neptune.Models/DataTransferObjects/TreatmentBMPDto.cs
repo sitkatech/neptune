@@ -64,8 +64,6 @@ namespace Neptune.Models.DataTransferObjects
         public List<MaintenanceRecordDto>? MaintenanceRecords { get; set; }
         public List<TreatmentBMPAssessmentDto>? TreatmentBMPAssessments { get; set; }
         public List<TreatmentBMPBenchmarkAndThresholdDto>? TreatmentBMPBenchmarkAndThresholds { get; set; }
-        public List<TreatmentBMPDocumentDto>? TreatmentBMPDocuments { get; set; }
-        public List<TreatmentBMPImageDto>? TreatmentBMPImages { get; set; }
         public List<NereidResultDto>? NereidResults { get; set; }
         public List<ProjectNereidResultDto>? ProjectNereidResults { get; set; }
         public List<WaterQualityManagementPlanVerifyTreatmentBMPDto>? WaterQualityManagementPlanVerifyTreatmentBMPs { get; set; }

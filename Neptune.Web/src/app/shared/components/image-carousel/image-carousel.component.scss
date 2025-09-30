@@ -1,0 +1,31 @@
+.image-carousel .carousel-wrapper {
+    position: relative;
+    text-align: center;
+}
+.image-carousel .carousel-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #333;
+    z-index: 2;
+}
+.image-carousel .carousel-nav.left {
+    left: 0;
+}
+.image-carousel .carousel-nav.right {
+    right: 0;
+}
+.image-carousel .carousel-indicator {
+    margin-top: 0.5rem;
+    font-size: 1rem;
+    color: #666;
+}
+.image-carousel .carousel-caption {
+    margin-top: 0.5rem;
+    color: #555;
+    font-size: 1rem;
+}

@@ -153,8 +153,6 @@ public static class TreatmentBMPExtensionMethods
             MaintenanceRecords = treatmentBMP.MaintenanceRecords?.Select(x => x.AsDto()).ToList(),
             TreatmentBMPAssessments = treatmentBMP.TreatmentBMPAssessments?.Select(x => x.AsDto()).ToList(),
             TreatmentBMPBenchmarkAndThresholds = treatmentBMP.TreatmentBMPBenchmarkAndThresholds?.Select(x => x.AsDto()).ToList(),
-            TreatmentBMPDocuments = treatmentBMP.TreatmentBMPDocuments?.Select(x => x.AsDto()).ToList(),
-            TreatmentBMPImages = treatmentBMP.TreatmentBMPImages?.Select(x => x.AsDto()).ToList(),
             NereidResults = treatmentBMP.NereidResults?.Select(x => x.AsDto()).ToList(),
             ProjectNereidResults = treatmentBMP.ProjectNereidResults?.Select(x => x.AsDto()).ToList(),
             WaterQualityManagementPlanVerifyTreatmentBMPs = treatmentBMP.WaterQualityManagementPlanVerifyTreatmentBMPs?.Select(x => x.AsDto()).ToList(),

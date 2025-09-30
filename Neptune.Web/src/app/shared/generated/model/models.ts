@@ -85,7 +85,6 @@ export * from './trash-generating-unit-grid-dto';
 export * from './treatment-bmp-assessment-dto';
 export * from './treatment-bmp-benchmark-and-threshold-dto';
 export * from './treatment-bmp-display-dto';
-export * from './treatment-bmp-document-dto';
 export * from './treatment-bmp-dto';
 export * from './treatment-bmphru-characteristics-summary-simple-dto';
 export * from './treatment-bmp-image-dto';

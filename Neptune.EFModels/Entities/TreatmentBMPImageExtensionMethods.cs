@@ -9,6 +9,7 @@ namespace Neptune.EFModels.Entities
             return new TreatmentBMPImageDto
             {
                 TreatmentBMPImageID = entity.TreatmentBMPImageID,
+                FileResourceGUID = entity.FileResource.FileResourceGUID.ToString(),
                 Caption = entity.Caption
             };
         }
