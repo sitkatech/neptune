@@ -10,13 +10,14 @@ export const routeParams = {
     projectID: "projectID",
     onlandVisualTrashAssessmentID: "onlandVisualTrashAssessmentID",
     onlandVisualTrashAssessmentAreaID: "onlandVisualTrashAssessmentAreaID",
+    treatmentBMPID: "treatmentBMPID",
 };
 
 export const routes: Routes = [
     {
         path: "inventory",
         title: "New Inventory Module",
-        loadComponent: () => import("./pages/inventory-module/inventory-site-layout.component").then((m) => m.InventorySiteLayoutComponent),
+        loadComponent: () => import("./pages/inventory-module/inventory-site-layout/inventory-site-layout.component").then((m) => m.InventorySiteLayoutComponent),
         children: [
             {
                 path: "",
@@ -25,54 +26,59 @@ export const routes: Routes = [
             },
             // BMP Inventory
             {
-                path: "bmp-inventory/jurisdictions",
+                path: "jurisdictions",
                 title: "Jurisdictions",
-                loadComponent: () => import("./pages/inventory-module/bmp-inventory/jurisdictions.component").then((m) => m.JurisdictionsComponent),
+                loadComponent: () => import("./pages/inventory-module/jurisdictions/jurisdictions.component").then((m) => m.JurisdictionsComponent),
             },
             {
-                path: "bmp-inventory/find-bmp",
+                path: "find-bmp",
                 title: "Find a BMP",
-                loadComponent: () => import("./pages/inventory-module/bmp-inventory/find-bmp.component").then((m) => m.FindBmpComponent),
+                loadComponent: () => import("./pages/inventory-module/find-bmp/find-bmp.component").then((m) => m.FindBmpComponent),
             },
             {
-                path: "bmp-inventory/modeling-parameters",
+                path: "modeling-parameters",
                 title: "Modeling Parameters",
-                loadComponent: () => import("./pages/inventory-module/bmp-inventory/modeling-parameters.component").then((m) => m.ModelingParametersComponent),
+                loadComponent: () => import("./pages/inventory-module/modeling-parameters/modeling-parameters.component").then((m) => m.ModelingParametersComponent),
             },
             {
-                path: "bmp-inventory/view-all-bmps",
+                path: "view-all-bmps",
                 title: "View All BMPs",
-                loadComponent: () => import("./pages/inventory-module/bmp-inventory/view-all-bmps/view-all-bmps.component").then((m) => m.ViewAllBmpsComponent),
+                loadComponent: () => import("./pages/inventory-module/view-all-bmps/view-all-bmps.component").then((m) => m.ViewAllBmpsComponent),
             },
             {
-                path: "bmp-inventory/latest-bmp-assessments",
+                path: `treatment-bmp-detail/:${routeParams.treatmentBMPID}`,
+                title: "Treatment BMP Detail",
+                loadComponent: () => import("./pages/inventory-module/treatment-bmp-detail/treatment-bmp-detail.component").then((m) => m.TreatmentBmpDetailComponent),
+            },
+            {
+                path: "latest-bmp-assessments",
                 title: "View Latest BMP Assessments",
-                loadComponent: () => import("./pages/inventory-module/bmp-inventory/latest-bmp-assessments.component").then((m) => m.LatestBmpAssessmentsComponent),
+                loadComponent: () => import("./pages/inventory-module/latest-bmp-assessments/latest-bmp-assessments.component").then((m) => m.LatestBmpAssessmentsComponent),
             },
             {
-                path: "bmp-inventory/field-records",
+                path: "field-records",
                 title: "View All Field Records",
-                loadComponent: () => import("./pages/inventory-module/bmp-inventory/field-records.component").then((m) => m.FieldRecordsComponent),
+                loadComponent: () => import("./pages/inventory-module/field-records/field-records.component").then((m) => m.FieldRecordsComponent),
             },
             {
-                path: "bmp-inventory/wqmps",
+                path: "wqmps",
                 title: "Water Quality Management Plans",
-                loadComponent: () => import("./pages/inventory-module/bmp-inventory/wqmps.component").then((m) => m.WqmpsComponent),
+                loadComponent: () => import("./pages/inventory-module/wqmps/wqmps.component").then((m) => m.WqmpsComponent),
             },
             {
-                path: "bmp-inventory/wqmp-map",
+                path: "wqmp-map",
                 title: "WQMP Map",
-                loadComponent: () => import("./pages/inventory-module/bmp-inventory/wqmp-map.component").then((m) => m.WqmpMapComponent),
+                loadComponent: () => import("./pages/inventory-module/wqmp-map/wqmp-map.component").then((m) => m.WqmpMapComponent),
             },
             {
-                path: "bmp-inventory/wqmp-annual-report",
+                path: "wqmp-annual-report",
                 title: "WQMP Annual Report",
-                loadComponent: () => import("./pages/inventory-module/bmp-inventory/wqmp-annual-report.component").then((m) => m.WqmpAnnualReportComponent),
+                loadComponent: () => import("./pages/inventory-module/wqmp-annual-report/wqmp-annual-report.component").then((m) => m.WqmpAnnualReportComponent),
             },
             {
-                path: "bmp-inventory/parcels",
+                path: "parcels",
                 title: "Parcels",
-                loadComponent: () => import("./pages/inventory-module/bmp-inventory/parcels.component").then((m) => m.ParcelsComponent),
+                loadComponent: () => import("./pages/inventory-module/parcels/parcels.component").then((m) => m.ParcelsComponent),
             },
             // Program Info
             {

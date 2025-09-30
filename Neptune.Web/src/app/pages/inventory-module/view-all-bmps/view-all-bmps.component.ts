@@ -1,7 +1,12 @@
 import { Component } from "@angular/core";
-import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
-import { AlertDisplayComponent } from "../../../../shared/components/alert-display/alert-display.component";
-import { HybridMapGridComponent } from "../../../../shared/components/hybrid-map-grid/hybrid-map-grid.component";
+import { Router } from "@angular/router";
+import { ConfirmService } from "src/app/shared/services/confirm/confirm.service";
+import { AlertService } from "src/app/shared/services/alert.service";
+import { Alert } from "src/app/shared/models/alert";
+import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
+import { PageHeaderComponent } from "src/app/shared/components/page-header/page-header.component";
+import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
+import { HybridMapGridComponent } from "src/app/shared/components/hybrid-map-grid/hybrid-map-grid.component";
 import "leaflet.markercluster";
 import * as L from "leaflet";
 import { ColDef } from "ag-grid-community";
@@ -35,7 +40,10 @@ export class ViewAllBmpsComponent {
     constructor(
         private treatmentBMPService: TreatmentBMPService,
         private utilityFunctionsService: UtilityFunctionsService,
-        private stormwaterJurisdictionService: StormwaterJurisdictionService
+        private stormwaterJurisdictionService: StormwaterJurisdictionService,
+        private router: Router,
+        private confirmService: ConfirmService,
+        private alertService: AlertService
     ) {}
 
     ngOnInit(): void {
@@ -43,11 +51,16 @@ export class ViewAllBmpsComponent {
             this.utilityFunctionsService.createActionsColumnDef((params: any) => [
                 {
                     ActionName: "View",
-                    ActionHandler: () => this.handleView(params.data.TreatmentBMPID),
+                    ActionHandler: () => this.router.navigate(["/inventory/treatment-bmp-detail", params.data.TreatmentBMPID]),
+                },
+                {
+                    ActionName: "Delete",
+                    ActionIcon: "fa fa-trash text-danger",
+                    ActionHandler: () => this.deleteModal(params),
                 },
             ]),
             this.utilityFunctionsService.createLinkColumnDef("Name", "TreatmentBMPName", "TreatmentBMPID", {
-                InRouterLink: "../bmp-inventory/",
+                InRouterLink: "../",
             }),
             this.utilityFunctionsService.createBasicColumnDef("Jurisdiction", "JurisdictionName"),
             this.utilityFunctionsService.createBasicColumnDef("Owner Organization", "OwnerOrganizationName"),
@@ -147,9 +160,23 @@ export class ViewAllBmpsComponent {
             }
         }
     }
-    handleView(treatmentBMPID: number) {
-        // TODO: Implement navigation to detail page
-        // Example: this.router.navigate(["/inventory/bmp-inventory", treatmentBMPID]);
+
+    private deleteModal(params: any) {
+        const confirmOptions = {
+            title: "Delete BMP",
+            message: `<p>You are about to delete ${params.data.TreatmentBMPName ?? "this BMP"}.</p><p>Are you sure you wish to proceed?</p>`,
+            buttonClassYes: "btn btn-danger",
+            buttonTextYes: "Delete",
+            buttonTextNo: "Cancel",
+        };
+        this.confirmService.confirm(confirmOptions).then((confirmed) => {
+            if (confirmed) {
+                this.treatmentBMPService.treatmentBmpsTreatmentBMPIDDelete(params.data.TreatmentBMPID).subscribe(() => {
+                    this.alertService.pushAlert(new Alert("Successfully deleted BMP", AlertContext.Success));
+                    params.api.applyTransaction({ remove: [params.data] });
+                });
+            }
+        });
     }
 
     onSelectedTreatmentBMPChangedFromGrid(selectedTreatmentBMPID: number) {

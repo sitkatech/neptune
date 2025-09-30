@@ -8,6 +8,8 @@ using Neptune.Models.DataTransferObjects;
 using NetTopologySuite.Features;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Neptune.API.Common;
 
 namespace Neptune.API.Controllers
 {
@@ -91,6 +93,36 @@ namespace Neptune.API.Controllers
             var regionalSubbasin = RegionalSubbasins.GetFirstByContainsGeometry(DbContext, treatmentBMP.LocationPoint);
 
             return Ok(RegionalSubbasins.GetUpstreamCatchmentGeometry4326GeoJSONAndArea(DbContext, regionalSubbasin.RegionalSubbasinID, treatmentBMPID, delineation?.DelineationID));
+        }
+
+        [HttpDelete("{treatmentBMPID}")]
+        [JurisdictionEditFeature]
+        public async Task<IActionResult> Delete([FromRoute] int treatmentBMPID)
+        {
+            var treatmentBMP = TreatmentBMPs.GetByIDWithChangeTracking(dbContext, treatmentBMPID);
+
+            var delineation = Delineations.GetByTreatmentBMPIDWithChangeTracking(dbContext, treatmentBMP.TreatmentBMPID);
+            var delineationGeometry = delineation?.DelineationGeometry;
+            var isDelineationDistributed = delineation != null && delineation.DelineationTypeID == (int)DelineationTypeEnum.Distributed;
+
+            await EFModels.Nereid.NereidUtilities.MarkDownstreamNodeDirty(treatmentBMP, dbContext);
+
+            // Remove upstream references
+            foreach (var downstreamBMP in treatmentBMP.InverseUpstreamBMP)
+            {
+                downstreamBMP.UpstreamBMPID = null;
+            }
+            await dbContext.SaveChangesAsync();
+
+            await treatmentBMP.DeleteFull(dbContext);
+
+            // Queue LGU refresh if needed
+            if (isDelineationDistributed && delineationGeometry != null)
+            {
+                await ModelingEngineUtilities.QueueLGURefreshForArea(delineationGeometry, null, dbContext);
+            }
+
+            return NoContent();
         }
     }
 }

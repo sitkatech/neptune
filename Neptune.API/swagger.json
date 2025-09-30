@@ -3935,6 +3935,29 @@
         }
       }
     },
+    "/treatment-bmps/{treatmentBMPID}": {
+      "delete": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "parameters": [
+          {
+            "name": "treatmentBMPID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/treatment-bmp-types": {
       "get": {
         "tags": [
