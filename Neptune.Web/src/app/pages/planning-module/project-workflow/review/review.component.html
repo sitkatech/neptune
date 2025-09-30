@@ -1,128 +1,122 @@
 <page-header pageTitle="Review and Share"> </page-header>
 <workflow-body>
-  <app-alert-display></app-alert-display>
-  <custom-rich-text [customRichTextTypeID]="customRichTextTypeID"></custom-rich-text>
+    <app-alert-display></app-alert-display>
+    <custom-rich-text [customRichTextTypeID]="customRichTextTypeID"></custom-rich-text>
 
-  @if (project?.ShareOCTAM2Tier2Scores) {
+    @if (project?.ShareOCTAM2Tier2Scores) {
     <div class="alert alert-warning">
-      <div class="alert-content">
-        <i class="fa fa-warning"></i>
-        This project has been shared with the OCTA M2 Tier 2 Grant Program. If you would like to edit this project, you must first revoke sharing for all grant programs.
-      </div>
+        <div class="alert-content">
+            <i class="fa fa-warning"></i>
+            This project has been shared with the OCTA M2 Tier 2 Grant Program. If you would like to edit this project, you must first revoke sharing for all grant programs.
+        </div>
     </div>
-  }
-
-  @if (project) {
+    } @if (project) {
     <div class="grid-12 mt-3 mb-3">
-      <div class="g-col-7">
-        <div class="card">
-          <div class="card-header">Project Basics</div>
-          <div class="card-body">
-            <dl class="grid-12">
-              <dt class="g-col-4">Name</dt>
-              <dd class="g-col-7">
-                {{ project?.ProjectName }}
-              </dd>
-              <dt class="g-col-4 mt-2">Description</dt>
-              <dd class="g-col-7 mt-2">
-                {{ project?.ProjectDescription }}
-                @if (!project?.ProjectDescription) {
-                  <em class="text-muted">None Provided</em>
-                }
-              </dd>
-              <dt class="g-col-4 mt-2">Status</dt>
-              <dd class="g-col-7 mt-2">
-                {{ project?.ProjectStatus.ProjectStatusDisplayName }}
-              </dd>
-              <dt class="g-col-4 mt-2">Date Created</dt>
-              <dd class="g-col-7 mt-2">
-                {{ project?.DateCreated | date : "MM/dd/yyyy" }}
-              </dd>
-              <dt class="g-col-4 mt-2">Project Owner</dt>
-              <dd class="g-col-7 mt-2">
-                {{ project?.Organization.OrganizationName }}
-              </dd>
-              <dt class="g-col-4 mt-2">Jurisdiction</dt>
-              <dd class="g-col-7 mt-2">
-                {{ project?.StormwaterJurisdiction.Organization.OrganizationName }}
-              </dd>
-              <dt class="g-col-4 mt-2">Primary Contact</dt>
-              <dd class="g-col-7 mt-2">
-                {{ project?.PrimaryContactPerson.FullName }}
-              </dd>
-              <dt class="g-col-4 mt-2">Additional Contact Information</dt>
-              <dd class="g-col-7 mt-2">
-                {{ project?.AdditionalContactInformation }}
-                @if (!project?.AdditionalContactInformation) {
-                  <em class="text-muted">None Provided</em>
-                }
-              </dd>
-              <dt class="g-col-4 mt-2">Includes Stormwater Treatment BMPs</dt>
-              <dd class="g-col-7 mt-2">
-                {{ project?.DoesNotIncludeTreatmentBMPs ? "No" : "Yes" }}
-              </dd>
-            </dl>
-          </div>
-        </div>
-      </div>
-      <div class="g-col-5">
-        <div class="card">
-          <div class="card-header">Share Project</div>
-          <div class="card-body">
-            <div class="grid-12">
-              <div class="g-col-8">
-                <i [ngClass]="project.ShareOCTAM2Tier2Scores ? 'fas fa-check text-success' : 'fas fa-times text-danger'"></i>
-                OCTA M2 Tier 2 Grant Program
-              </div>
-              <div class="g-col-4">
-                <button (click)="shareOrRevokeOCTAScores()" class="btn btn-primary btn-sm" [disabled]="isLoadingSubmit">
-                  @if (isLoadingSubmit) {
-                    <span class="fa fa-spinner loading-spinner"></span>
-                  }
-                  {{ project.ShareOCTAM2Tier2Scores ? "Revoke" : "Share" }}
-                </button>
-              </div>
+        <div class="g-col-7">
+            <div class="card">
+                <div class="card-header">Project Basics</div>
+                <div class="card-body">
+                    <dl class="grid-12">
+                        <dt class="g-col-4">Name</dt>
+                        <dd class="g-col-7">
+                            {{ project?.ProjectName }}
+                        </dd>
+                        <dt class="g-col-4 mt-2">Description</dt>
+                        <dd class="g-col-7 mt-2">
+                            {{ project?.ProjectDescription }}
+                            @if (!project?.ProjectDescription) {
+                            <em class="text-muted">None Provided</em>
+                            }
+                        </dd>
+                        <dt class="g-col-4 mt-2">Status</dt>
+                        <dd class="g-col-7 mt-2">
+                            {{ project?.ProjectStatus.ProjectStatusDisplayName }}
+                        </dd>
+                        <dt class="g-col-4 mt-2">Date Created</dt>
+                        <dd class="g-col-7 mt-2">
+                            {{ project?.DateCreated | date : "MM/dd/yyyy" }}
+                        </dd>
+                        <dt class="g-col-4 mt-2">Project Owner</dt>
+                        <dd class="g-col-7 mt-2">
+                            {{ project?.Organization.OrganizationName }}
+                        </dd>
+                        <dt class="g-col-4 mt-2">Jurisdiction</dt>
+                        <dd class="g-col-7 mt-2">
+                            {{ project?.StormwaterJurisdiction.Organization.OrganizationName }}
+                        </dd>
+                        <dt class="g-col-4 mt-2">Primary Contact</dt>
+                        <dd class="g-col-7 mt-2">
+                            {{ project?.PrimaryContactPerson.FullName }}
+                        </dd>
+                        <dt class="g-col-4 mt-2">Additional Contact Information</dt>
+                        <dd class="g-col-7 mt-2">
+                            {{ project?.AdditionalContactInformation }}
+                            @if (!project?.AdditionalContactInformation) {
+                            <em class="text-muted">None Provided</em>
+                            }
+                        </dd>
+                        <dt class="g-col-4 mt-2">Includes Stormwater Treatment BMPs</dt>
+                        <dd class="g-col-7 mt-2">
+                            {{ project?.DoesNotIncludeTreatmentBMPs ? "No" : "Yes" }}
+                        </dd>
+                    </dl>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
+        <div class="g-col-5">
+            <div class="card">
+                <div class="card-header">Share Project</div>
+                <div class="card-body">
+                    <div class="grid-12">
+                        <div class="g-col-8">
+                            <i [ngClass]="project.ShareOCTAM2Tier2Scores ? 'fas fa-check text-success' : 'fas fa-times text-danger'"></i>
+                            OCTA M2 Tier 2 Grant Program
+                        </div>
+                        <div class="g-col-4">
+                            <button (click)="shareOrRevokeOCTAScores()" class="btn btn-primary btn-sm" [disabled]="isLoadingSubmit">
+                                @if (isLoadingSubmit) {
+                                <span class="fa fa-spinner loading-spinner"></span>
+                                }
+                                {{ project.ShareOCTAM2Tier2Scores ? "Revoke" : "Share" }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     @if (!project?.DoesNotIncludeTreatmentBMPs) {
-      <div class="card mt-3 mb-3">
+    <div class="card mt-3 mb-3">
         <div class="card-header">Treatment BMPs</div>
         <div class="card-body">
-          <project-map #treatmentBMPMapAndModelingAttributes [projectID]="projectID"> </project-map>
+            <project-map #treatmentBMPMapAndModelingAttributes [projectID]="projectID"> </project-map>
         </div>
-      </div>
-    }
-    @if (showModelResultsPanel()) {
-      <div class="card mt-3 mb-3">
+    </div>
+    } @if (showModelResultsPanel()) {
+    <div class="card mt-3 mb-3">
         <div class="card-header">Model Results</div>
         <div class="card-body">
-          <model-results
-            [projectID]="project.ProjectID"
-            [treatmentBMPs]="treatmentBMPs"
-            [delineations]="delineations"
-            [projectNetworkSolveHistories]="projectNetworkSolveHistories">
-          </model-results>
+            <project-model-results
+                [projectID]="project.ProjectID"
+                [treatmentBMPs]="treatmentBMPs"
+                [delineations]="delineations"
+                [projectNetworkSolveHistories]="projectNetworkSolveHistories">
+            </project-model-results>
         </div>
-      </div>
-    }
-    @if (attachments && attachments.length > 0) {
-      <div class="card mt-3 mb-3">
+    </div>
+    } @if (attachments && attachments.length > 0) {
+    <div class="card mt-3 mb-3">
         <div class="card-header">Attachments</div>
         <div class="card-body">
-          <attachments-display [attachments]="attachments"></attachments-display>
+            <attachments-display [attachments]="attachments"></attachments-display>
         </div>
-      </div>
-    }
-    @if (project.CalculateOCTAM2Tier2Scores) {
-      <div class="card mt-3 mb-3">
+    </div>
+    } @if (project.CalculateOCTAM2Tier2Scores) {
+    <div class="card mt-3 mb-3">
         <div class="card-header">Grant Metrics</div>
         <div class="card-body">
-          <grant-scores [project]="project"></grant-scores>
+            <grant-scores [project]="project"></grant-scores>
         </div>
-      </div>
-    }
-  }
+    </div>
+    } }
 </workflow-body>

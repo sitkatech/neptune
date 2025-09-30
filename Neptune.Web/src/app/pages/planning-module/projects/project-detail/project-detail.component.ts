@@ -13,7 +13,7 @@ import { AlertService } from "src/app/shared/services/alert.service";
 import { ConfirmService } from "src/app/shared/services/confirm/confirm.service";
 import { GrantScoresComponent } from "src/app/pages/planning-module/projects/grant-scores/grant-scores.component";
 import { AttachmentsDisplayComponent } from "src/app/pages/planning-module/projects/attachments-display/attachments-display.component";
-import { ModelResultsComponent } from "src/app/pages/planning-module/projects/model-results/model-results.component";
+import { ProjectModelResultsComponent } from "src/app/pages/planning-module/projects/project-model-results/project-model-results.component";
 import { ProjectMapComponent } from "src/app/pages/planning-module/projects/project-map/project-map.component";
 import { FieldDefinitionComponent } from "src/app/shared/components/field-definition/field-definition.component";
 import { DatePipe, AsyncPipe } from "@angular/common";
@@ -29,7 +29,7 @@ import { AlertDisplayComponent } from "src/app/shared/components/alert-display/a
         RouterLink,
         FieldDefinitionComponent,
         ProjectMapComponent,
-        ModelResultsComponent,
+        ProjectModelResultsComponent,
         AttachmentsDisplayComponent,
         GrantScoresComponent,
         DatePipe,

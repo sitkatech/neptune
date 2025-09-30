@@ -1,128 +1,123 @@
 @if (currentProject$ | async; as project) {
-  <page-header [pageTitle]="project.ProjectName" [templateRight]="templateRight" [templateAbove]="templateAbove"> </page-header>
-  <ng-template #templateRight>
+<page-header [pageTitle]="project.ProjectName" [templateRight]="templateRight" [templateAbove]="templateAbove"> </page-header>
+<ng-template #templateRight>
     <a [routerLink]="getWorkflowLink(project)" class="btn btn-primary mr-2">Edit</a>
     <a (click)="makeProjectCopy(project)" class="btn btn-primary-outline" [class.disabled]="isCopyingProject">
-      @if (isCopyingProject) {
+        @if (isCopyingProject) {
         <span class="fa fa-spinner loading-spinner"></span>
-      }
-      Copy Project
+        } Copy Project
     </a>
-  </ng-template>
-  <ng-template #templateAbove>
+</ng-template>
+<ng-template #templateAbove>
     <div class="back">
-      <a [routerLink]="['../']" class="back__link">Back to Project Grid</a>
+        <a [routerLink]="['../']" class="back__link">Back to Project Grid</a>
     </div>
-  </ng-template>
-  <app-alert-display></app-alert-display>
-  <div class="grid-12 mt-2 mb-3">
+</ng-template>
+<app-alert-display></app-alert-display>
+<div class="grid-12 mt-2 mb-3">
     <div class="card">
-      <div class="card-header">
-        <span class="card-title">Project Basics</span>
-      </div>
-      <div class="card-body">
-        <dl class="grid-12">
-          <dt class="g-col-4">Name</dt>
-          <dd class="g-col-8">
-            {{ project?.ProjectName }}
-          </dd>
-          <dt class="g-col-4">Description</dt>
-          <dd class="g-col-8">
-            {{ project?.ProjectDescription }}
-            @if (!project?.ProjectDescription) {
-              <em class="text-muted">None Provided</em>
-            }
-          </dd>
-          <dt class="g-col-4">Status</dt>
-          <dd class="g-col-8">
-            {{ project?.ProjectStatus.ProjectStatusDisplayName }}
-          </dd>
-          <dt class="g-col-4">Date Created</dt>
-          <dd class="g-col-8">
-            {{ project?.DateCreated | date : "MM/dd/yyyy" }}
-          </dd>
-          <dt class="g-col-4">Date Updated</dt>
-          <dd class="g-col-8">
-            {{ project?.DateUpdated | date : "MM/dd/yyyy" }}
-          </dd>
-          <dt class="g-col-4">Project Owner</dt>
-          <dd class="g-col-8">
-            {{ project?.Organization.OrganizationName }}
-          </dd>
-          <dt class="g-col-4"><field-definition fieldDefinitionType="Jurisdiction"></field-definition></dt>
-          <dd class="g-col-8">
-            {{ project?.StormwaterJurisdiction.Organization.OrganizationName }}
-          </dd>
-          <dt class="g-col-4">Primary Contact</dt>
-          <dd class="g-col-8">
-            {{ project?.PrimaryContactPerson.FullName }}
-          </dd>
-          <dt class="g-col-4">Additional Contact Information</dt>
-          <dd class="g-col-8">
-            {{ project?.AdditionalContactInformation }}
-            @if (!project?.AdditionalContactInformation) {
-              <em class="text-muted">None Provided</em>
-            }
-          </dd>
-          <dt class="g-col-4">Does Project Include Stormwater Treatment BMPs?</dt>
-          <dd class="g-col-8">
-            {{ project?.DoesNotIncludeTreatmentBMPs ? "No" : "Yes" }}
-          </dd>
-        </dl>
-      </div>
+        <div class="card-header">
+            <span class="card-title">Project Basics</span>
+        </div>
+        <div class="card-body">
+            <dl class="grid-12">
+                <dt class="g-col-4">Name</dt>
+                <dd class="g-col-8">
+                    {{ project?.ProjectName }}
+                </dd>
+                <dt class="g-col-4">Description</dt>
+                <dd class="g-col-8">
+                    {{ project?.ProjectDescription }}
+                    @if (!project?.ProjectDescription) {
+                    <em class="text-muted">None Provided</em>
+                    }
+                </dd>
+                <dt class="g-col-4">Status</dt>
+                <dd class="g-col-8">
+                    {{ project?.ProjectStatus.ProjectStatusDisplayName }}
+                </dd>
+                <dt class="g-col-4">Date Created</dt>
+                <dd class="g-col-8">
+                    {{ project?.DateCreated | date : "MM/dd/yyyy" }}
+                </dd>
+                <dt class="g-col-4">Date Updated</dt>
+                <dd class="g-col-8">
+                    {{ project?.DateUpdated | date : "MM/dd/yyyy" }}
+                </dd>
+                <dt class="g-col-4">Project Owner</dt>
+                <dd class="g-col-8">
+                    {{ project?.Organization.OrganizationName }}
+                </dd>
+                <dt class="g-col-4"><field-definition fieldDefinitionType="Jurisdiction"></field-definition></dt>
+                <dd class="g-col-8">
+                    {{ project?.StormwaterJurisdiction.Organization.OrganizationName }}
+                </dd>
+                <dt class="g-col-4">Primary Contact</dt>
+                <dd class="g-col-8">
+                    {{ project?.PrimaryContactPerson.FullName }}
+                </dd>
+                <dt class="g-col-4">Additional Contact Information</dt>
+                <dd class="g-col-8">
+                    {{ project?.AdditionalContactInformation }}
+                    @if (!project?.AdditionalContactInformation) {
+                    <em class="text-muted">None Provided</em>
+                    }
+                </dd>
+                <dt class="g-col-4">Does Project Include Stormwater Treatment BMPs?</dt>
+                <dd class="g-col-8">
+                    {{ project?.DoesNotIncludeTreatmentBMPs ? "No" : "Yes" }}
+                </dd>
+            </dl>
+        </div>
     </div>
-  </div>
-  @if (!project?.DoesNotIncludeTreatmentBMPs) {
-    <div class="mt-3 mb-3">
-      <div class="card">
+</div>
+@if (!project?.DoesNotIncludeTreatmentBMPs) {
+<div class="mt-3 mb-3">
+    <div class="card">
         <div class="card-header"><span class="card-title">Treatment BMPs</span></div>
         <div class="card-body">
-          <project-map #treatmentBMPMapAndModelingAttributes [projectID]="project.ProjectID"> </project-map>
+            <project-map #treatmentBMPMapAndModelingAttributes [projectID]="project.ProjectID"> </project-map>
         </div>
-      </div>
     </div>
-  }
-  @if (!project?.DoesNotIncludeTreatmentBMPs && project?.HasModeledResults) {
-    <div class="mt-3 mb-3">
-      @if (modeledResultsData$ | async; as modeledResultsData) {
+</div>
+} @if (!project?.DoesNotIncludeTreatmentBMPs && project?.HasModeledResults) {
+<div class="mt-3 mb-3">
+    @if (modeledResultsData$ | async; as modeledResultsData) {
+    <div class="card">
+        <div class="card-header"><span class="card-title">Model Results</span></div>
+        <div class="card-body">
+            <project-model-results
+                [projectID]="project.ProjectID"
+                [treatmentBMPs]="modeledResultsData.treatmentBMPs"
+                [delineations]="modeledResultsData.delineations"
+                [projectNetworkSolveHistories]="modeledResultsData.projectNetworkSolveHistories">
+            </project-model-results>
+        </div>
+    </div>
+    }
+</div>
+} @if (attachments$ | async; as attachments) {
+<div class="row mt-3 mb-3">
+    @if (attachments.length > 0) {
+    <div class="col-12">
         <div class="card">
-          <div class="card-header"><span class="card-title">Model Results</span></div>
-          <div class="card-body">
-            <model-results
-              [projectID]="project.ProjectID"
-              [treatmentBMPs]="modeledResultsData.treatmentBMPs"
-              [delineations]="modeledResultsData.delineations"
-              [projectNetworkSolveHistories]="modeledResultsData.projectNetworkSolveHistories">
-            </model-results>
-          </div>
-        </div>
-      }
-    </div>
-  }
-  @if (attachments$ | async; as attachments) {
-    <div class="row mt-3 mb-3">
-      @if (attachments.length > 0) {
-        <div class="col-12">
-          <div class="card">
             <div class="card-header"><span class="card-title">Attachments</span></div>
             <div class="card-body">
-              <attachments-display [attachments]="attachments"></attachments-display>
+                <attachments-display [attachments]="attachments"></attachments-display>
             </div>
-          </div>
         </div>
-      }
     </div>
-  }
-  @if (project.CalculateOCTAM2Tier2Scores) {
-    <div class="row mt-3 mb-3">
-      <div class="col-12">
+    }
+</div>
+} @if (project.CalculateOCTAM2Tier2Scores) {
+<div class="row mt-3 mb-3">
+    <div class="col-12">
         <div class="card">
-          <div class="card-header"><span class="card-title">Grant Metrics</span></div>
-          <div class="card-body">
-            <grant-scores [project]="project"></grant-scores>
-          </div>
+            <div class="card-header"><span class="card-title">Grant Metrics</span></div>
+            <div class="card-body">
+                <grant-scores [project]="project"></grant-scores>
+            </div>
         </div>
-      </div>
     </div>
-  }
-}
+</div>
+} }

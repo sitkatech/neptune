@@ -14,12 +14,12 @@ import { TreatmentBMPDisplayDto } from "src/app/shared/generated/model/treatment
 import { BtnGroupRadioInputComponent } from "src/app/shared/components/inputs/btn-group-radio-input/btn-group-radio-input.component";
 
 @Component({
-    selector: "model-results",
-    templateUrl: "./model-results.component.html",
-    styleUrls: ["./model-results.component.scss"],
-    imports: [FormsModule, FieldDefinitionComponent, DecimalPipe, NeptuneModelingResultSigFigPipe, BtnGroupRadioInputComponent]
+    selector: "project-model-results",
+    templateUrl: "./project-model-results.component.html",
+    styleUrls: ["./project-model-results.component.scss"],
+    imports: [FormsModule, FieldDefinitionComponent, DecimalPipe, NeptuneModelingResultSigFigPipe, BtnGroupRadioInputComponent],
 })
-export class ModelResultsComponent implements OnInit {
+export class ProjectModelResultsComponent implements OnInit {
     public ModeledPerformanceDisplayTypeEnum = ModeledPerformanceDisplayTypeEnum;
     public activeID = ModeledPerformanceDisplayTypeEnum.Total;
     public modelingSelectListOptions: { TreatmentBMPID: number; TreatmentBMPName: string }[] = [];

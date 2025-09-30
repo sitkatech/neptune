@@ -14,7 +14,7 @@ import { ProjectService } from "src/app/shared/generated/api/project.service";
 import { ProjectNetworkSolveHistoryStatusTypeEnum } from "src/app/shared/generated/enum/project-network-solve-history-status-type-enum";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
 import { GrantScoresComponent } from "src/app/pages/planning-module/projects/grant-scores/grant-scores.component";
-import { ModelResultsComponent } from "src/app/pages/planning-module/projects/model-results/model-results.component";
+import { ProjectModelResultsComponent } from "src/app/pages/planning-module/projects/project-model-results/project-model-results.component";
 import { FieldDefinitionComponent } from "src/app/shared/components/field-definition/field-definition.component";
 import { AsyncPipe } from "@angular/common";
 import { CustomRichTextComponent } from "src/app/shared/components/custom-rich-text/custom-rich-text.component";
@@ -37,7 +37,7 @@ import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet
         CustomRichTextComponent,
         AsyncPipe,
         FieldDefinitionComponent,
-        ModelResultsComponent,
+        ProjectModelResultsComponent,
         GrantScoresComponent,
         PageHeaderComponent,
         WorkflowBodyComponent,
