@@ -6,24 +6,20 @@ import { DelineationUpsertDto } from "src/app/shared/generated/model/delineation
 import { ProjectLoadReducingResultDto } from "src/app/shared/generated/model/project-load-reducing-result-dto";
 import { ProjectNetworkSolveHistorySimpleDto } from "src/app/shared/generated/model/project-network-solve-history-simple-dto";
 import { TreatmentBMPHRUCharacteristicsSummarySimpleDto } from "src/app/shared/generated/model/treatment-bmphru-characteristics-summary-simple-dto";
-import { NeptuneModelingResultSigFigPipe } from "src/app/shared/pipes/neptune-modeling-result-sig-fig.pipe";
-import { FieldDefinitionComponent } from "src/app/shared/components/field-definition/field-definition.component";
-import { FormsModule } from "@angular/forms";
-import { DecimalPipe } from "@angular/common";
+import { FormsModule, ReactiveFormsModule, FormControl } from "@angular/forms";
 import { TreatmentBMPDisplayDto } from "src/app/shared/generated/model/treatment-bmp-display-dto";
-import { BtnGroupRadioInputComponent } from "src/app/shared/components/inputs/btn-group-radio-input/btn-group-radio-input.component";
+import { ModelResultsComponent } from "src/app/shared/components/model-results/model-results.component";
 
 @Component({
     selector: "project-model-results",
     templateUrl: "./project-model-results.component.html",
     styleUrls: ["./project-model-results.component.scss"],
-    imports: [FormsModule, FieldDefinitionComponent, DecimalPipe, NeptuneModelingResultSigFigPipe, BtnGroupRadioInputComponent],
+    imports: [FormsModule, ReactiveFormsModule, ModelResultsComponent],
 })
 export class ProjectModelResultsComponent implements OnInit {
-    public ModeledPerformanceDisplayTypeEnum = ModeledPerformanceDisplayTypeEnum;
-    public activeID = ModeledPerformanceDisplayTypeEnum.Total;
     public modelingSelectListOptions: { TreatmentBMPID: number; TreatmentBMPName: string }[] = [];
-    public treatmentBMPIDForSelectedProjectLoadReducingResult = 0;
+    public treatmentBMPIDForSelectedProjectLoadReducingResult: number = -1;
+    public treatmentBMPIDControl = new FormControl<number>(-1);
     public projectLoadReducingResults: Array<ProjectLoadReducingResultDto>;
     public selectedProjectLoadReducingResult: ProjectLoadReducingResultDto;
     public treatmentBMPHRUCharacteristicSummaries: Array<TreatmentBMPHRUCharacteristicsSummarySimpleDto>;
@@ -40,13 +36,6 @@ export class ProjectModelResultsComponent implements OnInit {
     @Input("delineations") delineations: Array<DelineationUpsertDto> = [];
     @Input("projectID") projectID: number;
 
-    public activeTab: string = "Total";
-    public tabs = [
-        { label: "Total", value: "Total" },
-        { label: "Dry", value: "Dry" },
-        { label: "Wet", value: "Wet" },
-    ];
-
     constructor(private projectService: ProjectService) {}
 
     ngOnInit(): void {
@@ -62,22 +51,22 @@ export class ProjectModelResultsComponent implements OnInit {
                 this.projectLoadReducingResults = modeledResults;
                 this.treatmentBMPHRUCharacteristicSummaries = treatmentBMPHRUCharacteristicSummaries;
                 this.populateModeledResultsOptions();
+                // Set initial value for control
+                this.treatmentBMPIDControl.setValue(-1);
                 this.updateSelectedProjectLoadReducingResult();
             });
         }
-    }
-
-    public setActiveTab(event) {
-        this.activeTab = event;
-        if (this.activeTab === "Total") {
-        } else if (this.activeTab === "Dry") {
-        } else if (this.activeTab === "Wet") {
-        }
+        // Subscribe to control changes
+        this.treatmentBMPIDControl.valueChanges.subscribe((value) => {
+            // Always parse as integer to guarantee numeric type
+            this.treatmentBMPIDForSelectedProjectLoadReducingResult = typeof value === "string" ? parseInt(value, 10) : value;
+            this.updateSelectedProjectLoadReducingResult();
+        });
     }
 
     populateModeledResultsOptions() {
         var tempOptions = [];
-        tempOptions.push({ TreatmentBMPID: 0, TreatmentBMPName: "All Treatment BMPs" });
+        tempOptions.push({ TreatmentBMPID: -1, TreatmentBMPName: "All Treatment BMPs" });
         this.projectLoadReducingResults.forEach((x) => {
             var treatmentBMP = this.treatmentBMPs.find((y) => y.TreatmentBMPID == x.TreatmentBMPID);
             tempOptions.push({ TreatmentBMPID: treatmentBMP.TreatmentBMPID, TreatmentBMPName: treatmentBMP.TreatmentBMPName });
@@ -86,7 +75,7 @@ export class ProjectModelResultsComponent implements OnInit {
     }
 
     updateSelectedProjectLoadReducingResult() {
-        if (this.treatmentBMPIDForSelectedProjectLoadReducingResult != 0) {
+        if (this.treatmentBMPIDForSelectedProjectLoadReducingResult > 0) {
             this.selectedProjectLoadReducingResult = this.projectLoadReducingResults.find((x) => x.TreatmentBMPID == this.treatmentBMPIDForSelectedProjectLoadReducingResult);
             this.selectedTreatmentBMPHRUCharacteristicSummaries = this.hruCharacteristicsGroupByLandUse(
                 this.treatmentBMPHRUCharacteristicSummaries.filter((x) => x.TreatmentBMPID == this.treatmentBMPIDForSelectedProjectLoadReducingResult)
@@ -95,6 +84,7 @@ export class ProjectModelResultsComponent implements OnInit {
             return;
         }
 
+        // -1 means 'All Treatment BMPs'
         this.selectedProjectLoadReducingResult = new ProjectLoadReducingResultDto();
         //We get the property names of the first one so we have a fully populated object because Typescript doesn't always populate the keys which is VERY annoying
         if (this.projectLoadReducingResults.length > 0) {
