@@ -54,7 +54,6 @@
         "font-awesome": "^4.7.0",
         "leaflet": "^1.9.4",
         "leaflet-arrowheads": "1.2.3",
-        "leaflet-draw": "^1.0.4",
         "leaflet-geometryutil": "0.9.3",
         "leaflet-gesture-handling": "^1.2.2",
         "leaflet.fullscreen": "^4.0.0",

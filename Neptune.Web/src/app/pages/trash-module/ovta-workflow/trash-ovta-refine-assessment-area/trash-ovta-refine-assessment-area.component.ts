@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { Observable, switchMap, tap } from "rxjs";
 import { NeptuneMapInitEvent, NeptuneMapComponent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
 import { OnlandVisualTrashAssessmentService } from "src/app/shared/generated/api/onland-visual-trash-assessment.service";
-import "leaflet-draw";
+import "@geoman-io/leaflet-geoman-free";
 import * as L from "leaflet";
 import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
 import { AlertDisplayComponent } from "../../../../shared/components/alert-display/alert-display.component";
@@ -20,6 +20,7 @@ import { ParcelLayerComponent } from "../../../../shared/components/leaflet/laye
 import { TransectLineLayerComponent } from "src/app/shared/components/leaflet/layers/transect-line-layer/transect-line-layer.component";
 import { IFeature, OnlandVisualTrashAssessmentDetailDto, OnlandVisualTrashAssessmentRefineAreaDto } from "src/app/shared/generated/model/models";
 import { WfsService } from "src/app/shared/services/wfs.service";
+import { IconComponent } from "src/app/shared/components/icon/icon.component";
 
 @Component({
     selector: "trash-ovta-refine-assessment-area",
@@ -33,6 +34,7 @@ import { WfsService } from "src/app/shared/services/wfs.service";
         LandUseBlockLayerComponent,
         ParcelLayerComponent,
         TransectLineLayerComponent,
+        IconComponent,
     ],
     templateUrl: "./trash-ovta-refine-assessment-area.component.html",
     styleUrl: "./trash-ovta-refine-assessment-area.component.scss",
@@ -51,8 +53,7 @@ export class TrashOvtaRefineAssessmentAreaComponent {
     public bounds: any;
     public isLoadingSubmit: boolean = false;
 
-    public drawnItems: L.FeatureGroup;
-    public drawControl: L.Control;
+    // Geoman does not use drawControl or drawnItems
     public isPerformingDrawAction: boolean = false;
     public layer: L.FeatureGroup = new L.FeatureGroup();
 
@@ -61,27 +62,6 @@ export class TrashOvtaRefineAssessmentAreaComponent {
         fillOpacity: 0.2,
         opacity: 0,
     };
-
-    // private defaultDrawControlSpec: L.Control.DrawConstructorOptions = {
-    //     polyline: false,
-    //     rectangle: false,
-    //     circle: false,
-    //     marker: false,
-    //     circlemarker: false,
-    //     polygon: {
-    //         allowIntersection: true, // Restricts shapes to simple polygons
-    //     },
-    // };
-    // private defaultEditControlSpec: L.Control.DrawConstructorOptions = {
-    //     featureGroup: this.layer,
-    //     remove: true,
-    //     edit: {
-    //         featureGroup: this.layer,
-    //     },
-    //     poly: {
-    //         allowIntersection: true, // Restricts shapes to simple polygons
-    //     },
-    // };
 
     constructor(
         private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService,
@@ -122,7 +102,7 @@ export class TrashOvtaRefineAssessmentAreaComponent {
         this.layer.eachLayer((layer: L.Layer & { toGeoJSON: () => GeoJSON.Feature }) => {
             onlandVisualTrashAssessmentRefineArea.GeometryAsGeoJson = JSON.stringify(layer.toGeoJSON());
         });
-
+        debugger;
         this.onlandVisualTrashAssessmentService
             .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDRefineAreaPost(this.onlandVisualTrashAssessmentID, onlandVisualTrashAssessmentRefineArea)
             .subscribe(() => {
@@ -136,57 +116,93 @@ export class TrashOvtaRefineAssessmentAreaComponent {
             });
     }
 
-    // public addOrRemoveDrawControl(turnOn: boolean) {
-    //     if (turnOn) {
-    //         var drawOptions = {
-    //             draw: Object.assign({}, this.defaultDrawControlSpec),
-    //             edit: Object.assign({}, this.defaultEditControlSpec),
-    //         };
-    //         this.drawControl = new L.Control.Draw(drawOptions);
-    //         this.map.addControl(this.drawControl);
-    //         return;
-    //     }
-    //     this.drawControl.remove();
-    // }
-
     public setControl(): void {
-        // L.EditToolbar.Delete.include({
-        //     removeAllLayers: false,
-        // });
-        // this.map
-        //     .on(L.Draw.Event.CREATED, (event) => {
-        //         this.isPerformingDrawAction = false;
-        //         const layer = (event as L.DrawEvents.Created).layer;
-        //         this.layer.addLayer(layer);
-        //         this.selectFeatureImpl();
-        //     })
-        //     .on(L.Draw.Event.EDITED, (event) => {
-        //         this.isPerformingDrawAction = false;
-        //         const layers = (event as L.DrawEvents.Edited).layers;
-        //         this.selectFeatureImpl();
-        //     })
-        //     .on(L.Draw.Event.DELETED, (event) => {
-        //         this.isPerformingDrawAction = false;
-        //         const layers = (event as L.DrawEvents.Deleted).layers;
-        //         this.selectFeatureImpl();
-        //     })
-        //     .on(L.Draw.Event.DRAWSTART, () => {})
-        //     .on(L.Draw.Event.TOOLBAROPENED, () => {
-        //         this.isPerformingDrawAction = true;
-        //     })
-        //     .on(L.Draw.Event.TOOLBARCLOSED, () => {
-        //         this.isPerformingDrawAction = false;
-        //     });
-        // this.addOrRemoveDrawControl(true);
+        this.map
+            .on("pm:create", (event: { shape: string; layer: L.Polygon & { toGeoJSON: () => GeoJSON.Feature } }) => {
+                this.isPerformingDrawAction = false;
+                const layer = event.layer;
+                this.layer.clearLayers();
+                this.layer.addLayer(layer);
+                this.selectFeatureImpl();
+            })
+            .on("pm:globaleditmodetoggled", (e: any) => {
+                if (e.enabled) {
+                    return;
+                }
+                // Edit mode exited, sync geometry
+                this.syncGeometryFromLayer();
+                this.selectFeatureImpl();
+            })
+            .on("pm:globalremovalmodetoggled", (e: any) => {
+                if (e.enabled) {
+                    // Remove geometry
+                    this.layer.clearLayers();
+                    this.syncGeometryFromLayer();
+                    this.map.pm.toggleGlobalRemovalMode();
+                    return;
+                }
+
+                this.syncGeometryFromLayer();
+                this.selectFeatureImpl();
+            });
+        this.addOrRemoveGeomanControl(true);
+    }
+
+    public addOrRemoveGeomanControl(turnOn: boolean) {
+        if (turnOn) {
+            const hasPolygon = this.layer.getLayers().length > 0;
+            this.map.pm.addControls({
+                position: "topleft",
+                drawMarker: false,
+                drawText: false,
+                drawCircleMarker: false,
+                drawPolyline: false,
+                drawRectangle: false,
+                drawPolygon: !hasPolygon,
+                drawCircle: false,
+                editMode: hasPolygon,
+                removalMode: hasPolygon,
+                cutPolygon: false,
+                dragMode: false,
+                rotateMode: false,
+                snappingOption: true,
+                showCancelButton: true,
+            });
+            this.map.pm.setGlobalOptions({ allowSelfIntersection: false });
+            this.map.pm.setLang(
+                "en",
+                {
+                    buttonTitles: {
+                        drawPolyButton: "Add Assessment Area",
+                        editButton: "Edit Assessment Area",
+                        deleteButton: "Delete Assessment Area",
+                    },
+                },
+                "en"
+            );
+            return;
+        }
+        this.map.pm.removeControls();
+    }
+
+    public syncGeometryFromLayer() {
+        // Sync the geometry from the layer to the DTO
+        if (this.layer.getLayers().length > 0) {
+            const layer = this.layer.getLayers()[0] as L.Layer & { toGeoJSON: () => GeoJSON.Feature };
+            // Save geometry to DTO (if needed)
+            // This can be extended if DTO is stored in component
+        }
+
+        // No geometry present
     }
 
     public selectFeatureImpl() {
         if (this.isPerformingDrawAction) {
             return;
         }
-        this.map.removeControl(this.drawControl);
+        this.map.pm.removeControls();
         this.layer.setStyle(this.defaultStyle).bringToFront();
-        // this.addOrRemoveDrawControl(true);
+        this.addOrRemoveGeomanControl(true);
     }
 
     public addFeatureCollectionToFeatureGroup(featureCollection: any, featureGroup: L.FeatureGroup) {
