@@ -4,7 +4,7 @@ import { Router } from "@angular/router";
 import { Input } from "@angular/core";
 import L, { PM } from "leaflet";
 import "@geoman-io/leaflet-geoman-free";
-import { forkJoin, Observable, switchMap } from "rxjs";
+import { forkJoin, Observable } from "rxjs";
 import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto";
 import { DelineationUpsertDto } from "src/app/shared/generated/model/delineation-upsert-dto";
 import { environment } from "src/environments/environment";
