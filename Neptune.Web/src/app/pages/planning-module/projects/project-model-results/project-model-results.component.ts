@@ -8,13 +8,16 @@ import { ProjectNetworkSolveHistorySimpleDto } from "src/app/shared/generated/mo
 import { TreatmentBMPHRUCharacteristicsSummarySimpleDto } from "src/app/shared/generated/model/treatment-bmphru-characteristics-summary-simple-dto";
 import { FormsModule, ReactiveFormsModule, FormControl } from "@angular/forms";
 import { TreatmentBMPDisplayDto } from "src/app/shared/generated/model/treatment-bmp-display-dto";
-import { ModelResultsComponent } from "src/app/shared/components/model-results/model-results.component";
+import { ModeledBmpPerformanceComponent } from "src/app/shared/components/modeled-bmp-performance/modeled-bmp-performance.component";
+import { LandUseTableComponent } from "src/app/shared/components/land-use-table/land-use-table.component";
+import { FieldDefinitionComponent } from "src/app/shared/components/field-definition/field-definition.component";
+import { DecimalPipe } from "@angular/common";
 
 @Component({
     selector: "project-model-results",
     templateUrl: "./project-model-results.component.html",
     styleUrls: ["./project-model-results.component.scss"],
-    imports: [FormsModule, ReactiveFormsModule, ModelResultsComponent],
+    imports: [FormsModule, ReactiveFormsModule, DecimalPipe, ModeledBmpPerformanceComponent, LandUseTableComponent, FieldDefinitionComponent],
 })
 export class ProjectModelResultsComponent implements OnInit {
     public modelingSelectListOptions: { TreatmentBMPID: number; TreatmentBMPName: string }[] = [];
