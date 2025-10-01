@@ -41,16 +41,10 @@ namespace Neptune.Models.DataTransferObjects
 
         // Modeling/Parameterization
         public bool? IsFullyParameterized { get; set; }
-        public bool? HasModelingAttributes { get; set; }
         public vTreatmentBMPModelingAttributeDto? TreatmentBMPModelingAttribute { get; set; }
-
-        // HRU Characteristics
-        public object? HRUCharacteristics { get; set; }
-        public object? ModeledPerformance { get; set; }
 
         // Related Entities
         public bool? OtherTreatmentBmpsExistInSubbasin { get; set; }
-        public List<CustomAttributeUpsertDto>? CustomAttributes { get; set; }
         public DelineationDto? Delineation { get; set; }
         public TreatmentBMPDto? UpstreamBMP { get; set; }
         public bool? IsUpstreamestBMPAnalyzedInModelingModule { get; set; }

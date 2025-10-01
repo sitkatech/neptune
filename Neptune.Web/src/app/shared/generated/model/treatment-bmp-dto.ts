@@ -12,7 +12,6 @@ import { WaterQualityManagementPlanDto } from './water-quality-management-plan-d
 import { WatershedDto } from './watershed-dto';
 import { RegionalSubbasinRevisionRequestDto } from './regional-subbasin-revision-request-dto';
 import { TreatmentBMPAssessmentDto } from './treatment-bmp-assessment-dto';
-import { CustomAttributeUpsertDto } from './custom-attribute-upsert-dto';
 import { SizingBasisTypeDto } from './sizing-basis-type-dto';
 import { MaintenanceRecordDto } from './maintenance-record-dto';
 import { OrganizationDto } from './organization-dto';
@@ -62,12 +61,8 @@ export class TreatmentBMPDto {
     RegionalSubbasinID?: number | null;
     LastNereidLogID?: number | null;
     IsFullyParameterized?: boolean | null;
-    HasModelingAttributes?: boolean | null;
     TreatmentBMPModelingAttribute?: VTreatmentBMPModelingAttributeDto;
-    HRUCharacteristics?: any | null;
-    ModeledPerformance?: any | null;
     OtherTreatmentBmpsExistInSubbasin?: boolean | null;
-    CustomAttributes?: Array<CustomAttributeUpsertDto> | null;
     Delineation?: DelineationDto;
     UpstreamBMP?: TreatmentBMPDto;
     IsUpstreamestBMPAnalyzedInModelingModule?: boolean | null;
@@ -128,12 +123,8 @@ export interface TreatmentBMPDtoForm {
     RegionalSubbasinID?: FormControl<number>;
     LastNereidLogID?: FormControl<number>;
     IsFullyParameterized?: FormControl<boolean>;
-    HasModelingAttributes?: FormControl<boolean>;
     TreatmentBMPModelingAttribute?: FormControl<VTreatmentBMPModelingAttributeDto>;
-    HRUCharacteristics?: FormControl<any>;
-    ModeledPerformance?: FormControl<any>;
     OtherTreatmentBmpsExistInSubbasin?: FormControl<boolean>;
-    CustomAttributes?: FormControl<Array<CustomAttributeUpsertDto>>;
     Delineation?: FormControl<DelineationDto>;
     UpstreamBMP?: FormControl<TreatmentBMPDto>;
     IsUpstreamestBMPAnalyzedInModelingModule?: FormControl<boolean>;
@@ -488,16 +479,6 @@ export class TreatmentBMPDtoFormControls {
             ],
         }
     );
-    public static HasModelingAttributes = (value: FormControlState<boolean> | boolean = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<boolean>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
     public static TreatmentBMPModelingAttribute = (value: FormControlState<VTreatmentBMPModelingAttributeDto> | VTreatmentBMPModelingAttributeDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<VTreatmentBMPModelingAttributeDto>(
         value,
         formControlOptions ?? 
@@ -508,37 +489,7 @@ export class TreatmentBMPDtoFormControls {
             ],
         }
     );
-    public static HRUCharacteristics = (value: FormControlState<any> | any = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<any>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static ModeledPerformance = (value: FormControlState<any> | any = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<any>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
     public static OtherTreatmentBmpsExistInSubbasin = (value: FormControlState<boolean> | boolean = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<boolean>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static CustomAttributes = (value: FormControlState<Array<CustomAttributeUpsertDto>> | Array<CustomAttributeUpsertDto> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<CustomAttributeUpsertDto>>(
         value,
         formControlOptions ?? 
         {

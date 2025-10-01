@@ -90,34 +90,16 @@
                     </dl>
                 </div>
             </div>
-            <!-- Model Results Panel (Angular, styled to match template) -->
-            @if (isAnalyzedInModelingModule) {
-            <div class="card mt-3">
-                <div class="card-header">
-                    <span class="card-title">Modeling Attributes</span>
-                    <span class="card-actions">
-                        @if (currentPersonCanManage && customModelingAttributes?.length) {
-                        <a [routerLink]="getEditLink(treatmentBMP)" class="btn btn-link"><i class="icon-edit"></i> Edit</a>
-                        }
-                    </span>
-                </div>
-                <div class="card-body">
-                    @if (!customModelingAttributes?.length) {
-                    <p class="systemText">This type of treatment BMP does not have any Modeling Attributes</p>
-                    } @else {
-                    <dl class="grid-12">
-                        <dt class="g-col-5">Watershed</dt>
-                        <dd class="g-col-7">{{ treatmentBMP.Watershed?.WatershedName }}</dd>
-                        <!-- TODO: Lookup and display attribute name/description by CustomAttributeTypeID -->
-                        @for (attr of customModelingAttributes; track $index) {
-                        <dt class="g-col-5">Custom Attribute {{ $index + 1 }}</dt>
-                        <dd class="g-col-7">{{ attr.CustomAttributeValueWithUnits }}</dd>
-                        }
-                    </dl>
-                    }
-                </div>
-            </div>
-
+            @if(treatmentBMPTypeCustomAttributeTypes$ | async; as treatmentBMPTypeCustomAttributeTypes) { @if(customAttributes$ | async; as customAttributes) {
+            @if(hasModelingAttributes) {
+            <!-- Modeling Attributes Panel -->
+            <custom-attributes-display
+                [canManage]="currentPersonCanManage"
+                [editUrl]="editTreatmentBMPModelingAttributesUrl"
+                [isAdmin]="isSitkaAdmin"
+                [customAttributeTypePurposeEnum]="CustomAttributeTypePurposeEnum.Modeling"
+                [treatmentBMPTypeCustomAttributeTypes]="treatmentBMPTypeCustomAttributeTypes"
+                [customAttributes]="customAttributes"></custom-attributes-display>
             <div class="card mt-3">
                 <div class="card-header">
                     <span class="card-title">Modeled BMP Performance</span>
@@ -141,32 +123,15 @@
                 </div>
             </div>
             } @if(!isAnonymousOrUnassigned){
-            <!-- todo: need to implement Other Design Attributes -->
-            <div class="card mt-3">
-                <div class="card-header">
-                    <span class="card-title">Other Design Attributes</span>
-                    <span class="card-actions">
-                        @if (currentPersonCanManage && customModelingAttributes?.length) {
-                        <a [routerLink]="customModelingAttributes" class="btn btn-link"><i class="icon-edit"></i> Edit</a>
-                        }
-                    </span>
-                </div>
-                <div class="card-body">
-                    @if (!customModelingAttributes?.length) {
-                    <p class="systemText">This type of treatment BMP does not have any Other Design Attributes</p>
-                    } @else {
-                    <dl class="grid-12">
-                        @for (attr of customModelingAttributes; track $index) {
-                        <dt class="g-col-5">
-                            {{ attr.CustomAttributeTypeName }}<span class="help-block extra-small">{{ attr.CustomAttributeTypeDescription }}</span>
-                        </dt>
-                        <dd class="g-col-7">{{ attr.CustomAttributeValueWithUnits }}</dd>
-                        }
-                    </dl>
-                    }
-                </div>
-            </div>
-            }
+            <!-- Other Design Attributes Panel -->
+            <custom-attributes-display
+                [canManage]="currentPersonCanManage"
+                [editUrl]="editTreatmentBMPOtherDesignAttributesUrl"
+                [isAdmin]="isSitkaAdmin"
+                [customAttributeTypePurposeEnum]="CustomAttributeTypePurposeEnum.OtherDesignAttributes"
+                [treatmentBMPTypeCustomAttributeTypes]="treatmentBMPTypeCustomAttributeTypes"
+                [customAttributes]="customAttributes"></custom-attributes-display>
+            } } }
         </div>
 
         <!-- Map and Images -->
@@ -307,6 +272,98 @@
             </div>
             }
         </div>
+
+        <!-- more content can be added here -->
+        <!-- HRU Characteristics (Sitka Admin only) -->
+        @if (isSitkaAdmin && isAnalyzedInModelingModule) {
+        <div class="card mt-3">
+            <div class="card-header">
+                <span class="card-title">HRU Characteristics (Sitka Admin only)</span>
+            </div>
+            <div class="card-body">
+                <!-- TODO: Replace with actual grid component or table for HRU characteristics -->
+                <p class="systemText">[HRU Characteristics Grid goes here]</p>
+            </div>
+        </div>
+        }
+
+        <!-- Field Visits -->
+        <div class="card mt-3">
+            <div class="card-header">
+                <span class="card-title">Field Visits</span>
+                @if (currentPersonCanManage) {
+                <span class="card-actions">
+                    <!-- TODO: Implement modal dialog for Begin Field Visit -->
+                    <button class="btn btn-neptune"><span class="icon-plus"></span> Begin Field Visit</button>
+                </span>
+                }
+            </div>
+            <div class="card-body">
+                <neptune-grid
+                    [rowData]="fieldVisitRowData"
+                    [columnDefs]="fieldVisitColumnDefs"
+                    [pagination]="true"
+                    [height]="'400px'"
+                    [rowSelection]="'single'"
+                    [downloadFileName]="'FieldVisits'"></neptune-grid>
+            </div>
+        </div>
+
+        <!-- Funding Events -->
+        <div class="card mt-3">
+            <div class="card-header">
+                <span class="card-title">Funding Events</span>
+                @if (currentPersonCanManage) {
+                <span class="card-actions">
+                    <!-- TODO: Implement modal dialog for New Funding Event -->
+                    <button class="btn btn-neptune"><span class="icon-plus"></span> New Funding Event</button>
+                </span>
+                }
+            </div>
+            <div class="card-body" style="max-height: 800px; overflow: auto">
+                <!-- TODO: Replace with actual funding events table and controls -->
+                <p class="systemText">[Funding Events Table goes here]</p>
+            </div>
+        </div>
+
+        <!-- Benchmark & Threshold Values -->
+        <div class="card mt-3">
+            <div class="card-header">
+                <span class="card-title">Benchmark &amp; Threshold Values</span>
+                <span class="card-actions">
+                    @if (canEditBenchmarkAndThresholds) {
+                    <a [routerLink]="addBenchmarkAndThresholdUrl"><span class="icon-edit"></span></a>
+                    }
+                </span>
+            </div>
+            <div class="card-body">
+                @if (!hasSettableBenchmarkAndThresholdValues) {
+                <p class="systemText">This type of treatment BMP does not have settable benchmark and threshold values</p>
+                } @else {
+                <!-- TODO: Replace with actual table for benchmark and threshold values -->
+                <p class="systemText">[Benchmark & Threshold Table goes here]</p>
+                }
+            </div>
+        </div>
+
+        <!-- Documents -->
+        @if (!isAnonymousOrUnassigned) {
+        <div class="card mt-3">
+            <div class="card-header">
+                <span class="card-title">Documents</span>
+                <span class="card-actions">
+                    @if (currentPersonCanManage) {
+                    <!-- TODO: Implement modal dialog for Upload New Document -->
+                    <button class="btn btn-neptune"><span class="icon-plus"></span> Upload New Document</button>
+                    }
+                </span>
+            </div>
+            <div class="card-body">
+                <!-- TODO: Replace with actual documents list/table -->
+                <p class="systemText">[Documents List goes here]</p>
+            </div>
+        </div>
+        }
     </div>
 
     }

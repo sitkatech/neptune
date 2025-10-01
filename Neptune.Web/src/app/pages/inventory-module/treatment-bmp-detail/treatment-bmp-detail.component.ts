@@ -2,13 +2,14 @@ import { Component, OnInit, ViewChild, TemplateRef, Input } from "@angular/core"
 import { Router, RouterLink } from "@angular/router";
 import { DatePipe, AsyncPipe, CommonModule } from "@angular/common";
 import { Observable } from "rxjs";
-import { tap } from "rxjs/operators";
+import { switchMap, tap } from "rxjs/operators";
 import { PageHeaderComponent } from "src/app/shared/components/page-header/page-header.component";
 import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
 import * as L from "leaflet";
 import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
 import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.service";
 import { TreatmentBMPImageByTreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp-image-by-treatment-bmp.service";
+import { TreatmentBMPTypeCustomAttributeTypeService } from "src/app/shared/generated/api/treatment-bmp-type-custom-attribute-type.service";
 import { TreatmentBMPDto } from "src/app/shared/generated/model/treatment-bmp-dto";
 import { FieldDefinitionComponent } from "src/app/shared/components/field-definition/field-definition.component";
 import { NeptuneMapComponent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
@@ -22,11 +23,15 @@ import { TreatmentBMPLifespanTypeEnum } from "src/app/shared/generated/enum/trea
 import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto";
 import { LoadingDirective } from "src/app/shared/directives/loading.directive";
 import { ImageCarouselComponent } from "src/app/shared/components/image-carousel/image-carousel.component";
-import { environment } from "src/environments/environment";
 import { ButtonLoadingDirective } from "src/app/shared/directives/button-loading.directive";
 import { ModeledBmpPerformanceComponent } from "src/app/shared/components/modeled-bmp-performance/modeled-bmp-performance.component";
 import { WaterQualityManagementPlanModelingApproachEnum } from "src/app/shared/generated/enum/water-quality-management-plan-modeling-approach-enum";
 import { LandUseTableComponent } from "src/app/shared/components/land-use-table/land-use-table.component";
+import { NeptuneGridComponent } from "src/app/shared/components/neptune-grid/neptune-grid.component";
+import { CustomAttributesDisplayComponent } from "src/app/shared/components/custom-attributes-display/custom-attributes-display.component";
+import { CustomAttributeDto, TreatmentBMPTypeCustomAttributeTypeDto } from "src/app/shared/generated/model/models";
+import { CustomAttributeTypePurposeEnum, CustomAttributeTypePurposes } from "src/app/shared/generated/enum/custom-attribute-type-purpose-enum";
+import { TreatmentBMPTypeService } from "src/app/shared/generated/api/treatment-bmp-type.service";
 
 @Component({
     selector: "treatment-bmp-detail",
@@ -53,10 +58,20 @@ import { LandUseTableComponent } from "src/app/shared/components/land-use-table/
         ButtonLoadingDirective,
         ModeledBmpPerformanceComponent,
         LandUseTableComponent,
+        NeptuneGridComponent,
+        CustomAttributesDisplayComponent,
     ],
 })
 export class TreatmentBmpDetailComponent implements OnInit {
-    customModelingAttributes: any[] = [];
+    /**
+     * Stub: Edit URL for Modeling Attributes
+     */
+    editTreatmentBMPModelingAttributesUrl = "";
+
+    /**
+     * Stub: Edit URL for Other Design Attributes
+     */
+    editTreatmentBMPOtherDesignAttributesUrl = "";
     // Carousel state
     currentImageIndex = 0;
 
@@ -76,6 +91,8 @@ export class TreatmentBmpDetailComponent implements OnInit {
 
     // Observables for async pipe
     treatmentBMP$!: Observable<TreatmentBMPDto>;
+    customAttributes$: Observable<CustomAttributeDto[]>;
+    treatmentBMPTypeCustomAttributeTypes$: Observable<TreatmentBMPTypeCustomAttributeTypeDto[]>;
     attachments$!: Observable<any[]>; // TODO: Replace 'any' with ProjectDocumentDto
     treatmentBMPImages$!: Observable<any[]>;
     imagesLoading = true;
@@ -97,6 +114,7 @@ export class TreatmentBmpDetailComponent implements OnInit {
     upstreamBMPDetailUrl = "";
     delineationMapUrl = "";
     editUpstreamBMPUrl = "";
+    hasModelingAttributes = false;
     // TODO: Add more properties as needed
 
     public TreatmentBMPLifespanTypeEnum = TreatmentBMPLifespanTypeEnum;
@@ -106,8 +124,14 @@ export class TreatmentBmpDetailComponent implements OnInit {
      */
     hruCharacteristicsSummaries: any[] = [];
     public WaterQualityManagementPlanModelingApproachEnum = WaterQualityManagementPlanModelingApproachEnum;
+    public CustomAttributeTypePurposeEnum = CustomAttributeTypePurposeEnum;
 
-    constructor(private router: Router, private treatmentBMPService: TreatmentBMPService, private treatmentBMPImageByTreatmentBMPService: TreatmentBMPImageByTreatmentBMPService) {}
+    constructor(
+        private router: Router,
+        private treatmentBMPService: TreatmentBMPService,
+        private treatmentBMPImageByTreatmentBMPService: TreatmentBMPImageByTreatmentBMPService,
+        private treatmentBMPTypeService: TreatmentBMPTypeService
+    ) {}
 
     ngOnInit(): void {
         // treatmentBMPID will be set via input binding from the route param (withComponentInputBinding)
@@ -122,18 +146,21 @@ export class TreatmentBmpDetailComponent implements OnInit {
                         Top: bmp.Latitude + 0.001,
                     });
                 }
-                // Extract modeling attributes from CustomAttributes
-                // TODO: Filter custom attributes by modeling purpose when mapping is available
-                if (bmp && bmp.CustomAttributes) {
-                    this.customModelingAttributes = bmp.CustomAttributes.map((attr) => ({
-                        CustomAttributeTypeName: attr.CustomAttributeTypeID,
-                        CustomAttributeTypeDescription: attr.CustomAttributeTypeID,
-                        CustomAttributeValueWithUnits: attr.CustomAttributeValues?.join(", "),
-                    }));
-                } else {
-                    this.customModelingAttributes = [];
-                }
             })
+        );
+
+        this.customAttributes$ = this.treatmentBMP$.pipe(switchMap((bmp) => this.treatmentBMPService.treatmentBmpsTreatmentBMPIDCustomAttributesGet(bmp.TreatmentBMPID)));
+
+        // Wire up async calls for custom attribute types and attributes
+        this.treatmentBMPTypeCustomAttributeTypes$ = this.treatmentBMP$.pipe(
+            switchMap((bmp) =>
+                this.treatmentBMPTypeService.treatmentBmpTypesTreatmentBMPTypeIDCustomAttributeTypesGet(bmp.TreatmentBMPTypeID).pipe(
+                    tap((attributes) => {
+                        console.log(attributes);
+                        this.hasModelingAttributes = attributes.some((attr) => attr.CustomAttributeType.CustomAttributeTypePurposeID === CustomAttributeTypePurposeEnum.Modeling);
+                    })
+                )
+            )
         );
         // Fetch images for this BMP
         this.treatmentBMPImages$ = this.treatmentBMPImageByTreatmentBMPService.treatmentBmpsTreatmentBMPIDTreatmentBmpImagesGet(this.treatmentBMPID).pipe(
@@ -155,9 +182,57 @@ export class TreatmentBmpDetailComponent implements OnInit {
         // Fetch bounding box for map display (replace with actual service if needed)
     }
 
-    public getFileResourceUrl(fileResourceGUID: string) {
-        return environment.ocStormwaterToolsBaseUrl + "/FileResource/DisplayResource/" + fileResourceGUID;
-    }
+    /**
+     * Stub: Row data for Field Visits grid
+     */
+    fieldVisitRowData: any[] = [];
+
+    /**
+     * Stub: Column definitions for Field Visits grid
+     */
+    fieldVisitColumnDefs: any[] = [
+        // Action columns (delete, view/continue)
+        { headerName: "", field: "actions", cellRenderer: "actionCellRenderer", width: 60, suppressMenu: true, sortable: false, filter: false },
+        // BMP Name (if not detail page)
+        { headerName: "BMP Name", field: "TreatmentBMPName", width: 120 },
+        {
+            headerName: "Visit Date",
+            field: "VisitDate",
+            width: 130,
+            filter: "agDateColumnFilter",
+            valueFormatter: (params) => (params.value ? new Date(params.value).toLocaleDateString() : ""),
+        },
+        { headerName: "Jurisdiction", field: "OrganizationName", width: 140 },
+        { headerName: "Water Quality Management Plan", field: "WaterQualityManagementPlanName", width: 105 },
+        { headerName: "Performed By", field: "PerformedByPersonName", width: 105 },
+        { headerName: "Field Visit Verified", field: "IsFieldVisitVerified", width: 105, valueFormatter: (params) => (params.value ? "Yes" : "No") },
+        { headerName: "Field Visit Status", field: "FieldVisitStatusDisplayName", width: 85 },
+        { headerName: "Field Visit Type", field: "FieldVisitTypeDisplayName", width: 125 },
+        { headerName: "Inventory Updated?", field: "InventoryUpdated", width: 100, valueFormatter: (params) => (params.value ? "Yes" : "No") },
+        { headerName: "Required Attributes Entered?", field: "RequiredAttributesEntered", width: 100 },
+        { headerName: "Initial Assessment?", field: "InitialAssessmentStatus", width: 95 },
+        { headerName: "Initial Assessment Score", field: "AssessmentScoreInitial", width: 95 },
+        { headerName: "Maintenance Occurred?", field: "MaintenanceOccurred", width: 95 },
+        { headerName: "Post-Maintenance Assessment?", field: "PostMaintenanceAssessmentStatus", width: 120 },
+        { headerName: "Post-Maintenance Assessment Score", field: "AssessmentScorePM", width: 95 },
+    ];
+
+    /**
+     * Stub: Whether the current user can edit benchmark and thresholds
+     */
+    canEditBenchmarkAndThresholds = false;
+
+    /**
+     * Stub: URL for adding benchmark and threshold values
+     */
+    addBenchmarkAndThresholdUrl = "";
+
+    /**
+     * Stub: Whether this BMP type has settable benchmark and threshold values
+     */
+    hasSettableBenchmarkAndThresholdValues = false;
+
+    // NOTE: TreatmentBMPTypeIsAnalyzedInModelingModule is expected on treatmentBMP DTO. If missing, add to DTO or adjust template logic.
 
     // Handler for Neptune map load event
     handleMapReady(event: any): void {

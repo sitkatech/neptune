@@ -42,9 +42,9 @@ public static class TreatmentBMPTypeCustomAttributeTypes
         return GetByID(dbContext, treatmentBMPTypeCustomAttributeTypePrimaryKey.PrimaryKeyValue);
     }
 
-    public static TreatmentBMPTypeCustomAttributeTypeDto GetByIDAsDto(NeptuneDbContext dbContext, int TreatmentBMPTypeCustomAttributeTypeID)
+    public static TreatmentBMPTypeCustomAttributeTypeDto GetByIDAsDto(NeptuneDbContext dbContext, int treatmentBMPTypeCustomAttributeTypeID)
     {
-        return GetByID(dbContext, TreatmentBMPTypeCustomAttributeTypeID).AsDto();
+        return GetByID(dbContext, treatmentBMPTypeCustomAttributeTypeID).AsDto();
     }
 
     public static List<TreatmentBMPTypeCustomAttributeType> List(NeptuneDbContext dbContext)
@@ -57,10 +57,15 @@ public static class TreatmentBMPTypeCustomAttributeTypes
         return List(dbContext).Select(x => x.AsDto()).ToList();
     }
 
-    public static List<TreatmentBMPTypeCustomAttributeTypeDto> GetByCustomAttributeTypePurposeAsDto(NeptuneDbContext dbContext, int TreatmentBMPTypeCustomAttributeTypePurposeID)
+    public static List<TreatmentBMPTypeCustomAttributeTypeDto> ListByTreatmentBMPTypeAsDto(NeptuneDbContext dbContext, int treatmentBMPTypeID)
+    {
+        return GetImpl(dbContext).AsNoTracking().Where(x => x.TreatmentBMPTypeID == treatmentBMPTypeID).ToList().Select(x => x.AsDto()).ToList();
+    }
+
+    public static List<TreatmentBMPTypeCustomAttributeTypeDto> GetByCustomAttributeTypePurposeAsDto(NeptuneDbContext dbContext, int treatmentBMPTypeCustomAttributeTypePurposeID)
     {
         return GetImpl(dbContext).AsNoTracking().Where(x =>
-                x.CustomAttributeType.CustomAttributeTypePurposeID == TreatmentBMPTypeCustomAttributeTypePurposeID)
+                x.CustomAttributeType.CustomAttributeTypePurposeID == treatmentBMPTypeCustomAttributeTypePurposeID)
             .Select(x => x.AsDto())
             .ToList();
     }

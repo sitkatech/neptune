@@ -33,6 +33,7 @@ model/coordinate-dto.ts
 model/coordinate-sequence-factory.ts
 model/coordinate-sequence.ts
 model/coordinate.ts
+model/custom-attribute-dto.ts
 model/custom-attribute-type-dto.ts
 model/custom-attribute-type-with-treatment-bmp-type-ids-dto.ts
 model/custom-attribute-upsert-dto.ts
@@ -49,6 +50,7 @@ model/file-resource-simple-dto.ts
 model/geometry-factory.ts
 model/geometry-geo-json-and-area-dto.ts
 model/geometry.ts
+model/hru-characteristic-dto.ts
 model/hydrologic-subarea-dto.ts
 model/hydromodification-applies-type-dto.ts
 model/i-attributes-table.ts

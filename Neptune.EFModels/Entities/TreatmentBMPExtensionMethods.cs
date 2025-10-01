@@ -142,8 +142,6 @@ public static class TreatmentBMPExtensionMethods
             UpstreamBMPID = treatmentBMP.UpstreamBMPID,
             RegionalSubbasinID = treatmentBMP.RegionalSubbasinID,
             LastNereidLogID = treatmentBMP.LastNereidLogID,
-            HasModelingAttributes = false,//todo: treatmentBMP.CustomAttributes?.Any(x => x.CustomAttributeType.CustomAttributeTypePurposeID == (int)CustomAttributeTypePurposeEnum.Modeling),
-            CustomAttributes = treatmentBMP.CustomAttributes?.Select(x => x.AsUpsertDto()).ToList(),
             UpstreamBMP = treatmentBMP.UpstreamBMP?.AsDto(),
             RegionalSubbasinRevisionRequests = treatmentBMP.RegionalSubbasinRevisionRequests?.Select(x => x.AsDto()).ToList(),
             Watershed = treatmentBMP.Watershed?.AsDto(),

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities;
 
@@ -52,7 +53,7 @@ public static class vHRUCharacteristics
         {
             if (!treatmentBMP.RegionalSubbasinID.HasValue)
             {
-                return new List<vHRUCharacteristic>(Enumerable.Empty<vHRUCharacteristic>());
+                return [];
             }
             var catchmentRegionalSubbasins = vRegionalSubbasinUpstreams.ListUpstreamRegionalBasinIDs(dbContext, treatmentBMP.RegionalSubbasinID.Value);
 
@@ -63,5 +64,10 @@ public static class vHRUCharacteristics
 
         return GetImpl(dbContext)
             .Where(x => x.TreatmentBMPID != null && x.TreatmentBMPID == treatmentBMP.TreatmentBMPID).ToList();
+    }
+
+    public static List<HRUCharacteristicDto> ListByTreatmentBMPAsDto(NeptuneDbContext dbContext, TreatmentBMP treatmentBMP, Delineation? delineation)
+    {
+        return ListByTreatmentBMP(dbContext, treatmentBMP, delineation).Select(x => x.AsDto()).ToList();
     }
 }

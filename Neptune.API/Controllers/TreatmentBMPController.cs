@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Neptune.API.Common;
 using Neptune.API.Services;
+using Neptune.API.Services.Attributes;
 using Neptune.API.Services.Authorization;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
@@ -9,8 +12,6 @@ using NetTopologySuite.Features;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Neptune.API.Common;
-using Neptune.API.Services.Attributes;
 
 namespace Neptune.API.Controllers
 {
@@ -135,6 +136,29 @@ namespace Neptune.API.Controllers
             }
 
             return NoContent();
+        }
+
+        [HttpGet("{treatmentBMPID}/hru-characteristics")]
+        [EntityNotFound(typeof(TreatmentBMP), "treatmentBMPID")]
+        [SitkaAdminFeature]
+        public ActionResult<List<HRUCharacteristicDto>> ListHRUCharacteristics([FromRoute] int treatmentBMPID)
+        {
+            var treatmentBMP = TreatmentBMPs.GetByID(dbContext, treatmentBMPID);
+            var treatmentBMPTree = dbContext.vTreatmentBMPUpstreams.AsNoTracking()
+                .Single(x => x.TreatmentBMPID == treatmentBMP.TreatmentBMPID);
+            var upstreamestBMP = treatmentBMPTree.UpstreamBMPID.HasValue ? TreatmentBMPs.GetByID(dbContext, treatmentBMPTree.UpstreamBMPID) : null;
+            var delineation = Delineations.GetByTreatmentBMPID(dbContext, upstreamestBMP?.TreatmentBMPID ?? treatmentBMP.TreatmentBMPID);
+            var hruCharacteristics = vHRUCharacteristics.ListByTreatmentBMPAsDto(dbContext, upstreamestBMP ?? treatmentBMP, delineation);
+            return Ok(hruCharacteristics);
+        }
+
+        [HttpGet("{treatmentBMPID}/custom-attributes")]
+        [EntityNotFound(typeof(TreatmentBMP), "treatmentBMPID")]
+        [SitkaAdminFeature]
+        public ActionResult<List<CustomAttributeDto>> ListCustomAttributes([FromRoute] int treatmentBMPID)
+        {
+            var customAttributes = CustomAttributes.ListByTreatmentBMPIDAsDto(dbContext, treatmentBMPID);
+            return Ok(customAttributes);
         }
     }
 }

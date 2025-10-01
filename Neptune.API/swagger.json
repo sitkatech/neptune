@@ -3996,6 +3996,104 @@
         }
       }
     },
+    "/treatment-bmps/{treatmentBMPID}/hru-characteristics": {
+      "get": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "parameters": [
+          {
+            "name": "treatmentBMPID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HRUCharacteristicDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HRUCharacteristicDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HRUCharacteristicDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/treatment-bmps/{treatmentBMPID}/custom-attributes": {
+      "get": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "parameters": [
+          {
+            "name": "treatmentBMPID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CustomAttributeDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CustomAttributeDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CustomAttributeDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/treatment-bmps/{treatmentBMPID}/treatment-bmp-images": {
       "get": {
         "tags": [
@@ -4260,6 +4358,55 @@
                   "type": "array",
                   "items": {
                     "$ref": "#/components/schemas/TreatmentBMPTypeWithModelingAttributesDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/treatment-bmp-types/{treatmentBMPTypeID}/custom-attribute-types": {
+      "get": {
+        "tags": [
+          "TreatmentBMPType"
+        ],
+        "parameters": [
+          {
+            "name": "treatmentBMPTypeID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPTypeCustomAttributeTypeDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPTypeCustomAttributeTypeDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPTypeCustomAttributeTypeDto"
                   }
                 }
               }
@@ -4714,6 +4861,36 @@
         "properties": {
           "Ordinates": {
             "$ref": "#/components/schemas/Ordinates"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CustomAttributeDto": {
+        "type": "object",
+        "properties": {
+          "CustomAttributeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TreatmentBMPID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TreatmentBMPTypeCustomAttributeTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TreatmentBMPTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "CustomAttributeTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "CustomAttributeValueWithUnits": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -5325,6 +5502,91 @@
       },
       "GeometryRelate": {
         "type": "object",
+        "additionalProperties": false
+      },
+      "HRUCharacteristicDto": {
+        "type": "object",
+        "properties": {
+          "HRUCharacteristicID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "LastUpdated": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "LoadGeneratingUnitID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "HRUEntity": {
+            "type": "string",
+            "nullable": true
+          },
+          "TreatmentBMPID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "TreatmentBMPName": {
+            "type": "string",
+            "nullable": true
+          },
+          "WaterQualityManagementPlanID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "WaterQualityManagementPlanName": {
+            "type": "string",
+            "nullable": true
+          },
+          "RegionalSubbasinID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "RegionalSubbasinName": {
+            "type": "string",
+            "nullable": true
+          },
+          "HydrologicSoilGroup": {
+            "type": "string",
+            "nullable": true
+          },
+          "SlopePercentage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Area": {
+            "type": "number",
+            "format": "double"
+          },
+          "ImperviousAcres": {
+            "type": "number",
+            "format": "double"
+          },
+          "HRUCharacteristicLandUseCodeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "HRUCharacteristicLandUseCodeDisplayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "BaselineImperviousAcres": {
+            "type": "number",
+            "format": "double"
+          },
+          "BaselineHRUCharacteristicLandUseCodeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "BaselineHRUCharacteristicLandUseCodeDisplayName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
         "additionalProperties": false
       },
       "HydrologicSubareaDto": {
@@ -8403,28 +8665,11 @@
             "type": "boolean",
             "nullable": true
           },
-          "HasModelingAttributes": {
-            "type": "boolean",
-            "nullable": true
-          },
           "TreatmentBMPModelingAttribute": {
             "$ref": "#/components/schemas/vTreatmentBMPModelingAttributeDto"
           },
-          "HRUCharacteristics": {
-            "nullable": true
-          },
-          "ModeledPerformance": {
-            "nullable": true
-          },
           "OtherTreatmentBmpsExistInSubbasin": {
             "type": "boolean",
-            "nullable": true
-          },
-          "CustomAttributes": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/CustomAttributeUpsertDto"
-            },
             "nullable": true
           },
           "Delineation": {
