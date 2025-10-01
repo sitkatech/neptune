@@ -23,6 +23,10 @@ import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto"
 import { LoadingDirective } from "src/app/shared/directives/loading.directive";
 import { ImageCarouselComponent } from "src/app/shared/components/image-carousel/image-carousel.component";
 import { environment } from "src/environments/environment";
+import { ButtonLoadingDirective } from "src/app/shared/directives/button-loading.directive";
+import { ModeledBmpPerformanceComponent } from "src/app/shared/components/modeled-bmp-performance/modeled-bmp-performance.component";
+import { WaterQualityManagementPlanModelingApproachEnum } from "src/app/shared/generated/enum/water-quality-management-plan-modeling-approach-enum";
+import { LandUseTableComponent } from "src/app/shared/components/land-use-table/land-use-table.component";
 
 @Component({
     selector: "treatment-bmp-detail",
@@ -46,9 +50,13 @@ import { environment } from "src/environments/environment";
         InventoriedBMPsLayerComponent,
         LoadingDirective,
         ImageCarouselComponent,
+        ButtonLoadingDirective,
+        ModeledBmpPerformanceComponent,
+        LandUseTableComponent,
     ],
 })
 export class TreatmentBmpDetailComponent implements OnInit {
+    customModelingAttributes: any[] = [];
     // Carousel state
     currentImageIndex = 0;
 
@@ -81,11 +89,23 @@ export class TreatmentBmpDetailComponent implements OnInit {
     upstreamestBMP: any = null;
     isUpstreamestBMPAnalyzedInModelingModule = false;
     currentPersonCanManage = false;
-    isAnalyzedInModelingModule = false;
+    canEditStormwaterJurisdiction = false;
+    isAnalyzedInModelingModule = true;
     isSitkaAdmin = false;
+    otherTreatmentBmpsExistInSubbasin = false;
+    upstreamestBMPDetailUrl = "";
+    upstreamBMPDetailUrl = "";
+    delineationMapUrl = "";
+    editUpstreamBMPUrl = "";
     // TODO: Add more properties as needed
 
     public TreatmentBMPLifespanTypeEnum = TreatmentBMPLifespanTypeEnum;
+    /**
+     * Stub for HRU characteristics summaries used in the land use panel template.
+     * Replace with actual data wiring when available.
+     */
+    hruCharacteristicsSummaries: any[] = [];
+    public WaterQualityManagementPlanModelingApproachEnum = WaterQualityManagementPlanModelingApproachEnum;
 
     constructor(private router: Router, private treatmentBMPService: TreatmentBMPService, private treatmentBMPImageByTreatmentBMPService: TreatmentBMPImageByTreatmentBMPService) {}
 
@@ -101,6 +121,17 @@ export class TreatmentBmpDetailComponent implements OnInit {
                         Bottom: bmp.Latitude - 0.001,
                         Top: bmp.Latitude + 0.001,
                     });
+                }
+                // Extract modeling attributes from CustomAttributes
+                // TODO: Filter custom attributes by modeling purpose when mapping is available
+                if (bmp && bmp.CustomAttributes) {
+                    this.customModelingAttributes = bmp.CustomAttributes.map((attr) => ({
+                        CustomAttributeTypeName: attr.CustomAttributeTypeID,
+                        CustomAttributeTypeDescription: attr.CustomAttributeTypeID,
+                        CustomAttributeValueWithUnits: attr.CustomAttributeValues?.join(", "),
+                    }));
+                } else {
+                    this.customModelingAttributes = [];
                 }
             })
         );
@@ -148,5 +179,11 @@ export class TreatmentBmpDetailComponent implements OnInit {
     getEditLink(treatmentBMP: any): string {
         // TODO: Return the correct edit route for this BMP
         return `/inventory/treatment-bmps/edit/${treatmentBMP.TreatmentBMPID}`;
+    }
+
+    removeUpstreamBMP(): void {
+        // Implement the logic to remove the upstream BMP association
+        // This might involve calling a service method to update the backend
+        // and then updating the local state accordingly
     }
 }
