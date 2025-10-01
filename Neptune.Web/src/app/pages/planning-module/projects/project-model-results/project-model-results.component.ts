@@ -24,11 +24,6 @@ export class ProjectModelResultsComponent implements OnInit {
     public selectedProjectLoadReducingResult: ProjectLoadReducingResultDto;
     public treatmentBMPHRUCharacteristicSummaries: Array<TreatmentBMPHRUCharacteristicsSummarySimpleDto>;
     public selectedTreatmentBMPHRUCharacteristicSummaries: Array<TreatmentBMPHRUCharacteristicsSummarySimpleDto>;
-    public selectedTreatmentBMPHRUCharacteristicSummaryTotal: TreatmentBMPHRUCharacteristicsSummarySimpleDto = {
-        LandUse: "Total",
-        Area: 0,
-        ImperviousCover: 0,
-    };
     public ProjectNetworkHistoryStatusTypeEnum = ProjectNetworkSolveHistoryStatusTypeEnum;
 
     @Input("projectNetworkSolveHistories") projectNetworkSolveHistories: ProjectNetworkSolveHistorySimpleDto[];
@@ -80,7 +75,6 @@ export class ProjectModelResultsComponent implements OnInit {
             this.selectedTreatmentBMPHRUCharacteristicSummaries = this.hruCharacteristicsGroupByLandUse(
                 this.treatmentBMPHRUCharacteristicSummaries.filter((x) => x.TreatmentBMPID == this.treatmentBMPIDForSelectedProjectLoadReducingResult)
             );
-            this.updateSelectedTreatmentBMPHRUCharacteristicSummaryTotal();
             return;
         }
 
@@ -96,7 +90,6 @@ export class ProjectModelResultsComponent implements OnInit {
         this.selectedTreatmentBMPHRUCharacteristicSummaries = this.hruCharacteristicsGroupByLandUse([
             ...new Map(this.treatmentBMPHRUCharacteristicSummaries.map((item) => [item["ProjectHRUCharacteristicID"], item])).values(),
         ]);
-        this.updateSelectedTreatmentBMPHRUCharacteristicSummaryTotal();
     }
 
     private hruCharacteristicsGroupByLandUse(
@@ -129,19 +122,6 @@ export class ProjectModelResultsComponent implements OnInit {
             }
             return 0;
         });
-    }
-
-    updateSelectedTreatmentBMPHRUCharacteristicSummaryTotal() {
-        this.selectedTreatmentBMPHRUCharacteristicSummaryTotal.Area = this.selectedTreatmentBMPHRUCharacteristicSummaries.reduce((sum, current) => sum + current.Area, 0);
-        this.selectedTreatmentBMPHRUCharacteristicSummaryTotal.ImperviousCover = this.selectedTreatmentBMPHRUCharacteristicSummaries.reduce(
-            (sum, current) => sum + current.ImperviousCover,
-            0
-        );
-    }
-
-    //Helps to prevent keyvalue pipe from trying to do sorting
-    returnZero(): number {
-        return 0;
     }
 
     getModelResultsLastCalculatedText(): string {
@@ -184,10 +164,4 @@ export class ProjectModelResultsComponent implements OnInit {
 
         return this.treatmentBMPs.filter((x) => treatmentBMPIDsForDelineationsWithDiscrepancies.includes(x.TreatmentBMPID)).map((x) => x.TreatmentBMPName);
     }
-}
-
-export enum ModeledPerformanceDisplayTypeEnum {
-    Total = "Total",
-    Dry = "Dry",
-    Wet = "Wet",
 }
