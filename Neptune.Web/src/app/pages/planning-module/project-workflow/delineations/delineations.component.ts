@@ -211,6 +211,14 @@ export class DelineationsComponent implements OnInit {
             })
             .on("pm:globaleditmodetoggled", (e: any) => {
                 if (e.enabled) {
+                    // When global edit mode is enabled, only allow editing for the selected delineation
+                    this.delineationFeatureGroup.eachLayer((layer: L.Path & { feature?: GeoJSON.Feature }) => {
+                        if (this.selectedDelineation == null || this.selectedDelineation.TreatmentBMPID != layer.feature.properties.TreatmentBMPID) {
+                            if (layer.pm) layer.pm.disable();
+                        } else {
+                            if (layer.pm) layer.pm.enable();
+                        }
+                    });
                     return;
                 }
                 // Edit mode was just exited, user is done editing
@@ -285,7 +293,7 @@ export class DelineationsComponent implements OnInit {
                 });
                 // Attach Geoman events per-layer
                 layer.on("pm:edit", (event) => {
-                    const editedLayer = event.layer as L.Polygon;
+                    const editedLayer = event.layer as L.Path & { feature?: GeoJSON.Feature; toGeoJSON: () => GeoJSON.Feature };
                     var delineationUpsertDto = this.delineations.find((x) => editedLayer.feature.properties.TreatmentBMPID == x.TreatmentBMPID);
                     // Always set delineation type to distributed when edited
                     delineationUpsertDto.DelineationTypeID = DelineationTypeEnum.Distributed;
@@ -453,7 +461,7 @@ export class DelineationsComponent implements OnInit {
     public getFullyQualifiedJSONGeometryForDelineations(delineations: DelineationUpsertDto[]) {
         //We need a fully qualified geojson string and above we are just getting the geometry
         //Possible can remove the update above if we are always going to do it here
-        this.delineationFeatureGroup.eachLayer((layer: L.Polygon) => {
+        this.delineationFeatureGroup.eachLayer((layer: L.Path & { feature?: GeoJSON.Feature; toGeoJSON: () => GeoJSON.Feature }) => {
             var delineationUpsertDto = delineations.find((x) => x.TreatmentBMPID == layer.feature.properties.TreatmentBMPID);
             delineationUpsertDto.Geometry = JSON.stringify(layer.toGeoJSON());
         });

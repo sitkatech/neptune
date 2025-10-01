@@ -146,7 +146,7 @@ export class ModeledPerformanceComponent implements OnInit {
     public initializeMap(): void {
         const delineationGeoJson = this.mapDelineationsToGeoJson(this.delineations);
         this.delineationsLayer = new L.GeoJSON(delineationGeoJson as any, {
-            onEachFeature: (feature, layer: L.Polygon) => {
+            onEachFeature: (feature, layer: L.Path & { feature?: GeoJSON.Feature }) => {
                 layer.setStyle(this.delineationDefaultStyle);
                 layer.on("click", (e) => {
                     this.selectFeatureImpl(feature.properties.TreatmentBMPID);

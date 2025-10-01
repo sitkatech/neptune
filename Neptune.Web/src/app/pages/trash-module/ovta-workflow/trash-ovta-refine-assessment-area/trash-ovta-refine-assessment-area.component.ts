@@ -99,7 +99,7 @@ export class TrashOvtaRefineAssessmentAreaComponent {
     public save(andContinue = false) {
         var onlandVisualTrashAssessmentRefineArea = new OnlandVisualTrashAssessmentRefineAreaDto();
         onlandVisualTrashAssessmentRefineArea.OnlandVisualTrashAssessmentID = this.onlandVisualTrashAssessmentID;
-        this.layer.eachLayer((layer: L.Layer & { toGeoJSON: () => GeoJSON.Feature }) => {
+        this.layer.eachLayer((layer: L.Path & { toGeoJSON: () => GeoJSON.Feature }) => {
             onlandVisualTrashAssessmentRefineArea.GeometryAsGeoJson = JSON.stringify(layer.toGeoJSON());
         });
         debugger;
@@ -118,7 +118,7 @@ export class TrashOvtaRefineAssessmentAreaComponent {
 
     public setControl(): void {
         this.map
-            .on("pm:create", (event: { shape: string; layer: L.Polygon & { toGeoJSON: () => GeoJSON.Feature } }) => {
+            .on("pm:create", (event: { shape: string; layer: L.Path & { toGeoJSON: () => GeoJSON.Feature } }) => {
                 this.isPerformingDrawAction = false;
                 const layer = event.layer;
                 this.layer.clearLayers();

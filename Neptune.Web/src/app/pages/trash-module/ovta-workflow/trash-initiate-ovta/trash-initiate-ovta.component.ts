@@ -152,7 +152,7 @@ export class TrashInitiateOvtaComponent {
                 if (response.length == 0) return;
                 this.layer = new L.GeoJSON(response as any, {
                     style: this.defaultStyle,
-                    onEachFeature: (feature, layer: L.Polygon) => {
+                    onEachFeature: (feature, layer: L.Path & { feature?: GeoJSON.Feature }) => {
                         layer.on("mouseover", (e) => {
                             layer.setStyle({ fillOpacity: 0.5 });
                         });

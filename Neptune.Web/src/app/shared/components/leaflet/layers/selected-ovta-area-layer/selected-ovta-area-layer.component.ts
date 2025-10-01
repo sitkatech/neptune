@@ -143,7 +143,7 @@ export class SelectedOvtaAreaLayerComponent extends MapLayerBase implements OnCh
             }
 
             if (layer instanceof L.GeoJSON) {
-                const geoJsonLayers = layer.getLayers() as L.Polygon[];
+                const geoJsonLayers = layer.getLayers() as (L.Path & { feature?: GeoJSON.Feature })[];
                 if (geoJsonLayers[0].feature.properties.OnlandVisualTrashAssessmentAreaID == this.selectedOVTAAreaID) {
                     layer.setStyle(this.highlightStyle);
                     if ("getBounds" in layer && typeof layer.getBounds === "function") {
