@@ -281,8 +281,14 @@
                 <span class="card-title">HRU Characteristics (Sitka Admin only)</span>
             </div>
             <div class="card-body">
-                <!-- TODO: Replace with actual grid component or table for HRU characteristics -->
-                <p class="systemText">[HRU Characteristics Grid goes here]</p>
+                <neptune-grid
+                    [rowData]="hruCharacteristics$ | async"
+                    [columnDefs]="hruCharacteristicsColumnDefs"
+                    [pagination]="true"
+                    [height]="'400px'"
+                    [rowSelection]="'single'"
+                    [downloadFileName]="'HRUCharacteristics'">
+                </neptune-grid>
             </div>
         </div>
         }

@@ -26,6 +26,9 @@ import { ImageCarouselComponent } from "src/app/shared/components/image-carousel
 import { ButtonLoadingDirective } from "src/app/shared/directives/button-loading.directive";
 import { ModeledBmpPerformanceComponent } from "src/app/shared/components/modeled-bmp-performance/modeled-bmp-performance.component";
 import { WaterQualityManagementPlanModelingApproachEnum } from "src/app/shared/generated/enum/water-quality-management-plan-modeling-approach-enum";
+import { HRUCharacteristicDto } from "src/app/shared/generated/model/hru-characteristic-dto";
+import { ColDef } from "ag-grid-community";
+import { UtilityFunctionsService } from "src/app/services/utility-functions.service";
 import { LandUseTableComponent } from "src/app/shared/components/land-use-table/land-use-table.component";
 import { NeptuneGridComponent } from "src/app/shared/components/neptune-grid/neptune-grid.component";
 import { CustomAttributesDisplayComponent } from "src/app/shared/components/custom-attributes-display/custom-attributes-display.component";
@@ -95,6 +98,8 @@ export class TreatmentBmpDetailComponent implements OnInit {
     treatmentBMPTypeCustomAttributeTypes$: Observable<TreatmentBMPTypeCustomAttributeTypeDto[]>;
     attachments$!: Observable<any[]>; // TODO: Replace 'any' with ProjectDocumentDto
     treatmentBMPImages$!: Observable<any[]>;
+    hruCharacteristics$: Observable<HRUCharacteristicDto[]>;
+    hruCharacteristicsColumnDefs: Array<ColDef>;
     imagesLoading = true;
 
     // Placeholder properties for template bindings
@@ -108,7 +113,7 @@ export class TreatmentBmpDetailComponent implements OnInit {
     currentPersonCanManage = false;
     canEditStormwaterJurisdiction = false;
     isAnalyzedInModelingModule = true;
-    isSitkaAdmin = false;
+    isSitkaAdmin = true;
     otherTreatmentBmpsExistInSubbasin = false;
     upstreamestBMPDetailUrl = "";
     upstreamBMPDetailUrl = "";
@@ -130,10 +135,29 @@ export class TreatmentBmpDetailComponent implements OnInit {
         private router: Router,
         private treatmentBMPService: TreatmentBMPService,
         private treatmentBMPImageByTreatmentBMPService: TreatmentBMPImageByTreatmentBMPService,
-        private treatmentBMPTypeService: TreatmentBMPTypeService
+        private treatmentBMPTypeService: TreatmentBMPTypeService,
+        private utilityFunctionsService: UtilityFunctionsService
     ) {}
 
     ngOnInit(): void {
+        // Wire up HRU Characteristics observable
+        this.hruCharacteristics$ = this.treatmentBMPService.treatmentBmpsTreatmentBMPIDHruCharacteristicsGet(this.treatmentBMPID);
+        // Wire up columns using utilityFunctionsService
+        this.hruCharacteristicsColumnDefs = [
+            this.utilityFunctionsService.createBasicColumnDef("Type of HRU Entity", "HRUEntity"),
+            this.utilityFunctionsService.createBasicColumnDef("LGU ID", "LoadGeneratingUnitID"),
+            this.utilityFunctionsService.createBasicColumnDef("Model Basin Land Use Description", "HRUCharacteristicLandUseCodeDisplayName"),
+            this.utilityFunctionsService.createBasicColumnDef("Baseline Model Basin Land Use Description", "BaselineHRUCharacteristicLandUseCodeDisplayName"),
+            this.utilityFunctionsService.createBasicColumnDef("Hydrologic Soil Group", "HydrologicSoilGroup"),
+            this.utilityFunctionsService.createDecimalColumnDef("Slope %", "SlopePercentage"),
+            this.utilityFunctionsService.createDecimalColumnDef("Impervious Acres", "ImperviousAcres"),
+            this.utilityFunctionsService.createDecimalColumnDef("Baseline Impervious Acres", "BaselineImperviousAcres"),
+            this.utilityFunctionsService.createDecimalColumnDef("Total Acres", "Area"),
+            this.utilityFunctionsService.createBasicColumnDef("Treatment BMP", "TreatmentBMPName"),
+            this.utilityFunctionsService.createBasicColumnDef("Water Quality Management Plan", "WaterQualityManagementPlanName"),
+            this.utilityFunctionsService.createBasicColumnDef("Regional Subbasin", "RegionalSubbasinName"),
+            this.utilityFunctionsService.createDateColumnDef("Last Updated", "LastUpdated", "short"),
+        ];
         // treatmentBMPID will be set via input binding from the route param (withComponentInputBinding)
         // Example: Fetch detail data using the treatmentBMPID
         this.treatmentBMP$ = this.treatmentBMPService.treatmentBmpsTreatmentBMPIDGet(this.treatmentBMPID).pipe(
@@ -149,14 +173,12 @@ export class TreatmentBmpDetailComponent implements OnInit {
             })
         );
 
-        this.customAttributes$ = this.treatmentBMP$.pipe(switchMap((bmp) => this.treatmentBMPService.treatmentBmpsTreatmentBMPIDCustomAttributesGet(bmp.TreatmentBMPID)));
-
         // Wire up async calls for custom attribute types and attributes
+        this.customAttributes$ = this.treatmentBMP$.pipe(switchMap((bmp) => this.treatmentBMPService.treatmentBmpsTreatmentBMPIDCustomAttributesGet(bmp.TreatmentBMPID)));
         this.treatmentBMPTypeCustomAttributeTypes$ = this.treatmentBMP$.pipe(
             switchMap((bmp) =>
                 this.treatmentBMPTypeService.treatmentBmpTypesTreatmentBMPTypeIDCustomAttributeTypesGet(bmp.TreatmentBMPTypeID).pipe(
                     tap((attributes) => {
-                        console.log(attributes);
                         this.hasModelingAttributes = attributes.some((attr) => attr.CustomAttributeType.CustomAttributeTypePurposeID === CustomAttributeTypePurposeEnum.Modeling);
                     })
                 )
