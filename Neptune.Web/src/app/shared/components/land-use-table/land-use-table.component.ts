@@ -12,5 +12,12 @@ import { DecimalPipe } from "@angular/common";
     imports: [FieldDefinitionComponent, SumPipe, DecimalPipe],
 })
 export class LandUseTableComponent {
-    @Input() hruCharacteristics: TreatmentBMPHRUCharacteristicsSummarySimpleDto[] = [];
+    private _hruCharacteristics: TreatmentBMPHRUCharacteristicsSummarySimpleDto[] = [];
+    @Input()
+    set hruCharacteristics(value: TreatmentBMPHRUCharacteristicsSummarySimpleDto[]) {
+        this._hruCharacteristics = (value ?? []).slice().sort((a, b) => a.LandUse.localeCompare(b.LandUse));
+    }
+    get hruCharacteristics(): TreatmentBMPHRUCharacteristicsSummarySimpleDto[] {
+        return this._hruCharacteristics;
+    }
 }
