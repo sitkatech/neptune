@@ -44,6 +44,7 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
     @Input() legendPosition: ControlPosition = "topleft";
     @Output() onMapLoad: EventEmitter<NeptuneMapInitEvent> = new EventEmitter();
     @Output() onOverlayToggle: EventEmitter<L.LayersControlEvent> = new EventEmitter();
+    @Output() onLegendControlReady: EventEmitter<Control> = new EventEmitter();
 
     public legendControl: Control;
     public legendItems: LegendItem[] = [];
@@ -104,19 +105,30 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
         );
 
         if (this.showLegend) {
-            const self = this;
             const legendControl = Control.extend({
-                onAdd(map: Map) {
-                    const domElement = DomUtil.get(self.mapID + "Legend");
-                    L.DomEvent.disableClickPropagation(domElement);
-                    return domElement;
+                onAdd: (map: Map) => {
+                    const domElement = DomUtil.get(this.mapID + "Legend");
+                    if (domElement != null) {
+                        L.DomEvent.disableClickPropagation(domElement);
+                        return domElement;
+                    }
                 },
-                onRemove(map: Map) {},
+                moveToBottomOfContainer: () => {
+                    const container = document.querySelector(
+                        `.leaflet-${this.legendPosition.includes("top") ? "top" : "bottom"}.leaflet-${this.legendPosition.includes("left") ? "left" : "right"}`
+                    );
+                    const legendElement = document.getElementById(this.legendID); // or legendControl.getContainer()
+                    if (container && legendElement) {
+                        container.appendChild(legendElement); // Moves legend to the bottom
+                    }
+                },
+                onRemove: (map: Map) => {},
             });
             this.legendControl = new legendControl({
                 position: this.legendPosition,
             }).addTo(this.map);
             this.map["showLegend"] = true;
+            this.onLegendControlReady.emit(this.legendControl);
         }
 
         //this.map.fullscreenControl.getContainer().classList.add("leaflet-custom-controls");

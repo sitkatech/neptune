@@ -29,6 +29,7 @@ export class TrashOvtaAreaEditLocationComponent {
     public mapHeight = window.innerHeight - window.innerHeight * 0.4 + "px";
     public map: L.Map;
     public layerControl: L.Control.Layers;
+    public legendControl: L.Control;
     public mapIsReady = false;
     public bounds: any;
 
@@ -38,12 +39,6 @@ export class TrashOvtaAreaEditLocationComponent {
     public buttonText = "Pick Parcels";
 
     public layer: L.FeatureGroup = new L.FeatureGroup();
-
-    private defaultStyle = {
-        color: "blue",
-        fillOpacity: 0.2,
-        opacity: 0,
-    };
 
     private highlightStyle = {
         color: "#fcfc12",
@@ -79,6 +74,10 @@ export class TrashOvtaAreaEditLocationComponent {
 
         this.layer.addTo(this.map);
         this.mapIsReady = true;
+    }
+
+    public handleLegendControlReady(legendControl: L.Control) {
+        this.legendControl = legendControl;
     }
 
     ngOnInit(): void {
@@ -154,7 +153,6 @@ export class TrashOvtaAreaEditLocationComponent {
             return;
         }
         this.map.pm.removeControls();
-        this.layer.setStyle(this.defaultStyle).bringToFront();
         this.addOrRemoveGeomanControl(true);
     }
 
@@ -206,6 +204,9 @@ export class TrashOvtaAreaEditLocationComponent {
                 },
                 "en"
             );
+            if (this.legendControl && typeof this.legendControl["moveToBottomOfContainer"] === "function") {
+                this.legendControl["moveToBottomOfContainer"]();
+            }
             return;
         }
         this.map.pm.removeControls();

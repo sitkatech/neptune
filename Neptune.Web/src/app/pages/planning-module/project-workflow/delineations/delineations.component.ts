@@ -1,5 +1,5 @@
 import * as turf from "@turf/turf";
-import { ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from "@angular/core";
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 import { Input } from "@angular/core";
 import L, { PM } from "leaflet";
@@ -53,6 +53,7 @@ import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet
     ],
 })
 export class DelineationsComponent implements OnInit {
+    @ViewChild("mapContainer") mapContainer: ElementRef;
     public mapIsReady: boolean = false;
 
     public drawMapClicked: boolean = false;
@@ -105,6 +106,7 @@ export class DelineationsComponent implements OnInit {
     public projectTreatmentBMPs: Array<TreatmentBMPDisplayDto>;
 
     // 1. Initialization & Lifecycle
+
     constructor(
         private treatmentBMPService: TreatmentBMPService,
         private router: Router,
@@ -198,9 +200,7 @@ export class DelineationsComponent implements OnInit {
                     DelineationID: this.newDelineationID,
                 };
                 delineationUpsertDto.Geometry = JSON.stringify(geometry);
-                // Use turf.area for geodesic area calculation
-                const turfArea = turf.area(layer.toGeoJSON());
-                delineationUpsertDto.DelineationArea = +(turfArea / this.squareMetersToAcreDivisor).toFixed(2);
+                delineationUpsertDto.DelineationArea = this.calculateAcreage(layer.toGeoJSON());
                 // Remove the drawn layer to prevent duplicates
                 if (layer && layer.remove) {
                     layer.remove();
@@ -252,26 +252,17 @@ export class DelineationsComponent implements OnInit {
 
     // 3. Data Mapping & Layer Management
     private mapTreatmentBMPsToGeoJson(treatmentBMPs: TreatmentBMPDisplayDto[]) {
-        return {
-            type: "FeatureCollection",
-            features: treatmentBMPs.map((x) => {
-                let treatmentBMPGeoJson = {
-                    type: "Feature",
-                    geometry: {
-                        type: "Point",
-                        coordinates: [x.Longitude ?? 0, x.Latitude ?? 0],
-                    },
-                    properties: {
-                        TreatmentBMPID: x.TreatmentBMPID,
-                        TreatmentBMPName: x.TreatmentBMPName,
-                        TreatmentBMPTypeName: x.TreatmentBMPTypeName,
-                        Latitude: x.Latitude,
-                        Longitude: x.Longitude,
-                    },
-                };
-                return treatmentBMPGeoJson;
-            }),
-        };
+        return this.mapToFeatureCollection(
+            treatmentBMPs,
+            (x) => ({ type: "Point", coordinates: [x.Longitude ?? 0, x.Latitude ?? 0] }),
+            (x) => ({
+                TreatmentBMPID: x.TreatmentBMPID,
+                TreatmentBMPName: x.TreatmentBMPName,
+                TreatmentBMPTypeName: x.TreatmentBMPTypeName,
+                Latitude: x.Latitude,
+                Longitude: x.Longitude,
+            })
+        );
     }
 
     private mapDelineationsToGeoJson(delineations: DelineationUpsertDto[]) {
@@ -299,9 +290,7 @@ export class DelineationsComponent implements OnInit {
                     delineationUpsertDto.DelineationTypeID = DelineationTypeEnum.Distributed;
                     this.selectedDelineation.DelineationTypeID = DelineationTypeEnum.Distributed;
                     delineationUpsertDto.Geometry = JSON.stringify(editedLayer.toGeoJSON());
-                    // Use turf.area for geodesic area calculation
-                    const turfArea = turf.area(editedLayer.toGeoJSON());
-                    delineationUpsertDto.DelineationArea = +(turfArea / this.squareMetersToAcreDivisor).toFixed(2);
+                    delineationUpsertDto.DelineationArea = this.calculateAcreage(editedLayer.toGeoJSON());
                 });
             },
         });
@@ -333,6 +322,7 @@ export class DelineationsComponent implements OnInit {
     }
 
     // 4. Selection & Interaction
+
     public selectFeatureImpl(treatmentBMPID: number, skipDrawCheck: boolean = false) {
         if (this.isPerformingGeomanAction(skipDrawCheck)) {
             return;
@@ -352,14 +342,15 @@ export class DelineationsComponent implements OnInit {
 
         this.selectedDelineation = this.delineations?.find((x) => x.TreatmentBMPID == treatmentBMPID);
         this.delineationFeatureGroup.eachLayer((layer: L.Polygon) => {
-            if (this.selectedDelineation == null || this.selectedDelineation.TreatmentBMPID != layer.feature.properties.TreatmentBMPID) {
-                layer.setStyle(this.delineationDefaultStyle);
-                if (layer.pm) layer.pm.disable();
-                return;
+            const isSelected = this.selectedDelineation != null && this.selectedDelineation.TreatmentBMPID == layer.feature.properties.TreatmentBMPID;
+            // Only enable edit mode if global edit mode is active
+            const shouldEdit = isSelected && this.map.pm.globalEditModeEnabled();
+            this.setLayerEditState(layer, isSelected ? this.delineationSelectedStyle : this.delineationDefaultStyle, shouldEdit);
+            if (isSelected) {
+                layer.bringToFront();
+                this.map.flyToBounds(layer.getBounds(), { padding: new L.Point(50, 50) });
+                hasFlownToSelectedObject = true;
             }
-            layer.setStyle(this.delineationSelectedStyle).bringToFront();
-            this.map.flyToBounds(layer.getBounds(), { padding: new L.Point(50, 50) });
-            hasFlownToSelectedObject = true;
         });
 
         this.selectedListItem = treatmentBMPID;
@@ -382,16 +373,11 @@ export class DelineationsComponent implements OnInit {
                 return;
             }
             if (this.selectedDelineation?.Geometry != null) {
-                const button = document.querySelector(".leaflet-pm-icon-edit") as HTMLButtonElement;
-                if (button) {
-                    button.click();
-                }
+                this.map.pm.toggleGlobalEditMode();
             } else {
-                const button = document.querySelector(".leaflet-pm-icon-polygon") as HTMLButtonElement;
-                if (button) {
-                    button.click();
-                }
+                this.map.pm.enableDraw("Polygon");
             }
+            this.scrollMapIntoView();
         }
         this.drawMapClicked = false;
     }
@@ -436,6 +422,13 @@ export class DelineationsComponent implements OnInit {
         if (this.selectedTreatmentBMP && this.selectedTreatmentBMP.Latitude && this.selectedTreatmentBMP.Longitude) {
             this.selectedListItemDetails.title = `${selectedNumber}`;
             this.selectedListItemDetails.attributes = selectedAttributes;
+        }
+    }
+
+    scrollMapIntoView(): void {
+        let mapElement = document.getElementById(this.mapContainer["mapID"]);
+        if (mapElement) {
+            mapElement.scrollIntoView({ behavior: "smooth", block: "center" });
         }
     }
 
@@ -522,6 +515,28 @@ export class DelineationsComponent implements OnInit {
     }
 
     // 6. Utility & State
+    // --- Helper Functions ---
+    private setLayerEditState(layer: any, style: any, editable: boolean) {
+        layer.setStyle(style);
+        if (layer.pm) {
+            editable ? layer.pm.enable() : layer.pm.disable();
+        }
+    }
+
+    private calculateAcreage(geoJson: any): number {
+        return +(turf.area(geoJson) / this.squareMetersToAcreDivisor).toFixed(2);
+    }
+
+    private mapToFeatureCollection(items: any[], geometryMapper: (item: any) => any, propertiesMapper: (item: any) => any) {
+        return {
+            type: "FeatureCollection",
+            features: items.map((item) => ({
+                type: "Feature",
+                geometry: geometryMapper(item),
+                properties: propertiesMapper(item),
+            })),
+        };
+    }
     public isPerformingGeomanAction(skipDrawCheck: boolean = false): boolean {
         //MP 10/1/25 - Added skipDrawCheck because the global draw mode remains enabled momentarily after drawing a shape is complete
         return (this.map?.pm?.globalDrawModeEnabled() && !skipDrawCheck) || this.map?.pm?.globalEditModeEnabled() || this.map?.pm?.globalRemovalModeEnabled();

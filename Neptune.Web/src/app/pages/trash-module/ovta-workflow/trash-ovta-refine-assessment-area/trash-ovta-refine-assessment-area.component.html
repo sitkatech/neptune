@@ -14,7 +14,11 @@
         </p>
     </div>
     @if (onlandVisualTrashAssessmentArea$ | async; as onlandVisualTrashAssessmentArea) {
-    <neptune-map (onMapLoad)="handleMapReady($event, onlandVisualTrashAssessmentArea)" mapHeight="600px" [showLegend]="true">
+    <neptune-map
+        (onMapLoad)="handleMapReady($event, onlandVisualTrashAssessmentArea)"
+        (onLegendControlReady)="handleLegendControlReady($event)"
+        mapHeight="600px"
+        [showLegend]="true">
         @if (mapIsReady) {
         <land-use-block-layer [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></land-use-block-layer>
         <parcel-layer [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="20" styles="parcel_alt"></parcel-layer>

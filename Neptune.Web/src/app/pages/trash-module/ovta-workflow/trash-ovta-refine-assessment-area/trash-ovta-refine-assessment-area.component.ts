@@ -19,7 +19,6 @@ import { LandUseBlockLayerComponent } from "../../../../shared/components/leafle
 import { ParcelLayerComponent } from "../../../../shared/components/leaflet/layers/parcel-layer/parcel-layer.component";
 import { TransectLineLayerComponent } from "src/app/shared/components/leaflet/layers/transect-line-layer/transect-line-layer.component";
 import { IFeature, OnlandVisualTrashAssessmentDetailDto, OnlandVisualTrashAssessmentRefineAreaDto } from "src/app/shared/generated/model/models";
-import { WfsService } from "src/app/shared/services/wfs.service";
 import { IconComponent } from "src/app/shared/components/icon/icon.component";
 
 @Component({
@@ -49,6 +48,7 @@ export class TrashOvtaRefineAssessmentAreaComponent {
     public mapHeight = window.innerHeight - window.innerHeight * 0.4 + "px";
     public map: L.Map;
     public layerControl: L.Control.Layers;
+    public legendControl: L.Control;
     public mapIsReady = false;
     public bounds: any;
     public isLoadingSubmit: boolean = false;
@@ -57,17 +57,10 @@ export class TrashOvtaRefineAssessmentAreaComponent {
     public isPerformingDrawAction: boolean = false;
     public layer: L.FeatureGroup = new L.FeatureGroup();
 
-    private defaultStyle = {
-        color: "blue",
-        fillOpacity: 0.2,
-        opacity: 0,
-    };
-
     constructor(
         private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService,
         private router: Router,
         private alertService: AlertService,
-        private wfsService: WfsService,
         private ovtaWorkflowProgressService: OvtaWorkflowProgressService
     ) {}
 
@@ -96,13 +89,16 @@ export class TrashOvtaRefineAssessmentAreaComponent {
         this.mapIsReady = true;
     }
 
+    public handleLegendControlReady(legendControl: L.Control) {
+        this.legendControl = legendControl;
+    }
+
     public save(andContinue = false) {
         var onlandVisualTrashAssessmentRefineArea = new OnlandVisualTrashAssessmentRefineAreaDto();
         onlandVisualTrashAssessmentRefineArea.OnlandVisualTrashAssessmentID = this.onlandVisualTrashAssessmentID;
         this.layer.eachLayer((layer: L.Path & { toGeoJSON: () => GeoJSON.Feature }) => {
             onlandVisualTrashAssessmentRefineArea.GeometryAsGeoJson = JSON.stringify(layer.toGeoJSON());
         });
-        debugger;
         this.onlandVisualTrashAssessmentService
             .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDRefineAreaPost(this.onlandVisualTrashAssessmentID, onlandVisualTrashAssessmentRefineArea)
             .subscribe(() => {
@@ -127,22 +123,29 @@ export class TrashOvtaRefineAssessmentAreaComponent {
             })
             .on("pm:globaleditmodetoggled", (e: any) => {
                 if (e.enabled) {
+                    //MP 10/2/25 Because direct comparison of layers is proving to be difficult,
+                    // just turn off editing for all layers then re-enable only for the layer we want to edit
+                    this.map.eachLayer((layer: any) => {
+                        if (layer.pm && (this.layer != layer || !this.layer.hasLayer(layer))) {
+                            layer.pm.disable();
+                        }
+                    });
+                    // Only enable editing for layers in this.layer
+                    this.layer.eachLayer((layer: L.Path) => {
+                        layer.pm.enable();
+                    });
                     return;
                 }
-                // Edit mode exited, sync geometry
-                this.syncGeometryFromLayer();
                 this.selectFeatureImpl();
             })
             .on("pm:globalremovalmodetoggled", (e: any) => {
                 if (e.enabled) {
                     // Remove geometry
                     this.layer.clearLayers();
-                    this.syncGeometryFromLayer();
                     this.map.pm.toggleGlobalRemovalMode();
                     return;
                 }
 
-                this.syncGeometryFromLayer();
                 this.selectFeatureImpl();
             });
         this.addOrRemoveGeomanControl(true);
@@ -180,20 +183,12 @@ export class TrashOvtaRefineAssessmentAreaComponent {
                 },
                 "en"
             );
+            if (this.legendControl && typeof this.legendControl["moveToBottomOfContainer"] === "function") {
+                this.legendControl["moveToBottomOfContainer"]();
+            }
             return;
         }
         this.map.pm.removeControls();
-    }
-
-    public syncGeometryFromLayer() {
-        // Sync the geometry from the layer to the DTO
-        if (this.layer.getLayers().length > 0) {
-            const layer = this.layer.getLayers()[0] as L.Layer & { toGeoJSON: () => GeoJSON.Feature };
-            // Save geometry to DTO (if needed)
-            // This can be extended if DTO is stored in component
-        }
-
-        // No geometry present
     }
 
     public selectFeatureImpl() {
@@ -201,7 +196,6 @@ export class TrashOvtaRefineAssessmentAreaComponent {
             return;
         }
         this.map.pm.removeControls();
-        this.layer.setStyle(this.defaultStyle).bringToFront();
         this.addOrRemoveGeomanControl(true);
     }
 
