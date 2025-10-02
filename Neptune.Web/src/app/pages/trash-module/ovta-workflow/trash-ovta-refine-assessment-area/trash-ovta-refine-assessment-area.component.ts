@@ -20,6 +20,7 @@ import { ParcelLayerComponent } from "../../../../shared/components/leaflet/laye
 import { TransectLineLayerComponent } from "src/app/shared/components/leaflet/layers/transect-line-layer/transect-line-layer.component";
 import { IFeature, OnlandVisualTrashAssessmentDetailDto, OnlandVisualTrashAssessmentRefineAreaDto } from "src/app/shared/generated/model/models";
 import { IconComponent } from "src/app/shared/components/icon/icon.component";
+import { LeafletHelperService } from "src/app/shared/services/leaflet-helper.service";
 
 @Component({
     selector: "trash-ovta-refine-assessment-area",
@@ -61,7 +62,8 @@ export class TrashOvtaRefineAssessmentAreaComponent {
         private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService,
         private router: Router,
         private alertService: AlertService,
-        private ovtaWorkflowProgressService: OvtaWorkflowProgressService
+        private ovtaWorkflowProgressService: OvtaWorkflowProgressService,
+        private leafletHelperService: LeafletHelperService
     ) {}
 
     ngOnInit(): void {
@@ -154,38 +156,8 @@ export class TrashOvtaRefineAssessmentAreaComponent {
     public addOrRemoveGeomanControl(turnOn: boolean) {
         if (turnOn) {
             const hasPolygon = this.layer.getLayers().length > 0;
-            this.map.pm.addControls({
-                position: "topleft",
-                drawMarker: false,
-                drawText: false,
-                drawCircleMarker: false,
-                drawPolyline: false,
-                drawRectangle: false,
-                drawPolygon: !hasPolygon,
-                drawCircle: false,
-                editMode: hasPolygon,
-                removalMode: hasPolygon,
-                cutPolygon: false,
-                dragMode: false,
-                rotateMode: false,
-                snappingOption: true,
-                showCancelButton: true,
-            });
-            this.map.pm.setGlobalOptions({ allowSelfIntersection: false });
-            this.map.pm.setLang(
-                "en",
-                {
-                    buttonTitles: {
-                        drawPolyButton: "Add Assessment Area",
-                        editButton: "Edit Assessment Area",
-                        deleteButton: "Delete Assessment Area",
-                    },
-                },
-                "en"
-            );
-            if (this.legendControl && typeof this.legendControl["moveToBottomOfContainer"] === "function") {
-                this.legendControl["moveToBottomOfContainer"]();
-            }
+            this.leafletHelperService.setupGeomanControls(this.map, !hasPolygon, hasPolygon, hasPolygon, "Assessment Area");
+            this.leafletHelperService.moveLegendToBottomOfContainer(this.legendControl);
             return;
         }
         this.map.pm.removeControls();

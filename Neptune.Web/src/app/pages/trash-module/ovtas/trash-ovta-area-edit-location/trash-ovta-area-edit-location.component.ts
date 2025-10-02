@@ -8,13 +8,15 @@ import { LandUseBlockLayerComponent } from "../../../../shared/components/leafle
 import { AsyncPipe } from "@angular/common";
 import { Router, RouterLink } from "@angular/router";
 import { Input } from "@angular/core";
-import { Observable } from "rxjs";
+import { Observable, forkJoin } from "rxjs";
+import { switchMap, tap } from "rxjs/operators";
 import { OnlandVisualTrashAssessmentAreaService } from "src/app/shared/generated/api/onland-visual-trash-assessment-area.service";
 import { OnlandVisualTrashAssessmentAreaDetailDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-area-detail-dto";
 import { TransectLineLayerComponent } from "../../../../shared/components/leaflet/layers/transect-line-layer/transect-line-layer.component";
 import { OnlandVisualTrashAssessmentAreaGeometryDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-area-geometry-dto";
 import { GroupByPipe } from "src/app/shared/pipes/group-by.pipe";
 import { WfsService } from "src/app/shared/services/wfs.service";
+import { LeafletHelperService } from "src/app/shared/services/leaflet-helper.service";
 
 @Component({
     selector: "trash-ovta-area-edit-location",
@@ -63,7 +65,8 @@ export class TrashOvtaAreaEditLocationComponent {
         private router: Router,
         private onlandVisualTrashAssessmentAreaService: OnlandVisualTrashAssessmentAreaService,
         private wfsService: WfsService,
-        private groupByPipe: GroupByPipe
+        private groupByPipe: GroupByPipe,
+        private leafletHelperService: LeafletHelperService
     ) {}
 
     public handleMapReady(event: NeptuneMapInitEvent, geometry): void {
@@ -164,7 +167,13 @@ export class TrashOvtaAreaEditLocationComponent {
     public addFeatureCollectionToFeatureGroup(featureJsons: any, featureGroup: L.FeatureGroup) {
         L.geoJson(featureJsons, {
             onEachFeature: (feature, layer) => {
-                this.addLayersToFeatureGroup(layer, featureGroup);
+                if (typeof (layer as any).getLayers === "function") {
+                    (layer as any).getLayers().forEach((l) => {
+                        featureGroup.addLayer(l);
+                    });
+                } else {
+                    featureGroup.addLayer(layer);
+                }
                 layer.on("click", (e) => {
                     this.selectFeatureImpl();
                 });
@@ -175,51 +184,11 @@ export class TrashOvtaAreaEditLocationComponent {
     public addOrRemoveGeomanControl(turnOn: boolean) {
         if (turnOn) {
             const hasPolygon = this.layer.getLayers().length > 0;
-            this.map.pm.addControls({
-                position: "topleft",
-                drawMarker: false,
-                drawText: false,
-                drawCircleMarker: false,
-                drawPolyline: false,
-                drawRectangle: false,
-                drawPolygon: !hasPolygon,
-                drawCircle: false,
-                editMode: hasPolygon,
-                removalMode: hasPolygon,
-                cutPolygon: false,
-                dragMode: false,
-                rotateMode: false,
-                snappingOption: true,
-                showCancelButton: true,
-            });
-            this.map.pm.setGlobalOptions({ allowSelfIntersection: false });
-            this.map.pm.setLang(
-                "en",
-                {
-                    buttonTitles: {
-                        drawPolyButton: "Add OVTA Area",
-                        editButton: "Edit OVTA Area",
-                        deleteButton: "Delete OVTA Area",
-                    },
-                },
-                "en"
-            );
-            if (this.legendControl && typeof this.legendControl["moveToBottomOfContainer"] === "function") {
-                this.legendControl["moveToBottomOfContainer"]();
-            }
+            this.leafletHelperService.setupGeomanControls(this.map, !hasPolygon, hasPolygon, hasPolygon, "OVTA Area");
+            this.leafletHelperService.moveLegendToBottomOfContainer(this.legendControl);
             return;
         }
         this.map.pm.removeControls();
-    }
-
-    private addLayersToFeatureGroup(layer: any, featureGroup: L.FeatureGroup) {
-        if (layer.getLayers) {
-            layer.getLayers().forEach((l) => {
-                featureGroup.addLayer(l);
-            });
-        } else {
-            featureGroup.addLayer(layer);
-        }
     }
 
     public setCanPickParcels(ovtaAreaID, boundingBox, geometry) {
@@ -245,13 +214,20 @@ export class TrashOvtaAreaEditLocationComponent {
     }
 
     private addOVTAAreaToLayer(ovtaAreaID) {
-        this.onlandVisualTrashAssessmentAreaService.onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDParcelGeometriesGet(ovtaAreaID).subscribe((parcels) => {
-            this.wfsService.getGeoserverWFSLayerWithCQLFilter("OCStormwater:Parcels", `ParcelID in (${parcels.map((x) => x.ParcelID)})`, "ParcelID").subscribe((response) => {
-                const geoJson = L.geoJSON(response as any, { style: this.highlightStyle });
-                geoJson.addTo(this.layer);
-                this.selectedParcelIDs = parcels.map((x) => x.ParcelID);
-            });
-        });
+        this.onlandVisualTrashAssessmentAreaService.onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDParcelGeometriesGet(ovtaAreaID).pipe(
+            switchMap((parcels) => {
+                const parcelIDs = parcels.map((x) => x.ParcelID);
+                return forkJoin({
+                    response: this.wfsService.getGeoserverWFSLayerWithCQLFilter("OCStormwater:Parcels", `ParcelID in (${parcelIDs})`, "ParcelID"),
+                }).pipe(
+                    tap(({ response }) => {
+                        const geoJson = L.geoJSON(response as any, { style: this.highlightStyle });
+                        geoJson.addTo(this.layer);
+                        this.selectedParcelIDs = parcels.map((x) => x.ParcelID);
+                    })
+                );
+            })
+        );
     }
 
     private addParcelsToLayer(boundingBox) {
@@ -300,7 +276,6 @@ export class TrashOvtaAreaEditLocationComponent {
                     } else {
                         layer.setStyle(this.highlightStyle);
                     }
-
                     this.map.fitBounds(layer.getBounds());
                 }
             }

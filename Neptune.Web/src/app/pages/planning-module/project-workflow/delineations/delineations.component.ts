@@ -31,6 +31,7 @@ import { StormwaterNetworkLayerComponent } from "src/app/shared/components/leafl
 import { WqmpsLayerComponent } from "src/app/shared/components/leaflet/layers/wqmps-layer/wqmps-layer.component";
 import { NeptuneMapComponent, NeptuneMapInitEvent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
 import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet/layers/inventoried-bmps-layer/inventoried-bmps-layer.component";
+import { LeafletHelperService } from "src/app/shared/services/leaflet-helper.service";
 
 @Component({
     selector: "delineations",
@@ -113,7 +114,8 @@ export class DelineationsComponent implements OnInit {
         private alertService: AlertService,
         private cdr: ChangeDetectorRef,
         private projectWorkflowProgressService: ProjectWorkflowProgressService,
-        private projectService: ProjectService
+        private projectService: ProjectService,
+        private leafletHelperService: LeafletHelperService
     ) {}
 
     public ngOnInit(): void {
@@ -603,37 +605,7 @@ export class DelineationsComponent implements OnInit {
             // Show delete only if selected TreatmentBMP has a delineation
             const bmpSelected = !!this.selectedTreatmentBMP;
             const hasDelineation = bmpSelected && !!(this.selectedDelineation && this.selectedDelineation.Geometry);
-            const allowDraw = bmpSelected && (!this.selectedDelineation || !this.selectedDelineation.Geometry);
-            const allowDelete = hasDelineation;
-            this.map.pm.addControls({
-                position: "topleft",
-                drawMarker: false,
-                drawText: false,
-                drawCircleMarker: false,
-                drawPolyline: false,
-                drawRectangle: false,
-                drawPolygon: allowDraw,
-                drawCircle: false,
-                editMode: !allowDraw,
-                removalMode: allowDelete,
-                cutPolygon: false,
-                dragMode: false,
-                rotateMode: false,
-                snappingOption: true,
-                showCancelButton: true,
-            });
-            this.map.pm.setGlobalOptions({ allowSelfIntersection: false });
-            this.map.pm.setLang(
-                "en",
-                {
-                    buttonTitles: {
-                        drawPolyButton: "Add Delineation",
-                        editButton: "Edit Delineation",
-                        deleteButton: "Delete Delineation",
-                    },
-                },
-                "en"
-            );
+            this.leafletHelperService.setupGeomanControls(this.map, !hasDelineation, hasDelineation, hasDelineation, "Delineation");
             return;
         }
         this.map.pm.removeControls();

@@ -122,6 +122,44 @@ export class LeafletHelperService {
         map.setView(marker.getLatLng(), zoomLevel ?? 18);
     }
 
+    public moveLegendToBottomOfContainer(legendControl: L.Control) {
+        if (legendControl && typeof legendControl["moveToBottomOfContainer"] === "function") {
+            legendControl["moveToBottomOfContainer"]();
+        }
+    }
+
+    public setupGeomanControls(map: L.Map, enableDrawPolygon: boolean = false, enableEdit: boolean = false, enableDelete: boolean = false, buttonNoun: string) {
+        map.pm.addControls({
+            position: "topleft",
+            drawMarker: false,
+            drawText: false,
+            drawCircleMarker: false,
+            drawPolyline: false,
+            drawRectangle: false,
+            drawPolygon: enableDrawPolygon,
+            drawCircle: false,
+            editMode: enableEdit,
+            removalMode: enableDelete,
+            cutPolygon: false,
+            dragMode: false,
+            rotateMode: false,
+            snappingOption: true,
+            showCancelButton: true,
+        });
+        map.pm.setGlobalOptions({ allowSelfIntersection: false });
+        map.pm.setLang(
+            "en",
+            {
+                buttonTitles: {
+                    drawPolyButton: `Add ${buttonNoun}`,
+                    editButton: `Edit ${buttonNoun}`,
+                    deleteButton: `Delete ${buttonNoun}`,
+                },
+            },
+            "en"
+        );
+    }
+
     public static GetDefaultTileLayers(): { [key: string]: any } {
         return {
             Aerial: L.tileLayer("https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
