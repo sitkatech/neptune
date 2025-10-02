@@ -145,8 +145,8 @@ export class ModeledPerformanceComponent implements OnInit {
 
     public initializeMap(): void {
         const delineationGeoJson = this.mapDelineationsToGeoJson(this.delineations);
-        this.delineationsLayer = new L.GeoJSON(delineationGeoJson, {
-            onEachFeature: (feature, layer) => {
+        this.delineationsLayer = new L.GeoJSON(delineationGeoJson as any, {
+            onEachFeature: (feature, layer: L.Path & { feature?: GeoJSON.Feature }) => {
                 layer.setStyle(this.delineationDefaultStyle);
                 layer.on("click", (e) => {
                     this.selectFeatureImpl(feature.properties.TreatmentBMPID);
@@ -156,7 +156,7 @@ export class ModeledPerformanceComponent implements OnInit {
         this.delineationsLayer.addTo(this.map);
 
         const treatmentBMPsGeoJson = this.mapTreatmentBMPsToGeoJson(this.projectTreatmentBMPs);
-        this.treatmentBMPsLayer = new L.GeoJSON(treatmentBMPsGeoJson, {
+        this.treatmentBMPsLayer = new L.GeoJSON(treatmentBMPsGeoJson as any, {
             pointToLayer: (feature, latlng) => {
                 return L.marker(latlng, { icon: MarkerHelper.treatmentBMPMarker });
             },
@@ -208,7 +208,7 @@ export class ModeledPerformanceComponent implements OnInit {
     public selectFeatureImpl(treatmentBMPID: number) {
         this.selectedTreatmentBMP = this.projectTreatmentBMPs.find((x) => x.TreatmentBMPID == treatmentBMPID);
         let hasFlownToSelectedObject = false;
-        this.delineationsLayer?.eachLayer((layer) => {
+        this.delineationsLayer?.eachLayer((layer: L.Polygon) => {
             if (this.selectedTreatmentBMP == null || this.selectedTreatmentBMP.TreatmentBMPID != layer.feature.properties.TreatmentBMPID) {
                 layer.setStyle(this.delineationDefaultStyle);
                 return;
@@ -217,7 +217,7 @@ export class ModeledPerformanceComponent implements OnInit {
             this.map.flyToBounds(layer.getBounds(), { padding: new L.Point(50, 50) });
             hasFlownToSelectedObject = true;
         });
-        this.treatmentBMPsLayer.eachLayer((layer) => {
+        this.treatmentBMPsLayer.eachLayer((layer: L.Marker) => {
             if (this.selectedTreatmentBMP == null || this.selectedTreatmentBMP.TreatmentBMPID != layer.feature.properties.TreatmentBMPID) {
                 layer.setIcon(MarkerHelper.treatmentBMPMarker).setZIndexOffset(1000);
                 return;

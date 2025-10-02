@@ -5,6 +5,7 @@
 
     @if (boundingBox$ | async; as boundingBox) {
     <neptune-map
+        #mapContainer
         (onMapLoad)="handleMapReady($event)"
         [mapHeight]="mapHeight"
         [showLegend]="false"

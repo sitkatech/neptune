@@ -1,4 +1,3 @@
-
 import { Component, Input, OnChanges } from "@angular/core";
 import { environment } from "src/environments/environment";
 import * as L from "leaflet";
@@ -7,7 +6,7 @@ import { MapLayerBase } from "../map-layer-base.component";
     selector: "delineations-layer",
     imports: [],
     templateUrl: "./delineations-layer.component.html",
-    styleUrls: ["./delineations-layer.component.scss"]
+    styleUrls: ["./delineations-layer.component.scss"],
 })
 export class DelineationsLayerComponent extends MapLayerBase implements OnChanges {
     constructor() {
@@ -23,8 +22,8 @@ export class DelineationsLayerComponent extends MapLayerBase implements OnChange
             transparent: true,
             format: "image/png",
             tiled: true,
-            cql_filter: this.isAnalyzedInModelingModule ?  "DelineationStatus = 'Verified' AND IsAnalyzedInModelingModule = 1" : "DelineationStatus = 'Verified'",
-        };
+            cql_filter: this.isAnalyzedInModelingModule ? "DelineationStatus = 'Verified' AND IsAnalyzedInModelingModule = 1" : "DelineationStatus = 'Verified'",
+        } as any;
 
         this.layer = L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", this.wmsOptions);
         this.initLayer();

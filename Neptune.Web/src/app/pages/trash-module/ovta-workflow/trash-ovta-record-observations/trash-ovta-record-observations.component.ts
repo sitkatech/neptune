@@ -124,7 +124,7 @@ export class TrashOvtaRecordObservationsComponent {
                     "OnlandVisualTrashAssessmentAreaID"
                 )
                 .subscribe((response) => {
-                    this.map.fitBounds(L.geoJson(response).getBounds());
+                    this.map.fitBounds(L.geoJson(response as any).getBounds());
                 });
         } else {
             this.wfsService
@@ -134,7 +134,7 @@ export class TrashOvtaRecordObservationsComponent {
                     "StormwaterJurisdictionID"
                 )
                 .subscribe((response) => {
-                    this.map.fitBounds(L.geoJson(response).getBounds());
+                    this.map.fitBounds(L.geoJson(response as any).getBounds());
                 });
         }
     }
@@ -146,7 +146,7 @@ export class TrashOvtaRecordObservationsComponent {
         });
     }
 
-    public addObservation(latlng: L.latlng) {
+    public addObservation(latlng: L.LatLng) {
         this.uploadFormField.reset();
         let observation = this.formBuilder.group<OnlandVisualTrashAssessmentObservationWithPhotoDto>({
             OnlandVisualTrashAssessmentObservationID: this.newObservationIDIndex,
@@ -170,7 +170,7 @@ export class TrashOvtaRecordObservationsComponent {
             this.layerControl.removeLayer(this.ovtaObservationLayer);
         }
         const ovtaObservationGeoJSON = this.mapObservationsToGeoJson();
-        this.ovtaObservationLayer = new L.GeoJSON(ovtaObservationGeoJSON, {
+        this.ovtaObservationLayer = new L.GeoJSON(ovtaObservationGeoJSON as any, {
             pointToLayer: (feature, latlng) => {
                 return L.marker(latlng, {
                     icon:
@@ -186,7 +186,7 @@ export class TrashOvtaRecordObservationsComponent {
                 });
             },
         });
-        this.ovtaObservationLayer.sortOrder = 100;
+        this.ovtaObservationLayer["sortOrder"] = 100;
         this.ovtaObservationLayer.addTo(this.map);
     }
 
@@ -236,7 +236,7 @@ export class TrashOvtaRecordObservationsComponent {
 
     public selectOnlandVisualTrashAssessmentObservation() {
         this.uploadFormField.reset();
-        this.ovtaObservationLayer.eachLayer((layer) => {
+        this.ovtaObservationLayer.eachLayer((layer: L.Marker) => {
             if (layer.feature.properties.OnlandVisualTrashAssessmentObservationID === this.selectedOnlandVisualTrashAssessmentObservationID) {
                 layer.setIcon(MarkerHelper.selectedMarker);
             } else {

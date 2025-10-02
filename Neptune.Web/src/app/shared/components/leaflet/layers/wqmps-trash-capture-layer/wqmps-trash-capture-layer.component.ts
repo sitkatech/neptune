@@ -7,7 +7,7 @@ import { MapLayerBase } from "../map-layer-base.component";
     selector: "wqmps-trash-capture-layer",
     imports: [],
     templateUrl: "./wqmps-trash-capture-layer.component.html",
-    styleUrls: ["./wqmps-trash-capture-layer.component.scss"]
+    styleUrls: ["./wqmps-trash-capture-layer.component.scss"],
 })
 export class WqmpsTrashCaptureLayerComponent extends MapLayerBase implements OnChanges {
     public iconSrc: string;
@@ -26,12 +26,11 @@ export class WqmpsTrashCaptureLayerComponent extends MapLayerBase implements OnC
             transparent: true,
             format: "image/png",
             tiled: true,
-            styles: "wqmp_trash_capture_status"
-        };
+            styles: "wqmp_trash_capture_status",
+        } as any;
         this.layer = L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", this.wmsOptions);
         this.initLayer();
     }
-
 
     public ocstBaseUrl(): string {
         return environment.ocStormwaterToolsBaseUrl;

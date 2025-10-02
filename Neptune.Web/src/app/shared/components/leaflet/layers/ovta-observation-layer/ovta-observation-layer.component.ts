@@ -11,7 +11,7 @@ import { OnlandVisualTrashAssessmentObservationService } from "src/app/shared/ge
     selector: "ovta-observation-layer",
     imports: [AsyncPipe],
     templateUrl: "./ovta-observation-layer.component.html",
-    styleUrl: "./ovta-observation-layer.component.scss"
+    styleUrl: "./ovta-observation-layer.component.scss",
 })
 export class OvtaObservationLayerComponent extends MapLayerBase implements OnChanges {
     @Input() ovtaID: number;
@@ -29,7 +29,7 @@ export class OvtaObservationLayerComponent extends MapLayerBase implements OnCha
             .pipe(
                 tap((locations) => {
                     const ovtaObservationGeoJSON = this.mapObservationsToGeoJson(locations);
-                    this.layer = new L.GeoJSON(ovtaObservationGeoJSON, {
+                    this.layer = new L.GeoJSON(ovtaObservationGeoJSON as any, {
                         pointToLayer: (feature, latlng) => {
                             return L.marker(latlng, { icon: MarkerHelper.treatmentBMPMarker });
                         },

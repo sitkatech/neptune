@@ -11,7 +11,7 @@ import { LegendItem } from "src/app/shared/models/legend-item";
     selector: "regional-subbasin-trace-from-point",
     imports: [],
     templateUrl: "./regional-subbasin-trace-from-point.component.html",
-    styleUrl: "./regional-subbasin-trace-from-point.component.scss"
+    styleUrl: "./regional-subbasin-trace-from-point.component.scss",
 })
 export class RegionalSubbasinTraceFromPointComponent {
     @Input() map: any;
@@ -58,7 +58,7 @@ export class RegionalSubbasinTraceFromPointComponent {
         }),
     ];
 
-    rsbTraceLayer: L.Layers = null;
+    rsbTraceLayer: L.LayerGroup = null;
     rsbTraceStartMarker: L.Layer = null;
     tooltip: L.Tooltip;
 
@@ -99,7 +99,7 @@ export class RegionalSubbasinTraceFromPointComponent {
         }
     }
 
-    getRSBTraceFromPoint(e: L.PointerEvent) {
+    getRSBTraceFromPoint(e: L.LeafletMouseEvent) {
         this.clearAddedTraceLayers();
         if (this.traceFromPointMode) {
             var latLng = new L.LatLng(e.latlng.lat, e.latlng.lng);
@@ -127,7 +127,7 @@ export class RegionalSubbasinTraceFromPointComponent {
                         },
                         arrowheads: this.arrowHeadsStyle,
                         interactive: false,
-                    }
+                    } as any
                 );
                 this.rsbTraceLayer.addTo(this.map);
             });

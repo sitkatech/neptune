@@ -89,7 +89,7 @@ export class TrashOvtaAddRemoveParcelsComponent {
         }
         if (this.selectedParcelIDs.length > 0) {
             this.wfsService.getGeoserverWFSLayerWithCQLFilter("OCStormwater:Parcels", `ParcelID in (${this.selectedParcelIDs.join(",")})`, "ParcelID").subscribe((response) => {
-                this.selectedParcelsLayer = L.geoJSON(response, { style: this.highlightStyle });
+                this.selectedParcelsLayer = L.geoJSON(response as any, { style: this.highlightStyle });
                 this.selectedParcelsLayer.addTo(this.map);
                 this.map.fitBounds(this.selectedParcelsLayer.getBounds());
             });
@@ -125,8 +125,8 @@ export class TrashOvtaAddRemoveParcelsComponent {
             this.map.off("click");
         } else {
             this.map.on("click", (event: L.LeafletMouseEvent): void => {
-                this.wfsService.getParcelByCoordinate(event.latlng.lng, event.latlng.lat).subscribe((parcelsFeatureCollection: L.FeatureCollection) => {
-                    parcelsFeatureCollection.features.forEach((feature: L.Feature) => {
+                this.wfsService.getParcelByCoordinate(event.latlng.lng, event.latlng.lat).subscribe((parcelsFeatureCollection: GeoJSON.FeatureCollection) => {
+                    parcelsFeatureCollection.features.forEach((feature: GeoJSON.Feature) => {
                         const parcelID = feature.properties.ParcelID;
                         if (this.selectedParcelIDs.includes(parcelID)) {
                             this.selectedParcelIDs.splice(this.selectedParcelIDs.indexOf(parcelID), 1);

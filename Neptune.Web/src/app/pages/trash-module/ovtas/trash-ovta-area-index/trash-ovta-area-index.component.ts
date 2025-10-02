@@ -12,7 +12,7 @@ import { environment } from "src/environments/environment";
 import { IconComponent } from "../../../../shared/components/icon/icon.component";
 import { HybridMapGridComponent } from "../../../../shared/components/hybrid-map-grid/hybrid-map-grid.component";
 import { NeptuneMapInitEvent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
-import { Map, layerControl } from "leaflet";
+import { Map, Control } from "leaflet";
 import { SelectedOvtaAreaLayerComponent } from "src/app/shared/components/leaflet/layers/selected-ovta-area-layer/selected-ovta-area-layer.component";
 import { Router, RouterLink } from "@angular/router";
 import { ConfirmService } from "src/app/shared/services/confirm/confirm.service";
@@ -29,7 +29,7 @@ import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto"
     selector: "trash-ovta-area-index",
     imports: [PageHeaderComponent, AlertDisplayComponent, AsyncPipe, LoadingDirective, IconComponent, HybridMapGridComponent, SelectedOvtaAreaLayerComponent, RouterLink],
     templateUrl: "./trash-ovta-area-index.component.html",
-    styleUrl: "./trash-ovta-area-index.component.scss"
+    styleUrl: "./trash-ovta-area-index.component.scss",
 })
 export class TrashOvtaAreaIndexComponent {
     public onlandVisualTrashAssessmentAreas$: Observable<OnlandVisualTrashAssessmentAreaGridDto[]>;
@@ -40,7 +40,7 @@ export class TrashOvtaAreaIndexComponent {
     public selectionFromMap: boolean;
 
     public map: Map;
-    public layerControl: layerControl;
+    public layerControl: Control.Layers;
     public bounds: any;
     public mapIsReady: boolean = false;
     public boundingBox$: Observable<BoundingBoxDto>;

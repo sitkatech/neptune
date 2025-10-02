@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { BoundingBoxDto } from "../generated/model/bounding-box-dto";
 import * as L from "leaflet";
+import { Layer } from "leaflet";
 
 @Injectable({
     providedIn: "root",
@@ -85,12 +86,12 @@ export class LeafletHelperService {
         });
     }
 
-    public fitMapToDefaultBoundingBox(map: L.map) {
+    public fitMapToDefaultBoundingBox(map: L.Map) {
         const defaultBoundingBox = LeafletHelperService.defaultBoundingBox;
         this.fitMapToBoundingBox(map, defaultBoundingBox);
     }
 
-    public fitMapToBoundingBox(map: L.map, boundingBox: BoundingBoxDto) {
+    public fitMapToBoundingBox(map: L.Map, boundingBox: BoundingBoxDto) {
         map.fitBounds([
             [boundingBox.Bottom, boundingBox.Left],
             [boundingBox.Top, boundingBox.Right],
@@ -119,6 +120,44 @@ export class LeafletHelperService {
 
     public zoomToMarker(map: L.Map, marker: L.Marker, zoomLevel?: number) {
         map.setView(marker.getLatLng(), zoomLevel ?? 18);
+    }
+
+    public moveLegendToBottomOfContainer(legendControl: L.Control) {
+        if (legendControl && typeof legendControl["moveToBottomOfContainer"] === "function") {
+            legendControl["moveToBottomOfContainer"]();
+        }
+    }
+
+    public setupGeomanControls(map: L.Map, enableDrawPolygon: boolean = false, enableEdit: boolean = false, enableDelete: boolean = false, buttonNoun: string) {
+        map.pm.addControls({
+            position: "topleft",
+            drawMarker: false,
+            drawText: false,
+            drawCircleMarker: false,
+            drawPolyline: false,
+            drawRectangle: false,
+            drawPolygon: enableDrawPolygon,
+            drawCircle: false,
+            editMode: enableEdit,
+            removalMode: enableDelete,
+            cutPolygon: false,
+            dragMode: false,
+            rotateMode: false,
+            snappingOption: true,
+            showCancelButton: true,
+        });
+        map.pm.setGlobalOptions({ allowSelfIntersection: false });
+        map.pm.setLang(
+            "en",
+            {
+                buttonTitles: {
+                    drawPolyButton: `Add ${buttonNoun}`,
+                    editButton: `Edit ${buttonNoun}`,
+                    deleteButton: `Delete ${buttonNoun}`,
+                },
+            },
+            "en"
+        );
     }
 
     public static GetDefaultTileLayers(): { [key: string]: any } {
@@ -156,5 +195,33 @@ export class LeafletHelperService {
                 }),
             },
         };
+    }
+
+    /**
+     * Type guard for layers with a _url property.
+     */
+    public static hasUrl(layer: Layer): layer is Layer & { _url: string } {
+        return typeof (layer as any)._url === "string";
+    }
+
+    /**
+     * Type-safe getter for _url property.
+     */
+    public static getLayerUrl(layer: Layer): string | undefined {
+        return LeafletHelperService.hasUrl(layer) ? layer._url : undefined;
+    }
+
+    /**
+     * Type guard for layers with a legendHtml property.
+     */
+    public static hasLegendHtml(layer: Layer): layer is Layer & { legendHtml: string } {
+        return typeof (layer as any).legendHtml === "string";
+    }
+
+    /**
+     * Type-safe getter for legendHtml property.
+     */
+    public static getLegendHtml(layer: Layer): string | undefined {
+        return LeafletHelperService.hasLegendHtml(layer) ? layer.legendHtml : undefined;
     }
 }
