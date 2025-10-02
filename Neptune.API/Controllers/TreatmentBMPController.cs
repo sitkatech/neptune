@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -167,5 +168,15 @@ namespace Neptune.API.Controllers
             var customAttributes = CustomAttributes.ListByTreatmentBMPIDAsDto(dbContext, treatmentBMPID);
             return Ok(customAttributes);
         }
+
+        [HttpGet("{treatmentBMPID}/field-visits")]
+        [EntityNotFound(typeof(TreatmentBMP), "treatmentBMPID")]
+        [TreatmentBMPViewFeature]
+        public ActionResult<List<FieldVisitDto>> FieldVisitGridJsonData([FromRoute] int treatmentBMPID)
+        {
+            var fieldVisits = vFieldVisitDetaileds.ListAsDtoByTreatmentBMPID(dbContext, treatmentBMPID);
+            return Ok(fieldVisits);
+        }
+
     }
 }

@@ -8,43 +8,43 @@ using Neptune.EFModels.Entities;
 
 namespace Neptune.API.Services.Authorization
 {
-    public abstract class BaseAuthorizationAttribute : AuthorizeAttribute, IAuthorizationFilter
+    public abstract class BaseAuthorizationAttribute(IEnumerable<RoleEnum> grantedRoles)
+        : AuthorizeAttribute, IAuthorizationFilter
     {
-        private readonly IEnumerable<RoleEnum> _grantedRoles;
-
-        protected BaseAuthorizationAttribute(IEnumerable<RoleEnum> grantedRoles)
-        {
-            _grantedRoles = grantedRoles;
-        }
+        public int Order { get; set; } = 0; // Default order, higher than EntityNotFoundAttribute
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
             var user = context.HttpContext.User;
             if (!user.Identity.IsAuthenticated)
             {
-                // it isn't needed to set unauthorized result 
-                // as the base class already requires the user to be authenticated
-                // this also makes redirect to a login page work properly
-                // context.Result = new UnauthorizedResult();
                 return;
             }
 
             var dbContextService = context.HttpContext.RequestServices.GetService(typeof(NeptuneDbContext));
             if (dbContextService == null || !(dbContextService is NeptuneDbContext dbContext))
             {
-                //MK 1/16/2018 - If we don't have a repository we are in a terrible state.
                 throw new ApplicationException(
                     "Could not find injected NeptuneDbRepository. OnAuthorization.cs needs your help!");
             }
 
             var person = UserContext.GetUserFromHttpContext(dbContext, context.HttpContext);
 
-            var isAuthorized = person != null && (_grantedRoles.Any(x => (int) x == person.RoleID) || !_grantedRoles.Any()); // allowing an empty list lets us implement LoggedInUnclassifiedFeature easily
-            
+            var isAuthorized = person != null && (grantedRoles.Any(x => (int)x == person.RoleID) || !grantedRoles.Any());
             if (!isAuthorized)
             {
                 context.Result = new StatusCodeResult((int)System.Net.HttpStatusCode.Forbidden);
+                return;
             }
+
+            // Call extension point for entity/context logic
+            OnAuthorizationCore(context, dbContext, person);
+        }
+
+        // Extension point for derived classes
+        protected virtual void OnAuthorizationCore(AuthorizationFilterContext context, NeptuneDbContext dbContext, Person? person)
+        {
+            // Default: do nothing
         }
     }
 }

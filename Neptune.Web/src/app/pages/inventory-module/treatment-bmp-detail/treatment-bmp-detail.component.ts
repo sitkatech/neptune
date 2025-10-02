@@ -31,6 +31,7 @@ import { LandUseTableComponent } from "src/app/shared/components/land-use-table/
 import { NeptuneGridComponent } from "src/app/shared/components/neptune-grid/neptune-grid.component";
 import { CustomAttributesDisplayComponent } from "src/app/shared/components/custom-attributes-display/custom-attributes-display.component";
 import { CustomAttributeDto, TreatmentBMPHRUCharacteristicsSummarySimpleDto, TreatmentBMPTypeCustomAttributeTypeDto } from "src/app/shared/generated/model/models";
+import { FieldVisitDto } from "src/app/shared/generated/model/field-visit-dto";
 import { CustomAttributeTypePurposeEnum } from "src/app/shared/generated/enum/custom-attribute-type-purpose-enum";
 import { TreatmentBMPTypeService } from "src/app/shared/generated/api/treatment-bmp-type.service";
 import { GroupByPipe } from "src/app/shared/pipes/group-by.pipe";
@@ -105,6 +106,9 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
     treatmentBMPImages$!: Observable<any[]>;
     hruCharacteristics$: Observable<HRUCharacteristicDto[]>;
     hruCharacteristicsColumnDefs: Array<ColDef>;
+    fieldVisits$: Observable<FieldVisitDto[]>;
+    fieldVisitColumnDefs: Array<ColDef>;
+
     imagesLoading = true;
 
     // Placeholder properties for template bindings
@@ -165,6 +169,24 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
             this.utilityFunctionsService.createBasicColumnDef("Regional Subbasin", "RegionalSubbasinName"),
             this.utilityFunctionsService.createDateColumnDef("Last Updated", "LastUpdated", "short"),
         ];
+
+        this.fieldVisitColumnDefs = [
+            // todo: implement action cell renderer, make initial assessment, maintenance occurred, and post-maintenance assessment into link columns
+            // Action columns (delete, view/continue) - implement cellRenderer as needed
+            { headerName: "", field: "actions", cellRenderer: "actionCellRenderer", width: 60, suppressMenu: true, sortable: false, filter: false },
+            this.utilityFunctionsService.createDateColumnDef("Visit Date", "VisitDate", "MM/dd/yyyy"),
+            this.utilityFunctionsService.createBasicColumnDef("Performed By", "PerformedByPersonName"),
+            this.utilityFunctionsService.createBooleanColumnDef("Field Visit Verified", "IsFieldVisitVerified"),
+            this.utilityFunctionsService.createBasicColumnDef("Field Visit Status", "FieldVisitStatusDisplayName"),
+            this.utilityFunctionsService.createBasicColumnDef("Field Visit Type", "FieldVisitTypeDisplayName"),
+            this.utilityFunctionsService.createBooleanColumnDef("Inventory Updated?", "InventoryUpdated"),
+            this.utilityFunctionsService.createBooleanColumnDef("Required Attributes Entered?", "RequiredAttributesEntered"),
+            this.utilityFunctionsService.createBasicColumnDef("Initial Assessment?", "InitialAssessmentStatus"),
+            this.utilityFunctionsService.createDecimalColumnDef("Initial Assessment Score", "AssessmentScoreInitial"),
+            this.utilityFunctionsService.createBasicColumnDef("Maintenance Occurred?", "MaintenanceOccurred"),
+            this.utilityFunctionsService.createBasicColumnDef("Post-Maintenance Assessment?", "PostMaintenanceAssessmentStatus"),
+            this.utilityFunctionsService.createDecimalColumnDef("Post-Maintenance Assessment Score", "AssessmentScorePM"),
+        ];
         this.loadData();
     }
 
@@ -182,6 +204,8 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
                 );
             })
         );
+        // Wire up field visits grid as observable
+        this.fieldVisits$ = this.treatmentBMPService.treatmentBmpsTreatmentBMPIDFieldVisitsGet(this.treatmentBMPID);
         this.treatmentBMP$ = this.treatmentBMPService.treatmentBmpsTreatmentBMPIDGet(this.treatmentBMPID).pipe(
             tap((bmp) => {
                 if (bmp && bmp.Latitude && bmp.Longitude) {
@@ -220,41 +244,6 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
             })
         );
     }
-
-    /**
-     * Stub: Row data for Field Visits grid
-     */
-    fieldVisitRowData: any[] = [];
-
-    /**
-     * Stub: Column definitions for Field Visits grid
-     */
-    fieldVisitColumnDefs: any[] = [
-        // Action columns (delete, view/continue)
-        { headerName: "", field: "actions", cellRenderer: "actionCellRenderer", width: 60, suppressMenu: true, sortable: false, filter: false },
-        // BMP Name (if not detail page)
-        { headerName: "BMP Name", field: "TreatmentBMPName", width: 120 },
-        {
-            headerName: "Visit Date",
-            field: "VisitDate",
-            width: 130,
-            filter: "agDateColumnFilter",
-            valueFormatter: (params) => (params.value ? new Date(params.value).toLocaleDateString() : ""),
-        },
-        { headerName: "Jurisdiction", field: "OrganizationName", width: 140 },
-        { headerName: "Water Quality Management Plan", field: "WaterQualityManagementPlanName", width: 105 },
-        { headerName: "Performed By", field: "PerformedByPersonName", width: 105 },
-        { headerName: "Field Visit Verified", field: "IsFieldVisitVerified", width: 105, valueFormatter: (params) => (params.value ? "Yes" : "No") },
-        { headerName: "Field Visit Status", field: "FieldVisitStatusDisplayName", width: 85 },
-        { headerName: "Field Visit Type", field: "FieldVisitTypeDisplayName", width: 125 },
-        { headerName: "Inventory Updated?", field: "InventoryUpdated", width: 100, valueFormatter: (params) => (params.value ? "Yes" : "No") },
-        { headerName: "Required Attributes Entered?", field: "RequiredAttributesEntered", width: 100 },
-        { headerName: "Initial Assessment?", field: "InitialAssessmentStatus", width: 95 },
-        { headerName: "Initial Assessment Score", field: "AssessmentScoreInitial", width: 95 },
-        { headerName: "Maintenance Occurred?", field: "MaintenanceOccurred", width: 95 },
-        { headerName: "Post-Maintenance Assessment?", field: "PostMaintenanceAssessmentStatus", width: 120 },
-        { headerName: "Post-Maintenance Assessment Score", field: "AssessmentScorePM", width: 95 },
-    ];
 
     /**
      * Stub: Whether the current user can edit benchmark and thresholds

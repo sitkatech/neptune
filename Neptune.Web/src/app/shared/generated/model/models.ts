@@ -15,6 +15,7 @@ export * from './elevation-model';
 export * from './envelope';
 export * from './field-definition-dto';
 export * from './field-definition-type-simple-dto';
+export * from './field-visit-dto';
 export * from './file-resource-dto';
 export * from './file-resource-mime-type-simple-dto';
 export * from './file-resource-simple-dto';

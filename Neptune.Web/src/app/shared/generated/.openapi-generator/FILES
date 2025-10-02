@@ -44,6 +44,7 @@ model/elevation-model.ts
 model/envelope.ts
 model/field-definition-dto.ts
 model/field-definition-type-simple-dto.ts
+model/field-visit-dto.ts
 model/file-resource-dto.ts
 model/file-resource-mime-type-simple-dto.ts
 model/file-resource-simple-dto.ts

@@ -18,7 +18,7 @@ namespace Neptune.API.Services
                 bytes = ms.ToArray();
             }
 
-            var person = UserContext.GetUserFromHttpContext(dbContext, httpContext);
+            var person = UserContext.GetUserAsDtoFromHttpContext(dbContext, httpContext);
 
             var fileResourceMimeType = FileResourceMimeType.GetFileResourceMimeTypeByContentTypeName(dbContext,
                 inputFile.ContentType);

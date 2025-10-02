@@ -4094,6 +4094,55 @@
         }
       }
     },
+    "/treatment-bmps/{treatmentBMPID}/field-visits": {
+      "get": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "parameters": [
+          {
+            "name": "treatmentBMPID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FieldVisitDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FieldVisitDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FieldVisitDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/treatment-bmps/{treatmentBMPID}/treatment-bmp-images": {
       "get": {
         "tags": [
@@ -5251,6 +5300,141 @@
             "nullable": true
           },
           "FieldDefinitionTypeDisplayName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "FieldVisitDto": {
+        "type": "object",
+        "properties": {
+          "FieldVisitID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "VisitDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "TreatmentBMPID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TreatmentBMPName": {
+            "type": "string",
+            "nullable": true
+          },
+          "TreatmentBMPTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TreatmentBMPTypeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "StormwaterJurisdictionID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OrganizationName": {
+            "type": "string",
+            "nullable": true
+          },
+          "FieldVisitTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "FieldVisitTypeDisplayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "PerformedByPersonID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "PerformedByPersonName": {
+            "type": "string",
+            "nullable": true
+          },
+          "FieldVisitStatusID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "FieldVisitStatusDisplayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "IsFieldVisitVerified": {
+            "type": "boolean"
+          },
+          "InventoryUpdated": {
+            "type": "boolean"
+          },
+          "NumberOfRequiredAttributes": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "NumberRequiredAttributesEntered": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "RequiredAttributesEntered": {
+            "type": "boolean",
+            "readOnly": true
+          },
+          "TreatmentBMPAssessmentIDInitial": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "IsAssessmentCompleteInitial": {
+            "type": "boolean"
+          },
+          "AssessmentScoreInitial": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "InitialAssessmentStatus": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "TreatmentBMPAssessmentIDPM": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "IsAssessmentCompletePM": {
+            "type": "boolean"
+          },
+          "AssessmentScorePM": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "MaintenanceRecordID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "MaintenanceOccurred": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "PostMaintenanceAssessmentStatus": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "WaterQualityManagementPlanID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "WaterQualityManagementPlanName": {
             "type": "string",
             "nullable": true
           }

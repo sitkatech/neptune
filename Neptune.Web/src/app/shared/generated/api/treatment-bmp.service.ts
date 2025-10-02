@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 // @ts-ignore
 import { CustomAttributeDto } from '../model/custom-attribute-dto';
 // @ts-ignore
+import { FieldVisitDto } from '../model/field-visit-dto';
+// @ts-ignore
 import { GeometryGeoJSONAndAreaDto } from '../model/geometry-geo-json-and-area-dto';
 // @ts-ignore
 import { HRUCharacteristicDto } from '../model/hru-characteristic-dto';
@@ -348,6 +350,61 @@ export class TreatmentBMPService extends BaseService {
         let localVarPath = `/treatment-bmps/${this.configuration.encodeParam({name: "treatmentBMPID", value: treatmentBMPID, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * @param treatmentBMPID 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public treatmentBmpsTreatmentBMPIDFieldVisitsGet(treatmentBMPID: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<FieldVisitDto>>;
+    public treatmentBmpsTreatmentBMPIDFieldVisitsGet(treatmentBMPID: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<FieldVisitDto>>>;
+    public treatmentBmpsTreatmentBMPIDFieldVisitsGet(treatmentBMPID: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<FieldVisitDto>>>;
+    public treatmentBmpsTreatmentBMPIDFieldVisitsGet(treatmentBMPID: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (treatmentBMPID === null || treatmentBMPID === undefined) {
+            throw new Error('Required parameter treatmentBMPID was null or undefined when calling treatmentBmpsTreatmentBMPIDFieldVisitsGet.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'text/plain',
+            'application/json',
+            'text/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/treatment-bmps/${this.configuration.encodeParam({name: "treatmentBMPID", value: treatmentBMPID, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}/field-visits`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<FieldVisitDto>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

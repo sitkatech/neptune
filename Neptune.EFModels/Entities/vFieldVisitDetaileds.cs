@@ -20,6 +20,7 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using Microsoft.EntityFrameworkCore;
+using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
@@ -43,11 +44,17 @@ namespace Neptune.EFModels.Entities
                 .Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID)).OrderByDescending(x => x.VisitDate).ToList();
         }
 
-
         public static List<vFieldVisitDetailed> ListByTreatmentBMPID(NeptuneDbContext dbContext, int treatmentBMPID)
         {
             return dbContext.vFieldVisitDetaileds.AsNoTracking().Where(x => x.TreatmentBMPID == treatmentBMPID)
                 .OrderByDescending(x => x.VisitDate)
+                .ToList();
+        }
+
+        public static List<FieldVisitDto> ListAsDtoByTreatmentBMPID(NeptuneDbContext dbContext, int treatmentBMPID)
+        {
+            return ListByTreatmentBMPID(dbContext, treatmentBMPID)
+                .Select(x => x.AsDto())
                 .ToList();
         }
     }

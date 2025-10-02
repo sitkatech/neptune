@@ -305,12 +305,13 @@
             </div>
             <div class="card-body">
                 <neptune-grid
-                    [rowData]="fieldVisitRowData"
+                    [rowData]="fieldVisits$ | async"
                     [columnDefs]="fieldVisitColumnDefs"
                     [pagination]="true"
                     [height]="'400px'"
                     [rowSelection]="'single'"
-                    [downloadFileName]="'FieldVisits'"></neptune-grid>
+                    [downloadFileName]="'FieldVisits'">
+                </neptune-grid>
             </div>
         </div>
 

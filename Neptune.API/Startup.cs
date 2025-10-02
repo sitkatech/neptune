@@ -107,7 +107,7 @@ namespace Neptune.API
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped(s => s.GetService<IHttpContextAccessor>().HttpContext);
-            services.AddScoped(s => UserContext.GetUserFromHttpContext(s.GetService<NeptuneDbContext>(), s.GetService<IHttpContextAccessor>().HttpContext));
+            services.AddScoped(s => UserContext.GetUserAsDtoFromHttpContext(s.GetService<NeptuneDbContext>(), s.GetService<IHttpContextAccessor>().HttpContext));
 
             #region Sendgrid
             services.AddSendGrid(options => { options.ApiKey = configuration.SendGridApiKey; });
