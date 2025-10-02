@@ -3,6 +3,7 @@ import { PageHeaderComponent } from "../../../../shared/components/page-header/p
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
 import { NeptuneMapComponent, NeptuneMapInitEvent } from "../../../../shared/components/leaflet/neptune-map/neptune-map.component";
 import * as L from "leaflet";
+import "@geoman-io/leaflet-geoman-free";
 import { LandUseBlockLayerComponent } from "../../../../shared/components/leaflet/layers/land-use-block-layer/land-use-block-layer.component";
 import { AsyncPipe } from "@angular/common";
 import { Router, RouterLink } from "@angular/router";
@@ -36,11 +37,6 @@ export class TrashOvtaAreaEditLocationComponent {
     public canPickParcels: boolean = false;
     public buttonText = "Pick Parcels";
 
-    public isPerformingDrawAction: boolean = false;
-    public drawMapClicked: boolean = false;
-
-    public drawnItems: L.FeatureGroup;
-    public drawControl: L.Control;
     public layer: L.FeatureGroup = new L.FeatureGroup();
 
     private defaultStyle = {
@@ -66,35 +62,6 @@ export class TrashOvtaAreaEditLocationComponent {
         weight: 1,
         opacity: 0.7,
     };
-
-    // private defaultDrawControlSpec: L.Control.DrawConstructorOptions = {
-    //     polyline: false,
-    //     rectangle: false,
-    //     circle: false,
-    //     marker: false,
-    //     circlemarker: false,
-    //     polygon: {
-    //         allowIntersection: false, // Restricts shapes to simple polygons
-    //         drawError: {
-    //             color: "#E1E100", // Color the shape will turn when intersects
-    //             message: "Self-intersecting polygons are not allowed.", // Message that will show when intersect
-    //         },
-    //     },
-    // };
-    // private defaultEditControlSpec: L.Control.DrawConstructorOptions = {
-    //     featureGroup: this.layer,
-    //     remove: true,
-    //     edit: {
-    //         featureGroup: this.layer,
-    //     },
-    //     poly: {
-    //         allowIntersection: false, // Restricts shapes to simple polygons
-    //         drawError: {
-    //             color: "#E1E100", // Color the shape will turn when intersects
-    //             message: "Self-intersecting polygons are not allowed.", // Message that will show when intersect
-    //         },
-    //     },
-    // };
 
     @Input() onlandVisualTrashAssessmentAreaID!: number;
     constructor(
@@ -131,71 +98,69 @@ export class TrashOvtaAreaEditLocationComponent {
     public save(ovtaAreaID) {
         var ovtaGeometryDto = new OnlandVisualTrashAssessmentAreaGeometryDto();
         ovtaGeometryDto.UsingParcels = this.canPickParcels;
-        this.layer.eachLayer((layer: L.Layer & { toGeoJSON: () => GeoJSON.Feature }) => {
-            ovtaGeometryDto.GeometryAsGeoJson = JSON.stringify(layer.toGeoJSON());
+        let geoJson = null;
+        this.layer.eachLayer((layer: L.Path & { toGeoJSON: () => GeoJSON.Feature }) => {
+            geoJson = layer.toGeoJSON();
         });
+        ovtaGeometryDto.GeometryAsGeoJson = geoJson ? JSON.stringify(geoJson) : null;
         ovtaGeometryDto.ParcelIDs = this.selectedParcelIDs;
         ovtaGeometryDto.OnlandVisualTrashAssessmentAreaID = ovtaAreaID;
         this.onlandVisualTrashAssessmentAreaService
             .onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDParcelGeometriesPost(ovtaAreaID, ovtaGeometryDto)
             .subscribe((x) => {
-                this.router.navigate(["../"]);
+                this.router.navigate(`trash/onland-visual-trash-assessment-areas/${ovtaAreaID}`.split("/"));
             });
     }
 
-    // public addOrRemoveDrawControl(turnOn: boolean) {
-    //     if (turnOn) {
-    //         var drawOptions = {
-    //             draw: Object.assign({}, this.defaultDrawControlSpec),
-    //             edit: Object.assign({}, this.defaultEditControlSpec),
-    //         };
-    //         this.drawControl = new L.Control.Draw(drawOptions);
-    //         this.map.addControl(this.drawControl);
-    //         return;
-    //     }
-    //     this.drawControl.remove();
-    // }
-
     public setControl(): void {
-        // L.EditToolbar.Delete.include({
-        //     removeAllLayers: false,
-        // });
-        // this.map
-        //     .on(L.Draw.Event.CREATED, (event) => {
-        //         this.isPerformingDrawAction = false;
-        //         const layer = (event as L.DrawEvents.Created).layer;
-        //         this.layer.addLayer(layer);
-        //         this.selectFeatureImpl();
-        //     })
-        //     .on(L.Draw.Event.EDITED, (event) => {
-        //         this.isPerformingDrawAction = false;
-        //         const layers = (event as L.DrawEvents.Edited).layers;
-        //         this.selectFeatureImpl();
-        //     })
-        //     .on(L.Draw.Event.DELETED, (event) => {
-        //         this.isPerformingDrawAction = false;
-        //         const layers = (event as L.DrawEvents.Deleted).layers;
-        //         this.selectFeatureImpl();
-        //     })
-        //     .on(L.Draw.Event.DRAWSTART, () => {
-        //         this.layer.clearLayers();
-        //     })
-        //     .on(L.Draw.Event.TOOLBAROPENED, () => {
-        //         this.isPerformingDrawAction = true;
-        //     })
-        //     .on(L.Draw.Event.TOOLBARCLOSED, () => {
-        //         this.isPerformingDrawAction = false;
-        //     });
-        // this.addOrRemoveDrawControl(true);
+        this.map
+            .on("pm:create", (event: { shape: string; layer: L.Path & { toGeoJSON: () => GeoJSON.Feature } }) => {
+                const layer = event.layer;
+                this.layer.clearLayers();
+                this.layer.addLayer(layer);
+                this.selectFeatureImpl();
+            })
+            .on("pm:globaleditmodetoggled", (e: any) => {
+                if (e.enabled) {
+                    //MP 10/2/25 Because direct comparison of layers is proving to be difficult,
+                    // just turn off editing for all layers then re-enable only for the layer we want to edit
+                    this.map.eachLayer((layer: any) => {
+                        if (layer.pm && (this.layer != layer || !this.layer.hasLayer(layer))) {
+                            layer.pm.disable();
+                        }
+                    });
+                    // Only enable editing for layers in this.layer
+                    this.layer.eachLayer((layer: L.Path) => {
+                        layer.pm.enable();
+                    });
+                    return;
+                }
+                this.selectFeatureImpl();
+            })
+            .on("pm:globalremovalmodetoggled", (e: any) => {
+                if (e.enabled) {
+                    // Remove geometry
+                    this.layer.clearLayers();
+                    this.map.pm.toggleGlobalRemovalMode();
+                    return;
+                }
+                this.selectFeatureImpl();
+            });
+        this.addOrRemoveGeomanControl(true);
     }
 
     public selectFeatureImpl() {
-        if (this.isPerformingDrawAction) {
+        if (this.isPerformingGeomanAction(true)) {
             return;
         }
-        this.map.removeControl(this.drawControl);
+        this.map.pm.removeControls();
         this.layer.setStyle(this.defaultStyle).bringToFront();
-        // this.addOrRemoveDrawControl(true);
+        this.addOrRemoveGeomanControl(true);
+    }
+
+    public isPerformingGeomanAction(skipDrawCheck: boolean = false): boolean {
+        //MP 10/1/25 - Added skipDrawCheck because the global draw mode remains enabled momentarily after drawing a shape is complete
+        return (this.map?.pm?.globalDrawModeEnabled() && !skipDrawCheck) || this.map?.pm?.globalEditModeEnabled() || this.map?.pm?.globalRemovalModeEnabled();
     }
 
     public addFeatureCollectionToFeatureGroup(featureJsons: any, featureGroup: L.FeatureGroup) {
@@ -207,6 +172,43 @@ export class TrashOvtaAreaEditLocationComponent {
                 });
             },
         });
+    }
+
+    public addOrRemoveGeomanControl(turnOn: boolean) {
+        if (turnOn) {
+            const hasPolygon = this.layer.getLayers().length > 0;
+            this.map.pm.addControls({
+                position: "topleft",
+                drawMarker: false,
+                drawText: false,
+                drawCircleMarker: false,
+                drawPolyline: false,
+                drawRectangle: false,
+                drawPolygon: !hasPolygon,
+                drawCircle: false,
+                editMode: hasPolygon,
+                removalMode: hasPolygon,
+                cutPolygon: false,
+                dragMode: false,
+                rotateMode: false,
+                snappingOption: true,
+                showCancelButton: true,
+            });
+            this.map.pm.setGlobalOptions({ allowSelfIntersection: false });
+            this.map.pm.setLang(
+                "en",
+                {
+                    buttonTitles: {
+                        drawPolyButton: "Add OVTA Area",
+                        editButton: "Edit OVTA Area",
+                        deleteButton: "Delete OVTA Area",
+                    },
+                },
+                "en"
+            );
+            return;
+        }
+        this.map.pm.removeControls();
     }
 
     private addLayersToFeatureGroup(layer: any, featureGroup: L.FeatureGroup) {
@@ -223,13 +225,13 @@ export class TrashOvtaAreaEditLocationComponent {
         this.canPickParcels = !this.canPickParcels;
         this.layer.clearLayers();
         if (this.canPickParcels) {
-            this.drawControl.remove();
+            this.map.pm.removeControls();
             this.addOVTAAreaToLayer(ovtaAreaID);
             this.addParcelsToLayer(boundingBox);
             this.buttonText = "Draw OVTA Areas";
         } else {
             this.addFeatureCollectionToFeatureGroup(JSON.parse(geometry), this.layer);
-            // this.addOrRemoveDrawControl(true);
+            this.addOrRemoveGeomanControl(true);
             this.buttonText = "Pick Parcels";
         }
         const bounds = this.layer.getBounds();
