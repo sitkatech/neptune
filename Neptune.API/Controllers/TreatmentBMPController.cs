@@ -102,8 +102,15 @@ namespace Neptune.API.Controllers
         [UserViewFeature]
         public ActionResult<TreatmentBMPDto> GetByID([FromRoute] int treatmentBMPID)
         {
-            var treatmentBMP = TreatmentBMPs.GetByID(DbContext, treatmentBMPID);
-            // Use the new extension method for mapping
+            var treatmentBMP = dbContext.TreatmentBMPs
+                .Include(x => x.TreatmentBMPType)
+                .Include(x => x.StormwaterJurisdiction)
+                .ThenInclude(x => x.Organization)
+                .Include(x => x.OwnerOrganization)
+                .Include(x => x.WaterQualityManagementPlan)
+                .Include(x => x.Delineation)
+                .AsNoTracking()
+                .Single(x => x.TreatmentBMPID == treatmentBMPID);
             var dto = treatmentBMP.AsDto();
             return Ok(dto);
         }

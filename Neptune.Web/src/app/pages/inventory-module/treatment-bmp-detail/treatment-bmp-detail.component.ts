@@ -30,9 +30,11 @@ import { UtilityFunctionsService } from "src/app/services/utility-functions.serv
 import { LandUseTableComponent } from "src/app/shared/components/land-use-table/land-use-table.component";
 import { NeptuneGridComponent } from "src/app/shared/components/neptune-grid/neptune-grid.component";
 import { CustomAttributesDisplayComponent } from "src/app/shared/components/custom-attributes-display/custom-attributes-display.component";
-import { CustomAttributeDto, TreatmentBMPTypeCustomAttributeTypeDto } from "src/app/shared/generated/model/models";
+import { CustomAttributeDto, TreatmentBMPHRUCharacteristicsSummarySimpleDto, TreatmentBMPTypeCustomAttributeTypeDto } from "src/app/shared/generated/model/models";
 import { CustomAttributeTypePurposeEnum } from "src/app/shared/generated/enum/custom-attribute-type-purpose-enum";
 import { TreatmentBMPTypeService } from "src/app/shared/generated/api/treatment-bmp-type.service";
+import { GroupByPipe } from "src/app/shared/pipes/group-by.pipe";
+import { SumPipe } from "src/app/shared/pipes/sum.pipe";
 
 @Component({
     selector: "treatment-bmp-detail",
@@ -69,46 +71,6 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
         }
     }
 
-    private loadData(): void {
-        this.hruCharacteristics$ = this.treatmentBMPService.treatmentBmpsTreatmentBMPIDHruCharacteristicsGet(this.treatmentBMPID);
-        this.treatmentBMP$ = this.treatmentBMPService.treatmentBmpsTreatmentBMPIDGet(this.treatmentBMPID).pipe(
-            tap((bmp) => {
-                if (bmp && bmp.Latitude && bmp.Longitude) {
-                    this.boundingBox = new BoundingBoxDto({
-                        Left: bmp.Longitude - 0.001,
-                        Right: bmp.Longitude + 0.001,
-                        Bottom: bmp.Latitude - 0.001,
-                        Top: bmp.Latitude + 0.001,
-                    });
-                }
-            })
-        );
-        this.customAttributes$ = this.treatmentBMP$.pipe(switchMap((bmp) => this.treatmentBMPService.treatmentBmpsTreatmentBMPIDCustomAttributesGet(bmp.TreatmentBMPID)));
-        this.treatmentBMPTypeCustomAttributeTypes$ = this.treatmentBMP$.pipe(
-            switchMap((bmp) =>
-                this.treatmentBMPTypeService.treatmentBmpTypesTreatmentBMPTypeIDCustomAttributeTypesGet(bmp.TreatmentBMPTypeID).pipe(
-                    tap((attributes) => {
-                        this.hasModelingAttributes =
-                            Array.isArray(attributes) &&
-                            attributes.some((attr) => attr.CustomAttributeType?.CustomAttributeTypePurposeID === CustomAttributeTypePurposeEnum.Modeling);
-                    })
-                )
-            )
-        );
-        this.treatmentBMPImages$ = this.treatmentBMPImageByTreatmentBMPService.treatmentBmpsTreatmentBMPIDTreatmentBmpImagesGet(this.treatmentBMPID).pipe(
-            tap({
-                next: () => {
-                    this.imagesLoading = false;
-                },
-                error: () => {
-                    this.imagesLoading = false;
-                },
-                complete: () => {
-                    this.imagesLoading = false;
-                },
-            })
-        );
-    }
     /**
      * Stub: Edit URL for Modeling Attributes
      */
@@ -170,7 +132,7 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
      * Stub for HRU characteristics summaries used in the land use panel template.
      * Replace with actual data wiring when available.
      */
-    hruCharacteristicsSummaries: any[] = [];
+    hruCharacteristicsSummaries: TreatmentBMPHRUCharacteristicsSummarySimpleDto[] = [];
     public WaterQualityManagementPlanModelingApproachEnum = WaterQualityManagementPlanModelingApproachEnum;
     public CustomAttributeTypePurposeEnum = CustomAttributeTypePurposeEnum;
 
@@ -179,7 +141,9 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
         private treatmentBMPService: TreatmentBMPService,
         private treatmentBMPImageByTreatmentBMPService: TreatmentBMPImageByTreatmentBMPService,
         private treatmentBMPTypeService: TreatmentBMPTypeService,
-        private utilityFunctionsService: UtilityFunctionsService
+        private utilityFunctionsService: UtilityFunctionsService,
+        private groupByPipe: GroupByPipe,
+        private sumPipe: SumPipe
     ) {}
 
     ngOnInit(): void {
@@ -202,6 +166,59 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
             this.utilityFunctionsService.createDateColumnDef("Last Updated", "LastUpdated", "short"),
         ];
         this.loadData();
+    }
+
+    private loadData(): void {
+        this.hruCharacteristics$ = this.treatmentBMPService.treatmentBmpsTreatmentBMPIDHruCharacteristicsGet(this.treatmentBMPID).pipe(
+            tap((hruCharacteristics) => {
+                const grouped = this.groupByPipe.transform(hruCharacteristics, "HRUCharacteristicLandUseCodeDisplayName");
+                this.hruCharacteristicsSummaries = Object.entries(grouped).map(
+                    ([key, value]) =>
+                        new TreatmentBMPHRUCharacteristicsSummarySimpleDto({
+                            Area: this.sumPipe.transform(value, "Area"),
+                            ImperviousCover: this.sumPipe.transform(value, "ImperviousAcres"),
+                            LandUse: key,
+                        })
+                );
+            })
+        );
+        this.treatmentBMP$ = this.treatmentBMPService.treatmentBmpsTreatmentBMPIDGet(this.treatmentBMPID).pipe(
+            tap((bmp) => {
+                if (bmp && bmp.Latitude && bmp.Longitude) {
+                    this.boundingBox = new BoundingBoxDto({
+                        Left: bmp.Longitude - 0.001,
+                        Right: bmp.Longitude + 0.001,
+                        Bottom: bmp.Latitude - 0.001,
+                        Top: bmp.Latitude + 0.001,
+                    });
+                }
+            })
+        );
+        this.customAttributes$ = this.treatmentBMP$.pipe(switchMap((bmp) => this.treatmentBMPService.treatmentBmpsTreatmentBMPIDCustomAttributesGet(bmp.TreatmentBMPID)));
+        this.treatmentBMPTypeCustomAttributeTypes$ = this.treatmentBMP$.pipe(
+            switchMap((bmp) =>
+                this.treatmentBMPTypeService.treatmentBmpTypesTreatmentBMPTypeIDCustomAttributeTypesGet(bmp.TreatmentBMPTypeID).pipe(
+                    tap((attributes) => {
+                        this.hasModelingAttributes =
+                            Array.isArray(attributes) &&
+                            attributes.some((attr) => attr.CustomAttributeType?.CustomAttributeTypePurposeID === CustomAttributeTypePurposeEnum.Modeling);
+                    })
+                )
+            )
+        );
+        this.treatmentBMPImages$ = this.treatmentBMPImageByTreatmentBMPService.treatmentBmpsTreatmentBMPIDTreatmentBmpImagesGet(this.treatmentBMPID).pipe(
+            tap({
+                next: () => {
+                    this.imagesLoading = false;
+                },
+                error: () => {
+                    this.imagesLoading = false;
+                },
+                complete: () => {
+                    this.imagesLoading = false;
+                },
+            })
+        );
     }
 
     /**
