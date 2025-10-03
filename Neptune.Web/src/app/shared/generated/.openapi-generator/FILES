@@ -7,6 +7,7 @@ api/delineation.service.ts
 api/field-definition.service.ts
 api/file-resource.service.ts
 api/funding-event-by-treatment-bmpid.service.ts
+api/funding-source.service.ts
 api/land-use-block.service.ts
 api/nereid.service.ts
 api/onland-visual-trash-assessment-area.service.ts
@@ -53,6 +54,8 @@ model/file-resource-simple-dto.ts
 model/funding-event-dto.ts
 model/funding-event-funding-source-simple-dto.ts
 model/funding-event-upsert-dto.ts
+model/funding-source-dto.ts
+model/funding-source-upsert-dto.ts
 model/geometry-factory.ts
 model/geometry-geo-json-and-area-dto.ts
 model/geometry.ts

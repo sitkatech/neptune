@@ -22,6 +22,8 @@ export * from './file-resource-simple-dto';
 export * from './funding-event-dto';
 export * from './funding-event-funding-source-simple-dto';
 export * from './funding-event-upsert-dto';
+export * from './funding-source-dto';
+export * from './funding-source-upsert-dto';
 export * from './geometry';
 export * from './geometry-factory';
 export * from './geometry-geo-json-and-area-dto';

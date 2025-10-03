@@ -11,7 +11,6 @@
 
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class FundingEventFundingSourceSimpleDto { 
-    FundingEventFundingSourceID?: number;
     FundingSourceID?: number;
     Amount?: number | null;
     FundingSourceName?: string | null;
@@ -21,23 +20,12 @@ export class FundingEventFundingSourceSimpleDto {
 }
 
 export interface FundingEventFundingSourceSimpleDtoForm { 
-    FundingEventFundingSourceID?: FormControl<number>;
     FundingSourceID?: FormControl<number>;
     Amount?: FormControl<number>;
     FundingSourceName?: FormControl<string>;
 }
 
 export class FundingEventFundingSourceSimpleDtoFormControls { 
-    public static FundingEventFundingSourceID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
     public static FundingSourceID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
