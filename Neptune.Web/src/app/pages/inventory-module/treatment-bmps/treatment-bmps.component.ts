@@ -20,12 +20,12 @@ import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto"
 import { StormwaterJurisdictionService } from "src/app/shared/generated/api/stormwater-jurisdiction.service";
 
 @Component({
-    selector: "view-all-bmps",
+    selector: "treatment-bmps",
     standalone: true,
     imports: [PageHeaderComponent, AlertDisplayComponent, HybridMapGridComponent, AsyncPipe, LoadingDirective],
-    templateUrl: "./view-all-bmps.component.html",
+    templateUrl: "./treatment-bmps.component.html",
 })
-export class ViewAllBmpsComponent {
+export class TreatmentBmpsComponent {
     public map: any;
     public layerControl: any;
     private markerClusterLayer: any;

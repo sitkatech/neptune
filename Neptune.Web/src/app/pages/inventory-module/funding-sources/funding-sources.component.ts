@@ -89,10 +89,6 @@ export class FundingSourcesComponent {
         });
     }
 
-    onSelectionChanged(event: any) {
-        // Handle row selection if needed
-    }
-
     deleteFundingSource(fundingSource: FundingSourceDto) {
         this.confirmService
             .confirm({

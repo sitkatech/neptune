@@ -1,5 +1,5 @@
 import { DialogService } from "@ngneat/dialog";
-import { FundingEventModalComponent, FundingEventModalContext } from "./funding-event-modal/funding-event-modal.component";
+import { FundingEventModalComponent, FundingEventModalContext } from "../funding-event-modal/funding-event-modal.component";
 import { ConfirmService } from "src/app/shared/services/confirm/confirm.service";
 import { Component, OnInit, OnChanges, SimpleChanges, ViewChild, TemplateRef, Input } from "@angular/core";
 import { Router, RouterLink } from "@angular/router";

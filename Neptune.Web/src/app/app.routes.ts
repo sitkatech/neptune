@@ -43,12 +43,13 @@ export const routes: Routes = [
             {
                 path: "view-all-bmps",
                 title: "View All BMPs",
-                loadComponent: () => import("./pages/inventory-module/view-all-bmps/view-all-bmps.component").then((m) => m.ViewAllBmpsComponent),
+                loadComponent: () => import("./pages/inventory-module/treatment-bmps/treatment-bmps.component").then((m) => m.TreatmentBmpsComponent),
             },
             {
                 path: `treatment-bmp-detail/:${routeParams.treatmentBMPID}`,
                 title: "Treatment BMP Detail",
-                loadComponent: () => import("./pages/inventory-module/treatment-bmp-detail/treatment-bmp-detail.component").then((m) => m.TreatmentBmpDetailComponent),
+                loadComponent: () =>
+                    import("./pages/inventory-module/treatment-bmps/treatment-bmp-detail/treatment-bmp-detail.component").then((m) => m.TreatmentBmpDetailComponent),
             },
             {
                 path: "latest-bmp-assessments",
