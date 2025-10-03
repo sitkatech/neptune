@@ -134,9 +134,9 @@ export const routes: Routes = [
             },
             { path: "manage/users", title: "Users", loadComponent: () => import("./pages/inventory-module/manage/users.component").then((m) => m.UsersComponent) },
             {
-                path: "manage/organizations",
+                path: "organizations",
                 title: "Organizations",
-                loadComponent: () => import("./pages/inventory-module/manage/organizations.component").then((m) => m.OrganizationsComponent),
+                loadComponent: () => import("./pages/inventory-module/organizations/organizations.component").then((m) => m.OrganizationsComponent),
             },
             {
                 path: "manage/jurisdictions",

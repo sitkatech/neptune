@@ -7,50 +7,35 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { OrganizationTypeSimpleDto } from './organization-type-simple-dto';
-import { PersonSimpleDto } from './person-simple-dto';
-import { FileResourceSimpleDto } from './file-resource-simple-dto';
 
 
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
-export class OrganizationDto { 
-    OrganizationID?: number;
+export class OrganizationUpsertDto { 
     OrganizationGuid?: string | null;
     OrganizationName?: string | null;
     OrganizationShortName?: string | null;
-    PrimaryContactPerson?: PersonSimpleDto;
+    PrimaryContactPersonID?: number | null;
     IsActive?: boolean;
     OrganizationUrl?: string | null;
-    LogoFileResource?: FileResourceSimpleDto;
-    OrganizationType?: OrganizationTypeSimpleDto;
+    LogoFileResourceID?: number | null;
+    OrganizationTypeID?: number;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
 }
 
-export interface OrganizationDtoForm { 
-    OrganizationID?: FormControl<number>;
+export interface OrganizationUpsertDtoForm { 
     OrganizationGuid?: FormControl<string>;
     OrganizationName?: FormControl<string>;
     OrganizationShortName?: FormControl<string>;
-    PrimaryContactPerson?: FormControl<PersonSimpleDto>;
+    PrimaryContactPersonID?: FormControl<number>;
     IsActive?: FormControl<boolean>;
     OrganizationUrl?: FormControl<string>;
-    LogoFileResource?: FormControl<FileResourceSimpleDto>;
-    OrganizationType?: FormControl<OrganizationTypeSimpleDto>;
+    LogoFileResourceID?: FormControl<number>;
+    OrganizationTypeID?: FormControl<number>;
 }
 
-export class OrganizationDtoFormControls { 
-    public static OrganizationID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
+export class OrganizationUpsertDtoFormControls { 
     public static OrganizationGuid = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
@@ -81,7 +66,7 @@ export class OrganizationDtoFormControls {
             ],
         }
     );
-    public static PrimaryContactPerson = (value: FormControlState<PersonSimpleDto> | PersonSimpleDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<PersonSimpleDto>(
+    public static PrimaryContactPersonID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
         {
@@ -111,7 +96,7 @@ export class OrganizationDtoFormControls {
             ],
         }
     );
-    public static LogoFileResource = (value: FormControlState<FileResourceSimpleDto> | FileResourceSimpleDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<FileResourceSimpleDto>(
+    public static LogoFileResourceID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
         {
@@ -121,7 +106,7 @@ export class OrganizationDtoFormControls {
             ],
         }
     );
-    public static OrganizationType = (value: FormControlState<OrganizationTypeSimpleDto> | OrganizationTypeSimpleDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<OrganizationTypeSimpleDto>(
+    public static OrganizationTypeID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
         {

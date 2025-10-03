@@ -99,4 +99,41 @@ public static class Organizations
     {
         return dbContext.Organizations.Single(x => x.OrganizationName == Organization.OrganizationUnknown).OrganizationID;
     }
+
+    public static async Task<List<OrganizationDto>> ListAsDtoAsync(NeptuneDbContext dbContext)
+    {
+        var entities = await GetImpl(dbContext).AsNoTracking().OrderBy(x => x.OrganizationName).ToListAsync();
+        return entities.Select(x => x.AsDto()).ToList();
+    }
+
+    public static async Task<OrganizationDto?> GetByIDAsDtoAsync(NeptuneDbContext dbContext, int organizationID)
+    {
+        var entity = await GetImpl(dbContext).AsNoTracking().SingleOrDefaultAsync(x => x.OrganizationID == organizationID);
+        return entity?.AsDto();
+    }
+
+    public static async Task<OrganizationDto> CreateAsync(NeptuneDbContext dbContext, OrganizationUpsertDto dto)
+    {
+        var entity = dto.AsEntity();
+        dbContext.Organizations.Add(entity);
+        await dbContext.SaveChangesAsync();
+        return await GetByIDAsDtoAsync(dbContext, entity.OrganizationID);
+    }
+
+    public static async Task<OrganizationDto?> UpdateAsync(NeptuneDbContext dbContext, int organizationID, OrganizationUpsertDto dto)
+    {
+        var entity = await dbContext.Organizations.FirstOrDefaultAsync(x => x.OrganizationID == organizationID);
+        if (entity == null) return null;
+        entity.UpdateFromUpsertDto(dto);
+        await dbContext.SaveChangesAsync();
+        return await GetByIDAsDtoAsync(dbContext, entity.OrganizationID);
+    }
+
+    public static async Task<bool> DeleteAsync(NeptuneDbContext dbContext, int organizationID)
+    {
+        var entity = await dbContext.Organizations.FirstOrDefaultAsync(x => x.OrganizationID == organizationID);
+        if (entity == null) return false;
+        await entity.DeleteFull(dbContext);
+        return true;
+    }
 }

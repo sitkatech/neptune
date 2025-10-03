@@ -2375,7 +2375,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/OrganizationSimpleDto"
+                    "$ref": "#/components/schemas/OrganizationDto"
                   }
                 }
               },
@@ -2383,7 +2383,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/OrganizationSimpleDto"
+                    "$ref": "#/components/schemas/OrganizationDto"
                   }
                 }
               },
@@ -2391,11 +2391,175 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/OrganizationSimpleDto"
+                    "$ref": "#/components/schemas/OrganizationDto"
                   }
                 }
               }
             }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Organization"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrganizationUpsertDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrganizationUpsertDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrganizationUpsertDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrganizationDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrganizationDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrganizationDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/organizations/{organizationID}": {
+      "get": {
+        "tags": [
+          "Organization"
+        ],
+        "parameters": [
+          {
+            "name": "organizationID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrganizationDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrganizationDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrganizationDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Organization"
+        ],
+        "parameters": [
+          {
+            "name": "organizationID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrganizationUpsertDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrganizationUpsertDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrganizationUpsertDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrganizationDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrganizationDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrganizationDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Organization"
+        ],
+        "parameters": [
+          {
+            "name": "organizationID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -6145,72 +6309,6 @@
         },
         "additionalProperties": false
       },
-      "FileResourceDto": {
-        "type": "object",
-        "properties": {
-          "FileResourceID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "FileResourceMimeType": {
-            "$ref": "#/components/schemas/FileResourceMimeTypeSimpleDto"
-          },
-          "OriginalBaseFilename": {
-            "type": "string",
-            "nullable": true
-          },
-          "OriginalFileExtension": {
-            "type": "string",
-            "nullable": true
-          },
-          "FileResourceGUID": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "CreatePerson": {
-            "$ref": "#/components/schemas/PersonDto"
-          },
-          "CreateDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "ContentLength": {
-            "type": "integer",
-            "format": "int64"
-          }
-        },
-        "additionalProperties": false
-      },
-      "FileResourceMimeTypeSimpleDto": {
-        "type": "object",
-        "properties": {
-          "FileResourceMimeTypeID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "FileResourceMimeTypeName": {
-            "type": "string",
-            "nullable": true
-          },
-          "FileResourceMimeTypeDisplayName": {
-            "type": "string",
-            "nullable": true
-          },
-          "FileResourceMimeTypeContentTypeName": {
-            "type": "string",
-            "nullable": true
-          },
-          "FileResourceMimeTypeIconSmallFilename": {
-            "type": "string",
-            "nullable": true
-          },
-          "FileResourceMimeTypeIconNormalFilename": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "FileResourceSimpleDto": {
         "type": "object",
         "properties": {
@@ -7671,7 +7769,7 @@
             "nullable": true
           },
           "PrimaryContactPerson": {
-            "$ref": "#/components/schemas/PersonDto"
+            "$ref": "#/components/schemas/PersonSimpleDto"
           },
           "IsActive": {
             "type": "boolean"
@@ -7681,7 +7779,7 @@
             "nullable": true
           },
           "LogoFileResource": {
-            "$ref": "#/components/schemas/FileResourceDto"
+            "$ref": "#/components/schemas/FileResourceSimpleDto"
           },
           "OrganizationType": {
             "$ref": "#/components/schemas/OrganizationTypeSimpleDto"
@@ -7754,6 +7852,46 @@
           },
           "IsDefaultOrganizationType": {
             "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OrganizationUpsertDto": {
+        "type": "object",
+        "properties": {
+          "OrganizationGuid": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "OrganizationName": {
+            "type": "string",
+            "nullable": true
+          },
+          "OrganizationShortName": {
+            "type": "string",
+            "nullable": true
+          },
+          "PrimaryContactPersonID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "IsActive": {
+            "type": "boolean"
+          },
+          "OrganizationUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "LogoFileResourceID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "OrganizationTypeID": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false

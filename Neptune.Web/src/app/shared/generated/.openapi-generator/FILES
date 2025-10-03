@@ -48,8 +48,6 @@ model/envelope.ts
 model/field-definition-dto.ts
 model/field-definition-type-simple-dto.ts
 model/field-visit-dto.ts
-model/file-resource-dto.ts
-model/file-resource-mime-type-simple-dto.ts
 model/file-resource-simple-dto.ts
 model/funding-event-dto.ts
 model/funding-event-funding-source-simple-dto.ts
@@ -96,6 +94,7 @@ model/ordinates.ts
 model/organization-dto.ts
 model/organization-simple-dto.ts
 model/organization-type-simple-dto.ts
+model/organization-upsert-dto.ts
 model/ovta-results-dto.ts
 model/parcel-geometry-simple-dto.ts
 model/person-create-dto.ts
