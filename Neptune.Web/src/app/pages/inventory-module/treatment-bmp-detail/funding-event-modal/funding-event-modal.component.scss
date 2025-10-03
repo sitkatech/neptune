@@ -1,0 +1,16 @@
+/* Funding Event Modal Styles */
+.section-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+.modal-header {
+    border-bottom: 1px solid #eee;
+    margin-bottom: 1rem;
+}
+.modal-footer {
+    border-top: 1px solid #eee;
+    margin-top: 1rem;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}

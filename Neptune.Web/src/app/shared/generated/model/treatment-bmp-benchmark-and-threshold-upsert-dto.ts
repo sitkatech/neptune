@@ -10,9 +10,7 @@
 
 
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
-export class TreatmentBMPBenchmarkAndThresholdDto { 
-    TreatmentBMPBenchmarkAndThresholdID?: number;
-    TreatmentBMPID?: number;
+export class TreatmentBMPBenchmarkAndThresholdUpsertDto { 
     TreatmentBMPTypeAssessmentObservationTypeID?: number;
     TreatmentBMPTypeID?: number;
     TreatmentBMPAssessmentObservationTypeID?: number;
@@ -23,9 +21,7 @@ export class TreatmentBMPBenchmarkAndThresholdDto {
     }
 }
 
-export interface TreatmentBMPBenchmarkAndThresholdDtoForm { 
-    TreatmentBMPBenchmarkAndThresholdID?: FormControl<number>;
-    TreatmentBMPID?: FormControl<number>;
+export interface TreatmentBMPBenchmarkAndThresholdUpsertDtoForm { 
     TreatmentBMPTypeAssessmentObservationTypeID?: FormControl<number>;
     TreatmentBMPTypeID?: FormControl<number>;
     TreatmentBMPAssessmentObservationTypeID?: FormControl<number>;
@@ -33,27 +29,7 @@ export interface TreatmentBMPBenchmarkAndThresholdDtoForm {
     ThresholdValue?: FormControl<number>;
 }
 
-export class TreatmentBMPBenchmarkAndThresholdDtoFormControls { 
-    public static TreatmentBMPBenchmarkAndThresholdID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static TreatmentBMPID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
+export class TreatmentBMPBenchmarkAndThresholdUpsertDtoFormControls { 
     public static TreatmentBMPTypeAssessmentObservationTypeID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 

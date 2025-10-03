@@ -1,3 +1,6 @@
+import { DialogService } from "@ngneat/dialog";
+import { FundingEventModalComponent, FundingEventModalContext } from "./funding-event-modal/funding-event-modal.component";
+import { ConfirmService } from "src/app/shared/services/confirm/confirm.service";
 import { Component, OnInit, OnChanges, SimpleChanges, ViewChild, TemplateRef, Input } from "@angular/core";
 import { Router, RouterLink } from "@angular/router";
 import { DatePipe, AsyncPipe, CommonModule } from "@angular/common";
@@ -32,6 +35,8 @@ import { NeptuneGridComponent } from "src/app/shared/components/neptune-grid/nep
 import { CustomAttributesDisplayComponent } from "src/app/shared/components/custom-attributes-display/custom-attributes-display.component";
 import { CustomAttributeDto, TreatmentBMPHRUCharacteristicsSummarySimpleDto, TreatmentBMPTypeCustomAttributeTypeDto } from "src/app/shared/generated/model/models";
 import { FieldVisitDto } from "src/app/shared/generated/model/field-visit-dto";
+import { FundingEventByTreatmentBMPIDService } from "src/app/shared/generated/api/funding-event-by-treatment-bmpid.service";
+import { FundingEventDto } from "src/app/shared/generated/model/funding-event-dto";
 import { CustomAttributeTypePurposeEnum } from "src/app/shared/generated/enum/custom-attribute-type-purpose-enum";
 import { TreatmentBMPTypeService } from "src/app/shared/generated/api/treatment-bmp-type.service";
 import { GroupByPipe } from "src/app/shared/pipes/group-by.pipe";
@@ -66,6 +71,44 @@ import { SumPipe } from "src/app/shared/pipes/sum.pipe";
     ],
 })
 export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
+    openAddFundingEventModal(): void {
+        this.dialogService
+            .open(FundingEventModalComponent, {
+                data: { treatmentBMPID: this.treatmentBMPID } as FundingEventModalContext,
+            })
+            .afterClosed$.subscribe((result) => {
+                if (result) this.loadData();
+            });
+    }
+
+    openEditFundingEventModal(fundingEvent: FundingEventDto): void {
+        this.dialogService
+            .open(FundingEventModalComponent, {
+                data: { treatmentBMPID: this.treatmentBMPID, editData: fundingEvent } as FundingEventModalContext,
+            })
+            .afterClosed$.subscribe((result) => {
+                if (result) this.loadData();
+            });
+    }
+
+    confirmDeleteFundingEvent(fundingEvent: FundingEventDto): void {
+        this.confirmService
+            .confirm({
+                buttonClassYes: "btn-danger",
+                buttonTextYes: "Delete",
+                buttonTextNo: "Cancel",
+                title: "Delete Funding Event",
+                message: `<p>Are you sure you want to delete the Funding Event '<strong>${fundingEvent.DisplayName}</strong>'?</p>`,
+            })
+            .then((confirmed) => {
+                if (confirmed) {
+                    this.fundingEventByTreatmentBMPIDService
+                        .treatmentBmpsTreatmentBMPIDFundingEventsFundingEventIDDelete(this.treatmentBMPID, fundingEvent.FundingEventID)
+                        .subscribe(() => this.loadData());
+                }
+            });
+    }
+    fundingEvents$: Observable<FundingEventDto[]>;
     ngOnChanges(changes: SimpleChanges): void {
         if (changes["treatmentBMPID"] && !changes["treatmentBMPID"].firstChange) {
             this.loadData();
@@ -119,7 +162,7 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
     openRevisionRequestDetailUrl = "";
     upstreamestBMP: any = null;
     isUpstreamestBMPAnalyzedInModelingModule = false;
-    currentPersonCanManage = false;
+    currentPersonCanManage = true;
     canEditStormwaterJurisdiction = false;
     isAnalyzedInModelingModule = true;
     isSitkaAdmin = true;
@@ -147,7 +190,10 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
         private treatmentBMPTypeService: TreatmentBMPTypeService,
         private utilityFunctionsService: UtilityFunctionsService,
         private groupByPipe: GroupByPipe,
-        private sumPipe: SumPipe
+        private sumPipe: SumPipe,
+        private fundingEventByTreatmentBMPIDService: FundingEventByTreatmentBMPIDService,
+        private dialogService: DialogService,
+        private confirmService: ConfirmService
     ) {}
 
     ngOnInit(): void {
@@ -191,6 +237,8 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
     }
 
     private loadData(): void {
+        // Wire up funding events grid as observable
+        this.fundingEvents$ = this.fundingEventByTreatmentBMPIDService.treatmentBmpsTreatmentBMPIDFundingEventsGet(this.treatmentBMPID);
         this.hruCharacteristics$ = this.treatmentBMPService.treatmentBmpsTreatmentBMPIDHruCharacteristicsGet(this.treatmentBMPID).pipe(
             tap((hruCharacteristics) => {
                 const grouped = this.groupByPipe.transform(hruCharacteristics, "HRUCharacteristicLandUseCodeDisplayName");
@@ -277,6 +325,11 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
                 marker.bindPopup(bmp.TreatmentBMPName || "BMP Location");
             }
         });
+    }
+
+    getFundingEventTotal(fundingEvent: FundingEventDto): number {
+        if (!fundingEvent.FundingEventFundingSources) return 0;
+        return fundingEvent.FundingEventFundingSources.reduce((acc, s) => acc + (s.Amount || 0), 0);
     }
 
     getEditLink(treatmentBMP: any): string {

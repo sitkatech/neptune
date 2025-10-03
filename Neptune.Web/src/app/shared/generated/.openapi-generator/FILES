@@ -6,6 +6,7 @@ api/custom-rich-text.service.ts
 api/delineation.service.ts
 api/field-definition.service.ts
 api/file-resource.service.ts
+api/funding-event-by-treatment-bmpid.service.ts
 api/land-use-block.service.ts
 api/nereid.service.ts
 api/onland-visual-trash-assessment-area.service.ts
@@ -19,6 +20,7 @@ api/stormwater-jurisdiction.service.ts
 api/system-info.service.ts
 api/trash-generating-unit-by-stormwater-jurisdiction.service.ts
 api/trash-generating-unit.service.ts
+api/treatment-bmp-benchmark-and-threshold.service.ts
 api/treatment-bmp-image-by-treatment-bmp.service.ts
 api/treatment-bmp-type-custom-attribute-type.service.ts
 api/treatment-bmp-type.service.ts
@@ -48,6 +50,9 @@ model/field-visit-dto.ts
 model/file-resource-dto.ts
 model/file-resource-mime-type-simple-dto.ts
 model/file-resource-simple-dto.ts
+model/funding-event-dto.ts
+model/funding-event-funding-source-simple-dto.ts
+model/funding-event-upsert-dto.ts
 model/geometry-factory.ts
 model/geometry-geo-json-and-area-dto.ts
 model/geometry.ts
@@ -117,6 +122,7 @@ model/trash-generating-unit-dto.ts
 model/trash-generating-unit-grid-dto.ts
 model/treatment-bmp-assessment-dto.ts
 model/treatment-bmp-benchmark-and-threshold-dto.ts
+model/treatment-bmp-benchmark-and-threshold-upsert-dto.ts
 model/treatment-bmp-display-dto.ts
 model/treatment-bmp-dto.ts
 model/treatment-bmp-image-dto.ts

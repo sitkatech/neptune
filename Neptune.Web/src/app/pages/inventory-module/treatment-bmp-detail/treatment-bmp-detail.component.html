@@ -293,7 +293,7 @@
         }
 
         <!-- Field Visits -->
-        <div class="card mt-3">
+        <div class="card">
             <div class="card-header">
                 <span class="card-title">Field Visits</span>
                 @if (currentPersonCanManage) {
@@ -316,24 +316,60 @@
         </div>
 
         <!-- Funding Events -->
-        <div class="card mt-3">
-            <div class="card-header">
+        <div class="card g-col-6 mt-3">
+            <div class="card-header d-flex justify-content-between align-items-center">
                 <span class="card-title">Funding Events</span>
                 @if (currentPersonCanManage) {
                 <span class="card-actions">
-                    <!-- TODO: Implement modal dialog for New Funding Event -->
-                    <button class="btn btn-neptune"><span class="icon-plus"></span> New Funding Event</button>
+                    <button class="btn btn-neptune" (click)="openAddFundingEventModal()"><span class="icon-plus"></span> Add Funding Event</button>
                 </span>
                 }
             </div>
-            <div class="card-body" style="max-height: 800px; overflow: auto">
-                <!-- TODO: Replace with actual funding events table and controls -->
-                <p class="systemText">[Funding Events Table goes here]</p>
+            <div class="card-body">
+                @if (fundingEvents$ | async; as fundingEvents) { @if (fundingEvents.length) { @for (fundingEvent of fundingEvents; track fundingEvent.FundingEventID) {
+                <div class="d-flex justify-content-between align-items-center mt-2">
+                    <h5 class="mb-0">{{ fundingEvent.DisplayName }}</h5>
+                    <div>
+                        <button class="btn btn-sm btn-outline-primary me-2" (click)="openEditFundingEventModal(fundingEvent)"><span class="icon-edit"></span> Edit</button>
+                        <button class="btn btn-sm btn-outline-danger" (click)="confirmDeleteFundingEvent(fundingEvent)"><span class="icon-trash"></span> Delete</button>
+                    </div>
+                </div>
+                <p class="mb-2">{{ fundingEvent.Description }}</p>
+                @if (fundingEvent.FundingEventFundingSources?.length) {
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Funding Source</th>
+                                <th class="text-end">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (source of fundingEvent.FundingEventFundingSources; track source.FundingSourceID) {
+                            <tr>
+                                <td>
+                                    <a [routerLink]="['/funding-sources', source.FundingSourceID]">{{ source.FundingSourceName }}</a>
+                                </td>
+                                <td class="text-end">{{ source.Amount | currency }}</td>
+                            </tr>
+                            }
+                            <tr class="fw-bold">
+                                <td>Total</td>
+                                <td class="text-end">{{ getFundingEventTotal(fundingEvent) | currency }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                } @else {
+                <p class="systemText mb-0">No Funding Sources identified for this Funding Event</p>
+                } } } @else {
+                <p class="systemText">No Funding Events identified for this Treatment BMP</p>
+                } }
             </div>
         </div>
 
         <!-- Benchmark & Threshold Values -->
-        <div class="card mt-3">
+        <div class="card g-col-6 mt-3">
             <div class="card-header">
                 <span class="card-title">Benchmark &amp; Threshold Values</span>
                 <span class="card-actions">
