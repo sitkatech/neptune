@@ -2,15 +2,16 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Neptune.API.Services;
+using Neptune.API.Services.Attributes;
 using Neptune.API.Services.Authorization;
+using Neptune.Common.Email;
 using Neptune.EFModels.Entities;
+using Neptune.Models.DataTransferObjects;
+using Neptune.Models.DataTransferObjects.Person;
 using System;
 using System.Collections.Generic;
 using System.Net.Mail;
 using System.Threading.Tasks;
-using Neptune.Models.DataTransferObjects;
-using Neptune.Common.Email;
-using Neptune.Models.DataTransferObjects.Person;
 
 namespace Neptune.API.Controllers
 {
@@ -26,7 +27,7 @@ namespace Neptune.API.Controllers
     {
         [HttpPost]
         [LoggedInUnclassifiedFeature]
-        public async Task<ActionResult<PersonDto>> CreateUser([FromBody] PersonCreateDto personCreateDto)
+        public async Task<ActionResult<PersonDto>> Create([FromBody] PersonCreateDto personCreateDto)
         {
             // Validate request body; all fields required in Dto except Org Name and Phone
             if (personCreateDto == null)
@@ -53,18 +54,48 @@ namespace Neptune.API.Controllers
 
         [HttpGet]
         [UserViewFeature]
-        public ActionResult<List<PersonSimpleDto>> List()
+        public async Task<ActionResult<List<PersonSimpleDto>>> List()
         {
-            var userList = People.ListAsSimpleDto(DbContext);
-            return Ok(userList);
+            var people = await People.ListAsSimpleDtoAsync(DbContext);
+            return Ok(people);
         }
 
         [HttpGet("{personID}")]
         [UserViewDetailFeature]
-        public ActionResult<PersonDto> GetByPersonID([FromRoute] int personID)
+        [EntityNotFoundAttribute(typeof(Person), "personID")]
+        public async Task<ActionResult<PersonDto>> Get([FromRoute] int personID)
         {
-            var userDto = People.GetByIDAsDto(DbContext, personID);
-            return RequireNotNullThrowNotFound(userDto, "User", personID);
+            var person = await People.GetByIDAsDtoAsync(DbContext, personID);
+            if (person == null) return NotFound();
+            return Ok(person);
+        }
+
+        //[HttpPost]
+        //[AdminFeature]
+        //public async Task<ActionResult<PersonDto>> Create([FromBody] PersonUpsertDto dto)
+        //{
+        //    var created = await People.CreateAsync(DbContext, dto, dto.Email, Guid.NewGuid());
+        //    return CreatedAtAction(nameof(Get), new { personID = created.PersonID }, created);
+        //}
+
+        [HttpPut("{personID}")]
+        [AdminFeature]
+        [EntityNotFoundAttribute(typeof(Person), "personID")]
+        public async Task<ActionResult<PersonDto>> Update([FromRoute] int personID, [FromBody] PersonUpsertDto dto)
+        {
+            var updated = await People.UpdateAsync(DbContext, personID, dto);
+            if (updated == null) return NotFound();
+            return Ok(updated);
+        }
+
+        [HttpDelete("{personID}")]
+        [AdminFeature]
+        [EntityNotFoundAttribute(typeof(Person), "personID")]
+        public async Task<IActionResult> Delete([FromRoute] int personID)
+        {
+            var deleted = await People.DeleteAsync(DbContext, personID);
+            if (!deleted) return NotFound();
+            return NoContent();
         }
 
         private MailMessage GenerateUserCreatedEmail(PersonDto person)

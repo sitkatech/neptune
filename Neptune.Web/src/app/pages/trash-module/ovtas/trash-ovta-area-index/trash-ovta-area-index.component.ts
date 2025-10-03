@@ -88,8 +88,8 @@ export class TrashOvtaAreaIndexComponent {
             }),
             this.utilityFunctionsService.createBasicColumnDef("Description", "AssessmentAreaDescription"),
         ];
-        this.onlandVisualTrashAssessmentAreas$ = this.onlandVisualTrashAssessmentAreaService.onlandVisualTrashAssessmentAreasGet().pipe(tap((x) => (this.isLoading = false)));
-        this.boundingBox$ = this.stormwaterJurisdictionService.jurisdictionsBoundingBoxGet();
+        this.onlandVisualTrashAssessmentAreas$ = this.onlandVisualTrashAssessmentAreaService.listOnlandVisualTrashAssessmentArea().pipe(tap((x) => (this.isLoading = false)));
+        this.boundingBox$ = this.stormwaterJurisdictionService.getBoundingBoxStormwaterJurisdiction();
     }
 
     public handleMapReady(event: NeptuneMapInitEvent) {
@@ -129,7 +129,7 @@ export class TrashOvtaAreaIndexComponent {
                     onlandVisualTrashAssessmentSimpleDto.OnlandVisualTrashAssessmentAreaID = onlandVisualTrashAssessmentAreaID;
                     onlandVisualTrashAssessmentSimpleDto.StormwaterJurisdictionID = stormwaterJurisdictionID;
                     onlandVisualTrashAssessmentSimpleDto.AssessingNewArea = false;
-                    this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsPost(onlandVisualTrashAssessmentSimpleDto).subscribe((response) => {
+                    this.onlandVisualTrashAssessmentService.createOnlandVisualTrashAssessment(onlandVisualTrashAssessmentSimpleDto).subscribe((response) => {
                         this.alertService.clearAlerts();
                         this.alertService.pushAlert(new Alert("Your OVTA was successfully created.", AlertContext.Success));
                         this.router.navigate([`/trash/onland-visual-trash-assessments/edit/${response.OnlandVisualTrashAssessmentID}/record-observations`]);

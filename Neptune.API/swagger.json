@@ -10,6 +10,7 @@
         "tags": [
           "CustomAttributeType"
         ],
+        "operationId": "List_CustomAttributeType",
         "responses": {
           "200": {
             "description": "OK",
@@ -48,6 +49,7 @@
         "tags": [
           "CustomAttributeType"
         ],
+        "operationId": "Get_CustomAttributeType",
         "parameters": [
           {
             "name": "customAttributeTypeID",
@@ -88,6 +90,7 @@
         "tags": [
           "CustomAttributeType"
         ],
+        "operationId": "GetByCustomAttributeTypePurposeID_CustomAttributeType",
         "parameters": [
           {
             "name": "customAttributeTypePurposeID",
@@ -137,6 +140,7 @@
         "tags": [
           "CustomRichText"
         ],
+        "operationId": "GetCustomRichText_CustomRichText",
         "parameters": [
           {
             "name": "customRichTextTypeID",
@@ -175,6 +179,7 @@
         "tags": [
           "CustomRichText"
         ],
+        "operationId": "UpdateCustomRichText_CustomRichText",
         "parameters": [
           {
             "name": "customRichTextTypeID",
@@ -234,6 +239,7 @@
         "tags": [
           "Delineation"
         ],
+        "operationId": "List_Delineation",
         "responses": {
           "200": {
             "description": "OK",
@@ -272,6 +278,7 @@
         "tags": [
           "FieldDefinition"
         ],
+        "operationId": "List_FieldDefinition",
         "responses": {
           "200": {
             "description": "OK",
@@ -310,6 +317,7 @@
         "tags": [
           "FieldDefinition"
         ],
+        "operationId": "Get_FieldDefinition",
         "parameters": [
           {
             "name": "fieldDefinitionTypeID",
@@ -348,6 +356,7 @@
         "tags": [
           "FieldDefinition"
         ],
+        "operationId": "Update_FieldDefinition",
         "parameters": [
           {
             "name": "fieldDefinitionTypeID",
@@ -407,6 +416,7 @@
         "tags": [
           "FileResource"
         ],
+        "operationId": "DisplayResource_FileResource",
         "parameters": [
           {
             "name": "fileResourceGuidAsString",
@@ -429,6 +439,7 @@
         "tags": [
           "FundingEventByTreatmentBMPID"
         ],
+        "operationId": "List_FundingEventByTreatmentBMPID",
         "parameters": [
           {
             "name": "treatmentBMPID",
@@ -476,6 +487,7 @@
         "tags": [
           "FundingEventByTreatmentBMPID"
         ],
+        "operationId": "Create_FundingEventByTreatmentBMPID",
         "parameters": [
           {
             "name": "treatmentBMPID",
@@ -535,6 +547,7 @@
         "tags": [
           "FundingEventByTreatmentBMPID"
         ],
+        "operationId": "Get_FundingEventByTreatmentBMPID",
         "parameters": [
           {
             "name": "treatmentBMPID",
@@ -582,6 +595,7 @@
         "tags": [
           "FundingEventByTreatmentBMPID"
         ],
+        "operationId": "Update_FundingEventByTreatmentBMPID",
         "parameters": [
           {
             "name": "treatmentBMPID",
@@ -648,6 +662,7 @@
         "tags": [
           "FundingEventByTreatmentBMPID"
         ],
+        "operationId": "Delete_FundingEventByTreatmentBMPID",
         "parameters": [
           {
             "name": "treatmentBMPID",
@@ -680,6 +695,7 @@
         "tags": [
           "FundingSource"
         ],
+        "operationId": "List_FundingSource",
         "responses": {
           "200": {
             "description": "OK",
@@ -716,6 +732,7 @@
         "tags": [
           "FundingSource"
         ],
+        "operationId": "Create_FundingSource",
         "requestBody": {
           "content": {
             "application/json": {
@@ -764,6 +781,7 @@
         "tags": [
           "FundingSource"
         ],
+        "operationId": "Get_FundingSource",
         "parameters": [
           {
             "name": "fundingSourceID",
@@ -802,6 +820,7 @@
         "tags": [
           "FundingSource"
         ],
+        "operationId": "Update_FundingSource",
         "parameters": [
           {
             "name": "fundingSourceID",
@@ -859,6 +878,7 @@
         "tags": [
           "FundingSource"
         ],
+        "operationId": "Delete_FundingSource",
         "parameters": [
           {
             "name": "fundingSourceID",
@@ -882,6 +902,7 @@
         "tags": [
           "LandUseBlock"
         ],
+        "operationId": "List_LandUseBlock",
         "responses": {
           "200": {
             "description": "OK",
@@ -918,6 +939,7 @@
         "tags": [
           "LandUseBlock"
         ],
+        "operationId": "Update_LandUseBlock",
         "parameters": [
           {
             "name": "landUseBlockID",
@@ -959,6 +981,7 @@
         "tags": [
           "Nereid"
         ],
+        "operationId": "DeltaSolve_Nereid",
         "responses": {
           "200": {
             "description": "OK"
@@ -971,6 +994,7 @@
         "tags": [
           "Nereid"
         ],
+        "operationId": "HealthCheck_Nereid",
         "responses": {
           "200": {
             "description": "OK"
@@ -983,6 +1007,7 @@
         "tags": [
           "Nereid"
         ],
+        "operationId": "ConfigCheck_Nereid",
         "responses": {
           "200": {
             "description": "OK"
@@ -995,6 +1020,7 @@
         "tags": [
           "Nereid"
         ],
+        "operationId": "ValidateNetworkGraph_Nereid",
         "responses": {
           "200": {
             "description": "OK"
@@ -1007,6 +1033,7 @@
         "tags": [
           "Nereid"
         ],
+        "operationId": "Subgraph_Nereid",
         "responses": {
           "200": {
             "description": "OK"
@@ -1019,6 +1046,7 @@
         "tags": [
           "Nereid"
         ],
+        "operationId": "SolutionSequence_Nereid",
         "responses": {
           "200": {
             "description": "OK"
@@ -1031,6 +1059,7 @@
         "tags": [
           "Nereid"
         ],
+        "operationId": "Loading_Nereid",
         "responses": {
           "200": {
             "description": "OK"
@@ -1043,6 +1072,7 @@
         "tags": [
           "Nereid"
         ],
+        "operationId": "BaselineLoading_Nereid",
         "responses": {
           "200": {
             "description": "OK"
@@ -1055,6 +1085,7 @@
         "tags": [
           "Nereid"
         ],
+        "operationId": "TreatmentFacility_Nereid",
         "responses": {
           "200": {
             "description": "OK"
@@ -1067,6 +1098,7 @@
         "tags": [
           "Nereid"
         ],
+        "operationId": "ValidateTreatmentFacility_Nereid",
         "parameters": [
           {
             "name": "treatmentBMPID",
@@ -1090,6 +1122,7 @@
         "tags": [
           "Nereid"
         ],
+        "operationId": "NoTreatmentFacility_Nereid",
         "responses": {
           "200": {
             "description": "OK"
@@ -1102,6 +1135,7 @@
         "tags": [
           "Nereid"
         ],
+        "operationId": "TreatmentSiteTable_Nereid",
         "responses": {
           "200": {
             "description": "OK"
@@ -1114,6 +1148,7 @@
         "tags": [
           "Nereid"
         ],
+        "operationId": "TreatmentFacilityTable_Nereid",
         "responses": {
           "200": {
             "description": "OK"
@@ -1126,6 +1161,7 @@
         "tags": [
           "Nereid"
         ],
+        "operationId": "LandSurfaceTable_Nereid",
         "responses": {
           "200": {
             "description": "OK"
@@ -1138,6 +1174,7 @@
         "tags": [
           "Nereid"
         ],
+        "operationId": "NetworkTable_Nereid",
         "responses": {
           "200": {
             "description": "OK"
@@ -1150,6 +1187,7 @@
         "tags": [
           "Nereid"
         ],
+        "operationId": "SolutionTestCase_Nereid",
         "responses": {
           "200": {
             "description": "OK"
@@ -1162,6 +1200,7 @@
         "tags": [
           "Nereid"
         ],
+        "operationId": "DeltaSolveTest_Nereid",
         "responses": {
           "200": {
             "description": "OK"
@@ -1174,6 +1213,7 @@
         "tags": [
           "OnlandVisualTrashAssessment"
         ],
+        "operationId": "List_OnlandVisualTrashAssessment",
         "responses": {
           "200": {
             "description": "OK",
@@ -1210,6 +1250,7 @@
         "tags": [
           "OnlandVisualTrashAssessment"
         ],
+        "operationId": "Create_OnlandVisualTrashAssessment",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1258,6 +1299,7 @@
         "tags": [
           "OnlandVisualTrashAssessment"
         ],
+        "operationId": "Get_OnlandVisualTrashAssessment",
         "parameters": [
           {
             "name": "onlandVisualTrashAssessmentID",
@@ -1296,6 +1338,7 @@
         "tags": [
           "OnlandVisualTrashAssessment"
         ],
+        "operationId": "Delete_OnlandVisualTrashAssessment",
         "parameters": [
           {
             "name": "onlandVisualTrashAssessmentID",
@@ -1319,6 +1362,7 @@
         "tags": [
           "OnlandVisualTrashAssessment"
         ],
+        "operationId": "GetAreaAsFeatureCollection_OnlandVisualTrashAssessment",
         "parameters": [
           {
             "name": "onlandVisualTrashAssessmentID",
@@ -1368,6 +1412,7 @@
         "tags": [
           "OnlandVisualTrashAssessment"
         ],
+        "operationId": "GetTransectLineAsFeatureCollection_OnlandVisualTrashAssessment",
         "parameters": [
           {
             "name": "onlandVisualTrashAssessmentID",
@@ -1417,6 +1462,7 @@
         "tags": [
           "OnlandVisualTrashAssessment"
         ],
+        "operationId": "GetByIDForAddOrRemoveParcel_OnlandVisualTrashAssessment",
         "parameters": [
           {
             "name": "onlandVisualTrashAssessmentID",
@@ -1455,6 +1501,7 @@
         "tags": [
           "OnlandVisualTrashAssessment"
         ],
+        "operationId": "UpdateOnlandVisualTrashAssessmentWithParcels_OnlandVisualTrashAssessment",
         "parameters": [
           {
             "name": "onlandVisualTrashAssessmentID",
@@ -1509,6 +1556,7 @@
         "tags": [
           "OnlandVisualTrashAssessment"
         ],
+        "operationId": "GetByIDForReviewAndFinalize_OnlandVisualTrashAssessment",
         "parameters": [
           {
             "name": "onlandVisualTrashAssessmentID",
@@ -1547,6 +1595,7 @@
         "tags": [
           "OnlandVisualTrashAssessment"
         ],
+        "operationId": "UpdateReviewAndFinalize_OnlandVisualTrashAssessment",
         "parameters": [
           {
             "name": "onlandVisualTrashAssessmentID",
@@ -1589,6 +1638,7 @@
         "tags": [
           "OnlandVisualTrashAssessment"
         ],
+        "operationId": "GetWorkflowProgress_OnlandVisualTrashAssessment",
         "parameters": [
           {
             "name": "onlandVisualTrashAssessmentID",
@@ -1629,6 +1679,7 @@
         "tags": [
           "OnlandVisualTrashAssessment"
         ],
+        "operationId": "UpdateOnlandVisualTrashAssessmentWithRefinedArea_OnlandVisualTrashAssessment",
         "parameters": [
           {
             "name": "onlandVisualTrashAssessmentID",
@@ -1671,6 +1722,7 @@
         "tags": [
           "OnlandVisualTrashAssessment"
         ],
+        "operationId": "RefreshOnlandVisualTrashAssessmentParcels_OnlandVisualTrashAssessment",
         "parameters": [
           {
             "name": "onlandVisualTrashAssessmentID",
@@ -1711,6 +1763,7 @@
         "tags": [
           "OnlandVisualTrashAssessment"
         ],
+        "operationId": "EditStatusToAllowEdit_OnlandVisualTrashAssessment",
         "parameters": [
           {
             "name": "onlandVisualTrashAssessmentID",
@@ -1734,6 +1787,7 @@
         "tags": [
           "OnlandVisualTrashAssessmentArea"
         ],
+        "operationId": "List_OnlandVisualTrashAssessmentArea",
         "responses": {
           "200": {
             "description": "OK",
@@ -1772,6 +1826,7 @@
         "tags": [
           "OnlandVisualTrashAssessmentArea"
         ],
+        "operationId": "Get_OnlandVisualTrashAssessmentArea",
         "parameters": [
           {
             "name": "onlandVisualTrashAssessmentAreaID",
@@ -1810,6 +1865,7 @@
         "tags": [
           "OnlandVisualTrashAssessmentArea"
         ],
+        "operationId": "Update_OnlandVisualTrashAssessmentArea",
         "parameters": [
           {
             "name": "onlandVisualTrashAssessmentAreaID",
@@ -1852,6 +1908,7 @@
         "tags": [
           "OnlandVisualTrashAssessmentArea"
         ],
+        "operationId": "ListAssessmentsByOVTAID_OnlandVisualTrashAssessmentArea",
         "parameters": [
           {
             "name": "onlandVisualTrashAssessmentAreaID",
@@ -1901,6 +1958,7 @@
         "tags": [
           "OnlandVisualTrashAssessmentArea"
         ],
+        "operationId": "GetParcelGeometries_OnlandVisualTrashAssessmentArea",
         "parameters": [
           {
             "name": "onlandVisualTrashAssessmentAreaID",
@@ -1948,6 +2006,7 @@
         "tags": [
           "OnlandVisualTrashAssessmentArea"
         ],
+        "operationId": "UpdateOnlandVisualTrashAssessmentWithParcels_OnlandVisualTrashAssessmentArea",
         "parameters": [
           {
             "name": "onlandVisualTrashAssessmentAreaID",
@@ -1990,6 +2049,7 @@
         "tags": [
           "OnlandVisualTrashAssessmentArea"
         ],
+        "operationId": "GetAreaAsFeatureCollection_OnlandVisualTrashAssessmentArea",
         "parameters": [
           {
             "name": "onlandVisualTrashAssessmentAreaID",
@@ -2039,6 +2099,7 @@
         "tags": [
           "OnlandVisualTrashAssessmentArea"
         ],
+        "operationId": "GetTransectLineAsFeatureCollection_OnlandVisualTrashAssessmentArea",
         "parameters": [
           {
             "name": "onlandVisualTrashAssessmentAreaID",
@@ -2088,6 +2149,7 @@
         "tags": [
           "OnlandVisualTrashAssessmentArea"
         ],
+        "operationId": "ListByJurisdictionID_OnlandVisualTrashAssessmentArea",
         "parameters": [
           {
             "name": "jurisdictionID",
@@ -2137,6 +2199,7 @@
         "tags": [
           "OnlandVisualTrashAssessmentObservation"
         ],
+        "operationId": "ListByOnlandVisualTrashAssessmentID_OnlandVisualTrashAssessmentObservation",
         "parameters": [
           {
             "name": "onlandVisualTrashAssessmentID",
@@ -2184,6 +2247,7 @@
         "tags": [
           "OnlandVisualTrashAssessmentObservation"
         ],
+        "operationId": "UpdateObservations_OnlandVisualTrashAssessmentObservation",
         "parameters": [
           {
             "name": "onlandVisualTrashAssessmentID",
@@ -2226,6 +2290,7 @@
         "tags": [
           "OnlandVisualTrashAssessmentObservation"
         ],
+        "operationId": "GetAsFeatureCollection_OnlandVisualTrashAssessmentObservation",
         "parameters": [
           {
             "name": "onlandVisualTrashAssessmentID",
@@ -2275,6 +2340,7 @@
         "tags": [
           "OnlandVisualTrashAssessmentObservation"
         ],
+        "operationId": "StageObservationPhoto_OnlandVisualTrashAssessmentObservation",
         "parameters": [
           {
             "name": "onlandVisualTrashAssessmentID",
@@ -2335,6 +2401,7 @@
         "tags": [
           "OnlandVisualTrashAssessmentObservation"
         ],
+        "operationId": "DeleteObservationPhoto_OnlandVisualTrashAssessmentObservation",
         "parameters": [
           {
             "name": "onlandVisualTrashAssessmentID",
@@ -2367,6 +2434,7 @@
         "tags": [
           "Organization"
         ],
+        "operationId": "List_Organization",
         "responses": {
           "200": {
             "description": "OK",
@@ -2403,6 +2471,7 @@
         "tags": [
           "Organization"
         ],
+        "operationId": "Create_Organization",
         "requestBody": {
           "content": {
             "application/json": {
@@ -2451,6 +2520,7 @@
         "tags": [
           "Organization"
         ],
+        "operationId": "Get_Organization",
         "parameters": [
           {
             "name": "organizationID",
@@ -2489,6 +2559,7 @@
         "tags": [
           "Organization"
         ],
+        "operationId": "Update_Organization",
         "parameters": [
           {
             "name": "organizationID",
@@ -2546,6 +2617,7 @@
         "tags": [
           "Organization"
         ],
+        "operationId": "Delete_Organization",
         "parameters": [
           {
             "name": "organizationID",
@@ -2569,6 +2641,7 @@
         "tags": [
           "Project"
         ],
+        "operationId": "List_Project",
         "responses": {
           "200": {
             "description": "OK",
@@ -2605,6 +2678,7 @@
         "tags": [
           "Project"
         ],
+        "operationId": "Create_Project",
         "requestBody": {
           "content": {
             "application/json": {
@@ -2653,6 +2727,7 @@
         "tags": [
           "Project"
         ],
+        "operationId": "Get_Project",
         "parameters": [
           {
             "name": "projectID",
@@ -2691,6 +2766,7 @@
         "tags": [
           "Project"
         ],
+        "operationId": "Delete_Project",
         "parameters": [
           {
             "name": "projectID",
@@ -2714,6 +2790,7 @@
         "tags": [
           "Project"
         ],
+        "operationId": "GetBoundingBoxByProjectID_Project",
         "parameters": [
           {
             "name": "projectID",
@@ -2754,6 +2831,7 @@
         "tags": [
           "Project"
         ],
+        "operationId": "GetProjectProgress_Project",
         "parameters": [
           {
             "name": "projectID",
@@ -2794,6 +2872,7 @@
         "tags": [
           "Project"
         ],
+        "operationId": "Update_Project",
         "parameters": [
           {
             "name": "projectID",
@@ -2836,6 +2915,7 @@
         "tags": [
           "Project"
         ],
+        "operationId": "ListAttachmentsByProjectID_Project",
         "parameters": [
           {
             "name": "projectID",
@@ -2883,6 +2963,7 @@
         "tags": [
           "Project"
         ],
+        "operationId": "AddAttachment_Project",
         "parameters": [
           {
             "name": "projectID",
@@ -2971,6 +3052,7 @@
         "tags": [
           "Project"
         ],
+        "operationId": "ListTreatmentBMPsByProjectID_Project",
         "parameters": [
           {
             "name": "projectID",
@@ -3018,6 +3100,7 @@
         "tags": [
           "Project"
         ],
+        "operationId": "MergeTreatmentBMPs_Project",
         "parameters": [
           {
             "name": "projectID",
@@ -3069,6 +3152,7 @@
         "tags": [
           "Project"
         ],
+        "operationId": "ListTreatmentBMPsAsUpsertDtosByProjectID_Project",
         "parameters": [
           {
             "name": "projectID",
@@ -3118,6 +3202,7 @@
         "tags": [
           "Project"
         ],
+        "operationId": "MergeTreatmentBMPLocations_Project",
         "parameters": [
           {
             "name": "projectID",
@@ -3169,6 +3254,7 @@
         "tags": [
           "Project"
         ],
+        "operationId": "ListProjectNetworkSolveHistoriesForProject_Project",
         "parameters": [
           {
             "name": "projectID",
@@ -3218,6 +3304,7 @@
         "tags": [
           "Project"
         ],
+        "operationId": "ListTreatmentBMPHRUCharacteristicsForProject_Project",
         "parameters": [
           {
             "name": "projectID",
@@ -3267,6 +3354,7 @@
         "tags": [
           "Project"
         ],
+        "operationId": "ListLoadReducingResultsForProject_Project",
         "parameters": [
           {
             "name": "projectID",
@@ -3316,6 +3404,7 @@
         "tags": [
           "Project"
         ],
+        "operationId": "ListtLoadGeneratingResultsForProject_Project",
         "parameters": [
           {
             "name": "projectID",
@@ -3365,6 +3454,7 @@
         "tags": [
           "Project"
         ],
+        "operationId": "TriggerModeledPerformanceForProject_Project",
         "parameters": [
           {
             "name": "projectID",
@@ -3388,6 +3478,7 @@
         "tags": [
           "Project"
         ],
+        "operationId": "ListDelineationsByProjectID_Project",
         "parameters": [
           {
             "name": "projectID",
@@ -3435,6 +3526,7 @@
         "tags": [
           "Project"
         ],
+        "operationId": "MergeDelineationsForProject_Project",
         "parameters": [
           {
             "name": "projectID",
@@ -3486,6 +3578,7 @@
         "tags": [
           "Project"
         ],
+        "operationId": "CreateProjectCopy_Project",
         "parameters": [
           {
             "name": "projectID",
@@ -3529,6 +3622,7 @@
         "tags": [
           "Project"
         ],
+        "operationId": "DownloadProjectsWithModels_Project",
         "responses": {
           "200": {
             "description": "OK",
@@ -3549,6 +3643,7 @@
         "tags": [
           "Project"
         ],
+        "operationId": "DownloadTreatmentBMPsForProjects_Project",
         "responses": {
           "200": {
             "description": "OK",
@@ -3569,6 +3664,7 @@
         "tags": [
           "Project"
         ],
+        "operationId": "ListProjectsSharedWithOCTAM2Tier2GrantProgram_Project",
         "responses": {
           "200": {
             "description": "OK",
@@ -3607,6 +3703,7 @@
         "tags": [
           "Project"
         ],
+        "operationId": "DownloadProjectsSharedWithOCTAM2Tier2GrantProgram_Project",
         "responses": {
           "200": {
             "description": "OK",
@@ -3627,6 +3724,7 @@
         "tags": [
           "Project"
         ],
+        "operationId": "DownloadTreatmentBMPsForProjectsSharedWithOCTAM2Tier2GrantProgram_Project",
         "responses": {
           "200": {
             "description": "OK",
@@ -3647,6 +3745,7 @@
         "tags": [
           "Project"
         ],
+        "operationId": "ListDelineations_Project",
         "responses": {
           "200": {
             "description": "OK",
@@ -3685,6 +3784,7 @@
         "tags": [
           "ProjectDocument"
         ],
+        "operationId": "GetAttachmentByID_ProjectDocument",
         "parameters": [
           {
             "name": "projectDocumentID",
@@ -3723,6 +3823,7 @@
         "tags": [
           "ProjectDocument"
         ],
+        "operationId": "UpdateAttachment_ProjectDocument",
         "parameters": [
           {
             "name": "projectDocumentID",
@@ -3780,6 +3881,7 @@
         "tags": [
           "ProjectDocument"
         ],
+        "operationId": "DeleteAttachment_ProjectDocument",
         "parameters": [
           {
             "name": "projectDocumentID",
@@ -3803,6 +3905,7 @@
         "tags": [
           "RegionalSubbasin"
         ],
+        "operationId": "GetRegionalSubbasinGraphTraceAsFeatureCollectionFromPoint_RegionalSubbasin",
         "requestBody": {
           "content": {
             "application/json": {
@@ -3860,6 +3963,7 @@
         "tags": [
           "StormwaterJurisdiction"
         ],
+        "operationId": "List_StormwaterJurisdiction",
         "responses": {
           "200": {
             "description": "OK",
@@ -3898,6 +4002,7 @@
         "tags": [
           "StormwaterJurisdiction"
         ],
+        "operationId": "ListViewableStormwaterJurisdictionIDs_StormwaterJurisdiction",
         "responses": {
           "200": {
             "description": "OK",
@@ -3936,6 +4041,7 @@
         "tags": [
           "StormwaterJurisdiction"
         ],
+        "operationId": "GetBoundingBox_StormwaterJurisdiction",
         "responses": {
           "200": {
             "description": "OK",
@@ -3965,6 +4071,7 @@
         "tags": [
           "StormwaterJurisdiction"
         ],
+        "operationId": "GetBoundingBoxByJurisdictionID_StormwaterJurisdiction",
         "parameters": [
           {
             "name": "jurisdictionID",
@@ -4005,6 +4112,7 @@
         "tags": [
           "SystemInfo"
         ],
+        "operationId": "GetSystemInfo_SystemInfo",
         "responses": {
           "200": {
             "description": "OK",
@@ -4034,6 +4142,7 @@
         "tags": [
           "TrashGeneratingUnit"
         ],
+        "operationId": "ListForCallingUser_TrashGeneratingUnit",
         "responses": {
           "200": {
             "description": "OK",
@@ -4072,6 +4181,7 @@
         "tags": [
           "TrashGeneratingUnit"
         ],
+        "operationId": "Get_TrashGeneratingUnit",
         "parameters": [
           {
             "name": "trashGeneratingUnitID",
@@ -4112,6 +4222,7 @@
         "tags": [
           "TrashGeneratingUnit"
         ],
+        "operationId": "GetLastUpdateDate_TrashGeneratingUnit",
         "responses": {
           "200": {
             "description": "OK",
@@ -4144,6 +4255,7 @@
         "tags": [
           "TrashGeneratingUnitByStormwaterJurisdiction"
         ],
+        "operationId": "GetAreaBasedResultsCalculations_TrashGeneratingUnitByStormwaterJurisdiction",
         "parameters": [
           {
             "name": "jurisdictionID",
@@ -4184,6 +4296,7 @@
         "tags": [
           "TrashGeneratingUnitByStormwaterJurisdiction"
         ],
+        "operationId": "GetOVTABasedResultsCalculations_TrashGeneratingUnitByStormwaterJurisdiction",
         "parameters": [
           {
             "name": "jurisdictionID",
@@ -4224,6 +4337,7 @@
         "tags": [
           "TrashGeneratingUnitByStormwaterJurisdiction"
         ],
+        "operationId": "GetLoadBasedResultsCalculations_TrashGeneratingUnitByStormwaterJurisdiction",
         "parameters": [
           {
             "name": "jurisdictionID",
@@ -4264,6 +4378,7 @@
         "tags": [
           "TreatmentBMP"
         ],
+        "operationId": "List_TreatmentBMP",
         "responses": {
           "200": {
             "description": "OK",
@@ -4302,6 +4417,7 @@
         "tags": [
           "TreatmentBMP"
         ],
+        "operationId": "ListInventoryVerifiedTreatmentBMPsAsFeatureCollection_TreatmentBMP",
         "responses": {
           "200": {
             "description": "OK",
@@ -4340,6 +4456,7 @@
         "tags": [
           "TreatmentBMP"
         ],
+        "operationId": "ListInventoryVerifiedTreatmentBMPsByJurisdictionIDAsFeatureCollection_TreatmentBMP",
         "parameters": [
           {
             "name": "jurisdictionID",
@@ -4389,6 +4506,7 @@
         "tags": [
           "TreatmentBMP"
         ],
+        "operationId": "ListTreatmentBMPsWithProjectIDAsFeatureCollection_TreatmentBMP",
         "responses": {
           "200": {
             "description": "OK",
@@ -4427,6 +4545,7 @@
         "tags": [
           "TreatmentBMP"
         ],
+        "operationId": "ListOCTAM2Tier2GrantProgramTreatmentBMPs_TreatmentBMP",
         "responses": {
           "200": {
             "description": "OK",
@@ -4465,6 +4584,7 @@
         "tags": [
           "TreatmentBMP"
         ],
+        "operationId": "ChangeTreatmentBMPType_TreatmentBMP",
         "parameters": [
           {
             "name": "treatmentBMPID",
@@ -4517,6 +4637,7 @@
         "tags": [
           "TreatmentBMP"
         ],
+        "operationId": "GetUpstreamRSBCatchmentGeoJSONForTreatmentBMP_TreatmentBMP",
         "parameters": [
           {
             "name": "treatmentBMPID",
@@ -4557,6 +4678,7 @@
         "tags": [
           "TreatmentBMP"
         ],
+        "operationId": "GetByID_TreatmentBMP",
         "parameters": [
           {
             "name": "treatmentBMPID",
@@ -4595,6 +4717,7 @@
         "tags": [
           "TreatmentBMP"
         ],
+        "operationId": "Delete_TreatmentBMP",
         "parameters": [
           {
             "name": "treatmentBMPID",
@@ -4618,6 +4741,7 @@
         "tags": [
           "TreatmentBMP"
         ],
+        "operationId": "ListHRUCharacteristics_TreatmentBMP",
         "parameters": [
           {
             "name": "treatmentBMPID",
@@ -4667,6 +4791,7 @@
         "tags": [
           "TreatmentBMP"
         ],
+        "operationId": "ListCustomAttributes_TreatmentBMP",
         "parameters": [
           {
             "name": "treatmentBMPID",
@@ -4716,6 +4841,7 @@
         "tags": [
           "TreatmentBMP"
         ],
+        "operationId": "FieldVisitGridJsonData_TreatmentBMP",
         "parameters": [
           {
             "name": "treatmentBMPID",
@@ -4765,6 +4891,7 @@
         "tags": [
           "TreatmentBMPBenchmarkAndThreshold"
         ],
+        "operationId": "List_TreatmentBMPBenchmarkAndThreshold",
         "parameters": [
           {
             "name": "treatmentBMPID",
@@ -4812,6 +4939,7 @@
         "tags": [
           "TreatmentBMPBenchmarkAndThreshold"
         ],
+        "operationId": "Create_TreatmentBMPBenchmarkAndThreshold",
         "parameters": [
           {
             "name": "treatmentBMPID",
@@ -4871,6 +4999,7 @@
         "tags": [
           "TreatmentBMPBenchmarkAndThreshold"
         ],
+        "operationId": "Get_TreatmentBMPBenchmarkAndThreshold",
         "parameters": [
           {
             "name": "treatmentBMPID",
@@ -4918,6 +5047,7 @@
         "tags": [
           "TreatmentBMPBenchmarkAndThreshold"
         ],
+        "operationId": "Update_TreatmentBMPBenchmarkAndThreshold",
         "parameters": [
           {
             "name": "treatmentBMPID",
@@ -4984,6 +5114,7 @@
         "tags": [
           "TreatmentBMPBenchmarkAndThreshold"
         ],
+        "operationId": "Delete_TreatmentBMPBenchmarkAndThreshold",
         "parameters": [
           {
             "name": "treatmentBMPID",
@@ -5016,6 +5147,7 @@
         "tags": [
           "TreatmentBMPImageByTreatmentBMP"
         ],
+        "operationId": "List_TreatmentBMPImageByTreatmentBMP",
         "parameters": [
           {
             "name": "treatmentBMPID",
@@ -5063,6 +5195,7 @@
         "tags": [
           "TreatmentBMPImageByTreatmentBMP"
         ],
+        "operationId": "Create_TreatmentBMPImageByTreatmentBMP",
         "parameters": [
           {
             "name": "treatmentBMPID",
@@ -5122,6 +5255,7 @@
         "tags": [
           "TreatmentBMPImageByTreatmentBMP"
         ],
+        "operationId": "Get_TreatmentBMPImageByTreatmentBMP",
         "parameters": [
           {
             "name": "treatmentBMPID",
@@ -5169,6 +5303,7 @@
         "tags": [
           "TreatmentBMPImageByTreatmentBMP"
         ],
+        "operationId": "Update_TreatmentBMPImageByTreatmentBMP",
         "parameters": [
           {
             "name": "treatmentBMPID",
@@ -5218,6 +5353,7 @@
         "tags": [
           "TreatmentBMPImageByTreatmentBMP"
         ],
+        "operationId": "Delete_TreatmentBMPImageByTreatmentBMP",
         "parameters": [
           {
             "name": "treatmentBMPID",
@@ -5250,6 +5386,7 @@
         "tags": [
           "TreatmentBMPType"
         ],
+        "operationId": "List_TreatmentBMPType",
         "responses": {
           "200": {
             "description": "OK",
@@ -5288,6 +5425,7 @@
         "tags": [
           "TreatmentBMPType"
         ],
+        "operationId": "ListCustomAttributeTypes_TreatmentBMPType",
         "parameters": [
           {
             "name": "treatmentBMPTypeID",
@@ -5337,6 +5475,7 @@
         "tags": [
           "TreatmentBMPTypeCustomAttributeType"
         ],
+        "operationId": "List_TreatmentBMPTypeCustomAttributeType",
         "responses": {
           "200": {
             "description": "OK",
@@ -5375,6 +5514,7 @@
         "tags": [
           "TreatmentBMPTypeCustomAttributeType"
         ],
+        "operationId": "Get_TreatmentBMPTypeCustomAttributeType",
         "parameters": [
           {
             "name": "treatmentBMPTypeCustomAttributeTypeID",
@@ -5415,6 +5555,7 @@
         "tags": [
           "TreatmentBMPTypeCustomAttributeType"
         ],
+        "operationId": "GetTreatmentBMPTypeCustomAttributeTypeByCustomAttributePurposeID_TreatmentBMPTypeCustomAttributeType",
         "parameters": [
           {
             "name": "customAttributeTypePurposeID",
@@ -5464,6 +5605,7 @@
         "tags": [
           "User"
         ],
+        "operationId": "Create_User",
         "requestBody": {
           "content": {
             "application/json": {
@@ -5510,6 +5652,7 @@
         "tags": [
           "User"
         ],
+        "operationId": "List_User",
         "responses": {
           "200": {
             "description": "OK",
@@ -5548,6 +5691,7 @@
         "tags": [
           "User"
         ],
+        "operationId": "Get_User",
         "parameters": [
           {
             "name": "personID",
@@ -5581,6 +5725,86 @@
             }
           }
         }
+      },
+      "put": {
+        "tags": [
+          "User"
+        ],
+        "operationId": "Update_User",
+        "parameters": [
+          {
+            "name": "personID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonUpsertDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonUpsertDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonUpsertDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "User"
+        ],
+        "operationId": "Delete_User",
+        "parameters": [
+          {
+            "name": "personID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
       }
     },
     "/user-claims/{globalID}": {
@@ -5588,6 +5812,7 @@
         "tags": [
           "UserClaims"
         ],
+        "operationId": "GetByGlobalID_UserClaims",
         "parameters": [
           {
             "name": "globalID",
@@ -8095,6 +8320,33 @@
             "type": "string",
             "nullable": true,
             "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PersonUpsertDto": {
+        "type": "object",
+        "properties": {
+          "FirstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "LastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "OrganizationName": {
+            "type": "string",
+            "nullable": true
+          },
+          "Email": {
+            "type": "string",
+            "nullable": true
+          },
+          "RoleID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
           }
         },
         "additionalProperties": false

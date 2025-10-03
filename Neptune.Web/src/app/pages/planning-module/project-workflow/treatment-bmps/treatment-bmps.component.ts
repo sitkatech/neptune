@@ -139,7 +139,7 @@ export class TreatmentBmpsComponent implements OnInit {
     }
 
     public ngOnInit(): void {
-        this.boundingBox$ = this.projectService.projectsProjectIDBoundingBoxGet(this.projectID);
+        this.boundingBox$ = this.projectService.getBoundingBoxByProjectIDProject(this.projectID);
         this.compileService.configure(this.appRef);
     }
 
@@ -153,18 +153,18 @@ export class TreatmentBmpsComponent implements OnInit {
         this.mapIsReady = true;
 
         if (this.projectID) {
-            this.projectService.projectsProjectIDGet(this.projectID).subscribe((project) => {
+            this.projectService.getProject(this.projectID).subscribe((project) => {
                 // redirect to review step if project is shared with OCTA grant program
                 if (project.ShareOCTAM2Tier2Scores) {
                     this.router.navigateByUrl(`/planning/projects/edit/${this.projectID}/review-and-share`);
                 } else {
                     this.mapProjectDtoToProject(project);
                     forkJoin({
-                        projectTreatmentBMPs: this.projectService.projectsProjectIDTreatmentBmpsAsUpsertDtosGet(this.projectID),
-                        delineations: this.projectService.projectsProjectIDDelineationsGet(this.projectID),
-                        treatmentBMPTypes: this.treatmentBMPTypeService.treatmentBmpTypesGet(),
+                        projectTreatmentBMPs: this.projectService.listTreatmentBMPsAsUpsertDtosByProjectIDProject(this.projectID),
+                        delineations: this.projectService.listDelineationsByProjectIDProject(this.projectID),
+                        treatmentBMPTypes: this.treatmentBMPTypeService.listTreatmentBMPType(),
                         treatmentBMPTypeCustomAttributeTypes:
-                            this.treatmentBMPTypeCustomAttributeTypeService.treatmentBmpTypeCustomAttributeTypesPurposeCustomAttributeTypePurposeIDGet(
+                            this.treatmentBMPTypeCustomAttributeTypeService.getTreatmentBMPTypeCustomAttributeTypeByCustomAttributePurposeIDTreatmentBMPTypeCustomAttributeType(
                                 CustomAttributeTypePurposeEnum.Modeling
                             ),
                     }).subscribe(({ projectTreatmentBMPs, delineations, treatmentBMPTypes, treatmentBMPTypeCustomAttributeTypes: treatmentBMPTypeCustomAttributeTypes }) => {
@@ -427,7 +427,7 @@ export class TreatmentBmpsComponent implements OnInit {
     }
 
     public changeTreatmentBMPType(treatmentBMPType: number) {
-        this.treatmentBMPService.treatmentBmpsTreatmentBMPIDTreatmentBmpTypesTreatmentBMPTypeIDPut(this.selectedTreatmentBMP.TreatmentBMPID, treatmentBMPType).subscribe((temp) => {
+        this.treatmentBMPService.changeTreatmentBMPTypeTreatmentBMP(this.selectedTreatmentBMP.TreatmentBMPID, treatmentBMPType).subscribe((temp) => {
             this.closeEditTreatmentBMPTypeModal();
             this.selectedTreatmentBMP.TreatmentBMPTypeID = treatmentBMPType;
             this.selectedTreatmentBMP.TreatmentBMPModelingTypeID = temp;
@@ -487,13 +487,13 @@ export class TreatmentBmpsComponent implements OnInit {
 
         this.project.DoesNotIncludeTreatmentBMPs = this.project.DoesNotIncludeTreatmentBMPs && (this.projectTreatmentBMPs == null || this.projectTreatmentBMPs.length == 0);
         this.clearNonApplicableModelingAttributesForTreatmentBMPs();
-        this.projectService.projectsProjectIDUpdatePut(this.projectID, this.project).subscribe(
+        this.projectService.updateProject(this.projectID, this.project).subscribe(
             () => {
-                this.projectService.projectsProjectIDTreatmentBmpsPut(this.projectID, this.projectTreatmentBMPs).subscribe(
+                this.projectService.mergeTreatmentBMPsProject(this.projectID, this.projectTreatmentBMPs).subscribe(
                     () => {
                         this.isLoadingSubmit = false;
                         this.projectWorkflowProgressService.updateProgress(this.projectID);
-                        this.projectService.projectsProjectIDTreatmentBmpsAsUpsertDtosGet(this.projectID).subscribe(
+                        this.projectService.listTreatmentBMPsAsUpsertDtosByProjectIDProject(this.projectID).subscribe(
                             (treatmentBMPs) => {
                                 this.projectTreatmentBMPs = treatmentBMPs;
                                 this.originalTreatmentBMPs = JSON.stringify(treatmentBMPs);

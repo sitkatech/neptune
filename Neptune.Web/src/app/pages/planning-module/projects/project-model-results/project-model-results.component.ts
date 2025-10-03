@@ -43,8 +43,8 @@ export class ProjectModelResultsComponent implements OnInit {
             this.projectNetworkSolveHistories.filter((x) => x.ProjectNetworkSolveHistoryStatusTypeID == ProjectNetworkSolveHistoryStatusTypeEnum.Succeeded).length > 0
         ) {
             forkJoin({
-                modeledResults: this.projectService.projectsProjectIDLoadReducingResultsGet(this.projectID),
-                treatmentBMPHRUCharacteristicSummaries: this.projectService.projectsProjectIDTreatmentBmpHruCharacteristicsGet(this.projectID),
+                modeledResults: this.projectService.listLoadReducingResultsForProjectProject(this.projectID),
+                treatmentBMPHRUCharacteristicSummaries: this.projectService.listTreatmentBMPHRUCharacteristicsForProjectProject(this.projectID),
             }).subscribe(({ modeledResults, treatmentBMPHRUCharacteristicSummaries }) => {
                 this.projectLoadReducingResults = modeledResults;
                 this.treatmentBMPHRUCharacteristicSummaries = treatmentBMPHRUCharacteristicSummaries;

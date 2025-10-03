@@ -57,14 +57,14 @@ export class ProjectDetailComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.currentProject$ = this.projectService.projectsProjectIDGet(this.projectID);
+        this.currentProject$ = this.projectService.getProject(this.projectID);
 
         this.modeledResultsData$ = this.currentProject$.pipe(
             switchMap((project) => {
                 return combineLatest({
-                    treatmentBMPs$: this.projectService.projectsProjectIDTreatmentBmpsAsUpsertDtosGet(project.ProjectID),
-                    delineations$: this.projectService.projectsProjectIDDelineationsGet(project.ProjectID),
-                    projectNetworkSolveHistories$: this.projectService.projectsProjectIDProjectNetworkSolveHistoriesGet(project.ProjectID),
+                    treatmentBMPs$: this.projectService.listTreatmentBMPsAsUpsertDtosByProjectIDProject(project.ProjectID),
+                    delineations$: this.projectService.listDelineationsByProjectIDProject(project.ProjectID),
+                    projectNetworkSolveHistories$: this.projectService.listProjectNetworkSolveHistoriesForProjectProject(project.ProjectID),
                 });
             }),
             map((value) => {
@@ -78,7 +78,7 @@ export class ProjectDetailComponent implements OnInit {
 
         this.attachments$ = this.currentProject$.pipe(
             switchMap((project) => {
-                return this.projectService.projectsProjectIDAttachmentsGet(project.ProjectID);
+                return this.projectService.listAttachmentsByProjectIDProject(project.ProjectID);
             })
         );
 
@@ -101,7 +101,7 @@ export class ProjectDetailComponent implements OnInit {
             .then((confirmed) => {
                 if (confirmed) {
                     this.isCopyingProject = true;
-                    this.projectService.projectsProjectIDCopyPost(project.ProjectID).subscribe(
+                    this.projectService.createProjectCopyProject(project.ProjectID).subscribe(
                         (newProjectID) => {
                             this.router.navigateByUrl(`/planning/projects/${newProjectID}`).then(() => {
                                 this.alertService.pushAlert(new Alert("Project successfully copied.", AlertContext.Success));

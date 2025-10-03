@@ -38,12 +38,12 @@ export class UserClaimsService extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public userClaimsGlobalIDGet(globalID: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<PersonDto>;
-    public userClaimsGlobalIDGet(globalID: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PersonDto>>;
-    public userClaimsGlobalIDGet(globalID: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PersonDto>>;
-    public userClaimsGlobalIDGet(globalID: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getByGlobalIDUserClaims(globalID: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<PersonDto>;
+    public getByGlobalIDUserClaims(globalID: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PersonDto>>;
+    public getByGlobalIDUserClaims(globalID: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PersonDto>>;
+    public getByGlobalIDUserClaims(globalID: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (globalID === null || globalID === undefined) {
-            throw new Error('Required parameter globalID was null or undefined when calling userClaimsGlobalIDGet.');
+            throw new Error('Required parameter globalID was null or undefined when calling getByGlobalIDUserClaims.');
         }
 
         let localVarHeaders = this.defaultHeaders;

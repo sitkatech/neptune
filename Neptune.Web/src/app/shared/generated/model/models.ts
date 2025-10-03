@@ -67,6 +67,7 @@ export * from './parcel-geometry-simple-dto';
 export * from './person-create-dto';
 export * from './person-dto';
 export * from './person-simple-dto';
+export * from './person-upsert-dto';
 export * from './point';
 export * from './precision-model';
 export * from './precision-models';

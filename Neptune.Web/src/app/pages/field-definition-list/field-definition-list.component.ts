@@ -14,7 +14,7 @@ import { PageHeaderComponent } from "src/app/shared/components/page-header/page-
     selector: "field-definition-list",
     templateUrl: "./field-definition-list.component.html",
     styleUrls: ["./field-definition-list.component.scss"],
-    imports: [AlertDisplayComponent, AgGridModule, NeptuneGridComponent, PageHeaderComponent]
+    imports: [AlertDisplayComponent, AgGridModule, NeptuneGridComponent, PageHeaderComponent],
 })
 export class FieldDefinitionListComponent implements OnInit {
     @ViewChild("fieldDefinitionsGrid") fieldDefinitionsGrid: AgGridAngular;
@@ -33,7 +33,7 @@ export class FieldDefinitionListComponent implements OnInit {
         this.authenticationService.getCurrentUser().subscribe((currentUser) => {
             this.currentUser = currentUser;
             this.fieldDefinitionsGrid?.api.showLoadingOverlay();
-            this.fieldDefinitionService.fieldDefinitionsGet().subscribe((fieldDefinitions) => {
+            this.fieldDefinitionService.listFieldDefinition().subscribe((fieldDefinitions) => {
                 this.fieldDefinitions = fieldDefinitions;
                 this.rowData = fieldDefinitions;
                 this.fieldDefinitionsGrid.api.hideOverlay();

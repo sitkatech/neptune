@@ -163,21 +163,21 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.stormwaterJurisdictions$ = this.stormwaterJurisdictionService.jurisdictionsUserViewableGet().pipe(
+        this.stormwaterJurisdictions$ = this.stormwaterJurisdictionService.listStormwaterJurisdiction().pipe(
             tap((x) => {
                 this.stormwaterJurisdictionSubject.next(x[0]);
                 this.currentStormwaterJurisdiction = x[0];
             })
         );
 
-        this.lastUpdateDate$ = this.trashGeneratingUnitService.trashGeneratingUnitsLastUpdateDateGet();
+        this.lastUpdateDate$ = this.trashGeneratingUnitService.getLastUpdateDateTrashGeneratingUnit();
 
         this.areaBasedAcreCalculationsDto$ = this.stormwaterJurisdiction$.pipe(
             tap(() => {
                 this.isLoading = true;
             }),
             switchMap((x) => {
-                return this.trashResultsByJurisdictionService.trashResultsByJurisdictionJurisdictionIDAreaBasedResultsCalculationsGet(x.StormwaterJurisdictionID);
+                return this.trashResultsByJurisdictionService.getAreaBasedResultsCalculationsTrashGeneratingUnitByStormwaterJurisdiction(x.StormwaterJurisdictionID);
             }),
             tap(() => {
                 this.isLoading = false;
@@ -189,7 +189,7 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
                 this.isLoading = true;
             }),
             switchMap((x) => {
-                return this.trashResultsByJurisdictionService.trashResultsByJurisdictionJurisdictionIDLoadBasedResultsCalculationsGet(x.StormwaterJurisdictionID);
+                return this.trashResultsByJurisdictionService.getLoadBasedResultsCalculationsTrashGeneratingUnitByStormwaterJurisdiction(x.StormwaterJurisdictionID);
             }),
             tap(() => {
                 this.isLoading = false;
@@ -201,7 +201,7 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
                 this.isLoading = true;
             }),
             switchMap((x) => {
-                return this.trashResultsByJurisdictionService.trashResultsByJurisdictionJurisdictionIDOvtaBasedResultsCalculationsGet(x.StormwaterJurisdictionID);
+                return this.trashResultsByJurisdictionService.getOVTABasedResultsCalculationsTrashGeneratingUnitByStormwaterJurisdiction(x.StormwaterJurisdictionID);
             }),
             tap(() => {
                 this.isLoading = false;
@@ -213,7 +213,7 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
                 this.addSelectedJurisdictionLayer(x.StormwaterJurisdictionID);
             }),
             switchMap((x) => {
-                return this.stormwaterJurisdictionService.jurisdictionsJurisdictionIDBoundingBoxGet(x.StormwaterJurisdictionID);
+                return this.stormwaterJurisdictionService.getBoundingBoxByJurisdictionIDStormwaterJurisdiction(x.StormwaterJurisdictionID);
             }),
             tap((boundingBox) => {
                 if (this.mapIsReady) {
@@ -224,7 +224,7 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
 
         this.treatmentBMPs$ = this.stormwaterJurisdiction$.pipe(
             switchMap((x) => {
-                return this.treatmentBMPService.treatmentBmpsJurisdictionsJurisdictionIDVerifiedFeatureCollectionGet(x.StormwaterJurisdictionID);
+                return this.treatmentBMPService.listInventoryVerifiedTreatmentBMPsByJurisdictionIDAsFeatureCollectionTreatmentBMP(x.StormwaterJurisdictionID);
             }),
             tap((treatmentBMPs) => {
                 var isCurrentlyOn = this.map.hasLayer(this.treatmentBMPClusterLayer);
@@ -333,7 +333,7 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
                     });
 
                 featuresInRenderedOrder.forEach((feature: GeoJSON.Feature) => {
-                    this.tguDto$ = this.trashGeneratingUnitService.trashGeneratingUnitsTrashGeneratingUnitIDGet(feature.properties.TrashGeneratingUnitID);
+                    this.tguDto$ = this.trashGeneratingUnitService.getTrashGeneratingUnit(feature.properties.TrashGeneratingUnitID);
                     const geoJson = L.geoJSON(feature, {
                         style: this.highlightStyle,
                     });

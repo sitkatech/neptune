@@ -44,12 +44,12 @@ export class FundingSourceModalComponent implements OnInit {
         if (this.formGroup.invalid) return;
         const dto = new FundingSourceUpsertDto(this.formGroup.value);
         if (this.mode === "add") {
-            this.fundingSourceService.fundingSourcesPost(dto).subscribe(() => {
+            this.fundingSourceService.createFundingSource(dto).subscribe(() => {
                 this.ref.close(true);
             });
         } else {
             const fundingSourceID = this.ref.data.fundingSource?.FundingSourceID;
-            this.fundingSourceService.fundingSourcesFundingSourceIDPut(fundingSourceID, dto).subscribe(() => {
+            this.fundingSourceService.updateFundingSource(fundingSourceID, dto).subscribe(() => {
                 this.ref.close(true);
             });
         }

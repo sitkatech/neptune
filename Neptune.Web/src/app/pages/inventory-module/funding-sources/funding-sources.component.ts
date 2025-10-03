@@ -52,7 +52,7 @@ export class FundingSourcesComponent {
             this.utilityFunctions.createBasicColumnDef("Description", "FundingSourceDescription"),
             this.utilityFunctions.createBooleanColumnDef("Active?", "IsActive"),
         ];
-        this.fundingSources$ = this.fundingSourceService.fundingSourcesGet();
+        this.fundingSources$ = this.fundingSourceService.listFundingSource();
     }
 
     openAddModal() {
@@ -66,7 +66,7 @@ export class FundingSourcesComponent {
             if (result) {
                 this.alertService.clearAlerts();
                 this.alertService.pushAlert(new Alert("Funding source added successfully.", AlertContext.Success));
-                this.fundingSources$ = this.fundingSourceService.fundingSourcesGet();
+                this.fundingSources$ = this.fundingSourceService.listFundingSource();
             }
         });
     }
@@ -82,7 +82,7 @@ export class FundingSourcesComponent {
             if (result) {
                 this.alertService.clearAlerts();
                 this.alertService.pushAlert(new Alert("Funding source updated successfully.", AlertContext.Success));
-                this.fundingSources$ = this.fundingSourceService.fundingSourcesGet();
+                this.fundingSources$ = this.fundingSourceService.listFundingSource();
             }
         });
     }
@@ -102,10 +102,10 @@ export class FundingSourcesComponent {
             })
             .then((confirmed) => {
                 if (confirmed) {
-                    this.fundingSourceService.fundingSourcesFundingSourceIDDelete(fundingSource.FundingSourceID).subscribe(() => {
+                    this.fundingSourceService.deleteFundingSource(fundingSource.FundingSourceID).subscribe(() => {
                         this.alertService.clearAlerts();
                         this.alertService.pushAlert(new Alert("Funding source deleted successfully.", AlertContext.Success));
-                        this.fundingSources$ = this.fundingSourceService.fundingSourcesGet();
+                        this.fundingSources$ = this.fundingSourceService.listFundingSource();
                     });
                 }
             });

@@ -50,12 +50,12 @@ export class OrganizationModalComponent implements OnInit {
         if (this.formGroup.invalid) return;
         const dto = new OrganizationUpsertDto(this.formGroup.value);
         if (this.mode === "add") {
-            this.organizationService.organizationsPost(dto).subscribe(() => {
+            this.organizationService.createOrganization(dto).subscribe(() => {
                 this.ref.close(true);
             });
         } else {
             const organizationID = this.ref.data.organization?.OrganizationID;
-            this.organizationService.organizationsOrganizationIDPut(organizationID, dto).subscribe(() => {
+            this.organizationService.updateOrganization(organizationID, dto).subscribe(() => {
                 this.ref.close(true);
             });
         }

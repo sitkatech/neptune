@@ -20,7 +20,7 @@ namespace Neptune.API.Controllers
     {
         [HttpGet]
         [JurisdictionEditFeature]
-        public ActionResult<List<StormwaterJurisdictionDto>> ListByPersonID()
+        public ActionResult<List<StormwaterJurisdictionDto>> List()
         {
             var stormwaterJurisdictionIDs = People.ListStormwaterJurisdictionIDsByPersonID(DbContext, CallingUser.PersonID);
             var stormwaterJurisdictionSimpleDtos = StormwaterJurisdictions.ListByIDsAsDto(DbContext, stormwaterJurisdictionIDs);
@@ -29,7 +29,7 @@ namespace Neptune.API.Controllers
 
 
         [HttpGet("user-viewable")]
-        public ActionResult<List<StormwaterJurisdictionDto>> ListViewableStormwaterJurisdictionIDsByPersonID()
+        public ActionResult<List<StormwaterJurisdictionDto>> ListViewableStormwaterJurisdictionIDs()
         {
             var stormwaterJurisdictionIDs = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonIDForBMPs(DbContext, CallingUser?.PersonID);
             var stormwaterJurisdictionSimpleDtos = StormwaterJurisdictions.ListByIDsAsDto(DbContext, stormwaterJurisdictionIDs);
@@ -38,14 +38,14 @@ namespace Neptune.API.Controllers
 
         [HttpGet("bounding-box")]
         [UserViewFeature]
-        public ActionResult<BoundingBoxDto> GetBoundingBoxByPersonID()
+        public ActionResult<BoundingBoxDto> GetBoundingBox()
         {
             var boundingBoxDto = StormwaterJurisdictions.GetBoundingBoxDtoByPersonID(DbContext, CallingUser.PersonID);
             return Ok(boundingBoxDto);
         }
 
         [HttpGet("{jurisdictionID}/bounding-box")]
-        public ActionResult<BoundingBoxDto> GetBoundingBoxByProjectID([FromRoute] int jurisdictionID)
+        public ActionResult<BoundingBoxDto> GetBoundingBoxByJurisdictionID([FromRoute] int jurisdictionID)
         {
             var boundingBoxDto = StormwaterJurisdictions.GetBoundingBoxDtoByJurisdictionID(DbContext, jurisdictionID);
             return Ok(boundingBoxDto);

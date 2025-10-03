@@ -38,12 +38,12 @@ export class CustomRichTextService extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public customRichTextsCustomRichTextTypeIDGet(customRichTextTypeID: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<NeptunePageDto>;
-    public customRichTextsCustomRichTextTypeIDGet(customRichTextTypeID: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<NeptunePageDto>>;
-    public customRichTextsCustomRichTextTypeIDGet(customRichTextTypeID: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<NeptunePageDto>>;
-    public customRichTextsCustomRichTextTypeIDGet(customRichTextTypeID: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getCustomRichTextCustomRichText(customRichTextTypeID: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<NeptunePageDto>;
+    public getCustomRichTextCustomRichText(customRichTextTypeID: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<NeptunePageDto>>;
+    public getCustomRichTextCustomRichText(customRichTextTypeID: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<NeptunePageDto>>;
+    public getCustomRichTextCustomRichText(customRichTextTypeID: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (customRichTextTypeID === null || customRichTextTypeID === undefined) {
-            throw new Error('Required parameter customRichTextTypeID was null or undefined when calling customRichTextsCustomRichTextTypeIDGet.');
+            throw new Error('Required parameter customRichTextTypeID was null or undefined when calling getCustomRichTextCustomRichText.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -94,12 +94,12 @@ export class CustomRichTextService extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public customRichTextsCustomRichTextTypeIDPut(customRichTextTypeID: number, neptunePageDto?: NeptunePageDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<NeptunePageDto>;
-    public customRichTextsCustomRichTextTypeIDPut(customRichTextTypeID: number, neptunePageDto?: NeptunePageDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<NeptunePageDto>>;
-    public customRichTextsCustomRichTextTypeIDPut(customRichTextTypeID: number, neptunePageDto?: NeptunePageDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<NeptunePageDto>>;
-    public customRichTextsCustomRichTextTypeIDPut(customRichTextTypeID: number, neptunePageDto?: NeptunePageDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public updateCustomRichTextCustomRichText(customRichTextTypeID: number, neptunePageDto?: NeptunePageDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<NeptunePageDto>;
+    public updateCustomRichTextCustomRichText(customRichTextTypeID: number, neptunePageDto?: NeptunePageDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<NeptunePageDto>>;
+    public updateCustomRichTextCustomRichText(customRichTextTypeID: number, neptunePageDto?: NeptunePageDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<NeptunePageDto>>;
+    public updateCustomRichTextCustomRichText(customRichTextTypeID: number, neptunePageDto?: NeptunePageDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (customRichTextTypeID === null || customRichTextTypeID === undefined) {
-            throw new Error('Required parameter customRichTextTypeID was null or undefined when calling customRichTextsCustomRichTextTypeIDPut.');
+            throw new Error('Required parameter customRichTextTypeID was null or undefined when calling updateCustomRichTextCustomRichText.');
         }
 
         let localVarHeaders = this.defaultHeaders;

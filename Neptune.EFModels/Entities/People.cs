@@ -24,6 +24,14 @@ namespace Neptune.EFModels.Entities
                 .Select(x => x.AsSimpleDto()).ToList();
         }
 
+        public static async Task<List<PersonSimpleDto>> ListAsSimpleDtoAsync(NeptuneDbContext dbContext)
+        {
+            var people = await GetImpl(dbContext)
+                .OrderBy(x => x.LastName).ThenBy(x => x.FirstName)
+                .ToListAsync();
+            return people.Select(x => x.AsSimpleDto()).ToList();
+        }
+
         public static IQueryable<Person> ListActive(NeptuneDbContext dbContext)
         {
             return GetImpl(dbContext).AsNoTracking().Where(x => x.IsActive)
@@ -60,6 +68,12 @@ namespace Neptune.EFModels.Entities
         {
             var person = GetByID(dbContext, personID);
             return person.AsDto();
+        }
+
+        public static async Task<PersonDto?> GetByIDAsDtoAsync(NeptuneDbContext dbContext, int personID)
+        {
+            var person = await GetImpl(dbContext).AsNoTracking().SingleOrDefaultAsync(x => x.PersonID == personID);
+            return person?.AsDto();
         }
 
         public static PersonDto? GetByEmailAsDto(NeptuneDbContext dbContext, string email)
@@ -191,6 +205,61 @@ namespace Neptune.EFModels.Entities
             dbContext.Entry(person).Reload();
 
             return GetByIDAsDto(dbContext, person.PersonID);
+        }
+
+        public static async Task<PersonDto> CreateAsync(NeptuneDbContext dbContext, PersonUpsertDto dto, string loginName, Guid userGuid)
+        {
+            if (!dto.RoleID.HasValue)
+            {
+                return null;
+            }
+            var organizationID = Organizations.OrganizationIDUnassigned;
+            var organization = Organizations.GetByName(dbContext, dto.OrganizationName);
+            if (organization != null)
+            {
+                organizationID = organization.OrganizationID;
+            }
+            var person = new Person
+            {
+                PersonGuid = userGuid,
+                LoginName = loginName,
+                Email = dto.Email,
+                FirstName = dto.FirstName,
+                LastName = dto.LastName,
+                IsActive = true,
+                RoleID = dto.RoleID.Value,
+                CreateDate = DateTime.UtcNow,
+                OrganizationID = organizationID,
+                WebServiceAccessToken = Guid.NewGuid()
+            };
+            dbContext.People.Add(person);
+            await dbContext.SaveChangesAsync();
+            return await GetByIDAsDtoAsync(dbContext, person.PersonID);
+        }
+
+        public static async Task<PersonDto?> UpdateAsync(NeptuneDbContext dbContext, int personID, PersonUpsertDto dto)
+        {
+            var person = await dbContext.People.FirstOrDefaultAsync(x => x.PersonID == personID);
+            if (person == null) return null;
+            person.FirstName = dto.FirstName;
+            person.LastName = dto.LastName;
+            person.Email = dto.Email;
+            person.RoleID = dto.RoleID ?? person.RoleID;
+            var organization = Organizations.GetByName(dbContext, dto.OrganizationName);
+            if (organization != null)
+            {
+                person.OrganizationID = organization.OrganizationID;
+            }
+            await dbContext.SaveChangesAsync();
+            return await GetByIDAsDtoAsync(dbContext, person.PersonID);
+        }
+
+        public static async Task<bool> DeleteAsync(NeptuneDbContext dbContext, int personID)
+        {
+            var person = await dbContext.People.FirstOrDefaultAsync(x => x.PersonID == personID);
+            if (person == null) return false;
+            await person.DeleteFull(dbContext);
+            return true;
         }
     }
 }

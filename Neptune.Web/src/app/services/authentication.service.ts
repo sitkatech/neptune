@@ -66,7 +66,7 @@ export class AuthenticationService {
     private getUser(claims: any) {
         var globalID = claims["sub"];
 
-        this.userClaimsService.userClaimsGlobalIDGet(globalID).subscribe(
+        this.userClaimsService.getByGlobalIDUserClaims(globalID).subscribe(
             (result) => {
                 this.updateUser(result);
             },
@@ -95,7 +95,7 @@ export class AuthenticationService {
                 UserGuid: claims["sub"],
             });
 
-            this.userService.usersPost(newUser).subscribe((user) => {
+            this.userService.createUser(newUser).subscribe((user) => {
                 this.updateUser(user);
             });
         }

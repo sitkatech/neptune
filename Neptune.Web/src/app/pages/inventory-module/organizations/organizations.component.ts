@@ -55,7 +55,7 @@ export class OrganizationsComponent {
             this.utilityFunctions.createBasicColumnDef("Primary Contact", "PrimaryContactPerson.FullName"),
             this.utilityFunctions.createBooleanColumnDef("Active?", "IsActive"),
         ];
-        this.organizations$ = this.organizationService.organizationsGet();
+            this.organizations$ = this.organizationService.listOrganization();
     }
 
     openAddModal() {
@@ -69,7 +69,7 @@ export class OrganizationsComponent {
             if (result) {
                 this.alertService.clearAlerts();
                 this.alertService.pushAlert(new Alert("Organization added successfully.", AlertContext.Success));
-                this.organizations$ = this.organizationService.organizationsGet();
+                    this.organizations$ = this.organizationService.listOrganization();
             }
         });
     }
@@ -85,7 +85,7 @@ export class OrganizationsComponent {
             if (result) {
                 this.alertService.clearAlerts();
                 this.alertService.pushAlert(new Alert("Organization updated successfully.", AlertContext.Success));
-                this.organizations$ = this.organizationService.organizationsGet();
+                    this.organizations$ = this.organizationService.listOrganization();
             }
         });
     }
@@ -101,10 +101,10 @@ export class OrganizationsComponent {
             })
             .then((confirmed) => {
                 if (confirmed) {
-                    this.organizationService.organizationsOrganizationIDDelete(organization.OrganizationID).subscribe(() => {
+                        this.organizationService.deleteOrganization(organization.OrganizationID).subscribe(() => {
                         this.alertService.clearAlerts();
                         this.alertService.pushAlert(new Alert("Organization deleted successfully.", AlertContext.Success));
-                        this.organizations$ = this.organizationService.organizationsGet();
+                            this.organizations$ = this.organizationService.listOrganization();
                     });
                 }
             });

@@ -100,7 +100,7 @@ export class TrashInitiateOvtaComponent {
 
     ngOnInit() {
         this.formGroup.controls.AssessingNewArea.patchValue(false);
-        this.stormwaterJurisdictions$ = this.stormwaterJurisdictionService.jurisdictionsUserViewableGet().pipe(
+        this.stormwaterJurisdictions$ = this.stormwaterJurisdictionService.listStormwaterJurisdiction().pipe(
             tap((x) => {
                 const defaultJurisdiction = x[0];
                 this.formGroup.controls.StormwaterJurisdictionID.patchValue(defaultJurisdiction.StormwaterJurisdictionID);
@@ -115,7 +115,7 @@ export class TrashInitiateOvtaComponent {
                 this.addOVTAAreasToLayer(x.StormwaterJurisdictionID);
             }),
             switchMap((x) => {
-                return this.onlandVisualTrashAssessmentAreaService.onlandVisualTrashAssessmentAreasJurisdictionsJurisdictionIDGet(x.StormwaterJurisdictionID);
+                return this.onlandVisualTrashAssessmentAreaService.listByJurisdictionIDOnlandVisualTrashAssessmentArea(x.StormwaterJurisdictionID);
             }),
             tap(() => {
                 this.isLoading = false;
@@ -132,7 +132,7 @@ export class TrashInitiateOvtaComponent {
 
     public save(andContinue: boolean = false) {
         this.isLoadingSubmit = true;
-        this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsPost(this.formGroup.value).subscribe((response) => {
+        this.onlandVisualTrashAssessmentService.createOnlandVisualTrashAssessment(this.formGroup.value).subscribe((response) => {
             this.isLoadingSubmit = false;
             this.alertService.clearAlerts();
             this.alertService.pushAlert(new Alert("Your OVTA was successfully created.", AlertContext.Success));

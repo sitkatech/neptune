@@ -18,7 +18,7 @@ import { PageHeaderComponent } from "../../shared/components/page-header/page-he
     templateUrl: "./field-definition-edit.component.html",
     styleUrls: ["./field-definition-edit.component.scss"],
     imports: [RouterLink, AlertDisplayComponent, EditorModule, FormsModule, PageHeaderComponent],
-    providers: [{ provide: TINYMCE_SCRIPT_SRC, useValue: "tinymce/tinymce.min.js" }]
+    providers: [{ provide: TINYMCE_SCRIPT_SRC, useValue: "tinymce/tinymce.min.js" }],
 })
 export class FieldDefinitionEditComponent implements OnInit {
     private currentUser: PersonDto;
@@ -44,7 +44,7 @@ export class FieldDefinitionEditComponent implements OnInit {
             this.currentUser = currentUser;
             const id = parseInt(this.route.snapshot.paramMap.get("definitionID"));
             if (id) {
-                this.fieldDefinitionService.fieldDefinitionsFieldDefinitionTypeIDGet(id).subscribe((fieldDefinition) => {
+                this.fieldDefinitionService.getFieldDefinition(id).subscribe((fieldDefinition) => {
                     this.fieldDefinition = fieldDefinition;
                 });
             }
@@ -68,7 +68,7 @@ export class FieldDefinitionEditComponent implements OnInit {
     saveDefinition(): void {
         this.isLoadingSubmit = true;
 
-        this.fieldDefinitionService.fieldDefinitionsFieldDefinitionTypeIDPut(this.fieldDefinition.FieldDefinitionType.FieldDefinitionTypeID, this.fieldDefinition).subscribe(
+        this.fieldDefinitionService.updateFieldDefinition(this.fieldDefinition.FieldDefinitionType.FieldDefinitionTypeID, this.fieldDefinition).subscribe(
             (response) => {
                 this.isLoadingSubmit = false;
                 this.router.navigateByUrl("/labels-and-definitions").then((x) => {

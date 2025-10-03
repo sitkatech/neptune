@@ -27,13 +27,19 @@
     <ProjectReference Include="..\Neptune.Jobs\Neptune.Jobs.csproj" />
     <ProjectReference Include="..\Neptune.Models\Neptune.Models.csproj" />
   </ItemGroup>
-  <!-- 
-    This PostBuild target is used to generate the static swagger.json file that is meant to be 
-    used by the web project to generate typescript models using `npm run gen-model`
-  -->
+
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition=" '$(Configuration)' == 'Debug' ">
+    <!-- 
+      This PostBuild target is used to generate the static swagger.json file that is meant to be 
+      used by the web project to generate typescript models using `npm run gen-model`
+    -->
     <Exec Command="dotnet new tool-manifest --force" />
-    <Exec Command="dotnet tool install --version 6.3.1 Swashbuckle.AspNetCore.Cli" />
+    <Exec Command="dotnet tool install --version 6.6.2 Swashbuckle.AspNetCore.Cli" />
     <Exec Command="dotnet swagger tofile --output swagger.json $(OutputPath)\$(AssemblyName).dll v1 " />
+    
+    <!--
+      It is also used to create dev certs after build in debug mode for local development (https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-dev-certs)
+    -->
+    <Exec Command="dotnet dev-certs https" />
   </Target>
 </Project>

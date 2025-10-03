@@ -82,8 +82,8 @@ export class ViewAllBmpsComponent {
             this.utilityFunctionsService.createBasicColumnDef("Trash Capture Effectiveness (%)", "TrashCaptureEffectiveness"),
             this.utilityFunctionsService.createBasicColumnDef("Delineation Type", "DelineationTypeDisplayName"),
         ];
-        this.treatmentBmps$ = this.treatmentBMPService.treatmentBmpsGet().pipe(tap(() => (this.isLoading = false)));
-        this.boundingBox$ = this.stormwaterJurisdictionService.jurisdictionsBoundingBoxGet();
+        this.treatmentBmps$ = this.treatmentBMPService.listTreatmentBMP().pipe(tap(() => (this.isLoading = false)));
+        this.boundingBox$ = this.stormwaterJurisdictionService.getBoundingBoxStormwaterJurisdiction();
     }
 
     handleMapReady(event: any) {
@@ -171,7 +171,7 @@ export class ViewAllBmpsComponent {
         };
         this.confirmService.confirm(confirmOptions).then((confirmed) => {
             if (confirmed) {
-                this.treatmentBMPService.treatmentBmpsTreatmentBMPIDDelete(params.data.TreatmentBMPID).subscribe(() => {
+                this.treatmentBMPService.deleteTreatmentBMP(params.data.TreatmentBMPID).subscribe(() => {
                     this.alertService.pushAlert(new Alert("Successfully deleted BMP", AlertContext.Success));
                     params.api.applyTransaction({ remove: [params.data] });
                 });

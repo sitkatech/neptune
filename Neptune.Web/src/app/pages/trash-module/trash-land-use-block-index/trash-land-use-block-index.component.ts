@@ -99,8 +99,8 @@ export class TrashLandUseBlockIndexComponent {
             this.utilityFunctionsService.createBasicColumnDef("Permit Type", "PermitTypeName"),
             this.utilityFunctionsService.createBasicColumnDef("Land Use for TGR", "LandUseForTGR"),
         ];
-        this.landUseBlocks$ = this.landUseBlockService.landUseBlocksGet().pipe(tap((x) => (this.isLoading = false)));
-        this.boundingBox$ = this.stormwaterJurisdictionService.jurisdictionsBoundingBoxGet();
+        this.landUseBlocks$ = this.landUseBlockService.listLandUseBlock().pipe(tap((x) => (this.isLoading = false)));
+        this.boundingBox$ = this.stormwaterJurisdictionService.getBoundingBoxStormwaterJurisdiction();
     }
 
     public currentUserHasJurisdictionEditPermission(): boolean {

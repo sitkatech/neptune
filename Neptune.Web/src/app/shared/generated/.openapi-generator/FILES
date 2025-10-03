@@ -100,6 +100,7 @@ model/parcel-geometry-simple-dto.ts
 model/person-create-dto.ts
 model/person-dto.ts
 model/person-simple-dto.ts
+model/person-upsert-dto.ts
 model/point.ts
 model/precision-model.ts
 model/precision-models.ts

@@ -96,7 +96,7 @@ export class FundingEventModalComponent implements OnInit {
             });
         }
         // Set funding sources and options observable
-        this.fundingSources$ = this.fundingSourceService.fundingSourcesGet();
+        this.fundingSources$ = this.fundingSourceService.listFundingSource();
         this.fundingSourceOptions$ = this.fundingSources$.pipe(
             map((sources) =>
                 (sources || []).map(
@@ -116,14 +116,14 @@ export class FundingEventModalComponent implements OnInit {
         const dto = this.formGroup.value;
         if (this.ref.data?.editData) {
             // Edit
-            this.fundingEventService.treatmentBmpsTreatmentBMPIDFundingEventsFundingEventIDPut(treatmentBMPID, this.ref.data.editData.FundingEventID, dto).subscribe(() => {
+            this.fundingEventService.updateFundingEventByTreatmentBMPID(treatmentBMPID, this.ref.data.editData.FundingEventID, dto).subscribe(() => {
                 this.alertService.clearAlerts();
                 this.alertService.pushAlert(new Alert("Successfully updated Funding Event.", AlertContext.Success));
                 this.ref.close(true);
             });
         } else {
             // Add
-            this.fundingEventService.treatmentBmpsTreatmentBMPIDFundingEventsPost(treatmentBMPID, dto).subscribe(() => {
+            this.fundingEventService.createFundingEventByTreatmentBMPID(treatmentBMPID, dto).subscribe(() => {
                 this.alertService.clearAlerts();
                 this.alertService.pushAlert(new Alert("Successfully added Funding Event.", AlertContext.Success));
                 this.ref.close(true);

@@ -6,7 +6,6 @@ import { DelineationUpsertDto } from "src/app/shared/generated/model/delineation
 import { CustomCompileService } from "src/app/shared/services/custom-compile.service";
 import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
 import { ProjectService } from "src/app/shared/generated/api/project.service";
-import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.service";
 import { FieldDefinitionTypeEnum } from "src/app/shared/generated/enum/field-definition-type-enum";
 import { TreatmentBMPTypeWithModelingAttributesDto } from "src/app/shared/generated/model/treatment-bmp-type-with-modeling-attributes-dto";
 import { TreatmentBMPDisplayDto } from "src/app/shared/generated/model/treatment-bmp-display-dto";
@@ -25,7 +24,6 @@ import { TreatmentBMPTypeCustomAttributeTypeService } from "src/app/shared/gener
 import { CustomAttributeTypePurposeEnum } from "src/app/shared/generated/enum/custom-attribute-type-purpose-enum";
 import { CustomAttributeDataTypeEnum } from "src/app/shared/generated/enum/custom-attribute-data-type-enum";
 import { CustomAttributeTypeDto } from "src/app/shared/generated/model/custom-attribute-type-dto";
-import { PopperComponent } from "src/app/shared/components/popper/popper.component";
 import { PopperDirective } from "src/app/shared/directives/popper.directive";
 
 //This component could use a fair amount of cleanup. It should likely be sent in the treatment bmps and delineations instead of grabbing them itself
@@ -94,7 +92,6 @@ export class ProjectMapComponent implements OnInit {
 
     constructor(
         private projectService: ProjectService,
-        private treatmentBMPService: TreatmentBMPService,
         private treatmentBMPTypeService: TreatmentBMPTypeService,
         private appRef: ApplicationRef,
         private compileService: CustomCompileService,
@@ -104,13 +101,14 @@ export class ProjectMapComponent implements OnInit {
     public ngOnInit(): void {
         if (this.projectID) {
             forkJoin({
-                treatmentBMPs: this.projectService.projectsProjectIDTreatmentBmpsGet(this.projectID),
-                delineations: this.projectService.projectsProjectIDDelineationsGet(this.projectID),
-                boundingBox: this.projectService.projectsProjectIDBoundingBoxGet(this.projectID),
-                treatmentBMPTypes: this.treatmentBMPTypeService.treatmentBmpTypesGet(),
-                treatmentBMPTypeCustomAttributeTypes: this.treatmentBMPTypeCustomAttributeTypeService.treatmentBmpTypeCustomAttributeTypesPurposeCustomAttributeTypePurposeIDGet(
-                    CustomAttributeTypePurposeEnum.Modeling
-                ),
+                treatmentBMPs: this.projectService.listTreatmentBMPsByProjectIDProject(this.projectID),
+                delineations: this.projectService.listDelineationsByProjectIDProject(this.projectID),
+                boundingBox: this.projectService.getBoundingBoxByProjectIDProject(this.projectID),
+                treatmentBMPTypes: this.treatmentBMPTypeService.listTreatmentBMPType(),
+                treatmentBMPTypeCustomAttributeTypes:
+                    this.treatmentBMPTypeCustomAttributeTypeService.getTreatmentBMPTypeCustomAttributeTypeByCustomAttributePurposeIDTreatmentBMPTypeCustomAttributeType(
+                        CustomAttributeTypePurposeEnum.Modeling
+                    ),
             }).subscribe(({ treatmentBMPs, delineations, boundingBox, treatmentBMPTypes, treatmentBMPTypeCustomAttributeTypes }) => {
                 this.projectTreatmentBMPs = treatmentBMPs;
                 this.delineations = delineations;

@@ -35,7 +35,7 @@ export class OvtaAreaLayerComponent extends MapLayerBase implements OnChanges {
 
     ngAfterViewInit(): void {
         if (this.ovtaID) {
-            this.featureCollection$ = this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDAreaAsFeatureCollectionGet(this.ovtaID).pipe(
+            this.featureCollection$ = this.onlandVisualTrashAssessmentService.getAreaAsFeatureCollectionOnlandVisualTrashAssessment(this.ovtaID).pipe(
                 tap((transectLineFeatureCollection) => {
                     this.layer = new L.GeoJSON(transectLineFeatureCollection as any, {
                         style: this.ovtaAreaStyle,
@@ -44,16 +44,14 @@ export class OvtaAreaLayerComponent extends MapLayerBase implements OnChanges {
                 })
             );
         } else if (this.ovtaAreaID) {
-            this.featureCollection$ = this.onlandVisualTrashAssessmentAreaService
-                .onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDAreaAsFeatureCollectionGet(this.ovtaAreaID)
-                .pipe(
-                    tap((transectLineFeatureCollection) => {
-                        this.layer = new L.GeoJSON(transectLineFeatureCollection as any, {
-                            style: this.ovtaAreaStyle,
-                        });
-                        this.initLayer();
-                    })
-                );
+            this.featureCollection$ = this.onlandVisualTrashAssessmentAreaService.getAreaAsFeatureCollectionOnlandVisualTrashAssessmentArea(this.ovtaAreaID).pipe(
+                tap((transectLineFeatureCollection) => {
+                    this.layer = new L.GeoJSON(transectLineFeatureCollection as any, {
+                        style: this.ovtaAreaStyle,
+                    });
+                    this.initLayer();
+                })
+            );
         }
     }
 }

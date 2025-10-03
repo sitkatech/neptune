@@ -37,71 +37,16 @@ export class TreatmentBMPBenchmarkAndThresholdService extends BaseService {
 
     /**
      * @param treatmentBMPID 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public treatmentBmpsTreatmentBMPIDBenchmarksAndThresholdsGet(treatmentBMPID: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<TreatmentBMPBenchmarkAndThresholdDto>>;
-    public treatmentBmpsTreatmentBMPIDBenchmarksAndThresholdsGet(treatmentBMPID: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<TreatmentBMPBenchmarkAndThresholdDto>>>;
-    public treatmentBmpsTreatmentBMPIDBenchmarksAndThresholdsGet(treatmentBMPID: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<TreatmentBMPBenchmarkAndThresholdDto>>>;
-    public treatmentBmpsTreatmentBMPIDBenchmarksAndThresholdsGet(treatmentBMPID: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (treatmentBMPID === null || treatmentBMPID === undefined) {
-            throw new Error('Required parameter treatmentBMPID was null or undefined when calling treatmentBmpsTreatmentBMPIDBenchmarksAndThresholdsGet.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'text/plain',
-            'application/json',
-            'text/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/treatment-bmps/${this.configuration.encodeParam({name: "treatmentBMPID", value: treatmentBMPID, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}/benchmarks-and-thresholds`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<TreatmentBMPBenchmarkAndThresholdDto>>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * @param treatmentBMPID 
      * @param treatmentBMPBenchmarkAndThresholdUpsertDto 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public treatmentBmpsTreatmentBMPIDBenchmarksAndThresholdsPost(treatmentBMPID: number, treatmentBMPBenchmarkAndThresholdUpsertDto?: TreatmentBMPBenchmarkAndThresholdUpsertDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<TreatmentBMPBenchmarkAndThresholdDto>;
-    public treatmentBmpsTreatmentBMPIDBenchmarksAndThresholdsPost(treatmentBMPID: number, treatmentBMPBenchmarkAndThresholdUpsertDto?: TreatmentBMPBenchmarkAndThresholdUpsertDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TreatmentBMPBenchmarkAndThresholdDto>>;
-    public treatmentBmpsTreatmentBMPIDBenchmarksAndThresholdsPost(treatmentBMPID: number, treatmentBMPBenchmarkAndThresholdUpsertDto?: TreatmentBMPBenchmarkAndThresholdUpsertDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TreatmentBMPBenchmarkAndThresholdDto>>;
-    public treatmentBmpsTreatmentBMPIDBenchmarksAndThresholdsPost(treatmentBMPID: number, treatmentBMPBenchmarkAndThresholdUpsertDto?: TreatmentBMPBenchmarkAndThresholdUpsertDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createTreatmentBMPBenchmarkAndThreshold(treatmentBMPID: number, treatmentBMPBenchmarkAndThresholdUpsertDto?: TreatmentBMPBenchmarkAndThresholdUpsertDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<TreatmentBMPBenchmarkAndThresholdDto>;
+    public createTreatmentBMPBenchmarkAndThreshold(treatmentBMPID: number, treatmentBMPBenchmarkAndThresholdUpsertDto?: TreatmentBMPBenchmarkAndThresholdUpsertDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TreatmentBMPBenchmarkAndThresholdDto>>;
+    public createTreatmentBMPBenchmarkAndThreshold(treatmentBMPID: number, treatmentBMPBenchmarkAndThresholdUpsertDto?: TreatmentBMPBenchmarkAndThresholdUpsertDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TreatmentBMPBenchmarkAndThresholdDto>>;
+    public createTreatmentBMPBenchmarkAndThreshold(treatmentBMPID: number, treatmentBMPBenchmarkAndThresholdUpsertDto?: TreatmentBMPBenchmarkAndThresholdUpsertDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (treatmentBMPID === null || treatmentBMPID === undefined) {
-            throw new Error('Required parameter treatmentBMPID was null or undefined when calling treatmentBmpsTreatmentBMPIDBenchmarksAndThresholdsPost.');
+            throw new Error('Required parameter treatmentBMPID was null or undefined when calling createTreatmentBMPBenchmarkAndThreshold.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -164,15 +109,15 @@ export class TreatmentBMPBenchmarkAndThresholdService extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public treatmentBmpsTreatmentBMPIDBenchmarksAndThresholdsTreatmentBMPBenchmarkAndThresholdIDDelete(treatmentBMPID: number, treatmentBMPBenchmarkAndThresholdID: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public treatmentBmpsTreatmentBMPIDBenchmarksAndThresholdsTreatmentBMPBenchmarkAndThresholdIDDelete(treatmentBMPID: number, treatmentBMPBenchmarkAndThresholdID: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public treatmentBmpsTreatmentBMPIDBenchmarksAndThresholdsTreatmentBMPBenchmarkAndThresholdIDDelete(treatmentBMPID: number, treatmentBMPBenchmarkAndThresholdID: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public treatmentBmpsTreatmentBMPIDBenchmarksAndThresholdsTreatmentBMPBenchmarkAndThresholdIDDelete(treatmentBMPID: number, treatmentBMPBenchmarkAndThresholdID: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deleteTreatmentBMPBenchmarkAndThreshold(treatmentBMPID: number, treatmentBMPBenchmarkAndThresholdID: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deleteTreatmentBMPBenchmarkAndThreshold(treatmentBMPID: number, treatmentBMPBenchmarkAndThresholdID: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deleteTreatmentBMPBenchmarkAndThreshold(treatmentBMPID: number, treatmentBMPBenchmarkAndThresholdID: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deleteTreatmentBMPBenchmarkAndThreshold(treatmentBMPID: number, treatmentBMPBenchmarkAndThresholdID: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (treatmentBMPID === null || treatmentBMPID === undefined) {
-            throw new Error('Required parameter treatmentBMPID was null or undefined when calling treatmentBmpsTreatmentBMPIDBenchmarksAndThresholdsTreatmentBMPBenchmarkAndThresholdIDDelete.');
+            throw new Error('Required parameter treatmentBMPID was null or undefined when calling deleteTreatmentBMPBenchmarkAndThreshold.');
         }
         if (treatmentBMPBenchmarkAndThresholdID === null || treatmentBMPBenchmarkAndThresholdID === undefined) {
-            throw new Error('Required parameter treatmentBMPBenchmarkAndThresholdID was null or undefined when calling treatmentBmpsTreatmentBMPIDBenchmarksAndThresholdsTreatmentBMPBenchmarkAndThresholdIDDelete.');
+            throw new Error('Required parameter treatmentBMPBenchmarkAndThresholdID was null or undefined when calling deleteTreatmentBMPBenchmarkAndThreshold.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -220,15 +165,15 @@ export class TreatmentBMPBenchmarkAndThresholdService extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public treatmentBmpsTreatmentBMPIDBenchmarksAndThresholdsTreatmentBMPBenchmarkAndThresholdIDGet(treatmentBMPID: number, treatmentBMPBenchmarkAndThresholdID: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<TreatmentBMPBenchmarkAndThresholdDto>;
-    public treatmentBmpsTreatmentBMPIDBenchmarksAndThresholdsTreatmentBMPBenchmarkAndThresholdIDGet(treatmentBMPID: number, treatmentBMPBenchmarkAndThresholdID: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TreatmentBMPBenchmarkAndThresholdDto>>;
-    public treatmentBmpsTreatmentBMPIDBenchmarksAndThresholdsTreatmentBMPBenchmarkAndThresholdIDGet(treatmentBMPID: number, treatmentBMPBenchmarkAndThresholdID: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TreatmentBMPBenchmarkAndThresholdDto>>;
-    public treatmentBmpsTreatmentBMPIDBenchmarksAndThresholdsTreatmentBMPBenchmarkAndThresholdIDGet(treatmentBMPID: number, treatmentBMPBenchmarkAndThresholdID: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getTreatmentBMPBenchmarkAndThreshold(treatmentBMPID: number, treatmentBMPBenchmarkAndThresholdID: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<TreatmentBMPBenchmarkAndThresholdDto>;
+    public getTreatmentBMPBenchmarkAndThreshold(treatmentBMPID: number, treatmentBMPBenchmarkAndThresholdID: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TreatmentBMPBenchmarkAndThresholdDto>>;
+    public getTreatmentBMPBenchmarkAndThreshold(treatmentBMPID: number, treatmentBMPBenchmarkAndThresholdID: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TreatmentBMPBenchmarkAndThresholdDto>>;
+    public getTreatmentBMPBenchmarkAndThreshold(treatmentBMPID: number, treatmentBMPBenchmarkAndThresholdID: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (treatmentBMPID === null || treatmentBMPID === undefined) {
-            throw new Error('Required parameter treatmentBMPID was null or undefined when calling treatmentBmpsTreatmentBMPIDBenchmarksAndThresholdsTreatmentBMPBenchmarkAndThresholdIDGet.');
+            throw new Error('Required parameter treatmentBMPID was null or undefined when calling getTreatmentBMPBenchmarkAndThreshold.');
         }
         if (treatmentBMPBenchmarkAndThresholdID === null || treatmentBMPBenchmarkAndThresholdID === undefined) {
-            throw new Error('Required parameter treatmentBMPBenchmarkAndThresholdID was null or undefined when calling treatmentBmpsTreatmentBMPIDBenchmarksAndThresholdsTreatmentBMPBenchmarkAndThresholdIDGet.');
+            throw new Error('Required parameter treatmentBMPBenchmarkAndThresholdID was null or undefined when calling getTreatmentBMPBenchmarkAndThreshold.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -275,20 +220,75 @@ export class TreatmentBMPBenchmarkAndThresholdService extends BaseService {
 
     /**
      * @param treatmentBMPID 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public listTreatmentBMPBenchmarkAndThreshold(treatmentBMPID: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<TreatmentBMPBenchmarkAndThresholdDto>>;
+    public listTreatmentBMPBenchmarkAndThreshold(treatmentBMPID: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<TreatmentBMPBenchmarkAndThresholdDto>>>;
+    public listTreatmentBMPBenchmarkAndThreshold(treatmentBMPID: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<TreatmentBMPBenchmarkAndThresholdDto>>>;
+    public listTreatmentBMPBenchmarkAndThreshold(treatmentBMPID: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (treatmentBMPID === null || treatmentBMPID === undefined) {
+            throw new Error('Required parameter treatmentBMPID was null or undefined when calling listTreatmentBMPBenchmarkAndThreshold.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'text/plain',
+            'application/json',
+            'text/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/treatment-bmps/${this.configuration.encodeParam({name: "treatmentBMPID", value: treatmentBMPID, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}/benchmarks-and-thresholds`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<TreatmentBMPBenchmarkAndThresholdDto>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * @param treatmentBMPID 
      * @param treatmentBMPBenchmarkAndThresholdID 
      * @param treatmentBMPBenchmarkAndThresholdUpsertDto 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public treatmentBmpsTreatmentBMPIDBenchmarksAndThresholdsTreatmentBMPBenchmarkAndThresholdIDPut(treatmentBMPID: number, treatmentBMPBenchmarkAndThresholdID: number, treatmentBMPBenchmarkAndThresholdUpsertDto?: TreatmentBMPBenchmarkAndThresholdUpsertDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<TreatmentBMPBenchmarkAndThresholdDto>;
-    public treatmentBmpsTreatmentBMPIDBenchmarksAndThresholdsTreatmentBMPBenchmarkAndThresholdIDPut(treatmentBMPID: number, treatmentBMPBenchmarkAndThresholdID: number, treatmentBMPBenchmarkAndThresholdUpsertDto?: TreatmentBMPBenchmarkAndThresholdUpsertDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TreatmentBMPBenchmarkAndThresholdDto>>;
-    public treatmentBmpsTreatmentBMPIDBenchmarksAndThresholdsTreatmentBMPBenchmarkAndThresholdIDPut(treatmentBMPID: number, treatmentBMPBenchmarkAndThresholdID: number, treatmentBMPBenchmarkAndThresholdUpsertDto?: TreatmentBMPBenchmarkAndThresholdUpsertDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TreatmentBMPBenchmarkAndThresholdDto>>;
-    public treatmentBmpsTreatmentBMPIDBenchmarksAndThresholdsTreatmentBMPBenchmarkAndThresholdIDPut(treatmentBMPID: number, treatmentBMPBenchmarkAndThresholdID: number, treatmentBMPBenchmarkAndThresholdUpsertDto?: TreatmentBMPBenchmarkAndThresholdUpsertDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public updateTreatmentBMPBenchmarkAndThreshold(treatmentBMPID: number, treatmentBMPBenchmarkAndThresholdID: number, treatmentBMPBenchmarkAndThresholdUpsertDto?: TreatmentBMPBenchmarkAndThresholdUpsertDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<TreatmentBMPBenchmarkAndThresholdDto>;
+    public updateTreatmentBMPBenchmarkAndThreshold(treatmentBMPID: number, treatmentBMPBenchmarkAndThresholdID: number, treatmentBMPBenchmarkAndThresholdUpsertDto?: TreatmentBMPBenchmarkAndThresholdUpsertDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TreatmentBMPBenchmarkAndThresholdDto>>;
+    public updateTreatmentBMPBenchmarkAndThreshold(treatmentBMPID: number, treatmentBMPBenchmarkAndThresholdID: number, treatmentBMPBenchmarkAndThresholdUpsertDto?: TreatmentBMPBenchmarkAndThresholdUpsertDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TreatmentBMPBenchmarkAndThresholdDto>>;
+    public updateTreatmentBMPBenchmarkAndThreshold(treatmentBMPID: number, treatmentBMPBenchmarkAndThresholdID: number, treatmentBMPBenchmarkAndThresholdUpsertDto?: TreatmentBMPBenchmarkAndThresholdUpsertDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (treatmentBMPID === null || treatmentBMPID === undefined) {
-            throw new Error('Required parameter treatmentBMPID was null or undefined when calling treatmentBmpsTreatmentBMPIDBenchmarksAndThresholdsTreatmentBMPBenchmarkAndThresholdIDPut.');
+            throw new Error('Required parameter treatmentBMPID was null or undefined when calling updateTreatmentBMPBenchmarkAndThreshold.');
         }
         if (treatmentBMPBenchmarkAndThresholdID === null || treatmentBMPBenchmarkAndThresholdID === undefined) {
-            throw new Error('Required parameter treatmentBMPBenchmarkAndThresholdID was null or undefined when calling treatmentBmpsTreatmentBMPIDBenchmarksAndThresholdsTreatmentBMPBenchmarkAndThresholdIDPut.');
+            throw new Error('Required parameter treatmentBMPBenchmarkAndThresholdID was null or undefined when calling updateTreatmentBMPBenchmarkAndThreshold.');
         }
 
         let localVarHeaders = this.defaultHeaders;

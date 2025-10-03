@@ -113,7 +113,7 @@ export class PlanningMapComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.boundingBox$ = this.stormwaterJurisdictionService.jurisdictionsBoundingBoxGet();
+        this.boundingBox$ = this.stormwaterJurisdictionService.getBoundingBoxStormwaterJurisdiction();
 
         this.columnDefs = [
             this.utilityFunctionsService.createLinkColumnDef("Project ID", "ProjectID", "ProjectID", {
@@ -145,9 +145,9 @@ export class PlanningMapComponent implements OnInit {
         });
 
         this.planningMapInitData$ = combineLatest({
-            Projects: this.projectService.projectsGet(),
-            TreatmentBMPs: this.treatmentBMPService.treatmentBmpsPlannedProjectsGet(),
-            Delineations: this.delineationService.delineationsGet(),
+            Projects: this.projectService.listProject(),
+            TreatmentBMPs: this.treatmentBMPService.listTreatmentBMP(),
+            Delineations: this.delineationService.listDelineation(),
         }).pipe(
             tap((data) => {
                 this.projects = data.Projects;

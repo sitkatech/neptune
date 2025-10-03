@@ -93,7 +93,7 @@ export class ModeledPerformanceComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.project$ = this.projectService.projectsProjectIDGet(this.projectID).pipe(
+        this.project$ = this.projectService.getProject(this.projectID).pipe(
             tap((project) => {
                 // redirect to review step if project is shared with OCTA grant program
                 if (project.ShareOCTAM2Tier2Scores) {
@@ -104,9 +104,9 @@ export class ModeledPerformanceComponent implements OnInit {
         this.projectNetworkSolveHistories$ = this.project$.pipe(
             switchMap((project) => {
                 return combineLatest({
-                    TreatmentBMPs: this.projectService.projectsProjectIDTreatmentBmpsGet(project.ProjectID),
-                    Delineations: this.projectService.projectsProjectIDDelineationsGet(project.ProjectID),
-                    ProjectNetworkSolveHistories: this.projectService.projectsProjectIDProjectNetworkSolveHistoriesGet(project.ProjectID),
+                    TreatmentBMPs: this.projectService.listTreatmentBMPsByProjectIDProject(project.ProjectID),
+                    Delineations: this.projectService.listDelineationsByProjectIDProject(project.ProjectID),
+                    ProjectNetworkSolveHistories: this.projectService.listProjectNetworkSolveHistoriesForProjectProject(project.ProjectID),
                 });
             }),
             tap((data) => {
@@ -124,7 +124,7 @@ export class ModeledPerformanceComponent implements OnInit {
 
         this.boundingBox$ = this.project$.pipe(
             switchMap((project) => {
-                return this.projectService.projectsProjectIDBoundingBoxGet(project.ProjectID);
+                return this.projectService.getBoundingBoxByProjectIDProject(project.ProjectID);
             })
         );
 
@@ -240,11 +240,11 @@ export class ModeledPerformanceComponent implements OnInit {
     }
 
     triggerModelRunForProject(): void {
-        this.projectService.projectsProjectIDModeledPerformancePost(this.projectID).subscribe(
+        this.projectService.triggerModeledPerformanceForProjectProject(this.projectID).subscribe(
             (results) => {
                 this.alertService.pushAlert(new Alert("Model run was successfully started and will run in the background.", AlertContext.Success, true));
                 window.scroll(0, 0);
-                this.projectNetworkSolveHistories$ = this.projectService.projectsProjectIDProjectNetworkSolveHistoriesGet(this.projectID);
+                this.projectNetworkSolveHistories$ = this.projectService.listProjectNetworkSolveHistoriesForProjectProject(this.projectID);
             },
             (error) => {
                 window.scroll(0, 0);

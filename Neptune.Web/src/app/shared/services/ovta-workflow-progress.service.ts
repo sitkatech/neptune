@@ -22,11 +22,9 @@ export class OvtaWorkflowProgressService {
 
     getProgress(ovtaID: number) {
         if (ovtaID) {
-            this.progressSubscription = this.onlandVisualTrashAssessmentService
-                .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDProgressGet(ovtaID)
-                .subscribe((response) => {
-                    this.progressSubject.next(response);
-                });
+            this.progressSubscription = this.onlandVisualTrashAssessmentService.getWorkflowProgressOnlandVisualTrashAssessment(ovtaID).subscribe((response) => {
+                this.progressSubject.next(response);
+            });
         } else {
             this.progressSubject.next(
                 new OnlandVisualTrashAssessmentWorkflowProgressDto({

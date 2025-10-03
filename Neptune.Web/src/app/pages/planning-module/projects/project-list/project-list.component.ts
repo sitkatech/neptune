@@ -22,7 +22,7 @@ import { DropdownToggleDirective } from "src/app/shared/directives/dropdown-togg
     selector: "project-list",
     templateUrl: "./project-list.component.html",
     styleUrls: ["./project-list.component.scss"],
-    imports: [DropdownToggleDirective, AgGridModule, NeptuneGridComponent, PageHeaderComponent, RouterLink]
+    imports: [DropdownToggleDirective, AgGridModule, NeptuneGridComponent, PageHeaderComponent, RouterLink],
 })
 export class ProjectListComponent implements OnInit {
     private currentUser: PersonDto;
@@ -105,7 +105,7 @@ export class ProjectListComponent implements OnInit {
     }
 
     private updateGridData() {
-        this.projectService.projectsGet().subscribe((projects) => {
+        this.projectService.listProject().subscribe((projects) => {
             this.projects = projects;
         });
     }
@@ -120,7 +120,7 @@ export class ProjectListComponent implements OnInit {
         };
         this.confirmService.confirm(confirmOptions).then((confirmed) => {
             if (confirmed) {
-                this.projectService.projectsProjectIDDelete(params.data.ProjectID).subscribe(() => {
+                this.projectService.deleteProject(params.data.ProjectID).subscribe(() => {
                     this.alertService.pushAlert(new Alert("Successfully deleted project", AlertContext.Success));
                     params.api.applyTransaction({ remove: [params.data] });
                 });
@@ -129,7 +129,7 @@ export class ProjectListComponent implements OnInit {
     }
 
     public downloadProjectModelResults() {
-        this.projectService.projectsDownloadGet().subscribe(
+        this.projectService.downloadProjectsWithModelsProject().subscribe(
             (csv) => {
                 //Create a fake object for us to click and download
                 var a = document.createElement("a");
@@ -148,7 +148,7 @@ export class ProjectListComponent implements OnInit {
     }
 
     public downloadTreatmentBMPModelResults() {
-        this.projectService.projectsTreatmentBMPsDownloadGet().subscribe(
+        this.projectService.downloadTreatmentBMPsForProjectsProject().subscribe(
             (csv) => {
                 //Create a fake object for us to click and download
                 var a = document.createElement("a");

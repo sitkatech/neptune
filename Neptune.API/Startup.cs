@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using Neptune.API.Services;
 using Neptune.API.Services.Filter;
 using Neptune.API.Services.Middleware;
@@ -27,6 +28,7 @@ using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using System.Threading;
 using LogHelper = Neptune.API.Services.Logging.LogHelper;
@@ -138,7 +140,7 @@ namespace Neptune.API
             // Base swagger services
             services.AddSwaggerGen(options =>
             {
-                // extra options here if you wanted
+                options.DocumentFilter<UseMethodNameAsOperationIdFilter>();
             });
             #endregion
 

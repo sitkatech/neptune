@@ -102,9 +102,7 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
             })
             .then((confirmed) => {
                 if (confirmed) {
-                    this.fundingEventByTreatmentBMPIDService
-                        .treatmentBmpsTreatmentBMPIDFundingEventsFundingEventIDDelete(this.treatmentBMPID, fundingEvent.FundingEventID)
-                        .subscribe(() => this.loadData());
+                    this.fundingEventByTreatmentBMPIDService.deleteFundingEventByTreatmentBMPID(this.treatmentBMPID, fundingEvent.FundingEventID).subscribe(() => this.loadData());
                 }
             });
     }
@@ -238,8 +236,8 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
 
     private loadData(): void {
         // Wire up funding events grid as observable
-        this.fundingEvents$ = this.fundingEventByTreatmentBMPIDService.treatmentBmpsTreatmentBMPIDFundingEventsGet(this.treatmentBMPID);
-        this.hruCharacteristics$ = this.treatmentBMPService.treatmentBmpsTreatmentBMPIDHruCharacteristicsGet(this.treatmentBMPID).pipe(
+        this.fundingEvents$ = this.fundingEventByTreatmentBMPIDService.listFundingEventByTreatmentBMPID(this.treatmentBMPID);
+        this.hruCharacteristics$ = this.treatmentBMPService.listHRUCharacteristicsTreatmentBMP(this.treatmentBMPID).pipe(
             tap((hruCharacteristics) => {
                 const grouped = this.groupByPipe.transform(hruCharacteristics, "HRUCharacteristicLandUseCodeDisplayName");
                 this.hruCharacteristicsSummaries = Object.entries(grouped).map(
@@ -253,8 +251,8 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
             })
         );
         // Wire up field visits grid as observable
-        this.fieldVisits$ = this.treatmentBMPService.treatmentBmpsTreatmentBMPIDFieldVisitsGet(this.treatmentBMPID);
-        this.treatmentBMP$ = this.treatmentBMPService.treatmentBmpsTreatmentBMPIDGet(this.treatmentBMPID).pipe(
+        this.fieldVisits$ = this.treatmentBMPService.fieldVisitGridJsonDataTreatmentBMP(this.treatmentBMPID);
+        this.treatmentBMP$ = this.treatmentBMPService.getByIDTreatmentBMP(this.treatmentBMPID).pipe(
             tap((bmp) => {
                 if (bmp && bmp.Latitude && bmp.Longitude) {
                     this.boundingBox = new BoundingBoxDto({
@@ -266,10 +264,10 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
                 }
             })
         );
-        this.customAttributes$ = this.treatmentBMP$.pipe(switchMap((bmp) => this.treatmentBMPService.treatmentBmpsTreatmentBMPIDCustomAttributesGet(bmp.TreatmentBMPID)));
+        this.customAttributes$ = this.treatmentBMP$.pipe(switchMap((bmp) => this.treatmentBMPService.listCustomAttributesTreatmentBMP(bmp.TreatmentBMPID)));
         this.treatmentBMPTypeCustomAttributeTypes$ = this.treatmentBMP$.pipe(
             switchMap((bmp) =>
-                this.treatmentBMPTypeService.treatmentBmpTypesTreatmentBMPTypeIDCustomAttributeTypesGet(bmp.TreatmentBMPTypeID).pipe(
+                this.treatmentBMPTypeService.listCustomAttributeTypesTreatmentBMPType(bmp.TreatmentBMPTypeID).pipe(
                     tap((attributes) => {
                         this.hasModelingAttributes =
                             Array.isArray(attributes) &&
@@ -278,7 +276,7 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
                 )
             )
         );
-        this.treatmentBMPImages$ = this.treatmentBMPImageByTreatmentBMPService.treatmentBmpsTreatmentBMPIDTreatmentBmpImagesGet(this.treatmentBMPID).pipe(
+        this.treatmentBMPImages$ = this.treatmentBMPImageByTreatmentBMPService.listTreatmentBMPImageByTreatmentBMP(this.treatmentBMPID).pipe(
             tap({
                 next: () => {
                     this.imagesLoading = false;

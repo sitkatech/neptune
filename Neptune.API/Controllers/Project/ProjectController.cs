@@ -35,7 +35,7 @@ namespace Neptune.API.Controllers
     {
         [HttpGet]
         [JurisdictionEditFeature]
-        public ActionResult<List<ProjectDto>> ListByPersonID()
+        public ActionResult<List<ProjectDto>> List()
         {
             var projectDtos = Projects.ListByPersonIDAsDto(DbContext, CallingUser.PersonID);
             return Ok(projectDtos);
@@ -173,7 +173,7 @@ namespace Neptune.API.Controllers
 
         [HttpGet("{projectID}/treatment-bmps/as-upsert-dtos")]
         [UserViewFeature]
-        public ActionResult<List<TreatmentBMPUpsertDto>> GetByProjectID([FromRoute] int projectID)
+        public ActionResult<List<TreatmentBMPUpsertDto>> ListTreatmentBMPsAsUpsertDtosByProjectID([FromRoute] int projectID)
         {
             var treatmentBMPUpsertDtos = TreatmentBMPs.ListByProjectIDAsUpsertDto(DbContext, projectID);
             return Ok(treatmentBMPUpsertDtos);
@@ -403,7 +403,7 @@ namespace Neptune.API.Controllers
         [HttpGet("{projectID}/project-network-solve-histories")]
         [EntityNotFound(typeof(Project), "projectID")]
         [UserViewFeature]
-        public ActionResult<List<ProjectNetworkSolveHistorySimpleDto>> GetProjectNetworkSolveHistoriesForProject([FromRoute] int projectID)
+        public ActionResult<List<ProjectNetworkSolveHistorySimpleDto>> ListProjectNetworkSolveHistoriesForProject([FromRoute] int projectID)
         {
             var project = Projects.GetByID(DbContext, projectID);
             if ((!CallingUser.IsOCTAGrantReviewer || !project.ShareOCTAM2Tier2Scores) && !CallingUser.CanEditJurisdiction(project.StormwaterJurisdictionID, DbContext))
@@ -418,7 +418,7 @@ namespace Neptune.API.Controllers
         [HttpGet("{projectID}/treatment-bmp-hru-characteristics")]
         [EntityNotFound(typeof(Project), "projectID")]
         [UserViewFeature]
-        public ActionResult<List<TreatmentBMPHRUCharacteristicsSummarySimpleDto>> GetTreatmentBMPHRUCharacteristicsForProject([FromRoute] int projectID)
+        public ActionResult<List<TreatmentBMPHRUCharacteristicsSummarySimpleDto>> ListTreatmentBMPHRUCharacteristicsForProject([FromRoute] int projectID)
         {
             var project = Projects.GetByID(DbContext, projectID);
             if ((!CallingUser.IsOCTAGrantReviewer || !project.ShareOCTAM2Tier2Scores) && !CallingUser.CanEditJurisdiction(project.StormwaterJurisdictionID, DbContext))
@@ -434,7 +434,7 @@ namespace Neptune.API.Controllers
         [HttpGet("{projectID}/load-reducing-results")]
         [EntityNotFound(typeof(Project), "projectID")]
         [UserViewFeature]
-        public ActionResult<List<ProjectLoadReducingResultDto>> GetLoadRemovingResultsForProject([FromRoute] int projectID)
+        public ActionResult<List<ProjectLoadReducingResultDto>> ListLoadReducingResultsForProject([FromRoute] int projectID)
         {
             var project = Projects.GetByID(DbContext, projectID);
             if ((!CallingUser.IsOCTAGrantReviewer || !project.ShareOCTAM2Tier2Scores) && !CallingUser.CanEditJurisdiction(project.StormwaterJurisdictionID, DbContext))
@@ -450,7 +450,7 @@ namespace Neptune.API.Controllers
         [HttpGet("{projectID}/load-generating-results")]
         [EntityNotFound(typeof(Project), "projectID")]
         [UserViewFeature]
-        public ActionResult<List<ProjectLoadGeneratingResultDto>> GetLoadGeneratingResultsForProject([FromRoute] int projectID)
+        public ActionResult<List<ProjectLoadGeneratingResultDto>> ListtLoadGeneratingResultsForProject([FromRoute] int projectID)
         {
             var project = Projects.GetByID(DbContext, projectID);
             if ((!CallingUser.IsOCTAGrantReviewer || !project.ShareOCTAM2Tier2Scores) && !CallingUser.CanEditJurisdiction(project.StormwaterJurisdictionID, DbContext))
@@ -491,7 +491,7 @@ namespace Neptune.API.Controllers
         [HttpGet("{projectID}/delineations")]
         [EntityNotFound(typeof(Project), "projectID")]
         [UserViewFeature]
-        public ActionResult<List<DelineationUpsertDto>> GetDelineationsByProjectID([FromRoute] int projectID)
+        public ActionResult<List<DelineationUpsertDto>> ListDelineationsByProjectID([FromRoute] int projectID)
         {
             var delineationUpsertDtos = Delineations.ListByProjectIDAsUpsertDto(DbContext, projectID);
             return Ok(delineationUpsertDtos);
@@ -567,7 +567,7 @@ namespace Neptune.API.Controllers
 
         [HttpGet("OCTAM2Tier2GrantProgram")]
         [UserViewFeature]
-        public ActionResult<List<ProjectDto>> GetProjectsSharedWithOCTAM2Tier2GrantProgram()
+        public ActionResult<List<ProjectDto>> ListProjectsSharedWithOCTAM2Tier2GrantProgram()
         {
             if (!CallingUser.IsOCTAGrantReviewer)
             {
@@ -623,7 +623,7 @@ namespace Neptune.API.Controllers
 
         [HttpGet("delineations")]
         [UserViewFeature]
-        public ActionResult<List<DelineationDto>> List()
+        public ActionResult<List<DelineationDto>> ListDelineations()
         {
             if (!CallingUser.IsOCTAGrantReviewer)
             {
