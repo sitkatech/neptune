@@ -14,7 +14,7 @@ import { environment } from "src/environments/environment";
 import { AuthenticationService } from "src/app/services/authentication.service";
 import { NeptuneMapInitEvent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
 import { HybridMapGridComponent } from "src/app/shared/components/hybrid-map-grid/hybrid-map-grid.component";
-import { Map, layerControl } from "leaflet";
+import { Map, Control } from "leaflet";
 import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto";
 import { StormwaterJurisdictionService } from "src/app/shared/generated/api/stormwater-jurisdiction.service";
 import { SelectedLandUseBlockLayerComponent } from "src/app/shared/components/leaflet/layers/selected-land-use-block-layer/selected-land-use-block-layer.component";
@@ -56,7 +56,7 @@ export class TrashLandUseBlockIndexComponent {
     public selectionFromMap: boolean;
 
     public map: Map;
-    public layerControl: layerControl;
+    public layerControl: Control.Layers;
     public bounds: any;
     public mapIsReady: boolean = false;
     public boundingBox$: Observable<BoundingBoxDto>;

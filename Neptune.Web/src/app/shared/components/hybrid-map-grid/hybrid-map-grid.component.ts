@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { ColDef, GridApi, GridReadyEvent } from "ag-grid-community";
 import { AgGridAngular } from "ag-grid-angular";
-import { Map, layerControl } from "leaflet";
+import { Map, Control } from "leaflet";
 import { LoadingDirective } from "../../directives/loading.directive";
 import { IconComponent } from "../icon/icon.component";
 
@@ -34,7 +34,7 @@ export class HybridMapGridComponent {
     public selectedPanel: "Grid" | "Hybrid" | "Map" = "Hybrid";
 
     public map: Map;
-    public layerControl: layerControl;
+    public layerControl: L.Control.Layers;
     public bounds: any;
     public mapIsReady: boolean = false;
 

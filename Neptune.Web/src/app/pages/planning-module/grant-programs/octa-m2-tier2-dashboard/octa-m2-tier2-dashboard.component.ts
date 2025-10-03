@@ -89,7 +89,7 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
     public PrioritizationMetric = PrioritizationMetric;
     public prioritizationMetrics = Object.values(PrioritizationMetric);
     public selectedPrioritizationMetric = PrioritizationMetric.NoMetric;
-    public prioritizationMetricOverlayLayer: L.Layers;
+    public prioritizationMetricOverlayLayer: L.Layer;
 
     private plannedTreatmentBMPOverlayName = "<img src='./assets/main/map-icons/marker-icon-violet.png' style='height:17px; margin-bottom:3px'> Project BMPs";
     private delineationDefaultStyle = {
@@ -142,7 +142,7 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
         this.registerClickEvents();
 
         this.map.on("overlayadd overlayremove", (e) => {
-            if (e.name != this.plannedTreatmentBMPOverlayName) {
+            if (e["name"] != this.plannedTreatmentBMPOverlayName) {
                 return;
             }
         });
@@ -165,15 +165,15 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
 
     public initializePanes(): void {
         let hippocampChoroplethPane = this.map.createPane("hippocampChoroplethPane");
-        hippocampChoroplethPane.style.zIndex = 300;
+        hippocampChoroplethPane.style.zIndex = "300";
     }
 
     public registerClickEvents(): void {
         const wfsService = this.wfsService;
         const self = this;
         this.map.on("click", (event: L.LeafletMouseEvent): void => {
-            wfsService.getOCTAPrioritizationMetricsByCoordinate(event.latlng.lng, event.latlng.lat).subscribe((octaPrioritizationFeatureCollection: L.FeatureCollection) => {
-                octaPrioritizationFeatureCollection.features.forEach((feature: L.Feature) => {
+            wfsService.getOCTAPrioritizationMetricsByCoordinate(event.latlng.lng, event.latlng.lat).subscribe((octaPrioritizationFeatureCollection: GeoJSON.FeatureCollection) => {
+                octaPrioritizationFeatureCollection.features.forEach((feature: GeoJSON.Feature) => {
                     new L.Popup({
                         minWidth: 500,
                         autoPanPadding: new L.Point(100, 100),
@@ -198,7 +198,7 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
 
         // add planned project BMPs layer
         const projectTreatmentBMPGeoJSON = this.mapTreatmentBMPsToGeoJson(this.treatmentBMPs);
-        this.plannedProjectTreatmentBMPsLayer = new L.GeoJSON(projectTreatmentBMPGeoJSON, {
+        this.plannedProjectTreatmentBMPsLayer = new L.GeoJSON(projectTreatmentBMPGeoJSON as any, {
             pointToLayer: (feature, latlng) => {
                 return L.marker(latlng, { icon: MarkerHelper.treatmentBMPMarker });
             },
@@ -208,7 +208,7 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
                 });
             },
         });
-        this.plannedProjectTreatmentBMPsLayer.sortOrder = 100;
+        this.plannedProjectTreatmentBMPsLayer["sortOrder"] = 100;
         this.plannedProjectTreatmentBMPsLayer.addTo(this.map);
         this.layerControl.addOverlay(this.plannedProjectTreatmentBMPsLayer, this.plannedTreatmentBMPOverlayName);
     }
@@ -244,9 +244,9 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
         let selectedTreatmentBMP = this.treatmentBMPs.find((x) => x.TreatmentBMPID == treatmentBMPID);
         this.selectProjectImpl(selectedTreatmentBMP.ProjectID);
         this.selectedTreatmentBMP = selectedTreatmentBMP;
-        this.plannedProjectTreatmentBMPsLayer.eachLayer((layer) => {
+        this.plannedProjectTreatmentBMPsLayer.eachLayer((layer: L.Marker) => {
             if (!layer.feature.properties.DefaultZIndexOffset) {
-                layer.feature.properties.DefaultZIndexOffset = layer._zIndex;
+                layer.feature.properties.DefaultZIndexOffset = layer.options.zIndexOffset;
             }
             layer.setZIndexOffset(10000);
             layer.setIcon(MarkerHelper.buildDefaultLeafletMarkerFromMarkerPath("/assets/main/map-icons/marker-icon-red.png"));
@@ -266,11 +266,11 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
         this.selectedProject = this.projects.find((x) => x.ProjectID == projectID);
         this.relatedTreatmentBMPs = this.treatmentBMPs.filter((x) => x.ProjectID == projectID);
         let relatedTreatmentBMPIDs = this.relatedTreatmentBMPs.map((x) => x.TreatmentBMPID);
-        let featureGroupForZoom = new L.featureGroup();
+        let featureGroupForZoom = L.featureGroup();
 
         let relatedDelineations = this.delineations.filter((x) => relatedTreatmentBMPIDs.includes(x.TreatmentBMPID));
         if (relatedDelineations != null && relatedDelineations.length > 0) {
-            this.selectedProjectDelineationsLayer = new L.GeoJSON(this.mapDelineationsToGeoJson(relatedDelineations), {
+            this.selectedProjectDelineationsLayer = new L.GeoJSON(this.mapDelineationsToGeoJson(relatedDelineations) as any, {
                 style: () => {
                     return this.delineationDefaultStyle;
                 },
@@ -279,7 +279,7 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
             this.selectedProjectDelineationsLayer.addTo(featureGroupForZoom);
         }
 
-        this.plannedProjectTreatmentBMPsLayer.eachLayer((layer) => {
+        this.plannedProjectTreatmentBMPsLayer.eachLayer((layer: L.Marker) => {
             layer.setIcon(MarkerHelper.treatmentBMPMarker);
             if (relatedTreatmentBMPIDs.includes(layer.feature.properties.TreatmentBMPID)) {
                 layer.addTo(featureGroupForZoom);

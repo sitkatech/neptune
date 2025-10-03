@@ -60,7 +60,7 @@ export class ObservationsMapComponent {
             this.layerControl.removeLayer(this.ovtaObservationLayer);
         }
         const ovtaObservationGeoJSON = this.mapObservationsToGeoJson(this.onlandVisualTrashAssessmentObservations);
-        this.ovtaObservationLayer = new L.GeoJSON(ovtaObservationGeoJSON, {
+        this.ovtaObservationLayer = new L.GeoJSON(ovtaObservationGeoJSON as any, {
             pointToLayer: (feature, latlng) => {
                 return L.marker(latlng, { icon: MarkerHelper.treatmentBMPMarker });
             },
@@ -70,7 +70,7 @@ export class ObservationsMapComponent {
                 });
             },
         });
-        this.ovtaObservationLayer.sortOrder = 100;
+        this.ovtaObservationLayer["sortOrder"] = 100;
         this.map.fitBounds(this.ovtaObservationLayer.getBounds());
         this.ovtaObservationLayer.addTo(this.map);
         this.layerControl.addOverlay(this.ovtaObservationLayer, this.ovtaObservationOverlayName);
@@ -105,10 +105,10 @@ export class ObservationsMapComponent {
         this.selectedOnlandVisualTrashAssessmentObservation = this.onlandVisualTrashAssessmentObservations.find(
             (x) => x.OnlandVisualTrashAssessmentObservationID == onlandVisualTrashAssessmentObservationID
         );
-        this.ovtaObservationLayer.eachLayer((layer) => {
+        this.ovtaObservationLayer.eachLayer((layer: L.Marker) => {
             if (layer.feature.properties.OnlandVisualTrashAssessmentObservationID == this.selectedOnlandVisualTrashAssessmentObservation.OnlandVisualTrashAssessmentObservationID) {
                 if (!layer.feature.properties.DefaultZIndexOffset) {
-                    layer.feature.properties.DefaultZIndexOffset = layer._zIndex;
+                    layer.feature.properties.DefaultZIndexOffset = layer.options.zIndexOffset;
                 }
                 layer.setZIndexOffset(10000);
                 layer.setIcon(MarkerHelper.selectedMarker);

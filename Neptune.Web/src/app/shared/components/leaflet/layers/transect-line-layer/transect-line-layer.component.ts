@@ -11,7 +11,7 @@ import { OnlandVisualTrashAssessmentService } from "src/app/shared/generated/api
     selector: "transect-line-layer",
     imports: [AsyncPipe],
     templateUrl: "./transect-line-layer.component.html",
-    styleUrl: "./transect-line-layer.component.scss"
+    styleUrl: "./transect-line-layer.component.scss",
 })
 export class TransectLineLayerComponent extends MapLayerBase implements OnChanges {
     constructor(
@@ -38,7 +38,7 @@ export class TransectLineLayerComponent extends MapLayerBase implements OnChange
                 .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDTransectLineAsFeatureCollectionGet(this.ovtaID)
                 .pipe(
                     tap((transectLineFeatureCollection) => {
-                        this.layer = new L.GeoJSON(transectLineFeatureCollection, {
+                        this.layer = new L.GeoJSON(transectLineFeatureCollection as any, {
                             style: this.transectLineStyle,
                         });
                         this.initLayer();
@@ -50,7 +50,7 @@ export class TransectLineLayerComponent extends MapLayerBase implements OnChange
                 .pipe(
                     tap((transectLineFeatureCollection) => {
                         console.log(transectLineFeatureCollection);
-                        this.layer = new L.GeoJSON(transectLineFeatureCollection, {
+                        this.layer = new L.GeoJSON(transectLineFeatureCollection as any, {
                             style: this.transectLineStyle,
                         });
                         this.initLayer();

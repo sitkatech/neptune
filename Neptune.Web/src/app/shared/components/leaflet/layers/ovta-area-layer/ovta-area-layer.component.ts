@@ -11,7 +11,7 @@ import { OnlandVisualTrashAssessmentService } from "src/app/shared/generated/api
     selector: "ovta-area-layer",
     imports: [AsyncPipe],
     templateUrl: "./ovta-area-layer.component.html",
-    styleUrl: "./ovta-area-layer.component.scss"
+    styleUrl: "./ovta-area-layer.component.scss",
 })
 export class OvtaAreaLayerComponent extends MapLayerBase implements OnChanges {
     constructor(
@@ -37,7 +37,7 @@ export class OvtaAreaLayerComponent extends MapLayerBase implements OnChanges {
         if (this.ovtaID) {
             this.featureCollection$ = this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDAreaAsFeatureCollectionGet(this.ovtaID).pipe(
                 tap((transectLineFeatureCollection) => {
-                    this.layer = new L.GeoJSON(transectLineFeatureCollection, {
+                    this.layer = new L.GeoJSON(transectLineFeatureCollection as any, {
                         style: this.ovtaAreaStyle,
                     });
                     this.initLayer();
@@ -48,7 +48,7 @@ export class OvtaAreaLayerComponent extends MapLayerBase implements OnChanges {
                 .onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDAreaAsFeatureCollectionGet(this.ovtaAreaID)
                 .pipe(
                     tap((transectLineFeatureCollection) => {
-                        this.layer = new L.GeoJSON(transectLineFeatureCollection, {
+                        this.layer = new L.GeoJSON(transectLineFeatureCollection as any, {
                             style: this.ovtaAreaStyle,
                         });
                         this.initLayer();

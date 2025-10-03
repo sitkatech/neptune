@@ -1,4 +1,3 @@
-
 import { Component, Input, OnChanges } from "@angular/core";
 import { environment } from "src/environments/environment";
 import * as L from "leaflet";
@@ -7,7 +6,7 @@ import { MapLayerBase } from "../map-layer-base.component";
     selector: "trash-generating-unit-loads-layer",
     imports: [],
     templateUrl: "./trash-generating-unit-loads-layer.component.html",
-    styleUrls: ["./trash-generating-unit-loads-layer.component.scss"]
+    styleUrls: ["./trash-generating-unit-loads-layer.component.scss"],
 })
 export class TrashGeneratingUnitLoadsLayerComponent extends MapLayerBase implements OnChanges {
     constructor() {
@@ -19,16 +18,20 @@ export class TrashGeneratingUnitLoadsLayerComponent extends MapLayerBase impleme
     public layer;
 
     ngAfterViewInit(): void {
+        let cql_filter = `1=1`;
+        if (this.selectedJurisdictionID) {
+            cql_filter = `StormwaterJurisdictionID=${this.selectedJurisdictionID}`;
+        }
+
         this.wmsOptions = {
             layers: "OCStormwater:TrashGeneratingUnits",
             transparent: true,
             format: "image/png",
             tiled: true,
             styles: this.style,
-        };
-        if (this.selectedJurisdictionID) {
-            this.wmsOptions.cql_filter = `StormwaterJurisdictionID=${this.selectedJurisdictionID}`;
-        }
+            cql_filter: cql_filter,
+        } as any;
+
         this.layer = L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", this.wmsOptions);
         this.initLayer();
     }

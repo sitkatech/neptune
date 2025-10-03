@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { Observable, switchMap, tap } from "rxjs";
 import { NeptuneMapInitEvent, NeptuneMapComponent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
 import { OnlandVisualTrashAssessmentService } from "src/app/shared/generated/api/onland-visual-trash-assessment.service";
-import "leaflet-draw";
+import "@geoman-io/leaflet-geoman-free";
 import * as L from "leaflet";
 import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
 import { AlertDisplayComponent } from "../../../../shared/components/alert-display/alert-display.component";
@@ -19,7 +19,8 @@ import { LandUseBlockLayerComponent } from "../../../../shared/components/leafle
 import { ParcelLayerComponent } from "../../../../shared/components/leaflet/layers/parcel-layer/parcel-layer.component";
 import { TransectLineLayerComponent } from "src/app/shared/components/leaflet/layers/transect-line-layer/transect-line-layer.component";
 import { IFeature, OnlandVisualTrashAssessmentDetailDto, OnlandVisualTrashAssessmentRefineAreaDto } from "src/app/shared/generated/model/models";
-import { WfsService } from "src/app/shared/services/wfs.service";
+import { IconComponent } from "src/app/shared/components/icon/icon.component";
+import { LeafletHelperService } from "src/app/shared/services/leaflet-helper.service";
 
 @Component({
     selector: "trash-ovta-refine-assessment-area",
@@ -33,6 +34,7 @@ import { WfsService } from "src/app/shared/services/wfs.service";
         LandUseBlockLayerComponent,
         ParcelLayerComponent,
         TransectLineLayerComponent,
+        IconComponent,
     ],
     templateUrl: "./trash-ovta-refine-assessment-area.component.html",
     styleUrl: "./trash-ovta-refine-assessment-area.component.scss",
@@ -47,48 +49,21 @@ export class TrashOvtaRefineAssessmentAreaComponent {
     public mapHeight = window.innerHeight - window.innerHeight * 0.4 + "px";
     public map: L.Map;
     public layerControl: L.Control.Layers;
+    public legendControl: L.Control;
     public mapIsReady = false;
     public bounds: any;
     public isLoadingSubmit: boolean = false;
 
-    public drawnItems: L.featureGroup;
-    public drawControl: L.Control;
+    // Geoman does not use drawControl or drawnItems
     public isPerformingDrawAction: boolean = false;
     public layer: L.FeatureGroup = new L.FeatureGroup();
-
-    private defaultStyle = {
-        color: "blue",
-        fillOpacity: 0.2,
-        opacity: 0,
-    };
-
-    private defaultDrawControlSpec: L.Control.DrawConstructorOptions = {
-        polyline: false,
-        rectangle: false,
-        circle: false,
-        marker: false,
-        circlemarker: false,
-        polygon: {
-            allowIntersection: true, // Restricts shapes to simple polygons
-        },
-    };
-    private defaultEditControlSpec: L.Control.DrawConstructorOptions = {
-        featureGroup: this.layer,
-        remove: true,
-        edit: {
-            featureGroup: this.layer,
-        },
-        poly: {
-            allowIntersection: true, // Restricts shapes to simple polygons
-        },
-    };
 
     constructor(
         private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService,
         private router: Router,
         private alertService: AlertService,
-        private wfsService: WfsService,
-        private ovtaWorkflowProgressService: OvtaWorkflowProgressService
+        private ovtaWorkflowProgressService: OvtaWorkflowProgressService,
+        private leafletHelperService: LeafletHelperService
     ) {}
 
     ngOnInit(): void {
@@ -116,13 +91,16 @@ export class TrashOvtaRefineAssessmentAreaComponent {
         this.mapIsReady = true;
     }
 
+    public handleLegendControlReady(legendControl: L.Control) {
+        this.legendControl = legendControl;
+    }
+
     public save(andContinue = false) {
         var onlandVisualTrashAssessmentRefineArea = new OnlandVisualTrashAssessmentRefineAreaDto();
         onlandVisualTrashAssessmentRefineArea.OnlandVisualTrashAssessmentID = this.onlandVisualTrashAssessmentID;
-        this.layer.eachLayer((layer) => {
+        this.layer.eachLayer((layer: L.Path & { toGeoJSON: () => GeoJSON.Feature }) => {
             onlandVisualTrashAssessmentRefineArea.GeometryAsGeoJson = JSON.stringify(layer.toGeoJSON());
         });
-
         this.onlandVisualTrashAssessmentService
             .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDRefineAreaPost(this.onlandVisualTrashAssessmentID, onlandVisualTrashAssessmentRefineArea)
             .subscribe(() => {
@@ -136,58 +114,61 @@ export class TrashOvtaRefineAssessmentAreaComponent {
             });
     }
 
-    public addOrRemoveDrawControl(turnOn: boolean) {
-        if (turnOn) {
-            var drawOptions = {
-                draw: Object.assign({}, this.defaultDrawControlSpec),
-                edit: Object.assign({}, this.defaultEditControlSpec),
-            };
-            this.drawControl = new L.Control.Draw(drawOptions);
-            this.map.addControl(this.drawControl);
-            return;
-        }
-        this.drawControl.remove();
-    }
-
     public setControl(): void {
-        L.EditToolbar.Delete.include({
-            removeAllLayers: false,
-        });
-
         this.map
-            .on(L.Draw.Event.CREATED, (event) => {
+            .on("pm:create", (event: { shape: string; layer: L.Path & { toGeoJSON: () => GeoJSON.Feature } }) => {
                 this.isPerformingDrawAction = false;
-                const layer = (event as L.DrawEvents.Created).layer;
+                const layer = event.layer;
+                this.layer.clearLayers();
                 this.layer.addLayer(layer);
                 this.selectFeatureImpl();
             })
-            .on(L.Draw.Event.EDITED, (event) => {
-                this.isPerformingDrawAction = false;
-                const layers = (event as L.DrawEvents.Edited).layers;
+            .on("pm:globaleditmodetoggled", (e: any) => {
+                if (e.enabled) {
+                    //MP 10/2/25 Because direct comparison of layers is proving to be difficult,
+                    // just turn off editing for all layers then re-enable only for the layer we want to edit
+                    this.map.eachLayer((layer: any) => {
+                        if (layer.pm && (this.layer != layer || !this.layer.hasLayer(layer))) {
+                            layer.pm.disable();
+                        }
+                    });
+                    // Only enable editing for layers in this.layer
+                    this.layer.eachLayer((layer: L.Path) => {
+                        layer.pm.enable();
+                    });
+                    return;
+                }
                 this.selectFeatureImpl();
             })
-            .on(L.Draw.Event.DELETED, (event) => {
-                this.isPerformingDrawAction = false;
-                const layers = (event as L.DrawEvents.Deleted).layers;
+            .on("pm:globalremovalmodetoggled", (e: any) => {
+                if (e.enabled) {
+                    // Remove geometry
+                    this.layer.clearLayers();
+                    this.map.pm.toggleGlobalRemovalMode();
+                    return;
+                }
+
                 this.selectFeatureImpl();
-            })
-            .on(L.Draw.Event.DRAWSTART, () => {})
-            .on(L.Draw.Event.TOOLBAROPENED, () => {
-                this.isPerformingDrawAction = true;
-            })
-            .on(L.Draw.Event.TOOLBARCLOSED, () => {
-                this.isPerformingDrawAction = false;
             });
-        this.addOrRemoveDrawControl(true);
+        this.addOrRemoveGeomanControl(true);
+    }
+
+    public addOrRemoveGeomanControl(turnOn: boolean) {
+        if (turnOn) {
+            const hasPolygon = this.layer.getLayers().length > 0;
+            this.leafletHelperService.setupGeomanControls(this.map, !hasPolygon, hasPolygon, hasPolygon, "Assessment Area");
+            this.leafletHelperService.moveLegendToBottomOfContainer(this.legendControl);
+            return;
+        }
+        this.map.pm.removeControls();
     }
 
     public selectFeatureImpl() {
         if (this.isPerformingDrawAction) {
             return;
         }
-        this.map.removeControl(this.drawControl);
-        this.layer.setStyle(this.defaultStyle).bringToFront();
-        this.addOrRemoveDrawControl(true);
+        this.map.pm.removeControls();
+        this.addOrRemoveGeomanControl(true);
     }
 
     public addFeatureCollectionToFeatureGroup(featureCollection: any, featureGroup: L.FeatureGroup) {

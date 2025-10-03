@@ -71,7 +71,7 @@ export class ProjectMapComponent implements OnInit {
     public selectedObjectMarker: L.Layer;
     public selectedTreatmentBMP: TreatmentBMPDisplayDto;
     public treatmentBMPsLayer: L.GeoJSON<any>;
-    public delineationsLayer: L.GeoJson<any>;
+    public delineationsLayer: L.GeoJSON<any>;
 
     private delineationDefaultStyle = {
         color: "blue",
@@ -152,8 +152,8 @@ export class ProjectMapComponent implements OnInit {
         let hasFlownToSelectedObject = false;
 
         const delineationGeoJson = this.mapDelineationsToGeoJson(this.delineations);
-        this.delineationsLayer = new L.GeoJSON(delineationGeoJson, {
-            onEachFeature: (feature, layer) => {
+        this.delineationsLayer = new L.GeoJSON(delineationGeoJson as any, {
+            onEachFeature: (feature, layer: L.Polygon) => {
                 if (this.selectedTreatmentBMP != null) {
                     if (layer.feature.properties.TreatmentBMPID != this.selectedTreatmentBMP.TreatmentBMPID) {
                         layer.setStyle(this.delineationDefaultStyle);
@@ -172,14 +172,14 @@ export class ProjectMapComponent implements OnInit {
         });
 
         const treatmentBMPsGeoJson = this.mapTreatmentBMPsToGeoJson(this.projectTreatmentBMPs);
-        this.treatmentBMPsLayer = new L.GeoJSON(treatmentBMPsGeoJson, {
+        this.treatmentBMPsLayer = new L.GeoJSON(treatmentBMPsGeoJson as any, {
             pointToLayer: (feature, latlng) => {
                 return L.marker(latlng, { icon: MarkerHelper.treatmentBMPMarker });
             },
             filter: (feature) => {
                 return this.selectedTreatmentBMP == null || feature.properties.TreatmentBMPID != this.selectedTreatmentBMP.TreatmentBMPID;
             },
-            onEachFeature: (feature, layer) => {
+            onEachFeature: (feature, layer: L.Marker) => {
                 if (this.selectedTreatmentBMP != null && hasFlownToSelectedObject) {
                     if (layer.feature.properties.TreatmentBMPID != this.selectedTreatmentBMP.TreatmentBMPID) {
                         return;
@@ -241,7 +241,7 @@ export class ProjectMapComponent implements OnInit {
         ];
 
         if (this.selectedTreatmentBMP && this.selectedTreatmentBMP.Latitude && this.selectedTreatmentBMP.Longitude) {
-            this.selectedObjectMarker = new L.marker(
+            this.selectedObjectMarker = L.marker(
                 { lat: this.selectedTreatmentBMP.Latitude, lng: this.selectedTreatmentBMP.Longitude },
                 { icon: MarkerHelper.selectedMarker, zIndexOffset: 1000 }
             );

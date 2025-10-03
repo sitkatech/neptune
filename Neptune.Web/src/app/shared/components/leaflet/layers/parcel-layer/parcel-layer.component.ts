@@ -7,7 +7,7 @@ import { MapLayerBase } from "../map-layer-base.component";
     selector: "parcel-layer",
     imports: [],
     templateUrl: "./parcel-layer.component.html",
-    styleUrl: "./parcel-layer.component.scss"
+    styleUrl: "./parcel-layer.component.scss",
 })
 export class ParcelLayerComponent extends MapLayerBase implements OnChanges, AfterViewInit {
     @Input() styles: string = "parcel";
@@ -25,7 +25,7 @@ export class ParcelLayerComponent extends MapLayerBase implements OnChanges, Aft
             format: "image/png",
             tiled: true,
             styles: this.styles,
-        };
+        } as any;
 
         this.layer = L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", this.wmsOptions);
         this.initLayer();

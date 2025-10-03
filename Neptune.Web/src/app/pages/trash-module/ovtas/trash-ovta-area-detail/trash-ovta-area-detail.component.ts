@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { Router, RouterLink } from "@angular/router";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { Input } from "@angular/core";
 import { BehaviorSubject, Observable, switchMap, tap } from "rxjs";
 import { OnlandVisualTrashAssessmentAreaService } from "src/app/shared/generated/api/onland-visual-trash-assessment-area.service";
@@ -190,7 +190,7 @@ export class TrashOvtaAreaDetailComponent {
             .confirm({ buttonClassYes: "btn-primary", buttonTextYes: "Continue", buttonTextNo: "Cancel", title: "Edit Location", message: modalContents })
             .then((confirmed) => {
                 if (confirmed) {
-                    this.router.navigate(["edit-location"]);
+                    this.router.navigate(`trash/onland-visual-trash-assessment-areas/${this.onlandVisualTrashAssessmentAreaID}/edit-location`.split("/"));
                 }
             });
     }

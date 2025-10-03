@@ -3,12 +3,11 @@ import { environment } from "src/environments/environment";
 import { MapLayerBase } from "../map-layer-base.component";
 import * as L from "leaflet";
 
-
 @Component({
     selector: "ovta-areas-layer",
     imports: [],
     templateUrl: "./ovta-areas-layer.component.html",
-    styleUrl: "./ovta-areas-layer.component.scss"
+    styleUrl: "./ovta-areas-layer.component.scss",
 })
 export class OvtaAreasLayerComponent extends MapLayerBase implements OnChanges, AfterViewInit {
     constructor() {
@@ -19,15 +18,18 @@ export class OvtaAreasLayerComponent extends MapLayerBase implements OnChanges, 
     public layer;
 
     ngAfterViewInit(): void {
+        let cql_filter = "1=1";
+        if (this.selectedJurisdictionID) {
+            cql_filter = `StormwaterJurisdictionID=${this.selectedJurisdictionID}`;
+        }
         this.wmsOptions = {
             layers: "OCStormwater:OnlandVisualTrashAssessmentAreas",
             transparent: true,
             format: "image/png",
             tiled: true,
-        };
-        if (this.selectedJurisdictionID) {
-            this.wmsOptions.cql_filter = `StormwaterJurisdictionID=${this.selectedJurisdictionID}`;
-        }
+            cql_filter: cql_filter,
+        } as any;
+
         this.layer = L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", this.wmsOptions);
         this.initLayer();
     }
