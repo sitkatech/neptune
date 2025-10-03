@@ -14,6 +14,7 @@ import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
 import { DialogService } from "@ngneat/dialog";
 import { AlertService } from "src/app/shared/services/alert.service";
 import { ConfirmService } from "src/app/shared/services/confirm/confirm.service";
+import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
 
 @Component({
     selector: "funding-sources",
@@ -24,6 +25,7 @@ import { ConfirmService } from "src/app/shared/services/confirm/confirm.service"
 export class FundingSourcesComponent {
     public fundingSources$: Observable<FundingSourceDto[]>;
     public columnDefs: ColDef[];
+    public customRichTextTypeID = NeptunePageTypeEnum.FundingSourcesList;
 
     constructor(
         private fundingSourceService: FundingSourceService,

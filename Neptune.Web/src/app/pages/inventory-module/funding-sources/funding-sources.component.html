@@ -1,7 +1,7 @@
 <ng-template #addButton>
     <button class="btn btn-primary" (click)="openAddModal()">Add New Funding Source</button>
 </ng-template>
-<page-header pageTitle="Funding Sources" [templateRight]="addButton"></page-header>
+<page-header pageTitle="Funding Sources" [customRichTextTypeID]="customRichTextTypeID" [templateRight]="addButton"></page-header>
 
 <app-alert-display></app-alert-display>
 

@@ -14,6 +14,7 @@ import { ConfirmService } from "src/app/shared/services/confirm/confirm.service"
 import { OrganizationModalComponent } from "./organization-modal/organization-modal.component";
 import { Alert } from "src/app/shared/models/alert";
 import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
+import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
 
 @Component({
     selector: "organizations",
@@ -25,6 +26,7 @@ import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
 export class OrganizationsComponent {
     public organizations$: Observable<OrganizationDto[]>;
     public columnDefs: ColDef[];
+    public customRichTextTypeID = NeptunePageTypeEnum.OrganizationsList;
 
     constructor(
         private utilityFunctions: UtilityFunctionsService,
@@ -55,7 +57,7 @@ export class OrganizationsComponent {
             this.utilityFunctions.createBasicColumnDef("Primary Contact", "PrimaryContactPerson.FullName"),
             this.utilityFunctions.createBooleanColumnDef("Active?", "IsActive"),
         ];
-            this.organizations$ = this.organizationService.listOrganization();
+        this.organizations$ = this.organizationService.listOrganization();
     }
 
     openAddModal() {
@@ -69,7 +71,7 @@ export class OrganizationsComponent {
             if (result) {
                 this.alertService.clearAlerts();
                 this.alertService.pushAlert(new Alert("Organization added successfully.", AlertContext.Success));
-                    this.organizations$ = this.organizationService.listOrganization();
+                this.organizations$ = this.organizationService.listOrganization();
             }
         });
     }
@@ -85,7 +87,7 @@ export class OrganizationsComponent {
             if (result) {
                 this.alertService.clearAlerts();
                 this.alertService.pushAlert(new Alert("Organization updated successfully.", AlertContext.Success));
-                    this.organizations$ = this.organizationService.listOrganization();
+                this.organizations$ = this.organizationService.listOrganization();
             }
         });
     }
@@ -101,10 +103,10 @@ export class OrganizationsComponent {
             })
             .then((confirmed) => {
                 if (confirmed) {
-                        this.organizationService.deleteOrganization(organization.OrganizationID).subscribe(() => {
+                    this.organizationService.deleteOrganization(organization.OrganizationID).subscribe(() => {
                         this.alertService.clearAlerts();
                         this.alertService.pushAlert(new Alert("Organization deleted successfully.", AlertContext.Success));
-                            this.organizations$ = this.organizationService.listOrganization();
+                        this.organizations$ = this.organizationService.listOrganization();
                     });
                 }
             });
