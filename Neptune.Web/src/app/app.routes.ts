@@ -128,17 +128,6 @@ export const routes: Routes = [
                 loadComponent: () => import("./pages/inventory-module/manage/page-content.component").then((m) => m.PageContentComponent),
             },
             {
-                path: "manage/custom-labels-definitions",
-                title: "Custom Labels & Definitions",
-                loadComponent: () => import("./pages/inventory-module/manage/custom-labels-definitions.component").then((m) => m.CustomLabelsDefinitionsComponent),
-            },
-            { path: "manage/users", title: "Users", loadComponent: () => import("./pages/inventory-module/manage/users.component").then((m) => m.UsersComponent) },
-            {
-                path: "organizations",
-                title: "Organizations",
-                loadComponent: () => import("./pages/inventory-module/organizations/organizations.component").then((m) => m.OrganizationsComponent),
-            },
-            {
                 path: "manage/jurisdictions",
                 title: "Jurisdictions (Manage)",
                 loadComponent: () => import("./pages/inventory-module/manage/jurisdictions.component").then((m) => m.ManageJurisdictionsComponent),
@@ -507,6 +496,12 @@ export const routes: Routes = [
                 path: `labels-and-definitions/:${routeParams.definitionID}`,
                 loadComponent: () => import("./pages/field-definition-edit/field-definition-edit.component").then((m) => m.FieldDefinitionEditComponent),
                 canActivate: [UnauthenticatedAccessGuard, ManagerOnlyGuard],
+            },
+            { path: "users", title: "Users", loadComponent: () => import("./pages/users/users.component").then((m) => m.UsersComponent) },
+            {
+                path: "organizations",
+                title: "Organizations",
+                loadComponent: () => import("./pages/organizations/organizations.component").then((m) => m.OrganizationsComponent),
             },
             {
                 path: "labels-and-definitions",
