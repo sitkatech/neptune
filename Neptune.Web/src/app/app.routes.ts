@@ -92,9 +92,9 @@ export const routes: Routes = [
                 loadComponent: () => import("./pages/inventory-module/program-info/treatment-bmp-types.component").then((m) => m.TreatmentBmpTypesComponent),
             },
             {
-                path: "/funding-sources",
+                path: "funding-sources",
                 title: "Funding Sources",
-                loadComponent: () => import("./pages/inventory-module/program-info/funding-sources.component").then((m) => m.FundingSourcesComponent),
+                loadComponent: () => import("./pages/inventory-module/funding-sources/funding-sources.component").then((m) => m.FundingSourcesComponent),
             },
             // Dashboard
             {

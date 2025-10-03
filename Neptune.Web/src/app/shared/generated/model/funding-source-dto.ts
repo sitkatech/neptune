@@ -14,6 +14,7 @@ export class FundingSourceDto {
     FundingSourceID?: number;
     OrganizationID?: number;
     FundingSourceName?: string | null;
+    OrganizationName?: string | null;
     IsActive?: boolean;
     FundingSourceDescription?: string | null;
     DisplayName?: string | null;
@@ -26,6 +27,7 @@ export interface FundingSourceDtoForm {
     FundingSourceID?: FormControl<number>;
     OrganizationID?: FormControl<number>;
     FundingSourceName?: FormControl<string>;
+    OrganizationName?: FormControl<string>;
     IsActive?: FormControl<boolean>;
     FundingSourceDescription?: FormControl<string>;
     DisplayName?: FormControl<string>;
@@ -53,6 +55,16 @@ export class FundingSourceDtoFormControls {
         }
     );
     public static FundingSourceName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static OrganizationName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {
