@@ -1,1 +1,26 @@
-<!-- Placeholder for Jurisdictions component template -->
+<div>
+    <page-header pageTitle="Jurisdictions" [customRichTextTypeID]="customRichTextTypeID"></page-header>
+    <app-alert-display></app-alert-display>
+    <div class="page-body">
+        <hybrid-map-grid
+            height="700px"
+            [rowData]="jurisdictions$ | async"
+            [columnDefs]="columnDefs"
+            rowSelection="single"
+            downloadFileName="jurisdictions"
+            entityIDField="StormwaterJurisdictionID"
+            (onMapLoad)="handleMapReady($event)"
+            [selectedValue]="selectedJurisdictionID"
+            [selectionFromMap]="true"
+            (selectedValueChange)="onSelectedJurisdictionIDChanged($event)">
+            <div mapLayers>
+                <selected-jurisdiction-layer
+                    [map]="map"
+                    [layerControl]="layerControl"
+                    [displayOnLoad]="true"
+                    [selectedJurisdictionID]="selectedJurisdictionID"
+                    (jurisdictionSelected)="onSelectedJurisdictionIDChanged($event)"></selected-jurisdiction-layer>
+            </div>
+        </hybrid-map-grid>
+    </div>
+</div>

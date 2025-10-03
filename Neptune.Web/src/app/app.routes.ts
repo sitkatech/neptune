@@ -41,7 +41,7 @@ export const routes: Routes = [
                 loadComponent: () => import("./pages/inventory-module/modeling-parameters/modeling-parameters.component").then((m) => m.ModelingParametersComponent),
             },
             {
-                path: "view-all-bmps",
+                path: "treatment-bmps",
                 title: "View All BMPs",
                 loadComponent: () => import("./pages/inventory-module/treatment-bmps/treatment-bmps.component").then((m) => m.TreatmentBmpsComponent),
             },
@@ -65,11 +65,6 @@ export const routes: Routes = [
                 path: "wqmps",
                 title: "Water Quality Management Plans",
                 loadComponent: () => import("./pages/inventory-module/wqmps/wqmps.component").then((m) => m.WqmpsComponent),
-            },
-            {
-                path: "wqmp-map",
-                title: "WQMP Map",
-                loadComponent: () => import("./pages/inventory-module/wqmp-map/wqmp-map.component").then((m) => m.WqmpMapComponent),
             },
             {
                 path: "wqmp-annual-report",

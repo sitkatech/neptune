@@ -18,6 +18,7 @@ import { AsyncPipe } from "@angular/common";
 import { LoadingDirective } from "src/app/shared/directives/loading.directive";
 import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto";
 import { StormwaterJurisdictionService } from "src/app/shared/generated/api/stormwater-jurisdiction.service";
+import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
 
 @Component({
     selector: "treatment-bmps",
@@ -36,6 +37,7 @@ export class TreatmentBmpsComponent {
     public selectedTreatmentBMPID: number;
     public selectionFromMap: boolean;
     public boundingBox$: Observable<BoundingBoxDto>;
+    public customRichTextTypeID = NeptunePageTypeEnum.TreatmentBMP;
 
     constructor(
         private treatmentBMPService: TreatmentBMPService,
