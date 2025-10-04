@@ -1,4 +1,3 @@
-<!-- DEPRECATED: Use generic-wms-wfs-layer.component.html instead -->
 <generic-wms-wfs-layer
     [map]="map"
     [layerControl]="layerControl"
@@ -6,13 +5,13 @@
     [displayOnLoad]="displayOnLoad"
     [sortOrder]="sortOrder"
     [selectedID]="selectedID"
-    [wmsLayerName]="wmsLayerName"
+    [wmsLayerName]="wfsFeatureType"
     [wmsStyle]="wmsStyle"
     [wfsFeatureType]="wfsFeatureType"
     [identifierProperty]="identifierProperty"
     [overlayLabel]="overlayLabel"
-    [styleDictionary]="styleDictionary"
-    (selected)="onSelected($event)">
+    [selectedStyle]="selectedStyle"
+    (selected)="selected.emit($event)">
     <ng-template layerName>
         <span>Jurisdictions</span>
     </ng-template>

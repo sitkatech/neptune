@@ -4,7 +4,7 @@ import { Component, Input, OnDestroy, TemplateRef, ViewChild } from "@angular/co
     template: "",
 })
 export class MapLayerBase implements IMapLayer, OnDestroy {
-    @Input() map: any;
+    @Input() map: L.Map;
     @Input() layerControl: any;
     @Input() displayOnLoad: boolean = false;
     @Input() sortOrder: number;

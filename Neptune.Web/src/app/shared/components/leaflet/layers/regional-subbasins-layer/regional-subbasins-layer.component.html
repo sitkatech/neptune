@@ -5,12 +5,12 @@
     [displayOnLoad]="displayOnLoad"
     [sortOrder]="sortOrder"
     [selectedID]="selectedID"
-    [wmsLayerName]="wmsLayerName"
+    [wmsLayerName]="wfsFeatureType"
     [wmsStyle]="wmsStyle"
     [wfsFeatureType]="wfsFeatureType"
     [identifierProperty]="identifierProperty"
     [overlayLabel]="overlayLabel"
-    [styleDictionary]="styleDictionary"
+    [selectedStyle]="selectedStyle"
     (selected)="selected.emit($event)">
     <ng-template layerName>
         <span>Regional Subbasins</span>

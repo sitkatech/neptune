@@ -24,19 +24,11 @@ export class GenericWmsWfsLayerComponent extends MapLayerBase implements OnChang
     @Input() wfsFeatureType: string;
     @Input() identifierProperty: string;
     @Input() overlayLabel: string;
-    @Input() styleDictionary: any = {
-        Default: {
-            color: "#2D6CFF",
-            weight: 2,
-            opacity: 0.65,
-            fillOpacity: 0.1,
-        },
-        Highlight: {
-            color: "#fcfc12",
-            weight: 2,
-            opacity: 0.65,
-            fillOpacity: 0.1,
-        },
+    @Input() selectedStyle: L.PathOptions = {
+        color: "#fcfc12",
+        weight: 2,
+        opacity: 0.65,
+        fillOpacity: 0.1,
     };
     @Output() selected = new EventEmitter<number>();
     public wfsLayer: L.FeatureGroup;
@@ -103,7 +95,7 @@ export class GenericWmsWfsLayerComponent extends MapLayerBase implements OnChang
             const featuresGrouped = this.groupByPipe.transform(response, `properties.${this.identifierProperty}`);
             Object.keys(featuresGrouped).forEach((groupId) => {
                 const geoJson = L.geoJSON(featuresGrouped[groupId], {
-                    style: this.styleDictionary["Highlight"],
+                    style: this.selectedStyle,
                 });
                 geoJson.on("click", () => {
                     this.selected.emit(Number(groupId));
