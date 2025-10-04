@@ -1,6 +1,22 @@
-<ng-template #layerName>
-    <span>Jurisdictions</span>
-</ng-template>
-<ng-template #legend>
-    <img src="./assets/main/map-legend-images/jurisdiction.png" style="height: 12px; margin-bottom: 3px" />
-</ng-template>
+<!-- DEPRECATED: Use generic-wms-wfs-layer.component.html instead -->
+<generic-wms-wfs-layer
+    [map]="map"
+    [layerControl]="layerControl"
+    [interactive]="interactive"
+    [displayOnLoad]="displayOnLoad"
+    [sortOrder]="sortOrder"
+    [selectedID]="selectedID"
+    [wmsLayerName]="wmsLayerName"
+    [wmsStyle]="wmsStyle"
+    [wfsFeatureType]="wfsFeatureType"
+    [identifierProperty]="identifierProperty"
+    [overlayLabel]="overlayLabel"
+    [styleDictionary]="styleDictionary"
+    (selected)="onSelected($event)">
+    <ng-template layerName>
+        <span>Jurisdictions</span>
+    </ng-template>
+    <ng-template legend>
+        <img src="./assets/main/map-legend-images/jurisdiction.png" style="height: 12px; margin-bottom: 3px" />
+    </ng-template>
+</generic-wms-wfs-layer>
