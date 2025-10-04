@@ -38,10 +38,12 @@ export class RegionalSubbasinsComponent {
 
     ngOnInit(): void {
         this.columnDefs = [
-            this.utilityFunctionsService.createBasicColumnDef("Name", "DisplayName"),
+            this.utilityFunctionsService.createBasicColumnDef("RSB ID", "RegionalSubbasinID"),
+            this.utilityFunctionsService.createBasicColumnDef("Drain ID", "DrainID"),
             this.utilityFunctionsService.createBasicColumnDef("Watershed", "Watershed"),
             this.utilityFunctionsService.createBasicColumnDef("Area (sq mi)", "AreaSqMi"),
-            this.utilityFunctionsService.createBasicColumnDef("# of Jurisdictions", "NumberOfJurisdictions"),
+            this.utilityFunctionsService.createBasicColumnDef("Catchment ID in OC Survey", "OCSurveyCatchmentID"),
+            this.utilityFunctionsService.createBasicColumnDef("Downstream Catchment ID in OC Survey", "OCSurveyDownstreamCatchmentID"),
         ];
         this.regionalSubbasins$ = this.regionalSubbasinService.listRegionalSubbasin().pipe(tap(() => (this.isLoading = false)));
         this.boundingBox$ = this.jurisdictionService.getBoundingBoxStormwaterJurisdiction();

@@ -18,6 +18,7 @@ export class RegionalSubbasinsLayerComponent extends MapLayerBase implements OnC
     @Input() layerControl: L.Control.Layers;
     @Input() map: L.Map;
     @Input() interactive: boolean = false;
+    @Input() showLayerByDefault: boolean = false;
     @Output() regionalSubbasinSelected = new EventEmitter<number>();
     public wfsLayer: L.FeatureGroup;
     public layer: L.Layer;
@@ -68,11 +69,11 @@ export class RegionalSubbasinsLayerComponent extends MapLayerBase implements OnC
 
     ngOnChanges(changes: any): void {
         this.createWmsLayerIfNeeded();
-        // Add to map if available
-        if (this.layer && this.map && !this.map.hasLayer(this.layer)) {
+        // Only add to map if showLayerByDefault is true
+        if (this.layer && this.map && this.showLayerByDefault && !this.map.hasLayer(this.layer)) {
             this.layer.addTo(this.map);
         }
-        // Remove layerControl.addOverlay from here to prevent duplicates
+        // Do NOT add to map by default if showLayerByDefault is false
         this.wireMapClickHandler();
         if (changes.selectedRegionalSubbasinID && !changes.selectedRegionalSubbasinID.firstChange) {
             this.addSelectedRegionalSubbasinVector(changes.selectedRegionalSubbasinID.currentValue);

@@ -17,6 +17,7 @@ export class JurisdictionsLayerComponent extends MapLayerBase implements OnChang
     @Input() layerControl: L.Control.Layers;
     @Input() map: L.Map;
     @Input() interactive: boolean = false;
+    @Input() showLayerByDefault: boolean = false;
     @Output() jurisdictionSelected = new EventEmitter<number>();
     // 'layer' will be the default WMS layer
     public wfsLayer: L.FeatureGroup;
@@ -69,10 +70,11 @@ export class JurisdictionsLayerComponent extends MapLayerBase implements OnChang
 
     ngOnChanges(changes: any): void {
         this.createWmsLayerIfNeeded();
-        // Add to map if available
-        if (this.layer && this.map && !this.map.hasLayer(this.layer)) {
+        // Only add to map if showLayerByDefault is true
+        if (this.layer && this.map && this.showLayerByDefault && !this.map.hasLayer(this.layer)) {
             this.layer.addTo(this.map);
         }
+        // Do NOT add to map by default if showLayerByDefault is false
         this.wireMapClickHandler();
         if (changes.selectedJurisdictionID && !changes.selectedJurisdictionID.firstChange) {
             this.addSelectedJurisdictionVector(changes.selectedJurisdictionID.currentValue);
