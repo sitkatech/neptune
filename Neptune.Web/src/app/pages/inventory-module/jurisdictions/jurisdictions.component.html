@@ -2,6 +2,7 @@
     <page-header pageTitle="Jurisdictions" [customRichTextTypeID]="customRichTextTypeID"></page-header>
     <app-alert-display></app-alert-display>
     <div class="page-body">
+        @if (boundingBox$ | async; as boundingBox) {
         <hybrid-map-grid
             height="700px"
             [rowData]="jurisdictions$ | async"
@@ -9,18 +10,20 @@
             rowSelection="single"
             downloadFileName="jurisdictions"
             entityIDField="StormwaterJurisdictionID"
-            (onMapLoad)="handleMapReady($event)"
+            (onMapLoad)="handleMapReady($event, boundingBox)"
             [selectedValue]="selectedJurisdictionID"
             [selectionFromMap]="true"
             (selectedValueChange)="onSelectedJurisdictionIDChanged($event)">
             <div mapLayers>
-                <selected-jurisdiction-layer
+                <jurisdictions-layer
                     [map]="map"
                     [layerControl]="layerControl"
-                    [displayOnLoad]="true"
+                    [interactive]="true"
                     [selectedJurisdictionID]="selectedJurisdictionID"
-                    (jurisdictionSelected)="onSelectedJurisdictionIDChanged($event)"></selected-jurisdiction-layer>
+                    (jurisdictionSelected)="onSelectedJurisdictionIDChanged($event, true)">
+                </jurisdictions-layer>
             </div>
         </hybrid-map-grid>
+        }
     </div>
 </div>
