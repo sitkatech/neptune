@@ -1,0 +1,21 @@
+<page-header title="Regional Subbasins"></page-header>
+<app-alert-display></app-alert-display>
+@if (boundingBox$ | async; as boundingBox) {
+<hybrid-map-grid
+    [rowData]="regionalSubbasins$ | async"
+    [columnDefs]="columnDefs"
+    rowSelection="single"
+    downloadFileName="regional-subbasins"
+    entityIDField="RegionalSubbasinID"
+    (onMapLoad)="handleMapReady($event, boundingBox)"
+    [selectedValue]="selectedRegionalSubbasinID"
+    [selectionFromMap]="true"
+    (selectedValueChange)="onSelectedRegionalSubbasinIDChanged($event)">
+    <regional-subbasins-layer
+        [map]="map"
+        [layerControl]="layerControl"
+        [selectedRegionalSubbasinID]="selectedRegionalSubbasinID"
+        [interactive]="true"
+        (regionalSubbasinSelected)="onSelectedRegionalSubbasinIDChanged($event, true)"></regional-subbasins-layer>
+</hybrid-map-grid>
+}

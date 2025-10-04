@@ -116,7 +116,9 @@ model/project-status-simple-dto.ts
 model/project-upsert-dto.ts
 model/project-workflow-progress-dto-steps.ts
 model/project-workflow-progress-dto.ts
+model/regional-subbasin-dto.ts
 model/regional-subbasin-revision-request-dto.ts
+model/regional-subbasin-upsert-dto.ts
 model/sizing-basis-type-dto.ts
 model/stormwater-jurisdiction-dto.ts
 model/system-info-dto.ts

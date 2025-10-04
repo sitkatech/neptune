@@ -124,44 +124,24 @@ export const routes: Routes = [
                 loadComponent: () => import("./pages/inventory-module/manage/page-content.component").then((m) => m.PageContentComponent),
             },
             {
-                path: "manage/jurisdictions",
-                title: "Jurisdictions (Manage)",
-                loadComponent: () => import("./pages/inventory-module/manage/jurisdictions.component").then((m) => m.ManageJurisdictionsComponent),
-            },
-            {
-                path: "manage/observation-types-manage",
-                title: "Observation Types (Manage)",
-                loadComponent: () => import("./pages/inventory-module/manage/observation-types-manage.component").then((m) => m.ObservationTypesManageComponent),
-            },
-            {
-                path: "manage/treatment-bmp-types-manage",
-                title: "Treatment BMP Types (Manage)",
-                loadComponent: () => import("./pages/inventory-module/manage/treatment-bmp-types-manage.component").then((m) => m.TreatmentBmpTypesManageComponent),
-            },
-            {
                 path: "manage/custom-attributes",
                 title: "Custom Attributes",
                 loadComponent: () => import("./pages/inventory-module/manage/custom-attributes.component").then((m) => m.CustomAttributesComponent),
             },
             {
-                path: "manage/load-generating-units",
+                path: "load-generating-units",
                 title: "Load Generating Units",
                 loadComponent: () => import("./pages/inventory-module/manage/load-generating-units.component").then((m) => m.LoadGeneratingUnitsComponent),
             },
             {
-                path: "manage/hru-characteristics",
+                path: "hru-characteristics",
                 title: "HRU Characteristics",
                 loadComponent: () => import("./pages/inventory-module/manage/hru-characteristics.component").then((m) => m.HruCharacteristicsComponent),
             },
             {
-                path: "manage/regional-subbasins",
+                path: "regional-subbasins",
                 title: "Regional Subbasins",
-                loadComponent: () => import("./pages/inventory-module/manage/regional-subbasins.component").then((m) => m.RegionalSubbasinsComponent),
-            },
-            {
-                path: "manage/regional-subbasin-grid",
-                title: "Regional Subbasin Grid",
-                loadComponent: () => import("./pages/inventory-module/manage/regional-subbasin-grid.component").then((m) => m.RegionalSubbasinGridComponent),
+                loadComponent: () => import("./pages/inventory-module/regional-subbasins/regional-subbasins.component").then((m) => m.RegionalSubbasinsComponent),
             },
             {
                 path: "manage/regional-subbasin-revision-requests",

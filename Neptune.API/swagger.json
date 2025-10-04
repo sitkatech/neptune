@@ -3900,6 +3900,213 @@
         }
       }
     },
+    "/regional-subbasins": {
+      "get": {
+        "tags": [
+          "RegionalSubbasin"
+        ],
+        "operationId": "List_RegionalSubbasin",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RegionalSubbasinDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RegionalSubbasinDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RegionalSubbasinDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "RegionalSubbasin"
+        ],
+        "operationId": "Create_RegionalSubbasin",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegionalSubbasinUpsertDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegionalSubbasinUpsertDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegionalSubbasinUpsertDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegionalSubbasinDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegionalSubbasinDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegionalSubbasinDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/regional-subbasins/{regionalSubbasinID}": {
+      "get": {
+        "tags": [
+          "RegionalSubbasin"
+        ],
+        "operationId": "Get_RegionalSubbasin",
+        "parameters": [
+          {
+            "name": "regionalSubbasinID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegionalSubbasinDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegionalSubbasinDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegionalSubbasinDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "RegionalSubbasin"
+        ],
+        "operationId": "Update_RegionalSubbasin",
+        "parameters": [
+          {
+            "name": "regionalSubbasinID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegionalSubbasinUpsertDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegionalSubbasinUpsertDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegionalSubbasinUpsertDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegionalSubbasinDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegionalSubbasinDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegionalSubbasinDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "RegionalSubbasin"
+        ],
+        "operationId": "Delete_RegionalSubbasin",
+        "parameters": [
+          {
+            "name": "regionalSubbasinID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/graph-trace-as-feature-collection-from-point": {
       "post": {
         "tags": [
@@ -9475,6 +9682,38 @@
         },
         "additionalProperties": false
       },
+      "RegionalSubbasinDto": {
+        "type": "object",
+        "properties": {
+          "RegionalSubbasinID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OCSurveyCatchmentID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "OCSurveyDownstreamCatchmentID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Watershed": {
+            "type": "string",
+            "nullable": true
+          },
+          "DrainID": {
+            "type": "string",
+            "nullable": true
+          },
+          "DisplayName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "RegionalSubbasinRevisionRequestDto": {
         "type": "object",
         "properties": {
@@ -9483,6 +9722,29 @@
             "format": "int32"
           },
           "Name": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RegionalSubbasinUpsertDto": {
+        "type": "object",
+        "properties": {
+          "OCSurveyCatchmentID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OCSurveyDownstreamCatchmentID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Watershed": {
+            "type": "string",
+            "nullable": true
+          },
+          "DrainID": {
             "type": "string",
             "nullable": true
           }

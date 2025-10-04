@@ -35,6 +35,7 @@ export class JurisdictionsLayerComponent extends MapLayerBase implements OnChang
             fillOpacity: 0.1,
         },
     };
+    private overlayAddedToControl = false;
 
     constructor(private wfsService: WfsService, private groupByPipe: GroupByPipe) {
         super();
@@ -52,6 +53,15 @@ export class JurisdictionsLayerComponent extends MapLayerBase implements OnChang
             } as any;
             this.layer = L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", wmsOptions);
         }
+        // Add to layerControl only once, after both layer and layerControl are available
+        if (this.layer && this.layerControl && !this.overlayAddedToControl) {
+            try {
+                this.layerControl.addOverlay(this.layer, "Jurisdictions");
+                this.overlayAddedToControl = true;
+            } catch (err) {
+                console.error("[JurisdictionsLayer] Error adding overlay:", err, this.layer);
+            }
+        }
     }
     ngAfterViewInit(): void {
         // Initialization is now handled in ngOnChanges
@@ -62,14 +72,6 @@ export class JurisdictionsLayerComponent extends MapLayerBase implements OnChang
         // Add to map if available
         if (this.layer && this.map && !this.map.hasLayer(this.layer)) {
             this.layer.addTo(this.map);
-        }
-        // Add to layerControl if available
-        if (this.layerControl && this.layer) {
-            try {
-                this.layerControl.addOverlay(this.layer, "Jurisdictions");
-            } catch (err) {
-                console.error("[JurisdictionsLayer] Error adding overlay:", err, this.layer);
-            }
         }
         this.wireMapClickHandler();
         if (changes.selectedJurisdictionID && !changes.selectedJurisdictionID.firstChange) {
