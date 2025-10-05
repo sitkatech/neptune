@@ -19,6 +19,7 @@ import { LoadingDirective } from "src/app/shared/directives/loading.directive";
 import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto";
 import { StormwaterJurisdictionService } from "src/app/shared/generated/api/stormwater-jurisdiction.service";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
+import { TreatmentBMPGridDto } from "src/app/shared/generated/model/treatment-bmp-grid-dto";
 
 @Component({
     selector: "treatment-bmps",
@@ -31,7 +32,7 @@ export class TreatmentBmpsComponent {
     public layerControl: any;
     private markerClusterLayer: any;
     private markerMap: Map<number, any> = new Map();
-    public treatmentBmps$: Observable<TreatmentBMPDisplayDto[]>;
+    public treatmentBmps$: Observable<TreatmentBMPGridDto[]>;
     public columnDefs: ColDef[];
     public isLoading = true;
     public selectedTreatmentBMPID: number;
@@ -62,9 +63,9 @@ export class TreatmentBmpsComponent {
                 },
             ]),
             this.utilityFunctionsService.createLinkColumnDef("Name", "TreatmentBMPName", "TreatmentBMPID", {
-                InRouterLink: "../treatment-bmp-detail/",
+                InRouterLink: "/inventory/treatment-bmp-detail/",
             }),
-            this.utilityFunctionsService.createBasicColumnDef("Jurisdiction", "JurisdictionName"),
+            this.utilityFunctionsService.createBasicColumnDef("Jurisdiction", "StormwaterJurisdictionName"),
             this.utilityFunctionsService.createBasicColumnDef("Owner Organization", "OwnerOrganizationName"),
             this.utilityFunctionsService.createBasicColumnDef("Type", "TreatmentBMPTypeName"),
             this.utilityFunctionsService.createBasicColumnDef("Year Built", "YearBuilt"),

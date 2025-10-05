@@ -4,16 +4,16 @@ namespace Neptune.EFModels.Entities
 {
     public static class vTreatmentBMPDetailedExtensionMethods
     {
-        public static TreatmentBMPIndexGridDto AsDto(this vTreatmentBMPDetailed entity)
+        public static TreatmentBMPGridDto AsGridDto(this vTreatmentBMPDetailed entity)
         {
-            return new TreatmentBMPIndexGridDto
+            return new TreatmentBMPGridDto
             {
                 TreatmentBMPID = entity.TreatmentBMPID,
                 TreatmentBMPName = entity.TreatmentBMPName,
                 TreatmentBMPTypeID = entity.TreatmentBMPTypeID,
                 TreatmentBMPTypeName = entity.TreatmentBMPTypeName,
                 StormwaterJurisdictionID = entity.StormwaterJurisdictionID,
-                OrganizationName = entity.OrganizationName,
+                StormwaterJurisdictionName = entity.OrganizationName,
                 OwnerOrganizationID = entity.OwnerOrganizationID,
                 OwnerOrganizationName = entity.OwnerOrganizationName,
                 YearBuilt = entity.YearBuilt,

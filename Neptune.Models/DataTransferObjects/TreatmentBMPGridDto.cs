@@ -1,17 +1,15 @@
-using System;
-
 namespace Neptune.Models.DataTransferObjects
 {
-    public class TreatmentBMPIndexGridDto
+    public class TreatmentBMPGridDto
     {
         public int TreatmentBMPID { get; set; }
         public string? TreatmentBMPName { get; set; }
         public int TreatmentBMPTypeID { get; set; }
         public string? TreatmentBMPTypeName { get; set; }
         public int StormwaterJurisdictionID { get; set; }
-        public string OrganizationName { get; set; } = null!;
+        public string StormwaterJurisdictionName { get; set; }
         public int OwnerOrganizationID { get; set; }
-        public string OwnerOrganizationName { get; set; } = null!;
+        public string OwnerOrganizationName { get; set; }
         public int? YearBuilt { get; set; }
         public string? Notes { get; set; }
         public DateTime? LatestAssessmentDate { get; set; }

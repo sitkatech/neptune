@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace Neptune.Models.DataTransferObjects
 {
     public class TreatmentBMPDto

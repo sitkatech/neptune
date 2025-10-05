@@ -10,13 +10,13 @@
 
 
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
-export class TreatmentBMPIndexGridDto { 
+export class TreatmentBMPGridDto { 
     TreatmentBMPID?: number;
     TreatmentBMPName?: string | null;
     TreatmentBMPTypeID?: number;
     TreatmentBMPTypeName?: string | null;
     StormwaterJurisdictionID?: number;
-    OrganizationName?: string | null;
+    StormwaterJurisdictionName?: string | null;
     OwnerOrganizationID?: number;
     OwnerOrganizationName?: string | null;
     YearBuilt?: number | null;
@@ -42,13 +42,13 @@ export class TreatmentBMPIndexGridDto {
     }
 }
 
-export interface TreatmentBMPIndexGridDtoForm { 
+export interface TreatmentBMPGridDtoForm { 
     TreatmentBMPID?: FormControl<number>;
     TreatmentBMPName?: FormControl<string>;
     TreatmentBMPTypeID?: FormControl<number>;
     TreatmentBMPTypeName?: FormControl<string>;
     StormwaterJurisdictionID?: FormControl<number>;
-    OrganizationName?: FormControl<string>;
+    StormwaterJurisdictionName?: FormControl<string>;
     OwnerOrganizationID?: FormControl<number>;
     OwnerOrganizationName?: FormControl<string>;
     YearBuilt?: FormControl<number>;
@@ -71,7 +71,7 @@ export interface TreatmentBMPIndexGridDtoForm {
     Longitude?: FormControl<number>;
 }
 
-export class TreatmentBMPIndexGridDtoFormControls { 
+export class TreatmentBMPGridDtoFormControls { 
     public static TreatmentBMPID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
@@ -122,7 +122,7 @@ export class TreatmentBMPIndexGridDtoFormControls {
             ],
         }
     );
-    public static OrganizationName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+    public static StormwaterJurisdictionName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {

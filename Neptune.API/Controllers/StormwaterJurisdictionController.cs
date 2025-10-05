@@ -1,12 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Neptune.API.Services;
 using Neptune.API.Services.Authorization;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Neptune.API.Controllers
 {
@@ -43,6 +45,14 @@ namespace Neptune.API.Controllers
             return Ok(boundingBoxDto);
         }
 
+        [HttpGet("{jurisdictionID}")]
+        [JurisdictionEditFeature]
+        public async Task<ActionResult<StormwaterJurisdictionGridDto>> Get([FromRoute] int jurisdictionID)
+        {
+            var stormwaterJurisdictionGridDto = await StormwaterJurisdictions.GetByIDAsDtoAsync(DbContext, jurisdictionID);
+            return Ok(stormwaterJurisdictionGridDto);
+        }
+
         [HttpGet("{jurisdictionID}/bounding-box")]
         public ActionResult<BoundingBoxDto> GetBoundingBoxByJurisdictionID([FromRoute] int jurisdictionID)
         {
@@ -50,5 +60,24 @@ namespace Neptune.API.Controllers
             return Ok(boundingBoxDto);
         }
 
+        [HttpGet("{jurisdictionID}/treatment-bmps")]
+        [JurisdictionEditFeature]
+        public async Task<ActionResult<List<TreatmentBMPGridDto>>> ListTreatmentBMPs([FromRoute] int jurisdictionID)
+        {
+            var entities = await dbContext.vTreatmentBMPDetaileds
+                .Where(x => x.StormwaterJurisdictionID == jurisdictionID)
+                .ToListAsync();
+            var treatmentBMPGridDtos = entities.Select(x => x.AsGridDto())
+                .ToList();
+            return Ok(treatmentBMPGridDtos);
+        }
+
+        [HttpGet("{jurisdictionID}/users")]
+        [JurisdictionEditFeature]
+        public async Task<ActionResult<List<PersonDisplayDto>>> ListUsers([FromRoute] int jurisdictionID)
+        {
+            var entities = await StormwaterJurisdictionPeople.ListByStormwaterJurisdictionIDAsPersonDto(dbContext, jurisdictionID);
+            return Ok(entities);
+        }
     }
 }

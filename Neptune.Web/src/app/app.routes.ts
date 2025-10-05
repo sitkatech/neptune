@@ -11,6 +11,7 @@ export const routeParams = {
     onlandVisualTrashAssessmentID: "onlandVisualTrashAssessmentID",
     onlandVisualTrashAssessmentAreaID: "onlandVisualTrashAssessmentAreaID",
     treatmentBMPID: "treatmentBMPID",
+    jurisdictionID: "jurisdictionID",
 };
 
 export const routes: Routes = [
@@ -29,6 +30,11 @@ export const routes: Routes = [
                 path: "jurisdictions",
                 title: "Jurisdictions",
                 loadComponent: () => import("./pages/inventory-module/jurisdictions/jurisdictions.component").then((m) => m.JurisdictionsComponent),
+            },
+            {
+                path: `jurisdiction-detail/:${routeParams.jurisdictionID}`,
+                title: "Jurisdiction Detail",
+                loadComponent: () => import("./pages/inventory-module/jurisdictions/jurisdiction-detail/jurisdiction-detail.component").then((m) => m.JurisdictionDetailComponent),
             },
             {
                 path: "find-bmp",

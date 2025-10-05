@@ -110,4 +110,13 @@ public static class StormwaterJurisdictionPeople
             .ThenInclude(x => x.Organization)
             .AsNoTracking().Where(x => x.StormwaterJurisdictionID == stormwaterJurisdictionID).ToList();
     }
+
+    public static async Task<List<PersonDisplayDto>> ListByStormwaterJurisdictionIDAsPersonDto(NeptuneDbContext dbContext, int stormwaterJurisdictionID)
+    {
+        var entities = await dbContext.StormwaterJurisdictionPeople
+            .Include(x => x.Person)
+            .ThenInclude(x => x.Organization)
+            .AsNoTracking().Where(x => x.StormwaterJurisdictionID == stormwaterJurisdictionID).ToListAsync();
+        return entities.Select(x => x.Person.AsDisplayDto()).OrderBy(x => x.FullName).ToList();
+    }
 }

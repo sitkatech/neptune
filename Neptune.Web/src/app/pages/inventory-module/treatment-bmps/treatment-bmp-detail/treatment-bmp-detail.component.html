@@ -1,412 +1,411 @@
-<div class="treatment-bmp-detail">
-    <!-- Alerts and Info -->
-    @if (treatmentBMP$ | async; as treatmentBMP) {
-    <page-header [pageTitle]="treatmentBMP.TreatmentBMPName" [templateRight]="templateRight" [templateAbove]="templateAbove"></page-header>
-    <ng-template #templateRight>
-        <!-- Example: Edit/View/Verify actions -->
-        <a [routerLink]="getEditLink(treatmentBMP)" class="btn btn-primary mr-2">Edit</a>
-        <!-- TODO: Add more actions as needed -->
-    </ng-template>
-    <ng-template #templateAbove>
-        <div class="back">
-            <a [routerLink]="['/inventory/treatment-bmps']" class="back__link">Back to BMP Grid</a>
-        </div>
-    </ng-template>
-    <app-alert-display></app-alert-display>
-    @if (delineationErrors?.length) {
-    <span>This BMP delineation may have errors:</span>
-    <ul>
-        @for (err of delineationErrors; track $index) {
-        <li>{{ err }}</li>
-        }
-    </ul>
-    } @if (parameterizationErrors?.length) {
-    <span>This BMP is not fully parameterized:</span>
-    <ul>
-        @for (err of parameterizationErrors; track $index) {
-        <li>{{ err }}</li>
-        }
-    </ul>
-    } @if (openRevisionRequest) {
-    <div class="alert alert-info">There is an open <a [routerLink]="openRevisionRequestDetailUrl">Regional Subbasin Revision Request</a> relating to this BMP.</div>
-    } @if (upstreamestBMP && !isUpstreamestBMPAnalyzedInModelingModule) {
-    <div class="alert alert-info">This BMP is downstream of a non-modeled BMP, and therefore will not have model results or land use statistics.</div>
+<!-- Alerts and Info -->
+@if (treatmentBMP$ | async; as treatmentBMP) {
+<page-header [pageTitle]="treatmentBMP.TreatmentBMPName" [templateRight]="templateRight" [templateAbove]="templateAbove"></page-header>
+<ng-template #templateRight>
+    <!-- Example: Edit/View/Verify actions -->
+    <a [routerLink]="getEditLink(treatmentBMP)" class="btn btn-primary mr-2">Edit</a>
+    <!-- TODO: Add more actions as needed -->
+</ng-template>
+<ng-template #templateAbove>
+    <div class="back">
+        <a [routerLink]="['/inventory/treatment-bmps']" class="back__link">Back to BMP Grid</a>
+    </div>
+</ng-template>
+<app-alert-display></app-alert-display>
+@if (delineationErrors?.length) {
+<span>This BMP delineation may have errors:</span>
+<ul>
+    @for (err of delineationErrors; track $index) {
+    <li>{{ err }}</li>
     }
+</ul>
+} @if (parameterizationErrors?.length) {
+<span>This BMP is not fully parameterized:</span>
+<ul>
+    @for (err of parameterizationErrors; track $index) {
+    <li>{{ err }}</li>
+    }
+</ul>
+} @if (openRevisionRequest) {
+<div class="alert alert-info">There is an open <a [routerLink]="openRevisionRequestDetailUrl">Regional Subbasin Revision Request</a> relating to this BMP.</div>
+} @if (upstreamestBMP && !isUpstreamestBMPAnalyzedInModelingModule) {
+<div class="alert alert-info">This BMP is downstream of a non-modeled BMP, and therefore will not have model results or land use statistics.</div>
+}
 
-    <div class="grid-12">
-        <div class="g-col-6">
-            <div class="card">
-                <div class="card-header">
-                    <span class="card-title">Basics</span>
-                </div>
-                <div class="card-body">
-                    <dl class="grid-12">
-                        <dt class="g-col-5">Name</dt>
-                        <dd class="g-col-7">{{ treatmentBMP.TreatmentBMPName }}</dd>
-                        <dt class="g-col-5"><field-definition fieldDefinitionType="TreatmentBMPType"></field-definition></dt>
-                        <dd class="g-col-7">{{ treatmentBMP.TreatmentBMPTypeName }}</dd>
-                        <dt class="g-col-5">Jurisdiction</dt>
-                        <dd class="g-col-7">
-                            <a [routerLink]="['/jurisdictions', treatmentBMP.StormwaterJurisdictionID]">{{ treatmentBMP.StormwaterJurisdictionName }}</a>
-                        </dd>
-                        <dt class="g-col-5">Owner</dt>
-                        <dd class="g-col-7">
-                            <a [routerLink]="['/organizations', treatmentBMP.OwnerOrganizationID]">{{ treatmentBMP.OwnerOrganizationName }}</a>
-                        </dd>
-                        <dt class="g-col-5">Year Built</dt>
-                        <dd class="g-col-7">{{ treatmentBMP.YearBuilt }}</dd>
-                        <dt class="g-col-5">ID in System of Record</dt>
-                        <dd class="g-col-7">{{ treatmentBMP.SystemOfRecordID }}</dd>
-                        <dt class="g-col-5">Water Quality Management Plan</dt>
-                        <dd class="g-col-7">
-                            @if (treatmentBMP.WaterQualityManagementPlan) {
-                            <a [routerLink]="['/wqmps', treatmentBMP.WaterQualityManagementPlanID]">{{ treatmentBMP.WaterQualityManagementPlan.WaterQualityManagementPlanName }}</a>
-                            } @else {
-                            <em class="text-muted">Has not been linked to a WQMP</em>
-                            }
-                        </dd>
-                        <dt class="g-col-5"><field-definition fieldDefinitionType="SizingBasis"></field-definition></dt>
-                        <dd class="g-col-7">{{ treatmentBMP.SizingBasisType.SizingBasisTypeDisplayName }}</dd>
-                        <dt class="g-col-5"><field-definition fieldDefinitionType="TrashCaptureStatus"></field-definition></dt>
-                        <dd class="g-col-7">{{ treatmentBMP.TrashCaptureStatusType.TrashCaptureStatusTypeDisplayName }}</dd>
-                        @if (false) {
-                        <dt class="g-col-5">Trash Capture Effectiveness</dt>
-                        <dd class="g-col-7">{{ treatmentBMP.TrashCaptureEffectiveness }}</dd>
-                        }
-                        <dt class="g-col-5"><field-definition fieldDefinitionType="RequiredLifespanOfInstallation"></field-definition></dt>
-                        <dd class="g-col-7">
-                            @if (treatmentBMP.TreatmentBMPLifespanType?.TreatmentBMPLifeSpanTypeID == TreatmentBMPLifespanTypeEnum.FixedEndDate) { Maintain until at least
-                            {{ treatmentBMP.TreatmentBMPLifespanEndDate | date : "MM/dd/yyyy" }}
-                            } @else {
-                            {{ treatmentBMP.TreatmentBMPLifespanType?.TreatmentBMPLifeSpanTypeDisplayName || "Unknown" }}
-                            }
-                        </dd>
-                        <dt class="g-col-5"><field-definition fieldDefinitionType="RequiredFieldVisitsPerYear"></field-definition></dt>
-                        <dd class="g-col-7">{{ treatmentBMP.RequiredFieldVisitsPerYear }}</dd>
-                        <dt class="g-col-5"><field-definition fieldDefinitionType="RequiredPostStormFieldVisitsPerYear"></field-definition></dt>
-                        <dd class="g-col-7">{{ treatmentBMP.RequiredPostStormFieldVisitsPerYear }}</dd>
-                        <dt class="g-col-5">Notes</dt>
-                        <dd class="g-col-7">{{ treatmentBMP.Notes }}</dd>
-                    </dl>
-                </div>
-            </div>
-            @if(treatmentBMPTypeCustomAttributeTypes$ | async; as treatmentBMPTypeCustomAttributeTypes) { @if(customAttributes$ | async; as customAttributes) {
-            @if(hasModelingAttributes) {
-            <!-- Modeling Attributes Panel -->
-            <custom-attributes-display
-                [canManage]="currentPersonCanManage"
-                [editUrl]="editTreatmentBMPModelingAttributesUrl"
-                [isAdmin]="isSitkaAdmin"
-                [customAttributeTypePurposeEnum]="CustomAttributeTypePurposeEnum.Modeling"
-                [treatmentBMPTypeCustomAttributeTypes]="treatmentBMPTypeCustomAttributeTypes"
-                [customAttributes]="customAttributes"></custom-attributes-display>
-            <div class="card mt-3">
-                <div class="card-header">
-                    <span class="card-title">Modeled BMP Performance</span>
-                </div>
-                <div class="card-body">
-                    @if (!treatmentBMP.IsFullyParameterized) { @if (treatmentBMP.WaterQualityManagementPlan != null &&
-                    treatmentBMP.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproach.WaterQualityManagementPlanModelingApproachID ==
-                    WaterQualityManagementPlanModelingApproachEnum.Simplified) {
-                    <p class="systemText">
-                        This BMP is associated with a <a href="@treatmentBMP.WaterQualityManagementPlanDetailUrl">WQMP</a> that is modeled using the simplified approach; this BMP
-                        will not be modeled explicitly.
-                    </p>
-                    } @else {
-                    <p class="systemText">
-                        This Treatment BMP record is missing fields required to calculate model results. Please provide a verified delineation and required Modeling Parameters
-                        above.
-                    </p>
-                    } } @else {
-                    <modeled-bmp-performance [selectedTreatmentBMPID]="treatmentBMP.TreatmentBMPID" [loadReducingResult]="null"></modeled-bmp-performance>
-                    }
-                </div>
-            </div>
-            } @if(!isAnonymousOrUnassigned){
-            <!-- Other Design Attributes Panel -->
-            <custom-attributes-display
-                [canManage]="currentPersonCanManage"
-                [editUrl]="editTreatmentBMPOtherDesignAttributesUrl"
-                [isAdmin]="isSitkaAdmin"
-                [customAttributeTypePurposeEnum]="CustomAttributeTypePurposeEnum.OtherDesignAttributes"
-                [treatmentBMPTypeCustomAttributeTypes]="treatmentBMPTypeCustomAttributeTypes"
-                [customAttributes]="customAttributes"></custom-attributes-display>
-            } } }
-        </div>
-
-        <!-- Map and Images -->
-        <div class="g-col-6">
-            <div class="card">
-                <div class="card-header"><span class="card-title">Images</span></div>
-                <div class="card-body" [loadingSpinner]="{ isLoading: imagesLoading, loadingHeight: 100 }">
-                    @if (treatmentBMPImages$ | async; as images) {
-                    <image-carousel [images]="images" [noImagesMessage]="'No images available for this BMP.'"></image-carousel>
-                    }
-                </div>
-            </div>
-            <div class="card mt-3">
-                <div class="card-header"><span class="card-title">Location & Map</span></div>
-                <div class="card-body">
-                    @if (treatmentBMP$ | async; as treatmentBMP) {
-                    <neptune-map [mapHeight]="'400px'" [showLegend]="false" [boundingBox]="boundingBox" (onMapLoad)="handleMapReady($event)">
-                        @if (mapIsReady) {
-                        <regional-subbasins-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></regional-subbasins-layer>
-                        } @if (mapIsReady) {
-                        <stormwater-network-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="20"></stormwater-network-layer>
-                        } @if (mapIsReady) {
-                        <jurisdictions-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="30"></jurisdictions-layer>
-                        } @if (mapIsReady) {
-                        <wqmps-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="40"></wqmps-layer>
-                        } @if (mapIsReady) {
-                        <delineations-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="50"></delineations-layer>
-                        } @if (mapIsReady) {
-                        <inventoried-bmps-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="60"></inventoried-bmps-layer>
-                        }
-                    </neptune-map>
-                    }
-
-                    <!-- Map Details (Angular 20 control flow, card/grid style) -->
-                    @if (upstreamestBMP) {
-                    <div class="mt-3">
-                        <p>
-                            No delineation may be added or edited because this BMP is associated with an Upstream BMP in the network. If you would like to add a delineation, please
-                            remove the connection to the Upstream BMP.
-                        </p>
-                        <p>
-                            The Delineation displayed above is associated with Upstream BMP:<br />
-                            <a [routerLink]="upstreamestBMPDetailUrl">{{ upstreamestBMP.TreatmentBMPName }}</a>
-                        </p>
-                    </div>
-                    }
-                    <div class="grid-12 mt-3">
-                        <div class="g-col-4 control-label">
-                            <field-definition fieldDefinitionType="DelineationType"></field-definition>
-                        </div>
-                        <div class="g-col-4">
-                            @if (treatmentBMP.Delineation) {
-                            {{ treatmentBMP.Delineation.DelineationTypeName }}
-                            } @else {
-                            <span class="systemText">No Delineation Provided</span>
-                            }
-                        </div>
-                        <div class="g-col-3">
-                            @if (!upstreamestBMP && canEditStormwaterJurisdiction) {
-                            <a [routerLink]="delineationMapUrl" class="btn btn-neptune">Edit</a>
-                            }
-                        </div>
-                    </div>
-                    @if (treatmentBMP.Delineation) {
-                    <div class="grid-12">
-                        <div class="g-col-4 control-label">
-                            <label>Delineation Area</label>
-                        </div>
-                        <div class="g-col-4">
-                            {{ treatmentBMP.Delineation.DelineationArea }}
-                        </div>
-                    </div>
-                    <div class="grid-12">
-                        <div class="g-col-4 control-label">
-                            <label>Delineation Status</label>
-                        </div>
-                        <div class="g-col-4">
-                            {{ treatmentBMP.Delineation.IsVerified ? "Verified" : "Unverified" }}
-                        </div>
-                    </div>
-                    } @if (!upstreamestBMP && !isAnonymousOrUnassigned) {
-                    <div class="mt-3">
-                        <a style="cursor: pointer" id="upstreamBMPDropdown"
-                            ><span class="upstreamBMPDropdownIcon icon-chevron-down"></span>&nbsp;&nbsp;What if this BMP shares a delineation with an upstream BMP?</a
-                        >
-                    </div>
-                    }
-                    <div class="grid-12 mt-3">
-                        <div id="upstreamBMPInfo" class="g-col-12" [class.collapse]="!upstreamestBMP">
-                            <div class="g-col-4 control-label" style="margin-top: 8px">
-                                <field-definition fieldDefinitionType="UpstreamBMP"></field-definition>
-                            </div>
-                            @if (otherTreatmentBmpsExistInSubbasin) {
-                            <div class="g-col-4" style="margin-top: 8px">
-                                @if (!treatmentBMP.UpstreamBMP) {
-                                <span>Not Provided</span>
-                                } @else {
-                                <a [routerLink]="upstreamBMPDetailUrl">{{ treatmentBMP.UpstreamBMP.TreatmentBMPName }}</a>
-                                }
-                            </div>
-                            <div class="g-col-3" style="margin-top: 6px">
-                                @if (!isAnonymousOrUnassigned) { @if (treatmentBMP.UpstreamBMP) {
-                                <button class="btn btn-sm btn-neptune" (click)="removeUpstreamBMP()"><span class="icon-trash"></span></button>
-                                }
-                                <a [routerLink]="editUpstreamBMPUrl" class="btn btn-sm btn-neptune">Edit</a>
-                                }
-                            </div>
-                            } @else {
-                            <div class="g-col-7 text-muted"><em>No Inventoried BMPs within the same Regional Subbasin</em></div>
-                            }
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            @if (isAnalyzedInModelingModule && (!upstreamestBMP || isUpstreamestBMPAnalyzedInModelingModule)) {
-            <div class="card mt-3">
-                <div class="card-header">
-                    <span class="card-title">Drainage Area Land Uses</span>
-                </div>
-                <div class="card-body">
-                    @if (!isAnonymousOrUnassigned && currentPersonCanManage) {
-                    <!-- TODO: Implement Refresh Land Use button logic and modal -->
-                    <button class="btn btn-neptune" [disabled]="!treatmentBMP.Delineation?.IsVerified">Refresh Land Use</button>
-                    } @if (hruCharacteristicsSummaries?.length && treatmentBMP.Delineation?.IsVerified) {
-                    <land-use-table [hruCharacteristics]="hruCharacteristicsSummaries"></land-use-table>
-                    } @else if (!treatmentBMP.Delineation) {
-                    <p class="systemText">No delineation is provided for this Treatment BMP. Land Use Statistics cannot be determined until a verified delineation is provided.</p>
-                    } @else if (treatmentBMP.Delineation && !treatmentBMP.Delineation.IsVerified) {
-                    <p class="systemText">
-                        The Delineation for this Treatment BMP is marked as provisional. Land Use Statistics will not be calculated until the Delineation is verified.
-                    </p>
-                    } @else {
-                    <p class="systemText">Land Use Statistics have not been calculated for this Treatment BMP</p>
-                    }
-                </div>
-            </div>
-            }
-        </div>
-
-        <!-- more content can be added here -->
-        <!-- HRU Characteristics (Sitka Admin only) -->
-        @if (isSitkaAdmin && isAnalyzedInModelingModule) {
-        <div class="card mt-3">
-            <div class="card-header">
-                <span class="card-title">HRU Characteristics (Sitka Admin only)</span>
-            </div>
-            <div class="card-body">
-                <neptune-grid
-                    [rowData]="hruCharacteristics$ | async"
-                    [columnDefs]="hruCharacteristicsColumnDefs"
-                    [pagination]="true"
-                    [height]="'400px'"
-                    [rowSelection]="'single'"
-                    [downloadFileName]="'HRUCharacteristics'">
-                </neptune-grid>
-            </div>
-        </div>
-        }
-
-        <!-- Field Visits -->
+<div class="grid-12">
+    <div class="g-col-6">
         <div class="card">
             <div class="card-header">
-                <span class="card-title">Field Visits</span>
-                @if (currentPersonCanManage) {
-                <span class="card-actions">
-                    <!-- TODO: Implement modal dialog for Begin Field Visit -->
-                    <button class="btn btn-neptune"><span class="icon-plus"></span> Begin Field Visit</button>
-                </span>
-                }
+                <span class="card-title">Basics</span>
             </div>
             <div class="card-body">
-                <neptune-grid
-                    [rowData]="fieldVisits$ | async"
-                    [columnDefs]="fieldVisitColumnDefs"
-                    [pagination]="true"
-                    [height]="'400px'"
-                    [rowSelection]="'single'"
-                    [downloadFileName]="'FieldVisits'">
-                </neptune-grid>
-            </div>
-        </div>
-
-        <!-- Funding Events -->
-        <div class="card g-col-6 mt-3">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <span class="card-title">Funding Events</span>
-                @if (currentPersonCanManage) {
-                <span class="card-actions">
-                    <button class="btn btn-neptune" (click)="openAddFundingEventModal()"><span class="icon-plus"></span> Add Funding Event</button>
-                </span>
-                }
-            </div>
-            <div class="card-body">
-                @if (fundingEvents$ | async; as fundingEvents) { @if (fundingEvents.length) { @for (fundingEvent of fundingEvents; track fundingEvent.FundingEventID) {
-                <div class="d-flex justify-content-between align-items-center mt-2">
-                    <h5 class="mb-0">{{ fundingEvent.DisplayName }}</h5>
-                    <div>
-                        <button class="btn btn-sm btn-outline-primary me-2" (click)="openEditFundingEventModal(fundingEvent)"><span class="icon-edit"></span> Edit</button>
-                        <button class="btn btn-sm btn-outline-danger" (click)="confirmDeleteFundingEvent(fundingEvent)"><span class="icon-trash"></span> Delete</button>
-                    </div>
-                </div>
-                <p class="mb-2">{{ fundingEvent.Description }}</p>
-                @if (fundingEvent.FundingEventFundingSources?.length) {
-                <div class="table-responsive">
-                    <table class="table table-striped table-bordered table-hover mb-0">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Funding Source</th>
-                                <th class="text-end">Amount</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @for (source of fundingEvent.FundingEventFundingSources; track source.FundingSourceID) {
-                            <tr>
-                                <td>
-                                    <a [routerLink]="['/funding-sources', source.FundingSourceID]">{{ source.FundingSourceName }}</a>
-                                </td>
-                                <td class="text-end">{{ source.Amount | currency }}</td>
-                            </tr>
-                            }
-                            <tr class="fw-bold">
-                                <td>Total</td>
-                                <td class="text-end">{{ getFundingEventTotal(fundingEvent) | currency }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                } @else {
-                <p class="systemText mb-0">No Funding Sources identified for this Funding Event</p>
-                } } } @else {
-                <p class="systemText">No Funding Events identified for this Treatment BMP</p>
-                } }
-            </div>
-        </div>
-
-        <!-- Benchmark & Threshold Values -->
-        <div class="card g-col-6 mt-3">
-            <div class="card-header">
-                <span class="card-title">Benchmark &amp; Threshold Values</span>
-                <span class="card-actions">
-                    @if (canEditBenchmarkAndThresholds) {
-                    <a [routerLink]="addBenchmarkAndThresholdUrl"><span class="icon-edit"></span></a>
+                <dl class="grid-12">
+                    <dt class="g-col-5">Name</dt>
+                    <dd class="g-col-7">{{ treatmentBMP.TreatmentBMPName }}</dd>
+                    <dt class="g-col-5"><field-definition fieldDefinitionType="TreatmentBMPType"></field-definition></dt>
+                    <dd class="g-col-7">{{ treatmentBMP.TreatmentBMPTypeName }}</dd>
+                    <dt class="g-col-5">Jurisdiction</dt>
+                    <dd class="g-col-7">
+                        <a [routerLink]="['/inventory/jurisdiction-detail', treatmentBMP.StormwaterJurisdictionID]">{{ treatmentBMP.StormwaterJurisdictionName }}</a>
+                    </dd>
+                    <dt class="g-col-5">Owner</dt>
+                    <dd class="g-col-7">
+                        <a [routerLink]="['/organization-detail', treatmentBMP.OwnerOrganizationID]">{{ treatmentBMP.OwnerOrganizationName }}</a>
+                    </dd>
+                    <dt class="g-col-5">Year Built</dt>
+                    <dd class="g-col-7">{{ treatmentBMP.YearBuilt }}</dd>
+                    <dt class="g-col-5">ID in System of Record</dt>
+                    <dd class="g-col-7">{{ treatmentBMP.SystemOfRecordID }}</dd>
+                    <dt class="g-col-5">Water Quality Management Plan</dt>
+                    <dd class="g-col-7">
+                        @if (treatmentBMP.WaterQualityManagementPlan) {
+                        <a [routerLink]="['/wqmp-detail', treatmentBMP.WaterQualityManagementPlanID]">{{
+                            treatmentBMP.WaterQualityManagementPlan.WaterQualityManagementPlanName
+                        }}</a>
+                        } @else {
+                        <em class="text-muted">Has not been linked to a WQMP</em>
+                        }
+                    </dd>
+                    <dt class="g-col-5"><field-definition fieldDefinitionType="SizingBasis"></field-definition></dt>
+                    <dd class="g-col-7">{{ treatmentBMP.SizingBasisType.SizingBasisTypeDisplayName }}</dd>
+                    <dt class="g-col-5"><field-definition fieldDefinitionType="TrashCaptureStatus"></field-definition></dt>
+                    <dd class="g-col-7">{{ treatmentBMP.TrashCaptureStatusType.TrashCaptureStatusTypeDisplayName }}</dd>
+                    @if (false) {
+                    <dt class="g-col-5">Trash Capture Effectiveness</dt>
+                    <dd class="g-col-7">{{ treatmentBMP.TrashCaptureEffectiveness }}</dd>
                     }
-                </span>
-            </div>
-            <div class="card-body">
-                @if (!hasSettableBenchmarkAndThresholdValues) {
-                <p class="systemText">This type of treatment BMP does not have settable benchmark and threshold values</p>
-                } @else {
-                <!-- TODO: Replace with actual table for benchmark and threshold values -->
-                <p class="systemText">[Benchmark & Threshold Table goes here]</p>
-                }
+                    <dt class="g-col-5"><field-definition fieldDefinitionType="RequiredLifespanOfInstallation"></field-definition></dt>
+                    <dd class="g-col-7">
+                        @if (treatmentBMP.TreatmentBMPLifespanType?.TreatmentBMPLifeSpanTypeID == TreatmentBMPLifespanTypeEnum.FixedEndDate) { Maintain until at least
+                        {{ treatmentBMP.TreatmentBMPLifespanEndDate | date : "MM/dd/yyyy" }}
+                        } @else {
+                        {{ treatmentBMP.TreatmentBMPLifespanType?.TreatmentBMPLifeSpanTypeDisplayName || "Unknown" }}
+                        }
+                    </dd>
+                    <dt class="g-col-5"><field-definition fieldDefinitionType="RequiredFieldVisitsPerYear"></field-definition></dt>
+                    <dd class="g-col-7">{{ treatmentBMP.RequiredFieldVisitsPerYear }}</dd>
+                    <dt class="g-col-5"><field-definition fieldDefinitionType="RequiredPostStormFieldVisitsPerYear"></field-definition></dt>
+                    <dd class="g-col-7">{{ treatmentBMP.RequiredPostStormFieldVisitsPerYear }}</dd>
+                    <dt class="g-col-5">Notes</dt>
+                    <dd class="g-col-7">{{ treatmentBMP.Notes }}</dd>
+                </dl>
             </div>
         </div>
-
-        <!-- Documents -->
-        @if (!isAnonymousOrUnassigned) {
+        @if(treatmentBMPTypeCustomAttributeTypes$ | async; as treatmentBMPTypeCustomAttributeTypes) { @if(customAttributes$ | async; as customAttributes) {
+        @if(hasModelingAttributes) {
+        <!-- Modeling Attributes Panel -->
+        <custom-attributes-display
+            [canManage]="currentPersonCanManage"
+            [editUrl]="editTreatmentBMPModelingAttributesUrl"
+            [isAdmin]="isSitkaAdmin"
+            [customAttributeTypePurposeEnum]="CustomAttributeTypePurposeEnum.Modeling"
+            [treatmentBMPTypeCustomAttributeTypes]="treatmentBMPTypeCustomAttributeTypes"
+            [customAttributes]="customAttributes"></custom-attributes-display>
         <div class="card mt-3">
             <div class="card-header">
-                <span class="card-title">Documents</span>
-                <span class="card-actions">
-                    @if (currentPersonCanManage) {
-                    <!-- TODO: Implement modal dialog for Upload New Document -->
-                    <button class="btn btn-neptune"><span class="icon-plus"></span> Upload New Document</button>
-                    }
-                </span>
+                <span class="card-title">Modeled BMP Performance</span>
             </div>
             <div class="card-body">
-                <!-- TODO: Replace with actual documents list/table -->
-                <p class="systemText">[Documents List goes here]</p>
+                @if (!treatmentBMP.IsFullyParameterized) { @if (treatmentBMP.WaterQualityManagementPlan != null &&
+                treatmentBMP.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproach.WaterQualityManagementPlanModelingApproachID ==
+                WaterQualityManagementPlanModelingApproachEnum.Simplified) {
+                <p class="systemText">
+                    This BMP is associated with a <a href="@treatmentBMP.WaterQualityManagementPlanDetailUrl">WQMP</a> that is modeled using the simplified approach; this BMP will
+                    not be modeled explicitly.
+                </p>
+                } @else {
+                <p class="systemText">
+                    This Treatment BMP record is missing fields required to calculate model results. Please provide a verified delineation and required Modeling Parameters above.
+                </p>
+                } } @else {
+                <modeled-bmp-performance [selectedTreatmentBMPID]="treatmentBMP.TreatmentBMPID" [loadReducingResult]="null"></modeled-bmp-performance>
+                }
+            </div>
+        </div>
+        } @if(!isAnonymousOrUnassigned){
+        <!-- Other Design Attributes Panel -->
+        <custom-attributes-display
+            [canManage]="currentPersonCanManage"
+            [editUrl]="editTreatmentBMPOtherDesignAttributesUrl"
+            [isAdmin]="isSitkaAdmin"
+            [customAttributeTypePurposeEnum]="CustomAttributeTypePurposeEnum.OtherDesignAttributes"
+            [treatmentBMPTypeCustomAttributeTypes]="treatmentBMPTypeCustomAttributeTypes"
+            [customAttributes]="customAttributes"></custom-attributes-display>
+        } } }
+    </div>
+
+    <!-- Map and Images -->
+    <div class="g-col-6">
+        <div class="card">
+            <div class="card-header"><span class="card-title">Images</span></div>
+            <div class="card-body" [loadingSpinner]="{ isLoading: imagesLoading, loadingHeight: 100 }">
+                @if (treatmentBMPImages$ | async; as images) {
+                <image-carousel [images]="images" [noImagesMessage]="'No images available for this BMP.'"></image-carousel>
+                }
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-header"><span class="card-title">Location & Map</span></div>
+            <div class="card-body">
+                @if (treatmentBMP$ | async; as treatmentBMP) {
+                <neptune-map [mapHeight]="'400px'" [showLegend]="false" [boundingBox]="boundingBox" (onMapLoad)="handleMapReady($event)">
+                    @if (mapIsReady) {
+                    <regional-subbasins-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></regional-subbasins-layer>
+                    } @if (mapIsReady) {
+                    <stormwater-network-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="20"></stormwater-network-layer>
+                    } @if (mapIsReady) {
+                    <jurisdictions-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="30"></jurisdictions-layer>
+                    } @if (mapIsReady) {
+                    <wqmps-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="40"></wqmps-layer>
+                    } @if (mapIsReady) {
+                    <delineations-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="50"></delineations-layer>
+                    } @if (mapIsReady) {
+                    <inventoried-bmps-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="60"></inventoried-bmps-layer>
+                    }
+                </neptune-map>
+                }
+
+                <!-- Map Details (Angular 20 control flow, card/grid style) -->
+                @if (upstreamestBMP) {
+                <div class="mt-3">
+                    <p>
+                        No delineation may be added or edited because this BMP is associated with an Upstream BMP in the network. If you would like to add a delineation, please
+                        remove the connection to the Upstream BMP.
+                    </p>
+                    <p>
+                        The Delineation displayed above is associated with Upstream BMP:<br />
+                        <a [routerLink]="upstreamestBMPDetailUrl">{{ upstreamestBMP.TreatmentBMPName }}</a>
+                    </p>
+                </div>
+                }
+                <div class="grid-12 mt-3">
+                    <div class="g-col-4 control-label">
+                        <field-definition fieldDefinitionType="DelineationType"></field-definition>
+                    </div>
+                    <div class="g-col-4">
+                        @if (treatmentBMP.Delineation) {
+                        {{ treatmentBMP.Delineation.DelineationTypeName }}
+                        } @else {
+                        <span class="systemText">No Delineation Provided</span>
+                        }
+                    </div>
+                    <div class="g-col-3">
+                        @if (!upstreamestBMP && canEditStormwaterJurisdiction) {
+                        <a [routerLink]="delineationMapUrl" class="btn btn-neptune">Edit</a>
+                        }
+                    </div>
+                </div>
+                @if (treatmentBMP.Delineation) {
+                <div class="grid-12">
+                    <div class="g-col-4 control-label">
+                        <label>Delineation Area</label>
+                    </div>
+                    <div class="g-col-4">
+                        {{ treatmentBMP.Delineation.DelineationArea }}
+                    </div>
+                </div>
+                <div class="grid-12">
+                    <div class="g-col-4 control-label">
+                        <label>Delineation Status</label>
+                    </div>
+                    <div class="g-col-4">
+                        {{ treatmentBMP.Delineation.IsVerified ? "Verified" : "Unverified" }}
+                    </div>
+                </div>
+                } @if (!upstreamestBMP && !isAnonymousOrUnassigned) {
+                <div class="mt-3">
+                    <a style="cursor: pointer" id="upstreamBMPDropdown"
+                        ><span class="upstreamBMPDropdownIcon icon-chevron-down"></span>&nbsp;&nbsp;What if this BMP shares a delineation with an upstream BMP?</a
+                    >
+                </div>
+                }
+                <div class="grid-12 mt-3">
+                    <div id="upstreamBMPInfo" class="g-col-12" [class.collapse]="!upstreamestBMP">
+                        <div class="g-col-4 control-label" style="margin-top: 8px">
+                            <field-definition fieldDefinitionType="UpstreamBMP"></field-definition>
+                        </div>
+                        @if (otherTreatmentBmpsExistInSubbasin) {
+                        <div class="g-col-4" style="margin-top: 8px">
+                            @if (!treatmentBMP.UpstreamBMP) {
+                            <span>Not Provided</span>
+                            } @else {
+                            <a [routerLink]="upstreamBMPDetailUrl">{{ treatmentBMP.UpstreamBMP.TreatmentBMPName }}</a>
+                            }
+                        </div>
+                        <div class="g-col-3" style="margin-top: 6px">
+                            @if (!isAnonymousOrUnassigned) { @if (treatmentBMP.UpstreamBMP) {
+                            <button class="btn btn-sm btn-neptune" (click)="removeUpstreamBMP()"><span class="icon-trash"></span></button>
+                            }
+                            <a [routerLink]="editUpstreamBMPUrl" class="btn btn-sm btn-neptune">Edit</a>
+                            }
+                        </div>
+                        } @else {
+                        <div class="g-col-7 text-muted"><em>No Inventoried BMPs within the same Regional Subbasin</em></div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @if (isAnalyzedInModelingModule && (!upstreamestBMP || isUpstreamestBMPAnalyzedInModelingModule)) {
+        <div class="card mt-3">
+            <div class="card-header">
+                <span class="card-title">Drainage Area Land Uses</span>
+            </div>
+            <div class="card-body">
+                @if (!isAnonymousOrUnassigned && currentPersonCanManage) {
+                <!-- TODO: Implement Refresh Land Use button logic and modal -->
+                <button class="btn btn-neptune" [disabled]="!treatmentBMP.Delineation?.IsVerified">Refresh Land Use</button>
+                } @if (hruCharacteristicsSummaries?.length && treatmentBMP.Delineation?.IsVerified) {
+                <land-use-table [hruCharacteristics]="hruCharacteristicsSummaries"></land-use-table>
+                } @else if (!treatmentBMP.Delineation) {
+                <p class="systemText">No delineation is provided for this Treatment BMP. Land Use Statistics cannot be determined until a verified delineation is provided.</p>
+                } @else if (treatmentBMP.Delineation && !treatmentBMP.Delineation.IsVerified) {
+                <p class="systemText">
+                    The Delineation for this Treatment BMP is marked as provisional. Land Use Statistics will not be calculated until the Delineation is verified.
+                </p>
+                } @else {
+                <p class="systemText">Land Use Statistics have not been calculated for this Treatment BMP</p>
+                }
             </div>
         </div>
         }
     </div>
 
+    <!-- more content can be added here -->
+    <!-- HRU Characteristics (Sitka Admin only) -->
+    @if (isSitkaAdmin && isAnalyzedInModelingModule) {
+    <div class="card mt-3">
+        <div class="card-header">
+            <span class="card-title">HRU Characteristics (Sitka Admin only)</span>
+        </div>
+        <div class="card-body">
+            <neptune-grid
+                [rowData]="hruCharacteristics$ | async"
+                [columnDefs]="hruCharacteristicsColumnDefs"
+                [pagination]="true"
+                [height]="'400px'"
+                [rowSelection]="'single'"
+                [downloadFileName]="'HRUCharacteristics'">
+            </neptune-grid>
+        </div>
+    </div>
+    }
+
+    <!-- Field Visits -->
+    <div class="card">
+        <div class="card-header">
+            <span class="card-title">Field Visits</span>
+            @if (currentPersonCanManage) {
+            <span class="card-actions">
+                <!-- TODO: Implement modal dialog for Begin Field Visit -->
+                <button class="btn btn-neptune"><span class="icon-plus"></span> Begin Field Visit</button>
+            </span>
+            }
+        </div>
+        <div class="card-body">
+            <neptune-grid
+                [rowData]="fieldVisits$ | async"
+                [columnDefs]="fieldVisitColumnDefs"
+                [pagination]="true"
+                [height]="'400px'"
+                [rowSelection]="'single'"
+                [downloadFileName]="'FieldVisits'">
+            </neptune-grid>
+        </div>
+    </div>
+
+    <!-- Funding Events -->
+    <div class="card g-col-6 mt-3">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <span class="card-title">Funding Events</span>
+            @if (currentPersonCanManage) {
+            <span class="card-actions">
+                <button class="btn btn-neptune" (click)="openAddFundingEventModal()"><span class="icon-plus"></span> Add Funding Event</button>
+            </span>
+            }
+        </div>
+        <div class="card-body">
+            @if (fundingEvents$ | async; as fundingEvents) { @if (fundingEvents.length) { @for (fundingEvent of fundingEvents; track fundingEvent.FundingEventID) {
+            <div class="d-flex justify-content-between align-items-center mt-2">
+                <h5 class="mb-0">{{ fundingEvent.DisplayName }}</h5>
+                <div>
+                    <button class="btn btn-sm btn-outline-primary me-2" (click)="openEditFundingEventModal(fundingEvent)"><span class="icon-edit"></span> Edit</button>
+                    <button class="btn btn-sm btn-outline-danger" (click)="confirmDeleteFundingEvent(fundingEvent)"><span class="icon-trash"></span> Delete</button>
+                </div>
+            </div>
+            <p class="mb-2">{{ fundingEvent.Description }}</p>
+            @if (fundingEvent.FundingEventFundingSources?.length) {
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Funding Source</th>
+                            <th class="text-end">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (source of fundingEvent.FundingEventFundingSources; track source.FundingSourceID) {
+                        <tr>
+                            <td>
+                                <a [routerLink]="['/funding-sources', source.FundingSourceID]">{{ source.FundingSourceName }}</a>
+                            </td>
+                            <td class="text-end">{{ source.Amount | currency }}</td>
+                        </tr>
+                        }
+                        <tr class="fw-bold">
+                            <td>Total</td>
+                            <td class="text-end">{{ getFundingEventTotal(fundingEvent) | currency }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            } @else {
+            <p class="systemText mb-0">No Funding Sources identified for this Funding Event</p>
+            } } } @else {
+            <p class="systemText">No Funding Events identified for this Treatment BMP</p>
+            } }
+        </div>
+    </div>
+
+    <!-- Benchmark & Threshold Values -->
+    <div class="card g-col-6 mt-3">
+        <div class="card-header">
+            <span class="card-title">Benchmark &amp; Threshold Values</span>
+            <span class="card-actions">
+                @if (canEditBenchmarkAndThresholds) {
+                <a [routerLink]="addBenchmarkAndThresholdUrl"><span class="icon-edit"></span></a>
+                }
+            </span>
+        </div>
+        <div class="card-body">
+            @if (!hasSettableBenchmarkAndThresholdValues) {
+            <p class="systemText">This type of treatment BMP does not have settable benchmark and threshold values</p>
+            } @else {
+            <!-- TODO: Replace with actual table for benchmark and threshold values -->
+            <p class="systemText">[Benchmark & Threshold Table goes here]</p>
+            }
+        </div>
+    </div>
+
+    <!-- Documents -->
+    @if (!isAnonymousOrUnassigned) {
+    <div class="card mt-3">
+        <div class="card-header">
+            <span class="card-title">Documents</span>
+            <span class="card-actions">
+                @if (currentPersonCanManage) {
+                <!-- TODO: Implement modal dialog for Upload New Document -->
+                <button class="btn btn-neptune"><span class="icon-plus"></span> Upload New Document</button>
+                }
+            </span>
+        </div>
+        <div class="card-body">
+            <!-- TODO: Replace with actual documents list/table -->
+            <p class="systemText">[Documents List goes here]</p>
+        </div>
+    </div>
     }
 </div>
+
+}

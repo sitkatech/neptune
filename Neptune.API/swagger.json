@@ -4480,6 +4480,47 @@
         }
       }
     },
+    "/jurisdictions/{jurisdictionID}": {
+      "get": {
+        "tags": [
+          "StormwaterJurisdiction"
+        ],
+        "operationId": "Get_StormwaterJurisdiction",
+        "parameters": [
+          {
+            "name": "jurisdictionID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/StormwaterJurisdictionGridDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StormwaterJurisdictionGridDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StormwaterJurisdictionGridDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/jurisdictions/{jurisdictionID}/bounding-box": {
       "get": {
         "tags": [
@@ -4514,6 +4555,106 @@
               "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/BoundingBoxDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/jurisdictions/{jurisdictionID}/treatment-bmps": {
+      "get": {
+        "tags": [
+          "StormwaterJurisdiction"
+        ],
+        "operationId": "ListTreatmentBMPs_StormwaterJurisdiction",
+        "parameters": [
+          {
+            "name": "jurisdictionID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPGridDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPGridDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPGridDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/jurisdictions/{jurisdictionID}/users": {
+      "get": {
+        "tags": [
+          "StormwaterJurisdiction"
+        ],
+        "operationId": "ListUsers_StormwaterJurisdiction",
+        "parameters": [
+          {
+            "name": "jurisdictionID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PersonDisplayDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PersonDisplayDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PersonDisplayDto"
+                  }
                 }
               }
             }
@@ -4801,7 +4942,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/TreatmentBMPIndexGridDto"
+                    "$ref": "#/components/schemas/TreatmentBMPGridDto"
                   }
                 }
               },
@@ -4809,7 +4950,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/TreatmentBMPIndexGridDto"
+                    "$ref": "#/components/schemas/TreatmentBMPGridDto"
                   }
                 }
               },
@@ -4817,7 +4958,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/TreatmentBMPIndexGridDto"
+                    "$ref": "#/components/schemas/TreatmentBMPGridDto"
                   }
                 }
               }
@@ -8630,6 +8771,37 @@
         },
         "additionalProperties": false
       },
+      "PersonDisplayDto": {
+        "type": "object",
+        "properties": {
+          "PersonID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "FirstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "LastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "OrganizationID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OrganizationName": {
+            "type": "string",
+            "nullable": true
+          },
+          "FullName": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
       "PersonDto": {
         "type": "object",
         "properties": {
@@ -10767,63 +10939,7 @@
         },
         "additionalProperties": false
       },
-      "TreatmentBMPHRUCharacteristicsSummarySimpleDto": {
-        "type": "object",
-        "properties": {
-          "ProjectHRUCharacteristicID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "TreatmentBMPID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "LandUse": {
-            "type": "string",
-            "nullable": true
-          },
-          "Area": {
-            "type": "number",
-            "format": "double"
-          },
-          "ImperviousCover": {
-            "type": "number",
-            "format": "double"
-          }
-        },
-        "additionalProperties": false
-      },
-      "TreatmentBMPImageDto": {
-        "type": "object",
-        "properties": {
-          "TreatmentBMPImageID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "FileResourceID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "FileResourceGUID": {
-            "type": "string",
-            "nullable": true
-          },
-          "Caption": {
-            "type": "string",
-            "nullable": true
-          },
-          "TreatmentBMPID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "UploadDate": {
-            "type": "string",
-            "format": "date"
-          }
-        },
-        "additionalProperties": false
-      },
-      "TreatmentBMPIndexGridDto": {
+      "TreatmentBMPGridDto": {
         "type": "object",
         "properties": {
           "TreatmentBMPID": {
@@ -10846,7 +10962,7 @@
             "type": "integer",
             "format": "int32"
           },
-          "OrganizationName": {
+          "StormwaterJurisdictionName": {
             "type": "string",
             "nullable": true
           },
@@ -10938,6 +11054,62 @@
             "type": "number",
             "format": "double",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TreatmentBMPHRUCharacteristicsSummarySimpleDto": {
+        "type": "object",
+        "properties": {
+          "ProjectHRUCharacteristicID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TreatmentBMPID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "LandUse": {
+            "type": "string",
+            "nullable": true
+          },
+          "Area": {
+            "type": "number",
+            "format": "double"
+          },
+          "ImperviousCover": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TreatmentBMPImageDto": {
+        "type": "object",
+        "properties": {
+          "TreatmentBMPImageID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "FileResourceID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "FileResourceGUID": {
+            "type": "string",
+            "nullable": true
+          },
+          "Caption": {
+            "type": "string",
+            "nullable": true
+          },
+          "TreatmentBMPID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "UploadDate": {
+            "type": "string",
+            "format": "date"
           }
         },
         "additionalProperties": false

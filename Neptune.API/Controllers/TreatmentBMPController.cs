@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -27,15 +26,15 @@ namespace Neptune.API.Controllers
     {
         [HttpGet]
         [LoggedInUnclassifiedFeature]
-        public ActionResult<List<TreatmentBMPIndexGridDto>> List()
+        public async Task<ActionResult<List<TreatmentBMPGridDto>>> List()
         {
             var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonIDForBMPs(dbContext, CallingUser.PersonID);
-            var treatmentBMPs = dbContext.vTreatmentBMPDetaileds
+            var entities = await dbContext.vTreatmentBMPDetaileds
                 .Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID))
-                .ToList()
-                .Select(x => x.AsDto())
+                .ToListAsync();
+            var treatmentBMPGridDtos = entities.Select(x => x.AsGridDto())
                 .ToList();
-            return Ok(treatmentBMPs);
+            return Ok(treatmentBMPGridDtos);
         }
 
         [HttpGet("verified/feature-collection")]

@@ -110,4 +110,21 @@ public static class StormwaterJurisdictions
         }).ToList();
     }
 
+    public static async Task<StormwaterJurisdictionGridDto> GetByIDAsDtoAsync(NeptuneDbContext dbContext,
+        int stormwaterJurisdictionID)
+    {
+        var peopleCountByStormwaterJurisdiction =
+            StormwaterJurisdictionPeople.ListCountByStormwaterJurisdiction(dbContext);
+        var bmpCountByStormwaterJurisdiction = TreatmentBMPs.ListCountByStormwaterJurisdiction(dbContext);
+
+        var entity = await dbContext.StormwaterJurisdictions
+            .Include(x => x.Organization)
+            .AsNoTracking().OrderBy(ht => ht.Organization.OrganizationName)
+            .SingleAsync(x => x.StormwaterJurisdictionID == stormwaterJurisdictionID);
+        var dto = entity.AsGridDto();
+        dto.NumberOfUsers = peopleCountByStormwaterJurisdiction.GetValueOrDefault(entity.StormwaterJurisdictionID, 0);
+        dto.NumberOfBMPs = bmpCountByStormwaterJurisdiction.GetValueOrDefault(entity.StormwaterJurisdictionID, 0);
+        return dto;
+    }
+
 }
