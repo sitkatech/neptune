@@ -108,13 +108,13 @@ export class ProjectBasicsComponent implements OnInit {
                 return options;
             })
         );
-        this.stormwaterJurisdictionOptions$ = this.stormwaterJurisdictionService.listStormwaterJurisdiction().pipe(
+        this.stormwaterJurisdictionOptions$ = this.stormwaterJurisdictionService.listViewableStormwaterJurisdiction().pipe(
             map((list) => {
                 if (list.length == 1) {
-                    return [{ Value: list[0].StormwaterJurisdictionID, Label: list[0].Organization.OrganizationName, Disabled: false }];
+                    return [{ Value: list[0].StormwaterJurisdictionID, Label: list[0].StormwaterJurisdictionName, Disabled: false }];
                 }
 
-                let options = list.map((x) => ({ Value: x.StormwaterJurisdictionID, Label: x.Organization.OrganizationName } as SelectDropdownOption));
+                let options = list.map((x) => ({ Value: x.StormwaterJurisdictionID, Label: x.StormwaterJurisdictionName } as SelectDropdownOption));
                 return options;
             })
         );

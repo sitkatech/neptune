@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Neptune.API.Services;
 using Neptune.API.Services.Authorization;
 using Neptune.EFModels.Entities;
@@ -20,20 +21,18 @@ namespace Neptune.API.Controllers
     {
         [HttpGet]
         [JurisdictionEditFeature]
-        public ActionResult<List<StormwaterJurisdictionDto>> List()
+        public async Task<ActionResult<List<StormwaterJurisdictionGridDto>>> List()
         {
-            var stormwaterJurisdictionIDs = People.ListStormwaterJurisdictionIDsByPersonID(DbContext, CallingUser.PersonID);
-            var stormwaterJurisdictionSimpleDtos = StormwaterJurisdictions.ListByIDsAsDto(DbContext, stormwaterJurisdictionIDs);
-            return Ok(stormwaterJurisdictionSimpleDtos);
+            var stormwaterJurisdictionDtos = await StormwaterJurisdictions.ListAsDtoAsync(DbContext);
+            return Ok(stormwaterJurisdictionDtos);
         }
 
-
         [HttpGet("user-viewable")]
-        public ActionResult<List<StormwaterJurisdictionDto>> ListViewableStormwaterJurisdictionIDs()
+        public async Task<ActionResult<List<StormwaterJurisdictionDisplayDto>>> ListViewable()
         {
-            var stormwaterJurisdictionIDs = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonIDForBMPs(DbContext, CallingUser?.PersonID);
-            var stormwaterJurisdictionSimpleDtos = StormwaterJurisdictions.ListByIDsAsDto(DbContext, stormwaterJurisdictionIDs);
-            return Ok(stormwaterJurisdictionSimpleDtos);
+            var stormwaterJurisdictionIDs = People.ListStormwaterJurisdictionIDsByPersonID(DbContext, CallingUser.PersonID);
+            var stormwaterJurisdictionDisplayDtos = await StormwaterJurisdictions.ListByIDsAsDisplayDtoAsync(DbContext, stormwaterJurisdictionIDs);
+            return Ok(stormwaterJurisdictionDisplayDtos);
         }
 
         [HttpGet("bounding-box")]

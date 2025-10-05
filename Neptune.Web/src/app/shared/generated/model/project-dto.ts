@@ -8,9 +8,9 @@
  * Do not edit the class manually.
  */
 import { OrganizationSimpleDto } from './organization-simple-dto';
+import { StormwaterJurisdictionDisplayDto } from './stormwater-jurisdiction-display-dto';
 import { ProjectStatusSimpleDto } from './project-status-simple-dto';
 import { PersonSimpleDto } from './person-simple-dto';
-import { StormwaterJurisdictionDto } from './stormwater-jurisdiction-dto';
 
 
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
@@ -44,7 +44,7 @@ export class ProjectDto {
     UpdatePersonID?: number | null;
     DateUpdated?: string | null;
     Organization?: OrganizationSimpleDto;
-    StormwaterJurisdiction?: StormwaterJurisdictionDto;
+    StormwaterJurisdiction?: StormwaterJurisdictionDisplayDto;
     ProjectStatus?: ProjectStatusSimpleDto;
     PrimaryContactPerson?: PersonSimpleDto;
     CreatePerson?: PersonSimpleDto;
@@ -84,7 +84,7 @@ export interface ProjectDtoForm {
     UpdatePersonID?: FormControl<number>;
     DateUpdated?: FormControl<string>;
     Organization?: FormControl<OrganizationSimpleDto>;
-    StormwaterJurisdiction?: FormControl<StormwaterJurisdictionDto>;
+    StormwaterJurisdiction?: FormControl<StormwaterJurisdictionDisplayDto>;
     ProjectStatus?: FormControl<ProjectStatusSimpleDto>;
     PrimaryContactPerson?: FormControl<PersonSimpleDto>;
     CreatePerson?: FormControl<PersonSimpleDto>;
@@ -382,7 +382,7 @@ export class ProjectDtoFormControls {
             ],
         }
     );
-    public static StormwaterJurisdiction = (value: FormControlState<StormwaterJurisdictionDto> | StormwaterJurisdictionDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<StormwaterJurisdictionDto>(
+    public static StormwaterJurisdiction = (value: FormControlState<StormwaterJurisdictionDisplayDto> | StormwaterJurisdictionDisplayDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<StormwaterJurisdictionDisplayDto>(
         value,
         formControlOptions ?? 
         {

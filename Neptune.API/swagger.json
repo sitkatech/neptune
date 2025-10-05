@@ -4386,7 +4386,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/StormwaterJurisdictionDto"
+                    "$ref": "#/components/schemas/StormwaterJurisdictionGridDto"
                   }
                 }
               },
@@ -4394,7 +4394,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/StormwaterJurisdictionDto"
+                    "$ref": "#/components/schemas/StormwaterJurisdictionGridDto"
                   }
                 }
               },
@@ -4402,7 +4402,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/StormwaterJurisdictionDto"
+                    "$ref": "#/components/schemas/StormwaterJurisdictionGridDto"
                   }
                 }
               }
@@ -4416,7 +4416,7 @@
         "tags": [
           "StormwaterJurisdiction"
         ],
-        "operationId": "ListViewableStormwaterJurisdictionIDs_StormwaterJurisdiction",
+        "operationId": "ListViewable_StormwaterJurisdiction",
         "responses": {
           "200": {
             "description": "OK",
@@ -4425,7 +4425,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/StormwaterJurisdictionDto"
+                    "$ref": "#/components/schemas/StormwaterJurisdictionDisplayDto"
                   }
                 }
               },
@@ -4433,7 +4433,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/StormwaterJurisdictionDto"
+                    "$ref": "#/components/schemas/StormwaterJurisdictionDisplayDto"
                   }
                 }
               },
@@ -4441,7 +4441,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/StormwaterJurisdictionDto"
+                    "$ref": "#/components/schemas/StormwaterJurisdictionDisplayDto"
                   }
                 }
               }
@@ -9176,7 +9176,7 @@
             "$ref": "#/components/schemas/OrganizationSimpleDto"
           },
           "StormwaterJurisdiction": {
-            "$ref": "#/components/schemas/StormwaterJurisdictionDto"
+            "$ref": "#/components/schemas/StormwaterJurisdictionDisplayDto"
           },
           "ProjectStatus": {
             "$ref": "#/components/schemas/ProjectStatusSimpleDto"
@@ -10020,31 +10020,50 @@
         },
         "additionalProperties": false
       },
-      "StormwaterJurisdictionDto": {
+      "StormwaterJurisdictionDisplayDto": {
         "type": "object",
         "properties": {
           "StormwaterJurisdictionID": {
             "type": "integer",
             "format": "int32"
           },
+          "StormwaterJurisdictionName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "StormwaterJurisdictionGridDto": {
+        "type": "object",
+        "properties": {
+          "StormwaterJurisdictionID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "StormwaterJurisdictionName": {
+            "type": "string",
+            "nullable": true
+          },
           "OrganizationID": {
             "type": "integer",
             "format": "int32"
           },
-          "StateProvinceID": {
+          "StormwaterJurisdictionPublicBMPVisibilityTypeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "StormwaterJurisdictionPublicWQMPVisibilityTypeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "NumberOfUsers": {
             "type": "integer",
             "format": "int32"
           },
-          "StormwaterJurisdictionPublicBMPVisibilityTypeID": {
+          "NumberOfBMPs": {
             "type": "integer",
             "format": "int32"
-          },
-          "StormwaterJurisdictionPublicWQMPVisibilityTypeID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "Organization": {
-            "$ref": "#/components/schemas/OrganizationSimpleDto"
           }
         },
         "additionalProperties": false
@@ -10675,7 +10694,7 @@
             "$ref": "#/components/schemas/OrganizationDto"
           },
           "StormwaterJurisdiction": {
-            "$ref": "#/components/schemas/StormwaterJurisdictionDto"
+            "$ref": "#/components/schemas/StormwaterJurisdictionGridDto"
           },
           "WaterQualityManagementPlan": {
             "$ref": "#/components/schemas/WaterQualityManagementPlanDto"
@@ -11231,7 +11250,7 @@
             "nullable": true
           },
           "StormwaterJurisdiction": {
-            "$ref": "#/components/schemas/StormwaterJurisdictionDto"
+            "$ref": "#/components/schemas/StormwaterJurisdictionGridDto"
           },
           "WaterQualityManagementPlanLandUse": {
             "$ref": "#/components/schemas/WaterQualityManagementPlanLandUseDto"

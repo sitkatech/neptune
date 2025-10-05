@@ -35,7 +35,7 @@ namespace Neptune.Models.DataTransferObjects
         public string? WaterQualityManagementPlanBoundaryNotes { get; set; }
 
         // Complex/DTO properties
-        public StormwaterJurisdictionDto? StormwaterJurisdiction { get; set; }
+        public StormwaterJurisdictionGridDto? StormwaterJurisdiction { get; set; }
         public WaterQualityManagementPlanLandUseDto? WaterQualityManagementPlanLandUse { get; set; }
         public WaterQualityManagementPlanPriorityDto? WaterQualityManagementPlanPriority { get; set; }
         public WaterQualityManagementPlanStatusDto? WaterQualityManagementPlanStatus { get; set; }

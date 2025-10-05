@@ -2,7 +2,7 @@
 
 namespace Neptune.EFModels.Entities
 {
-    public static partial class ProjectExtensionMethods
+    public static class ProjectExtensionMethods
     {
         public static ProjectDto AsDto(this Project project)
         {
@@ -37,7 +37,7 @@ namespace Neptune.EFModels.Entities
                 UpdatePersonID = project.UpdatePersonID,
                 DateUpdated = project.DateUpdated,
                 Organization = project.Organization.AsSimpleDto(),
-                StormwaterJurisdiction = project.StormwaterJurisdiction.AsDto(),
+                StormwaterJurisdiction = project.StormwaterJurisdiction.AsDisplayDto(),
                 ProjectStatus = project.ProjectStatus.AsSimpleDto(),
                 PrimaryContactPerson = project.PrimaryContactPerson.AsSimpleDto(),
                 CreatePerson = project.CreatePerson.AsSimpleDto(),

@@ -122,7 +122,8 @@ model/regional-subbasin-dto.ts
 model/regional-subbasin-revision-request-dto.ts
 model/regional-subbasin-upsert-dto.ts
 model/sizing-basis-type-dto.ts
-model/stormwater-jurisdiction-dto.ts
+model/stormwater-jurisdiction-display-dto.ts
+model/stormwater-jurisdiction-grid-dto.ts
 model/system-info-dto.ts
 model/trash-capture-status-type-dto.ts
 model/trash-generating-unit-dto.ts

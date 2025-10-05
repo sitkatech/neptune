@@ -11,12 +11,14 @@ public static class StormwaterJurisdictions
         return GetImpl(dbContext).AsNoTracking().OrderBy(ht => ht.Organization.OrganizationName).ToList();
     }
 
-    public static List<StormwaterJurisdictionDto> ListByIDsAsDto(NeptuneDbContext dbContext, List<int> stormwaterJurisdictionIDs)
+    public static async Task<List<StormwaterJurisdictionDisplayDto>> ListByIDsAsDisplayDtoAsync(NeptuneDbContext dbContext, List<int> stormwaterJurisdictionIDs)
     {
-        return GetImpl(dbContext)
+        var entities = await dbContext.StormwaterJurisdictions
+            .Include(x => x.Organization)
             .Where(x => stormwaterJurisdictionIDs.Contains(x.StormwaterJurisdictionID))
-            .OrderBy(x => x.Organization.OrganizationName)
-            .Select(x => x.AsDto())
+            .OrderBy(x => x.Organization.OrganizationName).ToListAsync();
+        return entities
+            .Select(x => x.AsDisplayDto())
             .ToList();
     }
 
@@ -91,4 +93,21 @@ public static class StormwaterJurisdictions
         var stormwaterJurisdictionIDsViewable  = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonForWQMPs(dbContext, person);
         return GetImpl(dbContext).AsNoTracking().Where(x => stormwaterJurisdictionIDsViewable.Contains(x.StormwaterJurisdictionID)).ToList();
     }
+
+    public static async Task<List<StormwaterJurisdictionGridDto>> ListAsDtoAsync(NeptuneDbContext dbContext)
+    {
+        var peopleCountByStormwaterJurisdiction = StormwaterJurisdictionPeople.ListCountByStormwaterJurisdiction(dbContext);
+        var bmpCountByStormwaterJurisdiction = TreatmentBMPs.ListCountByStormwaterJurisdiction(dbContext);
+
+        var entities = await dbContext.StormwaterJurisdictions
+            .Include(x => x.Organization)
+            .AsNoTracking().OrderBy(ht => ht.Organization.OrganizationName).ToListAsync();
+        return entities.Select(x => {
+            var dto = x.AsGridDto();
+            dto.NumberOfUsers = peopleCountByStormwaterJurisdiction.GetValueOrDefault(x.StormwaterJurisdictionID, 0);
+            dto.NumberOfBMPs = bmpCountByStormwaterJurisdiction.GetValueOrDefault(x.StormwaterJurisdictionID, 0);
+            return dto;
+        }).ToList();
+    }
+
 }

@@ -1,196 +1,182 @@
 <page-header [customRichTextTypeID]="customRichTextTypeID" pageTitle="OCTA M2 Tier 2 Grant Program"></page-header>
 
 <section class="content-section">
-  <app-alert-display></app-alert-display>
+    <app-alert-display></app-alert-display>
 
-  <div class="grid-12">
-    <div class="g-col-3" [style.height]="mapHeight">
-      <div class="card">
-        <div class="card-header card-header-dropdown" [expandCollapse]="filterBodyLocation" [startOpen]="true">
-          <h3 class="card-title">Map Overlay</h3>
-          <icon icon="AngleDown"></icon>
-        </div>
-        <div class="card-body-dropdown" #filterBodyLocation>
-          <div class="dropdown-container">
-            <ng-select
-              [(ngModel)]="selectedPrioritizationMetric"
-              [items]="prioritizationMetrics"
-              bindLabel="key"
-              [clearable]="false"
-              (change)="applyPrioritizationMetricOverlay()">
-            </ng-select>
+    <div class="grid-12">
+        <div class="g-col-3" [style.height]="mapHeight">
+            <div class="card">
+                <div class="card-header card-header-dropdown" [expandCollapse]="filterBodyLocation" [startOpen]="true">
+                    <h3 class="card-title">Map Overlay</h3>
+                    <icon icon="AngleDown"></icon>
+                </div>
+                <div class="card-body-dropdown" #filterBodyLocation>
+                    <div class="dropdown-container">
+                        <ng-select
+                            [(ngModel)]="selectedPrioritizationMetric"
+                            [items]="prioritizationMetrics"
+                            bindLabel="key"
+                            [clearable]="false"
+                            (change)="applyPrioritizationMetricOverlay()">
+                        </ng-select>
 
-            @if (selectedPrioritizationMetric != PrioritizationMetric.NoMetric) {
-              <div class="choropleth mt-2">
-                @switch (selectedPrioritizationMetric.toString()) {
-                  @case ('Strategically Effective Area Score') {
-                    <p><field-definition [fieldDefinitionType]="'SEAScore'"></field-definition></p>
-                  }
-                  @case ('Transportation Nexus Score') {
-                    <p class="text-center">
-                      <field-definition [fieldDefinitionType]="'TPIScore'"></field-definition>
-                    </p>
-                  }
-                  @case ('Receiving Water Score') {
-                    <p class="text-center">
-                      <field-definition [fieldDefinitionType]="'ReceivingWaterScore'"></field-definition>
-                    </p>
-                  }
-                  @case ('Land Use Based Water Quality Need Score') {
-                    <p class="text-center">
-                      <field-definition [fieldDefinitionType]="'LandUseBasedWaterQualityScore'"></field-definition>
-                    </p>
-                  }
-                  @default {
-                    <p class="text-center"></p>
-                  }
-                }
-                <h4>Legend</h4>
-                <ul class="legend">
-                  @for (legendColor of selectedPrioritizationMetric.legendColors; track legendColor; let i = $index) {
-                    <li>
-                      <i [style.background]="legendColor"></i>
-                      <span class="legend-text">{{ selectedPrioritizationMetric.legendValues[i] }}</span>
-                    </li>
-                  }
-                </ul>
-              </div>
-            }
-          </div>
-        </div>
-      </div>
-
-      <div class="card mt-4">
-        <div class="card-header">
-          <h3 class="card-title">Selected Project</h3>
-        </div>
-        @if (selectedProject) {
-          <div class="card-body">
-            <div class="flex-between">
-              <div class="content-section">Project</div>
-              <div class="flex-end">
-                <a [routerLink]="['/planning/projects', selectedProject.ProjectID]" class="btn btn-sm btn-primary ml-auto">View Project Details</a>
-              </div>
+                        @if (selectedPrioritizationMetric != PrioritizationMetric.NoMetric) {
+                        <div class="choropleth mt-2">
+                            @switch (selectedPrioritizationMetric.toString()) { @case ('Strategically Effective Area Score') {
+                            <p><field-definition [fieldDefinitionType]="'SEAScore'"></field-definition></p>
+                            } @case ('Transportation Nexus Score') {
+                            <p class="text-center">
+                                <field-definition [fieldDefinitionType]="'TPIScore'"></field-definition>
+                            </p>
+                            } @case ('Receiving Water Score') {
+                            <p class="text-center">
+                                <field-definition [fieldDefinitionType]="'ReceivingWaterScore'"></field-definition>
+                            </p>
+                            } @case ('Land Use Based Water Quality Need Score') {
+                            <p class="text-center">
+                                <field-definition [fieldDefinitionType]="'LandUseBasedWaterQualityScore'"></field-definition>
+                            </p>
+                            } @default {
+                            <p class="text-center"></p>
+                            } }
+                            <h4>Legend</h4>
+                            <ul class="legend">
+                                @for (legendColor of selectedPrioritizationMetric.legendColors; track legendColor; let i = $index) {
+                                <li>
+                                    <i [style.background]="legendColor"></i>
+                                    <span class="legend-text">{{ selectedPrioritizationMetric.legendValues[i] }}</span>
+                                </li>
+                                }
+                            </ul>
+                        </div>
+                        }
+                    </div>
+                </div>
             </div>
-            <dl class="grid-12 mt-3">
-              <dt class="g-col-4">Name</dt>
-              <dd class="g-col-8">
-                {{ selectedProject.ProjectName }}
-              </dd>
-              <dt class="g-col-4">Jurisdiction</dt>
-              <dd class="g-col-8">
-                {{ selectedProject.StormwaterJurisdiction.Organization.OrganizationName }}
-              </dd>
-            </dl>
-            @if (selectedTreatmentBMP != null) {
-              <hr />
-              <div class="content-section">Selected BMP</div>
-              <dl class="grid-12 mt-2">
-                <dt class="g-col-4">Name</dt>
-                <dd class="g-col-8">
-                  {{ selectedTreatmentBMP.TreatmentBMPName }}
-                </dd>
-                <dt class="g-col-4">
-                  <field-definition fieldDefinitionType="TreatmentBMPType" [labelOverride]="'Type'"> </field-definition>
-                </dt>
-                <dd class="g-col-8">
-                  {{ selectedTreatmentBMP.TreatmentBMPTypeName }}
-                </dd>
-                <dt class="g-col-4">Status</dt>
-                <dd class="g-col-8">
-                  {{ selectedProject.ProjectStatus.ProjectStatusDisplayName }}
-                </dd>
-                @if (selectedDelineation != null) {
-                  <strong>Delineation</strong>
-                  <dt class="g-col-4">
-                    <field-definition fieldDefinitionType="Area"></field-definition>
-                  </dt>
-                  <dd class="g-col-8">{{ selectedDelineation.DelineationArea }} ac</dd>
-                  <dt class="g-col-4">
-                    <field-definition fieldDefinitionType="DelineationType" [labelOverride]="'Type'"></field-definition>
-                  </dt>
-                  <dd class="g-col-8">
-                    {{ selectedDelineation.DelineationTypeName }}
-                  </dd>
+
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h3 class="card-title">Selected Project</h3>
+                </div>
+                @if (selectedProject) {
+                <div class="card-body">
+                    <div class="flex-between">
+                        <div class="content-section">Project</div>
+                        <div class="flex-end">
+                            <a [routerLink]="['/planning/projects', selectedProject.ProjectID]" class="btn btn-sm btn-primary ml-auto">View Project Details</a>
+                        </div>
+                    </div>
+                    <dl class="grid-12 mt-3">
+                        <dt class="g-col-4">Name</dt>
+                        <dd class="g-col-8">
+                            {{ selectedProject.ProjectName }}
+                        </dd>
+                        <dt class="g-col-4">Jurisdiction</dt>
+                        <dd class="g-col-8">
+                            {{ selectedProject.StormwaterJurisdiction.StormwaterJurisdictionName }}
+                        </dd>
+                    </dl>
+                    @if (selectedTreatmentBMP != null) {
+                    <hr />
+                    <div class="content-section">Selected BMP</div>
+                    <dl class="grid-12 mt-2">
+                        <dt class="g-col-4">Name</dt>
+                        <dd class="g-col-8">
+                            {{ selectedTreatmentBMP.TreatmentBMPName }}
+                        </dd>
+                        <dt class="g-col-4">
+                            <field-definition fieldDefinitionType="TreatmentBMPType" [labelOverride]="'Type'"> </field-definition>
+                        </dt>
+                        <dd class="g-col-8">
+                            {{ selectedTreatmentBMP.TreatmentBMPTypeName }}
+                        </dd>
+                        <dt class="g-col-4">Status</dt>
+                        <dd class="g-col-8">
+                            {{ selectedProject.ProjectStatus.ProjectStatusDisplayName }}
+                        </dd>
+                        @if (selectedDelineation != null) {
+                        <strong>Delineation</strong>
+                        <dt class="g-col-4">
+                            <field-definition fieldDefinitionType="Area"></field-definition>
+                        </dt>
+                        <dd class="g-col-8">{{ selectedDelineation.DelineationArea }} ac</dd>
+                        <dt class="g-col-4">
+                            <field-definition fieldDefinitionType="DelineationType" [labelOverride]="'Type'"></field-definition>
+                        </dt>
+                        <dd class="g-col-8">
+                            {{ selectedDelineation.DelineationTypeName }}
+                        </dd>
+                        }
+                    </dl>
+                    } @if (relatedTreatmentBMPs.length != 0) {
+                    <hr />
+                    <div class="content-section">Other BMPs</div>
+                    <dl class="grid-12 mt-2">
+                        @for (bmp of getRelatedBMPsToShow(); track bmp) {
+                        <dt class="g-col-4 mb-1">
+                            <button class="btn btn-primary btn-sm" (click)="selectTreatmentBMPImpl(bmp.TreatmentBMPID)">Select</button>
+                        </dt>
+                        <dd class="g-col-8 mb-1">
+                            {{ bmp.TreatmentBMPName }}
+                        </dd>
+                        } @if (getRelatedBMPsToShow().length == 0) {
+                        <div class="col font-italic">There are no other BMPs associated with this project.</div>
+                        }
+                    </dl>
+                    }
+                </div>
+                } @else {
+                <div class="card-body">
+                    Select a Treatment BMP on the map to see information about the Treatment BMP, its Project and related Treatment BMPs, and Delineation if present. Alternatively,
+                    select a row in the grid below to bring up the selected project and choose a BMP from the populated panel.
+                </div>
                 }
-              </dl>
-            }
-            @if (relatedTreatmentBMPs.length != 0) {
-              <hr />
-              <div class="content-section">Other BMPs</div>
-              <dl class="grid-12 mt-2">
-                @for (bmp of getRelatedBMPsToShow(); track bmp) {
-                  <dt class="g-col-4 mb-1">
-                    <button class="btn btn-primary btn-sm" (click)="selectTreatmentBMPImpl(bmp.TreatmentBMPID)">Select</button>
-                  </dt>
-                  <dd class="g-col-8 mb-1">
-                    {{ bmp.TreatmentBMPName }}
-                  </dd>
-                }
-                @if (getRelatedBMPsToShow().length == 0) {
-                  <div class="col font-italic">There are no other BMPs associated with this project.</div>
-                }
-              </dl>
-            }
-          </div>
-        } @else {
-          <div class="card-body">
-            Select a Treatment BMP on the map to see information about the Treatment BMP, its Project and related Treatment BMPs, and Delineation if present.
-            Alternatively, select a row in the grid below to bring up the selected project and choose a BMP from the populated panel.
-          </div>
-        }
-      </div>
-    </div>
-    <div class="g-col-9">
-      @if (boundingBox$ | async; as boundingBox) {
-        <neptune-map (onMapLoad)="handleMapReady($event)" [mapHeight]="mapHeight" [showLegend]="false" [boundingBox]="boundingBox">
-          @if (mapIsReady) {
-            <regional-subbasins-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></regional-subbasins-layer>
-          }
-          @if (mapIsReady) {
-            <stormwater-network-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="20"></stormwater-network-layer>
-          }
-          @if (mapIsReady) {
-            <jurisdictions-layer [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="30"></jurisdictions-layer>
-          }
-          @if (mapIsReady) {
-            <wqmps-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="40"></wqmps-layer>
-          }
-          @if (mapIsReady) {
-            <delineations-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="50"></delineations-layer>
-          }
-          @if (mapIsReady) {
-            <inventoried-bmps-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="60"></inventoried-bmps-layer>
-          }
-        </neptune-map>
-      }
-      @if (octaM2Tier2MapInitData$ | async) {
-        <neptune-grid
-          height="700px"
-          [rowData]="projects"
-          [columnDefs]="columnDefs"
-          rowSelection="single"
-          [downloadFileName]="'OCTA-M2-Tier2-projects'"
-          (selectionChanged)="onSelectionChanged()"
-          (gridReady)="onGridReady($event)">
-          <div customGridActionsRight class="custom-grid-actions">
-            <a
-              href="javascript:void(0);"
-              [dropdownToggle]="downloadMenuToggle"
-              class="btn btn-sm btn-secondary-outline dropdown-toggle"
-              role="button"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false">
-              Download <i class="fas fa-chevron-down mr-2"></i>
-            </a>
-            <div #downloadMenuToggle class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" (click)="downloadProjectModelResults()">Project List with Model Results</a>
-              <a class="dropdown-item" (click)="downloadTreatmentBMPModelResults()">Treatment BMP List with Model Results</a>
             </div>
-          </div>
-        </neptune-grid>
-      }
+        </div>
+        <div class="g-col-9">
+            @if (boundingBox$ | async; as boundingBox) {
+            <neptune-map (onMapLoad)="handleMapReady($event)" [mapHeight]="mapHeight" [showLegend]="false" [boundingBox]="boundingBox">
+                @if (mapIsReady) {
+                <regional-subbasins-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></regional-subbasins-layer>
+                } @if (mapIsReady) {
+                <stormwater-network-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="20"></stormwater-network-layer>
+                } @if (mapIsReady) {
+                <jurisdictions-layer [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="30"></jurisdictions-layer>
+                } @if (mapIsReady) {
+                <wqmps-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="40"></wqmps-layer>
+                } @if (mapIsReady) {
+                <delineations-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="50"></delineations-layer>
+                } @if (mapIsReady) {
+                <inventoried-bmps-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="60"></inventoried-bmps-layer>
+                }
+            </neptune-map>
+            } @if (octaM2Tier2MapInitData$ | async) {
+            <neptune-grid
+                height="700px"
+                [rowData]="projects"
+                [columnDefs]="columnDefs"
+                rowSelection="single"
+                [downloadFileName]="'OCTA-M2-Tier2-projects'"
+                (selectionChanged)="onSelectionChanged()"
+                (gridReady)="onGridReady($event)">
+                <div customGridActionsRight class="custom-grid-actions">
+                    <a
+                        href="javascript:void(0);"
+                        [dropdownToggle]="downloadMenuToggle"
+                        class="btn btn-sm btn-secondary-outline dropdown-toggle"
+                        role="button"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false">
+                        Download <i class="fas fa-chevron-down mr-2"></i>
+                    </a>
+                    <div #downloadMenuToggle class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" (click)="downloadProjectModelResults()">Project List with Model Results</a>
+                        <a class="dropdown-item" (click)="downloadTreatmentBMPModelResults()">Treatment BMP List with Model Results</a>
+                    </div>
+                </div>
+            </neptune-grid>
+            }
+        </div>
     </div>
-  </div>
 </section>

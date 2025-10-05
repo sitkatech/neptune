@@ -7,33 +7,44 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { OrganizationSimpleDto } from './organization-simple-dto';
 
 
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
-export class StormwaterJurisdictionDto { 
+export class StormwaterJurisdictionGridDto { 
     StormwaterJurisdictionID?: number;
+    StormwaterJurisdictionName?: string | null;
     OrganizationID?: number;
-    StateProvinceID?: number;
-    StormwaterJurisdictionPublicBMPVisibilityTypeID?: number;
-    StormwaterJurisdictionPublicWQMPVisibilityTypeID?: number;
-    Organization?: OrganizationSimpleDto;
+    StormwaterJurisdictionPublicBMPVisibilityTypeName?: string | null;
+    StormwaterJurisdictionPublicWQMPVisibilityTypeName?: string | null;
+    NumberOfUsers?: number;
+    NumberOfBMPs?: number;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
 }
 
-export interface StormwaterJurisdictionDtoForm { 
+export interface StormwaterJurisdictionGridDtoForm { 
     StormwaterJurisdictionID?: FormControl<number>;
+    StormwaterJurisdictionName?: FormControl<string>;
     OrganizationID?: FormControl<number>;
-    StateProvinceID?: FormControl<number>;
-    StormwaterJurisdictionPublicBMPVisibilityTypeID?: FormControl<number>;
-    StormwaterJurisdictionPublicWQMPVisibilityTypeID?: FormControl<number>;
-    Organization?: FormControl<OrganizationSimpleDto>;
+    StormwaterJurisdictionPublicBMPVisibilityTypeName?: FormControl<string>;
+    StormwaterJurisdictionPublicWQMPVisibilityTypeName?: FormControl<string>;
+    NumberOfUsers?: FormControl<number>;
+    NumberOfBMPs?: FormControl<number>;
 }
 
-export class StormwaterJurisdictionDtoFormControls { 
+export class StormwaterJurisdictionGridDtoFormControls { 
     public static StormwaterJurisdictionID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static StormwaterJurisdictionName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {
@@ -53,7 +64,7 @@ export class StormwaterJurisdictionDtoFormControls {
             ],
         }
     );
-    public static StateProvinceID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+    public static StormwaterJurisdictionPublicBMPVisibilityTypeName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {
@@ -63,7 +74,7 @@ export class StormwaterJurisdictionDtoFormControls {
             ],
         }
     );
-    public static StormwaterJurisdictionPublicBMPVisibilityTypeID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+    public static StormwaterJurisdictionPublicWQMPVisibilityTypeName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {
@@ -73,7 +84,7 @@ export class StormwaterJurisdictionDtoFormControls {
             ],
         }
     );
-    public static StormwaterJurisdictionPublicWQMPVisibilityTypeID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+    public static NumberOfUsers = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
         {
@@ -83,7 +94,7 @@ export class StormwaterJurisdictionDtoFormControls {
             ],
         }
     );
-    public static Organization = (value: FormControlState<OrganizationSimpleDto> | OrganizationSimpleDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<OrganizationSimpleDto>(
+    public static NumberOfBMPs = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
         {

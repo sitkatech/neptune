@@ -21,8 +21,8 @@ import { VTreatmentBMPModelingAttributeDto } from './v-treatment-bmp-modeling-at
 import { NereidResultDto } from './nereid-result-dto';
 import { ProjectNereidResultDto } from './project-nereid-result-dto';
 import { TreatmentBMPBenchmarkAndThresholdDto } from './treatment-bmp-benchmark-and-threshold-dto';
-import { StormwaterJurisdictionDto } from './stormwater-jurisdiction-dto';
 import { TrashCaptureStatusTypeDto } from './trash-capture-status-type-dto';
+import { StormwaterJurisdictionGridDto } from './stormwater-jurisdiction-grid-dto';
 import { TreatmentBMPLifeSpanTypeDto } from './treatment-bmp-life-span-type-dto';
 
 
@@ -71,7 +71,7 @@ export class TreatmentBMPDto {
     WatershedFieldDefinitionText?: string | null;
     Project?: ProjectDto;
     OwnerOrganization?: OrganizationDto;
-    StormwaterJurisdiction?: StormwaterJurisdictionDto;
+    StormwaterJurisdiction?: StormwaterJurisdictionGridDto;
     WaterQualityManagementPlan?: WaterQualityManagementPlanDto;
     MaintenanceRecords?: Array<MaintenanceRecordDto> | null;
     TreatmentBMPAssessments?: Array<TreatmentBMPAssessmentDto> | null;
@@ -133,7 +133,7 @@ export interface TreatmentBMPDtoForm {
     WatershedFieldDefinitionText?: FormControl<string>;
     Project?: FormControl<ProjectDto>;
     OwnerOrganization?: FormControl<OrganizationDto>;
-    StormwaterJurisdiction?: FormControl<StormwaterJurisdictionDto>;
+    StormwaterJurisdiction?: FormControl<StormwaterJurisdictionGridDto>;
     WaterQualityManagementPlan?: FormControl<WaterQualityManagementPlanDto>;
     MaintenanceRecords?: FormControl<Array<MaintenanceRecordDto>>;
     TreatmentBMPAssessments?: FormControl<Array<TreatmentBMPAssessmentDto>>;
@@ -579,7 +579,7 @@ export class TreatmentBMPDtoFormControls {
             ],
         }
     );
-    public static StormwaterJurisdiction = (value: FormControlState<StormwaterJurisdictionDto> | StormwaterJurisdictionDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<StormwaterJurisdictionDto>(
+    public static StormwaterJurisdiction = (value: FormControlState<StormwaterJurisdictionGridDto> | StormwaterJurisdictionGridDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<StormwaterJurisdictionGridDto>(
         value,
         formControlOptions ?? 
         {

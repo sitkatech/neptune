@@ -17,7 +17,9 @@ import { Observable }                                        from 'rxjs';
 // @ts-ignore
 import { BoundingBoxDto } from '../model/bounding-box-dto';
 // @ts-ignore
-import { StormwaterJurisdictionDto } from '../model/stormwater-jurisdiction-dto';
+import { StormwaterJurisdictionDisplayDto } from '../model/stormwater-jurisdiction-display-dto';
+// @ts-ignore
+import { StormwaterJurisdictionGridDto } from '../model/stormwater-jurisdiction-grid-dto';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -145,9 +147,9 @@ export class StormwaterJurisdictionService extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public listStormwaterJurisdiction(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<StormwaterJurisdictionDto>>;
-    public listStormwaterJurisdiction(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<StormwaterJurisdictionDto>>>;
-    public listStormwaterJurisdiction(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<StormwaterJurisdictionDto>>>;
+    public listStormwaterJurisdiction(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<StormwaterJurisdictionGridDto>>;
+    public listStormwaterJurisdiction(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<StormwaterJurisdictionGridDto>>>;
+    public listStormwaterJurisdiction(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<StormwaterJurisdictionGridDto>>>;
     public listStormwaterJurisdiction(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
@@ -179,7 +181,7 @@ export class StormwaterJurisdictionService extends BaseService {
 
         let localVarPath = `/jurisdictions`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<StormwaterJurisdictionDto>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<StormwaterJurisdictionGridDto>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -196,10 +198,10 @@ export class StormwaterJurisdictionService extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public listViewableStormwaterJurisdictionIDsStormwaterJurisdiction(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<StormwaterJurisdictionDto>>;
-    public listViewableStormwaterJurisdictionIDsStormwaterJurisdiction(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<StormwaterJurisdictionDto>>>;
-    public listViewableStormwaterJurisdictionIDsStormwaterJurisdiction(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<StormwaterJurisdictionDto>>>;
-    public listViewableStormwaterJurisdictionIDsStormwaterJurisdiction(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listViewableStormwaterJurisdiction(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<StormwaterJurisdictionDisplayDto>>;
+    public listViewableStormwaterJurisdiction(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<StormwaterJurisdictionDisplayDto>>>;
+    public listViewableStormwaterJurisdiction(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<StormwaterJurisdictionDisplayDto>>>;
+    public listViewableStormwaterJurisdiction(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -230,7 +232,7 @@ export class StormwaterJurisdictionService extends BaseService {
 
         let localVarPath = `/jurisdictions/user-viewable`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<StormwaterJurisdictionDto>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<StormwaterJurisdictionDisplayDto>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

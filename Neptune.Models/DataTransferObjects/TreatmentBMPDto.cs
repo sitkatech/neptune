@@ -53,7 +53,7 @@ namespace Neptune.Models.DataTransferObjects
         public string? WatershedFieldDefinitionText { get; set; }
         public ProjectDto? Project { get; set; }
         public OrganizationDto? OwnerOrganization { get; set; }
-        public StormwaterJurisdictionDto? StormwaterJurisdiction { get; set; }
+        public StormwaterJurisdictionGridDto? StormwaterJurisdiction { get; set; }
         public WaterQualityManagementPlanDto? WaterQualityManagementPlan { get; set; }
         public List<MaintenanceRecordDto>? MaintenanceRecords { get; set; }
         public List<TreatmentBMPAssessmentDto>? TreatmentBMPAssessments { get; set; }

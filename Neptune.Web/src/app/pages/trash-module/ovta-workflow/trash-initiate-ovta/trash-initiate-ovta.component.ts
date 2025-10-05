@@ -22,7 +22,7 @@ import { LandUseBlockLayerComponent } from "../../../../shared/components/leafle
 import { ParcelLayerComponent } from "../../../../shared/components/leaflet/layers/parcel-layer/parcel-layer.component";
 import { WorkflowBodyComponent } from "../../../../shared/components/workflow-body/workflow-body.component";
 import { AlertDisplayComponent } from "../../../../shared/components/alert-display/alert-display.component";
-import { OnlandVisualTrashAssessmentAreaSimpleDto, StormwaterJurisdictionDto } from "src/app/shared/generated/model/models";
+import { OnlandVisualTrashAssessmentAreaSimpleDto, StormwaterJurisdictionDisplayDto } from "src/app/shared/generated/model/models";
 import { OnlandVisualTrashAssessmentAreaService } from "src/app/shared/generated/api/onland-visual-trash-assessment-area.service";
 import { NgSelectModule } from "@ng-select/ng-select";
 
@@ -76,8 +76,8 @@ export class TrashInitiateOvtaComponent {
         fillOpacity: 0.1,
     };
 
-    public stormwaterJurisdictions$: Observable<StormwaterJurisdictionDto[]>;
-    private stormwaterJurisdictionSubject = new BehaviorSubject<StormwaterJurisdictionDto | null>(null);
+    public stormwaterJurisdictions$: Observable<StormwaterJurisdictionDisplayDto[]>;
+    private stormwaterJurisdictionSubject = new BehaviorSubject<StormwaterJurisdictionDisplayDto | null>(null);
     public stormwaterJurisdiction$ = this.stormwaterJurisdictionSubject.asObservable();
     public onlandVisualTrashAssessmentAreas$: Observable<OnlandVisualTrashAssessmentAreaSimpleDto[]>;
 
@@ -100,7 +100,7 @@ export class TrashInitiateOvtaComponent {
 
     ngOnInit() {
         this.formGroup.controls.AssessingNewArea.patchValue(false);
-        this.stormwaterJurisdictions$ = this.stormwaterJurisdictionService.listStormwaterJurisdiction().pipe(
+        this.stormwaterJurisdictions$ = this.stormwaterJurisdictionService.listViewableStormwaterJurisdiction().pipe(
             tap((x) => {
                 const defaultJurisdiction = x[0];
                 this.formGroup.controls.StormwaterJurisdictionID.patchValue(defaultJurisdiction.StormwaterJurisdictionID);
@@ -178,7 +178,7 @@ export class TrashInitiateOvtaComponent {
             });
     }
 
-    public onJurisdictionSelected(event: StormwaterJurisdictionDto) {
+    public onJurisdictionSelected(event: StormwaterJurisdictionDisplayDto) {
         this.stormwaterJurisdictionSubject.next(event);
         this.getStormwaterJurisdictionBounds(event.StormwaterJurisdictionID);
     }

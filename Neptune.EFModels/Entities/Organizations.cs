@@ -49,16 +49,6 @@ public static class Organizations
         return GetImpl(dbContext).AsNoTracking().ToList().OrderBy(x => x.GetDisplayName()).ToList();
     }
 
-    public static List<OrganizationSimpleDto> ListAsSimpleDtos(NeptuneDbContext dbContext)
-    {
-        var organizations = dbContext.Organizations
-            .AsNoTracking()
-            .OrderBy(x => x.OrganizationName)
-            .Select(x => x.AsSimpleDto())
-            .ToList();
-        return organizations;
-    }
-
     public static List<Organization> ListActive(NeptuneDbContext dbContext)
     {
         return GetImpl(dbContext).AsNoTracking().Where(x => x.IsActive).ToList().OrderBy(x => x.GetDisplayName()).ToList();

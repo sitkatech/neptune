@@ -19,9 +19,9 @@ import { WaterQualityManagementPlanDevelopmentTypeDto } from './water-quality-ma
 import { HydrologicSubareaDto } from './hydrologic-subarea-dto';
 import { WaterQualityManagementPlanStatusDto } from './water-quality-management-plan-status-dto';
 import { WaterQualityManagementPlanBoundaryDto } from './water-quality-management-plan-boundary-dto';
-import { StormwaterJurisdictionDto } from './stormwater-jurisdiction-dto';
 import { TrashCaptureStatusTypeDto } from './trash-capture-status-type-dto';
 import { WaterQualityManagementPlanPermitTermDto } from './water-quality-management-plan-permit-term-dto';
+import { StormwaterJurisdictionGridDto } from './stormwater-jurisdiction-grid-dto';
 import { WaterQualityManagementPlanDocumentDto } from './water-quality-management-plan-document-dto';
 
 
@@ -54,7 +54,7 @@ export class WaterQualityManagementPlanDto {
     WaterQualityManagementPlanModelingApproachID?: number;
     LastNereidLogID?: number | null;
     WaterQualityManagementPlanBoundaryNotes?: string | null;
-    StormwaterJurisdiction?: StormwaterJurisdictionDto;
+    StormwaterJurisdiction?: StormwaterJurisdictionGridDto;
     WaterQualityManagementPlanLandUse?: WaterQualityManagementPlanLandUseDto;
     WaterQualityManagementPlanPriority?: WaterQualityManagementPlanPriorityDto;
     WaterQualityManagementPlanStatus?: WaterQualityManagementPlanStatusDto;
@@ -103,7 +103,7 @@ export interface WaterQualityManagementPlanDtoForm {
     WaterQualityManagementPlanModelingApproachID?: FormControl<number>;
     LastNereidLogID?: FormControl<number>;
     WaterQualityManagementPlanBoundaryNotes?: FormControl<string>;
-    StormwaterJurisdiction?: FormControl<StormwaterJurisdictionDto>;
+    StormwaterJurisdiction?: FormControl<StormwaterJurisdictionGridDto>;
     WaterQualityManagementPlanLandUse?: FormControl<WaterQualityManagementPlanLandUseDto>;
     WaterQualityManagementPlanPriority?: FormControl<WaterQualityManagementPlanPriorityDto>;
     WaterQualityManagementPlanStatus?: FormControl<WaterQualityManagementPlanStatusDto>;
@@ -392,7 +392,7 @@ export class WaterQualityManagementPlanDtoFormControls {
             ],
         }
     );
-    public static StormwaterJurisdiction = (value: FormControlState<StormwaterJurisdictionDto> | StormwaterJurisdictionDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<StormwaterJurisdictionDto>(
+    public static StormwaterJurisdiction = (value: FormControlState<StormwaterJurisdictionGridDto> | StormwaterJurisdictionGridDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<StormwaterJurisdictionGridDto>(
         value,
         formControlOptions ?? 
         {

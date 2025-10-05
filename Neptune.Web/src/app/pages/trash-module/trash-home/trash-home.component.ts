@@ -26,7 +26,7 @@ import { LoadResultsDto } from "src/app/shared/generated/model/load-results-dto"
 import { OVTAResultsDto } from "src/app/shared/generated/model/ovta-results-dto";
 import { LeafletHelperService } from "src/app/shared/services/leaflet-helper.service";
 import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto";
-import { IFeature, StormwaterJurisdictionDto, TrashGeneratingUnitDto } from "src/app/shared/generated/model/models";
+import { IFeature, StormwaterJurisdictionDisplayDto, TrashGeneratingUnitDto } from "src/app/shared/generated/model/models";
 import { WqmpsTrashCaptureLayerComponent } from "src/app/shared/components/leaflet/layers/wqmps-trash-capture-layer/wqmps-trash-capture-layer.component";
 import { OvtaAreasLayerComponent } from "src/app/shared/components/leaflet/layers/ovta-areas-layer/ovta-areas-layer.component";
 import { TrashGeneratingUnitLoadsLayerComponent } from "src/app/shared/components/leaflet/layers/trash-generating-unit-loads-layer/trash-generating-unit-loads-layer.component";
@@ -79,9 +79,9 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
     public mapIsReady: boolean = false;
     public layerControl: L.Control.Layers;
 
-    public stormwaterJurisdictions$: Observable<Array<StormwaterJurisdictionDto>>;
-    public currentStormwaterJurisdiction: StormwaterJurisdictionDto;
-    private stormwaterJurisdictionSubject = new BehaviorSubject<StormwaterJurisdictionDto | null>(null);
+    public stormwaterJurisdictions$: Observable<Array<StormwaterJurisdictionDisplayDto>>;
+    public currentStormwaterJurisdiction: StormwaterJurisdictionDisplayDto;
+    private stormwaterJurisdictionSubject = new BehaviorSubject<StormwaterJurisdictionDisplayDto | null>(null);
     public stormwaterJurisdiction$ = this.stormwaterJurisdictionSubject.asObservable();
 
     public selectedStormwaterJurisdictionLayer: L.GeoJSON<any>;
@@ -163,7 +163,7 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.stormwaterJurisdictions$ = this.stormwaterJurisdictionService.listStormwaterJurisdiction().pipe(
+        this.stormwaterJurisdictions$ = this.stormwaterJurisdictionService.listViewableStormwaterJurisdiction().pipe(
             tap((x) => {
                 this.stormwaterJurisdictionSubject.next(x[0]);
                 this.currentStormwaterJurisdiction = x[0];
@@ -284,7 +284,7 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
         this.addSelectedJurisdictionLayer(this.currentStormwaterJurisdiction.StormwaterJurisdictionID);
     }
 
-    public onJurisdictionSelected(selectedJurisdiction: StormwaterJurisdictionDto) {
+    public onJurisdictionSelected(selectedJurisdiction: StormwaterJurisdictionDisplayDto) {
         this.stormwaterJurisdictionSubject.next(selectedJurisdiction);
         this.currentStormwaterJurisdiction = selectedJurisdiction;
         this.cdr.detectChanges();

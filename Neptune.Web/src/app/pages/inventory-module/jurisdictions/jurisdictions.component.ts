@@ -7,7 +7,7 @@ import { AsyncPipe } from "@angular/common";
 import { ColDef } from "ag-grid-community";
 import { Observable, tap } from "rxjs";
 import { StormwaterJurisdictionService } from "src/app/shared/generated/api/stormwater-jurisdiction.service";
-import { StormwaterJurisdictionDto } from "src/app/shared/generated/model/stormwater-jurisdiction-dto";
+import { StormwaterJurisdictionGridDto } from "src/app/shared/generated/model/stormwater-jurisdiction-grid-dto";
 import { UtilityFunctionsService } from "src/app/services/utility-functions.service";
 import { AlertService } from "src/app/shared/services/alert.service";
 import { Map } from "leaflet";
@@ -23,7 +23,7 @@ import { JurisdictionsLayerComponent } from "src/app/shared/components/leaflet/l
     styleUrl: "./jurisdictions.component.scss",
 })
 export class JurisdictionsComponent {
-    public jurisdictions$: Observable<StormwaterJurisdictionDto[]>;
+    public jurisdictions$: Observable<StormwaterJurisdictionGridDto[]>;
     public columnDefs: ColDef[];
     public customRichTextTypeID = NeptunePageTypeEnum.Jurisdiction;
     public map: Map;
@@ -37,11 +37,11 @@ export class JurisdictionsComponent {
 
     ngOnInit(): void {
         this.columnDefs = [
-            this.utilityFunctionsService.createBasicColumnDef("Name", "Organization.OrganizationName"),
+            this.utilityFunctionsService.createBasicColumnDef("Name", "StormwaterJurisdictionName"),
             this.utilityFunctionsService.createBasicColumnDef("# of Users", "NumberOfUsers"),
             this.utilityFunctionsService.createBasicColumnDef("# of BMPs", "NumberOfBMPs"),
-            this.utilityFunctionsService.createBasicColumnDef("Public BMP Visibility", "PublicBMPVisibilityType.PublicBMPVisibilityTypeName"),
-            this.utilityFunctionsService.createBasicColumnDef("Public WQMP Visibility", "PublicWQMPVisibilityType.PublicWQMPVisibilityTypeName"),
+            this.utilityFunctionsService.createBasicColumnDef("Public BMP Visibility", "StormwaterJurisdictionPublicBMPVisibilityTypeName"),
+            this.utilityFunctionsService.createBasicColumnDef("Public WQMP Visibility", "StormwaterJurisdictionPublicWQMPVisibilityTypeName"),
         ];
         this.jurisdictions$ = this.jurisdictionService.listStormwaterJurisdiction().pipe(tap(() => (this.isLoading = false)));
         this.boundingBox$ = this.jurisdictionService.getBoundingBoxStormwaterJurisdiction();
