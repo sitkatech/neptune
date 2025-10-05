@@ -169,8 +169,8 @@
                 <div class="col-xs-8" style="padding: 0">
                     <select id="jurisdictionDropDown" class="selectpicker" data-width="100%" multiple="multiple" ng-change="filterMapByJurisdiction()" ng-model="selectedJurisdictionIDs"
                             data-selected-text-format="count>1" data-count-selected-text="{0} of {1} selected" data-actions-box="true">
-                        <option ng-repeat="jurisdiction in AngularViewData.Jurisdictions | orderBy:'StormwaterJurisdictionDisplayName'" value="{{jurisdiction.StormwaterJurisdictionID}}">
-                            {{jurisdiction.StormwaterJurisdictionDisplayName}}
+                        <option ng-repeat="jurisdiction in AngularViewData.Jurisdictions | orderBy:'StormwaterJurisdictionName'" value="{{jurisdiction.StormwaterJurisdictionID}}">
+                            {{jurisdiction.StormwaterJurisdictionName}}
                         </option>
                     </select>
                 </div>
