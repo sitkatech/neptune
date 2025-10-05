@@ -1,5 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Neptune.Common.DesignByContract;
+using Neptune.Models.DataTransferObjects;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Neptune.EFModels.Entities;
 
@@ -34,5 +38,45 @@ public static class LoadGeneratingUnits
             .SingleOrDefault(x => x.LoadGeneratingUnitID == loadGeneratingUnitID);
         Check.RequireNotNull(loadGeneratingUnit, $"Load Generating Unit with ID {loadGeneratingUnitID} not found!");
         return loadGeneratingUnit;
+    }
+
+    public static async Task<List<LoadGeneratingUnitDto>> ListAsDtoAsync(NeptuneDbContext dbContext)
+    {
+        var entities = await dbContext.LoadGeneratingUnits.AsNoTracking().ToListAsync();
+        return entities.Select(x => x.ToDto()).ToList();
+    }
+
+    public static async Task<LoadGeneratingUnitDto?> GetByIDAsDtoAsync(NeptuneDbContext dbContext, int id)
+    {
+        var entity = await dbContext.LoadGeneratingUnits.AsNoTracking().FirstOrDefaultAsync(x => x.LoadGeneratingUnitID == id);
+        return entity?.ToDto();
+    }
+
+    public static async Task<LoadGeneratingUnitDto> CreateAsync(NeptuneDbContext dbContext, LoadGeneratingUnitDto dto)
+    {
+        var entity = new LoadGeneratingUnit();
+        entity.UpdateFromDto(dto);
+        dbContext.LoadGeneratingUnits.Add(entity);
+        await dbContext.SaveChangesAsync();
+        return entity.ToDto();
+    }
+
+    public static async Task<LoadGeneratingUnitDto?> UpdateAsync(NeptuneDbContext dbContext, int id, LoadGeneratingUnitDto dto)
+    {
+        var entity = await dbContext.LoadGeneratingUnits.Include(x => x.HRUCharacteristics).FirstOrDefaultAsync(x => x.LoadGeneratingUnitID == id);
+        if (entity == null) return null;
+        entity.UpdateFromDto(dto);
+        await dbContext.SaveChangesAsync();
+        return entity.ToDto();
+    }
+
+    public static async Task<bool> DeleteAsync(NeptuneDbContext dbContext, int id)
+    {
+        var entity = await dbContext.LoadGeneratingUnits.Include(x => x.HRUCharacteristics).FirstOrDefaultAsync(x => x.LoadGeneratingUnitID == id);
+        if (entity == null) return false;
+        dbContext.HRUCharacteristics.RemoveRange(entity.HRUCharacteristics);
+        dbContext.LoadGeneratingUnits.Remove(entity);
+        await dbContext.SaveChangesAsync();
+        return true;
     }
 }

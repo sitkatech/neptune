@@ -976,6 +976,213 @@
         }
       }
     },
+    "/load-generating-units": {
+      "get": {
+        "tags": [
+          "LoadGeneratingUnit"
+        ],
+        "operationId": "List_LoadGeneratingUnit",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LoadGeneratingUnitDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LoadGeneratingUnitDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LoadGeneratingUnitDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "LoadGeneratingUnit"
+        ],
+        "operationId": "Create_LoadGeneratingUnit",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoadGeneratingUnitDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoadGeneratingUnitDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoadGeneratingUnitDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoadGeneratingUnitDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoadGeneratingUnitDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoadGeneratingUnitDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/load-generating-units/{loadGeneratingUnitID}": {
+      "get": {
+        "tags": [
+          "LoadGeneratingUnit"
+        ],
+        "operationId": "Get_LoadGeneratingUnit",
+        "parameters": [
+          {
+            "name": "loadGeneratingUnitID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoadGeneratingUnitDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoadGeneratingUnitDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoadGeneratingUnitDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "LoadGeneratingUnit"
+        ],
+        "operationId": "Update_LoadGeneratingUnit",
+        "parameters": [
+          {
+            "name": "loadGeneratingUnitID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoadGeneratingUnitDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoadGeneratingUnitDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoadGeneratingUnitDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoadGeneratingUnitDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoadGeneratingUnitDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoadGeneratingUnitDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "LoadGeneratingUnit"
+        ],
+        "operationId": "Delete_LoadGeneratingUnit",
+        "parameters": [
+          {
+            "name": "loadGeneratingUnitID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/nereid/delta-solve": {
       "get": {
         "tags": [
@@ -7301,6 +7508,50 @@
           "PermitTypeID": {
             "type": "integer",
             "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "LoadGeneratingUnitDto": {
+        "type": "object",
+        "properties": {
+          "LoadGeneratingUnitID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ModelBasinID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "RegionalSubbasinID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "DelineationID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "WaterQualityManagementPlanID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "IsEmptyResponseFromHRUService": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "DateHRURequested": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "HRULogID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
           }
         },
         "additionalProperties": false

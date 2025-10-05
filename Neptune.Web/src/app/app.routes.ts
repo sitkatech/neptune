@@ -131,7 +131,7 @@ export const routes: Routes = [
             {
                 path: "load-generating-units",
                 title: "Load Generating Units",
-                loadComponent: () => import("./pages/inventory-module/manage/load-generating-units.component").then((m) => m.LoadGeneratingUnitsComponent),
+                loadComponent: () => import("./pages/inventory-module/load-generating-units/load-generating-units.component").then((m) => m.LoadGeneratingUnitsComponent),
             },
             {
                 path: "hru-characteristics",

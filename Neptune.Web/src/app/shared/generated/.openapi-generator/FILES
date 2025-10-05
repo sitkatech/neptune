@@ -9,6 +9,7 @@ api/file-resource.service.ts
 api/funding-event-by-treatment-bmpid.service.ts
 api/funding-source.service.ts
 api/land-use-block.service.ts
+api/load-generating-unit.service.ts
 api/nereid.service.ts
 api/onland-visual-trash-assessment-area.service.ts
 api/onland-visual-trash-assessment-observation.service.ts
@@ -64,6 +65,7 @@ model/i-attributes-table.ts
 model/i-feature.ts
 model/land-use-block-grid-dto.ts
 model/land-use-block-upsert-dto.ts
+model/load-generating-unit-dto.ts
 model/load-results-dto.ts
 model/maintenance-record-dto.ts
 model/models.ts

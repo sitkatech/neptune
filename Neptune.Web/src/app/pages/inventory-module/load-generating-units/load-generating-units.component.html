@@ -1,0 +1,23 @@
+<page-header title="Load Generating Units"></page-header>
+<app-alert-display></app-alert-display>
+@if (boundingBox$ | async; as boundingBox) {
+<hybrid-map-grid
+    [rowData]="loadGeneratingUnits$ | async"
+    [columnDefs]="columnDefs"
+    rowSelection="single"
+    downloadFileName="load-generating-units"
+    entityIDField="LoadGeneratingUnitID"
+    (onMapLoad)="handleMapReady($event, boundingBox)"
+    [selectedValue]="selectedLoadGeneratingUnitID"
+    [selectionFromMap]="true"
+    (selectedValueChange)="onSelectedLoadGeneratingUnitIDChanged($event)">
+    <load-generating-units-layer
+        [map]="map"
+        [layerControl]="layerControl"
+        [interactive]="true"
+        [displayOnLoad]="true"
+        [selectedID]="selectedLoadGeneratingUnitID"
+        (selected)="onSelectedLoadGeneratingUnitIDChanged($event, true)">
+    </load-generating-units-layer>
+</hybrid-map-grid>
+}
