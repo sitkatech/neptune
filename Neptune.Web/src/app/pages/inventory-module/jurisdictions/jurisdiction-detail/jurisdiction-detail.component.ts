@@ -9,6 +9,7 @@ import { UtilityFunctionsService } from "src/app/services/utility-functions.serv
 import { NeptuneGridComponent } from "src/app/shared/components/neptune-grid/neptune-grid.component";
 import { PersonDisplayDto, StormwaterJurisdictionGridDto, TreatmentBMPGridDto } from "src/app/shared/generated/model/models";
 import { StormwaterJurisdictionService } from "src/app/shared/generated/api/stormwater-jurisdiction.service";
+import { tap } from "rxjs";
 
 @Component({
     selector: "jurisdiction-detail",
@@ -35,6 +36,7 @@ export class JurisdictionDetailComponent implements OnInit, OnChanges {
 
     usersCol1: PersonDisplayDto[] = [];
     usersCol2: PersonDisplayDto[] = [];
+    usersCol3: PersonDisplayDto[] = [];
 
     constructor(private stormwaterJurisdictionService: StormwaterJurisdictionService, private utilityFunctionsService: UtilityFunctionsService) {}
 
@@ -68,12 +70,14 @@ export class JurisdictionDetailComponent implements OnInit, OnChanges {
 
     private loadData(): void {
         this.jurisdiction$ = this.stormwaterJurisdictionService.getStormwaterJurisdiction(this.jurisdictionID);
-        this.users$ = this.stormwaterJurisdictionService.listUsersStormwaterJurisdiction(this.jurisdictionID);
+        this.users$ = this.stormwaterJurisdictionService.listUsersStormwaterJurisdiction(this.jurisdictionID).pipe(
+            tap((users) => {
+                const third = Math.ceil(users.length / 3);
+                this.usersCol1 = users.slice(0, third);
+                this.usersCol2 = users.slice(third, third * 2);
+                this.usersCol3 = users.slice(third * 2);
+            })
+        );
         this.treatmentBMPs$ = this.stormwaterJurisdictionService.listTreatmentBMPsStormwaterJurisdiction(this.jurisdictionID);
-        this.users$.subscribe((users) => {
-            const mid = Math.ceil(users.length / 2);
-            this.usersCol1 = users.slice(0, mid);
-            this.usersCol2 = users.slice(mid);
-        });
     }
 }
