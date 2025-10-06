@@ -177,5 +177,13 @@ namespace Neptune.API.Controllers
             return Ok(fieldVisits);
         }
 
+        [HttpGet("modeling-attributes")]
+        [LoggedInUnclassifiedFeature]
+        public async Task<ActionResult<List<TreatmentBMPModelingAttributesDto>>> ListWithModelingAttributes()
+        {
+            var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonIDForBMPs(dbContext, CallingUser.PersonID);
+            var dtos = await TreatmentBMPs.ListWithModelingAttributesAsync(DbContext, stormwaterJurisdictionIDsPersonCanView);
+            return Ok(dtos);
+        }
     }
 }

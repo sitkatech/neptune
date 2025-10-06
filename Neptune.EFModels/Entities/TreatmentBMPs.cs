@@ -423,15 +423,84 @@ namespace Neptune.EFModels.Entities
             return toReturn;
         }
 
-        public static List<TreatmentBMP> ListModelingTreatmentBMPsWithCentralizedDelineations(NeptuneDbContext dbContext)
+        public static async Task<List<TreatmentBMPModelingAttributesDto>> ListWithModelingAttributesAsync(NeptuneDbContext dbContext, List<int> stormwaterJurisdictionIDsPersonCanView)
         {
-            return dbContext.TreatmentBMPs
+            var treatmentBmps = await dbContext.TreatmentBMPs
                 .Include(x => x.TreatmentBMPType)
+                .Include(x => x.StormwaterJurisdiction)
+                .ThenInclude(x => x.Organization)
+                .Include(x => x.UpstreamBMP)
+                .ThenInclude(x => x.TreatmentBMPType)
+                .Include(x => x.Watershed)
                 .Include(x => x.Delineation)
-                .Where(x => x.RegionalSubbasinID != null && x.TreatmentBMPType.IsAnalyzedInModelingModule &&
-                            x.ModelBasinID != null && x.Delineation != null &&
-                            x.Delineation.DelineationTypeID == DelineationType.Centralized.DelineationTypeID &&
-                            x.Delineation.IsVerified).ToList();
+                .AsNoTracking()
+                .Where(x => x.TreatmentBMPType.IsAnalyzedInModelingModule &&
+                            stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID))
+                .ToListAsync();
+
+            var delineations= vTreatmentBMPUpstreams.ListWithDelineationAsDictionaryIncludeTreatmentBMPType(dbContext);
+            var watersheds = await dbContext.Watersheds.AsNoTracking().Select(x => new { x.WatershedID, x.WatershedName }).ToDictionaryAsync(x => x.WatershedID, x => x.WatershedName);
+            var precipitationZones = await dbContext.PrecipitationZones.AsNoTracking()
+                .Select(x => new { x.PrecipitationZoneID, x.DesignStormwaterDepthInInches })
+                .ToDictionaryAsync(x => x.PrecipitationZoneID, x => x.DesignStormwaterDepthInInches);
+
+            var modeledLandUseAreas = await dbContext.vTreatmentBMPModeledLandUseAreas.AsNoTracking().ToDictionaryAsync(x => x.TreatmentBMPID.Value, x => x.Area);
+            var modelingAttributes = await dbContext.vTreatmentBMPModelingAttributes.AsNoTracking().ToDictionaryAsync(x => x.TreatmentBMPID, x => x);
+
+            return treatmentBmps.Select(bmp => {
+                var delineation = bmp.Delineation ?? (delineations.GetValueOrDefault(bmp.TreatmentBMPID));
+                var modeling = modelingAttributes.GetValueOrDefault(bmp.TreatmentBMPID);
+                var watershedName = bmp.WatershedID.HasValue && watersheds.TryGetValue(bmp.WatershedID.Value, out var watershed) ? watershed : null;
+                var precipitationDepth = bmp.PrecipitationZoneID.HasValue && precipitationZones.TryGetValue(bmp.PrecipitationZoneID.Value, out var zone) ? zone : (double?)null;
+                var modeledArea = modeledLandUseAreas.GetValueOrDefault(bmp.TreatmentBMPID, null);
+                return new TreatmentBMPModelingAttributesDto
+                {
+                    TreatmentBMPID = bmp.TreatmentBMPID,
+                    TreatmentBMPName = bmp.TreatmentBMPName,
+                    TreatmentBMPTypeID = bmp.TreatmentBMPTypeID,
+                    TreatmentBMPTypeName = bmp.TreatmentBMPType?.TreatmentBMPTypeName,
+                    StormwaterJurisdictionID = bmp.StormwaterJurisdictionID,
+                    StormwaterJurisdictionName = bmp.StormwaterJurisdiction?.Organization?.OrganizationName,
+                    WatershedID = bmp.WatershedID,
+                    WatershedName = watershedName,
+                    PrecipitationZoneID = bmp.PrecipitationZoneID,
+                    DesignStormwaterDepthInInches = precipitationDepth,
+                    DelineationID = delineation?.DelineationID,
+                    DelineationTypeName = delineation?.DelineationType?.DelineationTypeDisplayName,
+                    DelineationStatus = delineation?.GetDelineationStatus(),
+                    DelineationAreaAcres = delineation?.GetDelineationArea(),
+                    ModeledLandUseAreaAcres = modeledArea,
+                    IsFullyParameterized = bmp.IsFullyParameterized(delineation, modeling),
+                    AverageDivertedFlowrate = modeling?.AverageDivertedFlowrate,
+                    AverageTreatmentFlowrate = modeling?.AverageTreatmentFlowrate,
+                    DesignDryWeatherTreatmentCapacity = modeling?.DesignDryWeatherTreatmentCapacity,
+                    DesignLowFlowDiversionCapacity = modeling?.DesignLowFlowDiversionCapacity,
+                    DesignMediaFiltrationRate = modeling?.DesignMediaFiltrationRate,
+                    DrawdownTimeForWQDetentionVolume = modeling?.DrawdownTimeForWQDetentionVolume,
+                    EffectiveFootprint = modeling?.EffectiveFootprint,
+                    EffectiveRetentionDepth = modeling?.EffectiveRetentionDepth,
+                    InfiltrationDischargeRate = modeling?.InfiltrationDischargeRate,
+                    InfiltrationSurfaceArea = modeling?.InfiltrationSurfaceArea,
+                    MediaBedFootprint = modeling?.MediaBedFootprint,
+                    MonthsOperational = modeling?.MonthsOperational,
+                    PermanentPoolOrWetlandVolume = modeling?.PermanentPoolOrWetlandVolume,
+                    StorageVolumeBelowLowestOutletElevation = modeling?.StorageVolumeBelowLowestOutletElevation,
+                    SummerHarvestedWaterDemand = modeling?.SummerHarvestedWaterDemand,
+                    TimeOfConcentration = modeling?.TimeOfConcentration,
+                    TotalEffectiveBMPVolume = modeling?.TotalEffectiveBMPVolume,
+                    TotalEffectiveDrywellBMPVolume = modeling?.TotalEffectiveDrywellBMPVolume,
+                    TreatmentRate = modeling?.TreatmentRate,
+                    UnderlyingHydrologicSoilGroup = modeling?.UnderlyingHydrologicSoilGroup,
+                    UnderlyingInfiltrationRate = modeling?.UnderlyingInfiltrationRate,
+                    ExtendedDetentionSurchargeVolume = modeling?.ExtendedDetentionSurchargeVolume,
+                    WettedFootprint = modeling?.WettedFootprint,
+                    WinterHarvestedWaterDemand = modeling?.WinterHarvestedWaterDemand,
+                    UpstreamBMPID = bmp.UpstreamBMPID,
+                    UpstreamBMPName = bmp.UpstreamBMP?.TreatmentBMPName,
+                    DownstreamOfNonModeledBMP = bmp is { UpstreamBMPID: not null, UpstreamBMP: not null } && !(bmp.UpstreamBMP.TreatmentBMPType?.IsAnalyzedInModelingModule ?? true),
+                    DryWeatherFlowOverride = modeling?.DryWeatherFlowOverride
+                };
+            }).ToList();
         }
     }
 }

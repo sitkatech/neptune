@@ -18,11 +18,6 @@ namespace Neptune.WebMvc.Models
             return $"{delineationAcresAsString} ac";
         }
 
-        public static string GetDelineationStatus(this Delineation? delineation)
-        {
-            return delineation != null ? delineation.IsVerified ? "Verified" : "Provisional" : "None";
-        }
-
         public static FeatureCollection ToGeoJsonFeatureCollection(this IEnumerable<Delineation> delineationGeometryStagings)
         {
             var featureCollection = new FeatureCollection();

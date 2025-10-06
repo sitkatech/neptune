@@ -320,13 +320,15 @@ export class UtilityFunctionsService {
         return dateColDef;
     }
 
-    public createBooleanColumnDef(headerName: string, fieldName: string): ColDef {
-        return {
+    public createBooleanColumnDef(headerName: string, fieldName: string, linkColumnDefParams?: LinkColumnDefParams): ColDef {
+        const colDef: ColDef<any, any> = {
             headerName: headerName,
             valueGetter: (params) => this.defaultValueGetter(params, fieldName),
             valueFormatter: (params) => this.booleanValueGetter(params.value),
             filter: true,
         };
+        this.applyDefaultQanatColumnDefParams(colDef, linkColumnDefParams);
+        return colDef;
     }
 
     public applyDefaultQanatColumnDefParams(colDef: ColDef, params: QanatColumnDefParams) {
