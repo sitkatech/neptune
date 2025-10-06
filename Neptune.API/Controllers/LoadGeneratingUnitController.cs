@@ -26,9 +26,9 @@ public class LoadGeneratingUnitController : SitkaController<LoadGeneratingUnitCo
 
     [HttpGet]
     [AdminFeature]
-    public async Task<ActionResult<List<LoadGeneratingUnitDto>>> List()
+    public async Task<ActionResult<List<LoadGeneratingUnitGridDto>>> List()
     {
-        var dtos = await LoadGeneratingUnits.ListAsDtoAsync(DbContext);
+        var dtos = await LoadGeneratingUnits.ListAsGridDtoAsync(DbContext);
         return Ok(dtos);
     }
 
@@ -40,33 +40,5 @@ public class LoadGeneratingUnitController : SitkaController<LoadGeneratingUnitCo
         var dto = await LoadGeneratingUnits.GetByIDAsDtoAsync(DbContext, loadGeneratingUnitID);
         if (dto == null) return NotFound();
         return Ok(dto);
-    }
-
-    [HttpPost]
-    [AdminFeature]
-    public async Task<ActionResult<LoadGeneratingUnitDto>> Create([FromBody] LoadGeneratingUnitDto dto)
-    {
-        var created = await LoadGeneratingUnits.CreateAsync(DbContext, dto);
-        return CreatedAtAction(nameof(Get), new { loadGeneratingUnitID = created.LoadGeneratingUnitID }, created);
-    }
-
-    [HttpPut("{loadGeneratingUnitID}")]
-    [AdminFeature]
-    [EntityNotFoundAttribute(typeof(LoadGeneratingUnit), "loadGeneratingUnitID")]
-    public async Task<ActionResult<LoadGeneratingUnitDto>> Update([FromRoute] int loadGeneratingUnitID, [FromBody] LoadGeneratingUnitDto dto)
-    {
-        var updated = await LoadGeneratingUnits.UpdateAsync(DbContext, loadGeneratingUnitID, dto);
-        if (updated == null) return NotFound();
-        return Ok(updated);
-    }
-
-    [HttpDelete("{loadGeneratingUnitID}")]
-    [AdminFeature]
-    [EntityNotFoundAttribute(typeof(LoadGeneratingUnit), "loadGeneratingUnitID")]
-    public async Task<IActionResult> Delete([FromRoute] int loadGeneratingUnitID)
-    {
-        var deleted = await LoadGeneratingUnits.DeleteAsync(DbContext, loadGeneratingUnitID);
-        if (!deleted) return NotFound();
-        return NoContent();
     }
 }

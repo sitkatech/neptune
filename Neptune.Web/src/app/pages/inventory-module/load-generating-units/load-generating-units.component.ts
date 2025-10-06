@@ -6,13 +6,13 @@ import { AsyncPipe } from "@angular/common";
 import { ColDef } from "ag-grid-community";
 import { Observable, tap } from "rxjs";
 import { LoadGeneratingUnitService } from "src/app/shared/generated/api/load-generating-unit.service";
-import { LoadGeneratingUnitDto } from "src/app/shared/generated/model/load-generating-unit-dto";
 import { UtilityFunctionsService } from "src/app/services/utility-functions.service";
 import { AlertService } from "src/app/shared/services/alert.service";
 import { Map } from "leaflet";
 import { NeptuneMapInitEvent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
 import { LoadGeneratingUnitsLayerComponent } from "src/app/shared/components/leaflet/layers/load-generating-units-layer/load-generating-units-layer.component";
 import { StormwaterJurisdictionService } from "src/app/shared/generated/api/stormwater-jurisdiction.service";
+import { LoadGeneratingUnitGridDto } from "src/app/shared/generated/model/models";
 
 @Component({
     selector: "load-generating-units",
@@ -21,7 +21,7 @@ import { StormwaterJurisdictionService } from "src/app/shared/generated/api/stor
     styleUrl: "./load-generating-units.component.scss",
 })
 export class LoadGeneratingUnitsComponent {
-    public loadGeneratingUnits$: Observable<LoadGeneratingUnitDto[]>;
+    public loadGeneratingUnits$: Observable<LoadGeneratingUnitGridDto[]>;
     public columnDefs: ColDef[];
     public map: Map;
     public layerControl: L.Control.Layers;
@@ -39,14 +39,24 @@ export class LoadGeneratingUnitsComponent {
 
     ngOnInit(): void {
         this.columnDefs = [
-            this.utilityFunctionsService.createBasicColumnDef("LoadGeneratingUnitID", "LoadGeneratingUnitID"),
-            this.utilityFunctionsService.createBasicColumnDef("ModelBasinID", "ModelBasinID"),
-            this.utilityFunctionsService.createBasicColumnDef("RegionalSubbasinID", "RegionalSubbasinID"),
-            this.utilityFunctionsService.createBasicColumnDef("DelineationID", "DelineationID"),
-            this.utilityFunctionsService.createBasicColumnDef("WaterQualityManagementPlanID", "WaterQualityManagementPlanID"),
-            this.utilityFunctionsService.createBasicColumnDef("IsEmptyResponseFromHRUService", "IsEmptyResponseFromHRUService"),
-            this.utilityFunctionsService.createBasicColumnDef("DateHRURequested", "DateHRURequested"),
-            this.utilityFunctionsService.createBasicColumnDef("HRULogID", "HRULogID"),
+            this.utilityFunctionsService.createLinkColumnDef("LGU ID", "LoadGeneratingUnitID", "LoadGeneratingUnitID", {
+                InRouterLink: "/inventory/load-generating-units/",
+            }),
+            this.utilityFunctionsService.createLinkColumnDef("TreatmentBMP", "TreatmentBMPName", "TreatmentBMPID", {
+                InRouterLink: "/inventory/treatment-bmps/",
+                FieldDefinitionType: "TreatmentBMP",
+            }),
+            this.utilityFunctionsService.createLinkColumnDef("WaterQualityManagementPlan", "WaterQualityManagementPlanName", "WaterQualityManagementPlanID", {
+                InRouterLink: "/inventory/water-quality-management-plans/",
+                FieldDefinitionType: "WaterQualityManagementPlan",
+            }),
+            this.utilityFunctionsService.createLinkColumnDef("RegionalSubbasin", "RegionalSubbasinName", "RegionalSubbasinID", {
+                InRouterLink: "/inventory/regional-subbasins/",
+                FieldDefinitionType: "RegionalSubbasin",
+            }),
+            this.utilityFunctionsService.createBasicColumnDef("Model Basin", "ModelBasinID"),
+            this.utilityFunctionsService.createDateColumnDef("Date HRU Requested", "DateHRURequested", "short"),
+            this.utilityFunctionsService.createBooleanColumnDef("Is Empty", "IsEmptyResponseFromHRUService"),
         ];
         this.loadGeneratingUnits$ = this.loadGeneratingUnitService.listLoadGeneratingUnit().pipe(tap(() => (this.isLoading = false)));
         this.boundingBox$ = this.jurisdictionService.getBoundingBoxStormwaterJurisdiction();

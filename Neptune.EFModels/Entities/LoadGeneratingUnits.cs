@@ -40,16 +40,25 @@ public static class LoadGeneratingUnits
         return loadGeneratingUnit;
     }
 
-    public static async Task<List<LoadGeneratingUnitDto>> ListAsDtoAsync(NeptuneDbContext dbContext)
+    public static async Task<List<LoadGeneratingUnitGridDto>> ListAsGridDtoAsync(NeptuneDbContext dbContext)
     {
-        var entities = await dbContext.LoadGeneratingUnits.AsNoTracking().ToListAsync();
-        return entities.Select(x => x.ToDto()).ToList();
+        var entities = await dbContext.LoadGeneratingUnits
+            .Include(x => x.RegionalSubbasin)
+            .Include(x => x.WaterQualityManagementPlan)
+            .Include(x => x.Delineation)
+            .ThenInclude(x => x.TreatmentBMP)
+            .AsNoTracking().ToListAsync();
+        return entities.Select(x => x.AsGridDto()).ToList();
     }
 
-    public static async Task<LoadGeneratingUnitDto?> GetByIDAsDtoAsync(NeptuneDbContext dbContext, int id)
+    public static async Task<LoadGeneratingUnitDto?> GetByIDAsDtoAsync(NeptuneDbContext dbContext, int loadGeneratingUnitID)
     {
-        var entity = await dbContext.LoadGeneratingUnits.AsNoTracking().FirstOrDefaultAsync(x => x.LoadGeneratingUnitID == id);
-        return entity?.ToDto();
+        var entity = await dbContext.LoadGeneratingUnits
+            .Include(x => x.RegionalSubbasin)
+            .Include(x => x.WaterQualityManagementPlan)
+            .Include(x => x.Delineation)
+            .ThenInclude(x => x.TreatmentBMP).AsNoTracking().FirstOrDefaultAsync(x => x.LoadGeneratingUnitID == loadGeneratingUnitID);
+        return entity?.AsDto();
     }
 
     public static async Task<LoadGeneratingUnitDto> CreateAsync(NeptuneDbContext dbContext, LoadGeneratingUnitDto dto)
@@ -58,21 +67,21 @@ public static class LoadGeneratingUnits
         entity.UpdateFromDto(dto);
         dbContext.LoadGeneratingUnits.Add(entity);
         await dbContext.SaveChangesAsync();
-        return entity.ToDto();
+        return entity.AsDto();
     }
 
-    public static async Task<LoadGeneratingUnitDto?> UpdateAsync(NeptuneDbContext dbContext, int id, LoadGeneratingUnitDto dto)
+    public static async Task<LoadGeneratingUnitDto?> UpdateAsync(NeptuneDbContext dbContext, int loadGeneratingUnitID, LoadGeneratingUnitDto dto)
     {
-        var entity = await dbContext.LoadGeneratingUnits.Include(x => x.HRUCharacteristics).FirstOrDefaultAsync(x => x.LoadGeneratingUnitID == id);
+        var entity = await dbContext.LoadGeneratingUnits.Include(x => x.HRUCharacteristics).FirstOrDefaultAsync(x => x.LoadGeneratingUnitID == loadGeneratingUnitID);
         if (entity == null) return null;
         entity.UpdateFromDto(dto);
         await dbContext.SaveChangesAsync();
-        return entity.ToDto();
+        return entity.AsDto();
     }
 
-    public static async Task<bool> DeleteAsync(NeptuneDbContext dbContext, int id)
+    public static async Task<bool> DeleteAsync(NeptuneDbContext dbContext, int loadGeneratingUnitID)
     {
-        var entity = await dbContext.LoadGeneratingUnits.Include(x => x.HRUCharacteristics).FirstOrDefaultAsync(x => x.LoadGeneratingUnitID == id);
+        var entity = await dbContext.LoadGeneratingUnits.Include(x => x.HRUCharacteristics).FirstOrDefaultAsync(x => x.LoadGeneratingUnitID == loadGeneratingUnitID);
         if (entity == null) return false;
         dbContext.HRUCharacteristics.RemoveRange(entity.HRUCharacteristics);
         dbContext.LoadGeneratingUnits.Remove(entity);

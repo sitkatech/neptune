@@ -33,6 +33,7 @@ export * from './i-feature';
 export * from './land-use-block-grid-dto';
 export * from './land-use-block-upsert-dto';
 export * from './load-generating-unit-dto';
+export * from './load-generating-unit-grid-dto';
 export * from './load-results-dto';
 export * from './maintenance-record-dto';
 export * from './neptune-page-dto';

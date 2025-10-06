@@ -10,42 +10,36 @@
 
 
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
-export class LoadGeneratingUnitDto { 
+export class LoadGeneratingUnitGridDto { 
     LoadGeneratingUnitID?: number;
     ModelBasinID?: number | null;
     RegionalSubbasinID?: number | null;
     RegionalSubbasinName?: string | null;
-    DelineationID?: number | null;
     TreatmentBMPID?: number | null;
     TreatmentBMPName?: string | null;
     WaterQualityManagementPlanID?: number | null;
     WaterQualityManagementPlanName?: string | null;
     IsEmptyResponseFromHRUService?: boolean | null;
     DateHRURequested?: string | null;
-    HRULogID?: number | null;
-    Area?: number | null;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
 }
 
-export interface LoadGeneratingUnitDtoForm { 
+export interface LoadGeneratingUnitGridDtoForm { 
     LoadGeneratingUnitID?: FormControl<number>;
     ModelBasinID?: FormControl<number>;
     RegionalSubbasinID?: FormControl<number>;
     RegionalSubbasinName?: FormControl<string>;
-    DelineationID?: FormControl<number>;
     TreatmentBMPID?: FormControl<number>;
     TreatmentBMPName?: FormControl<string>;
     WaterQualityManagementPlanID?: FormControl<number>;
     WaterQualityManagementPlanName?: FormControl<string>;
     IsEmptyResponseFromHRUService?: FormControl<boolean>;
     DateHRURequested?: FormControl<string>;
-    HRULogID?: FormControl<number>;
-    Area?: FormControl<number>;
 }
 
-export class LoadGeneratingUnitDtoFormControls { 
+export class LoadGeneratingUnitGridDtoFormControls { 
     public static LoadGeneratingUnitID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
@@ -77,16 +71,6 @@ export class LoadGeneratingUnitDtoFormControls {
         }
     );
     public static RegionalSubbasinName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static DelineationID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
         {
@@ -147,26 +131,6 @@ export class LoadGeneratingUnitDtoFormControls {
         }
     );
     public static DateHRURequested = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static HRULogID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static Area = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
         {
