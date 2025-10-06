@@ -125,11 +125,6 @@ export const routes: Routes = [
                 loadComponent: () => import("./pages/inventory-module/manage/homepage-configuration.component").then((m) => m.HomepageConfigurationComponent),
             },
             {
-                path: "manage/page-content",
-                title: "Page Content",
-                loadComponent: () => import("./pages/inventory-module/manage/page-content.component").then((m) => m.PageContentComponent),
-            },
-            {
                 path: "manage/custom-attributes",
                 title: "Custom Attributes",
                 loadComponent: () => import("./pages/inventory-module/manage/custom-attributes.component").then((m) => m.CustomAttributesComponent),

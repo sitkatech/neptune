@@ -30,6 +30,7 @@ export class GenericWmsWfsLayerComponent extends MapLayerBase implements OnChang
         opacity: 0.65,
         fillOpacity: 0.1,
     };
+    @Input() cqlFilter: string = "1=1";
     @Output() selected = new EventEmitter<number>();
     public wfsLayer: L.FeatureGroup;
     public layer: L.Layer;
@@ -46,7 +47,7 @@ export class GenericWmsWfsLayerComponent extends MapLayerBase implements OnChang
                 format: "image/png",
                 tiled: true,
                 styles: this.wmsStyle,
-                cql_filter: "1=1",
+                cql_filter: this.cqlFilter,
             } as any;
             this.layer = L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", wmsOptions);
         }

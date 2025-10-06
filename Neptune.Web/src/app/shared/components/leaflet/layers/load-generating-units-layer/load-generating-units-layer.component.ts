@@ -25,5 +25,15 @@ export class LoadGeneratingUnitsLayerComponent {
         opacity: 0.65,
         fillOpacity: 0.1,
     };
+    @Input() filterToIDs: number[];
+    cqlFilter: string;
     @Output() selected = new EventEmitter<number>();
+
+    ngOnChanges(): void {
+        if (this.filterToIDs && this.filterToIDs.length > 0) {
+            this.cqlFilter = `${this.identifierProperty} in (${this.filterToIDs.join(",")})`;
+        } else {
+            this.cqlFilter = "1=1";
+        }
+    }
 }
