@@ -43,7 +43,7 @@ export class JurisdictionDetailComponent implements OnInit, OnChanges {
     ngOnInit(): void {
         this.treatmentBMPColumnDefs = [
             this.utilityFunctionsService.createLinkColumnDef("Name", "TreatmentBMPName", "TreatmentBMPID", {
-                InRouterLink: "/inventory/treatment-bmp-detail/",
+                InRouterLink: "/inventory/treatment-bmps/",
             }),
             this.utilityFunctionsService.createBasicColumnDef("Jurisdiction", "StormwaterJurisdictionName"),
             this.utilityFunctionsService.createBasicColumnDef("Owner Organization", "OwnerOrganizationName"),

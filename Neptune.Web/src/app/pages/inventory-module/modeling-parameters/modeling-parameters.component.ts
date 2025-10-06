@@ -26,7 +26,7 @@ export class ModelingParametersComponent {
     ngOnInit(): void {
         this.columnDefs = [
             this.utilityFunctionsService.createLinkColumnDef("Name", "TreatmentBMPName", "TreatmentBMPID", {
-                InRouterLink: "/inventory/treatment-bmp-detail/",
+                InRouterLink: "/inventory/treatment-bmps/",
                 FieldDefinitionType: "TreatmentBMP",
                 FieldDefinitionLabelOverride: "BMP Name",
             }),
@@ -48,7 +48,7 @@ export class ModelingParametersComponent {
                 FieldDefinitionLabelOverride: "Land Use Area (ac)",
             }),
             this.utilityFunctionsService.createLinkColumnDef("Jurisdiction", "StormwaterJurisdictionName", "StormwaterJurisdictionID", {
-                InRouterLink: "/inventory/jurisdiction-detail/",
+                InRouterLink: "/inventory/jurisdictions/",
                 FieldDefinitionType: "Jurisdiction",
             }),
             this.utilityFunctionsService.createBasicColumnDef("Watershed", "WatershedName", {
@@ -155,7 +155,7 @@ export class ModelingParametersComponent {
                 FieldDefinitionLabelOverride: "Winter Harvested Water Demand (gpd)",
             }),
             this.utilityFunctionsService.createLinkColumnDef("Upstream BMP Name", "UpstreamBMPName", "UpstreamBMPID", {
-                InRouterLink: "/inventory/treatment-bmp-detail/",
+                InRouterLink: "/inventory/treatment-bmps/",
                 FieldDefinitionType: "UpstreamBMP",
                 FieldDefinitionLabelOverride: "Upstream BMP",
             }),

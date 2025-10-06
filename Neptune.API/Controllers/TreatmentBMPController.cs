@@ -28,8 +28,8 @@ namespace Neptune.API.Controllers
         [LoggedInUnclassifiedFeature]
         public async Task<ActionResult<List<TreatmentBMPGridDto>>> List()
         {
-            var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonIDForBMPs(dbContext, CallingUser.PersonID);
-            var entities = await dbContext.vTreatmentBMPDetaileds
+            var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonIDForBMPs(DbContext, CallingUser.PersonID);
+            var entities = await DbContext.vTreatmentBMPDetaileds
                 .Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID))
                 .ToListAsync();
             var treatmentBMPGridDtos = entities.Select(x => x.AsGridDto())
@@ -102,7 +102,7 @@ namespace Neptune.API.Controllers
         [UserViewFeature]
         public ActionResult<TreatmentBMPDto> GetByID([FromRoute] int treatmentBMPID)
         {
-            var treatmentBMP = dbContext.TreatmentBMPs
+            var treatmentBMP = DbContext.TreatmentBMPs
                 .Include(x => x.TreatmentBMPType)
                 .Include(x => x.StormwaterJurisdiction)
                 .ThenInclude(x => x.Organization)
@@ -119,27 +119,27 @@ namespace Neptune.API.Controllers
         [JurisdictionEditFeature]
         public async Task<IActionResult> Delete([FromRoute] int treatmentBMPID)
         {
-            var treatmentBMP = TreatmentBMPs.GetByIDWithChangeTracking(dbContext, treatmentBMPID);
+            var treatmentBMP = TreatmentBMPs.GetByIDWithChangeTracking(DbContext, treatmentBMPID);
 
-            var delineation = Delineations.GetByTreatmentBMPIDWithChangeTracking(dbContext, treatmentBMP.TreatmentBMPID);
+            var delineation = Delineations.GetByTreatmentBMPIDWithChangeTracking(DbContext, treatmentBMP.TreatmentBMPID);
             var delineationGeometry = delineation?.DelineationGeometry;
             var isDelineationDistributed = delineation != null && delineation.DelineationTypeID == (int)DelineationTypeEnum.Distributed;
 
-            await EFModels.Nereid.NereidUtilities.MarkDownstreamNodeDirty(treatmentBMP, dbContext);
+            await EFModels.Nereid.NereidUtilities.MarkDownstreamNodeDirty(treatmentBMP, DbContext);
 
             // Remove upstream references
             foreach (var downstreamBMP in treatmentBMP.InverseUpstreamBMP)
             {
                 downstreamBMP.UpstreamBMPID = null;
             }
-            await dbContext.SaveChangesAsync();
+            await DbContext.SaveChangesAsync();
 
-            await treatmentBMP.DeleteFull(dbContext);
+            await treatmentBMP.DeleteFull(DbContext);
 
             // Queue LGU refresh if needed
             if (isDelineationDistributed && delineationGeometry != null)
             {
-                await ModelingEngineUtilities.QueueLGURefreshForArea(delineationGeometry, null, dbContext);
+                await ModelingEngineUtilities.QueueLGURefreshForArea(delineationGeometry, null, DbContext);
             }
 
             return NoContent();
@@ -148,14 +148,14 @@ namespace Neptune.API.Controllers
         [HttpGet("{treatmentBMPID}/hru-characteristics")]
         [EntityNotFound(typeof(TreatmentBMP), "treatmentBMPID")]
         [SitkaAdminFeature]
-        public ActionResult<List<HRUCharacteristicDto>> ListHRUCharacteristics([FromRoute] int treatmentBMPID)
+        public async Task<ActionResult<List<HRUCharacteristicDto>>> ListHRUCharacteristics([FromRoute] int treatmentBMPID)
         {
-            var treatmentBMP = TreatmentBMPs.GetByID(dbContext, treatmentBMPID);
-            var treatmentBMPTree = dbContext.vTreatmentBMPUpstreams.AsNoTracking()
+            var treatmentBMP = TreatmentBMPs.GetByID(DbContext, treatmentBMPID);
+            var treatmentBMPTree = DbContext.vTreatmentBMPUpstreams.AsNoTracking()
                 .Single(x => x.TreatmentBMPID == treatmentBMP.TreatmentBMPID);
-            var upstreamestBMP = treatmentBMPTree.UpstreamBMPID.HasValue ? TreatmentBMPs.GetByID(dbContext, treatmentBMPTree.UpstreamBMPID) : null;
-            var delineation = Delineations.GetByTreatmentBMPID(dbContext, upstreamestBMP?.TreatmentBMPID ?? treatmentBMP.TreatmentBMPID);
-            var hruCharacteristics = vHRUCharacteristics.ListByTreatmentBMPAsDto(dbContext, upstreamestBMP ?? treatmentBMP, delineation);
+            var upstreamestBMP = treatmentBMPTree.UpstreamBMPID.HasValue ? TreatmentBMPs.GetByID(DbContext, treatmentBMPTree.UpstreamBMPID) : null;
+            var delineation = Delineations.GetByTreatmentBMPID(DbContext, upstreamestBMP?.TreatmentBMPID ?? treatmentBMP.TreatmentBMPID);
+            var hruCharacteristics = await vHRUCharacteristics.ListByTreatmentBMPAsDtoAsync(DbContext, upstreamestBMP ?? treatmentBMP, delineation);
             return Ok(hruCharacteristics);
         }
 
@@ -164,7 +164,7 @@ namespace Neptune.API.Controllers
         [SitkaAdminFeature]
         public ActionResult<List<CustomAttributeDto>> ListCustomAttributes([FromRoute] int treatmentBMPID)
         {
-            var customAttributes = CustomAttributes.ListByTreatmentBMPIDAsDto(dbContext, treatmentBMPID);
+            var customAttributes = CustomAttributes.ListByTreatmentBMPIDAsDto(DbContext, treatmentBMPID);
             return Ok(customAttributes);
         }
 
@@ -173,7 +173,7 @@ namespace Neptune.API.Controllers
         [TreatmentBMPViewFeature]
         public ActionResult<List<FieldVisitDto>> FieldVisitGridJsonData([FromRoute] int treatmentBMPID)
         {
-            var fieldVisits = vFieldVisitDetaileds.ListAsDtoByTreatmentBMPID(dbContext, treatmentBMPID);
+            var fieldVisits = vFieldVisitDetaileds.ListAsDtoByTreatmentBMPID(DbContext, treatmentBMPID);
             return Ok(fieldVisits);
         }
 
@@ -181,7 +181,7 @@ namespace Neptune.API.Controllers
         [LoggedInUnclassifiedFeature]
         public async Task<ActionResult<List<TreatmentBMPModelingAttributesDto>>> ListWithModelingAttributes()
         {
-            var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonIDForBMPs(dbContext, CallingUser.PersonID);
+            var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonIDForBMPs(DbContext, CallingUser.PersonID);
             var dtos = await TreatmentBMPs.ListWithModelingAttributesAsync(DbContext, stormwaterJurisdictionIDsPersonCanView);
             return Ok(dtos);
         }

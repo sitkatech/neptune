@@ -31,10 +31,10 @@ namespace Neptune.WebMvc.Controllers
 
         [HttpGet]
         [NeptuneAdminFeature]
-        public GridJsonNetJObjectResult<vHRUCharacteristic> HRUCharacteristicGridJsonData()
+        public async Task<GridJsonNetJObjectResult<vHRUCharacteristic>> HRUCharacteristicGridJsonData()
         {
             var gridSpec = new HRUCharacteristicGridSpec(_linkGenerator);
-            var hruCharacteristics = vHRUCharacteristics.List(_dbContext);
+            var hruCharacteristics = await vHRUCharacteristics.List(_dbContext);
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<vHRUCharacteristic>(hruCharacteristics, gridSpec);
             return gridJsonNetJObjectResult;
         }

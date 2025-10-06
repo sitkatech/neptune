@@ -5,13 +5,9 @@ namespace Neptune.EFModels.Entities;
 
 public static class vHRUCharacteristics
 {
-    private static IQueryable<vHRUCharacteristic> GetImpl(NeptuneDbContext dbContext)
+    public static Task<List<vHRUCharacteristic>> List(NeptuneDbContext dbContext)
     {
-        return dbContext.vHRUCharacteristics.AsNoTracking();
-    }
-    public static List<vHRUCharacteristic> List(NeptuneDbContext dbContext)
-    {
-        return GetImpl(dbContext).ToList();
+        return dbContext.vHRUCharacteristics.AsNoTracking().ToListAsync();
     }
 
     public static List<vHRUCharacteristic> ListByWaterQualityManagementPlanID(NeptuneDbContext dbContext,
@@ -20,33 +16,33 @@ public static class vHRUCharacteristics
         var waterQualityManagementPlan = WaterQualityManagementPlans.GetByID(dbContext, waterQualityManagementPlanID);
         if (waterQualityManagementPlan.WaterQualityManagementPlanModelingApproachID == (int) WaterQualityManagementPlanModelingApproachEnum.Simplified)
         {
-            return GetImpl(dbContext).Where(x =>
+            return dbContext.vHRUCharacteristics.AsNoTracking().Where(x =>
                 x.WaterQualityManagementPlanID == waterQualityManagementPlanID).ToList();
         }
 
         var treatmentBMPIDs = waterQualityManagementPlan.TreatmentBMPs.Select(x => x.TreatmentBMPID).ToList();
-        return GetImpl(dbContext).Where(x =>
+        return dbContext.vHRUCharacteristics.AsNoTracking().Where(x =>
             x.TreatmentBMPID.HasValue &&
             treatmentBMPIDs.Contains(x.TreatmentBMPID.Value)).ToList();
     }
 
     public static List<vHRUCharacteristic> ListByRegionalSubbasinID(NeptuneDbContext dbContext, int regionalSubbasinID)
     {
-        return GetImpl(dbContext)
+        return dbContext.vHRUCharacteristics.AsNoTracking()
             .Where(x => x.RegionalSubbasinID == regionalSubbasinID).ToList();
     }
 
     public static List<vHRUCharacteristic> ListByLoadGeneratingUnitID(NeptuneDbContext dbContext,
         int loadGeneratingUnitID)
     {
-        return GetImpl(dbContext).Where(x => x.LoadGeneratingUnitID == loadGeneratingUnitID).ToList();
+        return dbContext.vHRUCharacteristics.AsNoTracking().Where(x => x.LoadGeneratingUnitID == loadGeneratingUnitID).ToList();
     }
 
-    public static List<vHRUCharacteristic> ListByTreatmentBMP(NeptuneDbContext dbContext, TreatmentBMP treatmentBMP, Delineation? delineation)
+    public static async Task<List<vHRUCharacteristic>> ListByTreatmentBMP(NeptuneDbContext dbContext, TreatmentBMP treatmentBMP, Delineation? delineation)
     {
         if (delineation == null)
         {
-            return new List<vHRUCharacteristic>();
+            return [];
         }
 
         if (delineation.DelineationType == DelineationType.Centralized && treatmentBMP.TreatmentBMPType.TreatmentBMPModelingTypeID.HasValue)
@@ -57,17 +53,24 @@ public static class vHRUCharacteristics
             }
             var catchmentRegionalSubbasins = vRegionalSubbasinUpstreams.ListUpstreamRegionalBasinIDs(dbContext, treatmentBMP.RegionalSubbasinID.Value);
 
-            return GetImpl(dbContext).Where(x =>
+            return await dbContext.vHRUCharacteristics.AsNoTracking().Where(x =>
                 x.RegionalSubbasinID != null &&
-                catchmentRegionalSubbasins.Contains(x.RegionalSubbasinID.Value)).ToList();
+                catchmentRegionalSubbasins.Contains(x.RegionalSubbasinID.Value)).ToListAsync();
         }
 
-        return GetImpl(dbContext)
-            .Where(x => x.TreatmentBMPID != null && x.TreatmentBMPID == treatmentBMP.TreatmentBMPID).ToList();
+        return await dbContext.vHRUCharacteristics.AsNoTracking()
+            .Where(x => x.TreatmentBMPID != null && x.TreatmentBMPID == treatmentBMP.TreatmentBMPID).ToListAsync();
     }
 
-    public static List<HRUCharacteristicDto> ListByTreatmentBMPAsDto(NeptuneDbContext dbContext, TreatmentBMP treatmentBMP, Delineation? delineation)
+    public static async Task<List<HRUCharacteristicDto>> ListByTreatmentBMPAsDtoAsync(NeptuneDbContext dbContext, TreatmentBMP treatmentBMP, Delineation? delineation)
     {
-        return ListByTreatmentBMP(dbContext, treatmentBMP, delineation).Select(x => x.AsDto()).ToList();
+        var entities = await ListByTreatmentBMP(dbContext, treatmentBMP, delineation);
+        return entities.Select(x => x.AsDto()).ToList();
+    }
+
+    public static async Task<List<HRUCharacteristicDto>> ListAsDtoAsync(NeptuneDbContext dbContext)
+    {
+        var entities = await dbContext.vHRUCharacteristics.AsNoTracking().ToListAsync();
+        return entities.Select(x => x.AsDto()).ToList();
     }
 }

@@ -32,7 +32,7 @@ export const routes: Routes = [
                 loadComponent: () => import("./pages/inventory-module/jurisdictions/jurisdictions.component").then((m) => m.JurisdictionsComponent),
             },
             {
-                path: `jurisdiction-detail/:${routeParams.jurisdictionID}`,
+                path: `jurisdictions/:${routeParams.jurisdictionID}`,
                 title: "Jurisdiction Detail",
                 loadComponent: () => import("./pages/inventory-module/jurisdictions/jurisdiction-detail/jurisdiction-detail.component").then((m) => m.JurisdictionDetailComponent),
             },
@@ -52,7 +52,7 @@ export const routes: Routes = [
                 loadComponent: () => import("./pages/inventory-module/treatment-bmps/treatment-bmps.component").then((m) => m.TreatmentBmpsComponent),
             },
             {
-                path: `treatment-bmp-detail/:${routeParams.treatmentBMPID}`,
+                path: `treatment-bmps/:${routeParams.treatmentBMPID}`,
                 title: "Treatment BMP Detail",
                 loadComponent: () =>
                     import("./pages/inventory-module/treatment-bmps/treatment-bmp-detail/treatment-bmp-detail.component").then((m) => m.TreatmentBmpDetailComponent),
@@ -142,7 +142,7 @@ export const routes: Routes = [
             {
                 path: "hru-characteristics",
                 title: "HRU Characteristics",
-                loadComponent: () => import("./pages/inventory-module/manage/hru-characteristics.component").then((m) => m.HruCharacteristicsComponent),
+                loadComponent: () => import("./pages/inventory-module/hru-characteristics/hru-characteristics.component").then((m) => m.HRUCharacteristicsComponent),
             },
             {
                 path: "regional-subbasins",
