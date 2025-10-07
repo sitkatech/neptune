@@ -318,7 +318,7 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
 
     getEditLink(treatmentBMP: any): string {
         // TODO: Return the correct edit route for this BMP
-        return `/inventory/treatment-bmps/edit/${treatmentBMP.TreatmentBMPID}`;
+        return `/treatment-bmps/edit/${treatmentBMP.TreatmentBMPID}`;
     }
 
     removeUpstreamBMP(): void {

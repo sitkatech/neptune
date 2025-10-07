@@ -22,7 +22,7 @@ export class HruCharacteristicsGridComponent {
         this.columnDefs = [
             this.utilityFunctions.createBasicColumnDef("Type of HRU Entity", "HRUEntity"),
             this.utilityFunctions.createLinkColumnDef("LGU ID", "LoadGeneratingUnitID", "LoadGeneratingUnitID", {
-                InRouterLink: "/inventory/load-generating-units/",
+                InRouterLink: "/load-generating-units/",
             }),
             this.utilityFunctions.createBasicColumnDef("Model Basin Land Use Description", "HRUCharacteristicLandUseCodeDisplayName"),
             this.utilityFunctions.createBasicColumnDef("Baseline Model Basin Land Use Description", "BaselineHRUCharacteristicLandUseCodeDisplayName"),
@@ -41,17 +41,17 @@ export class HruCharacteristicsGridComponent {
                 FieldDefinitionType: "Area",
             }),
             this.utilityFunctions.createLinkColumnDef("Treatment BMP", "TreatmentBMPName", "TreatmentBMPID", {
-                InRouterLink: "/inventory/treatment-bmps/",
+                InRouterLink: "/treatment-bmps/",
                 FieldDefinitionLabelOverride: "Treatment BMP",
                 FieldDefinitionType: "TreatmentBMP",
             }),
             this.utilityFunctions.createLinkColumnDef("Water Quality Management Plan", "WaterQualityManagementPlanName", "WaterQualityManagementPlanID", {
-                InRouterLink: "/inventory/water-quality-management-plans/",
+                InRouterLink: "/water-quality-management-plans/",
                 FieldDefinitionLabelOverride: "Water Quality Management Plan",
                 FieldDefinitionType: "WaterQualityManagementPlan",
             }),
             this.utilityFunctions.createLinkColumnDef("Regional Subbasin", "RegionalSubbasinID", "RegionalSubbasinID", {
-                InRouterLink: "/inventory/regional-subbasins/",
+                InRouterLink: "/regional-subbasins/",
                 FieldDefinitionLabelOverride: "Regional Subbasin",
                 FieldDefinitionType: "RegionalSubbasin",
             }),

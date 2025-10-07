@@ -54,7 +54,7 @@ export class TreatmentBmpsComponent {
             this.utilityFunctionsService.createActionsColumnDef((params: any) => [
                 {
                     ActionName: "View",
-                    ActionHandler: () => this.router.navigate(["/inventory/treatment-bmp-detail", params.data.TreatmentBMPID]),
+                    ActionHandler: () => this.router.navigate(["/treatment-bmp-detail", params.data.TreatmentBMPID]),
                 },
                 {
                     ActionName: "Delete",
@@ -63,12 +63,12 @@ export class TreatmentBmpsComponent {
                 },
             ]),
             this.utilityFunctionsService.createLinkColumnDef("Name", "TreatmentBMPName", "TreatmentBMPID", {
-                InRouterLink: "/inventory/treatment-bmps/",
+                InRouterLink: "/treatment-bmps/",
                 FieldDefinitionType: "TreatmentBMP",
                 FieldDefinitionLabelOverride: "Name",
             }),
             this.utilityFunctionsService.createLinkColumnDef("Jurisdiction", "StormwaterJurisdictionName", "StormwaterJurisdictionID", {
-                InRouterLink: "/inventory/jurisdictions/",
+                InRouterLink: "/jurisdictions/",
                 FieldDefinitionType: "Jurisdiction",
             }),
             this.utilityFunctionsService.createBasicColumnDef("Owner Organization", "OwnerOrganizationName"),

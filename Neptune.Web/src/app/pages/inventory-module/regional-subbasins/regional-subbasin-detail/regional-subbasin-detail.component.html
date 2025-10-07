@@ -1,6 +1,6 @@
 <ng-template #templateAbove>
     <div class="back">
-        <a [routerLink]="['/inventory/regional-subbasins']" class="back__link">Back to Regional Subbasins</a>
+        <a [routerLink]="['/regional-subbasins']" class="back__link">Back to Regional Subbasins</a>
     </div>
 </ng-template>
 @if(regionalSubbasin$ | async; as regionalSubbasin) {
@@ -18,7 +18,7 @@
                     <dt class="g-col-5">Downstream Catchment ID</dt>
                     <dd class="g-col-7">
                         @if(subbasin.OCSurveyDownstreamCatchmentID) {
-                        <a [routerLink]="['/inventory/regional-subbasins', subbasin.DownstreamRegionalSubbasinID]">{{ subbasin.OCSurveyDownstreamCatchmentID }}</a>
+                        <a [routerLink]="['/regional-subbasins', subbasin.DownstreamRegionalSubbasinID]">{{ subbasin.OCSurveyDownstreamCatchmentID }}</a>
                         } @else {
                         <span class="systemText">This Regional Subbasin is the downstream terminus of its watershed and flows directly to the ocean.</span>
                         }

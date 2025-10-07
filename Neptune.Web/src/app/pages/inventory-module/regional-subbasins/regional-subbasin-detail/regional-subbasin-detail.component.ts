@@ -73,18 +73,18 @@ export class RegionalSubbasinDetailComponent implements OnInit {
         ];
         this.loadGeneratingUnitsColumnDefs = [
             this.utilityFunctionsService.createLinkColumnDef("LGU ID", "LoadGeneratingUnitID", "LoadGeneratingUnitID", {
-                InRouterLink: "/inventory/load-generating-units/",
+                InRouterLink: "/load-generating-units/",
             }),
             this.utilityFunctionsService.createLinkColumnDef("TreatmentBMP", "TreatmentBMPName", "TreatmentBMPID", {
-                InRouterLink: "/inventory/treatment-bmps/",
+                InRouterLink: "/treatment-bmps/",
                 FieldDefinitionType: "TreatmentBMP",
             }),
             this.utilityFunctionsService.createLinkColumnDef("WaterQualityManagementPlan", "WaterQualityManagementPlanName", "WaterQualityManagementPlanID", {
-                InRouterLink: "/inventory/water-quality-management-plans/",
+                InRouterLink: "/water-quality-management-plans/",
                 FieldDefinitionType: "WaterQualityManagementPlan",
             }),
             this.utilityFunctionsService.createLinkColumnDef("RegionalSubbasin", "RegionalSubbasinName", "RegionalSubbasinID", {
-                InRouterLink: "/inventory/regional-subbasins/",
+                InRouterLink: "/regional-subbasins/",
                 FieldDefinitionType: "RegionalSubbasin",
             }),
             this.utilityFunctionsService.createBasicColumnDef("Model Basin", "ModelBasinKey"),

@@ -1,6 +1,6 @@
 <ng-template #templateAbove>
     <div class="back">
-        <a [routerLink]="['/inventory/load-generating-units']" class="back__link">Back to Load Generating Units</a>
+        <a [routerLink]="['/load-generating-units']" class="back__link">Back to Load Generating Units</a>
     </div>
 </ng-template>
 @if(loadGeneratingUnit$ | async; as loadGeneratingUnit) {
@@ -20,7 +20,7 @@
                     </dt>
                     <dd class="g-col-7">
                         @if (lgu.RegionalSubbasinName) {
-                        <a [routerLink]="['/inventory/regional-subbasins', lgu.RegionalSubbasinID]">{{ lgu.RegionalSubbasinName }}</a>
+                        <a [routerLink]="['/regional-subbasins', lgu.RegionalSubbasinID]">{{ lgu.RegionalSubbasinName }}</a>
                         } @else {
                         <em class="text-muted">Is not linked to a Regional Subbasin</em>
                         }
@@ -31,7 +31,7 @@
                     </dt>
                     <dd class="g-col-7">
                         @if (lgu.TreatmentBMPName) {
-                        <a [routerLink]="['/inventory/treatment-bmps', lgu.TreatmentBMPID]">{{ lgu.TreatmentBMPName }}</a>
+                        <a [routerLink]="['/treatment-bmps', lgu.TreatmentBMPID]">{{ lgu.TreatmentBMPName }}</a>
                         } @else {
                         <em class="text-muted">Is not linked to a Treatment BMP</em>
                         }
@@ -42,7 +42,7 @@
                     </dt>
                     <dd class="g-col-7">
                         @if (lgu.WaterQualityManagementPlanName) {
-                        <a [routerLink]="['/inventory/water-quality-management-plans', lgu.WaterQualityManagementPlanID]">{{ lgu.WaterQualityManagementPlanName }}</a>
+                        <a [routerLink]="['/water-quality-management-plans', lgu.WaterQualityManagementPlanID]">{{ lgu.WaterQualityManagementPlanName }}</a>
                         } @else {
                         <em class="text-muted">Is not linked to a Water Quality Management Plan</em>
                         }

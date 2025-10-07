@@ -8,7 +8,7 @@
 </ng-template>
 <ng-template #templateAbove>
     <div class="back">
-        <a [routerLink]="['/inventory/treatment-bmps']" class="back__link">Back to BMP Grid</a>
+        <a [routerLink]="['/treatment-bmps']" class="back__link">Back to BMP Grid</a>
     </div>
 </ng-template>
 <app-alert-display></app-alert-display>
@@ -46,7 +46,7 @@
                     <dd class="g-col-7">{{ treatmentBMP.TreatmentBMPTypeName }}</dd>
                     <dt class="g-col-5">Jurisdiction</dt>
                     <dd class="g-col-7">
-                        <a [routerLink]="['/inventory/jurisdiction-detail', treatmentBMP.StormwaterJurisdictionID]">{{ treatmentBMP.StormwaterJurisdictionName }}</a>
+                        <a [routerLink]="['/jurisdiction-detail', treatmentBMP.StormwaterJurisdictionID]">{{ treatmentBMP.StormwaterJurisdictionName }}</a>
                     </dd>
                     <dt class="g-col-5">Owner</dt>
                     <dd class="g-col-7">
@@ -110,8 +110,8 @@
                 treatmentBMP.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproachID == WaterQualityManagementPlanModelingApproachEnum.Simplified) {
                 <p class="systemText">
                     This BMP is associated with a
-                    <a [routerLink]="['/inventory/water-quality-management-plans', treatmentBMP.WaterQualityManagementPlan.WaterQualityManagementPlanID]">WQMP</a> that is modeled
-                    using the simplified approach; this BMP will not be modeled explicitly.
+                    <a [routerLink]="['/water-quality-management-plans', treatmentBMP.WaterQualityManagementPlan.WaterQualityManagementPlanID]">WQMP</a> that is modeled using the
+                    simplified approach; this BMP will not be modeled explicitly.
                 </p>
                 } @else {
                 <p class="systemText">

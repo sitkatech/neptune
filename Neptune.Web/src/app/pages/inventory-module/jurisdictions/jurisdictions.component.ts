@@ -40,7 +40,7 @@ export class JurisdictionsComponent {
     ngOnInit(): void {
         this.columnDefs = [
             this.utilityFunctionsService.createLinkColumnDef("Name", "StormwaterJurisdictionName", "StormwaterJurisdictionID", {
-                InRouterLink: "/inventory/jurisdictions/",
+                InRouterLink: "/jurisdictions/",
             }),
             this.utilityFunctionsService.createBasicColumnDef("# of Users", "NumberOfUsers"),
             this.utilityFunctionsService.createBasicColumnDef("# of BMPs", "NumberOfBMPs"),
