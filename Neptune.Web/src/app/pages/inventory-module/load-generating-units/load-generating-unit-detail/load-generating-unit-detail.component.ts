@@ -77,7 +77,7 @@ export class LoadGeneratingUnitDetailComponent implements OnInit, OnChanges {
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement("a");
             a.href = url;
-            a.download = "HRURequest.json";
+            a.download = "HRURequest_LGU" + this.loadGeneratingUnitID + "_HRULog" + hruLog.HRULogID + ".json";
             a.click();
             window.URL.revokeObjectURL(url);
         }
@@ -90,7 +90,7 @@ export class LoadGeneratingUnitDetailComponent implements OnInit, OnChanges {
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement("a");
             a.href = url;
-            a.download = "HRUResponse.json";
+            a.download = "HRUResponse_LGU" + this.loadGeneratingUnitID + "_HRULog" + hruLog.HRULogID + ".json";
             a.click();
             window.URL.revokeObjectURL(url);
         }
