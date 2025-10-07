@@ -52,13 +52,13 @@
                     <dd class="g-col-7">{{ lgu.Area | number : "1.2-2" }}</dd>
                 </dl>
 
-                <div style="margin: 10px 0">
+                <div class="mt-3">
                     @if (lgu.HRULog) {
                     <p class="systemText">Most recent HRU Request made at {{ lgu.DateHRURequested | date : "MM/dd/yyyy hh:mm a" }}</p>
-                    <a role="button" tabindex="0" (click)="downloadHRURequest(lgu.HRULog)">Latest HRU Request</a>
+                    <a role="button" (click)="downloadHRURequest(lgu.HRULog)">Latest HRU Request</a>
                     @if (lgu.HRULog.HRUResponse) {
-                    <span>|</span>
-                    <a role="button" tabindex="0" (click)="downloadHRUResponse(lgu.HRULog)">Latest HRU Response</a>
+                    <span> | </span>
+                    <a role="button" (click)="downloadHRUResponse(lgu.HRULog)">Latest HRU Response</a>
                     } } @else {
                     <p class="systemText">There are no HRU Request logs for this Load Generating Unit</p>
                     }
