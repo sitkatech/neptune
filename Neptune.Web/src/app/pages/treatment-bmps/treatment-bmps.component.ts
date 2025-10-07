@@ -54,7 +54,7 @@ export class TreatmentBmpsComponent {
             this.utilityFunctionsService.createActionsColumnDef((params: any) => [
                 {
                     ActionName: "View",
-                    ActionHandler: () => this.router.navigate(["/treatment-bmp-detail", params.data.TreatmentBMPID]),
+                    ActionHandler: () => this.router.navigate(["/treatment-bmps", params.data.TreatmentBMPID]),
                 },
                 {
                     ActionName: "Delete",

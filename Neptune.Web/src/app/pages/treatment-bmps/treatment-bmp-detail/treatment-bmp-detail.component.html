@@ -46,11 +46,11 @@
                     <dd class="g-col-7">{{ treatmentBMP.TreatmentBMPTypeName }}</dd>
                     <dt class="g-col-5">Jurisdiction</dt>
                     <dd class="g-col-7">
-                        <a [routerLink]="['/jurisdiction-detail', treatmentBMP.StormwaterJurisdictionID]">{{ treatmentBMP.StormwaterJurisdictionName }}</a>
+                        <a [routerLink]="['/jurisdictions', treatmentBMP.StormwaterJurisdictionID]">{{ treatmentBMP.StormwaterJurisdictionName }}</a>
                     </dd>
                     <dt class="g-col-5">Owner</dt>
                     <dd class="g-col-7">
-                        <a [routerLink]="['/organization-detail', treatmentBMP.OwnerOrganizationID]">{{ treatmentBMP.OwnerOrganizationName }}</a>
+                        <a [routerLink]="['/organizations', treatmentBMP.OwnerOrganizationID]">{{ treatmentBMP.OwnerOrganizationName }}</a>
                     </dd>
                     <dt class="g-col-5">Year Built</dt>
                     <dd class="g-col-7">{{ treatmentBMP.YearBuilt }}</dd>
@@ -59,7 +59,7 @@
                     <dt class="g-col-5">Water Quality Management Plan</dt>
                     <dd class="g-col-7">
                         @if (treatmentBMP.WaterQualityManagementPlan) {
-                        <a [routerLink]="['/wqmp-detail', treatmentBMP.WaterQualityManagementPlanID]">{{
+                        <a [routerLink]="['/water-quality-management-plans', treatmentBMP.WaterQualityManagementPlanID]">{{
                             treatmentBMP.WaterQualityManagementPlan.WaterQualityManagementPlanName
                         }}</a>
                         } @else {

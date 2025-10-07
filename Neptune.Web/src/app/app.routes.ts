@@ -346,151 +346,143 @@ export const routes: Routes = [
                 loadComponent: () => import("./pages/field-definition-list/field-definition-list.component").then((m) => m.FieldDefinitionListComponent),
                 canActivate: [UnauthenticatedAccessGuard, ManagerOnlyGuard],
             },
-            // BMP Inventory
             {
                 path: "jurisdictions",
                 title: "Jurisdictions",
-                loadComponent: () => import("./pages/inventory-module/jurisdictions/jurisdictions.component").then((m) => m.JurisdictionsComponent),
+                loadComponent: () => import("./pages/jurisdictions/jurisdictions.component").then((m) => m.JurisdictionsComponent),
             },
             {
                 path: `jurisdictions/:${routeParams.jurisdictionID}`,
                 title: "Jurisdiction Detail",
-                loadComponent: () => import("./pages/inventory-module/jurisdictions/jurisdiction-detail/jurisdiction-detail.component").then((m) => m.JurisdictionDetailComponent),
+                loadComponent: () => import("./pages/jurisdictions/jurisdiction-detail/jurisdiction-detail.component").then((m) => m.JurisdictionDetailComponent),
             },
             {
                 path: "find-bmp",
                 title: "Find a BMP",
-                loadComponent: () => import("./pages/inventory-module/find-bmp/find-bmp.component").then((m) => m.FindBmpComponent),
+                loadComponent: () => import("./pages/find-bmp/find-bmp.component").then((m) => m.FindBmpComponent),
             },
             {
                 path: "modeling-parameters",
                 title: "Modeling Parameters",
-                loadComponent: () => import("./pages/inventory-module/modeling-parameters/modeling-parameters.component").then((m) => m.ModelingParametersComponent),
+                loadComponent: () => import("./pages/modeling-parameters/modeling-parameters.component").then((m) => m.ModelingParametersComponent),
             },
             {
                 path: "treatment-bmps",
                 title: "View All BMPs",
-                loadComponent: () => import("./pages/inventory-module/treatment-bmps/treatment-bmps.component").then((m) => m.TreatmentBmpsComponent),
+                loadComponent: () => import("./pages/treatment-bmps/treatment-bmps.component").then((m) => m.TreatmentBmpsComponent),
             },
             {
                 path: `treatment-bmps/:${routeParams.treatmentBMPID}`,
                 title: "Treatment BMP Detail",
-                loadComponent: () =>
-                    import("./pages/inventory-module/treatment-bmps/treatment-bmp-detail/treatment-bmp-detail.component").then((m) => m.TreatmentBmpDetailComponent),
+                loadComponent: () => import("./pages/treatment-bmps/treatment-bmp-detail/treatment-bmp-detail.component").then((m) => m.TreatmentBmpDetailComponent),
             },
             {
                 path: "latest-bmp-assessments",
                 title: "View Latest BMP Assessments",
-                loadComponent: () => import("./pages/inventory-module/latest-bmp-assessments/latest-bmp-assessments.component").then((m) => m.LatestBmpAssessmentsComponent),
+                loadComponent: () => import("./pages/latest-bmp-assessments/latest-bmp-assessments.component").then((m) => m.LatestBmpAssessmentsComponent),
             },
             {
                 path: "field-records",
                 title: "View All Field Records",
-                loadComponent: () => import("./pages/inventory-module/field-records/field-records.component").then((m) => m.FieldRecordsComponent),
+                loadComponent: () => import("./pages/field-records/field-records.component").then((m) => m.FieldRecordsComponent),
             },
             {
-                path: "wqmps",
+                path: "water-quality-management-plans",
                 title: "Water Quality Management Plans",
-                loadComponent: () => import("./pages/inventory-module/wqmps/wqmps.component").then((m) => m.WqmpsComponent),
+                loadComponent: () => import("./pages/wqmps/wqmps.component").then((m) => m.WqmpsComponent),
             },
             {
                 path: "wqmp-annual-report",
                 title: "WQMP Annual Report",
-                loadComponent: () => import("./pages/inventory-module/wqmp-annual-report/wqmp-annual-report.component").then((m) => m.WqmpAnnualReportComponent),
+                loadComponent: () => import("./pages/wqmp-annual-report/wqmp-annual-report.component").then((m) => m.WqmpAnnualReportComponent),
             },
             {
                 path: "parcels",
                 title: "Parcels",
-                loadComponent: () => import("./pages/inventory-module/parcels/parcels.component").then((m) => m.ParcelsComponent),
+                loadComponent: () => import("./pages/parcels/parcels.component").then((m) => m.ParcelsComponent),
             },
             // Program Info
             {
                 path: "program-info/observation-types",
                 title: "Observation Types",
-                loadComponent: () => import("./pages/inventory-module/program-info/observation-types.component").then((m) => m.ObservationTypesComponent),
+                loadComponent: () => import("./pages/program-info/observation-types.component").then((m) => m.ObservationTypesComponent),
             },
             {
                 path: "program-info/treatment-bmp-types",
                 title: "Treatment BMP Types",
-                loadComponent: () => import("./pages/inventory-module/program-info/treatment-bmp-types.component").then((m) => m.TreatmentBmpTypesComponent),
+                loadComponent: () => import("./pages/program-info/treatment-bmp-types.component").then((m) => m.TreatmentBmpTypesComponent),
             },
             {
                 path: "funding-sources",
                 title: "Funding Sources",
-                loadComponent: () => import("./pages/inventory-module/funding-sources/funding-sources.component").then((m) => m.FundingSourcesComponent),
+                loadComponent: () => import("./pages/funding-sources/funding-sources.component").then((m) => m.FundingSourcesComponent),
             },
             // Dashboard
             {
                 path: "dashboard",
                 title: "Dashboard",
-                loadComponent: () => import("./pages/inventory-module/dashboard/dashboard.component").then((m) => m.DashboardComponent),
+                loadComponent: () => import("./pages/dashboard/dashboard.component").then((m) => m.DashboardComponent),
             },
             // Delineation
             {
                 path: "delineation/delineation-map",
                 title: "Delineation Map",
-                loadComponent: () => import("./pages/inventory-module/delineation/delineation-map.component").then((m) => m.DelineationMapComponent),
+                loadComponent: () => import("./pages/delineation/delineation-map.component").then((m) => m.DelineationMapComponent),
             },
             {
                 path: "delineation/delineation-reconciliation-report",
                 title: "Delineation Reconciliation Report",
-                loadComponent: () =>
-                    import("./pages/inventory-module/delineation/delineation-reconciliation-report.component").then((m) => m.DelineationReconciliationReportComponent),
+                loadComponent: () => import("./pages/delineation/delineation-reconciliation-report.component").then((m) => m.DelineationReconciliationReportComponent),
             },
             // Data Hub
-            { path: "data-hub", title: "Data Hub", loadComponent: () => import("./pages/inventory-module/data-hub/data-hub.component").then((m) => m.DataHubComponent) },
+            { path: "data-hub", title: "Data Hub", loadComponent: () => import("./pages/data-hub/data-hub.component").then((m) => m.DataHubComponent) },
             // Manage
             {
                 path: "manage/homepage-configuration",
                 title: "Homepage Configuration",
-                loadComponent: () => import("./pages/inventory-module/manage/homepage-configuration.component").then((m) => m.HomepageConfigurationComponent),
+                loadComponent: () => import("./pages/manage/homepage-configuration.component").then((m) => m.HomepageConfigurationComponent),
             },
             {
                 path: "manage/custom-attributes",
                 title: "Custom Attributes",
-                loadComponent: () => import("./pages/inventory-module/manage/custom-attributes.component").then((m) => m.CustomAttributesComponent),
+                loadComponent: () => import("./pages/manage/custom-attributes.component").then((m) => m.CustomAttributesComponent),
             },
             {
                 path: "load-generating-units",
                 title: "Load Generating Units",
-                loadComponent: () => import("./pages/inventory-module/load-generating-units/load-generating-units.component").then((m) => m.LoadGeneratingUnitsComponent),
+                loadComponent: () => import("./pages/load-generating-units/load-generating-units.component").then((m) => m.LoadGeneratingUnitsComponent),
             },
             {
                 path: `load-generating-units/:${routeParams.loadGeneratingUnitID}`,
                 title: "Load Generating Unit Detail",
                 loadComponent: () =>
-                    import("./pages/inventory-module/load-generating-units/load-generating-unit-detail/load-generating-unit-detail.component").then(
-                        (m) => m.LoadGeneratingUnitDetailComponent
-                    ),
+                    import("./pages/load-generating-units/load-generating-unit-detail/load-generating-unit-detail.component").then((m) => m.LoadGeneratingUnitDetailComponent),
             },
             {
                 path: "hru-characteristics",
                 title: "HRU Characteristics",
-                loadComponent: () => import("./pages/inventory-module/hru-characteristics/hru-characteristics.component").then((m) => m.HRUCharacteristicsComponent),
+                loadComponent: () => import("./pages/hru-characteristics/hru-characteristics.component").then((m) => m.HRUCharacteristicsComponent),
             },
             {
                 path: "regional-subbasins",
                 title: "Regional Subbasins",
-                loadComponent: () => import("./pages/inventory-module/regional-subbasins/regional-subbasins.component").then((m) => m.RegionalSubbasinsComponent),
+                loadComponent: () => import("./pages/regional-subbasins/regional-subbasins.component").then((m) => m.RegionalSubbasinsComponent),
             },
             {
                 path: `regional-subbasins/:${routeParams.regionalSubbasinID}`,
                 title: "Regional Subbasin Detail",
                 loadComponent: () =>
-                    import("./pages/inventory-module/regional-subbasins/regional-subbasin-detail/regional-subbasin-detail.component").then(
-                        (m) => m.RegionalSubbasinDetailComponent
-                    ),
+                    import("./pages/regional-subbasins/regional-subbasin-detail/regional-subbasin-detail.component").then((m) => m.RegionalSubbasinDetailComponent),
             },
             {
                 path: "manage/regional-subbasin-revision-requests",
                 title: "Regional Subbasin Revision Requests",
-                loadComponent: () =>
-                    import("./pages/inventory-module/manage/regional-subbasin-revision-requests.component").then((m) => m.RegionalSubbasinRevisionRequestsComponent),
+                loadComponent: () => import("./pages/manage/regional-subbasin-revision-requests.component").then((m) => m.RegionalSubbasinRevisionRequestsComponent),
             },
             {
                 path: "manage/wqmp-lgu-audit",
                 title: "Water Quality Management Plan LGU Audit",
-                loadComponent: () => import("./pages/inventory-module/manage/wqmp-lgu-audit.component").then((m) => m.WqmpLguAuditComponent),
+                loadComponent: () => import("./pages/manage/wqmp-lgu-audit.component").then((m) => m.WqmpLguAuditComponent),
             },
         ],
     },
