@@ -275,14 +275,10 @@
             <span class="card-title">HRU Characteristics (Sitka Admin only)</span>
         </div>
         <div class="card-body">
-            <neptune-grid
+            <hru-characteristics-grid
                 [rowData]="hruCharacteristics$ | async"
-                [columnDefs]="hruCharacteristicsColumnDefs"
-                [pagination]="true"
                 [height]="'400px'"
-                [rowSelection]="'single'"
-                [downloadFileName]="'HRUCharacteristics'">
-            </neptune-grid>
+                [downloadFileName]="'HRUCharacteristics_BMP' + treatmentBMP.TreatmentBMPID"></hru-characteristics-grid>
         </div>
     </div>
     }

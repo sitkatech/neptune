@@ -20,6 +20,7 @@ import { SumPipe } from "src/app/shared/pipes/sum.pipe";
 import { LoadGeneratingUnitsLayerComponent } from "src/app/shared/components/leaflet/layers/load-generating-units-layer/load-generating-units-layer.component";
 import { RouterLink } from "@angular/router";
 import { LoadGeneratingUnitGridDto } from "src/app/shared/generated/model/models";
+import { HruCharacteristicsGridComponent } from "src/app/shared/components/hru-characteristics-grid/hru-characteristics-grid.component";
 
 @Component({
     selector: "regional-subbasin-detail",
@@ -38,6 +39,7 @@ import { LoadGeneratingUnitGridDto } from "src/app/shared/generated/model/models
         LandUseTableComponent,
         LoadGeneratingUnitsLayerComponent,
         RouterLink,
+        HruCharacteristicsGridComponent,
     ],
 })
 export class RegionalSubbasinDetailComponent implements OnInit {
@@ -54,7 +56,6 @@ export class RegionalSubbasinDetailComponent implements OnInit {
     public hruCharacteristics$!: Observable<HRUCharacteristicDto[]>;
     public landUseStatsColumnDefs: ColDef[];
     public loadGeneratingUnitsColumnDefs: ColDef[];
-    public hruCharacteristicsColumnDefs: ColDef[];
     public hruCharacteristicsSummaries: TreatmentBMPHRUCharacteristicsSummarySimpleDto[] = [];
 
     constructor(
@@ -89,44 +90,6 @@ export class RegionalSubbasinDetailComponent implements OnInit {
             this.utilityFunctionsService.createBasicColumnDef("Model Basin", "ModelBasinKey"),
             this.utilityFunctionsService.createDateColumnDef("Date HRU Requested", "DateHRURequested", "short"),
             this.utilityFunctionsService.createBooleanColumnDef("Is Empty", "IsEmptyResponseFromHRUService"),
-        ];
-        this.hruCharacteristicsColumnDefs = [
-            this.utilityFunctionsService.createBasicColumnDef("Type of HRU Entity", "HRUEntity"),
-            this.utilityFunctionsService.createLinkColumnDef("LGU ID", "LoadGeneratingUnitID", "LoadGeneratingUnitID", {
-                InRouterLink: "/inventory/load-generating-units/",
-            }),
-            this.utilityFunctionsService.createBasicColumnDef("Model Basin Land Use Description", "HRUCharacteristicLandUseCodeDisplayName"),
-            this.utilityFunctionsService.createBasicColumnDef("Baseline Model Basin Land Use Description", "BaselineHRUCharacteristicLandUseCodeDisplayName"),
-            this.utilityFunctionsService.createBasicColumnDef("Hydrologic Soil Group", "HydrologicSoilGroup", {
-                FieldDefinitionLabelOverride: "Hydrologic Soil Group",
-                FieldDefinitionType: "UnderlyingHydrologicSoilGroupID",
-            }),
-            this.utilityFunctionsService.createDecimalColumnDef("Slope Percentage", "SlopePercentage"),
-            this.utilityFunctionsService.createDecimalColumnDef("Impervious Acres", "ImperviousAcres", {
-                FieldDefinitionLabelOverride: "Impervious Acres",
-                FieldDefinitionType: "ImperviousArea",
-            }),
-            this.utilityFunctionsService.createDecimalColumnDef("Baseline Impervious Acres", "BaselineImperviousAcres"),
-            this.utilityFunctionsService.createDecimalColumnDef("Total Acres", "Area", {
-                FieldDefinitionLabelOverride: "Total Acres",
-                FieldDefinitionType: "Area",
-            }),
-            this.utilityFunctionsService.createLinkColumnDef("Treatment BMP", "TreatmentBMPName", "TreatmentBMPID", {
-                InRouterLink: "/inventory/treatment-bmps/",
-                FieldDefinitionLabelOverride: "Treatment BMP",
-                FieldDefinitionType: "TreatmentBMP",
-            }),
-            this.utilityFunctionsService.createLinkColumnDef("Water Quality Management Plan", "WaterQualityManagementPlanName", "WaterQualityManagementPlanID", {
-                InRouterLink: "/inventory/water-quality-management-plans/",
-                FieldDefinitionLabelOverride: "Water Quality Management Plan",
-                FieldDefinitionType: "WaterQualityManagementPlan",
-            }),
-            this.utilityFunctionsService.createLinkColumnDef("Regional Subbasin", "RegionalSubbasinID", "RegionalSubbasinID", {
-                InRouterLink: "/inventory/regional-subbasins/",
-                FieldDefinitionLabelOverride: "Regional Subbasin",
-                FieldDefinitionType: "RegionalSubbasin",
-            }),
-            this.utilityFunctionsService.createDateColumnDef("Last Updated", "LastUpdated", "MM/dd/yyyy"),
         ];
         this.loadData();
     }

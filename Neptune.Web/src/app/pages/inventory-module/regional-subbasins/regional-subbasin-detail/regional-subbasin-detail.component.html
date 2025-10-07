@@ -85,12 +85,10 @@
     <div class="card mt-3">
         <div class="card-header"><span class="card-title">HRU Characteristics</span></div>
         <div class="card-body">
-            <neptune-grid
+            <hru-characteristics-grid
                 [rowData]="hruCharacteristics$ | async"
-                [columnDefs]="hruCharacteristicsColumnDefs"
-                [pagination]="true"
                 [height]="'200px'"
-                [downloadFileName]="'HRUCharacteristics'"></neptune-grid>
+                [downloadFileName]="'HRUCharacteristics_RSB' + regionalSubbasinID"></hru-characteristics-grid>
         </div>
     </div>
 </div>

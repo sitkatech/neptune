@@ -7,16 +7,15 @@ import { AlertDisplayComponent } from "src/app/shared/components/alert-display/a
 import { NeptuneMapComponent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
 import { RegionalSubbasinsLayerComponent } from "src/app/shared/components/leaflet/layers/regional-subbasins-layer/regional-subbasins-layer.component";
 import { LoadGeneratingUnitsLayerComponent } from "src/app/shared/components/leaflet/layers/load-generating-units-layer/load-generating-units-layer.component";
-import { NeptuneGridComponent } from "src/app/shared/components/neptune-grid/neptune-grid.component";
 import { AsyncPipe, DatePipe, DecimalPipe } from "@angular/common";
 import { LoadGeneratingUnitService } from "src/app/shared/generated/api/load-generating-unit.service";
 import { LoadGeneratingUnitDto } from "src/app/shared/generated/model/load-generating-unit-dto";
 import { HRULogDto } from "src/app/shared/generated/model/hru-log-dto";
 import { HRUCharacteristicDto } from "src/app/shared/generated/model/hru-characteristic-dto";
-import { ColDef } from "ag-grid-community";
 import { Observable } from "rxjs";
 import { UtilityFunctionsService } from "src/app/services/utility-functions.service";
 import { OverlayMode } from "src/app/shared/components/leaflet/layers/generic-wms-wfs-layer/overlay-mode.enum";
+import { HruCharacteristicsGridComponent } from "src/app/shared/components/hru-characteristics-grid/hru-characteristics-grid.component";
 
 @Component({
     selector: "load-generating-unit-detail",
@@ -29,12 +28,12 @@ import { OverlayMode } from "src/app/shared/components/leaflet/layers/generic-wm
         NeptuneMapComponent,
         RegionalSubbasinsLayerComponent,
         LoadGeneratingUnitsLayerComponent,
-        NeptuneGridComponent,
         AsyncPipe,
         FieldDefinitionComponent,
         RouterModule,
         DatePipe,
         DecimalPipe,
+        HruCharacteristicsGridComponent,
     ],
 })
 export class LoadGeneratingUnitDetailComponent implements OnInit, OnChanges {
@@ -43,7 +42,6 @@ export class LoadGeneratingUnitDetailComponent implements OnInit, OnChanges {
     @Input() loadGeneratingUnitID!: number;
     public loadGeneratingUnit$!: Observable<LoadGeneratingUnitDto>;
     public hruCharacteristics$!: Observable<HRUCharacteristicDto[]>;
-    public hruCharacteristicsColumnDefs: ColDef[];
     public map: any;
     public layerControl: any;
     public mapIsReady = false;
@@ -53,44 +51,6 @@ export class LoadGeneratingUnitDetailComponent implements OnInit, OnChanges {
 
     ngOnInit(): void {
         this.loadData();
-        this.hruCharacteristicsColumnDefs = [
-            this.utilityFunctionsService.createBasicColumnDef("Type of HRU Entity", "HRUEntity"),
-            this.utilityFunctionsService.createLinkColumnDef("LGU ID", "LoadGeneratingUnitID", "LoadGeneratingUnitID", {
-                InRouterLink: "/inventory/load-generating-units/",
-            }),
-            this.utilityFunctionsService.createBasicColumnDef("Model Basin Land Use Description", "HRUCharacteristicLandUseCodeDisplayName"),
-            this.utilityFunctionsService.createBasicColumnDef("Baseline Model Basin Land Use Description", "BaselineHRUCharacteristicLandUseCodeDisplayName"),
-            this.utilityFunctionsService.createBasicColumnDef("Hydrologic Soil Group", "HydrologicSoilGroup", {
-                FieldDefinitionLabelOverride: "Hydrologic Soil Group",
-                FieldDefinitionType: "UnderlyingHydrologicSoilGroupID",
-            }),
-            this.utilityFunctionsService.createDecimalColumnDef("Slope Percentage", "SlopePercentage"),
-            this.utilityFunctionsService.createDecimalColumnDef("Impervious Acres", "ImperviousAcres", {
-                FieldDefinitionLabelOverride: "Impervious Acres",
-                FieldDefinitionType: "ImperviousArea",
-            }),
-            this.utilityFunctionsService.createDecimalColumnDef("Baseline Impervious Acres", "BaselineImperviousAcres"),
-            this.utilityFunctionsService.createDecimalColumnDef("Total Acres", "Area", {
-                FieldDefinitionLabelOverride: "Total Acres",
-                FieldDefinitionType: "Area",
-            }),
-            this.utilityFunctionsService.createLinkColumnDef("Treatment BMP", "TreatmentBMPName", "TreatmentBMPID", {
-                InRouterLink: "/inventory/treatment-bmps/",
-                FieldDefinitionLabelOverride: "Treatment BMP",
-                FieldDefinitionType: "TreatmentBMP",
-            }),
-            this.utilityFunctionsService.createLinkColumnDef("Water Quality Management Plan", "WaterQualityManagementPlanName", "WaterQualityManagementPlanID", {
-                InRouterLink: "/inventory/water-quality-management-plans/",
-                FieldDefinitionLabelOverride: "Water Quality Management Plan",
-                FieldDefinitionType: "WaterQualityManagementPlan",
-            }),
-            this.utilityFunctionsService.createLinkColumnDef("Regional Subbasin", "RegionalSubbasinID", "RegionalSubbasinID", {
-                InRouterLink: "/inventory/regional-subbasins/",
-                FieldDefinitionLabelOverride: "Regional Subbasin",
-                FieldDefinitionType: "RegionalSubbasin",
-            }),
-            this.utilityFunctionsService.createDateColumnDef("Last Updated", "LastUpdated", "MM/dd/yyyy"),
-        ];
     }
 
     ngOnChanges(changes: SimpleChanges): void {

@@ -71,15 +71,18 @@
         <div class="card">
             <div class="card-header"><span class="card-title">Map</span></div>
             <div class="card-body">
-                @if (loadGeneratingUnit$ | async; as lgu) {
                 <neptune-map [mapHeight]="'400px'" [showLegend]="false" [boundingBox]="boundingBox" (onMapLoad)="handleMapReady($event)">
                     @if (mapIsReady) {
                     <regional-subbasins-layer [mode]="OverlayMode.ReferenceOnly" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></regional-subbasins-layer>
-                    <load-generating-units-layer [mode]="OverlayMode.Single" [map]="map" [layerControl]="layerControl" [sortOrder]="30" [selectedID]="lgu.LoadGeneratingUnitID">
+                    <load-generating-units-layer
+                        [mode]="OverlayMode.Single"
+                        [map]="map"
+                        [layerControl]="layerControl"
+                        [sortOrder]="30"
+                        [selectedID]="loadGeneratingUnit.LoadGeneratingUnitID">
                     </load-generating-units-layer>
                     }
                 </neptune-map>
-                }
             </div>
         </div>
     </div>
@@ -89,14 +92,9 @@
         <span class="card-title">HRU Characteristics</span>
     </div>
     <div class="card-body">
-        <neptune-grid
+        <hru-characteristics-grid
             [rowData]="hruCharacteristics$ | async"
-            [columnDefs]="hruCharacteristicsColumnDefs"
-            [pagination]="true"
-            [height]="'400px'"
-            [rowSelection]="'single'"
-            [downloadFileName]="'HRUCharacteristics'">
-        </neptune-grid>
+            [downloadFileName]="'HRUCharacteristics_LGU' + loadGeneratingUnit.LoadGeneratingUnitID"></hru-characteristics-grid>
     </div>
 </div>
 }

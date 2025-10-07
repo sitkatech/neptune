@@ -42,6 +42,7 @@ import { TreatmentBMPTypeService } from "src/app/shared/generated/api/treatment-
 import { GroupByPipe } from "src/app/shared/pipes/group-by.pipe";
 import { SumPipe } from "src/app/shared/pipes/sum.pipe";
 import { OverlayMode } from "src/app/shared/components/leaflet/layers/generic-wms-wfs-layer/overlay-mode.enum";
+import { HruCharacteristicsGridComponent } from "src/app/shared/components/hru-characteristics-grid/hru-characteristics-grid.component";
 
 @Component({
     selector: "treatment-bmp-detail",
@@ -69,53 +70,13 @@ import { OverlayMode } from "src/app/shared/components/leaflet/layers/generic-wm
         LandUseTableComponent,
         NeptuneGridComponent,
         CustomAttributesDisplayComponent,
+        HruCharacteristicsGridComponent,
     ],
 })
 export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
     public OverlayMode = OverlayMode;
 
-    openAddFundingEventModal(): void {
-        this.dialogService
-            .open(FundingEventModalComponent, {
-                data: { treatmentBMPID: this.treatmentBMPID } as FundingEventModalContext,
-            })
-            .afterClosed$.subscribe((result) => {
-                if (result) this.loadData();
-            });
-    }
-
-    openEditFundingEventModal(fundingEvent: FundingEventDto): void {
-        this.dialogService
-            .open(FundingEventModalComponent, {
-                data: { treatmentBMPID: this.treatmentBMPID, editData: fundingEvent } as FundingEventModalContext,
-            })
-            .afterClosed$.subscribe((result) => {
-                if (result) this.loadData();
-            });
-    }
-
-    confirmDeleteFundingEvent(fundingEvent: FundingEventDto): void {
-        this.confirmService
-            .confirm({
-                buttonClassYes: "btn-danger",
-                buttonTextYes: "Delete",
-                buttonTextNo: "Cancel",
-                title: "Delete Funding Event",
-                message: `<p>Are you sure you want to delete the Funding Event '<strong>${fundingEvent.DisplayName}</strong>'?</p>`,
-            })
-            .then((confirmed) => {
-                if (confirmed) {
-                    this.fundingEventByTreatmentBMPIDService.deleteFundingEventByTreatmentBMPID(this.treatmentBMPID, fundingEvent.FundingEventID).subscribe(() => this.loadData());
-                }
-            });
-    }
     fundingEvents$: Observable<FundingEventDto[]>;
-    ngOnChanges(changes: SimpleChanges): void {
-        if (changes["treatmentBMPID"] && !changes["treatmentBMPID"].firstChange) {
-            this.loadData();
-        }
-    }
-
     /**
      * Stub: Edit URL for Modeling Attributes
      */
@@ -149,7 +110,6 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
     attachments$!: Observable<any[]>; // TODO: Replace 'any' with ProjectDocumentDto
     treatmentBMPImages$!: Observable<any[]>;
     hruCharacteristics$: Observable<HRUCharacteristicDto[]>;
-    hruCharacteristicsColumnDefs: Array<ColDef>;
     fieldVisits$: Observable<FieldVisitDto[]>;
     fieldVisitColumnDefs: Array<ColDef>;
 
@@ -198,25 +158,6 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
     ) {}
 
     ngOnInit(): void {
-        // Wire up columns using utilityFunctionsService
-        this.hruCharacteristicsColumnDefs = [
-            this.utilityFunctionsService.createBasicColumnDef("Type of HRU Entity", "HRUEntity"),
-            this.utilityFunctionsService.createBasicColumnDef("LGU ID", "LoadGeneratingUnitID"),
-            this.utilityFunctionsService.createBasicColumnDef("Model Basin Land Use Description", "HRUCharacteristicLandUseCodeDisplayName"),
-            this.utilityFunctionsService.createBasicColumnDef("Baseline Model Basin Land Use Description", "BaselineHRUCharacteristicLandUseCodeDisplayName"),
-            this.utilityFunctionsService.createBasicColumnDef("Hydrologic Soil Group", "HydrologicSoilGroup"),
-            this.utilityFunctionsService.createDecimalColumnDef("Slope %", "SlopePercentage"),
-            this.utilityFunctionsService.createDecimalColumnDef("Impervious Acres", "ImperviousAcres"),
-            this.utilityFunctionsService.createDecimalColumnDef("Baseline Impervious Acres", "BaselineImperviousAcres"),
-            this.utilityFunctionsService.createDecimalColumnDef("Total Acres", "Area"),
-            this.utilityFunctionsService.createLinkColumnDef("Treatment BMP", "TreatmentBMPName", "TreatmentBMPID", {
-                InRouterLink: "../",
-            }),
-            this.utilityFunctionsService.createBasicColumnDef("Water Quality Management Plan", "WaterQualityManagementPlanName"),
-            this.utilityFunctionsService.createBasicColumnDef("Regional Subbasin", "RegionalSubbasinName"),
-            this.utilityFunctionsService.createDateColumnDef("Last Updated", "LastUpdated", "short"),
-        ];
-
         this.fieldVisitColumnDefs = [
             // todo: implement action cell renderer, make initial assessment, maintenance occurred, and post-maintenance assessment into link columns
             // Action columns (delete, view/continue) - implement cellRenderer as needed
@@ -235,6 +176,12 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
             this.utilityFunctionsService.createDecimalColumnDef("Post-Maintenance Assessment Score", "AssessmentScorePM"),
         ];
         this.loadData();
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes["treatmentBMPID"] && !changes["treatmentBMPID"].firstChange) {
+            this.loadData();
+        }
     }
 
     private loadData(): void {
@@ -292,6 +239,42 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
                 },
             })
         );
+    }
+
+    openAddFundingEventModal(): void {
+        this.dialogService
+            .open(FundingEventModalComponent, {
+                data: { treatmentBMPID: this.treatmentBMPID } as FundingEventModalContext,
+            })
+            .afterClosed$.subscribe((result) => {
+                if (result) this.loadData();
+            });
+    }
+
+    openEditFundingEventModal(fundingEvent: FundingEventDto): void {
+        this.dialogService
+            .open(FundingEventModalComponent, {
+                data: { treatmentBMPID: this.treatmentBMPID, editData: fundingEvent } as FundingEventModalContext,
+            })
+            .afterClosed$.subscribe((result) => {
+                if (result) this.loadData();
+            });
+    }
+
+    confirmDeleteFundingEvent(fundingEvent: FundingEventDto): void {
+        this.confirmService
+            .confirm({
+                buttonClassYes: "btn-danger",
+                buttonTextYes: "Delete",
+                buttonTextNo: "Cancel",
+                title: "Delete Funding Event",
+                message: `<p>Are you sure you want to delete the Funding Event '<strong>${fundingEvent.DisplayName}</strong>'?</p>`,
+            })
+            .then((confirmed) => {
+                if (confirmed) {
+                    this.fundingEventByTreatmentBMPIDService.deleteFundingEventByTreatmentBMPID(this.treatmentBMPID, fundingEvent.FundingEventID).subscribe(() => this.loadData());
+                }
+            });
     }
 
     /**
