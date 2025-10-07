@@ -28,6 +28,7 @@ import { PermitTypeEnum } from "src/app/shared/generated/enum/permit-type-enum";
 import { Alert } from "src/app/shared/models/alert";
 import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
 import { AlertService } from "src/app/shared/services/alert.service";
+import { OverlayMode } from "src/app/shared/components/leaflet/layers/generic-wms-wfs-layer/overlay-mode.enum";
 
 @Component({
     selector: "trash-land-use-block-index",
@@ -47,6 +48,7 @@ import { AlertService } from "src/app/shared/services/alert.service";
     styleUrl: "./trash-land-use-block-index.component.scss",
 })
 export class TrashLandUseBlockIndexComponent {
+    public OverlayMode = OverlayMode;
     public landUseBlocks$: Observable<LandUseBlockGridDto[]>;
     public landUseBlockColumnDefs: ColDef[];
     public richTextID = NeptunePageTypeEnum.LandUseBlock;

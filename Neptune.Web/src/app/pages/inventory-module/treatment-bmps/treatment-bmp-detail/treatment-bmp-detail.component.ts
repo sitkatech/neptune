@@ -41,6 +41,7 @@ import { CustomAttributeTypePurposeEnum } from "src/app/shared/generated/enum/cu
 import { TreatmentBMPTypeService } from "src/app/shared/generated/api/treatment-bmp-type.service";
 import { GroupByPipe } from "src/app/shared/pipes/group-by.pipe";
 import { SumPipe } from "src/app/shared/pipes/sum.pipe";
+import { OverlayMode } from "src/app/shared/components/leaflet/layers/generic-wms-wfs-layer/overlay-mode.enum";
 
 @Component({
     selector: "treatment-bmp-detail",
@@ -71,6 +72,8 @@ import { SumPipe } from "src/app/shared/pipes/sum.pipe";
     ],
 })
 export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
+    public OverlayMode = OverlayMode;
+
     openAddFundingEventModal(): void {
         this.dialogService
             .open(FundingEventModalComponent, {

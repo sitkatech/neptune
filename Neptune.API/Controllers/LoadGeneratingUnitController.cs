@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -8,6 +6,8 @@ using Neptune.API.Services.Attributes;
 using Neptune.API.Services.Authorization;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Neptune.API.Controllers;
 
@@ -40,5 +40,14 @@ public class LoadGeneratingUnitController : SitkaController<LoadGeneratingUnitCo
         var dto = await LoadGeneratingUnits.GetByIDAsDtoAsync(DbContext, loadGeneratingUnitID);
         if (dto == null) return NotFound();
         return Ok(dto);
+    }
+
+    [HttpGet("{loadGeneratingUnitID}/hru-characteristics")]
+    [EntityNotFound(typeof(LoadGeneratingUnit), "loadGeneratingUnitID")]
+    [AdminFeature]
+    public async Task<ActionResult<List<HRUCharacteristicDto>>> ListHRUCharacteristics([FromRoute] int loadGeneratingUnitID)
+    {
+        var hruCharacteristics = await vHRUCharacteristics.ListByLoadGeneratingUnitAsGridDtoAsync(DbContext, loadGeneratingUnitID);
+        return Ok(hruCharacteristics);
     }
 }

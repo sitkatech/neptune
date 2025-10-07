@@ -25,6 +25,7 @@ import { CustomAttributeTypePurposeEnum } from "src/app/shared/generated/enum/cu
 import { CustomAttributeDataTypeEnum } from "src/app/shared/generated/enum/custom-attribute-data-type-enum";
 import { CustomAttributeTypeDto } from "src/app/shared/generated/model/custom-attribute-type-dto";
 import { PopperDirective } from "src/app/shared/directives/popper.directive";
+import { OverlayMode } from "src/app/shared/components/leaflet/layers/generic-wms-wfs-layer/overlay-mode.enum";
 
 //This component could use a fair amount of cleanup. It should likely be sent in the treatment bmps and delineations instead of grabbing them itself
 @Component({
@@ -45,6 +46,8 @@ import { PopperDirective } from "src/app/shared/directives/popper.directive";
     ],
 })
 export class ProjectMapComponent implements OnInit {
+    public OverlayMode = OverlayMode;
+
     @Input("projectID") projectID: number;
 
     public mapIsReady: boolean = false;

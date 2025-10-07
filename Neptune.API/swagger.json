@@ -1095,6 +1095,56 @@
         }
       }
     },
+    "/load-generating-units/{loadGeneratingUnitID}/hru-characteristics": {
+      "get": {
+        "tags": [
+          "LoadGeneratingUnit"
+        ],
+        "operationId": "ListHRUCharacteristics_LoadGeneratingUnit",
+        "parameters": [
+          {
+            "name": "loadGeneratingUnitID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HRUCharacteristicDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HRUCharacteristicDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HRUCharacteristicDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/nereid/delta-solve": {
       "get": {
         "tags": [
@@ -4056,53 +4106,6 @@
             }
           }
         }
-      },
-      "post": {
-        "tags": [
-          "RegionalSubbasin"
-        ],
-        "operationId": "Create_RegionalSubbasin",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RegionalSubbasinUpsertDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RegionalSubbasinUpsertDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/RegionalSubbasinUpsertDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/RegionalSubbasinDto"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RegionalSubbasinDto"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RegionalSubbasinDto"
-                }
-              }
-            }
-          }
-        }
       }
     },
     "/regional-subbasins/{regionalSubbasinID}": {
@@ -4144,12 +4147,14 @@
             }
           }
         }
-      },
-      "put": {
+      }
+    },
+    "/regional-subbasins/{regionalSubbasinID}/hru-characteristics": {
+      "get": {
         "tags": [
           "RegionalSubbasin"
         ],
-        "operationId": "Update_RegionalSubbasin",
+        "operationId": "ListHRUCharacteristics_RegionalSubbasin",
         "parameters": [
           {
             "name": "regionalSubbasinID",
@@ -4161,53 +4166,45 @@
             }
           }
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RegionalSubbasinUpsertDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RegionalSubbasinUpsertDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/RegionalSubbasinUpsertDto"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "OK",
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/RegionalSubbasinDto"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HRUCharacteristicDto"
+                  }
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RegionalSubbasinDto"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HRUCharacteristicDto"
+                  }
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RegionalSubbasinDto"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HRUCharacteristicDto"
+                  }
                 }
               }
             }
           }
         }
-      },
-      "delete": {
+      }
+    },
+    "/regional-subbasins/{regionalSubbasinID}/load-generating-units": {
+      "get": {
         "tags": [
           "RegionalSubbasin"
         ],
-        "operationId": "Delete_RegionalSubbasin",
+        "operationId": "ListLoadGeneratingUnits_RegionalSubbasin",
         "parameters": [
           {
             "name": "regionalSubbasinID",
@@ -4221,7 +4218,33 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LoadGeneratingUnitGridDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LoadGeneratingUnitGridDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LoadGeneratingUnitGridDto"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -7441,6 +7464,31 @@
         },
         "additionalProperties": false
       },
+      "HRULogDto": {
+        "type": "object",
+        "properties": {
+          "HRULogID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "RequestDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "Success": {
+            "type": "boolean"
+          },
+          "HRURequest": {
+            "type": "string",
+            "nullable": true
+          },
+          "HRUResponse": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "HydrologicSubareaDto": {
         "type": "object",
         "properties": {
@@ -7657,15 +7705,13 @@
             "format": "date-time",
             "nullable": true
           },
-          "HRULogID": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
           "Area": {
             "type": "number",
             "format": "double",
             "nullable": true
+          },
+          "HRULog": {
+            "$ref": "#/components/schemas/HRULogDto"
           }
         },
         "additionalProperties": false
@@ -10169,29 +10215,6 @@
             "format": "int32"
           },
           "Name": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "RegionalSubbasinUpsertDto": {
-        "type": "object",
-        "properties": {
-          "OCSurveyCatchmentID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "OCSurveyDownstreamCatchmentID": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "Watershed": {
-            "type": "string",
-            "nullable": true
-          },
-          "DrainID": {
             "type": "string",
             "nullable": true
           }

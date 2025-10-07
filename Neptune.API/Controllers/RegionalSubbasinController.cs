@@ -43,32 +43,22 @@ public class RegionalSubbasinController : SitkaController<RegionalSubbasinContro
         return Ok(regionalSubbasin);
     }
 
-    [HttpPost]
+    [HttpGet("{regionalSubbasinID}/hru-characteristics")]
+    [EntityNotFound(typeof(RegionalSubbasin), "regionalSubbasinID")]
     [AdminFeature]
-    public async Task<ActionResult<RegionalSubbasinDto>> Create([FromBody] RegionalSubbasinUpsertDto dto)
+    public async Task<ActionResult<List<HRUCharacteristicDto>>> ListHRUCharacteristics([FromRoute] int regionalSubbasinID)
     {
-        var created = await RegionalSubbasins.CreateAsync(DbContext, dto);
-        return CreatedAtAction(nameof(Get), new { regionalSubbasinID = created.RegionalSubbasinID }, created);
+        var hruCharacteristics = await vHRUCharacteristics.ListByRegionalSubbasinAsGridDtoAsync(DbContext, regionalSubbasinID);
+        return Ok(hruCharacteristics);
     }
 
-    [HttpPut("{regionalSubbasinID}")]
+    [HttpGet("{regionalSubbasinID}/load-generating-units")]
+    [EntityNotFound(typeof(RegionalSubbasin), "regionalSubbasinID")]
     [AdminFeature]
-    [EntityNotFoundAttribute(typeof(RegionalSubbasin), "regionalSubbasinID")]
-    public async Task<ActionResult<RegionalSubbasinDto>> Update([FromRoute] int regionalSubbasinID, [FromBody] RegionalSubbasinUpsertDto dto)
+    public async Task<ActionResult<List<LoadGeneratingUnitGridDto>>> ListLoadGeneratingUnits([FromRoute] int regionalSubbasinID)
     {
-        var updated = await RegionalSubbasins.UpdateAsync(DbContext, regionalSubbasinID, dto);
-        if (updated == null) return NotFound();
-        return Ok(updated);
-    }
-
-    [HttpDelete("{regionalSubbasinID}")]
-    [AdminFeature]
-    [EntityNotFoundAttribute(typeof(RegionalSubbasin), "regionalSubbasinID")]
-    public async Task<IActionResult> Delete([FromRoute] int regionalSubbasinID)
-    {
-        var deleted = await RegionalSubbasins.DeleteAsync(DbContext, regionalSubbasinID);
-        if (!deleted) return NotFound();
-        return NoContent();
+        var dtos = await LoadGeneratingUnits.ListByRegionalSubbasinAsGridDtoAsync(DbContext, regionalSubbasinID);
+        return Ok(dtos);
     }
 
     [HttpPost("/graph-trace-as-feature-collection-from-point")]

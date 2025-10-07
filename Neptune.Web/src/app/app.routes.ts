@@ -11,6 +11,7 @@ export const routeParams = {
     onlandVisualTrashAssessmentID: "onlandVisualTrashAssessmentID",
     onlandVisualTrashAssessmentAreaID: "onlandVisualTrashAssessmentAreaID",
     treatmentBMPID: "treatmentBMPID",
+    loadGeneratingUnitID: "loadGeneratingUnitID",
     jurisdictionID: "jurisdictionID",
 };
 
@@ -133,6 +134,14 @@ export const routes: Routes = [
                 path: "load-generating-units",
                 title: "Load Generating Units",
                 loadComponent: () => import("./pages/inventory-module/load-generating-units/load-generating-units.component").then((m) => m.LoadGeneratingUnitsComponent),
+            },
+            {
+                path: `load-generating-units/:${routeParams.loadGeneratingUnitID}`,
+                title: "Load Generating Unit Detail",
+                loadComponent: () =>
+                    import("./pages/inventory-module/load-generating-units/load-generating-unit-detail/load-generating-unit-detail.component").then(
+                        (m) => m.LoadGeneratingUnitDetailComponent
+                    ),
             },
             {
                 path: "hru-characteristics",

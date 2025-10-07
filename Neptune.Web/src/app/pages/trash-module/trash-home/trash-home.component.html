@@ -315,9 +315,9 @@
                     } @if (mapIsReady) {
                     <wqmps-trash-capture-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="40"></wqmps-trash-capture-layer>
                     } @if (mapIsReady) {
-                    <jurisdictions-layer [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="50"></jurisdictions-layer>
+                    <jurisdictions-layer [mode]="OverlayMode.ReferenceOnly" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="50"></jurisdictions-layer>
                     } @if (mapIsReady) {
-                    <regional-subbasins-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="60"></regional-subbasins-layer>
+                    <regional-subbasins-layer [mode]="OverlayMode.ReferenceOnly" [map]="map" [layerControl]="layerControl" [sortOrder]="60"></regional-subbasins-layer>
                     } @if (mapIsReady) {
                     <permit-type-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="70"></permit-type-layer>
                     } @if (mapIsReady && currentResultType == 'Area-Based Results') {

@@ -13,6 +13,7 @@ import { NeptuneMapInitEvent } from "src/app/shared/components/leaflet/neptune-m
 import { RegionalSubbasinsLayerComponent } from "src/app/shared/components/leaflet/layers/regional-subbasins-layer/regional-subbasins-layer.component";
 import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto";
 import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
+import { OverlayMode } from "src/app/shared/components/leaflet/layers/generic-wms-wfs-layer/overlay-mode.enum";
 
 @Component({
     selector: "regional-subbasins",
@@ -21,6 +22,7 @@ import { AlertDisplayComponent } from "src/app/shared/components/alert-display/a
     styleUrl: "./regional-subbasins.component.scss",
 })
 export class RegionalSubbasinsComponent {
+    public OverlayMode = OverlayMode;
     public regionalSubbasins$: Observable<RegionalSubbasinDto[]>;
     public columnDefs: ColDef[];
     public map: Map;

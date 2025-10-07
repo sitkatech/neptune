@@ -14,8 +14,7 @@
     <load-generating-units-layer
         [map]="map"
         [layerControl]="layerControl"
-        [interactive]="true"
-        [displayOnLoad]="true"
+        [mode]="OverlayMode.ReferenceWithInteractivity"
         [selectedID]="selectedLoadGeneratingUnitID"
         (selected)="onSelectedLoadGeneratingUnitIDChanged($event, true)">
     </load-generating-units-layer>

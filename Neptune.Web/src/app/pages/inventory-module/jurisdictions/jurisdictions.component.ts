@@ -14,6 +14,7 @@ import { Map } from "leaflet";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
 import { NeptuneMapInitEvent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
 import { JurisdictionsLayerComponent } from "src/app/shared/components/leaflet/layers/jurisdictions-layer/jurisdictions-layer.component";
+import { OverlayMode } from "src/app/shared/components/leaflet/layers/generic-wms-wfs-layer/overlay-mode.enum";
 
 @Component({
     selector: "jurisdictions",
@@ -32,6 +33,7 @@ export class JurisdictionsComponent {
     public boundingBox$: Observable<BoundingBoxDto>;
     public selectedJurisdictionID: number;
     public isLoading: boolean = true;
+    public OverlayMode = OverlayMode;
 
     constructor(private jurisdictionService: StormwaterJurisdictionService, private utilityFunctionsService: UtilityFunctionsService, private alertService: AlertService) {}
 

@@ -15,8 +15,7 @@
         <jurisdictions-layer
             [map]="map"
             [layerControl]="layerControl"
-            [interactive]="true"
-            [displayOnLoad]="true"
+            [mode]="OverlayMode.ReferenceWithInteractivity"
             [selectedID]="selectedJurisdictionID"
             (selected)="onSelectedJurisdictionIDChanged($event, true)">
         </jurisdictions-layer>

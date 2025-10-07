@@ -40,6 +40,7 @@ import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.
 import { TrashCaptureStatusTypeEnum } from "src/app/shared/generated/enum/trash-capture-status-type-enum";
 import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
 import { PermitTypeLayerComponent } from "src/app/shared/components/leaflet/layers/permit-type-layer/permit-type-layer.component";
+import { OverlayMode } from "src/app/shared/components/leaflet/layers/generic-wms-wfs-layer/overlay-mode.enum";
 
 @Component({
     selector: "trash-home",
@@ -70,6 +71,8 @@ import { PermitTypeLayerComponent } from "src/app/shared/components/leaflet/laye
     ],
 })
 export class TrashHomeComponent implements OnInit, OnDestroy {
+    public OverlayMode = OverlayMode;
+
     public watchUserChangeSubscription: any;
     public currentUser$: Observable<PersonDto>;
 

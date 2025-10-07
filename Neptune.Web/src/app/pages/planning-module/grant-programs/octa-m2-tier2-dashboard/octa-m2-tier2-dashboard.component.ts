@@ -36,6 +36,7 @@ import { StormwaterNetworkLayerComponent } from "src/app/shared/components/leafl
 import { WqmpsLayerComponent } from "src/app/shared/components/leaflet/layers/wqmps-layer/wqmps-layer.component";
 import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet/layers/inventoried-bmps-layer/inventoried-bmps-layer.component";
 import { DropdownToggleDirective } from "src/app/shared/directives/dropdown-toggle.directive";
+import { OverlayMode } from "src/app/shared/components/leaflet/layers/generic-wms-wfs-layer/overlay-mode.enum";
 
 @Component({
     selector: "octa-m2-tier2-dashboard",
@@ -64,6 +65,7 @@ import { DropdownToggleDirective } from "src/app/shared/directives/dropdown-togg
     ],
 })
 export class OCTAM2Tier2DashboardComponent implements OnInit {
+    public OverlayMode = OverlayMode;
     public mapIsReady: boolean = false;
     public customRichTextTypeID = NeptunePageTypeEnum.OCTAM2Tier2GrantProgramDashboard;
 

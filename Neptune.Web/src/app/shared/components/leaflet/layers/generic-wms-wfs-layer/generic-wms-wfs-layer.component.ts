@@ -31,6 +31,7 @@ export class GenericWmsWfsLayerComponent extends MapLayerBase implements OnChang
         fillOpacity: 0.1,
     };
     @Input() cqlFilter: string = "1=1";
+    @Input() addToLayerControl: boolean = true;
     @Output() selected = new EventEmitter<number>();
     public wfsLayer: L.FeatureGroup;
     public layer: L.Layer;
@@ -40,6 +41,11 @@ export class GenericWmsWfsLayerComponent extends MapLayerBase implements OnChang
     }
 
     private createWmsLayerIfNeeded() {
+        // Only create WMS if wmsLayerName is provided
+        if (!this.wmsLayerName) {
+            this.layer = undefined;
+            return;
+        }
         if (!this.layer) {
             const wmsOptions: L.WMSOptions = {
                 layers: this.wmsLayerName,
@@ -52,7 +58,7 @@ export class GenericWmsWfsLayerComponent extends MapLayerBase implements OnChang
             this.layer = L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", wmsOptions);
         }
         // Add to layerControl only once, after both layer and layerControl are available
-        if (this.layer && this.layerControl && !this.overlayAddedToControl) {
+        if (this.layer && this.layerControl && !this.overlayAddedToControl && this.addToLayerControl) {
             try {
                 this.layerControl.addOverlay(this.layer, this.overlayLabel);
                 this.overlayAddedToControl = true;
@@ -61,19 +67,34 @@ export class GenericWmsWfsLayerComponent extends MapLayerBase implements OnChang
             }
         }
     }
+
+    private createWfsHighlightIfNeeded() {
+        // Only create WFS highlight if selectedID is set
+        if (this.selectedID == null || this.selectedID === undefined) {
+            // Remove previous vector overlay if present
+            if (this.wfsLayer && this.map) {
+                this.map.removeLayer(this.wfsLayer);
+                this.wfsLayer = undefined;
+            }
+            return;
+        }
+        this.addSelectedVector(this.selectedID);
+    }
+
     ngAfterViewInit(): void {
         // Initialization is now handled in ngOnChanges
     }
 
     ngOnChanges(changes: any): void {
         this.createWmsLayerIfNeeded();
-        // Only add to map if displayOnLoad is true
+        // Only add to map if displayOnLoad is true and WMS layer exists
         if (this.layer && this.map && this.displayOnLoad && !this.map.hasLayer(this.layer)) {
             this.layer.addTo(this.map);
         }
+        this.createWfsHighlightIfNeeded();
         this.wireMapClickHandler();
         if (changes.selectedID && !changes.selectedID.firstChange) {
-            this.addSelectedVector(changes.selectedID.currentValue);
+            this.createWfsHighlightIfNeeded();
         }
     }
 
@@ -148,3 +169,30 @@ export class GenericWmsWfsLayerComponent extends MapLayerBase implements OnChang
         }
     }
 }
+
+/**
+ * Usage Patterns for GenericWmsWfsLayerComponent:
+ *
+ * 1. Show a single feature (WFS only, not in layer control):
+ *    - [selectedID] = feature ID
+ *    - [addToLayerControl] = false
+ *    - [displayOnLoad] = true
+ *    - [interactive] = false (optional)
+ *    - WMS can be skipped by not providing wmsLayerName or by conditional logic
+ *
+ * 2. Show all features via WMS (reference only, no interactivity):
+ *    - [displayOnLoad] = true
+ *    - [interactive] = false
+ *    - [addToLayerControl] = true (default)
+ *    - Do not set [selectedID]
+ *    - WMS displays all features, no selection/highlighting
+ *
+ * 3. Show all features via WMS, with interactivity and selection highlighting (WFS for highlight):
+ *    - [displayOnLoad] = true
+ *    - [interactive] = true
+ *    - [addToLayerControl] = true
+ *    - [selectedID] = currently selected feature
+ *    - WMS displays all features, WFS overlays highlight the selected feature
+ *
+ * The component will only create the layers needed for the current use case based on the provided inputs.
+ */

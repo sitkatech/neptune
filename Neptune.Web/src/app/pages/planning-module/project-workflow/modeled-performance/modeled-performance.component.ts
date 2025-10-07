@@ -28,6 +28,7 @@ import { StormwaterNetworkLayerComponent } from "src/app/shared/components/leafl
 import { WqmpsLayerComponent } from "src/app/shared/components/leaflet/layers/wqmps-layer/wqmps-layer.component";
 import { NeptuneMapComponent, NeptuneMapInitEvent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
 import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet/layers/inventoried-bmps-layer/inventoried-bmps-layer.component";
+import { OverlayMode } from "src/app/shared/components/leaflet/layers/generic-wms-wfs-layer/overlay-mode.enum";
 
 @Component({
     selector: "modeled-performance",
@@ -52,6 +53,7 @@ import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet
     ],
 })
 export class ModeledPerformanceComponent implements OnInit {
+    public OverlayMode = OverlayMode;
     public ProjectNetworkHistoryStatusTypeEnum = ProjectNetworkSolveHistoryStatusTypeEnum;
     public projectNetworkSolveHistories$: Observable<ProjectNetworkSolveHistorySimpleDto[]>;
 

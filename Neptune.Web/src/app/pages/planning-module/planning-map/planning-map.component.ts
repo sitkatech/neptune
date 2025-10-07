@@ -33,6 +33,7 @@ import { JurisdictionsLayerComponent } from "src/app/shared/components/leaflet/l
 import { WqmpsLayerComponent } from "src/app/shared/components/leaflet/layers/wqmps-layer/wqmps-layer.component";
 import { StormwaterNetworkLayerComponent } from "src/app/shared/components/leaflet/layers/stormwater-network-layer/stormwater-network-layer.component";
 import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet/layers/inventoried-bmps-layer/inventoried-bmps-layer.component";
+import { OverlayMode } from "src/app/shared/components/leaflet/layers/generic-wms-wfs-layer/overlay-mode.enum";
 
 @Component({
     selector: "planning-map",
@@ -60,6 +61,7 @@ import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet
     ],
 })
 export class PlanningMapComponent implements OnInit {
+    public OverlayMode = OverlayMode;
     public customRichTextTypeID = NeptunePageTypeEnum.HippocampPlanningMap;
 
     public mapIsReady: boolean = false;

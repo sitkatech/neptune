@@ -20,7 +20,7 @@ namespace Neptune.EFModels.Entities
                 WaterQualityManagementPlanName = entity.WaterQualityManagementPlan?.WaterQualityManagementPlanName,
                 IsEmptyResponseFromHRUService = entity.IsEmptyResponseFromHRUService,
                 DateHRURequested = entity.DateHRURequested,
-                HRULogID = entity.HRULogID,
+                HRULog = entity.HRULog?.AsDto(),
                 Area = entity.LoadGeneratingUnitGeometry.Area * Constants.SquareMetersToAcres
             };
         }
@@ -40,17 +40,6 @@ namespace Neptune.EFModels.Entities
                 IsEmptyResponseFromHRUService = entity.IsEmptyResponseFromHRUService,
                 DateHRURequested = entity.DateHRURequested,
             };
-        }
-
-        public static void UpdateFromDto(this LoadGeneratingUnit entity, LoadGeneratingUnitDto dto)
-        {
-            entity.ModelBasinID = dto.ModelBasinID;
-            entity.RegionalSubbasinID = dto.RegionalSubbasinID;
-            entity.DelineationID = dto.DelineationID;
-            entity.WaterQualityManagementPlanID = dto.WaterQualityManagementPlanID;
-            entity.IsEmptyResponseFromHRUService = dto.IsEmptyResponseFromHRUService;
-            entity.DateHRURequested = dto.DateHRURequested;
-            entity.HRULogID = dto.HRULogID;
         }
     }
 }

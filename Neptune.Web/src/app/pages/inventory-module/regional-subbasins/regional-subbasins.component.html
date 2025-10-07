@@ -15,8 +15,7 @@
         <regional-subbasins-layer
             [map]="map"
             [layerControl]="layerControl"
-            [interactive]="true"
-            [displayOnLoad]="true"
+            [mode]="OverlayMode.ReferenceWithInteractivity"
             [selectedID]="selectedRegionalSubbasinID"
             (selected)="onSelectedRegionalSubbasinIDChanged($event, true)">
         </regional-subbasins-layer>

@@ -33,7 +33,7 @@
                 (layerBoundsCalculated)="handleLayerBoundsCalculated($event)"
                 (landUseBlockSelected)="onSelectedLandUseBlockChanged($event)"></selected-land-use-block-layer>
             } @if (mapIsReady) {
-            <jurisdictions-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></jurisdictions-layer>
+            <jurisdictions-layer [mode]="OverlayMode.ReferenceWithInteractivity" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></jurisdictions-layer>
             } @if (mapIsReady) {
             <wqmps-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="20"></wqmps-layer>
             } @if (mapIsReady) {

@@ -73,4 +73,16 @@ public static class vHRUCharacteristics
         var entities = await dbContext.vHRUCharacteristics.AsNoTracking().ToListAsync();
         return entities.Select(x => x.AsDto()).ToList();
     }
+
+    public static async Task<List<HRUCharacteristicDto>> ListByLoadGeneratingUnitAsGridDtoAsync(NeptuneDbContext dbContext, int loadGeneratingUnitID)
+    {
+        var entities = await dbContext.vHRUCharacteristics.AsNoTracking().Where(x => x.LoadGeneratingUnitID == loadGeneratingUnitID).ToListAsync();
+        return entities.Select(x => x.AsDto()).ToList();
+    }
+
+    public static async Task<List<HRUCharacteristicDto>> ListByRegionalSubbasinAsGridDtoAsync(NeptuneDbContext dbContext, int regionalSubbasinID)
+    {
+        var entities = await dbContext.vHRUCharacteristics.AsNoTracking().Where(x => x.RegionalSubbasinID == regionalSubbasinID).ToListAsync();
+        return entities.Select(x => x.AsDto()).ToList();
+    }
 }

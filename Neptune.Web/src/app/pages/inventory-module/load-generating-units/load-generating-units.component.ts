@@ -13,6 +13,7 @@ import { NeptuneMapInitEvent } from "src/app/shared/components/leaflet/neptune-m
 import { LoadGeneratingUnitsLayerComponent } from "src/app/shared/components/leaflet/layers/load-generating-units-layer/load-generating-units-layer.component";
 import { StormwaterJurisdictionService } from "src/app/shared/generated/api/stormwater-jurisdiction.service";
 import { LoadGeneratingUnitGridDto } from "src/app/shared/generated/model/models";
+import { OverlayMode } from "src/app/shared/components/leaflet/layers/generic-wms-wfs-layer/overlay-mode.enum";
 
 @Component({
     selector: "load-generating-units",
@@ -21,6 +22,7 @@ import { LoadGeneratingUnitGridDto } from "src/app/shared/generated/model/models
     styleUrl: "./load-generating-units.component.scss",
 })
 export class LoadGeneratingUnitsComponent {
+    public OverlayMode = OverlayMode;
     public loadGeneratingUnits$: Observable<LoadGeneratingUnitGridDto[]>;
     public columnDefs: ColDef[];
     public map: Map;

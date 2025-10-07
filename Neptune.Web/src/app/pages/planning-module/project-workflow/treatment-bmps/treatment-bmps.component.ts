@@ -46,6 +46,7 @@ import { CustomAttributeUpsertDto } from "src/app/shared/generated/model/custom-
 import { TreatmentBMPTypeCustomAttributeTypeDto } from "src/app/shared/generated/model/treatment-bmp-type-custom-attribute-type-dto";
 import { TreatmentBMPTypeCustomAttributeTypeService } from "src/app/shared/generated/api/treatment-bmp-type-custom-attribute-type.service";
 import { PopperDirective } from "src/app/shared/directives/popper.directive";
+import { OverlayMode } from "src/app/shared/components/leaflet/layers/generic-wms-wfs-layer/overlay-mode.enum";
 
 @Component({
     selector: "treatment-bmps",
@@ -71,6 +72,7 @@ import { PopperDirective } from "src/app/shared/directives/popper.directive";
     ],
 })
 export class TreatmentBmpsComponent implements OnInit {
+    public OverlayMode = OverlayMode;
     @Input() projectID!: number;
     public customRichTextTypeID = NeptunePageTypeEnum.HippocampTreatmentBMPs;
 

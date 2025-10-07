@@ -32,6 +32,7 @@ import { WqmpsLayerComponent } from "src/app/shared/components/leaflet/layers/wq
 import { NeptuneMapComponent, NeptuneMapInitEvent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
 import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet/layers/inventoried-bmps-layer/inventoried-bmps-layer.component";
 import { LeafletHelperService } from "src/app/shared/services/leaflet-helper.service";
+import { OverlayMode } from "src/app/shared/components/leaflet/layers/generic-wms-wfs-layer/overlay-mode.enum";
 
 @Component({
     selector: "delineations",
@@ -54,6 +55,7 @@ import { LeafletHelperService } from "src/app/shared/services/leaflet-helper.ser
     ],
 })
 export class DelineationsComponent implements OnInit {
+    public OverlayMode = OverlayMode;
     @ViewChild("mapContainer") mapContainer: ElementRef;
     public mapIsReady: boolean = false;
 

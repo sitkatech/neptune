@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { HRULogDto } from './hru-log-dto';
 
 
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
@@ -22,8 +23,8 @@ export class LoadGeneratingUnitDto {
     WaterQualityManagementPlanName?: string | null;
     IsEmptyResponseFromHRUService?: boolean | null;
     DateHRURequested?: string | null;
-    HRULogID?: number | null;
     Area?: number | null;
+    HRULog?: HRULogDto;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
@@ -41,8 +42,8 @@ export interface LoadGeneratingUnitDtoForm {
     WaterQualityManagementPlanName?: FormControl<string>;
     IsEmptyResponseFromHRUService?: FormControl<boolean>;
     DateHRURequested?: FormControl<string>;
-    HRULogID?: FormControl<number>;
     Area?: FormControl<number>;
+    HRULog?: FormControl<HRULogDto>;
 }
 
 export class LoadGeneratingUnitDtoFormControls { 
@@ -156,7 +157,7 @@ export class LoadGeneratingUnitDtoFormControls {
             ],
         }
     );
-    public static HRULogID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+    public static Area = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
         {
@@ -166,7 +167,7 @@ export class LoadGeneratingUnitDtoFormControls {
             ],
         }
     );
-    public static Area = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+    public static HRULog = (value: FormControlState<HRULogDto> | HRULogDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<HRULogDto>(
         value,
         formControlOptions ?? 
         {
