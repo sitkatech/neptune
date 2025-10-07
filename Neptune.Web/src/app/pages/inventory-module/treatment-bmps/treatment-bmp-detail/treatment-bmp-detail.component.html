@@ -107,11 +107,11 @@
             </div>
             <div class="card-body">
                 @if (!treatmentBMP.IsFullyParameterized) { @if (treatmentBMP.WaterQualityManagementPlan != null &&
-                treatmentBMP.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproach.WaterQualityManagementPlanModelingApproachID ==
-                WaterQualityManagementPlanModelingApproachEnum.Simplified) {
+                treatmentBMP.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproachID == WaterQualityManagementPlanModelingApproachEnum.Simplified) {
                 <p class="systemText">
-                    This BMP is associated with a <a href="@treatmentBMP.WaterQualityManagementPlanDetailUrl">WQMP</a> that is modeled using the simplified approach; this BMP will
-                    not be modeled explicitly.
+                    This BMP is associated with a
+                    <a [routerLink]="['/inventory/water-quality-management-plans', treatmentBMP.WaterQualityManagementPlan.WaterQualityManagementPlanID]">WQMP</a> that is modeled
+                    using the simplified approach; this BMP will not be modeled explicitly.
                 </p>
                 } @else {
                 <p class="systemText">

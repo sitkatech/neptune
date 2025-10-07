@@ -25,6 +25,7 @@ export class LoadGeneratingUnitDto {
     DateHRURequested?: string | null;
     Area?: number | null;
     HRULog?: HRULogDto;
+    ModelBasinKey?: number | null;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
@@ -44,6 +45,7 @@ export interface LoadGeneratingUnitDtoForm {
     DateHRURequested?: FormControl<string>;
     Area?: FormControl<number>;
     HRULog?: FormControl<HRULogDto>;
+    ModelBasinKey?: FormControl<number>;
 }
 
 export class LoadGeneratingUnitDtoFormControls { 
@@ -168,6 +170,16 @@ export class LoadGeneratingUnitDtoFormControls {
         }
     );
     public static HRULog = (value: FormControlState<HRULogDto> | HRULogDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<HRULogDto>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static ModelBasinKey = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
         {

@@ -1,3 +1,5 @@
+using Neptune.Models.DataTransferObjects;
+
 namespace Neptune.Models.DataTransferObjects
 {
     public class TreatmentBMPDto
@@ -47,17 +49,10 @@ namespace Neptune.Models.DataTransferObjects
         public bool? IsUpstreamestBMPAnalyzedInModelingModule { get; set; }
         public List<RegionalSubbasinRevisionRequestDto>? RegionalSubbasinRevisionRequests { get; set; }
         public WatershedDto? Watershed { get; set; }
-        public string? WatershedFieldDefinitionText { get; set; }
+        public WaterQualityManagementPlanSimpleDto? WaterQualityManagementPlan { get; set; }
         public ProjectDto? Project { get; set; }
-        public OrganizationDto? OwnerOrganization { get; set; }
-        public StormwaterJurisdictionGridDto? StormwaterJurisdiction { get; set; }
-        public WaterQualityManagementPlanDto? WaterQualityManagementPlan { get; set; }
-        public List<MaintenanceRecordDto>? MaintenanceRecords { get; set; }
-        public List<TreatmentBMPAssessmentDto>? TreatmentBMPAssessments { get; set; }
-        public List<TreatmentBMPBenchmarkAndThresholdDto>? TreatmentBMPBenchmarkAndThresholds { get; set; }
-        public List<NereidResultDto>? NereidResults { get; set; }
-        public List<ProjectNereidResultDto>? ProjectNereidResults { get; set; }
-        public List<WaterQualityManagementPlanVerifyTreatmentBMPDto>? WaterQualityManagementPlanVerifyTreatmentBMPs { get; set; }
+        public OrganizationDisplayDto? OwnerOrganization { get; set; }
+        public StormwaterJurisdictionDisplayDto? StormwaterJurisdiction { get; set; }
 
         // Errors
         public List<string>? DelineationErrors { get; set; }

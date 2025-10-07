@@ -8,22 +8,16 @@
  * Do not edit the class manually.
  */
 import { ProjectDto } from './project-dto';
-import { WaterQualityManagementPlanDto } from './water-quality-management-plan-dto';
+import { StormwaterJurisdictionDisplayDto } from './stormwater-jurisdiction-display-dto';
 import { WatershedDto } from './watershed-dto';
-import { RegionalSubbasinRevisionRequestDto } from './regional-subbasin-revision-request-dto';
-import { TreatmentBMPAssessmentDto } from './treatment-bmp-assessment-dto';
-import { SizingBasisTypeDto } from './sizing-basis-type-dto';
-import { MaintenanceRecordDto } from './maintenance-record-dto';
-import { OrganizationDto } from './organization-dto';
-import { WaterQualityManagementPlanVerifyTreatmentBMPDto } from './water-quality-management-plan-verify-treatment-bmp-dto';
 import { DelineationDto } from './delineation-dto';
 import { VTreatmentBMPModelingAttributeDto } from './v-treatment-bmp-modeling-attribute-dto';
-import { NereidResultDto } from './nereid-result-dto';
-import { ProjectNereidResultDto } from './project-nereid-result-dto';
-import { TreatmentBMPBenchmarkAndThresholdDto } from './treatment-bmp-benchmark-and-threshold-dto';
+import { OrganizationDisplayDto } from './organization-display-dto';
+import { RegionalSubbasinRevisionRequestDto } from './regional-subbasin-revision-request-dto';
+import { SizingBasisTypeDto } from './sizing-basis-type-dto';
 import { TrashCaptureStatusTypeDto } from './trash-capture-status-type-dto';
-import { StormwaterJurisdictionGridDto } from './stormwater-jurisdiction-grid-dto';
 import { TreatmentBMPLifeSpanTypeDto } from './treatment-bmp-life-span-type-dto';
+import { WaterQualityManagementPlanSimpleDto } from './water-quality-management-plan-simple-dto';
 
 
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
@@ -68,17 +62,10 @@ export class TreatmentBMPDto {
     IsUpstreamestBMPAnalyzedInModelingModule?: boolean | null;
     RegionalSubbasinRevisionRequests?: Array<RegionalSubbasinRevisionRequestDto> | null;
     Watershed?: WatershedDto;
-    WatershedFieldDefinitionText?: string | null;
+    WaterQualityManagementPlan?: WaterQualityManagementPlanSimpleDto;
     Project?: ProjectDto;
-    OwnerOrganization?: OrganizationDto;
-    StormwaterJurisdiction?: StormwaterJurisdictionGridDto;
-    WaterQualityManagementPlan?: WaterQualityManagementPlanDto;
-    MaintenanceRecords?: Array<MaintenanceRecordDto> | null;
-    TreatmentBMPAssessments?: Array<TreatmentBMPAssessmentDto> | null;
-    TreatmentBMPBenchmarkAndThresholds?: Array<TreatmentBMPBenchmarkAndThresholdDto> | null;
-    NereidResults?: Array<NereidResultDto> | null;
-    ProjectNereidResults?: Array<ProjectNereidResultDto> | null;
-    WaterQualityManagementPlanVerifyTreatmentBMPs?: Array<WaterQualityManagementPlanVerifyTreatmentBMPDto> | null;
+    OwnerOrganization?: OrganizationDisplayDto;
+    StormwaterJurisdiction?: StormwaterJurisdictionDisplayDto;
     DelineationErrors?: Array<string> | null;
     ParameterizationErrors?: Array<string> | null;
     SizingBasisType?: SizingBasisTypeDto;
@@ -130,17 +117,10 @@ export interface TreatmentBMPDtoForm {
     IsUpstreamestBMPAnalyzedInModelingModule?: FormControl<boolean>;
     RegionalSubbasinRevisionRequests?: FormControl<Array<RegionalSubbasinRevisionRequestDto>>;
     Watershed?: FormControl<WatershedDto>;
-    WatershedFieldDefinitionText?: FormControl<string>;
+    WaterQualityManagementPlan?: FormControl<WaterQualityManagementPlanSimpleDto>;
     Project?: FormControl<ProjectDto>;
-    OwnerOrganization?: FormControl<OrganizationDto>;
-    StormwaterJurisdiction?: FormControl<StormwaterJurisdictionGridDto>;
-    WaterQualityManagementPlan?: FormControl<WaterQualityManagementPlanDto>;
-    MaintenanceRecords?: FormControl<Array<MaintenanceRecordDto>>;
-    TreatmentBMPAssessments?: FormControl<Array<TreatmentBMPAssessmentDto>>;
-    TreatmentBMPBenchmarkAndThresholds?: FormControl<Array<TreatmentBMPBenchmarkAndThresholdDto>>;
-    NereidResults?: FormControl<Array<NereidResultDto>>;
-    ProjectNereidResults?: FormControl<Array<ProjectNereidResultDto>>;
-    WaterQualityManagementPlanVerifyTreatmentBMPs?: FormControl<Array<WaterQualityManagementPlanVerifyTreatmentBMPDto>>;
+    OwnerOrganization?: FormControl<OrganizationDisplayDto>;
+    StormwaterJurisdiction?: FormControl<StormwaterJurisdictionDisplayDto>;
     DelineationErrors?: FormControl<Array<string>>;
     ParameterizationErrors?: FormControl<Array<string>>;
     SizingBasisType?: FormControl<SizingBasisTypeDto>;
@@ -549,7 +529,7 @@ export class TreatmentBMPDtoFormControls {
             ],
         }
     );
-    public static WatershedFieldDefinitionText = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+    public static WaterQualityManagementPlan = (value: FormControlState<WaterQualityManagementPlanSimpleDto> | WaterQualityManagementPlanSimpleDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<WaterQualityManagementPlanSimpleDto>(
         value,
         formControlOptions ?? 
         {
@@ -569,7 +549,7 @@ export class TreatmentBMPDtoFormControls {
             ],
         }
     );
-    public static OwnerOrganization = (value: FormControlState<OrganizationDto> | OrganizationDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<OrganizationDto>(
+    public static OwnerOrganization = (value: FormControlState<OrganizationDisplayDto> | OrganizationDisplayDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<OrganizationDisplayDto>(
         value,
         formControlOptions ?? 
         {
@@ -579,77 +559,7 @@ export class TreatmentBMPDtoFormControls {
             ],
         }
     );
-    public static StormwaterJurisdiction = (value: FormControlState<StormwaterJurisdictionGridDto> | StormwaterJurisdictionGridDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<StormwaterJurisdictionGridDto>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static WaterQualityManagementPlan = (value: FormControlState<WaterQualityManagementPlanDto> | WaterQualityManagementPlanDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<WaterQualityManagementPlanDto>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static MaintenanceRecords = (value: FormControlState<Array<MaintenanceRecordDto>> | Array<MaintenanceRecordDto> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<MaintenanceRecordDto>>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static TreatmentBMPAssessments = (value: FormControlState<Array<TreatmentBMPAssessmentDto>> | Array<TreatmentBMPAssessmentDto> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<TreatmentBMPAssessmentDto>>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static TreatmentBMPBenchmarkAndThresholds = (value: FormControlState<Array<TreatmentBMPBenchmarkAndThresholdDto>> | Array<TreatmentBMPBenchmarkAndThresholdDto> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<TreatmentBMPBenchmarkAndThresholdDto>>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static NereidResults = (value: FormControlState<Array<NereidResultDto>> | Array<NereidResultDto> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<NereidResultDto>>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static ProjectNereidResults = (value: FormControlState<Array<ProjectNereidResultDto>> | Array<ProjectNereidResultDto> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<ProjectNereidResultDto>>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static WaterQualityManagementPlanVerifyTreatmentBMPs = (value: FormControlState<Array<WaterQualityManagementPlanVerifyTreatmentBMPDto>> | Array<WaterQualityManagementPlanVerifyTreatmentBMPDto> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<WaterQualityManagementPlanVerifyTreatmentBMPDto>>(
+    public static StormwaterJurisdiction = (value: FormControlState<StormwaterJurisdictionDisplayDto> | StormwaterJurisdictionDisplayDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<StormwaterJurisdictionDisplayDto>(
         value,
         formControlOptions ?? 
         {

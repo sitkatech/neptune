@@ -10,7 +10,7 @@
 
 
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
-export class WaterQualityManagementPlanDto { 
+export class WaterQualityManagementPlanSimpleDto { 
     WaterQualityManagementPlanID?: number;
     StormwaterJurisdictionID?: number;
     WaterQualityManagementPlanLandUseID?: number | null;
@@ -19,14 +19,6 @@ export class WaterQualityManagementPlanDto {
     WaterQualityManagementPlanDevelopmentTypeID?: number | null;
     WaterQualityManagementPlanName?: string | null;
     ApprovalDate?: string | null;
-    MaintenanceContactName?: string | null;
-    MaintenanceContactOrganization?: string | null;
-    MaintenanceContactPhone?: string | null;
-    MaintenanceContactAddress1?: string | null;
-    MaintenanceContactAddress2?: string | null;
-    MaintenanceContactCity?: string | null;
-    MaintenanceContactState?: string | null;
-    MaintenanceContactZip?: string | null;
     WaterQualityManagementPlanPermitTermID?: number | null;
     HydromodificationAppliesTypeID?: number | null;
     DateOfConstruction?: string | null;
@@ -36,14 +28,12 @@ export class WaterQualityManagementPlanDto {
     TrashCaptureStatusTypeID?: number;
     TrashCaptureEffectiveness?: number | null;
     WaterQualityManagementPlanModelingApproachID?: number;
-    LastNereidLogID?: number | null;
-    WaterQualityManagementPlanBoundaryNotes?: string | null;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
 }
 
-export interface WaterQualityManagementPlanDtoForm { 
+export interface WaterQualityManagementPlanSimpleDtoForm { 
     WaterQualityManagementPlanID?: FormControl<number>;
     StormwaterJurisdictionID?: FormControl<number>;
     WaterQualityManagementPlanLandUseID?: FormControl<number>;
@@ -52,14 +42,6 @@ export interface WaterQualityManagementPlanDtoForm {
     WaterQualityManagementPlanDevelopmentTypeID?: FormControl<number>;
     WaterQualityManagementPlanName?: FormControl<string>;
     ApprovalDate?: FormControl<string>;
-    MaintenanceContactName?: FormControl<string>;
-    MaintenanceContactOrganization?: FormControl<string>;
-    MaintenanceContactPhone?: FormControl<string>;
-    MaintenanceContactAddress1?: FormControl<string>;
-    MaintenanceContactAddress2?: FormControl<string>;
-    MaintenanceContactCity?: FormControl<string>;
-    MaintenanceContactState?: FormControl<string>;
-    MaintenanceContactZip?: FormControl<string>;
     WaterQualityManagementPlanPermitTermID?: FormControl<number>;
     HydromodificationAppliesTypeID?: FormControl<number>;
     DateOfConstruction?: FormControl<string>;
@@ -69,11 +51,9 @@ export interface WaterQualityManagementPlanDtoForm {
     TrashCaptureStatusTypeID?: FormControl<number>;
     TrashCaptureEffectiveness?: FormControl<number>;
     WaterQualityManagementPlanModelingApproachID?: FormControl<number>;
-    LastNereidLogID?: FormControl<number>;
-    WaterQualityManagementPlanBoundaryNotes?: FormControl<string>;
 }
 
-export class WaterQualityManagementPlanDtoFormControls { 
+export class WaterQualityManagementPlanSimpleDtoFormControls { 
     public static WaterQualityManagementPlanID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
@@ -145,86 +125,6 @@ export class WaterQualityManagementPlanDtoFormControls {
         }
     );
     public static ApprovalDate = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static MaintenanceContactName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static MaintenanceContactOrganization = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static MaintenanceContactPhone = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static MaintenanceContactAddress1 = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static MaintenanceContactAddress2 = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static MaintenanceContactCity = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static MaintenanceContactState = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static MaintenanceContactZip = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {
@@ -315,26 +215,6 @@ export class WaterQualityManagementPlanDtoFormControls {
         }
     );
     public static WaterQualityManagementPlanModelingApproachID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static LastNereidLogID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static WaterQualityManagementPlanBoundaryNotes = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {

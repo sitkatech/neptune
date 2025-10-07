@@ -21,6 +21,7 @@ export class LoadGeneratingUnitGridDto {
     WaterQualityManagementPlanName?: string | null;
     IsEmptyResponseFromHRUService?: boolean | null;
     DateHRURequested?: string | null;
+    ModelBasinKey?: number | null;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
@@ -37,6 +38,7 @@ export interface LoadGeneratingUnitGridDtoForm {
     WaterQualityManagementPlanName?: FormControl<string>;
     IsEmptyResponseFromHRUService?: FormControl<boolean>;
     DateHRURequested?: FormControl<string>;
+    ModelBasinKey?: FormControl<number>;
 }
 
 export class LoadGeneratingUnitGridDtoFormControls { 
@@ -131,6 +133,16 @@ export class LoadGeneratingUnitGridDtoFormControls {
         }
     );
     public static DateHRURequested = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static ModelBasinKey = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
         {

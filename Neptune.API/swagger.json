@@ -5,6 +5,71 @@
     "version": "1.0"
   },
   "paths": {
+    "/ai/clean-up": {
+      "post": {
+        "tags": [
+          "AI"
+        ],
+        "operationId": "PostChatCompletions_AI",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/water-quality-management-plans/{waterQualityManagementPlanID}/documents/{waterQualityManagementPlanDocumentID}/ask": {
+      "post": {
+        "tags": [
+          "AI"
+        ],
+        "operationId": "Ask_AI",
+        "parameters": [
+          {
+            "name": "waterQualityManagementPlanID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "waterQualityManagementPlanDocumentID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChatRequestDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChatRequestDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChatRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/custom-attribute-types": {
       "get": {
         "tags": [
@@ -6375,6 +6440,213 @@
           }
         }
       }
+    },
+    "/water-quality-management-plans": {
+      "get": {
+        "tags": [
+          "WaterQualityManagementPlan"
+        ],
+        "operationId": "List_WaterQualityManagementPlan",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WaterQualityManagementPlanDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WaterQualityManagementPlanDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WaterQualityManagementPlanDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "WaterQualityManagementPlan"
+        ],
+        "operationId": "Create_WaterQualityManagementPlan",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WaterQualityManagementPlanUpsertDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WaterQualityManagementPlanUpsertDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/WaterQualityManagementPlanUpsertDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaterQualityManagementPlanDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaterQualityManagementPlanDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaterQualityManagementPlanDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/water-quality-management-plans/{waterQualityManagementPlanID}": {
+      "get": {
+        "tags": [
+          "WaterQualityManagementPlan"
+        ],
+        "operationId": "Get_WaterQualityManagementPlan",
+        "parameters": [
+          {
+            "name": "waterQualityManagementPlanID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaterQualityManagementPlanDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaterQualityManagementPlanDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaterQualityManagementPlanDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "WaterQualityManagementPlan"
+        ],
+        "operationId": "Update_WaterQualityManagementPlan",
+        "parameters": [
+          {
+            "name": "waterQualityManagementPlanID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WaterQualityManagementPlanUpsertDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WaterQualityManagementPlanUpsertDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/WaterQualityManagementPlanUpsertDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaterQualityManagementPlanDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaterQualityManagementPlanDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaterQualityManagementPlanDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "WaterQualityManagementPlan"
+        ],
+        "operationId": "Delete_WaterQualityManagementPlan",
+        "parameters": [
+          {
+            "name": "waterQualityManagementPlanID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -6423,6 +6695,42 @@
           "Top": {
             "type": "number",
             "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ChatMessageDto": {
+        "type": "object",
+        "properties": {
+          "Role": {
+            "type": "string",
+            "nullable": true
+          },
+          "Content": {
+            "type": "string",
+            "nullable": true
+          },
+          "Id": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ChatRequestDto": {
+        "type": "object",
+        "properties": {
+          "Messages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ChatMessageDto"
+            },
+            "nullable": true
+          },
+          "Filters": {
+            "type": "object",
+            "additionalProperties": { },
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -7489,38 +7797,6 @@
         },
         "additionalProperties": false
       },
-      "HydrologicSubareaDto": {
-        "type": "object",
-        "properties": {
-          "HydrologicSubareaID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "HydrologicSubareaName": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "HydromodificationAppliesTypeDto": {
-        "type": "object",
-        "properties": {
-          "HydromodificationAppliesTypeID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "HydromodificationAppliesTypeName": {
-            "type": "string",
-            "nullable": true
-          },
-          "HydromodificationAppliesTypeDisplayName": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "IAttributesTable": {
         "type": "object",
         "properties": {
@@ -7803,20 +8079,6 @@
         },
         "additionalProperties": false
       },
-      "MaintenanceRecordDto": {
-        "type": "object",
-        "properties": {
-          "MaintenanceRecordID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "Name": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "NeptunePageDto": {
         "type": "object",
         "properties": {
@@ -7849,34 +8111,6 @@
             "nullable": true
           },
           "NeptunePageTypeDisplayName": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "NereidLogSimpleDto": {
-        "type": "object",
-        "properties": {
-          "NereidLogID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "LogSummary": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "NereidResultDto": {
-        "type": "object",
-        "properties": {
-          "NereidResultID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "NodeID": {
             "type": "string",
             "nullable": true
           }
@@ -8651,6 +8885,24 @@
           "AllOrdinates"
         ],
         "type": "string"
+      },
+      "OrganizationDisplayDto": {
+        "type": "object",
+        "properties": {
+          "OrganizationID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OrganizationName": {
+            "type": "string",
+            "nullable": true
+          },
+          "OrganizationShortName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
       },
       "OrganizationDto": {
         "type": "object",
@@ -10025,20 +10277,6 @@
         },
         "additionalProperties": false
       },
-      "ProjectNereidResultDto": {
-        "type": "object",
-        "properties": {
-          "ProjectNereidResultID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "NodeID": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "ProjectNetworkSolveHistorySimpleDto": {
         "type": "object",
         "properties": {
@@ -10600,20 +10838,6 @@
         },
         "additionalProperties": false
       },
-      "TreatmentBMPAssessmentDto": {
-        "type": "object",
-        "properties": {
-          "TreatmentBMPAssessmentID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "Status": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "TreatmentBMPBenchmarkAndThresholdDto": {
         "type": "object",
         "properties": {
@@ -10922,63 +11146,17 @@
           "Watershed": {
             "$ref": "#/components/schemas/WatershedDto"
           },
-          "WatershedFieldDefinitionText": {
-            "type": "string",
-            "nullable": true
+          "WaterQualityManagementPlan": {
+            "$ref": "#/components/schemas/WaterQualityManagementPlanSimpleDto"
           },
           "Project": {
             "$ref": "#/components/schemas/ProjectDto"
           },
           "OwnerOrganization": {
-            "$ref": "#/components/schemas/OrganizationDto"
+            "$ref": "#/components/schemas/OrganizationDisplayDto"
           },
           "StormwaterJurisdiction": {
-            "$ref": "#/components/schemas/StormwaterJurisdictionGridDto"
-          },
-          "WaterQualityManagementPlan": {
-            "$ref": "#/components/schemas/WaterQualityManagementPlanDto"
-          },
-          "MaintenanceRecords": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/MaintenanceRecordDto"
-            },
-            "nullable": true
-          },
-          "TreatmentBMPAssessments": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/TreatmentBMPAssessmentDto"
-            },
-            "nullable": true
-          },
-          "TreatmentBMPBenchmarkAndThresholds": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/TreatmentBMPBenchmarkAndThresholdDto"
-            },
-            "nullable": true
-          },
-          "NereidResults": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/NereidResultDto"
-            },
-            "nullable": true
-          },
-          "ProjectNereidResults": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ProjectNereidResultDto"
-            },
-            "nullable": true
-          },
-          "WaterQualityManagementPlanVerifyTreatmentBMPs": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/WaterQualityManagementPlanVerifyTreatmentBMPDto"
-            },
-            "nullable": true
+            "$ref": "#/components/schemas/StormwaterJurisdictionDisplayDto"
           },
           "DelineationErrors": {
             "type": "array",
@@ -11529,52 +11707,6 @@
         },
         "additionalProperties": false
       },
-      "WaterQualityManagementPlanBoundaryDto": {
-        "type": "object",
-        "properties": {
-          "WaterQualityManagementPlanBoundaryID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "BoundaryNotes": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "WaterQualityManagementPlanDevelopmentTypeDto": {
-        "type": "object",
-        "properties": {
-          "WaterQualityManagementPlanDevelopmentTypeID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "WaterQualityManagementPlanDevelopmentTypeName": {
-            "type": "string",
-            "nullable": true
-          },
-          "WaterQualityManagementPlanDevelopmentTypeDisplayName": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "WaterQualityManagementPlanDocumentDto": {
-        "type": "object",
-        "properties": {
-          "WaterQualityManagementPlanDocumentID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "DocumentName": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "WaterQualityManagementPlanDto": {
         "type": "object",
         "properties": {
@@ -11697,196 +11829,211 @@
           "WaterQualityManagementPlanBoundaryNotes": {
             "type": "string",
             "nullable": true
-          },
-          "StormwaterJurisdiction": {
-            "$ref": "#/components/schemas/StormwaterJurisdictionGridDto"
-          },
-          "WaterQualityManagementPlanLandUse": {
-            "$ref": "#/components/schemas/WaterQualityManagementPlanLandUseDto"
-          },
-          "WaterQualityManagementPlanPriority": {
-            "$ref": "#/components/schemas/WaterQualityManagementPlanPriorityDto"
-          },
-          "WaterQualityManagementPlanStatus": {
-            "$ref": "#/components/schemas/WaterQualityManagementPlanStatusDto"
-          },
-          "WaterQualityManagementPlanDevelopmentType": {
-            "$ref": "#/components/schemas/WaterQualityManagementPlanDevelopmentTypeDto"
-          },
-          "WaterQualityManagementPlanPermitTerm": {
-            "$ref": "#/components/schemas/WaterQualityManagementPlanPermitTermDto"
-          },
-          "HydromodificationAppliesType": {
-            "$ref": "#/components/schemas/HydromodificationAppliesTypeDto"
-          },
-          "HydrologicSubarea": {
-            "$ref": "#/components/schemas/HydrologicSubareaDto"
-          },
-          "WaterQualityManagementPlanModelingApproach": {
-            "$ref": "#/components/schemas/WaterQualityManagementPlanModelingApproachDto"
-          },
-          "TrashCaptureStatusType": {
-            "$ref": "#/components/schemas/TrashCaptureStatusTypeDto"
-          },
-          "LastNereidLog": {
-            "$ref": "#/components/schemas/NereidLogSimpleDto"
-          },
-          "Watershed": {
-            "$ref": "#/components/schemas/WatershedSimpleDto"
-          },
-          "WaterQualityManagementPlanBoundary": {
-            "$ref": "#/components/schemas/WaterQualityManagementPlanBoundaryDto"
-          },
-          "WaterQualityManagementPlanDocuments": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/WaterQualityManagementPlanDocumentDto"
-            },
-            "nullable": true
-          },
-          "WaterQualityManagementPlanParcels": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/WaterQualityManagementPlanParcelDto"
-            },
-            "nullable": true
-          },
-          "WaterQualityManagementPlanVerifies": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/WaterQualityManagementPlanVerifyDto"
-            },
-            "nullable": true
           }
         },
         "additionalProperties": false
       },
-      "WaterQualityManagementPlanLandUseDto": {
+      "WaterQualityManagementPlanSimpleDto": {
         "type": "object",
         "properties": {
-          "WaterQualityManagementPlanLandUseID": {
+          "WaterQualityManagementPlanID": {
             "type": "integer",
             "format": "int32"
           },
-          "WaterQualityManagementPlanLandUseName": {
+          "StormwaterJurisdictionID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "WaterQualityManagementPlanLandUseID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "WaterQualityManagementPlanPriorityID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "WaterQualityManagementPlanStatusID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "WaterQualityManagementPlanDevelopmentTypeID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "WaterQualityManagementPlanName": {
             "type": "string",
             "nullable": true
           },
-          "WaterQualityManagementPlanLandUseDisplayName": {
+          "ApprovalDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "WaterQualityManagementPlanPermitTermID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "HydromodificationAppliesTypeID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "DateOfConstruction": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "HydrologicSubareaID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "RecordNumber": {
             "type": "string",
             "nullable": true
+          },
+          "RecordedWQMPAreaInAcres": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "TrashCaptureStatusTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TrashCaptureEffectiveness": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "WaterQualityManagementPlanModelingApproachID": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
       },
-      "WaterQualityManagementPlanModelingApproachDto": {
+      "WaterQualityManagementPlanUpsertDto": {
         "type": "object",
         "properties": {
+          "StormwaterJurisdictionID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "WaterQualityManagementPlanLandUseID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "WaterQualityManagementPlanPriorityID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "WaterQualityManagementPlanStatusID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "WaterQualityManagementPlanDevelopmentTypeID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "WaterQualityManagementPlanName": {
+            "type": "string",
+            "nullable": true
+          },
+          "ApprovalDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "MaintenanceContactName": {
+            "type": "string",
+            "nullable": true
+          },
+          "MaintenanceContactOrganization": {
+            "type": "string",
+            "nullable": true
+          },
+          "MaintenanceContactPhone": {
+            "type": "string",
+            "nullable": true
+          },
+          "MaintenanceContactAddress1": {
+            "type": "string",
+            "nullable": true
+          },
+          "MaintenanceContactAddress2": {
+            "type": "string",
+            "nullable": true
+          },
+          "MaintenanceContactCity": {
+            "type": "string",
+            "nullable": true
+          },
+          "MaintenanceContactState": {
+            "type": "string",
+            "nullable": true
+          },
+          "MaintenanceContactZip": {
+            "type": "string",
+            "nullable": true
+          },
+          "WaterQualityManagementPlanPermitTermID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "HydromodificationAppliesTypeID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "DateOfConstruction": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "HydrologicSubareaID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "RecordNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "RecordedWQMPAreaInAcres": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "TrashCaptureStatusTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TrashCaptureEffectiveness": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
           "WaterQualityManagementPlanModelingApproachID": {
             "type": "integer",
             "format": "int32"
           },
-          "WaterQualityManagementPlanModelingApproachName": {
-            "type": "string",
-            "nullable": true
-          },
-          "WaterQualityManagementPlanModelingApproachDisplayName": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "WaterQualityManagementPlanParcelDto": {
-        "type": "object",
-        "properties": {
-          "WaterQualityManagementPlanParcelID": {
+          "LastNereidLogID": {
             "type": "integer",
-            "format": "int32"
-          },
-          "ParcelNumber": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "WaterQualityManagementPlanPermitTermDto": {
-        "type": "object",
-        "properties": {
-          "WaterQualityManagementPlanPermitTermID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "WaterQualityManagementPlanPermitTermName": {
-            "type": "string",
+            "format": "int32",
             "nullable": true
           },
-          "WaterQualityManagementPlanPermitTermDisplayName": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "WaterQualityManagementPlanPriorityDto": {
-        "type": "object",
-        "properties": {
-          "WaterQualityManagementPlanPriorityID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "WaterQualityManagementPlanPriorityName": {
-            "type": "string",
-            "nullable": true
-          },
-          "WaterQualityManagementPlanPriorityDisplayName": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "WaterQualityManagementPlanStatusDto": {
-        "type": "object",
-        "properties": {
-          "WaterQualityManagementPlanStatusID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "WaterQualityManagementPlanStatusName": {
-            "type": "string",
-            "nullable": true
-          },
-          "WaterQualityManagementPlanStatusDisplayName": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "WaterQualityManagementPlanVerifyDto": {
-        "type": "object",
-        "properties": {
-          "WaterQualityManagementPlanVerifyID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "VerificationNotes": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "WaterQualityManagementPlanVerifyTreatmentBMPDto": {
-        "type": "object",
-        "properties": {
-          "WaterQualityManagementPlanVerifyTreatmentBMPID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "Name": {
+          "WaterQualityManagementPlanBoundaryNotes": {
             "type": "string",
             "nullable": true
           }
@@ -11894,20 +12041,6 @@
         "additionalProperties": false
       },
       "WatershedDto": {
-        "type": "object",
-        "properties": {
-          "WatershedID": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "WatershedName": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "WatershedSimpleDto": {
         "type": "object",
         "properties": {
           "WatershedID": {

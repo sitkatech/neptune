@@ -10,8 +10,7 @@
 
 
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
-export class WaterQualityManagementPlanDto { 
-    WaterQualityManagementPlanID?: number;
+export class WaterQualityManagementPlanUpsertDto { 
     StormwaterJurisdictionID?: number;
     WaterQualityManagementPlanLandUseID?: number | null;
     WaterQualityManagementPlanPriorityID?: number | null;
@@ -43,8 +42,7 @@ export class WaterQualityManagementPlanDto {
     }
 }
 
-export interface WaterQualityManagementPlanDtoForm { 
-    WaterQualityManagementPlanID?: FormControl<number>;
+export interface WaterQualityManagementPlanUpsertDtoForm { 
     StormwaterJurisdictionID?: FormControl<number>;
     WaterQualityManagementPlanLandUseID?: FormControl<number>;
     WaterQualityManagementPlanPriorityID?: FormControl<number>;
@@ -73,17 +71,7 @@ export interface WaterQualityManagementPlanDtoForm {
     WaterQualityManagementPlanBoundaryNotes?: FormControl<string>;
 }
 
-export class WaterQualityManagementPlanDtoFormControls { 
-    public static WaterQualityManagementPlanID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
+export class WaterQualityManagementPlanUpsertDtoFormControls { 
     public static StormwaterJurisdictionID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 

@@ -1,5 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Neptune.Common.DesignByContract;
+using Neptune.Models.DataTransferObjects;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Neptune.EFModels.Entities;
 
@@ -89,5 +93,41 @@ public static class WaterQualityManagementPlans
         return GetImpl(dbContext)
             .AsNoTracking()
             .Where(x => x.StormwaterJurisdictionID == stormwaterJurisdictionID).ToList();
+    }
+
+    public static async Task<List<WaterQualityManagementPlanDto>> ListAsDtoAsync(NeptuneDbContext dbContext)
+    {
+        var entities = await GetImpl(dbContext).AsNoTracking().ToListAsync();
+        return entities.Select(x => x.AsDto()).ToList();
+    }
+
+    public static async Task<WaterQualityManagementPlanDto?> GetByIDAsDtoAsync(NeptuneDbContext dbContext, int waterQualityManagementPlanID)
+    {
+        var entity = await GetImpl(dbContext).AsNoTracking().FirstOrDefaultAsync(x => x.WaterQualityManagementPlanID == waterQualityManagementPlanID);
+        return entity?.AsDto();
+    }
+
+    public static async Task<WaterQualityManagementPlanDto> CreateAsync(NeptuneDbContext dbContext, WaterQualityManagementPlanUpsertDto dto)
+    {
+        var entity = dto.AsEntity();
+        dbContext.WaterQualityManagementPlans.Add(entity);
+        await dbContext.SaveChangesAsync();
+        return await GetByIDAsDtoAsync(dbContext, entity.WaterQualityManagementPlanID);
+    }
+
+    public static async Task<WaterQualityManagementPlanDto?> UpdateAsync(NeptuneDbContext dbContext, int waterQualityManagementPlanID, WaterQualityManagementPlanUpsertDto dto)
+    {
+        var entity = await dbContext.WaterQualityManagementPlans.FirstAsync(x => x.WaterQualityManagementPlanID == waterQualityManagementPlanID);
+        entity.UpdateFromUpsertDto(dto);
+        await dbContext.SaveChangesAsync();
+        return await GetByIDAsDtoAsync(dbContext, entity.WaterQualityManagementPlanID);
+    }
+
+    public static async Task<bool> DeleteAsync(NeptuneDbContext dbContext, int waterQualityManagementPlanID)
+    {
+        var entity = await dbContext.WaterQualityManagementPlans.FirstOrDefaultAsync(x => x.WaterQualityManagementPlanID == waterQualityManagementPlanID);
+        if (entity == null) return false;
+        await entity.DeleteFull(dbContext);
+        return true;
     }
 }
