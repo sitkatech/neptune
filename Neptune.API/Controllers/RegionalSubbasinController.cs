@@ -57,7 +57,7 @@ public class RegionalSubbasinController : SitkaController<RegionalSubbasinContro
     [AdminFeature]
     public async Task<ActionResult<List<LoadGeneratingUnitGridDto>>> ListLoadGeneratingUnits([FromRoute] int regionalSubbasinID)
     {
-        var dtos = await LoadGeneratingUnits.ListByRegionalSubbasinAsGridDtoAsync(DbContext, regionalSubbasinID);
+        var dtos = await vLoadGeneratingUnits.ListByRegionalSubbasinAsGridDtoAsync(DbContext, regionalSubbasinID);
         return Ok(dtos);
     }
 

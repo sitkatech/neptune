@@ -3,7 +3,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities;
 
-public static partial class RegionalSubbasinExtensionMethods
+public static class RegionalSubbasinExtensionMethods
 {
     public static double? GetRegionalSubbasinArea(this RegionalSubbasin regionalSubbasin)
     {
@@ -19,9 +19,11 @@ public static partial class RegionalSubbasinExtensionMethods
             RegionalSubbasinID = entity.RegionalSubbasinID,
             OCSurveyCatchmentID = entity.OCSurveyCatchmentID,
             OCSurveyDownstreamCatchmentID = entity.OCSurveyDownstreamCatchmentID,
+            DownstreamRegionalSubbasinID = entity.OCSurveyDownstreamCatchment?.RegionalSubbasinID,
             Watershed = entity.Watershed,
             DrainID = entity.DrainID,
-            DisplayName = entity.GetDisplayName()
+            DisplayName = entity.GetDisplayName(),
+            Area = entity.CatchmentGeometry?.Area * Constants.SquareMetersToAcres
         };
     }
 

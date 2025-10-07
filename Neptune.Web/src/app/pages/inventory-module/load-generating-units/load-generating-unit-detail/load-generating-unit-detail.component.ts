@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, SimpleChanges, OnChanges } from "@angular/core";
 import { PageHeaderComponent } from "src/app/shared/components/page-header/page-header.component";
 import { FieldDefinitionComponent } from "src/app/shared/components/field-definition/field-definition.component";
 import { FieldDefinitionTypeEnum } from "src/app/shared/generated/enum/field-definition-type-enum";
@@ -37,7 +37,7 @@ import { OverlayMode } from "src/app/shared/components/leaflet/layers/generic-wm
         DecimalPipe,
     ],
 })
-export class LoadGeneratingUnitDetailComponent implements OnInit {
+export class LoadGeneratingUnitDetailComponent implements OnInit, OnChanges {
     public OverlayMode = OverlayMode;
     FieldDefinitionTypeEnum = FieldDefinitionTypeEnum;
     @Input() loadGeneratingUnitID!: number;
@@ -52,30 +52,62 @@ export class LoadGeneratingUnitDetailComponent implements OnInit {
     constructor(private loadGeneratingUnitService: LoadGeneratingUnitService, private utilityFunctionsService: UtilityFunctionsService) {}
 
     ngOnInit(): void {
-        this.loadGeneratingUnit$ = this.loadGeneratingUnitService.getLoadGeneratingUnit(this.loadGeneratingUnitID);
-        this.hruCharacteristics$ = this.loadGeneratingUnitService.listHRUCharacteristicsLoadGeneratingUnit(this.loadGeneratingUnitID);
+        this.loadData();
         this.hruCharacteristicsColumnDefs = [
             this.utilityFunctionsService.createBasicColumnDef("Type of HRU Entity", "HRUEntity"),
-            this.utilityFunctionsService.createBasicColumnDef("LGU ID", "LoadGeneratingUnitID"),
+            this.utilityFunctionsService.createLinkColumnDef("LGU ID", "LoadGeneratingUnitID", "LoadGeneratingUnitID", {
+                InRouterLink: "/inventory/load-generating-units/",
+            }),
             this.utilityFunctionsService.createBasicColumnDef("Model Basin Land Use Description", "HRUCharacteristicLandUseCodeDisplayName"),
             this.utilityFunctionsService.createBasicColumnDef("Baseline Model Basin Land Use Description", "BaselineHRUCharacteristicLandUseCodeDisplayName"),
-            this.utilityFunctionsService.createBasicColumnDef("Hydrologic Soil Group", "HydrologicSoilGroup"),
-            this.utilityFunctionsService.createDecimalColumnDef("Slope %", "SlopePercentage"),
-            this.utilityFunctionsService.createDecimalColumnDef("Impervious Acres", "ImperviousAcres"),
+            this.utilityFunctionsService.createBasicColumnDef("Hydrologic Soil Group", "HydrologicSoilGroup", {
+                FieldDefinitionLabelOverride: "Hydrologic Soil Group",
+                FieldDefinitionType: "UnderlyingHydrologicSoilGroupID",
+            }),
+            this.utilityFunctionsService.createDecimalColumnDef("Slope Percentage", "SlopePercentage"),
+            this.utilityFunctionsService.createDecimalColumnDef("Impervious Acres", "ImperviousAcres", {
+                FieldDefinitionLabelOverride: "Impervious Acres",
+                FieldDefinitionType: "ImperviousArea",
+            }),
             this.utilityFunctionsService.createDecimalColumnDef("Baseline Impervious Acres", "BaselineImperviousAcres"),
-            this.utilityFunctionsService.createDecimalColumnDef("Total Acres", "Area"),
-            this.utilityFunctionsService.createLinkColumnDef("Treatment BMP", "TreatmentBMPName", "TreatmentBMPID"),
-            this.utilityFunctionsService.createBasicColumnDef("Water Quality Management Plan", "WaterQualityManagementPlanName"),
-            this.utilityFunctionsService.createBasicColumnDef("Regional Subbasin", "RegionalSubbasinName"),
-            this.utilityFunctionsService.createDateColumnDef("Last Updated", "LastUpdated", "short"),
+            this.utilityFunctionsService.createDecimalColumnDef("Total Acres", "Area", {
+                FieldDefinitionLabelOverride: "Total Acres",
+                FieldDefinitionType: "Area",
+            }),
+            this.utilityFunctionsService.createLinkColumnDef("Treatment BMP", "TreatmentBMPName", "TreatmentBMPID", {
+                InRouterLink: "/inventory/treatment-bmps/",
+                FieldDefinitionLabelOverride: "Treatment BMP",
+                FieldDefinitionType: "TreatmentBMP",
+            }),
+            this.utilityFunctionsService.createLinkColumnDef("Water Quality Management Plan", "WaterQualityManagementPlanName", "WaterQualityManagementPlanID", {
+                InRouterLink: "/inventory/water-quality-management-plans/",
+                FieldDefinitionLabelOverride: "Water Quality Management Plan",
+                FieldDefinitionType: "WaterQualityManagementPlan",
+            }),
+            this.utilityFunctionsService.createLinkColumnDef("Regional Subbasin", "RegionalSubbasinID", "RegionalSubbasinID", {
+                InRouterLink: "/inventory/regional-subbasins/",
+                FieldDefinitionLabelOverride: "Regional Subbasin",
+                FieldDefinitionType: "RegionalSubbasin",
+            }),
+            this.utilityFunctionsService.createDateColumnDef("Last Updated", "LastUpdated", "MM/dd/yyyy"),
         ];
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes["loadGeneratingUnitID"] && !changes["loadGeneratingUnitID"].firstChange) {
+            this.loadData();
+        }
+    }
+
+    private loadData(): void {
+        this.loadGeneratingUnit$ = this.loadGeneratingUnitService.getLoadGeneratingUnit(this.loadGeneratingUnitID);
+        this.hruCharacteristics$ = this.loadGeneratingUnitService.listHRUCharacteristicsLoadGeneratingUnit(this.loadGeneratingUnitID);
     }
 
     handleMapReady(event: any): void {
         this.map = event.map;
         this.layerControl = event.layerControl;
         this.mapIsReady = true;
-        // Optionally add marker logic here if LGU has coordinates
     }
 
     downloadHRURequest(hruLog: HRULogDto | null | undefined): void {

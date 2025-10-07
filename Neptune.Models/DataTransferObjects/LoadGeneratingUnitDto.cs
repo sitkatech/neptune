@@ -15,5 +15,6 @@ namespace Neptune.Models.DataTransferObjects
         public DateTime? DateHRURequested { get; set; }
         public double? Area { get; set; }
         public HRULogDto? HRULog { get; set; }
+        public int? ModelBasinKey { get; set; }
     }
 }

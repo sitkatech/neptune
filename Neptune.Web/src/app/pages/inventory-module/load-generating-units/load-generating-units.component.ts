@@ -56,7 +56,7 @@ export class LoadGeneratingUnitsComponent {
                 InRouterLink: "/inventory/regional-subbasins/",
                 FieldDefinitionType: "RegionalSubbasin",
             }),
-            this.utilityFunctionsService.createBasicColumnDef("Model Basin", "ModelBasinID"),
+            this.utilityFunctionsService.createBasicColumnDef("Model Basin", "ModelBasinKey"),
             this.utilityFunctionsService.createDateColumnDef("Date HRU Requested", "DateHRURequested", "short"),
             this.utilityFunctionsService.createBooleanColumnDef("Is Empty", "IsEmptyResponseFromHRUService"),
         ];

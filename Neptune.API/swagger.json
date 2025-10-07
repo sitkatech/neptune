@@ -7712,6 +7712,11 @@
           },
           "HRULog": {
             "$ref": "#/components/schemas/HRULogDto"
+          },
+          "ModelBasinKey": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -7762,6 +7767,11 @@
           "DateHRURequested": {
             "type": "string",
             "format": "date-time",
+            "nullable": true
+          },
+          "ModelBasinKey": {
+            "type": "integer",
+            "format": "int32",
             "nullable": true
           }
         },
@@ -10202,6 +10212,16 @@
           },
           "DisplayName": {
             "type": "string",
+            "nullable": true
+          },
+          "DownstreamRegionalSubbasinID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Area": {
+            "type": "number",
+            "format": "double",
             "nullable": true
           }
         },

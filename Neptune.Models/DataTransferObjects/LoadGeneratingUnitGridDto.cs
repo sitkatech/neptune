@@ -12,4 +12,5 @@ public class LoadGeneratingUnitGridDto
     public string? WaterQualityManagementPlanName { get; set; }
     public bool? IsEmptyResponseFromHRUService { get; set; }
     public DateTime? DateHRURequested { get; set; }
+    public int? ModelBasinKey { get; set; }
 }

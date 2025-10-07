@@ -11,6 +11,7 @@ namespace Neptune.EFModels.Entities
             {
                 LoadGeneratingUnitID = entity.LoadGeneratingUnitID,
                 ModelBasinID = entity.ModelBasinID,
+                ModelBasinKey = entity.ModelBasin?.ModelBasinKey,
                 RegionalSubbasinID = entity.RegionalSubbasinID,
                 RegionalSubbasinName = entity.RegionalSubbasin?.GetDisplayName(),
                 DelineationID = entity.DelineationID,
@@ -38,6 +39,24 @@ namespace Neptune.EFModels.Entities
                 WaterQualityManagementPlanID = entity.WaterQualityManagementPlanID,
                 WaterQualityManagementPlanName = entity.WaterQualityManagementPlan?.WaterQualityManagementPlanName,
                 IsEmptyResponseFromHRUService = entity.IsEmptyResponseFromHRUService,
+                DateHRURequested = entity.DateHRURequested,
+            };
+        }
+
+        public static LoadGeneratingUnitGridDto AsGridDto(this vLoadGeneratingUnit entity)
+        {
+            return new LoadGeneratingUnitGridDto
+            {
+                LoadGeneratingUnitID = entity.LoadGeneratingUnitID,
+                ModelBasinID = entity.ModelBasinID,
+                ModelBasinKey = entity.ModelBasinKey,
+                RegionalSubbasinID = entity.RegionalSubbasinID,
+                RegionalSubbasinName = entity.RegionalSubbasinName,
+                TreatmentBMPID = entity.TreatmentBMPID,
+                TreatmentBMPName = entity.TreatmentBMPName,
+                WaterQualityManagementPlanID = entity.WaterQualityManagementPlanID,
+                WaterQualityManagementPlanName = entity.WaterQualityManagementPlanName,
+                IsEmptyResponseFromHRUService = entity.IsEmptyResponseFromHRUService ?? false,
                 DateHRURequested = entity.DateHRURequested,
             };
         }

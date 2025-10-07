@@ -28,7 +28,7 @@ public class LoadGeneratingUnitController : SitkaController<LoadGeneratingUnitCo
     [AdminFeature]
     public async Task<ActionResult<List<LoadGeneratingUnitGridDto>>> List()
     {
-        var dtos = await LoadGeneratingUnits.ListAsGridDtoAsync(DbContext);
+        var dtos = await vLoadGeneratingUnits.ListAsGridDtoAsync(DbContext);
         return Ok(dtos);
     }
 

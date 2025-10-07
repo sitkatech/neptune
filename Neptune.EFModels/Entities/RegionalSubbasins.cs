@@ -63,13 +63,13 @@ public static class RegionalSubbasins
 
     public static async Task<List<RegionalSubbasinDto>> ListAsDtoAsync(NeptuneDbContext dbContext)
     {
-        var entities = await GetImpl(dbContext).AsNoTracking().OrderBy(x => x.RegionalSubbasinID).ToListAsync();
+        var entities = await dbContext.RegionalSubbasins.Include(x => x.OCSurveyDownstreamCatchment).AsNoTracking().OrderBy(x => x.RegionalSubbasinID).ToListAsync();
         return entities.Select(x => x.AsDto()).ToList();
     }
 
     public static async Task<RegionalSubbasinDto?> GetByIDAsDtoAsync(NeptuneDbContext dbContext, int regionalSubbasinID)
     {
-        var entity = await GetImpl(dbContext).AsNoTracking().SingleOrDefaultAsync(x => x.RegionalSubbasinID == regionalSubbasinID);
+        var entity = await dbContext.RegionalSubbasins.Include(x => x.OCSurveyDownstreamCatchment).AsNoTracking().SingleOrDefaultAsync(x => x.RegionalSubbasinID == regionalSubbasinID);
         return entity?.AsDto();
     }
 

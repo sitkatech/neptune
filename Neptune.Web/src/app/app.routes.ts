@@ -13,6 +13,7 @@ export const routeParams = {
     treatmentBMPID: "treatmentBMPID",
     loadGeneratingUnitID: "loadGeneratingUnitID",
     jurisdictionID: "jurisdictionID",
+    regionalSubbasinID: "regionalSubbasinID",
 };
 
 export const routes: Routes = [
@@ -152,6 +153,14 @@ export const routes: Routes = [
                 path: "regional-subbasins",
                 title: "Regional Subbasins",
                 loadComponent: () => import("./pages/inventory-module/regional-subbasins/regional-subbasins.component").then((m) => m.RegionalSubbasinsComponent),
+            },
+            {
+                path: `regional-subbasins/:${routeParams.regionalSubbasinID}`,
+                title: "Regional Subbasin Detail",
+                loadComponent: () =>
+                    import("./pages/inventory-module/regional-subbasins/regional-subbasin-detail/regional-subbasin-detail.component").then(
+                        (m) => m.RegionalSubbasinDetailComponent
+                    ),
             },
             {
                 path: "manage/regional-subbasin-revision-requests",

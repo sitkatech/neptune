@@ -8,6 +8,8 @@ public class RegionalSubbasinDto
     public string? Watershed { get; set; }
     public string? DrainID { get; set; }
     public string? DisplayName { get; set; }
+    public int? DownstreamRegionalSubbasinID { get; set; }
+    public double? Area { get; set; }
 }
 
 public class RegionalSubbasinSimpleDto

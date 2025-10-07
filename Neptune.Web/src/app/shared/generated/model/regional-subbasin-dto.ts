@@ -17,6 +17,8 @@ export class RegionalSubbasinDto {
     Watershed?: string | null;
     DrainID?: string | null;
     DisplayName?: string | null;
+    DownstreamRegionalSubbasinID?: number | null;
+    Area?: number | null;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
@@ -29,6 +31,8 @@ export interface RegionalSubbasinDtoForm {
     Watershed?: FormControl<string>;
     DrainID?: FormControl<string>;
     DisplayName?: FormControl<string>;
+    DownstreamRegionalSubbasinID?: FormControl<number>;
+    Area?: FormControl<number>;
 }
 
 export class RegionalSubbasinDtoFormControls { 
@@ -83,6 +87,26 @@ export class RegionalSubbasinDtoFormControls {
         }
     );
     public static DisplayName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static DownstreamRegionalSubbasinID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static Area = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
         {
