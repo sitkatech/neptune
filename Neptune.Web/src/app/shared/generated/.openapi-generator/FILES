@@ -31,6 +31,7 @@ api/treatment-bmp-type.service.ts
 api/treatment-bmp.service.ts
 api/user-claims.service.ts
 api/user.service.ts
+api/water-quality-management-plan-document.service.ts
 api/water-quality-management-plan.service.ts
 configuration.ts
 encoder.ts
@@ -143,6 +144,8 @@ model/treatment-bmp-type-with-modeling-attributes-dto.ts
 model/treatment-bmp-upsert-dto.ts
 model/treatment-bmphru-characteristics-summary-simple-dto.ts
 model/v-treatment-bmp-modeling-attribute-dto.ts
+model/water-quality-management-plan-document-dto.ts
+model/water-quality-management-plan-document-upsert-dto.ts
 model/water-quality-management-plan-dto.ts
 model/water-quality-management-plan-simple-dto.ts
 model/water-quality-management-plan-upsert-dto.ts
