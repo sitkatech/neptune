@@ -63,7 +63,7 @@ export class WaterQualityManagementPlanKeyDocumentsComponent implements OnInit, 
      * Returns WaterQualityManagementPlanDocumentTypes sorted by display name
      */
     public getWaterQualityManagementPlanDocumentTypes(): Array<LookupTableEntry> {
-        return WaterQualityManagementPlanDocumentTypes.sort((a, b) => a.Name.localeCompare(b.Name));
+        return WaterQualityManagementPlanDocumentTypes.filter((x) => x.Name === "FinalWQMP").sort((a, b) => a.Name.localeCompare(b.Name));
     }
 
     /**
@@ -84,9 +84,10 @@ export class WaterQualityManagementPlanKeyDocumentsComponent implements OnInit, 
                 WaterQualityManagementPlan: waterQualityManagementPlan,
                 KeyDocument: waterQualityManagementPlanDocument,
             },
-            height: "90vh",
+            minHeight: "400px",
+            maxHeight: "90vh",
             width: "1600px",
-            // Optionally set width, height, etc. here
+            // Optionally set width, minHeight, maxHeight, etc. here
         });
     }
 

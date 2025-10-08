@@ -42,11 +42,7 @@ export class WaterQualityManagementPlanChatbotComponent implements OnDestroy, On
     };
 
     public prompts: string[] = [
-        "You are an assistant that specializes in summarizing waterqualitymanagementplan proposals. The content you are given consists " +
-            "of a proposal document that contains information about the scope of services being offered by our company. " +
-            "You should summarize only the services in the proposal and nothing else. Utilize a narrative form in your " +
-            "response and do not use bullet points. Ensure the response is in past tense rather than future tense. Whenever " +
-            "the text refers to the proposer or the consultant use the name of our company (ESA). ",
+        "Please extract the WaterQualityManagementPlan and all related tables from the document, using only the schema structure from WaterQualityManagementPlanExtractDto. For each field, explain your rationale and provide a snippet from the document showing why you chose that value. Respond in a clear, conversational format, streaming your response as you work. Do not use any sample data or context values—only parse the document itself.",
         // "Summarize the key elements of this proposal, including the client's objective, the scope of work, primary tasks, timeline, and expected outcomes.",
         // "Write a plain-language summary of this proposal that explains what the waterqualitymanagementplan is about, why it matters, and what work will be done. Keep it accessible to a general audience with little or no technical background.",
         // "Provide a technical summary of the proposed work, including the methodology, deliverables, regulatory context (if relevant), and any notable data sources, tools, or models used. Focus on the implementation side of the waterqualitymanagementplan."
@@ -124,8 +120,8 @@ export class WaterQualityManagementPlanChatbotComponent implements OnDestroy, On
     }
 
     async sendMessages(messageDto): Promise<void> {
-        // Fetch the access token asynchronously
-        this.isReceiving = true; // Set the flag to indicate we are receiving messages
+        this.isReceiving = true;
+        console.log("[SSE] isReceiving set to true, starting stream");
         try {
             const accessToken = this.authenticationService.getAccessToken();
             const options = {
@@ -136,26 +132,30 @@ export class WaterQualityManagementPlanChatbotComponent implements OnDestroy, On
                 payload: JSON.stringify(messageDto),
             };
             const eventNames = ["message"];
+            // Always push a new assistant message when a new response starts
+            this.messageDto.Messages.push({
+                Role: "assistant",
+                Content: "",
+                Date: new Date(),
+            });
             this.eventSourceSubscription = this.eventSourceService.connectToServerSentEvents(this.url, options, eventNames).subscribe({
-                next: this.handleEventData.bind(this),
+                next: (data) => {
+                    this.handleEventData(data);
+                    this.scrollToBottom(); // Scroll after each streamed chunk
+                },
                 error: (error) => {
-                    //handle error
-                    console.error("Received err:", error);
-                    this.isReceiving = false; // Set the flag to indicate we are no longer receiving messages
-                    this.eventSourceSubscription.unsubscribe(); // Unsubscribe from the event source
-                    this.cdr.detectChanges(); // Trigger change detection to update the view
+                    console.error("[SSE] Received error:", error);
+                    this.isReceiving = false;
+                    this.cdr.detectChanges();
+                    if (this.eventSourceSubscription) {
+                        this.eventSourceSubscription.unsubscribe();
+                    }
                 },
             });
-            setTimeout(() => {
-                this.messageDto.Messages.push({
-                    Role: "assistant",
-                    Content: "",
-                    Date: new Date(),
-                });
-                this.cdr.detectChanges(); // Trigger change detection to update the view
-            }, 100); // Add a new assistant message after a short delay
+            this.cdr.detectChanges();
+            this.scrollToBottom(); // Scroll after sending prompt
         } catch (error) {
-            console.error("Failed to get access token:", error);
+            console.error("[SSE] Failed to get access token:", error);
             this.isReceiving = false;
             this.cdr.detectChanges();
         }
@@ -163,39 +163,36 @@ export class WaterQualityManagementPlanChatbotComponent implements OnDestroy, On
 
     handleEventData(data: any): void {
         var customEvent = data as any;
-
         if (customEvent.data.includes("---MessageCompleted---")) {
+            console.log("[SSE] MessageCompleted received, setting isReceiving to false");
+            if (this.eventSourceSubscription) {
+                this.eventSourceSubscription.unsubscribe();
+            }
             this.isReceiving = false;
-            this.eventSourceSubscription.unsubscribe();
             this.cdr.detectChanges();
-            //return;
+            this.scrollToBottom(); // Scroll after response completes
+            return;
         }
 
         customEvent.data = customEvent.data.replace(/\\n/g, "\n");
 
         if (this.messageDto.Messages.length > 0) {
+            // Always append streamed data to the last assistant message
             var lastMessage = this.messageDto.Messages[this.messageDto.Messages.length - 1];
             let [intro, summaryHtml] = lastMessage.Content.split("---SUMMARY---");
             intro = intro ? intro.replace("---", "").replace("---SUMMARY", "").trim() : "";
             intro = intro ? intro.trim().replace(/(<br\s*\/?>\s*){1,2}$/i, "") : "";
             summaryHtml = summaryHtml ? summaryHtml.trim().replace(/^(<br\s*\/?>\s*){1,2}/i, "") : "";
 
-            if (lastMessage.Role === "user") {
-                // Parse and store intro/summaryHtml
-                this.messageDto.Messages.push({
-                    Role: "assistant",
-                    Content: customEvent.data,
-                    intro,
-                    summaryHtml,
-                    Date: new Date(),
-                });
-            } else {
+            // Only append to assistant message
+            if (lastMessage.Role === "assistant") {
                 lastMessage.Content += customEvent.data;
                 lastMessage.intro = intro;
                 lastMessage.summaryHtml = summaryHtml;
             }
         }
         this.cdr.detectChanges();
+        this.scrollToBottom(); // Scroll after each streamed chunk
     }
 
     reset(): void {
@@ -203,6 +200,7 @@ export class WaterQualityManagementPlanChatbotComponent implements OnDestroy, On
             Messages: [],
         };
         this.selectedPrompt = null;
+        this.isReceiving = false; // Always reset spinner
         this.cdr.detectChanges(); // Trigger change detection to update the view
     }
 
@@ -264,5 +262,20 @@ export class WaterQualityManagementPlanChatbotComponent implements OnDestroy, On
 
     sanitizeSummaryHtml(html: string): SafeHtml {
         return this.sanitizer.bypassSecurityTrustHtml(html);
+    }
+
+    exportChat(): void {
+        // Simple export: download chat as JSON
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.messageDto.Messages, null, 2));
+        const downloadAnchorNode = document.createElement("a");
+        downloadAnchorNode.setAttribute("href", dataStr);
+        downloadAnchorNode.setAttribute("download", "chat-history.json");
+        document.body.appendChild(downloadAnchorNode);
+        downloadAnchorNode.click();
+        downloadAnchorNode.remove();
+    }
+
+    showHelp(): void {
+        alert("To use the chat, select a prompt or type your own question. Use the Reset button to start over, Export to save the conversation, and Jump to Response to navigate.");
     }
 }

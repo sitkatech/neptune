@@ -14,6 +14,7 @@ using Neptune.API.Services.Attributes;
 using Neptune.API.Services.Authorization;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
+using Neptune.Models.DataTransferObjects.WaterQualityManagementPlan;
 using OpenAI;
 using OpenAI.Assistants;
 using OpenAI.Files;
@@ -76,9 +77,10 @@ public class AIController(
     [EntityNotFound(typeof(WaterQualityManagementPlan), "waterQualityManagementPlanID")]
     public async Task Ask([FromRoute] int waterQualityManagementPlanID, [FromRoute] int waterQualityManagementPlanDocumentID, [FromBody] ChatRequestDto messageDto)
     {
-        var waterQualityManagementPlanDto = await WaterQualityManagementPlans.GetByIDAsDtoAsync(DbContext, waterQualityManagementPlanID);
-        // Serialize projectDto for context
-        var waterQualityManagementPlanContext = $"WQMP CONTEXT: {JsonSerializer.Serialize(waterQualityManagementPlanDto)}\n";
+        var schemaStructure = JsonSerializer.Serialize(new WaterQualityManagementPlanExtractDto());
+        var waterQualityManagementPlanContext = $"SCHEMA STRUCTURE: {schemaStructure}\n";
+        //var waterQualityManagementPlanDto = await WaterQualityManagementPlans.GetByIDAsDtoAsync(DbContext, waterQualityManagementPlanID);
+        //var waterQualityManagementPlanContext = $"WQMP CONTEXT: {JsonSerializer.Serialize(waterQualityManagementPlanDto)}\n";
         var docDto = await WaterQualityManagementPlanDocuments.GetByIDAsDtoAsync(DbContext, waterQualityManagementPlanDocumentID);
         if (docDto == null)
         {
@@ -152,41 +154,73 @@ public class AIController(
 #pragma warning restore OPENAI001
     }
 
-    //[HttpPost("/ai/rag-ask")]
-    //[AdminFeature]
-    //public async Task RagAsk([FromBody] ChatRequestDto request)
-    //{
-    //    Response.Headers.Append("Content-Type", "text/event-stream");
-    //    Response.Headers.Append("X-Accel-Buffering", "no");
+    [HttpPost("water-quality-management-plans/{waterQualityManagementPlanID}/documents/{waterQualityManagementPlanDocumentID}/extract-schema")]
+    [AdminFeature]
+    [EntityNotFound(typeof(WaterQualityManagementPlan), "waterQualityManagementPlanID")]
+    public async Task ExtractSchema([FromRoute] int waterQualityManagementPlanID, [FromRoute] int waterQualityManagementPlanDocumentID)
+    {
+        var schemaStructure = JsonSerializer.Serialize(new WaterQualityManagementPlanExtractDto());
+        var waterQualityManagementPlanContext = $"SCHEMA STRUCTURE: {schemaStructure}\n";
+        var docDto = await WaterQualityManagementPlanDocuments.GetByIDAsDtoAsync(DbContext, waterQualityManagementPlanDocumentID);
+        if (docDto == null)
+        {
+            Response.StatusCode = 404;
+            return;
+        }
 
-    //    var input = new DatabricksRagInputDto
-    //    {
-    //        Messages = request.Messages?.Select(m => new DatabricksRagMessageInputDto
-    //        {
-    //            Role = m.Role,
-    //            Content = m.Content
-    //        }).ToList(),
-    //        Stream = true,
-    //        CustomInputs = new DatabricksRagCustomInputsDto
-    //        {
-    //            Filters = request.Filters != null ? new Dictionary<string, object>(request.Filters) : new Dictionary<string, object>()
-    //        }
-    //    };
+        Response.Headers.Append("Content-Type", "text/event-stream");
+        Response.Headers.Append("X-Accel-Buffering", "no");
 
-    //    await foreach (var message in ragService.QueryStreamAsync(input))
-    //    {
-    //        if (!string.IsNullOrWhiteSpace(message.Content))
-    //        {
-    //            // Optionally, you can HTML-encode or format the content here
-    //            await Response.WriteAsync($"data: {JsonSerializer.Serialize(message)}\n\n");
-    //        }
-    //        if (message.IsDone)
-    //        {
-    //            await Response.WriteAsync($"data: {JsonSerializer.Serialize(message)}\n\n");
-    //            break;
-    //        }
-    //    }
-    //}
+        var fileClient = openAIClient.GetOpenAIFileClient();
+#pragma warning disable OPENAI001
+        var assistantClient = openAIClient.GetAssistantClient();
+
+        var assistantID = await WaterQualityManagementPlanDocumentAssistants.GetByWaterQualityManagementPlanDocumentIDAsDtoAsync(DbContext, waterQualityManagementPlanDocumentID);
+        var needToCreateAssistant = await TryValidateAssistant(assistantID, assistantClient);
+
+        // Conversational prompt for streaming rationale and schema extraction
+        var cannedPrompt = "Please extract the WaterQualityManagementPlan and all related tables from the document, using only the schema structure from WaterQualityManagementPlanExtractDto. For each field, explain your rationale and provide a snippet from the document showing why you chose that value. Respond in a clear, conversational format, streaming your response as you work. Do not use any sample data or context values—only parse the document itself.";
+
+        if (needToCreateAssistant)
+        {
+            var blobDownloadResult = await azureBlobStorageService.DownloadBlobFromBlobStorageAsStream(docDto.FileResource.FileResourceGUID.ToString());
+            var assistant = await CreateAssistantClient(fileClient, blobDownloadResult.Content, assistantClient, waterQualityManagementPlanContext, docDto.FileResource.OriginalFilename);
+            assistantID = assistant.Value.Id;
+            await WaterQualityManagementPlanDocumentAssistants.UpsertAsync(DbContext, waterQualityManagementPlanDocumentID, assistantID);
+        }
+
+        var threadOptions = new ThreadCreationOptions();
+        threadOptions.InitialMessages.Add(new ThreadInitializationMessage(MessageRole.User, [cannedPrompt]));
+
+        var streamingResponses = assistantClient.CreateThreadAndRunStreamingAsync(assistantID, threadOptions);
+        await foreach (var streamingUpdate in streamingResponses)
+        {
+            if (streamingUpdate is MessageContentUpdate contentUpdate)
+            {
+                string output = null;
+                if (!string.IsNullOrEmpty(contentUpdate.Text))
+                {
+                    // Remove all content between 【 and 】 including the symbols
+                    var cleanedText = Regex.Replace(contentUpdate.Text, "【.*?】", string.Empty);
+                    // Replace newlines with <br> for HTML rendering in the browser
+                    output = cleanedText.Replace("\n", "<br>").Replace("\r", "");
+                }
+                if (contentUpdate.TextAnnotation != null)
+                {
+                    output += $" [Reference: {docDto.FileResource.OriginalFilename}]";
+                }
+                if (!string.IsNullOrWhiteSpace(output))
+                {
+                    await Response.WriteAsync($"data: {output}\n\n");
+                }
+            }
+            if (streamingUpdate.UpdateKind == StreamingUpdateReason.MessageCompleted)
+            {
+                await Response.WriteAsync($"data: ---{streamingUpdate.UpdateKind.ToString()}---\n\n");
+            }
+        }
+#pragma warning restore OPENAI001
+    }
 
     [Experimental("OPENAI001")]
     private static async Task<bool> TryValidateAssistant(string existingAssistantID, AssistantClient assistantClient)
@@ -218,13 +252,13 @@ public class AIController(
     }
 
     [Experimental("OPENAI001")]
-    private static async Task<ClientResult<Assistant>> CreateAssistantClient(OpenAIFileClient fileClient, Stream blobStream, AssistantClient assistantClient, string projectContext, string filename)
+    private static async Task<ClientResult<Assistant>> CreateAssistantClient(OpenAIFileClient fileClient, Stream blobStream, AssistantClient assistantClient, string wqmpContext, string filename)
     {
         OpenAIFile file = await fileClient.UploadFileAsync(blobStream, filename, FileUploadPurpose.Assistants);
         var assistant = await assistantClient.CreateAssistantAsync("gpt-4.1",
             new AssistantCreationOptions()
             {
-                Instructions = projectContext + Instructions,
+                Instructions = wqmpContext + Instructions,
                 Temperature = 0.4f,
                 Tools =
                 {

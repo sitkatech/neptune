@@ -70,6 +70,39 @@
         }
       }
     },
+    "/ai/water-quality-management-plans/{waterQualityManagementPlanID}/documents/{waterQualityManagementPlanDocumentID}/extract-schema": {
+      "post": {
+        "tags": [
+          "AI"
+        ],
+        "operationId": "ExtractSchema_AI",
+        "parameters": [
+          {
+            "name": "waterQualityManagementPlanID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "waterQualityManagementPlanDocumentID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/custom-attribute-types": {
       "get": {
         "tags": [

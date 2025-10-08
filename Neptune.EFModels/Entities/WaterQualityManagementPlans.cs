@@ -1,9 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Neptune.Common.DesignByContract;
 using Neptune.Models.DataTransferObjects;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Neptune.Models.DataTransferObjects.WaterQualityManagementPlan;
 
 namespace Neptune.EFModels.Entities;
 
@@ -129,5 +127,109 @@ public static class WaterQualityManagementPlans
         if (entity == null) return false;
         await entity.DeleteFull(dbContext);
         return true;
+    }
+
+    public static async Task<WaterQualityManagementPlanExtractDto?> GetByIDAsExtractDtoAsync(NeptuneDbContext dbContext, int waterQualityManagementPlanID)
+    {
+        var entity = await dbContext.WaterQualityManagementPlans
+            .Include(x => x.StormwaterJurisdiction)
+            .ThenInclude(x => x.Organization)
+            .Include(x => x.TreatmentBMPs)
+            .Include(x => x.QuickBMPs)
+            .Include(x => x.SourceControlBMPs)
+            .Include(x => x.WaterQualityManagementPlanParcels).ThenInclude(x => x.Parcel)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.WaterQualityManagementPlanID == waterQualityManagementPlanID);
+        if (entity == null) return null;
+        // You may need to implement AsExtractDto() on the entity
+        return entity.AsExtractDto();
+    }
+
+    public static WaterQualityManagementPlanExtractDto AsExtractDto(this WaterQualityManagementPlan entity)
+    {
+        return new WaterQualityManagementPlanExtractDto
+        {
+            WaterQualityManagementPlanID = entity.WaterQualityManagementPlanID,
+            WaterQualityManagementPlanName = entity.WaterQualityManagementPlanName,
+            StormwaterJurisdictionID = entity.StormwaterJurisdictionID,
+            WaterQualityManagementPlanLandUseID = entity.WaterQualityManagementPlanLandUseID,
+            WaterQualityManagementPlanPriorityID = entity.WaterQualityManagementPlanPriorityID,
+            WaterQualityManagementPlanStatusID = entity.WaterQualityManagementPlanStatusID,
+            WaterQualityManagementPlanDevelopmentTypeID = entity.WaterQualityManagementPlanDevelopmentTypeID,
+            ApprovalDate = entity.ApprovalDate,
+            MaintenanceContactName = entity.MaintenanceContactName,
+            MaintenanceContactOrganization = entity.MaintenanceContactOrganization,
+            MaintenanceContactPhone = entity.MaintenanceContactPhone,
+            MaintenanceContactAddress1 = entity.MaintenanceContactAddress1,
+            MaintenanceContactAddress2 = entity.MaintenanceContactAddress2,
+            MaintenanceContactCity = entity.MaintenanceContactCity,
+            MaintenanceContactState = entity.MaintenanceContactState,
+            MaintenanceContactZip = entity.MaintenanceContactZip,
+            WaterQualityManagementPlanPermitTermID = entity.WaterQualityManagementPlanPermitTermID,
+            HydromodificationAppliesTypeID = entity.HydromodificationAppliesTypeID,
+            DateOfConstruction = entity.DateOfConstruction,
+            HydrologicSubareaID = entity.HydrologicSubareaID,
+            RecordNumber = entity.RecordNumber,
+            RecordedWQMPAreaInAcres = entity.RecordedWQMPAreaInAcres,
+            TrashCaptureStatusTypeID = entity.TrashCaptureStatusTypeID,
+            TrashCaptureEffectiveness = entity.TrashCaptureEffectiveness,
+            WaterQualityManagementPlanModelingApproachID = entity.WaterQualityManagementPlanModelingApproachID,
+            WaterQualityManagementPlanBoundaryNotes = entity.WaterQualityManagementPlanBoundaryNotes,
+            Parcels = entity.WaterQualityManagementPlanParcels?.Select(p => new WaterQualityManagementPlanParcelExtractDto
+            {
+                WaterQualityManagementPlanParcelID = p.WaterQualityManagementPlanParcelID,
+                ParcelID = p.ParcelID
+            }).ToList() ?? new List<WaterQualityManagementPlanParcelExtractDto>(),
+            QuickBMPs = entity.QuickBMPs?.Select(q => new QuickBMPExtractDto
+            {
+                QuickBMPID = q.QuickBMPID,
+                QuickBMPName = q.QuickBMPName,
+                QuickBMPNote = q.QuickBMPNote,
+                PercentOfSiteTreated = q.PercentOfSiteTreated,
+                PercentCaptured = q.PercentCaptured,
+                PercentRetained = q.PercentRetained,
+                DryWeatherFlowOverrideID = q.DryWeatherFlowOverrideID,
+                NumberOfIndividualBMPs = q.NumberOfIndividualBMPs,
+                TreatmentBMPTypeID = q.TreatmentBMPTypeID
+            }).ToList() ?? new List<QuickBMPExtractDto>(),
+            TreatmentBMPs = entity.TreatmentBMPs?.Select(t => new TreatmentBMPExtractDto
+            {
+                TreatmentBMPID = t.TreatmentBMPID,
+                TreatmentBMPName = t.TreatmentBMPName,
+                TreatmentBMPTypeID = t.TreatmentBMPTypeID,
+                LocationPointWkt = t.LocationPoint4326.AsText(),
+                StormwaterJurisdictionID = t.StormwaterJurisdictionID,
+                Notes = t.Notes,
+                SystemOfRecordID = t.SystemOfRecordID,
+                YearBuilt = t.YearBuilt,
+                OwnerOrganizationID = t.OwnerOrganizationID,
+                WaterQualityManagementPlanID = t.WaterQualityManagementPlanID,
+                TreatmentBMPLifespanTypeID = t.TreatmentBMPLifespanTypeID,
+                TreatmentBMPLifespanEndDate = t.TreatmentBMPLifespanEndDate,
+                RequiredFieldVisitsPerYear = t.RequiredFieldVisitsPerYear,
+                RequiredPostStormFieldVisitsPerYear = t.RequiredPostStormFieldVisitsPerYear,
+                InventoryIsVerified = t.InventoryIsVerified,
+                DateOfLastInventoryVerification = t.DateOfLastInventoryVerification,
+                InventoryVerifiedByPersonID = t.InventoryVerifiedByPersonID,
+                InventoryLastChangedDate = t.InventoryLastChangedDate,
+                TrashCaptureStatusTypeID = t.TrashCaptureStatusTypeID,
+                SizingBasisTypeID = t.SizingBasisTypeID,
+                TrashCaptureEffectiveness = t.TrashCaptureEffectiveness,
+                WatershedID = t.WatershedID,
+                ModelBasinID = t.ModelBasinID,
+                PrecipitationZoneID = t.PrecipitationZoneID,
+                UpstreamBMPID = t.UpstreamBMPID,
+                RegionalSubbasinID = t.RegionalSubbasinID,
+                ProjectID = t.ProjectID,
+                LastNereidLogID = t.LastNereidLogID
+            }).ToList() ?? new List<TreatmentBMPExtractDto>(),
+            SourceControlBMPs = entity.SourceControlBMPs?.Select(s => new SourceControlBMPExtractDto
+            {
+                SourceControlBMPID = s.SourceControlBMPID,
+                SourceControlBMPAttributeID = s.SourceControlBMPAttributeID,
+                IsPresent = s.IsPresent,
+                SourceControlBMPNote = s.SourceControlBMPNote
+            }).ToList() ?? new List<SourceControlBMPExtractDto>()
+        };
     }
 }
