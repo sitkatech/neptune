@@ -9,7 +9,7 @@ public static class WaterQualityManagementPlanDocuments
     public static IQueryable<WaterQualityManagementPlanDocument> GetImpl(NeptuneDbContext dbContext)
     {
         return dbContext.WaterQualityManagementPlanDocuments
-            .Include(x => x.FileResource);
+            .Include(x => x.FileResource).ThenInclude(x => x.CreatePerson).ThenInclude(x => x.Organization);
     }
 
     public static List<WaterQualityManagementPlanDocument> ListByWaterQualityManagementPlanID(NeptuneDbContext dbContext, int waterQualityManagementPlanID)
@@ -20,6 +20,12 @@ public static class WaterQualityManagementPlanDocuments
     public static async Task<List<WaterQualityManagementPlanDocumentDto>> ListAsDtoAsync(NeptuneDbContext dbContext)
     {
         var entities = await GetImpl(dbContext).AsNoTracking().ToListAsync();
+        return entities.Select(x => x.AsDto()).ToList();
+    }
+
+    public static async Task<List<WaterQualityManagementPlanDocumentDto>> ListByWaterQualityManagementPlanIDAsDtoAsync(NeptuneDbContext dbContext, int waterQualityManagementPlanID)
+    {
+        var entities = await GetImpl(dbContext).AsNoTracking().Where(x => x.WaterQualityManagementPlanID == waterQualityManagementPlanID).OrderBy(ht => ht.DisplayName).ToListAsync();
         return entities.Select(x => x.AsDto()).ToList();
     }
 

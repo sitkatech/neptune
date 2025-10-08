@@ -2,3 +2,17 @@
     <h1>Welcome to the AI Module</h1>
     <p>Explore AI-powered features and tools here.</p>
 </div>
+<div class="ai-home">
+    <div class="plan-selector">
+        <form-field
+            fieldLabel="Select a Water Quality Management Plan"
+            [formControl]="planControl"
+            [formInputOptions]="waterQualityManagementPlans$ | async"
+            [type]="FormFieldType.Select"
+            name="planSelect"></form-field>
+    </div>
+
+    @if (planControl.value) {
+    <water-quality-management-plan-documents [waterQualityManagementPlanID]="planControl.value"></water-quality-management-plan-documents>
+    }
+</div>

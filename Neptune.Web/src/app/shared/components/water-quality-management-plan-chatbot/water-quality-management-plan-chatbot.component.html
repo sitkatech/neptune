@@ -1,0 +1,125 @@
+<div class="tb-dialog">
+    <div class="tb-dialog__header">
+        <h2 class="tb-dialog__title">
+            <img src="./assets/main/icons/esa-ai.svg" alt="AI Icon" />
+            Extract Data from Document
+        </h2>
+    </div>
+
+    @if(currentUser$ | async; as currentUser) {
+    <div class="tb-dialog__body | tb-dialog__body--two-col">
+        <div class="tb-dialog__main" #main [scrollTop]="main.scrollHeight">
+            @if (!messageDto.Messages || messageDto.Messages.length === 0) {
+            <div class="intro">
+                <div class="intro__wrapper | copy copy-3">
+                    <img src="./assets/main/icons/icon-leaf.svg" alt="Leaf" />
+                    <p><strong>Hi!</strong> Choose a prompt or write your own to start extracting data from the document.</p>
+                </div>
+            </div>
+            } @else {
+            <div class="output">
+                @for (chatMessage of messageDto.Messages; track $index) { @if (chatMessage.Role !== 'user') {
+                <div class="response" [class.old]="$index < messageDto.Messages.length - 1">
+                    <h4 class="response__header | sm-header" [id]="'response-' + ($index + 1) / 2">
+                        <strong>Response {{ ($index + 1) / 2 }}</strong> · {{ chatMessage.Date | date : "MMM d, y h:mm a" }}
+                    </h4>
+                    @if (chatMessage.summaryHtml) {
+                    <div class="response__body">
+                        <p [innerHTML]="sanitizeSummaryHtml(chatMessage.summaryHtml)"></p>
+                        <div class="response__badges">
+                            <ai-badge type="ai"></ai-badge>
+                        </div>
+                    </div>
+                    } @else {
+                    <div class="tb-spinner" style="margin: 1rem"></div>
+                    }
+                    <div class="response__footer">
+                        @if (!isReceiving) {
+                        <div class="response__utilities">
+                            @if (chatMessage.summaryHtml) {
+                            <!-- todo: copy to clipboard -->
+                            <!-- <a role="button" class="response__utilities-link copy" [cdkCopyToClipboard]="chatMessage.summaryHtml">
+                                <icon icon="copy"></talentbridge-icon>
+                            </a> -->
+                            }
+                        </div>
+                        }
+                    </div>
+                </div>
+                } }
+            </div>
+            }
+        </div>
+
+        <div class="tb-dialog__sidebar" #sidebar [scrollTop]="sidebar.scrollHeight">
+            <div class="tb-dialog__sidebar--body">
+                @if (!messageDto.Messages || messageDto.Messages.length === 0) {
+                <div class="initial">
+                    <h4 class="initial__header">Choose a Prompt</h4>
+                    @for (prompt of prompts; track $index) {
+                    <div class="option" (click)="selectPrompt(prompt)">
+                        <h5 class="option__header | sm-header">Option {{ $index | indexToChar }}</h5>
+                        <p class="option__text">{{ prompt }}</p>
+                    </div>
+                    }
+                </div>
+                } @else {
+                <div class="chat">
+                    <h4 class="chat__header">Beginning of Composition <a role="button" (click)="reset()">(Start Over)</a></h4>
+                    @for (chatMessage of messageDto.Messages; track $index) { @if (chatMessage.Role === 'user') {
+                    <div class="chat__message chat__message--user">
+                        @if ($index === 0) {
+                        <h5 class="chat__message--header | sm-header">Context</h5>
+                        <div class="context">
+                            <span class="context__badge">
+                                <icon [icon]="'Leaf'"></icon>
+                                {{ waterQualityManagementPlan?.WaterQualityManagementPlanName }}
+                            </span>
+
+                            <span class="context__badge">
+                                <icon [icon]="'File'"></icon>
+                                {{ keyDocument.FileName }}
+                            </span>
+                            <!-- <span class="context__badge">
+                                                <talentbridge-icon icon="at-sign"></talentbridge-icon>
+                                                50 Words
+                                            </span>
+                                            <span class="context__badge">
+                                                <talentbridge-icon icon="tone"></talentbridge-icon>
+                                                Formal
+                                            </span> -->
+                        </div>
+                        }
+
+                        <h5 class="chat__message--header | sm-header">{{ currentUser.FirstName + " " + currentUser.LastName }}</h5>
+                        <p class="option__text">{{ chatMessage.Content }}</p>
+                    </div>
+                    } @else {
+                    <div class="chat__message chat__message--system">
+                        <h5 class="chat__message--header | sm-header">ESA Intelligence</h5>
+                        @if (chatMessage.Content) {
+                        <p class="option__text">{{ chatMessage.intro }}</p>
+                        } @else {
+                        <div class="tb-spinner" style="margin: 1rem"></div>
+                        }
+                        <div class="chat__message--footer">
+                            <a href="javascript:void(0)" class="chat__message--output-link" (click)="scrollMainTo('response-' + ($index + 1) / 2)"
+                                >View Response {{ ($index + 1) / 2 }}</a
+                            >
+                        </div>
+                    </div>
+                    } }
+                </div>
+                }
+            </div>
+            <div class="tb-dialog__sidebar--footer">
+                <ai-chat-input
+                    placeholder="Write your own prompt..."
+                    [isReceiving]="isReceiving && !editingIndex"
+                    [isDisabled]="editingIndex !== null"
+                    (send)="send($event)"></ai-chat-input>
+            </div>
+        </div>
+    </div>
+    }
+</div>

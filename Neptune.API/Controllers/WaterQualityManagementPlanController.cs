@@ -69,5 +69,14 @@ namespace Neptune.API.Controllers
             if (!deleted) return NotFound();
             return NoContent();
         }
+
+        [HttpGet("{waterQualityManagementPlanID}/documents")]
+        [AdminFeature]
+        [EntityNotFoundAttribute(typeof(WaterQualityManagementPlan), "waterQualityManagementPlanID")]
+        public async Task<ActionResult<IEnumerable<WaterQualityManagementPlanDocumentDto>>> ListDocuments([FromRoute] int waterQualityManagementPlanID)
+        {
+            var waterQualityManagementPlanDocumentDtos = await WaterQualityManagementPlanDocuments.ListByWaterQualityManagementPlanIDAsDtoAsync(DbContext, waterQualityManagementPlanID);
+            return Ok(waterQualityManagementPlanDocumentDtos);
+        }
     }
 }

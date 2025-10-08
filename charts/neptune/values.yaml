@@ -26,6 +26,9 @@ global:
     keystoneOpenIDClientSecret: "secrethere"
     recaptchaV3SiteKey: "recaptchaV3SiteKeyHere"
     recaptchaV3SecretKey: "recaptchaV3SecretKeyHere"
+    openAIApiKey: "openAIApiKeyHere"
+    openAIOrganizationID: "openAIOrganizationID"
+    openAIProjectID: "openAIProjectID"
 
 api:
   replicaCount: 1

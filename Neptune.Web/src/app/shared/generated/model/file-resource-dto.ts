@@ -7,37 +7,39 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { PersonDisplayDto } from './person-display-dto';
+import { FileResourceMimeTypeSimpleDto } from './file-resource-mime-type-simple-dto';
 
 
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
-export class FileResourceSimpleDto { 
+export class FileResourceDto { 
     FileResourceID?: number;
-    FileResourceMimeTypeID?: number;
-    FileResourceGUID?: string;
-    CreatePersonID?: number;
-    CreateDate?: string;
-    ContentLength?: number;
+    FileResourceMimeType?: FileResourceMimeTypeSimpleDto;
     OriginalBaseFilename?: string | null;
     OriginalFileExtension?: string | null;
     OriginalFilename?: string | null;
+    FileResourceGUID?: string;
+    CreatePerson?: PersonDisplayDto;
+    CreateDate?: string;
+    ContentLength?: number;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
 }
 
-export interface FileResourceSimpleDtoForm { 
+export interface FileResourceDtoForm { 
     FileResourceID?: FormControl<number>;
-    FileResourceMimeTypeID?: FormControl<number>;
-    FileResourceGUID?: FormControl<string>;
-    CreatePersonID?: FormControl<number>;
-    CreateDate?: FormControl<string>;
-    ContentLength?: FormControl<number>;
+    FileResourceMimeType?: FormControl<FileResourceMimeTypeSimpleDto>;
     OriginalBaseFilename?: FormControl<string>;
     OriginalFileExtension?: FormControl<string>;
     OriginalFilename?: FormControl<string>;
+    FileResourceGUID?: FormControl<string>;
+    CreatePerson?: FormControl<PersonDisplayDto>;
+    CreateDate?: FormControl<string>;
+    ContentLength?: FormControl<number>;
 }
 
-export class FileResourceSimpleDtoFormControls { 
+export class FileResourceDtoFormControls { 
     public static FileResourceID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
@@ -48,47 +50,7 @@ export class FileResourceSimpleDtoFormControls {
             ],
         }
     );
-    public static FileResourceMimeTypeID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static FileResourceGUID = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static CreatePersonID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static CreateDate = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static ContentLength = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+    public static FileResourceMimeType = (value: FormControlState<FileResourceMimeTypeSimpleDto> | FileResourceMimeTypeSimpleDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<FileResourceMimeTypeSimpleDto>(
         value,
         formControlOptions ?? 
         {
@@ -119,6 +81,46 @@ export class FileResourceSimpleDtoFormControls {
         }
     );
     public static OriginalFilename = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static FileResourceGUID = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static CreatePerson = (value: FormControlState<PersonDisplayDto> | PersonDisplayDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<PersonDisplayDto>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static CreateDate = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static ContentLength = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
         {

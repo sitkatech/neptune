@@ -22,9 +22,11 @@ using Neptune.Jobs.Hangfire;
 using Neptune.Jobs.Services;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.IO.Converters;
+using OpenAI;
 using SendGrid.Extensions.DependencyInjection;
 using Serilog;
 using System;
+using System.ClientModel;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http;
 using System.Text.Json;
@@ -110,6 +112,21 @@ namespace Neptune.API
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped(s => s.GetService<IHttpContextAccessor>().HttpContext);
             services.AddScoped(s => UserContext.GetUserAsDtoFromHttpContext(s.GetService<NeptuneDbContext>(), s.GetService<IHttpContextAccessor>().HttpContext));
+
+            #region OpenAI
+            services.AddSingleton(_ =>
+            {
+                ApiKeyCredential nonAzureOpenAIApiKey = new(configuration.OpenAIApiKey);
+                OpenAIClient client = new(nonAzureOpenAIApiKey,
+                    new OpenAIClientOptions
+                    {
+                        OrganizationId = configuration.OpenAIOrganizationID,
+                        ProjectId = configuration.OpenAIProjectID
+                    });
+
+                return client;
+            });
+            #endregion
 
             #region Sendgrid
             services.AddSendGrid(options => { options.ApiKey = configuration.SendGridApiKey; });

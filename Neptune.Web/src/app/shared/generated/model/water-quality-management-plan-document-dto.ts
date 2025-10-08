@@ -7,13 +7,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { FileResourceDto } from './file-resource-dto';
 
 
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class WaterQualityManagementPlanDocumentDto { 
     WaterQualityManagementPlanDocumentID?: number;
     WaterQualityManagementPlanID?: number;
-    FileResourceID?: number;
+    FileResource?: FileResourceDto;
     DisplayName?: string | null;
     Description?: string | null;
     UploadDate?: string;
@@ -26,7 +27,7 @@ export class WaterQualityManagementPlanDocumentDto {
 export interface WaterQualityManagementPlanDocumentDtoForm { 
     WaterQualityManagementPlanDocumentID?: FormControl<number>;
     WaterQualityManagementPlanID?: FormControl<number>;
-    FileResourceID?: FormControl<number>;
+    FileResource?: FormControl<FileResourceDto>;
     DisplayName?: FormControl<string>;
     Description?: FormControl<string>;
     UploadDate?: FormControl<string>;
@@ -54,7 +55,7 @@ export class WaterQualityManagementPlanDocumentDtoFormControls {
             ],
         }
     );
-    public static FileResourceID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+    public static FileResource = (value: FormControlState<FileResourceDto> | FileResourceDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<FileResourceDto>(
         value,
         formControlOptions ?? 
         {

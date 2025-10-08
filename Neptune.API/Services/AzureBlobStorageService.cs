@@ -739,6 +739,13 @@ public class AzureBlobStorageService
         return downloadResult.Value;
     }
 
+    public async Task<BlobDownloadStreamingResult> DownloadBlobFromBlobStorageAsStream(string canonicalName)
+    {
+        var blobClient = _fileResourceContainerClient.GetBlobClient(canonicalName);
+        var downloadResult = await blobClient.DownloadStreamingAsync();
+        return downloadResult.Value;
+    }
+
     private string GetFileResourceContentType(FileResource fileResource)
     {
         var extension = fileResource.OriginalFileExtension.ToLower();

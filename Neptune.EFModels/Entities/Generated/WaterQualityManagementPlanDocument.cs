@@ -37,4 +37,7 @@ public partial class WaterQualityManagementPlanDocument
     [ForeignKey("WaterQualityManagementPlanID")]
     [InverseProperty("WaterQualityManagementPlanDocuments")]
     public virtual WaterQualityManagementPlan WaterQualityManagementPlan { get; set; } = null!;
+
+    [InverseProperty("WaterQualityManagementPlanDocument")]
+    public virtual WaterQualityManagementPlanDocumentAssistant? WaterQualityManagementPlanDocumentAssistant { get; set; }
 }

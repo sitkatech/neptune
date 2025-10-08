@@ -1,0 +1,430 @@
+@use "/src/scss/abstracts" as *;
+
+::ng-deep {
+    .mdc-dialog__surface {
+        overflow: hidden;
+    }
+}
+
+.tb-dialog {
+    &__header {
+        background: $gray-50;
+        padding: $spacing-500;
+        border-bottom: 1px solid $gray-100;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .mdc-dialog__title {
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: $spacing-200;
+
+            &::before {
+                display: none;
+            }
+        }
+    }
+
+    &__body {
+        min-height: 200px;
+
+        &--two-col {
+            display: flex;
+        }
+    }
+
+    &__label {
+        strong {
+            color: $green-600;
+        }
+    }
+
+    &__main {
+        width: 75%;
+        overflow: auto;
+
+        @include tablet {
+            width: 60%;
+        }
+    }
+
+    &__sidebar {
+        overflow: auto;
+        width: 25%;
+        border-left: 1px solid $blue-200;
+        background: linear-gradient(180deg, $blue-50 0%, $gray-0);
+        display: grid;
+        grid-template-rows: 1fr auto;
+        padding: $spacing-600;
+        gap: $spacing-600;
+
+        @include tablet {
+            width: 40%;
+        }
+
+        &--body {
+            display: flex;
+            justify-content: flex-end;
+            flex-direction: column;
+        }
+    }
+}
+
+.intro {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+
+    &__wrapper {
+        max-width: 18.75rem;
+        text-align: center;
+    }
+
+    img {
+        margin: 0 auto;
+    }
+
+    p {
+        padding-top: $spacing-200;
+    }
+}
+
+.initial {
+    display: grid;
+    align-items: start;
+    gap: $spacing-400;
+
+    &__header {
+        font-size: 0.625rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: $gray-500;
+        font-weight: 500;
+        text-align: center;
+        margin: 0;
+    }
+}
+
+.option {
+    background: $gray-0;
+    padding: $spacing-300;
+    cursor: pointer;
+    border-radius: $spacing-100;
+    border: 1px solid $blue-200;
+    transition: all 500ms ease;
+
+    &:hover {
+        background: $blue-50;
+        border-color: $blue-400;
+    }
+
+    &__header {
+        margin: 0;
+        padding-bottom: $spacing-100;
+    }
+
+    &__text {
+        margin: 0;
+        font-size: 0.875rem;
+        line-height: 1.5em;
+        white-space: pre-wrap;
+    }
+}
+
+.sm-header {
+    font-weight: 600;
+    font-size: 0.6875rem;
+    margin: 0;
+    padding: 0;
+}
+
+.compose {
+    border-radius: $spacing-400;
+    border: 1px solid $gray-200;
+    padding: $spacing-400;
+    background: $gray-0;
+    box-shadow: -15px 59px 17px 0px rgba(0, 0, 0, 0), -10px 38px 16px 0px rgba(0, 0, 0, 0.01), -5px 21px 13px 0px rgba(0, 0, 0, 0.05), -2px 9px 10px 0px rgba(0, 0, 0, 0.09),
+        -1px 2px 5px 0px rgba(0, 0, 0, 0.1);
+
+    &__textarea {
+        border: none;
+        width: 100%;
+        resize: none;
+        outline: none;
+        background: none;
+        font-family: $inter;
+        font-weight: 300;
+        font-size: 0.875rem;
+        line-height: 1.5em;
+        min-height: 20px;
+        max-height: 200px;
+        overflow-y: hidden;
+        padding: 0;
+        margin: 0;
+        height: auto;
+
+        &::placeholder {
+            color: $gray-500;
+        }
+    }
+
+    &__input {
+        padding-bottom: $spacing-300;
+    }
+
+    &__controls {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: $spacing-200;
+        align-items: center;
+    }
+
+    &__options {
+        display: flex;
+        flex-wrap: wrap;
+        gap: $spacing-200;
+    }
+
+    &__select {
+        position: relative;
+        talentbridge-icon {
+            position: absolute;
+            right: 12px;
+        }
+    }
+
+    &__submit {
+        &-btn {
+            width: 1.25rem;
+            height: 1.25rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            background: $blue-600;
+            cursor: pointer;
+            transition: all 300ms ease;
+
+            &:hover {
+                transform: scale(1.1);
+            }
+        }
+    }
+}
+
+.custom-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    font-size: 11px;
+    padding: $spacing-100 $spacing-200;
+    border-radius: $spacing-100;
+    border: 1px solid $gray-200;
+    background-color: $gray-0;
+    color: $gray-500;
+    line-height: 1;
+    cursor: pointer;
+    outline: none;
+    padding-right: 2.5rem;
+    font-family: $inter;
+    width: 100%;
+    min-width: 8rem;
+}
+
+.upload-btn {
+    display: inline-block;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: $gray-0;
+    border: 1px solid $gray-200;
+    cursor: pointer;
+    transition: all 300ms ease;
+
+    &:hover {
+        transform: scale(1.1);
+        background: $gray-500;
+        border-color: $gray-500;
+
+        svg path {
+            fill: $gray-0;
+        }
+    }
+}
+
+.chat {
+    display: grid;
+    align-items: start;
+    gap: $spacing-400;
+
+    &__header {
+        font-size: 0.625rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: $gray-500;
+        font-weight: 500;
+        text-align: center;
+        margin: 0;
+
+        a {
+            text-transform: none;
+            letter-spacing: unset;
+            color: $blue-700;
+            text-decoration: underline;
+        }
+    }
+
+    &__message {
+        padding: $spacing-400;
+        background: $gray-0;
+        border: 1px solid $gray-200;
+        border-radius: $spacing-100;
+
+        &--system {
+            border-color: $blue-400;
+            width: 75%;
+            margin-left: auto;
+        }
+
+        &--header {
+            padding-bottom: $spacing-100;
+        }
+
+        &--footer {
+            padding-top: $spacing-100;
+        }
+
+        &--output-link {
+            color: $gray-1000;
+            font-size: 0.6875rem;
+            text-decoration: underline;
+        }
+    }
+}
+
+.context {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-100;
+    padding-bottom: $spacing-400;
+
+    &__badge {
+        font-size: 0.6875rem;
+        font-weight: 400;
+        display: inline-flex;
+        gap: $spacing-100;
+        padding: $spacing-100 $spacing-200;
+        border-radius: $spacing-100;
+        background: $gray-0;
+        border: 1px solid $gray-300;
+        color: $gray-600;
+    }
+}
+
+.output {
+    display: grid;
+    align-items: center;
+    gap: $spacing-600;
+    padding: $spacing-600;
+}
+
+.response {
+    padding: $spacing-400;
+    display: grid;
+    align-items: start;
+    gap: $spacing-400;
+
+    &.old {
+        opacity: 0.5;
+        transition: all 500ms ease;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+
+    &__header {
+        font-weight: 400;
+
+        strong {
+            font-weight: 600;
+        }
+    }
+
+    &__body {
+        font-size: 1rem;
+        line-height: 1.5625em;
+        white-space: pre-wrap;
+
+        p {
+            margin: 0;
+        }
+    }
+
+    &__badges {
+        padding-top: $spacing-200;
+        display: flex;
+        gap: $spacing-200;
+        flex-wrap: wrap;
+    }
+
+    &__footer {
+        border-top: 1px solid $gray-200;
+        padding-top: $spacing-200;
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+    }
+
+    &__edit {
+        &-link {
+            display: flex;
+            align-items: center;
+            gap: $spacing-100;
+            font-size: 0.687rem;
+            color: $gray-600;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+
+    &__utilities {
+        display: flex;
+        align-items: center;
+        gap: $spacing-300;
+        padding-left: $spacing-400;
+        border-left: 1px solid $gray-200;
+        margin-left: $spacing-400;
+
+        &-link {
+        }
+    }
+
+    &__save {
+        &-link {
+            display: flex;
+            align-items: center;
+            gap: $spacing-100;
+            font-size: 0.687rem;
+            color: $green-600;
+
+            &:hover {
+                text-decoration: underline;
+            }
+            &.disabled {
+                color: $gray-500;
+                pointer-events: none;
+            }
+        }
+    }
+}

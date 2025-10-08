@@ -1,0 +1,60 @@
+<div class="compose">
+    <div class="compose__input">
+        <textarea
+            #textarea
+            class="compose__textarea"
+            [placeholder]="effectivePlaceholder"
+            value=""
+            [disabled]="isReceiving && !isDisabled"
+            (input)="autoResize()"
+            (keyup.enter)="onSend(textarea.value)"
+            (keyup.enter.shift)="addNewLineToTextarea(textarea)"
+            (keyup.control.enter)="addNewLineToTextarea(textarea)"
+            (keyup.alt.enter)="addNewLineToTextarea(textarea)"></textarea>
+    </div>
+    <div class="compose__controls">
+        <div class="compose__options">
+            <!-- <div class="compose__upload">
+                <button class="upload-btn">
+                    <talentbridge-icon icon="plus"></talentbridge-icon>
+                </button>
+            </div>
+            <div class="compose__word-limit | compose__select">
+                <select class="custom-select" name="" id="">
+                    <option value="50 Words">50 Words</option>
+                    <option value="100 Words">100 Words</option>
+                    <option value="200 Words">200 Words</option>
+                </select>                                
+                <talentbridge-icon icon="down-carrot"></talentbridge-icon>
+            </div>
+
+            <div class="compose__tone | compose__select">
+                <select class="custom-select" name="" id="">
+                    <option value="Formal">Formal</option>
+                    <option value="Technical">Technical</option>
+                    <option value="Persuasive">Persuasive</option>
+                    <option value="Authoritative">Authoritative</option>
+                    <option value="Creative">Creative</option>
+                    <option value="Narrative">Narrative</option>
+                    <option value="Neutral">Neutral</option>
+                </select>
+                <talentbridge-icon icon="down-carrot"></talentbridge-icon>
+            </div> -->
+            @if (context?.showKnowledgeScope && context?.knowledgeScopeOptions?.length) {
+            <div class="compose__word-limit | compose__select">
+                <select class="custom-select" name="knowledgeScope" [ngModel]="knowledgeScope" (ngModelChange)="onScopeChange($event)">
+                    @for (opt of context.knowledgeScopeOptions; track opt.value) {
+                    <option [value]="opt.value">{{ opt.label }}</option>
+                    }
+                </select>
+                <icon [icon]="'DownCarrot'"></icon>
+            </div>
+            }
+        </div>
+        <div class="compose__submit">
+            <button class="compose__submit-btn" (click)="onSend(textarea.value)" [disabled]="isReceiving && !isDisabled">
+                <icon [icon]="'UpArrow'"></icon>
+            </button>
+        </div>
+    </div>
+</div>

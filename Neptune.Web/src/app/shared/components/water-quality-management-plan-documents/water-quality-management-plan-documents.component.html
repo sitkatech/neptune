@@ -1,0 +1,21 @@
+<div class="documents">
+    <h3>Documents</h3>
+
+    @if(waterQualityManagementPlan$ | async; as waterQualityManagementPlan) {
+    <div class="page-body">
+        @if (waterQualityManagementPlanDocuments$ | async; as waterQualityManagementPlanDocuments) { @for (waterQualityManagementPlanDocumentType of
+        getWaterQualityManagementPlanDocumentTypes(); track $index) { @if (getDocumentsByType(waterQualityManagementPlanDocuments,
+        waterQualityManagementPlanDocumentType.Value).length > 0) {
+        <h4 class="document__sub-header">{{ waterQualityManagementPlanDocumentType.DisplayName }}</h4>
+        @for (waterQualityManagementPlanDocument of getDocumentsByType(waterQualityManagementPlanDocuments, waterQualityManagementPlanDocumentType.Value); track $index) {
+        <water-quality-management-plan-document
+            [keyDocument]="waterQualityManagementPlanDocument"
+            [waterQualityManagementPlan]="waterQualityManagementPlan"
+            [isLoading]="isLoading"
+            (openDocumentChatBot)="onClickOpenWaterQualityManagementPlanSummary($event.waterQualityManagementPlan, $event.keyDocument)"
+            (download)="downloadFile($event)">
+        </water-quality-management-plan-document>
+        } } } }
+    </div>
+    }
+</div>

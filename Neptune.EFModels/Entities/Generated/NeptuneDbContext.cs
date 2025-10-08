@@ -183,6 +183,8 @@ public partial class NeptuneDbContext : DbContext
 
     public virtual DbSet<WaterQualityManagementPlanDocument> WaterQualityManagementPlanDocuments { get; set; }
 
+    public virtual DbSet<WaterQualityManagementPlanDocumentAssistant> WaterQualityManagementPlanDocumentAssistants { get; set; }
+
     public virtual DbSet<WaterQualityManagementPlanParcel> WaterQualityManagementPlanParcels { get; set; }
 
     public virtual DbSet<WaterQualityManagementPlanPhoto> WaterQualityManagementPlanPhotos { get; set; }
@@ -1033,6 +1035,11 @@ public partial class NeptuneDbContext : DbContext
             entity.HasOne(d => d.FileResource).WithMany(p => p.WaterQualityManagementPlanDocuments).OnDelete(DeleteBehavior.ClientSetNull);
 
             entity.HasOne(d => d.WaterQualityManagementPlan).WithMany(p => p.WaterQualityManagementPlanDocuments).OnDelete(DeleteBehavior.ClientSetNull);
+        });
+
+        modelBuilder.Entity<WaterQualityManagementPlanDocumentAssistant>(entity =>
+        {
+            entity.HasOne(d => d.WaterQualityManagementPlanDocument).WithOne(p => p.WaterQualityManagementPlanDocumentAssistant).OnDelete(DeleteBehavior.ClientSetNull);
         });
 
         modelBuilder.Entity<WaterQualityManagementPlanParcel>(entity =>
