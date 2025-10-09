@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, Optional } from "@angular/core";
 import { DialogRef } from "@ngneat/dialog";
 import { ElementRef, ViewChild } from "@angular/core";
 import { Observable, Subscription, SubscriptionLike } from "rxjs";
@@ -12,17 +12,14 @@ import { FormsModule } from "@angular/forms";
 import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
 import { AiChatInputComponent } from "src/app/shared/components/ai-chat-input/ai-chat-input.component";
 import { IconComponent } from "../icon/icon.component";
-import { AiBadgeComponent } from "../ai-badge/ai-badge.component";
-import { LoadingDirective } from "../../directives/loading.directive";
-import { WaterQualityManagementPlanService } from "../../generated/api/water-quality-management-plan.service";
-import { PersonDto, WaterQualityManagementPlanDto } from "../../generated/model/models";
+import { PersonDto, WaterQualityManagementPlanDocumentDto } from "../../generated/model/models";
 
 @Component({
     selector: "water-quality-management-plan-chatbot",
     templateUrl: "water-quality-management-plan-chatbot.component.html",
     styleUrls: ["./water-quality-management-plan-chatbot.component.scss"],
     standalone: true,
-    imports: [IconComponent, AiBadgeComponent, IndexToCharPipe, DatePipe, LoadingDirective, AsyncPipe, ClipboardModule, FormsModule, AiChatInputComponent],
+    imports: [IconComponent, IndexToCharPipe, DatePipe, AsyncPipe, ClipboardModule, FormsModule, AiChatInputComponent],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WaterQualityManagementPlanChatbotComponent implements OnDestroy, OnInit {
@@ -30,9 +27,8 @@ export class WaterQualityManagementPlanChatbotComponent implements OnDestroy, On
     @ViewChild("sidebar") sidebarScrollContainer: ElementRef;
 
     private eventSourceSubscription: SubscriptionLike;
-    public waterQualityManagementPlan: WaterQualityManagementPlanDto | null = null;
     public currentUser$: Observable<PersonDto>;
-    public keyDocument: any = null;
+    @Input() waterQualityManagementPlanDocument: WaterQualityManagementPlanDocumentDto = null;
     private url: string = "";
     public selectedPrompt: string = null;
     public isReceiving: boolean = false; // Flag to indicate if we are receiving messages
@@ -50,26 +46,21 @@ export class WaterQualityManagementPlanChatbotComponent implements OnDestroy, On
 
     currentUserSubscription: Subscription;
     constructor(
-        public dialogRef: DialogRef<any>,
+        @Optional() public dialogRef: DialogRef<any>,
         private authenticationService: AuthenticationService,
         private eventSourceService: EventSourceService,
         private cdr: ChangeDetectorRef,
-        private sanitizer: DomSanitizer,
-        private waterQualityManagementPlanService: WaterQualityManagementPlanService
+        private sanitizer: DomSanitizer
     ) {
-        const data = dialogRef.data || {};
-        this.waterQualityManagementPlan = data.WaterQualityManagementPlan || null;
-        this.keyDocument = data.KeyDocument || null;
-
+        let data: any = {};
+        if (dialogRef) {
+            data = dialogRef.data || {};
+        }
+        this.waterQualityManagementPlanDocument = data.KeyDocument || this.waterQualityManagementPlanDocument || null;
         // dialogRef.disableClose = true; // Uncomment if you want to prevent closing on backdrop click (ngneat/dialog does not support this directly)
 
         this.url =
-            environment.mainAppApiUrl +
-            "/ai/water-quality-management-plans/" +
-            this.waterQualityManagementPlan?.WaterQualityManagementPlanID +
-            "/documents/" +
-            this.keyDocument?.WaterQualityManagementPlanDocumentID +
-            "/ask";
+            environment.mainAppApiUrl + "/ai/water-quality-management-plans-documents/" + this.waterQualityManagementPlanDocument?.WaterQualityManagementPlanDocumentID + "/ask";
     }
 
     ngOnInit(): void {

@@ -12,28 +12,17 @@
             [keyDocument]="waterQualityManagementPlanDocument"
             [waterQualityManagementPlan]="waterQualityManagementPlan"
             [isLoading]="isLoading"
-            (openDocumentChatBot)="onClickOpenWaterQualityManagementPlanSummary($event.waterQualityManagementPlan, $event.keyDocument)"
             (download)="downloadFile($event)"
-            (extractData)="onClickExtractData($event.waterQualityManagementPlan, $event.keyDocument)">
+            (extractData)="onClickExtractData($event.waterQualityManagementPlanDocument)">
         </water-quality-management-plan-document>
         } } } }
     </div>
     }
 
-    <!-- Extracted Data Panel -->
-    @if (isExtractingData) {
-    <div class="extracted-data-panel loading">
-        <span>Extracting data...</span>
-    </div>
-    } @else if (extractedDataResult) {
+    <!-- Inline Chatbot Panel -->
+    @if (activeChatbotDocument) {
     <div class="extracted-data-panel">
-        <h4>Extracted Data</h4>
-        @if (extractedDataResult.error) {
-        <div class="error">{{ extractedDataResult.error }}</div>
-        <pre>{{ extractedDataResult.details }}</pre>
-        } @else {
-        <pre>{{ extractedDataResult }}</pre>
-        }
+        <water-quality-management-plan-chatbot [waterQualityManagementPlanDocument]="activeChatbotDocument"> </water-quality-management-plan-chatbot>
     </div>
     }
 </div>

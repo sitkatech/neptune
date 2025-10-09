@@ -4,6 +4,7 @@ namespace Neptune.Models.DataTransferObjects
     {
         public int WaterQualityManagementPlanDocumentID { get; set; }
         public int WaterQualityManagementPlanID { get; set; }
+        public string WaterQualityManagementPlanName { get; set; }
         public FileResourceDto FileResource { get; set; }
         public string DisplayName { get; set; }
         public string? Description { get; set; }

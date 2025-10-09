@@ -8,7 +8,7 @@ public static class WaterQualityManagementPlanDocuments
 {
     public static IQueryable<WaterQualityManagementPlanDocument> GetImpl(NeptuneDbContext dbContext)
     {
-        return dbContext.WaterQualityManagementPlanDocuments
+        return dbContext.WaterQualityManagementPlanDocuments.Include(x => x.WaterQualityManagementPlan)
             .Include(x => x.FileResource).ThenInclude(x => x.CreatePerson).ThenInclude(x => x.Organization);
     }
 

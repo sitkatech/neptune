@@ -17,15 +17,14 @@ import { HttpClient } from "@angular/common/http";
     selector: "water-quality-management-plan-documents",
     templateUrl: "./water-quality-management-plan-documents.component.html",
     styleUrls: ["./water-quality-management-plan-documents.component.scss"],
-    imports: [WaterQualityManagementPlanDocumentComponent, AsyncPipe, JsonPipe],
+    imports: [WaterQualityManagementPlanDocumentComponent, AsyncPipe, WaterQualityManagementPlanChatbotComponent],
 })
 export class WaterQualityManagementPlanKeyDocumentsComponent implements OnInit, OnChanges {
     @Input() waterQualityManagementPlanID!: number;
     public waterQualityManagementPlan$: Observable<WaterQualityManagementPlanDto>;
     public waterQualityManagementPlanDocuments$: Observable<WaterQualityManagementPlanDocumentDto[]>;
     public isLoading: boolean = false;
-    public extractedDataResult: any = null;
-    public isExtractingData: boolean = false;
+    public activeChatbotDocument: WaterQualityManagementPlanDocumentDto = null;
 
     constructor(
         private waterQualityManagementPlanService: WaterQualityManagementPlanService,
@@ -41,6 +40,7 @@ export class WaterQualityManagementPlanKeyDocumentsComponent implements OnInit, 
     ngOnChanges(changes: SimpleChanges): void {
         if (changes["waterQualityManagementPlanID"] && !changes["waterQualityManagementPlanID"].firstChange) {
             this.loadPlanData();
+            this.activeChatbotDocument = null; // Clear chatbot when switching WQMP
         }
     }
 
@@ -84,50 +84,11 @@ export class WaterQualityManagementPlanKeyDocumentsComponent implements OnInit, 
             .sort((a, b) => a.DisplayName.localeCompare(b.DisplayName));
     }
 
-    onClickOpenWaterQualityManagementPlanSummary(
-        waterQualityManagementPlan: WaterQualityManagementPlanDto,
-        waterQualityManagementPlanDocument: WaterQualityManagementPlanDocumentDto
-    ) {
-        this.dialogService.open(WaterQualityManagementPlanChatbotComponent, {
-            data: {
-                WaterQualityManagementPlan: waterQualityManagementPlan,
-                KeyDocument: waterQualityManagementPlanDocument,
-            },
-            minHeight: "400px",
-            maxHeight: "90vh",
-            width: "1600px",
-            // Optionally set width, minHeight, maxHeight, etc. here
-        });
-    }
-
-    formatFileSize(bytes: number, decimals = 2) {
-        if (!+bytes) return "0 Bytes";
-
-        const k = 1024;
-        const dm = decimals < 0 ? 0 : decimals;
-        const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
-
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
-    }
-
     downloadFile(waterQualityManagementPlanDocument: WaterQualityManagementPlanDocumentDto) {
         return `${environment.mainAppApiUrl}/FileResource/${waterQualityManagementPlanDocument.FileResource.FileResourceGUID}`;
     }
 
-    onClickExtractData(waterQualityManagementPlan: any, keyDocument: any) {
-        this.isExtractingData = true;
-        this.extractedDataResult = null;
-        const url = `/ai/water-quality-management-plans/${waterQualityManagementPlan.WaterQualityManagementPlanID}/documents/${keyDocument.WaterQualityManagementPlanDocumentID}/extract-data`;
-        this.http.post(url, { responseType: "text" }).subscribe({
-            next: (result) => {
-                this.extractedDataResult = result;
-                this.isExtractingData = false;
-            },
-            error: (err) => {
-                this.extractedDataResult = { error: "Failed to extract data", details: err.error?.text || err.message || err };
-                this.isExtractingData = false;
-            },
-        });
+    onClickExtractData(waterQualityManagementPlanDocument: WaterQualityManagementPlanDocumentDto) {
+        this.activeChatbotDocument = waterQualityManagementPlanDocument;
     }
 }

@@ -14,6 +14,7 @@ import { FormControl, FormControlOptions, FormControlState, Validators } from "@
 export class WaterQualityManagementPlanDocumentDto { 
     WaterQualityManagementPlanDocumentID?: number;
     WaterQualityManagementPlanID?: number;
+    WaterQualityManagementPlanName?: string | null;
     FileResource?: FileResourceDto;
     DisplayName?: string | null;
     Description?: string | null;
@@ -27,6 +28,7 @@ export class WaterQualityManagementPlanDocumentDto {
 export interface WaterQualityManagementPlanDocumentDtoForm { 
     WaterQualityManagementPlanDocumentID?: FormControl<number>;
     WaterQualityManagementPlanID?: FormControl<number>;
+    WaterQualityManagementPlanName?: FormControl<string>;
     FileResource?: FormControl<FileResourceDto>;
     DisplayName?: FormControl<string>;
     Description?: FormControl<string>;
@@ -46,6 +48,16 @@ export class WaterQualityManagementPlanDocumentDtoFormControls {
         }
     );
     public static WaterQualityManagementPlanID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static WaterQualityManagementPlanName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {

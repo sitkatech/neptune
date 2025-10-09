@@ -60,12 +60,8 @@
             <div class="tb-dialog__sidebar--footer">
                 <div class="chatgpt-context">
                     <span class="context__badge">
-                        <icon [icon]="'Leaf'"></icon>
-                        {{ waterQualityManagementPlan?.WaterQualityManagementPlanName }}
-                    </span>
-                    <span class="context__badge">
                         <icon [icon]="'File'"></icon>
-                        {{ keyDocument.FileName }}
+                        {{ waterQualityManagementPlanDocument.FileResource.OriginalFilename }}
                     </span>
                 </div>
                 <div class="chatgpt-actions">

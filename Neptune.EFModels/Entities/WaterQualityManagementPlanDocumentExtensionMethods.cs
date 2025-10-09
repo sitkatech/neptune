@@ -10,6 +10,7 @@ public static class WaterQualityManagementPlanDocumentExtensionMethods
         {
             WaterQualityManagementPlanDocumentID = doc.WaterQualityManagementPlanDocumentID,
             WaterQualityManagementPlanID = doc.WaterQualityManagementPlanID,
+            WaterQualityManagementPlanName = doc.WaterQualityManagementPlan.WaterQualityManagementPlanName,
             FileResource = doc.FileResource.AsDto(),
             DisplayName = doc.DisplayName,
             Description = doc.Description,

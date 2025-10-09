@@ -18,16 +18,11 @@ export class WaterQualityManagementPlanDocumentComponent {
     @Input() isLoading: boolean = false;
 
     @Output() vote = new EventEmitter<{ keyDocument: WaterQualityManagementPlanDocumentDto; isAccurate: boolean }>();
-    @Output() openDocumentChatBot = new EventEmitter<{ waterQualityManagementPlan: WaterQualityManagementPlanDto; keyDocument: WaterQualityManagementPlanDocumentDto }>();
     @Output() download = new EventEmitter<WaterQualityManagementPlanDocumentDto>();
-    @Output() extractData = new EventEmitter<{ waterQualityManagementPlan: WaterQualityManagementPlanDto; keyDocument: WaterQualityManagementPlanDocumentDto }>();
+    @Output() extractData = new EventEmitter<{ waterQualityManagementPlanDocument: WaterQualityManagementPlanDocumentDto }>();
 
     onVote(isAccurate: boolean) {
         this.vote.emit({ keyDocument: this.keyDocument, isAccurate });
-    }
-
-    onClickOpenProjectSummary() {
-        this.openDocumentChatBot.emit({ waterQualityManagementPlan: this.waterQualityManagementPlan, keyDocument: this.keyDocument });
     }
 
     onDownload() {
@@ -35,6 +30,17 @@ export class WaterQualityManagementPlanDocumentComponent {
     }
 
     onClickExtractData() {
-        this.extractData.emit({ waterQualityManagementPlan: this.waterQualityManagementPlan, keyDocument: this.keyDocument });
+        this.extractData.emit({ waterQualityManagementPlanDocument: this.keyDocument });
+    }
+
+    formatFileSize(bytes: number, decimals = 2) {
+        if (!+bytes) return "0 Bytes";
+
+        const k = 1024;
+        const dm = decimals < 0 ? 0 : decimals;
+        const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
     }
 }

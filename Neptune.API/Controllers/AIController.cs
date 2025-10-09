@@ -35,11 +35,7 @@ public class AIController(
     OpenAIClient openAIClient)
     : SitkaController<AIController>(dbContext, logger, keystoneService, appConfiguration)
 {
-    private const string AskInstructions = "You will be referred to as ESA Intelligence. Please respond in two parts, Part 1: Respond to the user in a friendly manner, seeing if the summary is satisfactory. Limit this part to one or two sentences."
-                                        + " Part 2: The water quality management plan summary based on the file, use their instructions to determine the content of the summary."
-                                        + " Please use the contents of the file to produce the results, DO NOT INVENT ANYTHING. Limit the summary to a maximum of 4 paragraphs."
-                                        + " Separate the two parts with \"---SUMMARY---\". Like this: "
-                                        + " Let me know if you need any updates. ---SUMMARY--- This water quality management plan was conducted by ESA to perform";
+    private const string AskInstructions = "You are part of an automated workflow and should return only JSON in your response. Do not include any narrative and do not provide any follow-up suggestions. You are helping a stormwater technician extract data from a Water Quality Management Plan. You will populate an existing JSON schema, and you must match this schema exactly.\n";
 
     [HttpPost("clean-up")]
     public async Task PostChatCompletions()
@@ -75,13 +71,10 @@ public class AIController(
     }
 
 
-    [HttpPost("water-quality-management-plans/{waterQualityManagementPlanID}/documents/{waterQualityManagementPlanDocumentID}/ask")]
+    [HttpPost("water-quality-management-plan-documents/{waterQualityManagementPlanDocumentID}/ask")]
     [AdminFeature]
-    [EntityNotFound(typeof(WaterQualityManagementPlan), "waterQualityManagementPlanID")]
-    public async Task Ask([FromRoute] int waterQualityManagementPlanID, [FromRoute] int waterQualityManagementPlanDocumentID, [FromBody] ChatRequestDto messageDto)
+    public async Task Ask([FromRoute] int waterQualityManagementPlanDocumentID, [FromBody] ChatRequestDto messageDto)
     {
-        var waterQualityManagementPlanDto = await WaterQualityManagementPlans.GetByIDAsDtoAsync(DbContext, waterQualityManagementPlanID);
-        var waterQualityManagementPlanContext = $"WQMP CONTEXT: {JsonSerializer.Serialize(waterQualityManagementPlanDto)}\n";
         var docDto = await WaterQualityManagementPlanDocuments.GetByIDAsDtoAsync(DbContext, waterQualityManagementPlanDocumentID);
         if (docDto == null)
         {
@@ -105,7 +98,7 @@ public class AIController(
         {
             var blobDownloadResult = await azureBlobStorageService.DownloadBlobFromBlobStorageAsStream(docDto.FileResource.FileResourceGUID.ToString());
 
-            var assistant = await CreateAssistantClient(fileClient, blobDownloadResult.Content, assistantClient, waterQualityManagementPlanContext, docDto.FileResource.OriginalFilename, AskInstructions);
+            var assistant = await CreateAssistantClient(fileClient, blobDownloadResult.Content, assistantClient, "", docDto.FileResource.OriginalFilename, AskInstructions);
             assistantID = assistant.Value.Id;
 
             await WaterQualityManagementPlanDocumentAssistants.UpsertAsync(DbContext, waterQualityManagementPlanDocumentID, assistantID);
@@ -155,10 +148,9 @@ public class AIController(
 #pragma warning restore OPENAI001
     }
 
-    [HttpPost("water-quality-management-plans/{waterQualityManagementPlanID}/documents/{waterQualityManagementPlanDocumentID}/extract-data")]
+    [HttpPost("water-quality-management-plan-documents/{waterQualityManagementPlanDocumentID}/extract-data")]
     [AdminFeature]
-    [EntityNotFound(typeof(WaterQualityManagementPlan), "waterQualityManagementPlanID")]
-    public async Task ExtractData([FromRoute] int waterQualityManagementPlanID, [FromRoute] int waterQualityManagementPlanDocumentID)
+    public async Task<IActionResult> ExtractData([FromRoute] int waterQualityManagementPlanDocumentID)
     {
         var schemaStructure = JsonSerializer.Serialize(new WaterQualityManagementPlanExtractDto());
         var domainTables = new
@@ -188,12 +180,10 @@ public class AIController(
         var docDto = await WaterQualityManagementPlanDocuments.GetByIDAsDtoAsync(DbContext, waterQualityManagementPlanDocumentID);
         if (docDto == null)
         {
-            Response.StatusCode = 404;
-            return;
+            return NotFound();
         }
 
-        Response.Headers.Append("Content-Type", "text/event-stream");
-        Response.Headers.Append("X-Accel-Buffering", "no");
+        // Removed event-stream headers since we are not streaming the response
 
         var fileClient = openAIClient.GetOpenAIFileClient();
 #pragma warning disable OPENAI001
@@ -223,32 +213,31 @@ public class AIController(
         ));
 
         var streamingResponses = assistantClient.CreateThreadAndRunStreamingAsync(assistantID, threadOptions);
-
+        var resultBuilder = new System.Text.StringBuilder();
         await foreach (var streamingUpdate in streamingResponses)
         {
             if (streamingUpdate is MessageContentUpdate contentUpdate)
             {
-                string output = null;
                 if (!string.IsNullOrEmpty(contentUpdate.Text))
                 {
                     // Remove all content between 【 and 】 including the symbols
                     var cleanedText = Regex.Replace(contentUpdate.Text, "【.*?】", string.Empty);
-                    // Replace newlines with <br> for HTML rendering in the browser
-                    output = cleanedText.Replace("\n", "<br>").Replace("\r", "");
+                    resultBuilder.Append(cleanedText.Replace("\n", "<br>").Replace("\r", ""));
                 }
                 if (contentUpdate.TextAnnotation != null)
                 {
-                    output += $" [Reference: {docDto.FileResource.OriginalFilename}]";
-                }
-                if (!string.IsNullOrWhiteSpace(output))
-                {
-                    await Response.WriteAsync($"data: {output}\n\n");
+                    resultBuilder.Append($" [Reference: {docDto.FileResource.OriginalFilename}]");
                 }
             }
-            if (streamingUpdate.UpdateKind == StreamingUpdateReason.MessageCompleted)
-            {
-                await Response.WriteAsync($"data: ---{streamingUpdate.UpdateKind.ToString()}---\n\n");
-            }
+        }
+        var finalResult = resultBuilder.ToString();
+        if (!string.IsNullOrWhiteSpace(finalResult))
+        {
+            return Content(finalResult, "text/plain");
+        }
+        else
+        {
+            return StatusCode(500, new { error = "No response from AI service." });
         }
 #pragma warning restore OPENAI001
     }

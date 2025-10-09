@@ -18,22 +18,13 @@
         }
       }
     },
-    "/ai/water-quality-management-plans/{waterQualityManagementPlanID}/documents/{waterQualityManagementPlanDocumentID}/ask": {
+    "/ai/water-quality-management-plan-documents/{waterQualityManagementPlanDocumentID}/ask": {
       "post": {
         "tags": [
           "AI"
         ],
         "operationId": "Ask_AI",
         "parameters": [
-          {
-            "name": "waterQualityManagementPlanID",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
           {
             "name": "waterQualityManagementPlanDocumentID",
             "in": "path",
@@ -70,22 +61,13 @@
         }
       }
     },
-    "/ai/water-quality-management-plans/{waterQualityManagementPlanID}/documents/{waterQualityManagementPlanDocumentID}/extract-data": {
+    "/ai/water-quality-management-plan-documents/{waterQualityManagementPlanDocumentID}/extract-data": {
       "post": {
         "tags": [
           "AI"
         ],
         "operationId": "ExtractData_AI",
         "parameters": [
-          {
-            "name": "waterQualityManagementPlanID",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
           {
             "name": "waterQualityManagementPlanDocumentID",
             "in": "path",
@@ -12081,6 +12063,10 @@
           "WaterQualityManagementPlanID": {
             "type": "integer",
             "format": "int32"
+          },
+          "WaterQualityManagementPlanName": {
+            "type": "string",
+            "nullable": true
           },
           "FileResource": {
             "$ref": "#/components/schemas/FileResourceDto"
