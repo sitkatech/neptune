@@ -5,7 +5,6 @@ import { Observable, Subscription, SubscriptionLike } from "rxjs";
 import { AuthenticationService } from "src/app/services/authentication.service";
 import { EventSourceService } from "src/app/services/event-source.service";
 import { environment } from "src/environments/environment";
-import { IndexToCharPipe } from "src/app/shared/pipes/index-to-char.pipe";
 import { ClipboardModule } from "@angular/cdk/clipboard";
 import { AsyncPipe, DatePipe } from "@angular/common";
 import { FormsModule } from "@angular/forms";
@@ -19,7 +18,7 @@ import { PersonDto, WaterQualityManagementPlanDocumentDto } from "../../generate
     templateUrl: "water-quality-management-plan-chatbot.component.html",
     styleUrls: ["./water-quality-management-plan-chatbot.component.scss"],
     standalone: true,
-    imports: [IconComponent, IndexToCharPipe, DatePipe, AsyncPipe, ClipboardModule, FormsModule, AiChatInputComponent],
+    imports: [IconComponent, DatePipe, AsyncPipe, ClipboardModule, FormsModule, AiChatInputComponent],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WaterQualityManagementPlanChatbotComponent implements OnDestroy, OnInit {
@@ -30,19 +29,11 @@ export class WaterQualityManagementPlanChatbotComponent implements OnDestroy, On
     public currentUser$: Observable<PersonDto>;
     @Input() waterQualityManagementPlanDocument: WaterQualityManagementPlanDocumentDto = null;
     private url: string = "";
-    public selectedPrompt: string = null;
     public isReceiving: boolean = false; // Flag to indicate if we are receiving messages
 
     public messageDto = {
         Messages: [],
     };
-
-    public prompts: string[] = [
-        "Please extract the WaterQualityManagementPlan and all related tables from the document, using only the schema structure from WaterQualityManagementPlanExtractDto. For each field, explain your rationale and provide a snippet from the document showing why you chose that value. Respond in a clear, conversational format, streaming your response as you work. Do not use any sample data or context values—only parse the document itself.",
-        // "Summarize the key elements of this proposal, including the client's objective, the scope of work, primary tasks, timeline, and expected outcomes.",
-        // "Write a plain-language summary of this proposal that explains what the waterqualitymanagementplan is about, why it matters, and what work will be done. Keep it accessible to a general audience with little or no technical background.",
-        // "Provide a technical summary of the proposed work, including the methodology, deliverables, regulatory context (if relevant), and any notable data sources, tools, or models used. Focus on the implementation side of the waterqualitymanagementplan."
-    ];
 
     currentUserSubscription: Subscription;
     constructor(
@@ -96,18 +87,6 @@ export class WaterQualityManagementPlanChatbotComponent implements OnDestroy, On
 
         this.sendMessages(this.messageDto);
         this.cdr.detectChanges(); // Trigger change detection to update the view
-    }
-
-    selectPrompt(prompt: string): void {
-        this.selectedPrompt = prompt;
-
-        this.messageDto.Messages.push({
-            Role: "user",
-            Content: prompt,
-            Date: new Date(),
-        });
-
-        this.sendMessages(this.messageDto);
     }
 
     async sendMessages(messageDto): Promise<void> {
@@ -190,7 +169,6 @@ export class WaterQualityManagementPlanChatbotComponent implements OnDestroy, On
         this.messageDto = {
             Messages: [],
         };
-        this.selectedPrompt = null;
         this.isReceiving = false; // Always reset spinner
         this.cdr.detectChanges(); // Trigger change detection to update the view
     }
@@ -204,12 +182,6 @@ export class WaterQualityManagementPlanChatbotComponent implements OnDestroy, On
 
     scrollMainTo(element: any): void {
         (document.getElementById(element) as HTMLElement).scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
-    }
-
-    copy(inputElement) {
-        inputElement.select();
-        document.execCommand("copy");
-        inputElement.setSelectionRange(0, 0);
     }
 
     // --- Edit mode for AI responses ---

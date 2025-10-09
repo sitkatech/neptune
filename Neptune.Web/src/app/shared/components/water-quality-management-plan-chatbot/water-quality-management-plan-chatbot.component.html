@@ -46,17 +46,7 @@
         </div>
 
         <div class="tb-dialog__sidebar chatgpt-sidebar" #sidebar [scrollTop]="sidebar.scrollHeight">
-            <div class="tb-dialog__sidebar--body">
-                <div class="initial">
-                    <h4 class="initial__header">Choose a Prompt</h4>
-                    @for (prompt of prompts; track $index) {
-                    <div class="option" (click)="selectPrompt(prompt)">
-                        <h5 class="option__header | sm-header">Option {{ $index | indexToChar }}</h5>
-                        <p class="option__text">{{ prompt }}</p>
-                    </div>
-                    }
-                </div>
-            </div>
+            <!-- Prompt selection removed -->
             <div class="tb-dialog__sidebar--footer">
                 <div class="chatgpt-context">
                     <span class="context__badge">
