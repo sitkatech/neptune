@@ -20,6 +20,7 @@ export class WaterQualityManagementPlanDocumentComponent {
     @Output() vote = new EventEmitter<{ keyDocument: WaterQualityManagementPlanDocumentDto; isAccurate: boolean }>();
     @Output() openDocumentChatBot = new EventEmitter<{ waterQualityManagementPlan: WaterQualityManagementPlanDto; keyDocument: WaterQualityManagementPlanDocumentDto }>();
     @Output() download = new EventEmitter<WaterQualityManagementPlanDocumentDto>();
+    @Output() extractData = new EventEmitter<{ waterQualityManagementPlan: WaterQualityManagementPlanDto; keyDocument: WaterQualityManagementPlanDocumentDto }>();
 
     onVote(isAccurate: boolean) {
         this.vote.emit({ keyDocument: this.keyDocument, isAccurate });
@@ -31,5 +32,9 @@ export class WaterQualityManagementPlanDocumentComponent {
 
     onDownload() {
         this.download.emit(this.keyDocument);
+    }
+
+    onClickExtractData() {
+        this.extractData.emit({ waterQualityManagementPlan: this.waterQualityManagementPlan, keyDocument: this.keyDocument });
     }
 }

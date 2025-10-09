@@ -6,24 +6,33 @@ import { environment } from "src/environments/environment";
 import { WaterQualityManagementPlanService } from "../../generated/api/water-quality-management-plan.service";
 import { WaterQualityManagementPlanDocumentComponent } from "../water-quality-management-plan-document/water-quality-management-plan-document.component";
 import { WaterQualityManagementPlanDocumentTypes } from "../../generated/enum/water-quality-management-plan-document-type-enum";
-import { AsyncPipe } from "@angular/common";
+import { AsyncPipe, JsonPipe } from "@angular/common";
 import { WaterQualityManagementPlanDocumentDto } from "../../generated/model/water-quality-management-plan-document-dto";
 import { WaterQualityManagementPlanDto } from "../../generated/model/water-quality-management-plan-dto";
 import { LookupTableEntry } from "../../models/lookup-table-entry";
+import { AIService } from "../../generated/api/ai.service";
+import { HttpClient } from "@angular/common/http";
 
 @Component({
     selector: "water-quality-management-plan-documents",
     templateUrl: "./water-quality-management-plan-documents.component.html",
     styleUrls: ["./water-quality-management-plan-documents.component.scss"],
-    imports: [WaterQualityManagementPlanDocumentComponent, AsyncPipe],
+    imports: [WaterQualityManagementPlanDocumentComponent, AsyncPipe, JsonPipe],
 })
 export class WaterQualityManagementPlanKeyDocumentsComponent implements OnInit, OnChanges {
     @Input() waterQualityManagementPlanID!: number;
     public waterQualityManagementPlan$: Observable<WaterQualityManagementPlanDto>;
     public waterQualityManagementPlanDocuments$: Observable<WaterQualityManagementPlanDocumentDto[]>;
     public isLoading: boolean = false;
+    public extractedDataResult: any = null;
+    public isExtractingData: boolean = false;
 
-    constructor(private waterQualityManagementPlanService: WaterQualityManagementPlanService, private dialogService: DialogService) {}
+    constructor(
+        private waterQualityManagementPlanService: WaterQualityManagementPlanService,
+        private dialogService: DialogService,
+        private aiService: AIService,
+        private http: HttpClient
+    ) {}
 
     ngOnInit(): void {
         this.loadPlanData();
@@ -104,5 +113,21 @@ export class WaterQualityManagementPlanKeyDocumentsComponent implements OnInit, 
 
     downloadFile(waterQualityManagementPlanDocument: WaterQualityManagementPlanDocumentDto) {
         return `${environment.mainAppApiUrl}/FileResource/${waterQualityManagementPlanDocument.FileResource.FileResourceGUID}`;
+    }
+
+    onClickExtractData(waterQualityManagementPlan: any, keyDocument: any) {
+        this.isExtractingData = true;
+        this.extractedDataResult = null;
+        const url = `/ai/water-quality-management-plans/${waterQualityManagementPlan.WaterQualityManagementPlanID}/documents/${keyDocument.WaterQualityManagementPlanDocumentID}/extract-data`;
+        this.http.post(url, { responseType: "text" }).subscribe({
+            next: (result) => {
+                this.extractedDataResult = result;
+                this.isExtractingData = false;
+            },
+            error: (err) => {
+                this.extractedDataResult = { error: "Failed to extract data", details: err.error?.text || err.message || err };
+                this.isExtractingData = false;
+            },
+        });
     }
 }

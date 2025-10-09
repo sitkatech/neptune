@@ -70,12 +70,12 @@
         }
       }
     },
-    "/ai/water-quality-management-plans/{waterQualityManagementPlanID}/documents/{waterQualityManagementPlanDocumentID}/extract-schema": {
+    "/ai/water-quality-management-plans/{waterQualityManagementPlanID}/documents/{waterQualityManagementPlanDocumentID}/extract-data": {
       "post": {
         "tags": [
           "AI"
         ],
-        "operationId": "ExtractSchema_AI",
+        "operationId": "ExtractData_AI",
         "parameters": [
           {
             "name": "waterQualityManagementPlanID",

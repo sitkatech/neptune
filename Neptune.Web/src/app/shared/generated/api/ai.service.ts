@@ -108,15 +108,15 @@ export class AIService extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public extractSchemaAI(waterQualityManagementPlanID: number, waterQualityManagementPlanDocumentID: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public extractSchemaAI(waterQualityManagementPlanID: number, waterQualityManagementPlanDocumentID: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public extractSchemaAI(waterQualityManagementPlanID: number, waterQualityManagementPlanDocumentID: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public extractSchemaAI(waterQualityManagementPlanID: number, waterQualityManagementPlanDocumentID: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public extractDataAI(waterQualityManagementPlanID: number, waterQualityManagementPlanDocumentID: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public extractDataAI(waterQualityManagementPlanID: number, waterQualityManagementPlanDocumentID: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public extractDataAI(waterQualityManagementPlanID: number, waterQualityManagementPlanDocumentID: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public extractDataAI(waterQualityManagementPlanID: number, waterQualityManagementPlanDocumentID: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (waterQualityManagementPlanID === null || waterQualityManagementPlanID === undefined) {
-            throw new Error('Required parameter waterQualityManagementPlanID was null or undefined when calling extractSchemaAI.');
+            throw new Error('Required parameter waterQualityManagementPlanID was null or undefined when calling extractDataAI.');
         }
         if (waterQualityManagementPlanDocumentID === null || waterQualityManagementPlanDocumentID === undefined) {
-            throw new Error('Required parameter waterQualityManagementPlanDocumentID was null or undefined when calling extractSchemaAI.');
+            throw new Error('Required parameter waterQualityManagementPlanDocumentID was null or undefined when calling extractDataAI.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -143,7 +143,7 @@ export class AIService extends BaseService {
             }
         }
 
-        let localVarPath = `/ai/water-quality-management-plans/${this.configuration.encodeParam({name: "waterQualityManagementPlanID", value: waterQualityManagementPlanID, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}/documents/${this.configuration.encodeParam({name: "waterQualityManagementPlanDocumentID", value: waterQualityManagementPlanDocumentID, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}/extract-schema`;
+        let localVarPath = `/ai/water-quality-management-plans/${this.configuration.encodeParam({name: "waterQualityManagementPlanID", value: waterQualityManagementPlanID, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}/documents/${this.configuration.encodeParam({name: "waterQualityManagementPlanDocumentID", value: waterQualityManagementPlanDocumentID, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}/extract-data`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
             {
