@@ -224,4 +224,17 @@ export class LeafletHelperService {
     public static getLegendHtml(layer: Layer): string | undefined {
         return LeafletHelperService.hasLegendHtml(layer) ? layer.legendHtml : undefined;
     }
+    /**
+     * Type guard for layers with a wmsParams property.
+     */
+    public static hasWMSParams(layer: Layer): layer is Layer & { wmsParams: object } {
+        return typeof (layer as any).wmsParams === "object" && (layer as any).wmsParams !== null;
+    }
+
+    /**
+     * Type-safe getter for wmsParams property.
+     */
+    public static getWMSParams(layer: Layer): object | undefined {
+        return LeafletHelperService.hasWMSParams(layer) ? (layer as any).wmsParams : undefined;
+    }
 }
