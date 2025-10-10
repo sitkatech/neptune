@@ -61,30 +61,6 @@
         }
       }
     },
-    "/ai/water-quality-management-plan-documents/{waterQualityManagementPlanDocumentID}/extract-data": {
-      "post": {
-        "tags": [
-          "AI"
-        ],
-        "operationId": "ExtractData_AI",
-        "parameters": [
-          {
-            "name": "waterQualityManagementPlanDocumentID",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
     "/custom-attribute-types": {
       "get": {
         "tags": [
