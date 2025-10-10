@@ -11,7 +11,13 @@ import { FormsModule } from "@angular/forms";
 import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
 import { AiChatInputComponent } from "src/app/shared/components/ai-chat-input/ai-chat-input.component";
 import { IconComponent } from "../icon/icon.component";
-import { ChatMessageDto, ChatRequestDto, PersonDto, WaterQualityManagementPlanDocumentDto } from "../../generated/model/models";
+import {
+    ChatMessageDto,
+    ChatRequestDto,
+    PersonDto,
+    WaterQualityManagementPlanDocumentDto,
+    WaterQualityManagementPlanDocumentExtractionResultDto,
+} from "../../generated/model/models";
 
 @Component({
     selector: "water-quality-management-plan-chatbot",
@@ -22,8 +28,26 @@ import { ChatMessageDto, ChatRequestDto, PersonDto, WaterQualityManagementPlanDo
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WaterQualityManagementPlanChatbotComponent implements OnDestroy, OnInit {
+    formatFinalOutput(finalOutput: string): string {
+        if (!finalOutput) return "";
+        // Try to pretty-print if it's valid JSON
+        try {
+            const parsed = JSON.parse(finalOutput);
+            return `<pre><code>${JSON.stringify(parsed, null, 2)}</code></pre>`;
+        } catch {
+            // Otherwise, just replace \n with <br>
+            return `<pre><code>${finalOutput.replace(/\n/g, "<br>")}</code></pre>`;
+        }
+    }
+    private _extractionResultSubject = new BehaviorSubject<WaterQualityManagementPlanDocumentExtractionResultDto>(null);
+    extractionResult$ = this._extractionResultSubject.asObservable();
+    @Input() set extractionResult(value: WaterQualityManagementPlanDocumentExtractionResultDto) {
+        this._extractionResultSubject.next(value);
+    }
+    get extractionResult(): WaterQualityManagementPlanDocumentExtractionResultDto {
+        return this._extractionResultSubject.value;
+    }
     public assistantMessages$: Observable<ChatMessageDto[]>;
-    private initialMessageSent = false;
     @ViewChild("main") mainScrollContainer: ElementRef;
     @ViewChild("sidebar") sidebarScrollContainer: ElementRef;
 
@@ -33,23 +57,6 @@ export class WaterQualityManagementPlanChatbotComponent implements OnDestroy, On
     private url: string = "";
     private isReceivingSubject = new BehaviorSubject<boolean>(false);
     public isReceiving$ = this.isReceivingSubject.asObservable();
-
-    private initialExtractDataPrompt = `
-        You are part of an automated workflow and should return only JSON in your response.
-        Do not include any narrative and do not provide any follow-up suggestions.
-        You are helping a stormwater technician extract data from a Water Quality Management Plan (WQMP).
-        You will populate an existing JSON schema, and you must match this schema exactly.
-        The WQMPs are for Orange County California, and used by the MS4 permitees including Orange County Public Works and cities.
-        In the first step, you will extract the basic attributes of the WQMP. In follow-up prompts you will extract nested child records.
-        Each attribute you extract will be placed in the "Value" property of the named attribute.
-        The "ExtractionEvidence" will include a snippet from the WQMP PDF that shows the sentence in the WQMP where the data came from, plus the sentence before and after.
-        If the attribute was extracted from a table or label just include relevant text nearby.\n\n
-        The "DocumentSource" should include the Page # in the document where the attribute value was found.
-        Here is the sub-schema for each extracted attribute:\n
-        { "Value": "", "ExtractionEvidence": "", "DocumentSource": "" }\n\n
-        A second LLM will be reviewing this work for accuracy, so please do not hallucinate data.
-        If an attribute is not found simply put null in Value, ExtractionEvidence, and DocumentSource.
-    `;
 
     private chatMessagesSubject = new BehaviorSubject<ChatMessageDto[]>([]);
     public chatMessages$: Observable<ChatMessageDto[]> = this.chatMessagesSubject.asObservable();
@@ -69,11 +76,14 @@ export class WaterQualityManagementPlanChatbotComponent implements OnDestroy, On
         if (changes.waterQualityManagementPlanDocument && changes.waterQualityManagementPlanDocument.currentValue) {
             this.url =
                 environment.mainAppApiUrl + "/ai/water-quality-management-plan-documents/" + this.waterQualityManagementPlanDocument?.WaterQualityManagementPlanDocumentID + "/ask";
-            if (!this.initialMessageSent) {
-                this.initialMessageSent = true;
-                this.reset();
-                this.send({ message: this.initialExtractDataPrompt });
-            }
+            this.reset();
+        }
+        if (changes.extractionResult && changes.extractionResult.currentValue) {
+            // Automatically send ChatOCST prompt after extraction result is set
+            this.send({
+                message:
+                    "Ok thanks! Now you are a WQMP ChatBot available for the end user to ask narrative questions about. You are no longer constrained to JSON output, but use the context you gained while operating in that mode to be helpful to the stormwater technician. They will ask questions about the source data, how you extracted, and other things they want to know about the WQMP.",
+            });
         }
     }
 

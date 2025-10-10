@@ -13,6 +13,8 @@
     </div>
 
     @if (planControl.value) {
-    <water-quality-management-plan-documents [waterQualityManagementPlanID]="planControl.value"></water-quality-management-plan-documents>
+    <water-quality-management-plan-documents
+        [waterQualityManagementPlanID]="planControl.value"
+        (extractingChange)="onExtractingChange($event)"></water-quality-management-plan-documents>
     }
 </div>

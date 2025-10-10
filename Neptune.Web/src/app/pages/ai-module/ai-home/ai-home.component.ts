@@ -4,7 +4,6 @@ import { CommonModule } from "@angular/common";
 import { ReactiveFormsModule, FormControl } from "@angular/forms";
 import { WaterQualityManagementPlanService } from "src/app/shared/generated/api/water-quality-management-plan.service";
 import { WaterQualityManagementPlanKeyDocumentsComponent } from "src/app/shared/components/water-quality-management-plan-documents/water-quality-management-plan-documents.component";
-import { WaterQualityManagementPlanDto } from "src/app/shared/generated/model/water-quality-management-plan-dto";
 import { FormFieldComponent, FormFieldType, SelectDropdownOption } from "src/app/shared/components/forms/form-field/form-field.component";
 
 @Component({
@@ -15,6 +14,16 @@ import { FormFieldComponent, FormFieldType, SelectDropdownOption } from "src/app
     imports: [CommonModule, ReactiveFormsModule, WaterQualityManagementPlanKeyDocumentsComponent, FormFieldComponent],
 })
 export class AiHomeComponent implements OnInit {
+    public isExtracting: boolean = false;
+
+    onExtractingChange(isExtracting: boolean) {
+        this.isExtracting = isExtracting;
+        if (isExtracting) {
+            this.planControl.disable();
+        } else {
+            this.planControl.enable();
+        }
+    }
     public waterQualityManagementPlans$: Observable<SelectDropdownOption[]>;
     public planControl = new FormControl<number | null>(null);
     public FormFieldType = FormFieldType;

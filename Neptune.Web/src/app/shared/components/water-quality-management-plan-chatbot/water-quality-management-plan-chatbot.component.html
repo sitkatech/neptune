@@ -10,14 +10,28 @@
     <div class="tb-dialog__body | tb-dialog__body--two-col">
         <div class="tb-dialog__main chatgpt-main" #main [scrollTop]="main.scrollHeight">
             <div class="chatgpt-history">
-                @if (chatMessages.length === 0) {
+                @if (chatMessages.length === 0 && !(extractionResult$ | async)) {
                 <div class="intro">
                     <div class="intro__wrapper | copy copy-3">
                         <img src="./assets/main/icons/icon-leaf.svg" alt="Leaf" />
                         <p><strong>Hi!</strong> Type your question to start extracting data from the document.</p>
                     </div>
                 </div>
-                } @else { @for (chatMessage of chatMessages; track $index) { @if (chatMessage.Role === 'assistant') {
+                } @if (extractionResult$ | async; as extractionResult) {
+                <div class="chatgpt-bubble assistant">
+                    <div class="chatgpt-meta">
+                        <span> <img src="./assets/main/icons/esa-ai.svg" alt="AI Icon" class="chatgpt-avatar" /> ESA </span>
+                        <span class="chatgpt-date">{{ extractionResult?.ExtractedAt | date : "MMM d, y h:mm a" }}</span>
+                    </div>
+                    <div class="chatgpt-content">
+                        @if (extractionResult?.FinalOutput) {
+                        <span [innerHTML]="formatFinalOutput(extractionResult.FinalOutput)"></span>
+                        } @else {
+                        <pre><code>{{ extractionResult | json }}</code></pre>
+                        }
+                    </div>
+                </div>
+                } @if (chatMessages.length > 0) { @for (chatMessage of chatMessages; track $index) { @if (chatMessage.Role === 'assistant') {
                 <div class="chatgpt-bubble assistant" [id]="'response-' + ($index + 1)">
                     <div class="chatgpt-meta">
                         <span> <img src="./assets/main/icons/esa-ai.svg" alt="AI Icon" class="chatgpt-avatar" /> ESA </span>
@@ -65,11 +79,9 @@
                 } @if (chatMessages.length > 0) {
                 <div class="chatgpt-nav">
                     <h5 class="chatgpt-nav-header">Jump to Response</h5>
-                        @if (assistantMessages$ | async; as assistantMessages) {
-                            @for (chatMessage of assistantMessages; track $index) {
-                                <a role="button" class="chatgpt-nav-link" (click)="scrollMainTo('response-' + (chatMessages.indexOf(chatMessage) + 1))"> Response {{ $index + 1 }} </a>
-                            }
-                        }
+                    @if (assistantMessages$ | async; as assistantMessages) { @for (chatMessage of assistantMessages; track $index) {
+                    <a role="button" class="chatgpt-nav-link" (click)="scrollMainTo('response-' + (chatMessages.indexOf(chatMessage) + 1))"> Response {{ $index + 1 }} </a>
+                    } }
                 </div>
                 }
                 <div class="chatgpt-input-bar">

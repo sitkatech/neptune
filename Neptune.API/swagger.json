@@ -18,6 +18,47 @@
         }
       }
     },
+    "/ai/water-quality-management-plan-documents/{waterQualityManagementPlanDocumentID}/extract-all": {
+      "post": {
+        "tags": [
+          "AI"
+        ],
+        "operationId": "ExtractAll_AI",
+        "parameters": [
+          {
+            "name": "waterQualityManagementPlanDocumentID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaterQualityManagementPlanDocumentExtractionResultDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaterQualityManagementPlanDocumentExtractionResultDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaterQualityManagementPlanDocumentExtractionResultDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/ai/water-quality-management-plan-documents/{waterQualityManagementPlanDocumentID}/ask": {
       "post": {
         "tags": [
@@ -12113,6 +12154,24 @@
           "WaterQualityManagementPlanDocumentTypeID": {
             "type": "integer",
             "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "WaterQualityManagementPlanDocumentExtractionResultDto": {
+        "type": "object",
+        "properties": {
+          "FinalOutput": {
+            "type": "string",
+            "nullable": true
+          },
+          "RawResults": {
+            "type": "string",
+            "nullable": true
+          },
+          "ExtractedAt": {
+            "type": "string",
+            "format": "date-time"
           }
         },
         "additionalProperties": false

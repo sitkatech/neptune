@@ -1,4 +1,6 @@
-﻿using System.ClientModel;
+﻿using System;
+using System.ClientModel;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
@@ -89,6 +91,134 @@ public class AIController(
             await vectorStoreClient.DeleteVectorStoreAsync(vectorStore.Id);
         }
         await Response.WriteAsync($"data: ---DONE---\n\n");
+    }
+
+    [HttpPost("water-quality-management-plan-documents/{waterQualityManagementPlanDocumentID}/extract-all")]
+    [AdminFeature]
+    public async Task<ActionResult<WaterQualityManagementPlanDocumentExtractionResultDto>> ExtractAll([FromRoute] int waterQualityManagementPlanDocumentID)
+    {
+        // Step 1: Get document DTO
+        var docDto = await WaterQualityManagementPlanDocuments.GetByIDAsDtoAsync(DbContext, waterQualityManagementPlanDocumentID);
+        if (docDto == null)
+        {
+            return NotFound();
+        }
+
+
+        var fileClient = openAIClient.GetOpenAIFileClient();
+#pragma warning disable OPENAI001
+        var assistantClient = openAIClient.GetAssistantClient();
+
+
+        // Always create a new assistant and vector store for each extraction
+        var blobDownloadResult = await azureBlobStorageService.DownloadBlobFromBlobStorageAsStream(docDto.FileResource.FileResourceGUID.ToString());
+
+        var schemaStructure = JsonSerializer.Serialize(new WaterQualityManagementPlanExtractDto());
+        var domainTables = new
+        {
+            Jurisdictions = await DbContext.StormwaterJurisdictions.Include(x => x.Organization)
+                .Select(x => x.Organization.OrganizationName).AsNoTracking().ToListAsync(),
+            TreatmentBMPTypes = await DbContext.TreatmentBMPTypes.Select(x => x.TreatmentBMPTypeName).AsNoTracking().ToListAsync(),
+            HydrologicSubareas = await DbContext.HydrologicSubareas.Select(x => x.HydrologicSubareaName).AsNoTracking().ToListAsync(),
+            WaterQualityManagementPlanLandUse = WaterQualityManagementPlanLandUse.All.Select(x => x.WaterQualityManagementPlanLandUseDisplayName),
+            WaterQualityManagementPlanPriority = WaterQualityManagementPlanPriority.All.Select(x => x.WaterQualityManagementPlanPriorityDisplayName),
+            WaterQualityManagementPlanStatus = WaterQualityManagementPlanStatus.All.Select(x => x.WaterQualityManagementPlanStatusDisplayName),
+            WaterQualityManagementPlanDevelopmentType = WaterQualityManagementPlanDevelopmentType.All.Select(x => x.WaterQualityManagementPlanDevelopmentTypeDisplayName),
+            WaterQualityManagementPlanPermitTerm = WaterQualityManagementPlanPermitTerm.All.Select(x => x.WaterQualityManagementPlanPermitTermDisplayName),
+            WaterQualityManagementPlanModelingApproach = WaterQualityManagementPlanModelingApproach.All.Select(x => x.WaterQualityManagementPlanModelingApproachDisplayName),
+            TrashCaptureStatusType = TrashCaptureStatusType.All.Select(x => x.TrashCaptureStatusTypeDisplayName),
+            TreatmentBMPLifespanType = TreatmentBMPLifespanType.All.Select(x => x.TreatmentBMPLifespanTypeDisplayName),
+            SizingBasisType = SizingBasisType.All.Select(x => x.SizingBasisTypeDisplayName),
+            DryWeatherFlowOverride = DryWeatherFlowOverride.All.Select(x => x.DryWeatherFlowOverrideDisplayName),
+            SourceControlBMPAttributes = await DbContext.SourceControlBMPAttributes.AsNoTracking().Select(x => x.SourceControlBMPAttributeName).ToListAsync(),
+        };
+        var domainTablesJson = JsonSerializer.Serialize(domainTables);
+        var schemaAndDomainContext =
+            $"SCHEMA STRUCTURE: {schemaStructure}\n\nDOMAIN TABLES: {domainTablesJson}\n\n";
+
+        var assistant = await CreateAssistantClient(fileClient, blobDownloadResult.Content, assistantClient, docDto.FileResource.OriginalFilename, schemaAndDomainContext);
+        var assistantID = assistant.Value.Id;
+
+        await WaterQualityManagementPlanDocumentAssistants.UpsertAsync(DbContext, waterQualityManagementPlanDocumentID, assistantID);
+
+
+        // Step 2: Chained extraction prompts
+        // Extraction evidence instructions
+        var extractionEvidenceInstructions = "Use only the provided WQMP PDF document for extraction. Each attribute you extract will be placed in the 'Value' property of the named attribute. The 'ExtractionEvidence' will include a snippet from the WQMP PDF that shows the sentence in the WQMP where the data came from, plus the sentence before and after. If the attribute was extracted from a table or label just include relevant text nearby. The 'DocumentSource' should include the Page # in the document where the attribute value was found. Here is the sub-schema for each extracted attribute: { 'Value': '', 'ExtractionEvidence': '', 'DocumentSource': '' }\n\nA second LLM will be reviewing this work for accuracy, so please do not hallucinate data. If an attribute is not found simply put null in Value, ExtractionEvidence, and DocumentSource.\n";
+
+        // Serialize the Treatment BMP schema
+        var treatmentBMPSchemaStructure = JsonSerializer.Serialize(new TreatmentBMPExtractDto());
+        var treatmentBMPPrompt = $@"Extract all Treatment BMPs for this WQMP using only the provided WQMP PDF document. {extractionEvidenceInstructions} Use the following JSON schema for each BMP: {treatmentBMPSchemaStructure} Return a JSON array. If none are found, return an empty array. Do not include any narrative or follow-up questions.";
+
+        // Serialize the Parcel schema
+        var parcelSchemaStructure = JsonSerializer.Serialize(new WaterQualityManagementPlanParcelExtractDto());
+        var parcelPrompt = $@"Extract all Parcels for this WQMP using only the provided WQMP PDF document. {extractionEvidenceInstructions} Use the following JSON schema for each Parcel: {parcelSchemaStructure} Return a JSON array. If none are found, return an empty array. Do not include any narrative or follow-up questions.";
+
+        // Serialize the Source Control BMP schema
+        var sourceControlBMPSchemaStructure = JsonSerializer.Serialize(new SourceControlBMPExtractDto());
+        var sourceControlBMPPrompt = $@"Extract all Source Control BMPs for this WQMP using only the provided WQMP PDF document. {extractionEvidenceInstructions} Use the following JSON schema for each Source Control BMP: {sourceControlBMPSchemaStructure} Return a JSON array. If none are found, return an empty array. Do not include any narrative or follow-up questions.";
+
+        // Final consolidation prompt to unify all extracted entities into a single JSON object
+        var consolidationPrompt = @"Now consolidate all previously extracted data from the provided WQMP PDF document into a single JSON object with the following structure: { 'WQMP': {}, 'Parcels': [], 'TreatmentBMPs': [], 'SourceControlBMPs': [] } Return only valid JSON, and the attribute values should follow this schema { 'Value': '', 'ExtractionEvidence': '', 'DocumentSource': '' }. Do not include any narrative, explanation, or follow-up questions and DO NOT Hallucinate.";
+
+        // Define your list of prompts (first is ExtractorInstructions, then child entity prompts)
+        var extractionPrompts = new List<string>
+        {
+            ExtractorInstructions,
+            parcelPrompt,
+            treatmentBMPPrompt,
+            sourceControlBMPPrompt,
+            consolidationPrompt
+        };
+
+        // Step 3: Run each prompt in sequence, passing previous result as context
+
+        var aggregatedResults = new List<string>();
+        foreach (var prompt in extractionPrompts)
+        {
+            // Build messages for thread
+            var messages = new List<ThreadInitializationMessage>();
+            if (aggregatedResults.Count > 0)
+            {
+                // Pass all prior results as context
+                var allPriorResults = string.Join("\n\n", aggregatedResults);
+                messages.Add(new ThreadInitializationMessage(MessageRole.User, [allPriorResults]));
+            }
+            messages.Add(new ThreadInitializationMessage(MessageRole.User, [prompt]));
+
+            var threadOptions = new ThreadCreationOptions();
+            foreach (var msg in messages)
+            {
+                threadOptions.InitialMessages.Add(msg);
+            }
+
+            var resultBuilder = new System.Text.StringBuilder();
+            var streamingResponses = assistantClient.CreateThreadAndRunStreamingAsync(assistantID, threadOptions);
+            await foreach (var streamingUpdate in streamingResponses)
+            {
+                if (streamingUpdate is MessageContentUpdate contentUpdate)
+                {
+                    if (!string.IsNullOrEmpty(contentUpdate.Text))
+                    {
+                        // Remove all content between 【 and 】 including the symbols
+                        var cleanedText = Regex.Replace(contentUpdate.Text, "【.*?】", string.Empty);
+                        resultBuilder.Append(cleanedText);
+                    }
+                }
+            }
+            aggregatedResults.Add(resultBuilder.ToString());
+        }
+
+        // Step 4: Aggregate results (for now, just join them)
+        var rawResults = string.Join("\n\n", aggregatedResults.Take(aggregatedResults.Count - 1));
+        var waterQualityManagementPlanDocumentExtractionResultDto = new WaterQualityManagementPlanDocumentExtractionResultDto
+        {
+            FinalOutput = aggregatedResults.Last(),
+            RawResults = rawResults,
+            ExtractedAt = DateTime.UtcNow
+        };
+        return Ok(waterQualityManagementPlanDocumentExtractionResultDto);
+#pragma warning restore OPENAI001
     }
 
 

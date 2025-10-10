@@ -23,8 +23,8 @@
     </div>
 
     <div class="document__actions">
-        <a href="javascript:void(0)" (click)="onClickExtractData()" class="document__actions-link">
+        <button type="button" class="document__actions-link" (click)="onClickExtractData()" [disabled]="disableExtract">
             <span class="document__actions-label">Extract Data</span>
-        </a>
+        </button>
     </div>
 </div>

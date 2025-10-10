@@ -147,6 +147,7 @@ model/treatment-bmp-upsert-dto.ts
 model/treatment-bmphru-characteristics-summary-simple-dto.ts
 model/v-treatment-bmp-modeling-attribute-dto.ts
 model/water-quality-management-plan-document-dto.ts
+model/water-quality-management-plan-document-extraction-result-dto.ts
 model/water-quality-management-plan-document-upsert-dto.ts
 model/water-quality-management-plan-dto.ts
 model/water-quality-management-plan-simple-dto.ts

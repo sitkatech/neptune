@@ -12,6 +12,7 @@
             [keyDocument]="waterQualityManagementPlanDocument"
             [waterQualityManagementPlan]="waterQualityManagementPlan"
             [isLoading]="isLoading"
+            [disableExtract]="isExtracting"
             (download)="downloadFile($event)"
             (extractData)="onClickExtractData($event.waterQualityManagementPlanDocument)">
         </water-quality-management-plan-document>
@@ -21,8 +22,9 @@
 
     <!-- Inline Chatbot Panel -->
     @if (activeChatbotDocument) {
-    <div class="extracted-data-panel">
-        <water-quality-management-plan-chatbot [waterQualityManagementPlanDocument]="activeChatbotDocument"> </water-quality-management-plan-chatbot>
+    <div class="extracted-data-panel" [loadingSpinner]="{ isLoading: isExtracting, loadingHeight: 100 }">
+        <water-quality-management-plan-chatbot [waterQualityManagementPlanDocument]="activeChatbotDocument" [extractionResult]="extractionResult">
+        </water-quality-management-plan-chatbot>
     </div>
     }
 </div>

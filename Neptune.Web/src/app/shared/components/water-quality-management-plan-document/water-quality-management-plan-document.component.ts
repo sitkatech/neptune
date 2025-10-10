@@ -13,6 +13,7 @@ import { WaterQualityManagementPlanDocumentDto } from "../../generated/model/wat
     imports: [IconComponent, RouterModule, DatePipe],
 })
 export class WaterQualityManagementPlanDocumentComponent {
+    @Input() disableExtract: boolean = false;
     @Input() keyDocument: WaterQualityManagementPlanDocumentDto;
     @Input() waterQualityManagementPlan: WaterQualityManagementPlanDto;
     @Input() isLoading: boolean = false;
