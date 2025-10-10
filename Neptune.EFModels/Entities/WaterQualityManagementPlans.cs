@@ -147,13 +147,12 @@ public static class WaterQualityManagementPlans
 
     public static async Task<List<WaterQualityManagementPlanDto>> ListWithFinalWQMPDocumentAsync(NeptuneDbContext dbContext)
     {
-        var finalWQMPWaterQualityManagementPlanDocumentTypeID = WaterQualityManagementPlanDocumentType.FinalWQMP.WaterQualityManagementPlanDocumentTypeID;
         var entities = await dbContext.WaterQualityManagementPlans
             .Include(x => x.StormwaterJurisdiction)
             .ThenInclude(x => x.Organization)
             .Where(plan => dbContext.WaterQualityManagementPlanDocuments
                 .Any(doc => doc.WaterQualityManagementPlanID == plan.WaterQualityManagementPlanID
-                         && doc.WaterQualityManagementPlanDocumentTypeID == finalWQMPWaterQualityManagementPlanDocumentTypeID))
+                         && doc.WaterQualityManagementPlanDocumentTypeID == (int) WaterQualityManagementPlanDocumentTypeEnum.FinalWQMP))
             .AsNoTracking()
             .ToListAsync();
         return entities.Select(x => x.AsDto()).ToList();
