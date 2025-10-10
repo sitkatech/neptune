@@ -9,7 +9,7 @@
         </a>
 
         <div class="document__meta">
-            <span class="document__meta-item"><strong>Size: </strong> {{ keyDocument.FileResource.ContentLength }}</span>
+            <span class="document__meta-item"><strong>Size: </strong> {{ formatFileSize(keyDocument.FileResource.ContentLength) }}</span>
             <span class="document__meta-item"><strong>Date Modified: </strong> {{ keyDocument.UploadDate | date : "MMM d, y, h:mm a" }}</span>
             <span class="document__meta-item"
                 ><strong>Updated by: </strong>

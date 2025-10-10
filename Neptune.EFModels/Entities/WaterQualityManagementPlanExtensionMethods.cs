@@ -1,5 +1,4 @@
 ﻿using Neptune.Models.DataTransferObjects;
-using Neptune.Models.DataTransferObjects.WaterQualityManagementPlan;
 
 namespace Neptune.EFModels.Entities;
 
@@ -124,7 +123,6 @@ public static  class WaterQualityManagementPlanExtensionMethods
             MaintenanceContactState = entity.MaintenanceContactState,
             MaintenanceContactZip = entity.MaintenanceContactZip,
             WaterQualityManagementPlanPermitTerm = entity.WaterQualityManagementPlanPermitTerm?.WaterQualityManagementPlanPermitTermDisplayName,
-            HydromodificationAppliesType = entity.HydromodificationAppliesType?.HydromodificationAppliesTypeDisplayName,
             DateOfConstruction = entity.DateOfConstruction,
             HydrologicSubarea = entity.HydrologicSubarea?.HydrologicSubareaName,
             RecordNumber = entity.RecordNumber,
@@ -133,45 +131,6 @@ public static  class WaterQualityManagementPlanExtensionMethods
             TrashCaptureEffectiveness = entity.TrashCaptureEffectiveness,
             WaterQualityManagementPlanModelingApproach = entity.WaterQualityManagementPlanModelingApproach?.WaterQualityManagementPlanModelingApproachDisplayName,
             WaterQualityManagementPlanBoundaryNotes = entity.WaterQualityManagementPlanBoundaryNotes,
-            Parcels = entity.WaterQualityManagementPlanParcels?.Select(p => new WaterQualityManagementPlanParcelExtractDto
-            {
-                ParcelNumber = p.Parcel.ParcelNumber
-            }).ToList() ?? [],
-            QuickBMPs = entity.QuickBMPs?.Select(q => new QuickBMPExtractDto
-            {
-                QuickBMPName = q.QuickBMPName,
-                QuickBMPNote = q.QuickBMPNote,
-                PercentOfSiteTreated = q.PercentOfSiteTreated,
-                PercentCaptured = q.PercentCaptured,
-                PercentRetained = q.PercentRetained,
-                DryWeatherFlowOverride = q.DryWeatherFlowOverride?.DryWeatherFlowOverrideDisplayName,
-                NumberOfIndividualBMPs = q.NumberOfIndividualBMPs,
-                TreatmentBMPType = q.TreatmentBMPType.TreatmentBMPTypeName
-            }).ToList() ?? [],
-            TreatmentBMPs = entity.TreatmentBMPs?.Select(t => new TreatmentBMPExtractDto
-            {
-                TreatmentBMPName = t.TreatmentBMPName,
-                TreatmentBMPType = t.TreatmentBMPType.TreatmentBMPTypeName,
-                LocationPointWkt = t.LocationPoint4326.AsText(),
-                Jurisdiction = t.StormwaterJurisdiction.Organization.OrganizationName,
-                Notes = t.Notes,
-                SystemOfRecordID = t.SystemOfRecordID,
-                YearBuilt = t.YearBuilt,
-                OwnerOrganization = t.OwnerOrganization.OrganizationName,
-                TreatmentBMPLifespanType = t.TreatmentBMPLifespanType?.TreatmentBMPLifespanTypeDisplayName,
-                TreatmentBMPLifespanEndDate = t.TreatmentBMPLifespanEndDate,
-                RequiredFieldVisitsPerYear = t.RequiredFieldVisitsPerYear,
-                RequiredPostStormFieldVisitsPerYear = t.RequiredPostStormFieldVisitsPerYear,
-                TrashCaptureStatusType = t.TrashCaptureStatusType?.TrashCaptureStatusTypeDisplayName,
-                SizingBasisType = t.SizingBasisType?.SizingBasisTypeDisplayName,
-                TrashCaptureEffectiveness = t.TrashCaptureEffectiveness,
-            }).ToList() ?? [],
-            SourceControlBMPs = entity.SourceControlBMPs?.Select(s => new SourceControlBMPExtractDto
-            {
-                SourceControlBMPAttribute = s.SourceControlBMPAttribute.SourceControlBMPAttributeName,
-                IsPresent = s.IsPresent,
-                SourceControlBMPNote = s.SourceControlBMPNote
-            }).ToList() ?? []
         };
     }
 

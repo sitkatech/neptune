@@ -22,7 +22,7 @@ export class AiHomeComponent implements OnInit {
     constructor(private waterQualityManagementPlanService: WaterQualityManagementPlanService) {}
 
     ngOnInit(): void {
-        this.waterQualityManagementPlans$ = this.waterQualityManagementPlanService.listWaterQualityManagementPlan().pipe(
+        this.waterQualityManagementPlans$ = this.waterQualityManagementPlanService.listWithFinalWQMPDocumentWaterQualityManagementPlan().pipe(
             map((list) => {
                 let options = list.map((x) => ({ Value: x.WaterQualityManagementPlanID, Label: x.WaterQualityManagementPlanName } as SelectDropdownOption));
                 return options;

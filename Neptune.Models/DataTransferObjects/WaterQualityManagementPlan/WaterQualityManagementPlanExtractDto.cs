@@ -1,12 +1,12 @@
-using System;
-using System.Collections.Generic;
-
-namespace Neptune.Models.DataTransferObjects.WaterQualityManagementPlan
+namespace Neptune.Models.DataTransferObjects
 {
-    public class ExtractionEvidence
+    public class ExtractedValue
     {
-        public string Rationale { get; set; }
-        public string Snippet { get; set; }
+        public string Value { get; set; }
+        public string ExtractionEvidence { get; set; }
+        public string DocumentSource { get; set; }
+        public string ValidationScore { get; set; }
+        public string ValidationEvidence { get; set; }
     }
 
     public class WaterQualityManagementPlanExtractDto
@@ -27,7 +27,6 @@ namespace Neptune.Models.DataTransferObjects.WaterQualityManagementPlan
         public string MaintenanceContactState { get; set; }
         public string MaintenanceContactZip { get; set; }
         public string WaterQualityManagementPlanPermitTerm{ get; set; }
-        public string HydromodificationAppliesType { get; set; }
         public DateTime? DateOfConstruction { get; set; }
         public string HydrologicSubarea { get; set; }
         public string RecordNumber { get; set; }
@@ -36,37 +35,18 @@ namespace Neptune.Models.DataTransferObjects.WaterQualityManagementPlan
         public int? TrashCaptureEffectiveness { get; set; }
         public string WaterQualityManagementPlanModelingApproach { get; set; }
         public string WaterQualityManagementPlanBoundaryNotes { get; set; }
-        public List<WaterQualityManagementPlanParcelExtractDto> Parcels { get; set; } = new();
-        public List<QuickBMPExtractDto> QuickBMPs { get; set; } = new();
-        public List<TreatmentBMPExtractDto> TreatmentBMPs { get; set; } = new();
-        public List<SourceControlBMPExtractDto> SourceControlBMPs { get; set; } = new();
-        public Dictionary<string, ExtractionEvidence> ExtractionEvidences { get; set; } = new();
     }
 
     public class WaterQualityManagementPlanParcelExtractDto
     {
         public string ParcelNumber { get; set; }
-        public Dictionary<string, ExtractionEvidence> ExtractionEvidences { get; set; } = new();
     }
-
-    public class QuickBMPExtractDto
-    {
-        public string QuickBMPName { get; set; }
-        public string QuickBMPNote { get; set; }
-        public decimal? PercentOfSiteTreated { get; set; }
-        public decimal? PercentCaptured { get; set; }
-        public decimal? PercentRetained { get; set; }
-        public string DryWeatherFlowOverride { get; set; }
-        public int NumberOfIndividualBMPs { get; set; }
-        public string TreatmentBMPType { get; set; }
-        public Dictionary<string, ExtractionEvidence> ExtractionEvidences { get; set; } = new();
-    }
-
+    
     public class TreatmentBMPExtractDto
     {
         public string TreatmentBMPName { get; set; }
         public string TreatmentBMPType { get; set; }
-        public string LocationPointWkt { get; set; }
+        public string LocationPointAsWellKnownText { get; set; }
         public string Jurisdiction { get; set; }
         public string Notes { get; set; }
         public string SystemOfRecordID { get; set; }
@@ -79,7 +59,6 @@ namespace Neptune.Models.DataTransferObjects.WaterQualityManagementPlan
         public string TrashCaptureStatusType { get; set; }
         public string SizingBasisType { get; set; }
         public int? TrashCaptureEffectiveness { get; set; }
-        public Dictionary<string, ExtractionEvidence> ExtractionEvidences { get; set; } = new();
     }
 
     public class SourceControlBMPExtractDto
@@ -87,6 +66,5 @@ namespace Neptune.Models.DataTransferObjects.WaterQualityManagementPlan
         public string SourceControlBMPAttribute { get; set; }
         public bool? IsPresent { get; set; }
         public string SourceControlBMPNote { get; set; }
-        public Dictionary<string, ExtractionEvidence> ExtractionEvidences { get; set; } = new();
     }
 }

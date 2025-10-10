@@ -1,17 +1,14 @@
 import { Component, Input, OnInit, OnChanges, SimpleChanges } from "@angular/core";
-import { DialogService } from "@ngneat/dialog";
 import { WaterQualityManagementPlanChatbotComponent } from "../water-quality-management-plan-chatbot/water-quality-management-plan-chatbot.component";
 import { Observable, tap } from "rxjs";
 import { environment } from "src/environments/environment";
 import { WaterQualityManagementPlanService } from "../../generated/api/water-quality-management-plan.service";
 import { WaterQualityManagementPlanDocumentComponent } from "../water-quality-management-plan-document/water-quality-management-plan-document.component";
 import { WaterQualityManagementPlanDocumentTypes } from "../../generated/enum/water-quality-management-plan-document-type-enum";
-import { AsyncPipe, JsonPipe } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { WaterQualityManagementPlanDocumentDto } from "../../generated/model/water-quality-management-plan-document-dto";
 import { WaterQualityManagementPlanDto } from "../../generated/model/water-quality-management-plan-dto";
 import { LookupTableEntry } from "../../models/lookup-table-entry";
-import { AIService } from "../../generated/api/ai.service";
-import { HttpClient } from "@angular/common/http";
 
 @Component({
     selector: "water-quality-management-plan-documents",
@@ -26,12 +23,7 @@ export class WaterQualityManagementPlanKeyDocumentsComponent implements OnInit, 
     public isLoading: boolean = false;
     public activeChatbotDocument: WaterQualityManagementPlanDocumentDto = null;
 
-    constructor(
-        private waterQualityManagementPlanService: WaterQualityManagementPlanService,
-        private dialogService: DialogService,
-        private aiService: AIService,
-        private http: HttpClient
-    ) {}
+    constructor(private waterQualityManagementPlanService: WaterQualityManagementPlanService) {}
 
     ngOnInit(): void {
         this.loadPlanData();
@@ -62,7 +54,7 @@ export class WaterQualityManagementPlanKeyDocumentsComponent implements OnInit, 
         this.isLoading = true;
 
         this.waterQualityManagementPlanDocuments$ = this.waterQualityManagementPlanService.listDocumentsWaterQualityManagementPlan(this.waterQualityManagementPlanID).pipe(
-            tap((results) => {
+            tap(() => {
                 this.isLoading = false;
             })
         );

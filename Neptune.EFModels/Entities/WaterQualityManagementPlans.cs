@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Neptune.Common.DesignByContract;
 using Neptune.Models.DataTransferObjects;
-using Neptune.Models.DataTransferObjects.WaterQualityManagementPlan;
 
 namespace Neptune.EFModels.Entities;
 
@@ -144,5 +143,19 @@ public static class WaterQualityManagementPlans
             .FirstOrDefaultAsync(x => x.WaterQualityManagementPlanID == waterQualityManagementPlanID);
         if (entity == null) return null;
         return entity.AsExtractDto();
+    }
+
+    public static async Task<List<WaterQualityManagementPlanDto>> ListWithFinalWQMPDocumentAsync(NeptuneDbContext dbContext)
+    {
+        var finalWQMPWaterQualityManagementPlanDocumentTypeID = WaterQualityManagementPlanDocumentType.FinalWQMP.WaterQualityManagementPlanDocumentTypeID;
+        var entities = await dbContext.WaterQualityManagementPlans
+            .Include(x => x.StormwaterJurisdiction)
+            .ThenInclude(x => x.Organization)
+            .Where(plan => dbContext.WaterQualityManagementPlanDocuments
+                .Any(doc => doc.WaterQualityManagementPlanID == plan.WaterQualityManagementPlanID
+                         && doc.WaterQualityManagementPlanDocumentTypeID == finalWQMPWaterQualityManagementPlanDocumentTypeID))
+            .AsNoTracking()
+            .ToListAsync();
+        return entities.Select(x => x.AsDto()).ToList();
     }
 }

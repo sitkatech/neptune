@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -77,6 +78,14 @@ namespace Neptune.API.Controllers
         {
             var waterQualityManagementPlanDocumentDtos = await WaterQualityManagementPlanDocuments.ListByWaterQualityManagementPlanIDAsDtoAsync(DbContext, waterQualityManagementPlanID);
             return Ok(waterQualityManagementPlanDocumentDtos);
+        }
+
+        [HttpGet("with-final-document")]
+        [AdminFeature]
+        public async Task<ActionResult<IEnumerable<WaterQualityManagementPlanDto>>> ListWithFinalWQMPDocument()
+        {
+            var filteredPlans = await WaterQualityManagementPlans.ListWithFinalWQMPDocumentAsync(DbContext);
+            return Ok(filteredPlans);
         }
     }
 }

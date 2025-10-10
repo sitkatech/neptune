@@ -14,6 +14,9 @@ export class ChatMessageDto {
     Role?: string | null;
     Content?: string | null;
     Id?: string | null;
+    Date?: string;
+    Intro?: string | null;
+    SummaryHtml?: string | null;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
@@ -23,6 +26,9 @@ export interface ChatMessageDtoForm {
     Role?: FormControl<string>;
     Content?: FormControl<string>;
     Id?: FormControl<string>;
+    Date?: FormControl<string>;
+    Intro?: FormControl<string>;
+    SummaryHtml?: FormControl<string>;
 }
 
 export class ChatMessageDtoFormControls { 
@@ -47,6 +53,36 @@ export class ChatMessageDtoFormControls {
         }
     );
     public static Id = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static Date = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static Intro = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static SummaryHtml = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {

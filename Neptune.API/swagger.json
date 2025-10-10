@@ -6713,6 +6713,45 @@
         }
       }
     },
+    "/water-quality-management-plans/with-final-document": {
+      "get": {
+        "tags": [
+          "WaterQualityManagementPlan"
+        ],
+        "operationId": "ListWithFinalWQMPDocument_WaterQualityManagementPlan",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WaterQualityManagementPlanDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WaterQualityManagementPlanDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WaterQualityManagementPlanDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/water-quality-management-plan-documents": {
       "get": {
         "tags": [
@@ -6983,6 +7022,18 @@
             "nullable": true
           },
           "Id": {
+            "type": "string",
+            "nullable": true
+          },
+          "Date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "Intro": {
+            "type": "string",
+            "nullable": true
+          },
+          "SummaryHtml": {
             "type": "string",
             "nullable": true
           }

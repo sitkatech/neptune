@@ -1,23 +1,20 @@
-﻿using System;
-using System.ClientModel;
-using System.Collections.Generic;
+﻿using System.ClientModel;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Neptune.API.Services;
-using Neptune.API.Services.Attributes;
 using Neptune.API.Services.Authorization;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
-using Neptune.Models.DataTransferObjects.WaterQualityManagementPlan;
 using OpenAI;
 using OpenAI.Assistants;
 using OpenAI.Files;
@@ -35,9 +32,33 @@ public class AIController(
     OpenAIClient openAIClient)
     : SitkaController<AIController>(dbContext, logger, keystoneService, appConfiguration)
 {
-    private const string AskInstructions = "You are part of an automated workflow and should return only JSON in your response. Do not include any narrative and do not provide any follow-up suggestions. You are helping a stormwater technician extract data from a Water Quality Management Plan. You will populate an existing JSON schema, and you must match this schema exactly.\n";
+    private const string ExtractorInstructions =
+        "You are part of an automated workflow and should return only JSON in your response. Do not include any narrative and do not provide any follow-up suggestions. " +
+        "You are helping a stormwater technician extract data from a Water Quality Management Plan (WQMP). You will populate an existing JSON schema, and you must match this schema exactly. " +
+        "The WQMPs are for Orange County California, and used by the MS4 permitees including Orange County Public Works and cities. " +
+        "In the first step, you will extract the basic attributes of the WQMP. In follow-up prompts you will extract nested child records. " +
+        "Each attribute you extract will be placed in the \"Value\" property of the named attribute. The \"ExtractionEvidence\" will include a snippet from the WQMP PDF that shows the sentence in the WQMP where the data came from, " +
+        "plus the sentence before and after. If the attribute was extracted from a table or label just include relevant text nearby. The \"DocumentSource\" should include the Page # in the document where the attribute value was found. " +
+        "Here is the sub-schema for each extracted attribute: { \"Value\": \"\", \"ExtractionEvidence\": \"\", \"DocumentSource\": \"\" } " +
+        "A second LLM will be reviewing this work for accuracy, so please do not hallucinate data. " +
+        "If an attribute is not found simply put null in Value, ExtractionEvidence, and DocumentSource.\n";
+
+    private const string ValidatorInstructions =
+        "You are part of an automated workflow and should return only JSON in your response. " +
+        "Do not include any narrative and do not provide any follow-up suggestions. " +
+        "You are helping a stormwater technician extract data from a Water Quality Management Plan (WQMP). " +
+        "You are the second LLM to see this data. The first LLM extracted the data as best it could. Your job is to double check the work. " +
+        "You will score each attribute in the JSON schema from 0 to 100. " +
+        "Zero represents a complete hallucination that does not reflect any reasonable information in the source document. " +
+        "100 represents a complete match with data you can verify. \n\n" +
+        "Add a validation score to each extracted property, along with a short validation evidence snippet narrative explaining your score: " +
+        "\n\n { \"Value\": \"\", \"ExtractionEvidence\": \"\", \"DocumentSource\": \"\", \"ValidationScore\": \"\", \"ValidationEvidence\": \"\" }\n\n" +
+        "I will provide the WQMP PDF and the previously extracted JSON schema.";
+
+    private const string AskInstructions = "Ok thanks! Now you are a WQMP ChatBot available for the end user to ask narrative questions about. You are no longer constrained to JSON output, but use the context you gained while operating in that mode to be helpful to the stormwater technician. They will ask questions about the source data, how you extracted, and other things they want to know about the WQMP.\n";
 
     [HttpPost("clean-up")]
+    [AllowAnonymous]
     public async Task PostChatCompletions()
     {
         Response.Headers.Append("Content-Type", "text/event-stream");
@@ -73,7 +94,7 @@ public class AIController(
 
     [HttpPost("water-quality-management-plan-documents/{waterQualityManagementPlanDocumentID}/ask")]
     [AdminFeature]
-    public async Task Ask([FromRoute] int waterQualityManagementPlanDocumentID, [FromBody] ChatRequestDto messageDto)
+    public async Task Ask([FromRoute] int waterQualityManagementPlanDocumentID, [FromBody] ChatRequestDto chatRequestDto)
     {
         var docDto = await WaterQualityManagementPlanDocuments.GetByIDAsDtoAsync(DbContext, waterQualityManagementPlanDocumentID);
         if (docDto == null)
@@ -98,14 +119,38 @@ public class AIController(
         {
             var blobDownloadResult = await azureBlobStorageService.DownloadBlobFromBlobStorageAsStream(docDto.FileResource.FileResourceGUID.ToString());
 
-            var assistant = await CreateAssistantClient(fileClient, blobDownloadResult.Content, assistantClient, "", docDto.FileResource.OriginalFilename, AskInstructions);
+            var schemaStructure = JsonSerializer.Serialize(new WaterQualityManagementPlanExtractDto());
+            var domainTables = new
+            {
+                Jurisdictions = await DbContext.StormwaterJurisdictions.Include(x => x.Organization)
+                    .Select(x => x.Organization.OrganizationName).AsNoTracking().ToListAsync(),
+                TreatmentBMPTypes = await DbContext.TreatmentBMPTypes.Select(x => x.TreatmentBMPTypeName).AsNoTracking().ToListAsync(),
+                HydrologicSubareas = await DbContext.HydrologicSubareas.Select(x => x.HydrologicSubareaName).AsNoTracking().ToListAsync(),
+                WaterQualityManagementPlanLandUse = WaterQualityManagementPlanLandUse.All.Select(x => x.WaterQualityManagementPlanLandUseDisplayName),
+                WaterQualityManagementPlanPriority = WaterQualityManagementPlanPriority.All.Select(x => x.WaterQualityManagementPlanPriorityDisplayName),
+                WaterQualityManagementPlanStatus = WaterQualityManagementPlanStatus.All.Select(x => x.WaterQualityManagementPlanStatusDisplayName),
+                WaterQualityManagementPlanDevelopmentType = WaterQualityManagementPlanDevelopmentType.All.Select(x => x.WaterQualityManagementPlanDevelopmentTypeDisplayName),
+                WaterQualityManagementPlanPermitTerm = WaterQualityManagementPlanPermitTerm.All.Select(x => x.WaterQualityManagementPlanPermitTermDisplayName),
+                //HydromodificationAppliesType = HydromodificationAppliesType.All.Select(x => x.HydromodificationAppliesTypeDisplayName),
+                WaterQualityManagementPlanModelingApproach = WaterQualityManagementPlanModelingApproach.All.Select(x => x.WaterQualityManagementPlanModelingApproachDisplayName),
+                TrashCaptureStatusType = TrashCaptureStatusType.All.Select(x => x.TrashCaptureStatusTypeDisplayName),
+                TreatmentBMPLifespanType = TreatmentBMPLifespanType.All.Select(x => x.TreatmentBMPLifespanTypeDisplayName),
+                SizingBasisType = SizingBasisType.All.Select(x => x.SizingBasisTypeDisplayName),
+                DryWeatherFlowOverride = DryWeatherFlowOverride.All.Select(x => x.DryWeatherFlowOverrideDisplayName),
+                SourceControlBMPAttributes = await DbContext.SourceControlBMPAttributes.AsNoTracking().Select(x => x.SourceControlBMPAttributeName).ToListAsync(),
+            };
+            var domainTablesJson = JsonSerializer.Serialize(domainTables);
+            var schemaAndDomainContext =
+                $"SCHEMA STRUCTURE: {schemaStructure}\n\nDOMAIN TABLES: {domainTablesJson}\n\n";
+
+            var assistant = await CreateAssistantClient(fileClient, blobDownloadResult.Content, assistantClient, docDto.FileResource.OriginalFilename, schemaAndDomainContext);
             assistantID = assistant.Value.Id;
 
             await WaterQualityManagementPlanDocumentAssistants.UpsertAsync(DbContext, waterQualityManagementPlanDocumentID, assistantID);
         }
 
         var threadOptions = new ThreadCreationOptions();
-        var messages = messageDto.Messages.Select(message => new ThreadInitializationMessage(
+        var messages = chatRequestDto.Messages.Select(message => new ThreadInitializationMessage(
             message.Role == "user" ? MessageRole.User : MessageRole.Assistant,
             [
                 message.Content
@@ -198,7 +243,7 @@ public class AIController(
         {
             var blobDownloadResult = await azureBlobStorageService.DownloadBlobFromBlobStorageAsStream(docDto.FileResource.FileResourceGUID.ToString());
 
-            var assistant = await CreateAssistantClient(fileClient, blobDownloadResult.Content, assistantClient, "", docDto.FileResource.OriginalFilename, extractionPrompt);
+            var assistant = await CreateAssistantClient(fileClient, blobDownloadResult.Content, assistantClient, docDto.FileResource.OriginalFilename, extractionPrompt);
             assistantID = assistant.Value.Id;
 
             await WaterQualityManagementPlanDocumentAssistants.UpsertAsync(DbContext, waterQualityManagementPlanDocumentID, assistantID);
@@ -272,13 +317,13 @@ public class AIController(
     }
 
     [Experimental("OPENAI001")]
-    private static async Task<ClientResult<Assistant>> CreateAssistantClient(OpenAIFileClient fileClient, Stream blobStream, AssistantClient assistantClient, string wqmpContext, string filename, string instructions)
+    private static async Task<ClientResult<Assistant>> CreateAssistantClient(OpenAIFileClient fileClient, Stream blobStream, AssistantClient assistantClient, string filename, string instructions)
     {
         OpenAIFile file = await fileClient.UploadFileAsync(blobStream, filename, FileUploadPurpose.Assistants);
         var assistant = await assistantClient.CreateAssistantAsync("gpt-4.1",
             new AssistantCreationOptions()
             {
-                Instructions = instructions + wqmpContext,
+                Instructions = instructions,
                 Temperature = 0.4f,
                 Tools =
                 {
