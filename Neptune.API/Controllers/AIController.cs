@@ -109,38 +109,61 @@ public class AIController(
 #pragma warning disable OPENAI001
         var assistantClient = openAIClient.GetAssistantClient();
 
+        var assistantID = await WaterQualityManagementPlanDocumentAssistants.GetByWaterQualityManagementPlanDocumentIDAsDtoAsync(DbContext, waterQualityManagementPlanDocumentID);
+        // Check for existing assistant for this project and document
 
-        // Always create a new assistant and vector store for each extraction
-        var blobDownloadResult = await azureBlobStorageService.DownloadBlobFromBlobStorageAsStream(docDto.FileResource.FileResourceGUID.ToString());
+        var needToCreateAssistant = await TryValidateAssistant(assistantID, assistantClient);
 
-        var schemaStructure = JsonSerializer.Serialize(new WaterQualityManagementPlanExtractDto());
-        var domainTables = new
+        if (needToCreateAssistant)
         {
-            Jurisdictions = await DbContext.StormwaterJurisdictions.Include(x => x.Organization)
-                .Select(x => x.Organization.OrganizationName).AsNoTracking().ToListAsync(),
-            TreatmentBMPTypes = await DbContext.TreatmentBMPTypes.Select(x => x.TreatmentBMPTypeName).AsNoTracking().ToListAsync(),
-            HydrologicSubareas = await DbContext.HydrologicSubareas.Select(x => x.HydrologicSubareaName).AsNoTracking().ToListAsync(),
-            WaterQualityManagementPlanLandUse = WaterQualityManagementPlanLandUse.All.Select(x => x.WaterQualityManagementPlanLandUseDisplayName),
-            WaterQualityManagementPlanPriority = WaterQualityManagementPlanPriority.All.Select(x => x.WaterQualityManagementPlanPriorityDisplayName),
-            WaterQualityManagementPlanStatus = WaterQualityManagementPlanStatus.All.Select(x => x.WaterQualityManagementPlanStatusDisplayName),
-            WaterQualityManagementPlanDevelopmentType = WaterQualityManagementPlanDevelopmentType.All.Select(x => x.WaterQualityManagementPlanDevelopmentTypeDisplayName),
-            WaterQualityManagementPlanPermitTerm = WaterQualityManagementPlanPermitTerm.All.Select(x => x.WaterQualityManagementPlanPermitTermDisplayName),
-            WaterQualityManagementPlanModelingApproach = WaterQualityManagementPlanModelingApproach.All.Select(x => x.WaterQualityManagementPlanModelingApproachDisplayName),
-            TrashCaptureStatusType = TrashCaptureStatusType.All.Select(x => x.TrashCaptureStatusTypeDisplayName),
-            TreatmentBMPLifespanType = TreatmentBMPLifespanType.All.Select(x => x.TreatmentBMPLifespanTypeDisplayName),
-            SizingBasisType = SizingBasisType.All.Select(x => x.SizingBasisTypeDisplayName),
-            DryWeatherFlowOverride = DryWeatherFlowOverride.All.Select(x => x.DryWeatherFlowOverrideDisplayName),
-            SourceControlBMPAttributes = await DbContext.SourceControlBMPAttributes.AsNoTracking().Select(x => x.SourceControlBMPAttributeName).ToListAsync(),
-        };
-        var domainTablesJson = JsonSerializer.Serialize(domainTables);
-        var schemaAndDomainContext =
-            $"SCHEMA STRUCTURE: {schemaStructure}\n\nDOMAIN TABLES: {domainTablesJson}\n\n";
+            // Always create a new assistant and vector store for each extraction
+            var blobDownloadResult =
+                await azureBlobStorageService.DownloadBlobFromBlobStorageAsStream(docDto.FileResource.FileResourceGUID
+                    .ToString());
 
-        var assistant = await CreateAssistantClient(fileClient, blobDownloadResult.Content, assistantClient, docDto.FileResource.OriginalFilename, schemaAndDomainContext);
-        var assistantID = assistant.Value.Id;
+            var schemaStructure = JsonSerializer.Serialize(new WaterQualityManagementPlanExtractDto());
+            var domainTables = new
+            {
+                Jurisdictions = await DbContext.StormwaterJurisdictions.Include(x => x.Organization)
+                    .Select(x => x.Organization.OrganizationName).AsNoTracking().ToListAsync(),
+                TreatmentBMPTypes = await DbContext.TreatmentBMPTypes.Select(x => x.TreatmentBMPTypeName).AsNoTracking()
+                    .ToListAsync(),
+                HydrologicSubareas = await DbContext.HydrologicSubareas.Select(x => x.HydrologicSubareaName)
+                    .AsNoTracking().ToListAsync(),
+                WaterQualityManagementPlanLandUse =
+                    WaterQualityManagementPlanLandUse.All.Select(x => x.WaterQualityManagementPlanLandUseDisplayName),
+                WaterQualityManagementPlanPriority =
+                    WaterQualityManagementPlanPriority.All.Select(x => x.WaterQualityManagementPlanPriorityDisplayName),
+                WaterQualityManagementPlanStatus =
+                    WaterQualityManagementPlanStatus.All.Select(x => x.WaterQualityManagementPlanStatusDisplayName),
+                WaterQualityManagementPlanDevelopmentType =
+                    WaterQualityManagementPlanDevelopmentType.All.Select(x =>
+                        x.WaterQualityManagementPlanDevelopmentTypeDisplayName),
+                WaterQualityManagementPlanPermitTerm =
+                    WaterQualityManagementPlanPermitTerm.All.Select(x =>
+                        x.WaterQualityManagementPlanPermitTermDisplayName),
+                WaterQualityManagementPlanModelingApproach =
+                    WaterQualityManagementPlanModelingApproach.All.Select(x =>
+                        x.WaterQualityManagementPlanModelingApproachDisplayName),
+                TrashCaptureStatusType = TrashCaptureStatusType.All.Select(x => x.TrashCaptureStatusTypeDisplayName),
+                TreatmentBMPLifespanType =
+                    TreatmentBMPLifespanType.All.Select(x => x.TreatmentBMPLifespanTypeDisplayName),
+                SizingBasisType = SizingBasisType.All.Select(x => x.SizingBasisTypeDisplayName),
+                DryWeatherFlowOverride = DryWeatherFlowOverride.All.Select(x => x.DryWeatherFlowOverrideDisplayName),
+                SourceControlBMPAttributes = await DbContext.SourceControlBMPAttributes.AsNoTracking()
+                    .Select(x => x.SourceControlBMPAttributeName).ToListAsync(),
+            };
+            var domainTablesJson = JsonSerializer.Serialize(domainTables);
+            var schemaAndDomainContext =
+                $"SCHEMA STRUCTURE: {schemaStructure}\n\nDOMAIN TABLES: {domainTablesJson}\n\n";
 
-        await WaterQualityManagementPlanDocumentAssistants.UpsertAsync(DbContext, waterQualityManagementPlanDocumentID, assistantID);
+            var assistant = await CreateAssistantClient(fileClient, blobDownloadResult.Content, assistantClient,
+                docDto.FileResource.OriginalFilename, schemaAndDomainContext);
+            assistantID = assistant.Value.Id;
 
+            await WaterQualityManagementPlanDocumentAssistants.UpsertAsync(DbContext,
+                waterQualityManagementPlanDocumentID, assistantID);
+        }
 
         // Step 2: Chained extraction prompts
         // Extraction evidence instructions
