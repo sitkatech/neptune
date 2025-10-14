@@ -39,5 +39,5 @@ public partial class WaterQualityManagementPlanDocument
     public virtual WaterQualityManagementPlan WaterQualityManagementPlan { get; set; } = null!;
 
     [InverseProperty("WaterQualityManagementPlanDocument")]
-    public virtual WaterQualityManagementPlanDocumentAssistant? WaterQualityManagementPlanDocumentAssistant { get; set; }
+    public virtual WaterQualityManagementPlanDocumentVectorStore? WaterQualityManagementPlanDocumentVectorStore { get; set; }
 }

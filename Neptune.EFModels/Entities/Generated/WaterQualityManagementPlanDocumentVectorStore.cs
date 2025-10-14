@@ -6,20 +6,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Neptune.EFModels.Entities;
 
-[Table("WaterQualityManagementPlanDocumentAssistant")]
-[Index("WaterQualityManagementPlanDocumentID", Name = "UQ_WaterQualityManagementPlanDocumentAssistant_WaterQualityManagementPlanDocumentID", IsUnique = true)]
-public partial class WaterQualityManagementPlanDocumentAssistant
+[Table("WaterQualityManagementPlanDocumentVectorStore")]
+[Index("WaterQualityManagementPlanDocumentID", Name = "UQ_WaterQualityManagementPlanDocumentVectorStore_WaterQualityManagementPlanDocumentID", IsUnique = true)]
+public partial class WaterQualityManagementPlanDocumentVectorStore
 {
     [Key]
-    public int WaterQualityManagementPlanDocumentAssistantID { get; set; }
+    public int WaterQualityManagementPlanDocumentVectorStoreID { get; set; }
 
     public int WaterQualityManagementPlanDocumentID { get; set; }
 
     [StringLength(50)]
     [Unicode(false)]
-    public string AssistantID { get; set; } = null!;
+    public string OpenAIVectorStoreID { get; set; } = null!;
 
     [ForeignKey("WaterQualityManagementPlanDocumentID")]
-    [InverseProperty("WaterQualityManagementPlanDocumentAssistant")]
+    [InverseProperty("WaterQualityManagementPlanDocumentVectorStore")]
     public virtual WaterQualityManagementPlanDocument WaterQualityManagementPlanDocument { get; set; } = null!;
 }

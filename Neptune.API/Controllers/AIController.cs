@@ -1,8 +1,6 @@
 ﻿using System;
-using System.ClientModel;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -18,8 +16,8 @@ using Neptune.API.Services.Authorization;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
 using OpenAI;
-using OpenAI.Assistants;
 using OpenAI.Files;
+using OpenAI.Responses;
 
 namespace Neptune.API.Controllers;
 
@@ -95,97 +93,112 @@ public class AIController(
 
     [HttpPost("water-quality-management-plan-documents/{waterQualityManagementPlanDocumentID}/extract-all")]
     [AdminFeature]
+    [Experimental("OPENAI001")]
     public async Task<ActionResult<WaterQualityManagementPlanDocumentExtractionResultDto>> ExtractAll([FromRoute] int waterQualityManagementPlanDocumentID)
     {
         // Step 1: Get document DTO
         var docDto = await WaterQualityManagementPlanDocuments.GetByIDAsDtoAsync(DbContext, waterQualityManagementPlanDocumentID);
         if (docDto == null)
-        {
             return NotFound();
-        }
 
+        // Step 2: Ensure vector store exists and file is uploaded
+        var vectorStoreId = await EnsureVectorStoreWithFileAsync(waterQualityManagementPlanDocumentID, docDto);
 
-        var fileClient = openAIClient.GetOpenAIFileClient();
-#pragma warning disable OPENAI001
-        var assistantClient = openAIClient.GetAssistantClient();
+        // Step 3: Prepare schema and domain context
+        var schemaAndDomainContext = await BuildSchemaAndDomainContext();
 
-        var assistantID = await WaterQualityManagementPlanDocumentAssistants.GetByWaterQualityManagementPlanDocumentIDAsDtoAsync(DbContext, waterQualityManagementPlanDocumentID);
-        // Check for existing assistant for this project and document
+        // Step 4: Prepare extraction prompts
+        var extractionPrompts = BuildExtractionPrompts(schemaAndDomainContext);
 
-        var needToCreateAssistant = await TryValidateAssistant(assistantID, assistantClient);
+        // Step 5: Use OpenAI Chat API for each prompt
+        var responseClient = CreateResponseClient();
+        var fileSearchTool = CreateFileSearchTool(vectorStoreId);
 
-        if (needToCreateAssistant)
+        var aggregatedResults = new List<string>();
+        foreach (var prompt in extractionPrompts)
         {
-            // Always create a new assistant and vector store for each extraction
-            var blobDownloadResult =
-                await azureBlobStorageService.DownloadBlobFromBlobStorageAsStream(docDto.FileResource.FileResourceGUID
-                    .ToString());
+            var fullPrompt = aggregatedResults.Count == 0
+                ? schemaAndDomainContext + "\n\n" + prompt
+                : schemaAndDomainContext + "\n\n" + string.Join("\n\n", aggregatedResults) + "\n\n" + prompt;
 
-            var schemaStructure = JsonSerializer.Serialize(new WaterQualityManagementPlanExtractDto());
-            var domainTables = new
-            {
-                Jurisdictions = await DbContext.StormwaterJurisdictions.Include(x => x.Organization)
-                    .Select(x => x.Organization.OrganizationName).AsNoTracking().ToListAsync(),
-                TreatmentBMPTypes = await DbContext.TreatmentBMPTypes.Select(x => x.TreatmentBMPTypeName).AsNoTracking()
-                    .ToListAsync(),
-                HydrologicSubareas = await DbContext.HydrologicSubareas.Select(x => x.HydrologicSubareaName)
-                    .AsNoTracking().ToListAsync(),
-                WaterQualityManagementPlanLandUse =
-                    WaterQualityManagementPlanLandUse.All.Select(x => x.WaterQualityManagementPlanLandUseDisplayName),
-                WaterQualityManagementPlanPriority =
-                    WaterQualityManagementPlanPriority.All.Select(x => x.WaterQualityManagementPlanPriorityDisplayName),
-                WaterQualityManagementPlanStatus =
-                    WaterQualityManagementPlanStatus.All.Select(x => x.WaterQualityManagementPlanStatusDisplayName),
-                WaterQualityManagementPlanDevelopmentType =
-                    WaterQualityManagementPlanDevelopmentType.All.Select(x =>
-                        x.WaterQualityManagementPlanDevelopmentTypeDisplayName),
-                WaterQualityManagementPlanPermitTerm =
-                    WaterQualityManagementPlanPermitTerm.All.Select(x =>
-                        x.WaterQualityManagementPlanPermitTermDisplayName),
-                WaterQualityManagementPlanModelingApproach =
-                    WaterQualityManagementPlanModelingApproach.All.Select(x =>
-                        x.WaterQualityManagementPlanModelingApproachDisplayName),
-                TrashCaptureStatusType = TrashCaptureStatusType.All.Select(x => x.TrashCaptureStatusTypeDisplayName),
-                TreatmentBMPLifespanType =
-                    TreatmentBMPLifespanType.All.Select(x => x.TreatmentBMPLifespanTypeDisplayName),
-                SizingBasisType = SizingBasisType.All.Select(x => x.SizingBasisTypeDisplayName),
-                DryWeatherFlowOverride = DryWeatherFlowOverride.All.Select(x => x.DryWeatherFlowOverrideDisplayName),
-                SourceControlBMPAttributes = await DbContext.SourceControlBMPAttributes.AsNoTracking()
-                    .Select(x => x.SourceControlBMPAttributeName).ToListAsync(),
-            };
-            var domainTablesJson = JsonSerializer.Serialize(domainTables);
-            var schemaAndDomainContext =
-                $"SCHEMA STRUCTURE: {schemaStructure}\n\nDOMAIN TABLES: {domainTablesJson}\n\n";
-
-            var assistant = await CreateAssistantClient(fileClient, blobDownloadResult.Content, assistantClient,
-                docDto.FileResource.OriginalFilename, schemaAndDomainContext);
-            assistantID = assistant.Value.Id;
-
-            await WaterQualityManagementPlanDocumentAssistants.UpsertAsync(DbContext,
-                waterQualityManagementPlanDocumentID, assistantID);
+            var response = await responseClient.CreateResponseAsync(
+                userInputText: fullPrompt,
+                new ResponseCreationOptions()
+                {
+                    Tools = { fileSearchTool }
+                });
+            aggregatedResults.Add(ExtractMessageText(response.Value.OutputItems));
         }
 
-        // Step 2: Chained extraction prompts
-        // Extraction evidence instructions
+        // Step 6: Aggregate results
+        var rawResults = string.Join("\n\n", aggregatedResults.Take(aggregatedResults.Count - 1));
+        var extractionResult = new WaterQualityManagementPlanDocumentExtractionResultDto
+        {
+            FinalOutput = aggregatedResults.Last(),
+            RawResults = rawResults,
+            ExtractedAt = DateTime.UtcNow
+        };
+        return Ok(extractionResult);
+    }
+
+    // Helper: Ensure vector store exists and file is uploaded
+    private async Task<string> EnsureVectorStoreWithFileAsync(int documentId, WaterQualityManagementPlanDocumentDto docDto)
+    {
+        var vectorStoreId = await WaterQualityManagementPlanDocumentVectorStores.GetByWaterQualityManagementPlanDocumentIDAsDtoAsync(DbContext, documentId);
+        if (!string.IsNullOrWhiteSpace(vectorStoreId))
+            return vectorStoreId;
+
+        #pragma warning disable OPENAI001
+        var vectorStoreClient = openAIClient.GetVectorStoreClient();
+        var fileClient = openAIClient.GetOpenAIFileClient();
+        logger.LogInformation($"Starting file download from blob storage for documentId={documentId}, fileResourceGUID={docDto.FileResource.FileResourceGUID}");
+        var fileStream = await azureBlobStorageService.DownloadBlobFromBlobStorageAsStream(docDto.FileResource.FileResourceGUID.ToString());
+        logger.LogInformation($"File download complete. Starting upload to OpenAI for filename={docDto.FileResource.OriginalFilename}");
+        var fileUploadResult = await fileClient.UploadFileAsync(fileStream.Content, docDto.FileResource.OriginalFilename, FileUploadPurpose.UserData);
+        if (fileUploadResult == null || fileUploadResult.Value == null)
+        {
+            logger.LogError($"OpenAI file upload failed: result is null for documentId={documentId}");
+            throw new Exception($"OpenAI file upload failed for documentId={documentId}");
+        }
+        logger.LogInformation($"OpenAI file upload result: {JsonSerializer.Serialize(fileUploadResult.Value)}");
+        var openAiFileId = fileUploadResult.Value.Id;
+        logger.LogInformation($"File uploaded to OpenAI. FileId={openAiFileId}. Creating vector store.");
+
+        var options = new OpenAI.VectorStores.VectorStoreCreationOptions
+        {
+            Name = $"WQMP_{documentId}"
+        };
+        options.FileIds.Add(openAiFileId);
+        var vectorStoreCreateResult = await vectorStoreClient.CreateVectorStoreAsync(options);
+        if (vectorStoreCreateResult == null || vectorStoreCreateResult.Value == null)
+        {
+            logger.LogError($"OpenAI vector store creation failed: result is null for documentId={documentId}");
+            throw new Exception($"OpenAI vector store creation failed for documentId={documentId}");
+        }
+        logger.LogInformation($"OpenAI vector store creation result: {JsonSerializer.Serialize(vectorStoreCreateResult.Value)}");
+        vectorStoreId = vectorStoreCreateResult.Value.Id;
+        logger.LogInformation($"Vector store created. VectorStoreId={vectorStoreId}");
+        await WaterQualityManagementPlanDocumentVectorStores.UpsertAsync(DbContext, documentId, vectorStoreId);
+        return vectorStoreId;
+    }
+
+    // Helper: Build extraction prompts
+    private List<string> BuildExtractionPrompts(string schemaAndDomainContext)
+    {
         var extractionEvidenceInstructions = "Use only the provided WQMP PDF document for extraction. Each attribute you extract will be placed in the 'Value' property of the named attribute. The 'ExtractionEvidence' will include a snippet from the WQMP PDF that shows the sentence in the WQMP where the data came from, plus the sentence before and after. If the attribute was extracted from a table or label just include relevant text nearby. The 'DocumentSource' should include the Page # in the document where the attribute value was found. Here is the sub-schema for each extracted attribute: { 'Value': '', 'ExtractionEvidence': '', 'DocumentSource': '' }\n\nA second LLM will be reviewing this work for accuracy, so please do not hallucinate data. If an attribute is not found simply put null in Value, ExtractionEvidence, and DocumentSource.\n";
 
-        // Serialize the Treatment BMP schema
         var treatmentBMPSchemaStructure = JsonSerializer.Serialize(new TreatmentBMPExtractDto());
         var treatmentBMPPrompt = $@"Extract all Treatment BMPs for this WQMP using only the provided WQMP PDF document. {extractionEvidenceInstructions} Use the following JSON schema for each BMP: {treatmentBMPSchemaStructure} Return a JSON array. If none are found, return an empty array. Do not include any narrative or follow-up questions.";
 
-        // Serialize the Parcel schema
         var parcelSchemaStructure = JsonSerializer.Serialize(new WaterQualityManagementPlanParcelExtractDto());
         var parcelPrompt = $@"Extract all Parcels for this WQMP using only the provided WQMP PDF document. {extractionEvidenceInstructions} Use the following JSON schema for each Parcel: {parcelSchemaStructure} Return a JSON array. If none are found, return an empty array. Do not include any narrative or follow-up questions.";
 
-        // Serialize the Source Control BMP schema
         var sourceControlBMPSchemaStructure = JsonSerializer.Serialize(new SourceControlBMPExtractDto());
         var sourceControlBMPPrompt = $@"Extract all Source Control BMPs for this WQMP using only the provided WQMP PDF document. {extractionEvidenceInstructions} Use the following JSON schema for each Source Control BMP: {sourceControlBMPSchemaStructure} Return a JSON array. If none are found, return an empty array. Do not include any narrative or follow-up questions.";
 
-        // Final consolidation prompt to unify all extracted entities into a single JSON object
         var consolidationPrompt = @"Now consolidate all previously extracted data from the provided WQMP PDF document into a single JSON object with the following structure: { 'WQMP': {}, 'Parcels': [], 'TreatmentBMPs': [], 'SourceControlBMPs': [] } Return only valid JSON, and the attribute values should follow this schema { 'Value': '', 'ExtractionEvidence': '', 'DocumentSource': '' }. Do not include any narrative, explanation, or follow-up questions and DO NOT Hallucinate.";
 
-        // Define your list of prompts (first is ExtractorInstructions, then child entity prompts)
-        var extractionPrompts = new List<string>
+        return new List<string>
         {
             ExtractorInstructions,
             parcelPrompt,
@@ -193,60 +206,12 @@ public class AIController(
             sourceControlBMPPrompt,
             consolidationPrompt
         };
-
-        // Step 3: Run each prompt in sequence, passing previous result as context
-
-        var aggregatedResults = new List<string>();
-        foreach (var prompt in extractionPrompts)
-        {
-            // Build messages for thread
-            var messages = new List<ThreadInitializationMessage>();
-            if (aggregatedResults.Count > 0)
-            {
-                // Pass all prior results as context
-                var allPriorResults = string.Join("\n\n", aggregatedResults);
-                messages.Add(new ThreadInitializationMessage(MessageRole.User, [allPriorResults]));
-            }
-            messages.Add(new ThreadInitializationMessage(MessageRole.User, [prompt]));
-
-            var threadOptions = new ThreadCreationOptions();
-            foreach (var msg in messages)
-            {
-                threadOptions.InitialMessages.Add(msg);
-            }
-
-            var resultBuilder = new System.Text.StringBuilder();
-            var streamingResponses = assistantClient.CreateThreadAndRunStreamingAsync(assistantID, threadOptions);
-            await foreach (var streamingUpdate in streamingResponses)
-            {
-                if (streamingUpdate is MessageContentUpdate contentUpdate)
-                {
-                    if (!string.IsNullOrEmpty(contentUpdate.Text))
-                    {
-                        // Remove all content between 【 and 】 including the symbols
-                        var cleanedText = Regex.Replace(contentUpdate.Text, "【.*?】", string.Empty);
-                        resultBuilder.Append(cleanedText);
-                    }
-                }
-            }
-            aggregatedResults.Add(resultBuilder.ToString());
-        }
-
-        // Step 4: Aggregate results (for now, just join them)
-        var rawResults = string.Join("\n\n", aggregatedResults.Take(aggregatedResults.Count - 1));
-        var waterQualityManagementPlanDocumentExtractionResultDto = new WaterQualityManagementPlanDocumentExtractionResultDto
-        {
-            FinalOutput = aggregatedResults.Last(),
-            RawResults = rawResults,
-            ExtractedAt = DateTime.UtcNow
-        };
-        return Ok(waterQualityManagementPlanDocumentExtractionResultDto);
-#pragma warning restore OPENAI001
     }
 
 
     [HttpPost("water-quality-management-plan-documents/{waterQualityManagementPlanDocumentID}/ask")]
     [AdminFeature]
+    [Experimental("OPENAI001")]
     public async Task Ask([FromRoute] int waterQualityManagementPlanDocumentID, [FromBody] ChatRequestDto chatRequestDto)
     {
         var docDto = await WaterQualityManagementPlanDocuments.GetByIDAsDtoAsync(DbContext, waterQualityManagementPlanDocumentID);
@@ -256,149 +221,132 @@ public class AIController(
             return;
         }
 
+        // Get the OpenAI vector store ID from the new table
+        var vectorStoreId = await WaterQualityManagementPlanDocumentVectorStores.GetByWaterQualityManagementPlanDocumentIDAsDtoAsync(DbContext, waterQualityManagementPlanDocumentID);
+        if (string.IsNullOrWhiteSpace(vectorStoreId))
+        {
+            // Create a new vector store via OpenAI API
+            var vectorStoreClient = openAIClient.GetVectorStoreClient();
+            var fileClient = openAIClient.GetOpenAIFileClient();
+            // Upload the WQMP PDF file to OpenAI
+            var fileStream = await azureBlobStorageService.DownloadBlobFromBlobStorageAsStream(docDto.FileResource.FileResourceGUID.ToString());
+            var fileUploadResult = await fileClient.UploadFileAsync(fileStream.Content, docDto.FileResource.OriginalFilename, FileUploadPurpose.Assistants);
+            var openAiFileId = fileUploadResult.Value.Id;
+            // Create the vector store and attach the file
+            var options = new OpenAI.VectorStores.VectorStoreCreationOptions
+            {
+                Name = $"WQMP_{waterQualityManagementPlanDocumentID}"
+            };
+            options.FileIds.Add(openAiFileId);
+            var vectorStoreCreateResult = await vectorStoreClient.CreateVectorStoreAsync(options);
+            vectorStoreId = vectorStoreCreateResult.Value.Id;
+            // Save the new vector store ID in the database
+            await WaterQualityManagementPlanDocumentVectorStores.UpsertAsync(DbContext, waterQualityManagementPlanDocumentID, vectorStoreId);
+        }
+
         Response.Headers.Append("Content-Type", "text/event-stream");
         Response.Headers.Append("X-Accel-Buffering", "no");
 
-        var fileClient = openAIClient.GetOpenAIFileClient();
-#pragma warning disable OPENAI001
-        var assistantClient = openAIClient.GetAssistantClient();
+        // Prepare schema and domain context (unchanged)
+        var schemaAndDomainContext = await BuildSchemaAndDomainContext();
 
-        var assistantID = await WaterQualityManagementPlanDocumentAssistants.GetByWaterQualityManagementPlanDocumentIDAsDtoAsync(DbContext, waterQualityManagementPlanDocumentID);
-        // Check for existing assistant for this project and document
+        var responseClient = CreateResponseClient();
+        var fileSearchTool = CreateFileSearchTool(vectorStoreId);
 
-        var needToCreateAssistant = await TryValidateAssistant(assistantID, assistantClient);
+        // Combine all user messages into a single prompt
+        var userPrompt = schemaAndDomainContext + "\n\n" + string.Join("\n\n", chatRequestDto.Messages.Select(m => m.Content));
 
-        if (needToCreateAssistant)
-        {
-            var blobDownloadResult = await azureBlobStorageService.DownloadBlobFromBlobStorageAsStream(docDto.FileResource.FileResourceGUID.ToString());
-
-            var schemaStructure = JsonSerializer.Serialize(new WaterQualityManagementPlanExtractDto());
-            var domainTables = new
+        var response = await responseClient.CreateResponseAsync(
+            userInputText: userPrompt,
+            new ResponseCreationOptions()
             {
-                Jurisdictions = await DbContext.StormwaterJurisdictions.Include(x => x.Organization)
-                    .Select(x => x.Organization.OrganizationName).AsNoTracking().ToListAsync(),
-                TreatmentBMPTypes = await DbContext.TreatmentBMPTypes.Select(x => x.TreatmentBMPTypeName).AsNoTracking().ToListAsync(),
-                HydrologicSubareas = await DbContext.HydrologicSubareas.Select(x => x.HydrologicSubareaName).AsNoTracking().ToListAsync(),
-                WaterQualityManagementPlanLandUse = WaterQualityManagementPlanLandUse.All.Select(x => x.WaterQualityManagementPlanLandUseDisplayName),
-                WaterQualityManagementPlanPriority = WaterQualityManagementPlanPriority.All.Select(x => x.WaterQualityManagementPlanPriorityDisplayName),
-                WaterQualityManagementPlanStatus = WaterQualityManagementPlanStatus.All.Select(x => x.WaterQualityManagementPlanStatusDisplayName),
-                WaterQualityManagementPlanDevelopmentType = WaterQualityManagementPlanDevelopmentType.All.Select(x => x.WaterQualityManagementPlanDevelopmentTypeDisplayName),
-                WaterQualityManagementPlanPermitTerm = WaterQualityManagementPlanPermitTerm.All.Select(x => x.WaterQualityManagementPlanPermitTermDisplayName),
-                //HydromodificationAppliesType = HydromodificationAppliesType.All.Select(x => x.HydromodificationAppliesTypeDisplayName),
-                WaterQualityManagementPlanModelingApproach = WaterQualityManagementPlanModelingApproach.All.Select(x => x.WaterQualityManagementPlanModelingApproachDisplayName),
-                TrashCaptureStatusType = TrashCaptureStatusType.All.Select(x => x.TrashCaptureStatusTypeDisplayName),
-                TreatmentBMPLifespanType = TreatmentBMPLifespanType.All.Select(x => x.TreatmentBMPLifespanTypeDisplayName),
-                SizingBasisType = SizingBasisType.All.Select(x => x.SizingBasisTypeDisplayName),
-                DryWeatherFlowOverride = DryWeatherFlowOverride.All.Select(x => x.DryWeatherFlowOverrideDisplayName),
-                SourceControlBMPAttributes = await DbContext.SourceControlBMPAttributes.AsNoTracking().Select(x => x.SourceControlBMPAttributeName).ToListAsync(),
-            };
-            var domainTablesJson = JsonSerializer.Serialize(domainTables);
-            var schemaAndDomainContext =
-                $"SCHEMA STRUCTURE: {schemaStructure}\n\nDOMAIN TABLES: {domainTablesJson}\n\n";
-
-            var assistant = await CreateAssistantClient(fileClient, blobDownloadResult.Content, assistantClient, docDto.FileResource.OriginalFilename, schemaAndDomainContext);
-            assistantID = assistant.Value.Id;
-
-            await WaterQualityManagementPlanDocumentAssistants.UpsertAsync(DbContext, waterQualityManagementPlanDocumentID, assistantID);
-        }
-
-        var threadOptions = new ThreadCreationOptions();
-        var messages = chatRequestDto.Messages.Select(message => new ThreadInitializationMessage(
-            message.Role == "user" ? MessageRole.User : MessageRole.Assistant,
-            [
-                message.Content
-            ]
-        ));
-
-        foreach (var threadInitializationMessage in messages)
-        {
-            threadOptions.InitialMessages.Add(threadInitializationMessage);
-        }
-
-        var streamingResponses = assistantClient.CreateThreadAndRunStreamingAsync(assistantID, threadOptions);
-
-        await foreach (var streamingUpdate in streamingResponses)
-        {
-            if (streamingUpdate is MessageContentUpdate contentUpdate)
-            {
-                string output = null;
-                if (!string.IsNullOrEmpty(contentUpdate.Text))
-                {
-                    // Remove all content between 【 and 】 including the symbols
-                    var cleanedText = Regex.Replace(contentUpdate.Text, "【.*?】", string.Empty);
-                    // Replace newlines with <br> for HTML rendering in the browser
-                    output = cleanedText.Replace("\n", "<br>").Replace("\r", "");
-                }
-                if (contentUpdate.TextAnnotation != null)
-                {
-                    output += $" [Reference: {docDto.FileResource.OriginalFilename}]";
-                }
-                if (!string.IsNullOrWhiteSpace(output))
-                {
-                    await Response.WriteAsync($"data: {output}\n\n");
-                }
-            }
-            if (streamingUpdate.UpdateKind == StreamingUpdateReason.MessageCompleted)
-            {
-                await Response.WriteAsync($"data: ---{streamingUpdate.UpdateKind.ToString()}---\n\n");
-            }
-        }
-#pragma warning restore OPENAI001
-    }
-
-    [Experimental("OPENAI001")]
-    private static async Task<bool> TryValidateAssistant(string existingAssistantID, AssistantClient assistantClient)
-    {
-        bool needToCreateAssistant = false;
-        if (!string.IsNullOrWhiteSpace(existingAssistantID))
-        {
-            // Check if the assistant exists in OpenAI
-            try
-            {
-                var openAIAssistant = await assistantClient.GetAssistantAsync(existingAssistantID);
-                if (openAIAssistant == null)
-                {
-                    needToCreateAssistant = true;
-                }
-            }
-            catch
-            {
-                // If OpenAI throws (e.g. not found), treat as not existing
-                needToCreateAssistant = true;
-            }
-        }
-        else
-        {
-            needToCreateAssistant = true;
-        }
-
-        return needToCreateAssistant;
-    }
-
-    [Experimental("OPENAI001")]
-    private static async Task<ClientResult<Assistant>> CreateAssistantClient(OpenAIFileClient fileClient, Stream blobStream, AssistantClient assistantClient, string filename, string instructions)
-    {
-        OpenAIFile file = await fileClient.UploadFileAsync(blobStream, filename, FileUploadPurpose.Assistants);
-        var assistant = await assistantClient.CreateAssistantAsync("gpt-4.1",
-            new AssistantCreationOptions()
-            {
-                Instructions = instructions,
-                Temperature = 0.4f,
-                Tools =
-                {
-                    new FileSearchToolDefinition(),
-                },
-                ToolResources = new()
-                {
-                    FileSearch = new()
-                    {
-                        NewVectorStores =
-                        {
-                            new VectorStoreCreationHelper([file.Id]),
-                        }
-                    }
-                },
+                Tools = { fileSearchTool }
             });
-        return assistant;
+
+        var outputText = ExtractMessageText(response.Value.OutputItems).Replace("\n", "<br>").Replace("\r", "");
+        if (!string.IsNullOrWhiteSpace(outputText))
+        {
+            await Response.WriteAsync($"data: {outputText}\n\n");
+        }
+        // Signal end of stream
+        await Response.WriteAsync("data: ---MessageCompleted---\n\n");
+    }
+
+    // DRY Helper: Build schema and domain context string
+    private async Task<string> BuildSchemaAndDomainContext()
+    {
+        var schemaStructure = JsonSerializer.Serialize(new WaterQualityManagementPlanExtractDto());
+        var domainTables = new
+        {
+            Jurisdictions = await DbContext.StormwaterJurisdictions.Include(x => x.Organization)
+                .Select(x => x.Organization.OrganizationName).AsNoTracking().ToListAsync(),
+            TreatmentBMPTypes = await DbContext.TreatmentBMPTypes.Select(x => x.TreatmentBMPTypeName).AsNoTracking().ToListAsync(),
+            HydrologicSubareas = await DbContext.HydrologicSubareas.Select(x => x.HydrologicSubareaName).AsNoTracking().ToListAsync(),
+            WaterQualityManagementPlanLandUse = WaterQualityManagementPlanLandUse.All.Select(x => x.WaterQualityManagementPlanLandUseDisplayName),
+            WaterQualityManagementPlanPriority = WaterQualityManagementPlanPriority.All.Select(x => x.WaterQualityManagementPlanPriorityDisplayName),
+            WaterQualityManagementPlanStatus = WaterQualityManagementPlanStatus.All.Select(x => x.WaterQualityManagementPlanStatusDisplayName),
+            WaterQualityManagementPlanDevelopmentType = WaterQualityManagementPlanDevelopmentType.All.Select(x => x.WaterQualityManagementPlanDevelopmentTypeDisplayName),
+            WaterQualityManagementPlanPermitTerm = WaterQualityManagementPlanPermitTerm.All.Select(x => x.WaterQualityManagementPlanPermitTermDisplayName),
+            WaterQualityManagementPlanModelingApproach = WaterQualityManagementPlanModelingApproach.All.Select(x => x.WaterQualityManagementPlanModelingApproachDisplayName),
+            TrashCaptureStatusType = TrashCaptureStatusType.All.Select(x => x.TrashCaptureStatusTypeDisplayName),
+            TreatmentBMPLifespanType = TreatmentBMPLifespanType.All.Select(x => x.TreatmentBMPLifespanTypeDisplayName),
+              SizingBasisType = SizingBasisType.All.Select(x => x.SizingBasisTypeDisplayName),
+            DryWeatherFlowOverride = DryWeatherFlowOverride.All.Select(x => x.DryWeatherFlowOverrideDisplayName),
+            SourceControlBMPAttributes = await DbContext.SourceControlBMPAttributes.AsNoTracking().Select(x => x.SourceControlBMPAttributeName).ToListAsync(),
+        };
+        var domainTablesJson = JsonSerializer.Serialize(domainTables);
+        return $"SCHEMA STRUCTURE: {schemaStructure}\n\nDOMAIN TABLES: {domainTablesJson}\n\n";
+    }
+
+    // DRY Helper: Create OpenAIResponseClient
+    [Experimental("OPENAI001")]
+    private OpenAIResponseClient CreateResponseClient() =>
+        new OpenAIResponseClient(model: "gpt-4o-mini", apiKey: appConfiguration.Value.OpenAIApiKey);
+
+    // DRY Helper: Create file search tool
+    [Experimental("OPENAI001")]
+    private static ResponseTool CreateFileSearchTool(string fileId) =>
+        ResponseTool.CreateFileSearchTool(vectorStoreIds: [fileId]);
+
+    // DRY Helper: Extract cleaned message text from response items
+    [Experimental("OPENAI001")]
+    private static string ExtractMessageText(IEnumerable<ResponseItem> items)
+    {
+        var resultBuilder = new System.Text.StringBuilder();
+        foreach (var outputItem in items)
+        {
+            if (outputItem is MessageResponseItem message)
+            {
+                var text = message.Content?.FirstOrDefault()?.Text;
+                if (!string.IsNullOrEmpty(text))
+                {
+                    var cleanedText = Regex.Replace(text, "【.*?】", string.Empty);
+                    resultBuilder.Append(cleanedText);
+                }
+            }
+        }
+        return resultBuilder.ToString();
+    }
+
+    [HttpGet("vector-stores")]
+    public async Task<ActionResult<List<object>>> GetVectorStores()
+    {
+        #pragma warning disable OPENAI001
+        var vectorStoreClient = openAIClient.GetVectorStoreClient();
+        var vectorStores = new List<object>();
+        await foreach (var store in vectorStoreClient.GetVectorStoresAsync())
+        {
+            vectorStores.Add(new
+            {
+                Id = store.Id,
+                Name = store.Name,
+                FileCounts = store.FileCounts,
+                UsageBytes = store.UsageBytes,
+                CreatedAt = store.CreatedAt,
+                Status = store.Status
+            });
+        }
+        #pragma warning restore OPENAI001
+        return Ok(vectorStores);
     }
 }
