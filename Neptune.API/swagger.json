@@ -5,19 +5,6 @@
     "version": "1.0"
   },
   "paths": {
-    "/ai/clean-up": {
-      "post": {
-        "tags": [
-          "AI"
-        ],
-        "operationId": "PostChatCompletions_AI",
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
     "/ai/water-quality-management-plan-documents/{waterQualityManagementPlanDocumentID}/extract-all": {
       "post": {
         "tags": [
@@ -95,6 +82,19 @@
             }
           }
         },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/ai/clean-up": {
+      "post": {
+        "tags": [
+          "AI"
+        ],
+        "operationId": "PostChatCompletions_AI",
         "responses": {
           "200": {
             "description": "OK"

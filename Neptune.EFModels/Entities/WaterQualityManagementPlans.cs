@@ -128,31 +128,19 @@ public static class WaterQualityManagementPlans
         return true;
     }
 
-    public static async Task<WaterQualityManagementPlanExtractDto?> GetByIDAsExtractDtoAsync(NeptuneDbContext dbContext, int waterQualityManagementPlanID)
-    {
-        var entity = await dbContext.WaterQualityManagementPlans
-            .Include(x => x.StormwaterJurisdiction)
-            .ThenInclude(x => x.Organization)
-            .Include(x => x.TreatmentBMPs)
-            .ThenInclude(x => x.TreatmentBMPType)
-            .Include(x => x.QuickBMPs)
-            .Include(x => x.SourceControlBMPs).ThenInclude(x => x.SourceControlBMPAttribute)
-            .Include(x => x.WaterQualityManagementPlanParcels).ThenInclude(x => x.Parcel)
-            .Include(x => x.HydrologicSubarea)
-            .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.WaterQualityManagementPlanID == waterQualityManagementPlanID);
-        if (entity == null) return null;
-        return entity.AsExtractDto();
-    }
-
     public static async Task<List<WaterQualityManagementPlanDto>> ListWithFinalWQMPDocumentAsync(NeptuneDbContext dbContext)
     {
+        // todo: filtering by a hardcoded list of WQMP IDs is temporary until we can get the full list of WQMPs that should be included
+        var wqmpIDsToFilterBy = new List<int>
+            {
+            3066, 2845, 2856, 2857, 2850, 1623, 1632, 2528, 2531, 2343, 2527
+        };
         var entities = await dbContext.WaterQualityManagementPlans
             .Include(x => x.StormwaterJurisdiction)
             .ThenInclude(x => x.Organization)
-            .Where(plan => dbContext.WaterQualityManagementPlanDocuments
-                .Any(doc => doc.WaterQualityManagementPlanID == plan.WaterQualityManagementPlanID
-                         && doc.WaterQualityManagementPlanDocumentTypeID == (int) WaterQualityManagementPlanDocumentTypeEnum.FinalWQMP))
+            .Include(x => x.WaterQualityManagementPlanDocuments)
+            .Where(x => wqmpIDsToFilterBy.Contains(x.WaterQualityManagementPlanID) && x.WaterQualityManagementPlanDocuments
+                .Any(y => y.WaterQualityManagementPlanDocumentTypeID == (int) WaterQualityManagementPlanDocumentTypeEnum.FinalWQMP))
             .AsNoTracking()
             .ToListAsync();
         return entities.Select(x => x.AsDto()).ToList();

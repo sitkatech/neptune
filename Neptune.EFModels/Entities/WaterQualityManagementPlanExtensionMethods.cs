@@ -103,37 +103,6 @@ public static  class WaterQualityManagementPlanExtensionMethods
         };
     }
 
-    public static WaterQualityManagementPlanExtractDto AsExtractDto(this WaterQualityManagementPlan entity)
-    {
-        return new WaterQualityManagementPlanExtractDto
-        {
-            WaterQualityManagementPlanName = entity.WaterQualityManagementPlanName,
-            Jurisdiction = entity.StormwaterJurisdiction.Organization.OrganizationName,
-            WaterQualityManagementPlanLandUse = entity.WaterQualityManagementPlanLandUse?.WaterQualityManagementPlanLandUseDisplayName,
-            WaterQualityManagementPlanPriority = entity.WaterQualityManagementPlanPriority?.WaterQualityManagementPlanPriorityDisplayName,
-            WaterQualityManagementPlanStatus = entity.WaterQualityManagementPlanStatus?.WaterQualityManagementPlanStatusDisplayName,
-            WaterQualityManagementPlanDevelopmentType = entity.WaterQualityManagementPlanDevelopmentType?.WaterQualityManagementPlanDevelopmentTypeDisplayName,
-            ApprovalDate = entity.ApprovalDate,
-            MaintenanceContactName = entity.MaintenanceContactName,
-            MaintenanceContactOrganization = entity.MaintenanceContactOrganization,
-            MaintenanceContactPhone = entity.MaintenanceContactPhone,
-            MaintenanceContactAddress1 = entity.MaintenanceContactAddress1,
-            MaintenanceContactAddress2 = entity.MaintenanceContactAddress2,
-            MaintenanceContactCity = entity.MaintenanceContactCity,
-            MaintenanceContactState = entity.MaintenanceContactState,
-            MaintenanceContactZip = entity.MaintenanceContactZip,
-            WaterQualityManagementPlanPermitTerm = entity.WaterQualityManagementPlanPermitTerm?.WaterQualityManagementPlanPermitTermDisplayName,
-            DateOfConstruction = entity.DateOfConstruction,
-            HydrologicSubarea = entity.HydrologicSubarea?.HydrologicSubareaName,
-            RecordNumber = entity.RecordNumber,
-            RecordedWQMPAreaInAcres = entity.RecordedWQMPAreaInAcres,
-            TrashCaptureStatusType = entity.TrashCaptureStatusType?.TrashCaptureStatusTypeDisplayName,
-            TrashCaptureEffectiveness = entity.TrashCaptureEffectiveness,
-            WaterQualityManagementPlanModelingApproach = entity.WaterQualityManagementPlanModelingApproach?.WaterQualityManagementPlanModelingApproachDisplayName,
-            WaterQualityManagementPlanBoundaryNotes = entity.WaterQualityManagementPlanBoundaryNotes,
-        };
-    }
-
     public static void UpdateFromUpsertDto(this WaterQualityManagementPlan entity, WaterQualityManagementPlanUpsertDto dto)
     {
         entity.StormwaterJurisdictionID = dto.StormwaterJurisdictionID;
