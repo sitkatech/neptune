@@ -94,7 +94,7 @@
           </ogc:Filter>
           <PolygonSymbolizer>
             <Fill>
-              <CssParameter name="fill">##fee5d9</CssParameter>
+              <CssParameter name="fill">#fee5d9</CssParameter>
             </Fill>
           </PolygonSymbolizer>
         </Rule>
