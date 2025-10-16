@@ -31,14 +31,13 @@ Select
 	Cast(HasBaselineScore as bit) as HasBaselineScore,
 	Cast(HasProgressScore as bit) as HasProgressScore,
 	Case
-		When IsFullTrashCapture = 1 then 2.5
+		When IsFullTrashCapture = 1 then 0
 		When OnlandVisualTrashAssessmentAreaProgressScore = 'A' then 2.5
 		When OnlandVisualTrashAssessmentAreaBaselineScore = 'A' then 2.5
-		When PartialTrashCaptureEffectivenessPercentage > 0 and BaselineLoadingRate * (1 - PartialTrashCaptureEffectivenessPercentage/100.0) > 2.5 then BaselineLoadingRate * (1 - PartialTrashCaptureEffectivenessPercentage/100.0)
+		When PartialTrashCaptureEffectivenessPercentage > 0 then BaselineLoadingRate * (1 - PartialTrashCaptureEffectivenessPercentage/100.0)
 		When HasProgressScore = 1 then ProgressLoadingRate
 		When HasBaselineScore = 1 then BaselineLoadingRate
-		When BaselineLoadingRate * (1 - PartialTrashCaptureEffectivenessPercentage/100.0) > 2.5 then BaselineLoadingRate * (1 - PartialTrashCaptureEffectivenessPercentage/100.0)
-		Else 2.5
+		Else BaselineLoadingRate
 	end as CurrentLoadingRate,
 	ProgressLoadingRate,
 	DelineationIsVerified,

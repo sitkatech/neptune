@@ -10,7 +10,7 @@ namespace Neptune.API.Helpers;
 
 public static class TrashGeneratingUnitHelper
 {
-    public const decimal FullTrashCaptureLoading = 2.5m;
+    public const decimal FullTrashCaptureLoading = 0m;
 
     public static double TargetLoadReduction(NeptuneDbContext dbContext, int stormwaterJurisdictionID)
     {
