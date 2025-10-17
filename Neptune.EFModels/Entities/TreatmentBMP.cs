@@ -21,6 +21,7 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
+using System.Globalization;
 
 namespace Neptune.EFModels.Entities
 {
@@ -66,7 +67,26 @@ namespace Neptune.EFModels.Entities
                         measurementUnit = $" {customAttributeType.MeasurementUnitType.LegendDisplayName}";
                     }
 
-                    var value = string.Join(", ", customAttribute.CustomAttributeValues.OrderBy(x => x.AttributeValue).Select(x => x.AttributeValue));
+                    // Format numbers with thousands separators while preserving original decimal precision
+                    var formattedValues = customAttribute.CustomAttributeValues
+                        .OrderBy(x => x.AttributeValue)
+                        .Select(x =>
+                        {
+                            var raw = x.AttributeValue;
+                            if (string.IsNullOrWhiteSpace(raw))
+                            {
+                                return raw ?? string.Empty;
+                            }
+                            if (decimal.TryParse(raw, NumberStyles.Number, CultureInfo.InvariantCulture, out var num))
+                            {
+                                var decimalPlaces = raw.Contains('.') ? raw.Split('.')[1].Length : 0;
+                                var formatSpecifier = "N" + decimalPlaces; // e.g. N0, N1, N2
+                                return num.ToString(formatSpecifier, CultureInfo.InvariantCulture);
+                            }
+                            return raw; // non-numeric, return as-is
+                        });
+
+                    var value = string.Join(", ", formattedValues);
 
                     return $"{value}{measurementUnit}";
                 }
