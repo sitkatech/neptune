@@ -1,19 +1,16 @@
 import { ApplicationRef, ChangeDetectorRef, Component, ComponentRef, OnInit, ViewChild } from "@angular/core";
 import * as L from "leaflet";
-import { ActivatedRoute, Router } from "@angular/router";
+import { Router } from "@angular/router";
+import { Input } from "@angular/core";
 import { ProjectService } from "src/app/shared/generated/api/project.service";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
-import { forkJoin, Observable, switchMap } from "rxjs";
+import { forkJoin, Observable } from "rxjs";
 import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.service";
 import { FieldDefinitionTypeEnum } from "src/app/shared/generated/enum/field-definition-type-enum";
-import { TimeOfConcentrationEnum } from "src/app/shared/generated/enum/time-of-concentration-enum";
 import { TreatmentBMPModelingTypeEnum } from "src/app/shared/generated/enum/treatment-b-m-p-modeling-type-enum";
-import { UnderlyingHydrologicSoilGroupEnum } from "src/app/shared/generated/enum/underlying-hydrologic-soil-group-enum";
 import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto";
 import { DelineationUpsertDto } from "src/app/shared/generated/model/delineation-upsert-dto";
 import { ProjectUpsertDto } from "src/app/shared/generated/model/project-upsert-dto";
-import { TreatmentBMPModelingAttributeDefinitionDto } from "src/app/shared/generated/model/treatment-bmp-modeling-attribute-definition-dto";
-import { TreatmentBMPModelingAttributeDropdownItemDto } from "src/app/shared/generated/model/treatment-bmp-modeling-attribute-dropdown-item-dto";
 import { TreatmentBMPTypeWithModelingAttributesDto } from "src/app/shared/generated/model/treatment-bmp-type-with-modeling-attributes-dto";
 import { TreatmentBMPUpsertDto } from "src/app/shared/generated/model/treatment-bmp-upsert-dto";
 import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
@@ -25,7 +22,7 @@ import { ProjectDto, TreatmentBMPDisplayDto } from "src/app/shared/generated/mod
 import { FieldDefinitionComponent } from "src/app/shared/components/field-definition/field-definition.component";
 import { FormsModule } from "@angular/forms";
 import { CustomRichTextComponent } from "src/app/shared/components/custom-rich-text/custom-rich-text.component";
-import { AsyncPipe } from "@angular/common";
+import { AsyncPipe, CommonModule } from "@angular/common";
 import { PageHeaderComponent } from "src/app/shared/components/page-header/page-header.component";
 import { WorkflowBodyComponent } from "src/app/shared/components/workflow-body/workflow-body.component";
 import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
@@ -40,10 +37,15 @@ import { StormwaterNetworkLayerComponent } from "src/app/shared/components/leafl
 import { WqmpsLayerComponent } from "src/app/shared/components/leaflet/layers/wqmps-layer/wqmps-layer.component";
 import { NeptuneMapComponent, NeptuneMapInitEvent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
 import { ProjectWorkflowProgressService } from "src/app/shared/services/project-workflow-progress.service";
-import { routeParams } from "src/app/app.routes";
-import { GroupByPipe } from "src/app/shared/pipes/group-by.pipe";
 import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet/layers/inventoried-bmps-layer/inventoried-bmps-layer.component";
 import { TreatmentBMPTypeService } from "src/app/shared/generated/api/treatment-bmp-type.service";
+import { CustomAttributeTypePurposeEnum } from "src/app/shared/generated/enum/custom-attribute-type-purpose-enum";
+import { CustomAttributeTypeDto } from "src/app/shared/generated/model/custom-attribute-type-dto";
+import { CustomAttributeDataTypeEnum } from "src/app/shared/generated/enum/custom-attribute-data-type-enum";
+import { CustomAttributeUpsertDto } from "src/app/shared/generated/model/custom-attribute-upsert-dto";
+import { TreatmentBMPTypeCustomAttributeTypeDto } from "src/app/shared/generated/model/treatment-bmp-type-custom-attribute-type-dto";
+import { TreatmentBMPTypeCustomAttributeTypeService } from "src/app/shared/generated/api/treatment-bmp-type-custom-attribute-type.service";
+import { PopperDirective } from "src/app/shared/directives/popper.directive";
 
 @Component({
     selector: "treatment-bmps",
@@ -64,10 +66,12 @@ import { TreatmentBMPTypeService } from "src/app/shared/generated/api/treatment-
         WqmpsLayerComponent,
         StormwaterNetworkLayerComponent,
         InventoriedBMPsLayerComponent,
+        PopperDirective,
+        CommonModule,
     ],
 })
 export class TreatmentBmpsComponent implements OnInit {
-    public projectID: number;
+    @Input() projectID!: number;
     public customRichTextTypeID = NeptunePageTypeEnum.HippocampTreatmentBMPs;
 
     public mapIsReady: boolean = false;
@@ -104,17 +108,15 @@ export class TreatmentBmpsComponent implements OnInit {
 
     public treatmentBMPModelingTypeEnum = TreatmentBMPModelingTypeEnum;
     public fieldDefinitionTypeEnum = FieldDefinitionTypeEnum;
-    public modelingAttributeDropdownItems: ReadonlyMap<string, TreatmentBMPModelingAttributeDropdownItemDto[]>;
     public treatmentBMPTypes: Array<TreatmentBMPTypeWithModelingAttributesDto>;
     public newTreatmentBMPIndex = -1;
     public isLoadingSubmit = false;
     public isEditingLocation = false;
 
-    public static modelingAttributeFieldsWithDropdown = ["TimeOfConcentrationID", "MonthsOfOperationID", "UnderlyingHydrologicSoilGroupID", "DryWeatherFlowOverrideID"];
     public delineations: DelineationUpsertDto[];
+    public treatmentBMPTypeCustomAttributeTypes: TreatmentBMPTypeCustomAttributeTypeDto[];
 
     constructor(
-        private route: ActivatedRoute,
         private cdr: ChangeDetectorRef,
         private projectService: ProjectService,
         private treatmentBMPService: TreatmentBMPService,
@@ -126,7 +128,7 @@ export class TreatmentBmpsComponent implements OnInit {
         private projectWorkflowProgressService: ProjectWorkflowProgressService,
         private router: Router,
         private confirmService: ConfirmService,
-        private groupByPipe: GroupByPipe
+        private treatmentBMPTypeCustomAttributeTypeService: TreatmentBMPTypeCustomAttributeTypeService
     ) {}
 
     canExit() {
@@ -137,12 +139,7 @@ export class TreatmentBmpsComponent implements OnInit {
     }
 
     public ngOnInit(): void {
-        this.boundingBox$ = this.route.params.pipe(
-            switchMap((params) => {
-                this.projectID = parseInt(params[routeParams.projectID]);
-                return this.projectService.projectsProjectIDBoundingBoxGet(this.projectID);
-            })
-        );
+        this.boundingBox$ = this.projectService.projectsProjectIDBoundingBoxGet(this.projectID);
         this.compileService.configure(this.appRef);
     }
 
@@ -155,27 +152,28 @@ export class TreatmentBmpsComponent implements OnInit {
         this.layerControl = event.layerControl;
         this.mapIsReady = true;
 
-        const projectID = this.route.snapshot.paramMap.get("projectID");
-        if (projectID) {
-            this.projectService.projectsProjectIDGet(parseInt(projectID)).subscribe((project) => {
+        if (this.projectID) {
+            this.projectService.projectsProjectIDGet(this.projectID).subscribe((project) => {
                 // redirect to review step if project is shared with OCTA grant program
                 if (project.ShareOCTAM2Tier2Scores) {
-                    this.router.navigateByUrl(`/planning/projects/edit/${projectID}/review-and-share`);
+                    this.router.navigateByUrl(`/planning/projects/edit/${this.projectID}/review-and-share`);
                 } else {
-                    this.projectID = parseInt(projectID);
                     this.mapProjectDtoToProject(project);
                     forkJoin({
                         projectTreatmentBMPs: this.projectService.projectsProjectIDTreatmentBmpsAsUpsertDtosGet(this.projectID),
                         delineations: this.projectService.projectsProjectIDDelineationsGet(this.projectID),
                         treatmentBMPTypes: this.treatmentBMPTypeService.treatmentBmpTypesGet(),
-                        modelingAttributeDropdownItems: this.treatmentBMPService.treatmentBmpsModelingAttributeDropdownItemsGet(),
-                    }).subscribe(({ projectTreatmentBMPs, delineations, treatmentBMPTypes, modelingAttributeDropdownItems }) => {
+                        treatmentBMPTypeCustomAttributeTypes:
+                            this.treatmentBMPTypeCustomAttributeTypeService.treatmentBmpTypeCustomAttributeTypesPurposeCustomAttributeTypePurposeIDGet(
+                                CustomAttributeTypePurposeEnum.Modeling
+                            ),
+                    }).subscribe(({ projectTreatmentBMPs, delineations, treatmentBMPTypes, treatmentBMPTypeCustomAttributeTypes: treatmentBMPTypeCustomAttributeTypes }) => {
                         this.originalDoesNotIncludeTreatmentBMPs = project.DoesNotIncludeTreatmentBMPs;
                         this.projectTreatmentBMPs = projectTreatmentBMPs;
                         this.originalTreatmentBMPs = JSON.stringify(projectTreatmentBMPs);
                         this.delineations = delineations;
                         this.treatmentBMPTypes = treatmentBMPTypes;
-                        this.modelingAttributeDropdownItems = this.groupByPipe.transform(modelingAttributeDropdownItems, "FieldName");
+                        this.treatmentBMPTypeCustomAttributeTypes = treatmentBMPTypeCustomAttributeTypes;
                         this.updateMapLayers();
                     });
                 }
@@ -214,14 +212,14 @@ export class TreatmentBmpsComponent implements OnInit {
         let hasFlownToSelectedObject = false;
 
         const treatmentBMPsGeoJson = this.mapTreatmentBMPsToGeoJson(this.projectTreatmentBMPs);
-        this.treatmentBMPsLayer = new L.GeoJSON(treatmentBMPsGeoJson, {
+        this.treatmentBMPsLayer = new L.GeoJSON(treatmentBMPsGeoJson as any, {
             pointToLayer: (feature, latlng) => {
                 return L.marker(latlng, { icon: MarkerHelper.treatmentBMPMarker });
             },
             filter: (feature) => {
                 return this.selectedTreatmentBMP == null || feature.properties.TreatmentBMPID != this.selectedTreatmentBMP.TreatmentBMPID;
             },
-            onEachFeature: (feature, layer) => {
+            onEachFeature: (feature, layer: L.Marker) => {
                 if (this.selectedTreatmentBMP != null && this.zoomOnSelection && !hasFlownToSelectedObject) {
                     if (layer.feature.properties.TreatmentBMPID != this.selectedTreatmentBMP.TreatmentBMPID) {
                         return;
@@ -264,14 +262,14 @@ export class TreatmentBmpsComponent implements OnInit {
     }
 
     public registerClickEvents(): void {
-        this.map.on("click", (event: L.LeafletEvent) => {
+        this.map.on("click", (event: L.LeafletMouseEvent) => {
             if (!this.isEditingLocation) {
                 return;
             }
             if (this.selectedObjectMarker) {
                 this.map.removeLayer(this.selectedObjectMarker);
             }
-            this.selectedObjectMarker = new L.marker(event.latlng, { icon: MarkerHelper.selectedMarker, zIndexOffset: 1000 });
+            this.selectedObjectMarker = L.marker(event.latlng, { icon: MarkerHelper.selectedMarker, zIndexOffset: 1000 });
 
             this.selectedObjectMarker.addTo(this.map);
 
@@ -294,7 +292,6 @@ export class TreatmentBmpsComponent implements OnInit {
         let selectedNumber = null;
         let selectedAttributes = null;
         this.selectedTreatmentBMP = this.projectTreatmentBMPs.find((x) => x.TreatmentBMPID == treatmentBMPID);
-        this.selectedTreatmentBMPType = this.selectedTreatmentBMP.TreatmentBMPTypeID;
         selectedAttributes = [
             `<strong>Type:</strong> ${this.selectedTreatmentBMP.TreatmentBMPTypeName}`,
             `<strong>Latitude:</strong> ${this.selectedTreatmentBMP.Latitude}`,
@@ -302,7 +299,7 @@ export class TreatmentBmpsComponent implements OnInit {
         ];
 
         if (this.selectedTreatmentBMP && this.selectedTreatmentBMP.Latitude && this.selectedTreatmentBMP.Longitude) {
-            this.selectedObjectMarker = new L.marker(
+            this.selectedObjectMarker = L.marker(
                 { lat: this.selectedTreatmentBMP.Latitude, lng: this.selectedTreatmentBMP.Longitude },
                 { icon: MarkerHelper.selectedMarker, zIndexOffset: 1000 }
             );
@@ -311,24 +308,83 @@ export class TreatmentBmpsComponent implements OnInit {
             this.selectedListItemDetails.title = `${selectedNumber}`;
             this.selectedListItemDetails.attributes = selectedAttributes;
         }
+
+        if (this.selectedTreatmentBMP.TreatmentBMPTypeID != null) {
+            this.updateModelingAttributesForSelectedTreatmentBMP();
+        }
     }
 
-    public getModelingAttributeFieldsToDisplay(treatmentBMPTypeID: number): Array<TreatmentBMPModelingAttributeDefinitionDto> {
-        return this.treatmentBMPTypes.find((x) => x.TreatmentBMPTypeID == treatmentBMPTypeID).TreatmentBMPModelingAttributes ?? [];
+    public updateModelingAttributesForSelectedTreatmentBMP(): void {
+        if (!this.selectedTreatmentBMP || this.selectedTreatmentBMP.TreatmentBMPTypeID == null) return;
+        if (this.selectedTreatmentBMP.ModelingAttributes == null) {
+            this.selectedTreatmentBMP.ModelingAttributes = new Array<CustomAttributeUpsertDto>();
+        }
+        let treatmentBMPTypeCustomAttributeTypes = this.getTreatmentBMPTypeCustomAttributeTypesForTreatmentBMPType(this.selectedTreatmentBMP.TreatmentBMPTypeID);
+        for (let treatmentBMPTypeCustomAttributeType of treatmentBMPTypeCustomAttributeTypes) {
+            let index = this.selectedTreatmentBMP.ModelingAttributes.findIndex((x) => x.CustomAttributeTypeID == treatmentBMPTypeCustomAttributeType.CustomAttributeTypeID);
+            if (index == -1) {
+                this.selectedTreatmentBMP.ModelingAttributes.push(
+                    new CustomAttributeUpsertDto({
+                        TreatmentBMPID: this.selectedTreatmentBMP.TreatmentBMPID,
+                        TreatmentBMPTypeID: this.selectedTreatmentBMP.TreatmentBMPTypeID,
+                        TreatmentBMPTypeCustomAttributeTypeID: treatmentBMPTypeCustomAttributeType.TreatmentBMPTypeCustomAttributeTypeID,
+                        CustomAttributeTypeID: treatmentBMPTypeCustomAttributeType.CustomAttributeTypeID,
+                        CustomAttributeValues: new Array(treatmentBMPTypeCustomAttributeType.CustomAttributeType.CustomAttributeTypeDefaultValue),
+                    })
+                );
+            } else if (
+                treatmentBMPTypeCustomAttributeType.CustomAttributeType.CustomAttributeTypeDefaultValue != null &&
+                (this.selectedTreatmentBMP.ModelingAttributes[index].CustomAttributeValues == null ||
+                    this.selectedTreatmentBMP.ModelingAttributes[index].CustomAttributeValues.length == 0 ||
+                    this.selectedTreatmentBMP.ModelingAttributes[index].CustomAttributeValues[0] == null ||
+                    this.selectedTreatmentBMP.ModelingAttributes[index].CustomAttributeValues[0] == "")
+            ) {
+                this.selectedTreatmentBMP.ModelingAttributes[index].CustomAttributeValues = new Array(
+                    treatmentBMPTypeCustomAttributeType.CustomAttributeType.CustomAttributeTypeDefaultValue
+                );
+            }
+        }
+    }
+
+    public getTreatmentBMPTypeCustomAttributeTypesForTreatmentBMPType(treatmentBMPTypeID: number) {
+        return this.treatmentBMPTypeCustomAttributeTypes.filter((x) => x.TreatmentBMPTypeID == treatmentBMPTypeID);
+    }
+
+    public getCustomAttributeFieldsToDisplay(treatmentBMPTypeID: number): Array<CustomAttributeTypeDto> {
+        return this.getTreatmentBMPTypeCustomAttributeTypesForTreatmentBMPType(treatmentBMPTypeID)
+            .sort((a, b) => a.SortOrder - b.SortOrder)
+            .map((x) => x.CustomAttributeType);
     }
 
     public getTypeNameByTypeID(typeID: number) {
         return this.treatmentBMPTypes.find((x) => x.TreatmentBMPTypeID == typeID).TreatmentBMPTypeName ?? -1;
     }
 
-    public isFieldWithDropdown(fieldName: string): boolean {
-        return TreatmentBmpsComponent.modelingAttributeFieldsWithDropdown.indexOf(fieldName) > -1;
+    public isFieldWithDropdown(customAttributeDataTypeID: number): boolean {
+        return customAttributeDataTypeID == CustomAttributeDataTypeEnum.PickFromList;
     }
 
-    public updateModelingTypeOnTypeChange(selectedType: any) {
-        if (selectedType) {
-            this.selectedTreatmentBMP.TreatmentBMPModelingTypeID = selectedType.TreatmentBMPModelingTypeID;
-        }
+    public getFieldName(customAttributeDataTypeID: number): string {
+        return `selectedTreatmentBMP.ModelingAttributes[${this.getIndexOfCustomAttribute(customAttributeDataTypeID)}].CustomAttributeValues[0]`;
+    }
+
+    public getDropdownItemsForCustomAttributeType(optionsSchema: string): string[] {
+        return optionsSchema
+            .replaceAll("[", "")
+            .replaceAll("]", "")
+            .replaceAll('"', "")
+            .split(",")
+            .map((x) => x.trim());
+    }
+
+    public getIndexOfCustomAttribute(customAttributeTypeID: number): number {
+        let value = this.selectedTreatmentBMP.ModelingAttributes.findIndex((x) => x.CustomAttributeTypeID == customAttributeTypeID);
+        return value;
+    }
+
+    public convertSelectedBMPNumericFieldToString(enteredVal: number, customAttributeTypeID: number) {
+        let index = this.getIndexOfCustomAttribute(customAttributeTypeID);
+        this.selectedTreatmentBMP.ModelingAttributes[index].CustomAttributeValues[0] = enteredVal.toString();
     }
 
     public toggleIsEditingLocation() {
@@ -337,6 +393,7 @@ export class TreatmentBmpsComponent implements OnInit {
     }
 
     openEditTreatmentBMPTypeModal(): void {
+        this.selectedTreatmentBMPType = this.selectedTreatmentBMP.TreatmentBMPTypeID;
         this.editTreatmentBMPTypeModalComponent = this.modalService.open(this.editTreatmentBMPTypeModal, null, {
             ModalTheme: ModalThemeEnum.Light,
             ModalSize: ModalSizeEnum.Medium,
@@ -374,6 +431,7 @@ export class TreatmentBmpsComponent implements OnInit {
             this.closeEditTreatmentBMPTypeModal();
             this.selectedTreatmentBMP.TreatmentBMPTypeID = treatmentBMPType;
             this.selectedTreatmentBMP.TreatmentBMPModelingTypeID = temp;
+            this.updateModelingAttributesForSelectedTreatmentBMP();
             this.originalTreatmentBMPs = JSON.stringify(this.projectTreatmentBMPs);
         });
     }
@@ -393,9 +451,6 @@ export class TreatmentBmpsComponent implements OnInit {
         var newTreatmentBMP = new TreatmentBMPUpsertDto();
         newTreatmentBMP.TreatmentBMPID = this.newTreatmentBMPIndex;
         this.newTreatmentBMPIndex--;
-
-        newTreatmentBMP.TimeOfConcentrationID = TimeOfConcentrationEnum.FiveMinutes;
-        newTreatmentBMP.UnderlyingHydrologicSoilGroupID = UnderlyingHydrologicSoilGroupEnum.D;
 
         this.projectTreatmentBMPs.push(newTreatmentBMP);
         this.selectTreatmentBMP(newTreatmentBMP.TreatmentBMPID);
@@ -417,12 +472,22 @@ export class TreatmentBmpsComponent implements OnInit {
         return `${delineation.DelineationArea} ac`;
     }
 
+    public clearNonApplicableModelingAttributesForTreatmentBMPs() {
+        this.projectTreatmentBMPs.forEach((treatmentBMP) => {
+            let applicableCustomAttributeTypes = this.treatmentBMPTypeCustomAttributeTypes
+                .filter((x) => x.TreatmentBMPTypeID == treatmentBMP.TreatmentBMPTypeID)
+                .map((x) => x.CustomAttributeTypeID);
+            treatmentBMP.ModelingAttributes = treatmentBMP.ModelingAttributes.filter((attribute) => applicableCustomAttributeTypes.includes(attribute.CustomAttributeTypeID));
+        });
+    }
+
     public save(continueToNextStep?: boolean) {
         this.isLoadingSubmit = true;
         this.alertService.clearAlerts();
-        this.project.DoesNotIncludeTreatmentBMPs = this.project.DoesNotIncludeTreatmentBMPs && (this.projectTreatmentBMPs == null || this.projectTreatmentBMPs.length == 0);
 
-        this.projectService.projectsProjectIDUpdatePost(this.projectID, this.project).subscribe(
+        this.project.DoesNotIncludeTreatmentBMPs = this.project.DoesNotIncludeTreatmentBMPs && (this.projectTreatmentBMPs == null || this.projectTreatmentBMPs.length == 0);
+        this.clearNonApplicableModelingAttributesForTreatmentBMPs();
+        this.projectService.projectsProjectIDUpdatePut(this.projectID, this.project).subscribe(
             () => {
                 this.projectService.projectsProjectIDTreatmentBmpsPut(this.projectID, this.projectTreatmentBMPs).subscribe(
                     () => {

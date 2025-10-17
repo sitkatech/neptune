@@ -1,0 +1,70 @@
+<div class="modal-header">
+    <h3 class="section-title">
+        <span>Update OVTA Area Details</span>
+    </h3>
+</div>
+
+<div class="modal-body grid-12">
+    <app-alert-display [clearAlertsOnDestroy]="false"></app-alert-display>
+
+    <form class="form grid-12" [formGroup]="formGroup" (ngSubmit)="save()">
+        <form-field
+            [formControl]="formGroup.controls.PriorityLandUseTypeID"
+            [fieldLabel]="'Land Use Type'"
+            [type]="FormFieldType.Select"
+            [formInputOptions]="landUseTypes"
+            [placeholder]="'Select land use type'"
+            name="LandUseTypeID"
+            required>
+        </form-field>
+
+        <form-field
+            [formControl]="formGroup.controls.LandUseDescription"
+            [fieldLabel]="'Land Use Description'"
+            [type]="FormFieldType.Textarea"
+            [placeholder]="'Enter description'"
+            name="LandUseDescription">
+        </form-field>
+
+        <form-field
+            [formControl]="formGroup.controls.TrashGenerationRate"
+            [fieldLabel]="'Trash Generation Rate'"
+            [type]="FormFieldType.Number"
+            [placeholder]="'Enter trash generation rate'"
+            name="TrashGenerationRate"
+            units="'gal/acre/day'"
+            required>
+        </form-field>
+
+        <form-field
+            [formControl]="formGroup.controls.MedianHouseholdIncomeResidential"
+            [fieldLabel]="'Median Household Income (Residential)'"
+            [type]="FormFieldType.Number"
+            [placeholder]="'Enter median Residential income'"
+            name="MedianHouseholdIncomeResidential">
+        </form-field>
+
+        <form-field
+            [formControl]="formGroup.controls.MedianHouseholdIncomeRetail"
+            [fieldLabel]="'Median Household Income (Retail)'"
+            [type]="FormFieldType.Number"
+            [placeholder]="'Enter median Retail income'"
+            name="MedianHouseholdIncomeRetail">
+        </form-field>
+
+        <form-field
+            [formControl]="formGroup.controls.PermitTypeID"
+            [fieldLabel]="'Permit Type'"
+            [type]="FormFieldType.Select"
+            [formInputOptions]="permitTypes"
+            [placeholder]="'Select permit type'"
+            name="PermitTypeID"
+            required>
+        </form-field>
+    </form>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-primary" (click)="save()" [disabled]="formGroup.invalid">Save</button>
+    <button class="btn btn-primary-outline" (click)="cancel()">Cancel</button>
+</div>

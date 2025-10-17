@@ -5,7 +5,6 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Neptune.Models.DataTransferObjects;
 
 
 namespace Neptune.EFModels.Entities
@@ -34,6 +33,7 @@ namespace Neptune.EFModels.Entities
         public static readonly MeasurementUnitTypePounds Pounds = MeasurementUnitTypePounds.Instance;
         public static readonly MeasurementUnitTypeTons Tons = MeasurementUnitTypeTons.Instance;
         public static readonly MeasurementUnitTypeCubicYards CubicYards = MeasurementUnitTypeCubicYards.Instance;
+        public static readonly MeasurementUnitTypeHours Hours = MeasurementUnitTypeHours.Instance;
 
         public static readonly List<MeasurementUnitType> All;
         public static readonly ReadOnlyDictionary<int, MeasurementUnitType> AllLookupDictionary;
@@ -43,7 +43,7 @@ namespace Neptune.EFModels.Entities
         /// </summary>
         static MeasurementUnitType()
         {
-            All = new List<MeasurementUnitType> { Acres, SquareFeet, Kilogram, Count, Percent, MilligamsPerLiter, Meters, Feet, Inches, InchesPerHour, Seconds, PercentDecline, PercentIncrease, PercentDeviation, CubicFeet, Gallons, Minutes, CubicFeetPerSecond, GallonsPerDay, Pounds, Tons, CubicYards };
+            All = new List<MeasurementUnitType> { Acres, SquareFeet, Kilogram, Count, Percent, MilligamsPerLiter, Meters, Feet, Inches, InchesPerHour, Seconds, PercentDecline, PercentIncrease, PercentDeviation, CubicFeet, Gallons, Minutes, CubicFeetPerSecond, GallonsPerDay, Pounds, Tons, CubicYards, Hours };
             AllLookupDictionary = new ReadOnlyDictionary<int, MeasurementUnitType>(All.ToDictionary(x => x.MeasurementUnitTypeID));
         }
 
@@ -137,6 +137,8 @@ namespace Neptune.EFModels.Entities
                     return Gallons;
                 case MeasurementUnitTypeEnum.GallonsPerDay:
                     return GallonsPerDay;
+                case MeasurementUnitTypeEnum.Hours:
+                    return Hours;
                 case MeasurementUnitTypeEnum.Inches:
                     return Inches;
                 case MeasurementUnitTypeEnum.InchesPerHour:
@@ -194,7 +196,8 @@ namespace Neptune.EFModels.Entities
         GallonsPerDay = 19,
         Pounds = 20,
         Tons = 21,
-        CubicYards = 22
+        CubicYards = 22,
+        Hours = 23
     }
 
     public partial class MeasurementUnitTypeAcres : MeasurementUnitType
@@ -327,5 +330,11 @@ namespace Neptune.EFModels.Entities
     {
         private MeasurementUnitTypeCubicYards(int measurementUnitTypeID, string measurementUnitTypeName, string measurementUnitTypeDisplayName, string legendDisplayName, string singularDisplayName, int numberOfSignificantDigits, bool includeSpaceBeforeLegendLabel) : base(measurementUnitTypeID, measurementUnitTypeName, measurementUnitTypeDisplayName, legendDisplayName, singularDisplayName, numberOfSignificantDigits, includeSpaceBeforeLegendLabel) {}
         public static readonly MeasurementUnitTypeCubicYards Instance = new MeasurementUnitTypeCubicYards(22, @"CubicYards", @"cubic yards", @"cu yd", @"cubic yard", 1, true);
+    }
+
+    public partial class MeasurementUnitTypeHours : MeasurementUnitType
+    {
+        private MeasurementUnitTypeHours(int measurementUnitTypeID, string measurementUnitTypeName, string measurementUnitTypeDisplayName, string legendDisplayName, string singularDisplayName, int numberOfSignificantDigits, bool includeSpaceBeforeLegendLabel) : base(measurementUnitTypeID, measurementUnitTypeName, measurementUnitTypeDisplayName, legendDisplayName, singularDisplayName, numberOfSignificantDigits, includeSpaceBeforeLegendLabel) {}
+        public static readonly MeasurementUnitTypeHours Instance = new MeasurementUnitTypeHours(23, @"Hours", @"hours", @"h", @"Hour", 0, true);
     }
 }

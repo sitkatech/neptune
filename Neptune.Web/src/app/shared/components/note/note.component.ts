@@ -4,7 +4,6 @@ import { Component, Input } from "@angular/core";
     selector: "note",
     templateUrl: "./note.component.html",
     styleUrls: ["./note.component.scss"],
-    standalone: true,
 })
 export class NoteComponent {
     @Input() noteType: typeof NoteType = "default";

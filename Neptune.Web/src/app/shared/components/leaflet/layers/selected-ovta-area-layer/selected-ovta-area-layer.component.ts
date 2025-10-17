@@ -9,7 +9,7 @@ import { GroupByPipe } from "src/app/shared/pipes/group-by.pipe";
     selector: "selected-ovta-area-layer",
     imports: [],
     templateUrl: "./selected-ovta-area-layer.component.html",
-    styleUrl: "./selected-ovta-area-layer.component.scss"
+    styleUrl: "./selected-ovta-area-layer.component.scss",
 })
 export class SelectedOvtaAreaLayerComponent extends MapLayerBase implements OnChanges, AfterViewInit {
     @Input() selectedOVTAAreaID: number;
@@ -19,7 +19,7 @@ export class SelectedOvtaAreaLayerComponent extends MapLayerBase implements OnCh
 
     public isLoading: boolean = false;
 
-    public layer: L.featureGroup;
+    public layer: L.FeatureGroup;
 
     private styleDictionary = {
         "A": {
@@ -137,14 +137,21 @@ export class SelectedOvtaAreaLayerComponent extends MapLayerBase implements OnCh
     private highlightSelectedOVTAArea() {
         this.layer.eachLayer((layer) => {
             // skip if well layer
-            if (layer.options?.icon) return;
+            if (layer instanceof L.Marker && layer.options.icon) {
+                // layer has an icon
+                return;
+            }
 
-            const geoJsonLayers = layer.getLayers();
-            if (geoJsonLayers[0].feature.properties.OnlandVisualTrashAssessmentAreaID == this.selectedOVTAAreaID) {
-                layer.setStyle(this.highlightStyle);
-                this.map.fitBounds(layer.getBounds());
-            } else {
-                layer.setStyle(this.styleDictionary[geoJsonLayers[0].feature.properties.Score]);
+            if (layer instanceof L.GeoJSON) {
+                const geoJsonLayers = layer.getLayers() as (L.Path & { feature?: GeoJSON.Feature })[];
+                if (geoJsonLayers[0].feature.properties.OnlandVisualTrashAssessmentAreaID == this.selectedOVTAAreaID) {
+                    layer.setStyle(this.highlightStyle);
+                    if ("getBounds" in layer && typeof layer.getBounds === "function") {
+                        this.map.fitBounds(layer.getBounds());
+                    }
+                } else {
+                    layer.setStyle(this.styleDictionary[geoJsonLayers[0].feature.properties.Score]);
+                }
             }
         });
     }

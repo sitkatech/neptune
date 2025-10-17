@@ -271,20 +271,20 @@
         {
             <div class="panel panelNeptune">
                 <div class="panel-heading panelTitle">
-                    Performance / Modeling Attributes
+                    @CustomAttributeTypePurpose.Modeling.CustomAttributeTypePurposeDisplayName
                     <span class="pull-right">
-                        @if (ViewDataTyped.CurrentPersonCanManage && ViewDataTyped.HasModelingAttributes)
+                        @if (ViewDataTyped.CurrentPersonCanManage && ViewDataTyped.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Any(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.Modeling))
                         {
                             <a href="@ViewDataTyped.EditTreatmentBMPPerformanceAndModelingAttributesUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
                         }
+
                     </span>
                 </div>
                 <div class="panel-body">
-
-                    @if (!ViewDataTyped.HasModelingAttributes)
+                    @if (ViewDataTyped.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.All(x => x.CustomAttributeType.CustomAttributeTypePurpose != CustomAttributeTypePurpose.Modeling))
                     {
                         <p class="systemText">
-                            This type of treatment BMP does not have any Performance / Modeling Attributes
+                            This type of treatment BMP does not have any @CustomAttributeTypePurpose.Modeling.CustomAttributeTypePurposeDisplayName
                         </p>
                     }
                     else
@@ -297,278 +297,37 @@
                                 </tr>
                             </thead>
                             <tbody>
+                            <tr>
+                                <td>
+                                    Watershed
+                                    <span class="help-block extra-small">
+                                        @Html.Raw(@ViewDataTyped.FieldDefinitionTextForWatershed)
+                                    </span>
+                                </td>
+                                <td class="text-right" style="min-width: 150px">
+                                    @(ViewDataTyped.Watershed != null ? ViewDataTyped.Watershed.WatershedName : string.Empty)
+                                </td>
+                            </tr>
+                            @foreach (var treatmentBMPTypeAttributeType in ViewDataTyped.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Where(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.Modeling).ToList().OrderBy(x => x.SortOrder).ThenBy(x => x.CustomAttributeType.CustomAttributeTypeName))
+                            {
+                                
                                 <tr>
                                     <td>
-                                        @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForWatershed)
+                                        @if (ViewDataTyped.UserIsAdmin)
+                                        {
+                                            <a href="@ViewDataTyped.CustomAttributeTypeDetailUrlTemplate.ParameterReplace(treatmentBMPTypeAttributeType.CustomAttributeTypeID)">@treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeTypeName</a>
+                                        }
+                                        else
+                                        {
+                                            @treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeTypeName
+                                        }
+                                        <span class="help-block extra-small">@treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeTypeDescription</span>
                                     </td>
-                                    <td class="text-right">@(ViewDataTyped.Watershed != null ? ViewDataTyped.Watershed.WatershedName : string.Empty)</td>
-                                </tr>
-                                @switch (ViewDataTyped.TreatmentBMPType.TreatmentBMPModelingType.ToEnum)
-                                {
-                                    case TreatmentBMPModelingTypeEnum.BioinfiltrationBioretentionWithRaisedUnderdrain:
-                                        <tr>
-                                            <td>
-                                                @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForTotalEffectiveBMPVolume)
-                                            </td>
-                                            <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.TotalEffectiveBMPVolume, "cu ft")</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForStorageVolumeBelowLowestOutletElevation)
-                                            </td>
-                                            <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.StorageVolumeBelowLowestOutletElevation, "cu ft")</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForMediaBedFootprint)
-                                            </td>
-                                            <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.MediaBedFootprint, "sq ft")</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDesignMediaFiltrationRate)
-                                            </td>
-                                            <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.DesignMediaFiltrationRate, "in/hr")</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForUnderlyingHydrologicSoilGroupHSG)
-                                            </td>
-                                            <td class="text-right">@ViewDataTyped.DisplayUnderlyingHydrologicSoilGroup()</td>
-                                        </tr>
-                                        break;
-                                    case TreatmentBMPModelingTypeEnum.BioretentionWithNoUnderdrain:
-                                    case TreatmentBMPModelingTypeEnum.InfiltrationBasin:
-                                    case TreatmentBMPModelingTypeEnum.InfiltrationTrench:
-                                    case TreatmentBMPModelingTypeEnum.PermeablePavement:
-                                    case TreatmentBMPModelingTypeEnum.UndergroundInfiltration:
-                                        <tr>
-                                            <td>
-                                                @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForTotalEffectiveBMPVolume)
-                                            </td>
-                                            <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.TotalEffectiveBMPVolume, "cu ft")</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForInfiltrationSurfaceArea)
-                                            </td>
-                                            <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.InfiltrationSurfaceArea, "sq ft")</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForUnderlyingInfiltrationRate)
-                                            </td>
-                                            <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.UnderlyingInfiltrationRate, "in/hr")</td>
-                                        </tr>
-                                        break;
-                                    case TreatmentBMPModelingTypeEnum.BioretentionWithUnderdrainAndImperviousLiner:
-                                    case TreatmentBMPModelingTypeEnum.SandFilters:
-                                        <tr>
-                                            <td>
-                                                @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForTotalEffectiveBMPVolume)
-                                            </td>
-                                            <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.TotalEffectiveBMPVolume, "cu ft")</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForMediaBedFootprint)
-                                            </td>
-                                            <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.MediaBedFootprint, "sq ft")</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDesignMediaFiltrationRate)
-                                            </td>
-                                            <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.DesignMediaFiltrationRate, "in/hr")</td>
-                                        </tr>
-                                        break;
-                                    case TreatmentBMPModelingTypeEnum.CisternsForHarvestAndUse:
-                                        <tr>
-                                            <td>
-                                                @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForTotalEffectiveBMPVolume)
-                                            </td>
-                                            <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.TotalEffectiveBMPVolume, "cu ft")</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForWinterHarvestedWaterDemand)
-                                            </td>
-                                            <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.WinterHarvestedWaterDemand, "gpd")</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForSummerHarvestedWaterDemand)
-                                            </td>
-                                            <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.SummerHarvestedWaterDemand, "gpd")</td>
-                                        </tr>
-                                        break;
-                                    case TreatmentBMPModelingTypeEnum.ConstructedWetland:
-                                    case TreatmentBMPModelingTypeEnum.WetDetentionBasin:
-                                        <tr>
-                                            <td>
-                                                @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForPermanentPoolorWetlandVolume)
-                                            </td>
-                                            <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.PermanentPoolOrWetlandVolume, "cu ft")</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForWaterQualityDetentionVolume)
-                                            </td>
-                                            <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.WaterQualityDetentionVolume, "cu ft")</td>
-                                        </tr>
-                                        break;
-                                    case TreatmentBMPModelingTypeEnum.DryExtendedDetentionBasin:
-                                    case TreatmentBMPModelingTypeEnum.FlowDurationControlBasin:
-                                    case TreatmentBMPModelingTypeEnum.FlowDurationControlTank:
-                                        <tr>
-                                            <td>
-                                                @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForTotalEffectiveBMPVolume)
-                                            </td>
-                                            <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.TotalEffectiveBMPVolume, "cu ft")</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForStorageVolumeBelowLowestOutletElevation)
-                                            </td>
-                                            <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.StorageVolumeBelowLowestOutletElevation, "cu ft")</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForEffectiveFootprint)
-                                            </td>
-                                            <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.EffectiveFootprint, "sq ft")</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDrawdownTimeforWQDetentionVolume)
-                                            </td>
-                                            <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.DrawdownTimeForWQDetentionVolume, "hours")</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForUnderlyingHydrologicSoilGroupHSG)
-                                            </td>
-                                            <td class="text-right">@ViewDataTyped.DisplayUnderlyingHydrologicSoilGroup()</td>
-                                        </tr>
-                                        break;
-                                    case TreatmentBMPModelingTypeEnum.DryWeatherTreatmentSystems:
-                                        <tr>
-                                            <td>
-                                                @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDesignDryWeatherTreatmentCapacity)
-                                            </td>
-                                            <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.DesignDryWeatherTreatmentCapacity, "cfs")</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForAverageTreatmentFlowrate)
-                                            </td>
-                                            <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.AverageTreatmentFlowrate, "cfs")</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForMonthsofOperation)
-                                            </td>
-                                            <td class="text-right">@ViewDataTyped.DisplayMonthsOfOperation()</td>
-                                        </tr>
-                                        break;
-                                    case TreatmentBMPModelingTypeEnum.Drywell:
-                                        <tr>
-                                            <td>
-                                                @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForTotalEffectiveDrywellBMPVolume)
-                                            </td>
-                                            <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.TotalEffectiveDrywellBMPVolume, "cu ft")</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForInfiltrationDischargeRate)
-                                            </td>
-                                            <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.InfiltrationDischargeRate, "cfs")</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForTimeofConcentration)
-                                            </td>
-                                            <td class="text-right">@ViewDataTyped.DisplayTimeOfConcentration()</td>
-                                        </tr>
-                                        break;
-                                    case TreatmentBMPModelingTypeEnum.HydrodynamicSeparator:
-                                    case TreatmentBMPModelingTypeEnum.ProprietaryBiotreatment:
-                                    case TreatmentBMPModelingTypeEnum.ProprietaryTreatmentControl:
-                                        <tr>
-                                            <td>
-                                                @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForTreatmentRate)
-                                            </td>
-                                            <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.TreatmentRate, "cfs")</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForTimeofConcentration)
-                                            </td>
-                                            <td class="text-right">@ViewDataTyped.DisplayTimeOfConcentration()</td>
-                                        </tr>
-                                        break;
-                                    case TreatmentBMPModelingTypeEnum.LowFlowDiversions:
-                                        <tr>
-                                            <td>
-                                                @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDesignLowFlowDiversionCapacity)
-                                            </td>
-                                            <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.DesignLowFlowDiversionCapacity, "gpd")</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForAverageDivertedFlowrate)
-                                            </td>
-                                            <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.AverageDivertedFlowrate, "gpd")</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForMonthsofOperation)
-                                            </td>
-                                            <td class="text-right">@ViewDataTyped.DisplayMonthsOfOperation()</td>
-                                        </tr>
-                                        break;
-                                    case TreatmentBMPModelingTypeEnum.VegetatedFilterStrip:
-                                    case TreatmentBMPModelingTypeEnum.VegetatedSwale:
-                                        <tr>
-                                            <td>
-                                                @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForTimeofConcentration)
-                                            </td>
-                                            <td class="text-right">@ViewDataTyped.DisplayTimeOfConcentration()</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForTreatmentRate)
-                                            </td>
-                                            <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.TreatmentRate, "cfs")</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForWettedFootprint)
-                                            </td>
-                                            <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.WettedFootprint, " sq ft")</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForEffectiveRetentionDepth)
-                                            </td>
-                                            <td class="text-right">@ViewDataTyped.DisplayModelingAttributeValue(x => x.EffectiveRetentionDepth, " ft")</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForUnderlyingHydrologicSoilGroupHSG)
-                                            </td>
-                                            <td class="text-right">
-                                                @ViewDataTyped.DisplayUnderlyingHydrologicSoilGroup()
-                                            </td>
-                                        </tr>
-                                        break;
-                                }
-                                <tr>
-                                    <td>
-                                        @Html.LabelWithSugarFor(ViewDataTyped.FieldDefinitionForDryWeatherFlowOverride)
+                                    <td class="text-right" style="min-width: 150px">
+                                        @TreatmentBMP.GetCustomAttributeValueWithUnits(treatmentBMPTypeAttributeType, ViewDataTyped.CustomAttributes)
                                     </td>
-                                    <td class="text-right">@ViewDataTyped.DisplayDryWeatherFlowOverride()</td>
                                 </tr>
+                            }
                             </tbody>
                         </table>
                     }

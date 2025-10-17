@@ -3,21 +3,27 @@
 <workflow-body>
     <app-alert-display></app-alert-display>
     <div class="copy copy-2 mb-3">
-        You may click or tap the edit button (<i class="fas fa-edit"></i>) on the map below to adjust the Assessment Area's vertices. You may drag vertices to move them, or click
-        or tap vertices to delete them. Note that it may be necessary to zoom the map to see individual vertices that are close together (e.g. there may be many closely-placed
-        vertices along curves). You may click the "Reset Map Zoom" button to zoom back out to the entire Assessment Area.
+        You may click or tap the edit button (<icon icon="GeomanEdit"></icon>) on the map below to adjust the Assessment Area's vertices. You may drag vertices to move them, click
+        or tap existing vertices to create possible additional vertices near them, click or tap the slightly transparent vertices to create new vertices, or right-click to delete
+        them. Note that it may be necessary to zoom the map to see individual vertices that are close together (e.g. there may be many closely-placed vertices along curves). If a
+        new area needs to be drawn, you may delete (<icon icon="GeomanDelete"></icon>) the existing area and draw (<icon icon="GeomanPolygon"></icon>) a new one. You may click the
+        "Reset Map Zoom" button to zoom back out to the entire Assessment Area.
         <p class="mt-2">
             Note that the Assessment Area's edges must not intersect each other. If the Assessment Area contains any edges that intersect each other, you will not be able to save
             the Assessment Area
         </p>
     </div>
     @if (onlandVisualTrashAssessmentArea$ | async; as onlandVisualTrashAssessmentArea) {
-    <neptune-map (onMapLoad)="handleMapReady($event, onlandVisualTrashAssessmentArea)" mapHeight="600px" [showLegend]="true">
+    <neptune-map
+        (onMapLoad)="handleMapReady($event, onlandVisualTrashAssessmentArea)"
+        (onLegendControlReady)="handleLegendControlReady($event)"
+        mapHeight="600px"
+        [showLegend]="true">
         @if (mapIsReady) {
         <land-use-block-layer [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></land-use-block-layer>
         <parcel-layer [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="20" styles="parcel_alt"></parcel-layer>
-        <ovta-observation-layer [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="30" [ovtaID]="ovtaID"></ovta-observation-layer>
-        <transect-line-layer [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="25" [ovtaID]="ovtaID"></transect-line-layer>
+        <ovta-observation-layer [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="30" [ovtaID]="onlandVisualTrashAssessmentID"></ovta-observation-layer>
+        <transect-line-layer [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="25" [ovtaID]="onlandVisualTrashAssessmentID"></transect-line-layer>
         }
     </neptune-map>
     }

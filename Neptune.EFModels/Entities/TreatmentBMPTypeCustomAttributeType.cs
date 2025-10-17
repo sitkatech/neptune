@@ -1,4 +1,6 @@
-﻿namespace Neptune.EFModels.Entities
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Neptune.EFModels.Entities
 {
     public partial class TreatmentBMPTypeCustomAttributeType : IHaveASortOrder
     {

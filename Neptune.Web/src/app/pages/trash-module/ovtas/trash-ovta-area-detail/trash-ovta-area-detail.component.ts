@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
+import { Input } from "@angular/core";
 import { BehaviorSubject, Observable, switchMap, tap } from "rxjs";
-import { routeParams } from "src/app/app.routes";
 import { OnlandVisualTrashAssessmentAreaService } from "src/app/shared/generated/api/onland-visual-trash-assessment-area.service";
 import { OnlandVisualTrashAssessmentAreaDetailDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-area-detail-dto";
 import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
@@ -14,7 +14,6 @@ import { UtilityFunctionsService } from "src/app/services/utility-functions.serv
 import { NeptuneMapComponent, NeptuneMapInitEvent } from "../../../../shared/components/leaflet/neptune-map/neptune-map.component";
 import * as L from "leaflet";
 import { TransectLineLayerComponent } from "../../../../shared/components/leaflet/layers/transect-line-layer/transect-line-layer.component";
-import { ModalService, ModalSizeEnum, ModalThemeEnum } from "src/app/shared/services/modal/modal.service";
 import { UpdateOvtaAreaDetailsModalComponent, UpdateOvtaAreaModalContext } from "../update-ovta-area-details-modal/update-ovta-area-details-modal.component";
 import { OnlandVisualTrashAssessmentGridDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-grid-dto";
 import { LoadingDirective } from "src/app/shared/directives/loading.directive";
@@ -26,6 +25,7 @@ import { Alert } from "src/app/shared/models/alert";
 import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
 import { OnlandVisualTrashAssessmentStatusEnum } from "src/app/shared/generated/enum/onland-visual-trash-assessment-status-enum";
 import { OvtaAreaLayerComponent } from "../../../../shared/components/leaflet/layers/ovta-area-layer/ovta-area-layer.component";
+import { DialogService } from "@ngneat/dialog";
 
 @Component({
     selector: "trash-ovta-area-detail",
@@ -59,16 +59,16 @@ export class TrashOvtaAreaDetailComponent {
     public isLoading: boolean;
     public isLoadingGrid: boolean = true;
 
+    @Input() onlandVisualTrashAssessmentAreaID!: number;
     constructor(
         private onlandVisualTrashAssessmentService: OnlandVisualTrashAssessmentService,
         private onlandVisualTrashAssessmentAreaService: OnlandVisualTrashAssessmentAreaService,
         private utilityFunctionsService: UtilityFunctionsService,
-        private route: ActivatedRoute,
         private alertService: AlertService,
-        private modalService: ModalService,
         private confirmService: ConfirmService,
         private router: Router,
-        private datePipe: DatePipe
+        private datePipe: DatePipe,
+        private dialogService: DialogService
     ) {}
 
     ngOnInit(): void {
@@ -107,28 +107,17 @@ export class TrashOvtaAreaDetailComponent {
             tap(() => {
                 this.isLoading = true;
             }),
-            switchMap(() => {
-                return this.route.params.pipe(
-                    switchMap((params) => {
-                        return this.onlandVisualTrashAssessmentAreaService.onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDGet(
-                            params[routeParams.onlandVisualTrashAssessmentAreaID]
-                        );
-                    })
-                );
-            }),
+            switchMap(() =>
+                this.onlandVisualTrashAssessmentAreaService.onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDGet(this.onlandVisualTrashAssessmentAreaID)
+            ),
             tap(() => {
                 this.isLoading = false;
             })
         );
 
-        this.onlandVisualTrashAssessments$ = this.route.params.pipe(
-            switchMap((params) => {
-                return this.onlandVisualTrashAssessmentAreaService.onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDOnlandVisualTrashAssessmentsGet(
-                    params[routeParams.onlandVisualTrashAssessmentAreaID]
-                );
-            }),
-            tap(() => (this.isLoadingGrid = false))
-        );
+        this.onlandVisualTrashAssessments$ = this.onlandVisualTrashAssessmentAreaService
+            .onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDOnlandVisualTrashAssessmentsGet(this.onlandVisualTrashAssessmentAreaID)
+            .pipe(tap(() => (this.isLoadingGrid = false)));
     }
 
     public handleMapReady(event: NeptuneMapInitEvent): void {
@@ -201,25 +190,27 @@ export class TrashOvtaAreaDetailComponent {
             .confirm({ buttonClassYes: "btn-primary", buttonTextYes: "Continue", buttonTextNo: "Cancel", title: "Edit Location", message: modalContents })
             .then((confirmed) => {
                 if (confirmed) {
-                    this.router.navigate(["edit-location"], { relativeTo: this.route });
+                    this.router.navigate(`trash/onland-visual-trash-assessment-areas/${this.onlandVisualTrashAssessmentAreaID}/edit-location`.split("/"));
                 }
             });
     }
 
     updateOVTAAreaDetails(ovtaAreaDto: OnlandVisualTrashAssessmentAreaDetailDto) {
-        this.modalService
-            .open(UpdateOvtaAreaDetailsModalComponent, null, { CloseOnClickOut: false, TopLayer: false, ModalSize: ModalSizeEnum.Medium, ModalTheme: ModalThemeEnum.Light }, {
+        const dialogRef = this.dialogService.open(UpdateOvtaAreaDetailsModalComponent, {
+            data: {
                 OnlandVisualTrashAssessmentAreaID: ovtaAreaDto.OnlandVisualTrashAssessmentAreaID,
                 OnlandVisualTrashAssessmentAreaName: ovtaAreaDto.OnlandVisualTrashAssessmentAreaName,
                 AssessmentAreaDescription: ovtaAreaDto.AssessmentAreaDescription,
-            } as UpdateOvtaAreaModalContext)
-            .instance.result.then((result) => {
-                if (result) {
-                    this.alertService.clearAlerts();
-                    this.alertService.pushAlert(new Alert("Successfully updated Assessment Area.", AlertContext.Success));
-                    this.refreshOVTAAreasTrigger.next();
-                }
-            });
+            } as UpdateOvtaAreaModalContext,
+        });
+
+        dialogRef.afterClosed$.subscribe((result) => {
+            if (result) {
+                this.alertService.clearAlerts();
+                this.alertService.pushAlert(new Alert("Successfully updated Assessment Area.", AlertContext.Success));
+                this.refreshOVTAAreasTrigger.next();
+            }
+        });
     }
 
     public getLastAssessmentDate(onlandVisualTrashAssessments: OnlandVisualTrashAssessmentGridDto[]): string {

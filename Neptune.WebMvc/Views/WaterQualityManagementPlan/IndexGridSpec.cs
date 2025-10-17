@@ -87,7 +87,7 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
                 if (x.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproachID ==
                     WaterQualityManagementPlanModelingApproach.Detailed.WaterQualityManagementPlanModelingApproachID)
                 {
-                    return x.TreatmentBMPsWithModelingAttributesAndDelineation.Any(y => y.TreatmentBMP.IsFullyParameterized(y.Delineation)) ? new HtmlString("Yes") : new HtmlString("No");
+                    return x.TreatmentBMPsWithModelingAttributesAndDelineation.Any(y => y.TreatmentBMP.IsFullyParameterized(y.Delineation, y.TreatmentBMPModelingAttribute)) ? new HtmlString("Yes") : new HtmlString("No");
                 }
 
                 return x.QuickBMPs.Any(y => y.IsFullyParameterized())

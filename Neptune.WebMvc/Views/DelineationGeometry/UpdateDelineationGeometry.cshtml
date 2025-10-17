@@ -17,6 +17,11 @@
 @Html.ValidationSummary()
 <div class="formPage">
     <div class="row">
+        <div class="col-12">
+            <div id="gisUploadTopProgressBar"></div>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-6">
             <p>
                 Use this form on the right to bulk upload Treatment BMP Delineations. Requirements:
@@ -88,7 +93,7 @@
                 After you upload your file, you will see a report of the number of Treatment BMPs in the system which will have their delineations updated. Once you confirm the upload, new delineations will be added and any existing delineation locations with the same Treatment BMP name and specified Jurisdiction will be overwritten. All uploaded delineations will be marked as provisional.
             </p>
             <form id="approveGisUploadForm" method="post" action="@ViewDataTyped.ApprovedGisUploadUrl">
-                <div id="gisUploadResults"></div>
+                <div id="gisUploadBottomProgressBar"></div>
             </form>
         </div>
     </div>
@@ -102,11 +107,15 @@
         jQuery("#@Html.IdFor(x => x.FileResourceData)").on("change", function () {
             var $form = jQuery("#uploadGisForm");
             if ($form.valid()) {
-                var $gisUploadResults = jQuery("#gisUploadResults");
+                var $gisUploadTopProgressBar = jQuery("#gisUploadTopProgressBar");
+                var $gisUploadBottomProgressBar = jQuery("#gisUploadBottomProgressBar");
                 $form.ajaxForm({
                     "url": this.action,
                     "type": this.method,
-                    "beforeSubmit": function () { $gisUploadResults.html(jQuery("#progressBarHtml").html()); },
+                    "beforeSubmit": function () { 
+                        $gisUploadTopProgressBar.html(jQuery("#progressBarHtml").html()); 
+                        $gisUploadBottomProgressBar.html(jQuery("#progressBarHtml").html()); 
+                    },
                     "success": function (result, textStatus, jqXhr) {
                         jQuery(".progress").hide();
                         jQuery("#approvalInstructionsText").hide();
@@ -114,7 +123,8 @@
                             textStatus,
                             jqXhr,
                             function () {
-                                $gisUploadResults.html(result);
+                                $gisUploadTopProgressBar.html("");
+                                $gisUploadBottomProgressBar.html(result);
                                 $saveButton.prop("disabled", false);
                             });
                     },
@@ -122,7 +132,8 @@
                         console.error("xhr: " + xhr + ", status: " + statusText);
                         jQuery(".progress").hide();
                         $saveButton.prop("disabled", true);
-                        $gisUploadResults.html(jQuery("#gisUploadErrorHtml").html());
+                        $gisUploadTopProgressBar.html("");
+                        $gisUploadBottomProgressBar.html(jQuery("#gisUploadErrorHtml").html());
                     }
                 });
                 $form.submit();
@@ -142,7 +153,7 @@
     // ]]>
 </script>
 <script id="progressBarHtml" type="text/html">
-    <div style="padding-top: 10%">
+    <div style="padding-top: 1rem">
         <div class="progress">
             <div class="progress-bar progress-bar-info progress-bar-striped active text-center" role="progressbar" style="width: 100%">
                 Uploading &hellip;

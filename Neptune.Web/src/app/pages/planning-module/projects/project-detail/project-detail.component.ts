@@ -1,8 +1,8 @@
 import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute, Router, RouterLink } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
+import { Input } from "@angular/core";
 import { AuthenticationService } from "src/app/services/authentication.service";
 import { ProjectService } from "src/app/shared/generated/api/project.service";
-import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.service";
 import { DelineationUpsertDto } from "src/app/shared/generated/model/delineation-upsert-dto";
 import { ProjectDto, ProjectDocumentDto } from "src/app/shared/generated/model/models";
 import { ProjectNetworkSolveHistorySimpleDto } from "src/app/shared/generated/model/project-network-solve-history-simple-dto";
@@ -17,7 +17,6 @@ import { ModelResultsComponent } from "src/app/pages/planning-module/projects/mo
 import { ProjectMapComponent } from "src/app/pages/planning-module/projects/project-map/project-map.component";
 import { FieldDefinitionComponent } from "src/app/shared/components/field-definition/field-definition.component";
 import { DatePipe, AsyncPipe } from "@angular/common";
-import { routeParams } from "src/app/app.routes";
 import { Observable, combineLatest, map, switchMap } from "rxjs";
 import { PageHeaderComponent } from "src/app/shared/components/page-header/page-header.component";
 import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
@@ -27,19 +26,20 @@ import { AlertDisplayComponent } from "src/app/shared/components/alert-display/a
     templateUrl: "./project-detail.component.html",
     styleUrls: ["./project-detail.component.scss"],
     imports: [
-    RouterLink,
-    FieldDefinitionComponent,
-    ProjectMapComponent,
-    ModelResultsComponent,
-    AttachmentsDisplayComponent,
-    GrantScoresComponent,
-    DatePipe,
-    AsyncPipe,
-    PageHeaderComponent,
-    AlertDisplayComponent
-]
+        RouterLink,
+        FieldDefinitionComponent,
+        ProjectMapComponent,
+        ModelResultsComponent,
+        AttachmentsDisplayComponent,
+        GrantScoresComponent,
+        DatePipe,
+        AsyncPipe,
+        PageHeaderComponent,
+        AlertDisplayComponent,
+    ],
 })
 export class ProjectDetailComponent implements OnInit {
+    @Input() projectID!: number;
     public currentProject$: Observable<ProjectDto>;
     public treatmentBMPs$: Observable<Array<TreatmentBMPUpsertDto>>;
     public delineations$: Observable<Array<DelineationUpsertDto>>;
@@ -48,23 +48,16 @@ export class ProjectDetailComponent implements OnInit {
     public isReadOnly: boolean;
     public isCopyingProject = false;
     public modeledResultsData$: Observable<ModeledResultsDto>;
-
     constructor(
         private authenticationService: AuthenticationService,
         private projectService: ProjectService,
-        private treatmentBMPService: TreatmentBMPService,
-        private route: ActivatedRoute,
         private router: Router,
         private confirmService: ConfirmService,
         private alertService: AlertService
     ) {}
 
     ngOnInit(): void {
-        this.currentProject$ = this.route.params.pipe(
-            switchMap((params) => {
-                return this.projectService.projectsProjectIDGet(params[routeParams.projectID]);
-            })
-        );
+        this.currentProject$ = this.projectService.projectsProjectIDGet(this.projectID);
 
         this.modeledResultsData$ = this.currentProject$.pipe(
             switchMap((project) => {

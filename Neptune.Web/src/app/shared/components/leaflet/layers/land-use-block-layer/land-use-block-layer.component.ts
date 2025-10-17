@@ -8,7 +8,7 @@ import { MapLayerBase } from "../map-layer-base.component";
     selector: "land-use-block-layer",
     imports: [],
     templateUrl: "./land-use-block-layer.component.html",
-    styleUrl: "./land-use-block-layer.component.scss"
+    styleUrl: "./land-use-block-layer.component.scss",
 })
 export class LandUseBlockLayerComponent extends MapLayerBase implements OnChanges, AfterViewInit {
     constructor() {
@@ -23,7 +23,7 @@ export class LandUseBlockLayerComponent extends MapLayerBase implements OnChange
             transparent: true,
             format: "image/png",
             tiled: true,
-        };
+        } as any;
 
         this.layer = L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", this.wmsOptions);
         this.initLayer();

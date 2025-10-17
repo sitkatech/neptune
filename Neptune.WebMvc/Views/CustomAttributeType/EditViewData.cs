@@ -43,31 +43,50 @@ namespace Neptune.WebMvc.Views.CustomAttributeType
         public IEnumerable<SelectListItem> MeasurementUnitTypes { get; }
         public IEnumerable<SelectListItem> CustomAttributeTypePurposes { get; }
         public IEnumerable<SelectListItem> YesNos { get; }
-        public ViewDataForAngular ViewDataForAngular { get; }
+        public CustomAttributeTypeViewDataForAngular ViewDataForAngular { get; }
+        public Dictionary<string, object> DropDownListForHTMLAttributes { get; }
 
-        public EditViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, List<MeasurementUnitType> measurementUnitTypes,
+        public RouteValueDictionary TextBoxForHTMLAttributes { get; }
+        public bool IsModelingAttribute { get; }
+        public string? ModelingAttributeDisabledClass { get; }
+
+
+        public EditViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration,
+            Person currentPerson, List<MeasurementUnitType> measurementUnitTypes,
             List<CustomAttributeDataType> customAttributeDataTypes, string submitUrl,
-            EFModels.Entities.NeptunePage instructionsNeptunePage, EFModels.Entities.NeptunePage customAttributeInstructionsNeptunePage,
-            EFModels.Entities.CustomAttributeType customAttributeType) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
+            EFModels.Entities.NeptunePage instructionsNeptunePage,
+            EFModels.Entities.NeptunePage customAttributeInstructionsNeptunePage,
+            EFModels.Entities.CustomAttributeType customAttributeType) : base(httpContext, linkGenerator, currentPerson,
+            NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             EntityName = "Attribute Type";
-            var manageUrl = SitkaRoute<CustomAttributeTypeController>.BuildUrlFromExpression(linkGenerator, x => x.Manage());
+            var manageUrl =
+                SitkaRoute<CustomAttributeTypeController>.BuildUrlFromExpression(linkGenerator, x => x.Manage());
             EntityUrl = manageUrl;
             PageTitle = $"{(customAttributeType != null ? "Edit" : "New")} Attribute Type";
+            IsModelingAttribute = customAttributeType is { CustomAttributeTypePurposeID: (int)CustomAttributeTypePurposeEnum.Modeling };
 
             if (customAttributeType != null)
             {
                 SubEntityName = customAttributeType.CustomAttributeTypeName;
-                SubEntityUrl = SitkaRoute<CustomAttributeTypeController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(customAttributeType));
+                SubEntityUrl =
+                    SitkaRoute<CustomAttributeTypeController>.BuildUrlFromExpression(linkGenerator,
+                        x => x.Detail(customAttributeType));
             }
 
             YesNos = BooleanFormats.GetYesNoSelectList();
             CustomAttributeDataTypes = customAttributeDataTypes.ToSelectListWithDisabledEmptyFirstRow(
                 x => x.CustomAttributeDataTypeID.ToString(), x => x.CustomAttributeDataTypeDisplayName);
-            MeasurementUnitTypes = measurementUnitTypes.OrderBy(x => x.MeasurementUnitTypeDisplayName).ToSelectListWithEmptyFirstRow(
-                x => x.MeasurementUnitTypeID.ToString(), x => x.MeasurementUnitTypeDisplayName, ViewUtilities.NoneString);
-            CustomAttributeTypePurposes =
-                CustomAttributeTypePurpose.All.ToSelectListWithDisabledEmptyFirstRow(
+            MeasurementUnitTypes = measurementUnitTypes.OrderBy(x => x.MeasurementUnitTypeDisplayName)
+                .ToSelectListWithEmptyFirstRow(
+                    x => x.MeasurementUnitTypeID.ToString(), x => x.MeasurementUnitTypeDisplayName,
+                    ViewUtilities.NoneString);
+            var purposes = CustomAttributeTypePurpose.All;
+            if (!IsModelingAttribute)
+            {
+                purposes.Remove(CustomAttributeTypePurpose.Modeling);
+            }
+            CustomAttributeTypePurposes = purposes.ToSelectListWithDisabledEmptyFirstRow(
                     x => x.CustomAttributeTypePurposeID.ToString(CultureInfo.InvariantCulture),
                     x => x.CustomAttributeTypePurposeDisplayName);
 
@@ -75,20 +94,35 @@ namespace Neptune.WebMvc.Views.CustomAttributeType
                 manageUrl;
             SubmitUrl = submitUrl;
 
-            ViewInstructionsNeptunePage = new ViewPageContentViewData(linkGenerator, instructionsNeptunePage, currentPerson);
-            ViewCustomAttributeInstructionsNeptunePage = new ViewPageContentViewData(linkGenerator, customAttributeInstructionsNeptunePage, currentPerson);
+            ViewInstructionsNeptunePage =
+                new ViewPageContentViewData(linkGenerator, instructionsNeptunePage, currentPerson);
+            ViewCustomAttributeInstructionsNeptunePage = new ViewPageContentViewData(linkGenerator,
+                customAttributeInstructionsNeptunePage, currentPerson);
 
-            ViewDataForAngular = new ViewDataForAngular(customAttributeDataTypes);
+            ViewDataForAngular = new CustomAttributeTypeViewDataForAngular(customAttributeDataTypes);
+            
+            ModelingAttributeDisabledClass = IsModelingAttribute ? "disabled" : null;
+            TextBoxForHTMLAttributes = IsModelingAttribute
+                ? new RouteValueDictionary(new
+                    { @class = $"form-control", style = "width:100%", @disabled = "disabled" })
+                : new RouteValueDictionary(new { @class = $"form-control", style = "width:100%" });
+
+            DropDownListForHTMLAttributes = IsModelingAttribute
+                ? new Dictionary<string, object>()
+                    { { "style", "width: auto" }, { "class", $"form-control" }, { "disabled", "disabled" } }
+                : new Dictionary<string, object>() { { "style", "width: auto" }, { "class", $"form-control" } };
+
         }
-    }
 
-    public class ViewDataForAngular
-    {
-        public List<CustomAttributeDataTypeSimpleDto> CustomAttributeDataTypes { get; }
-       
-        public ViewDataForAngular(IEnumerable<CustomAttributeDataType> customAttributeDataTypes)           
+        public class CustomAttributeTypeViewDataForAngular
         {
-            CustomAttributeDataTypes = customAttributeDataTypes.Select(x => x.AsSimpleDto()).ToList();
+            public List<CustomAttributeDataTypeSimpleDto> CustomAttributeDataTypes { get; }
+
+            public CustomAttributeTypeViewDataForAngular(IEnumerable<CustomAttributeDataType> customAttributeDataTypes)
+            {
+                CustomAttributeDataTypes = customAttributeDataTypes.Select(x => x.AsSimpleDto()).ToList();
+            }
         }
+
     }
 }

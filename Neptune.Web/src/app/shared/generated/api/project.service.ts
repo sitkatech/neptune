@@ -1455,12 +1455,12 @@ export class ProjectService extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public projectsProjectIDUpdatePost(projectID: number, projectUpsertDto?: ProjectUpsertDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public projectsProjectIDUpdatePost(projectID: number, projectUpsertDto?: ProjectUpsertDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public projectsProjectIDUpdatePost(projectID: number, projectUpsertDto?: ProjectUpsertDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public projectsProjectIDUpdatePost(projectID: number, projectUpsertDto?: ProjectUpsertDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public projectsProjectIDUpdatePut(projectID: number, projectUpsertDto?: ProjectUpsertDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public projectsProjectIDUpdatePut(projectID: number, projectUpsertDto?: ProjectUpsertDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public projectsProjectIDUpdatePut(projectID: number, projectUpsertDto?: ProjectUpsertDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public projectsProjectIDUpdatePut(projectID: number, projectUpsertDto?: ProjectUpsertDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (projectID === null || projectID === undefined) {
-            throw new Error('Required parameter projectID was null or undefined when calling projectsProjectIDUpdatePost.');
+            throw new Error('Required parameter projectID was null or undefined when calling projectsProjectIDUpdatePut.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1500,7 +1500,7 @@ export class ProjectService extends BaseService {
 
         let localVarPath = `/projects/${this.configuration.encodeParam({name: "projectID", value: projectID, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}/update`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<any>('put', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: projectUpsertDto,

@@ -1,28 +1,29 @@
-import { Component } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
 import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
 import { CustomRichTextComponent } from "../../../../shared/components/custom-rich-text/custom-rich-text.component";
-import { ActivatedRoute, Router } from "@angular/router";
-import { routeParams } from "src/app/app.routes";
+import { Router } from "@angular/router";
 
 @Component({
     selector: "trash-ovta-instructions",
     imports: [PageHeaderComponent, CustomRichTextComponent],
     templateUrl: "./trash-ovta-instructions.component.html",
-    styleUrl: "./trash-ovta-instructions.component.scss"
+    styleUrl: "./trash-ovta-instructions.component.scss",
 })
 export class TrashOvtaInstructionsComponent {
     public customRichTextTypeID = NeptunePageTypeEnum.OVTAInstructions;
-    constructor(private router: Router, private route: ActivatedRoute) {}
+    @Input() onlandVisualTrashAssessmentID!: number;
+    constructor(private router: Router) {}
 
     continueToNextStep() {
-        var ovtaID = this.route.snapshot.paramMap.get(routeParams.onlandVisualTrashAssessmentID)
-            ? parseInt(this.route.snapshot.paramMap.get(routeParams.onlandVisualTrashAssessmentID))
-            : null;
-        if (ovtaID != null) {
-            this.router.navigateByUrl(`/trash/onland-visual-trash-assessments/edit/${ovtaID}/initiate-ovta`);
+        if (this.onlandVisualTrashAssessmentID != null && this.onlandVisualTrashAssessmentID !== undefined) {
+            this.router.navigateByUrl(`/trash/onland-visual-trash-assessments/edit/${this.onlandVisualTrashAssessmentID}/record-observations`);
         } else {
             this.router.navigateByUrl("/trash/onland-visual-trash-assessments/new/initiate-ovta");
         }
+    }
+
+    get buttonLabel(): string {
+        return this.onlandVisualTrashAssessmentID != null && this.onlandVisualTrashAssessmentID !== undefined ? "Continue" : "Begin OVTA";
     }
 }

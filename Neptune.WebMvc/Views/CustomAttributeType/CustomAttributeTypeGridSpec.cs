@@ -35,7 +35,7 @@ namespace Neptune.WebMvc.Views.CustomAttributeType
             var editUrlTemplate = new UrlTemplate<int>(SitkaRoute<CustomAttributeTypeController>.BuildUrlFromExpression(linkGenerator, x => x.Edit(UrlTemplate.Parameter1Int)));
             var deleteUrlTemplate = new UrlTemplate<int>(SitkaRoute<CustomAttributeTypeController>.BuildUrlFromExpression(linkGenerator, x => x.Delete(UrlTemplate.Parameter1Int)));
 
-            Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(deleteUrlTemplate.ParameterReplace(x.CustomAttributeTypeID), true), 30, DhtmlxGridColumnFilterType.None);
+            Add(string.Empty, x => x.CustomAttributeTypePurposeID != (int)CustomAttributeTypePurposeEnum.Modeling ? DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(deleteUrlTemplate.ParameterReplace(x.CustomAttributeTypeID), true): null, 30, DhtmlxGridColumnFilterType.None);
             Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeEditIconAsHyperlinkBootstrap(editUrlTemplate.ParameterReplace(x.CustomAttributeTypeID), true), 30, DhtmlxGridColumnFilterType.None);
             Add(FieldDefinitionType.CustomAttributeType.ToGridHeaderString(), x => UrlTemplate.MakeHrefString(detailUrlTemplate.ParameterReplace(x.CustomAttributeTypeID), x.CustomAttributeTypeName), 200, DhtmlxGridColumnFilterType.Html);
             Add(FieldDefinitionType.CustomAttributeDataType.ToGridHeaderString(), a => a.CustomAttributeDataType.CustomAttributeDataTypeDisplayName, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);

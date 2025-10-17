@@ -31,32 +31,18 @@ namespace Neptune.WebMvc.Views.TreatmentBMP
 {
     public class EditModelingAttributesViewData : NeptuneViewData
     {
-        public EditModelingAttributesViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, EFModels.Entities.TreatmentBMP treatmentBMP,
-            IEnumerable<RoutingConfiguration> routingConfigurations,
-            IEnumerable<TimeOfConcentration> timeOfConcentrations,
-            IEnumerable<UnderlyingHydrologicSoilGroup> underlyingHydrologicSoilGroups,
-            List<MonthsOfOperation> monthsOfOperation, List<DryWeatherFlowOverride> dryWeatherFlowOverride) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
+        public string ParentDetailUrl { get; set; }
+        public Shared.EditAttributes.EditAttributesViewData EditAttributesViewData { get; }
+
+        public EditModelingAttributesViewData(HttpContext httpContext, LinkGenerator linkGenerator, WebConfiguration webConfiguration, Person currentPerson, EFModels.Entities.TreatmentBMP treatmentBMP, string parentDetailUrl, Views.Shared.EditAttributes.EditAttributesViewData editAttributesViewData) : base(httpContext, linkGenerator, currentPerson, NeptuneArea.OCStormwaterTools, webConfiguration)
         {
             EntityName = $"{FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
             EntityUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.FindABMP());
             SubEntityName = treatmentBMP.TreatmentBMPName;
             SubEntityUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(linkGenerator, x => x.Detail(treatmentBMP));
             PageTitle = $"Edit {FieldDefinitionType.TreatmentBMP.GetFieldDefinitionLabel()} Modeling Attributes";
-            TreatmentBMP = treatmentBMP;
-            DryWeatherFlowOverride = dryWeatherFlowOverride.ToSelectList(x => x.DryWeatherFlowOverrideID.ToString(),
-                x => x.DryWeatherFlowOverrideDisplayName);
-            MonthsOfOperation = monthsOfOperation.ToSelectList(x => x.MonthsOfOperationID.ToString(CultureInfo.InvariantCulture), x => x.MonthsOfOperationDisplayName);
-            UnderlyingHydrologicSoilGroups = underlyingHydrologicSoilGroups.ToSelectListWithEmptyFirstRow(x => x.UnderlyingHydrologicSoilGroupID.ToString(), x => x.UnderlyingHydrologicSoilGroupDisplayName);
-            TimeOfConcentrations = timeOfConcentrations.ToSelectListWithEmptyFirstRow(x => x.TimeOfConcentrationID.ToString(), x =>
-                $"{x.TimeOfConcentrationDisplayName} minutes");
-            RoutingConfigurations = routingConfigurations.ToSelectListWithEmptyFirstRow(x => x.RoutingConfigurationID.ToString(), x => x.RoutingConfigurationDisplayName);
+            EditAttributesViewData = editAttributesViewData;
+            ParentDetailUrl = parentDetailUrl;
         }
-
-        public EFModels.Entities.TreatmentBMP TreatmentBMP { get; }
-        public IEnumerable<SelectListItem> RoutingConfigurations { get; }
-        public IEnumerable<SelectListItem> TimeOfConcentrations { get; }
-        public IEnumerable<SelectListItem> UnderlyingHydrologicSoilGroups { get; }
-        public IEnumerable<SelectListItem> MonthsOfOperation { get; }
-        public IEnumerable<SelectListItem> DryWeatherFlowOverride { get; }
     }
 }

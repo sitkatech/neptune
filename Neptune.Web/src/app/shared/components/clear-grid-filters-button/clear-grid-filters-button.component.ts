@@ -7,7 +7,6 @@ import { Subscription } from "rxjs";
     selector: "clear-grid-filters-button",
     templateUrl: "./clear-grid-filters-button.component.html",
     styleUrls: ["./clear-grid-filters-button.component.scss"],
-    standalone: true,
 })
 export class ClearGridFiltersButtonComponent implements OnInit, OnDestroy {
     @Input() grid: AgGridAngular = null;

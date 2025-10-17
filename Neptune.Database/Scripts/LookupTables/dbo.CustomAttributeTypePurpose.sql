@@ -1,5 +1,6 @@
 MERGE INTO dbo.CustomAttributeTypePurpose AS Target
 USING (VALUES
+(1, 'Modeling', 'Modeling Attributes'),
 (2, 'OtherDesignAttributes', 'Other Design Attributes'),
 (3, 'Maintenance', 'Maintenance Attributes')
 )

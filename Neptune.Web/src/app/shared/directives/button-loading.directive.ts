@@ -3,7 +3,6 @@ import { OnInit, Directive, Input, ElementRef, Renderer2 } from "@angular/core";
 
 @Directive({
     selector: "[buttonLoading]",
-    standalone: true,
 })
 export class ButtonLoadingDirective implements OnInit {
     @Input()
@@ -18,11 +17,7 @@ export class ButtonLoadingDirective implements OnInit {
 
     private loadingDiv: HTMLElement;
 
-    constructor(
-        private el: ElementRef,
-        private builder: AnimationBuilder,
-        private renderer: Renderer2
-    ) {
+    constructor(private el: ElementRef, private builder: AnimationBuilder, private renderer: Renderer2) {
         this.loadingDiv = this.renderer.createElement("i");
         this.renderer.addClass(this.loadingDiv, "fas");
         this.renderer.addClass(this.loadingDiv, "fa-spinner");

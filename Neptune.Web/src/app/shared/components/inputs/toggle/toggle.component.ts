@@ -13,7 +13,7 @@ import { Subscription } from "rxjs";
             useExisting: ToggleComponent,
         },
     ],
-    standalone: true,
+
     imports: [FormsModule, ReactiveFormsModule],
 })
 export class ToggleComponent implements OnInit, OnDestroy {

@@ -44,6 +44,11 @@ public partial class LandUseBlock
     [Column(TypeName = "geometry")]
     public Geometry? LandUseBlockGeometry4326 { get; set; }
 
+    public int? UpdatePersonID { get; set; }
+
+    [Column(TypeName = "datetime")]
+    public DateTime? DateUpdated { get; set; }
+
     [ForeignKey("StormwaterJurisdictionID")]
     [InverseProperty("LandUseBlocks")]
     public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; } = null!;
@@ -53,4 +58,8 @@ public partial class LandUseBlock
 
     [InverseProperty("LandUseBlock")]
     public virtual ICollection<TrashGeneratingUnit> TrashGeneratingUnits { get; set; } = new List<TrashGeneratingUnit>();
+
+    [ForeignKey("UpdatePersonID")]
+    [InverseProperty("LandUseBlocks")]
+    public virtual Person? UpdatePerson { get; set; }
 }

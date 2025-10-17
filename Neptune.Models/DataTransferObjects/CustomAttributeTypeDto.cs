@@ -14,4 +14,11 @@ public class CustomAttributeTypeDto
     public string MeasurementUnitDisplayName { get; set; }
     public string Purpose { get; set; }
     public int? CustomAttributeTypeSortOrder { get; set; }
+    public string CustomAttributeTypeDefaultValue { get; set; }
+}
+
+public class CustomAttributeTypeWithTreatmentBMPTypeIDsDto : CustomAttributeTypeDto
+{
+    public List<int> TreatmentBMPTypeIDs { get; set; }
+
 }

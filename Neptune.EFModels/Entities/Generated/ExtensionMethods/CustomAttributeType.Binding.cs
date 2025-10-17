@@ -14,7 +14,8 @@ namespace Neptune.EFModels.Entities
         public static class FieldLengths
         {
             public const int CustomAttributeTypeName = 100;
-            public const int CustomAttributeTypeDescription = 200;
+            public const int CustomAttributeTypeDescription = 500;
+            public const int CustomAttributeTypeDefaultValue = 1000;
         }
     }
 }

@@ -5,7 +5,6 @@ import { AuthenticationService } from "src/app/services/authentication.service";
     selector: "create-user-callback",
     templateUrl: "./create-user-callback.component.html",
     styleUrls: ["./create-user-callback.component.scss"],
-    standalone: true,
 })
 export class CreateUserCallbackComponent implements OnInit {
     constructor(private authenticationService: AuthenticationService) {}

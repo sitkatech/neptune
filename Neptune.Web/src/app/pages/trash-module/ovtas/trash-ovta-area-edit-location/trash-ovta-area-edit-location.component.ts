@@ -3,17 +3,20 @@ import { PageHeaderComponent } from "../../../../shared/components/page-header/p
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
 import { NeptuneMapComponent, NeptuneMapInitEvent } from "../../../../shared/components/leaflet/neptune-map/neptune-map.component";
 import * as L from "leaflet";
+import "@geoman-io/leaflet-geoman-free";
 import { LandUseBlockLayerComponent } from "../../../../shared/components/leaflet/layers/land-use-block-layer/land-use-block-layer.component";
 import { AsyncPipe } from "@angular/common";
-import { ActivatedRoute, Router, RouterLink } from "@angular/router";
-import { Observable, switchMap } from "rxjs";
-import { routeParams } from "src/app/app.routes";
+import { Router, RouterLink } from "@angular/router";
+import { Input } from "@angular/core";
+import { Observable, forkJoin } from "rxjs";
+import { switchMap, tap } from "rxjs/operators";
 import { OnlandVisualTrashAssessmentAreaService } from "src/app/shared/generated/api/onland-visual-trash-assessment-area.service";
 import { OnlandVisualTrashAssessmentAreaDetailDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-area-detail-dto";
 import { TransectLineLayerComponent } from "../../../../shared/components/leaflet/layers/transect-line-layer/transect-line-layer.component";
 import { OnlandVisualTrashAssessmentAreaGeometryDto } from "src/app/shared/generated/model/onland-visual-trash-assessment-area-geometry-dto";
 import { GroupByPipe } from "src/app/shared/pipes/group-by.pipe";
 import { WfsService } from "src/app/shared/services/wfs.service";
+import { LeafletHelperService } from "src/app/shared/services/leaflet-helper.service";
 
 @Component({
     selector: "trash-ovta-area-edit-location",
@@ -28,6 +31,7 @@ export class TrashOvtaAreaEditLocationComponent {
     public mapHeight = window.innerHeight - window.innerHeight * 0.4 + "px";
     public map: L.Map;
     public layerControl: L.Control.Layers;
+    public legendControl: L.Control;
     public mapIsReady = false;
     public bounds: any;
 
@@ -36,18 +40,7 @@ export class TrashOvtaAreaEditLocationComponent {
     public canPickParcels: boolean = false;
     public buttonText = "Pick Parcels";
 
-    public isPerformingDrawAction: boolean = false;
-    public drawMapClicked: boolean = false;
-
-    public drawnItems: L.featureGroup;
-    public drawControl: L.Control;
     public layer: L.FeatureGroup = new L.FeatureGroup();
-
-    private defaultStyle = {
-        color: "blue",
-        fillOpacity: 0.2,
-        opacity: 0,
-    };
 
     private highlightStyle = {
         color: "#fcfc12",
@@ -67,41 +60,13 @@ export class TrashOvtaAreaEditLocationComponent {
         opacity: 0.7,
     };
 
-    private defaultDrawControlSpec: L.Control.DrawConstructorOptions = {
-        polyline: false,
-        rectangle: false,
-        circle: false,
-        marker: false,
-        circlemarker: false,
-        polygon: {
-            allowIntersection: false, // Restricts shapes to simple polygons
-            drawError: {
-                color: "#E1E100", // Color the shape will turn when intersects
-                message: "Self-intersecting polygons are not allowed.", // Message that will show when intersect
-            },
-        },
-    };
-    private defaultEditControlSpec: L.Control.DrawConstructorOptions = {
-        featureGroup: this.layer,
-        remove: true,
-        edit: {
-            featureGroup: this.layer,
-        },
-        poly: {
-            allowIntersection: false, // Restricts shapes to simple polygons
-            drawError: {
-                color: "#E1E100", // Color the shape will turn when intersects
-                message: "Self-intersecting polygons are not allowed.", // Message that will show when intersect
-            },
-        },
-    };
-
+    @Input() onlandVisualTrashAssessmentAreaID!: number;
     constructor(
         private router: Router,
         private onlandVisualTrashAssessmentAreaService: OnlandVisualTrashAssessmentAreaService,
-        private route: ActivatedRoute,
         private wfsService: WfsService,
-        private groupByPipe: GroupByPipe
+        private groupByPipe: GroupByPipe,
+        private leafletHelperService: LeafletHelperService
     ) {}
 
     public handleMapReady(event: NeptuneMapInitEvent, geometry): void {
@@ -114,13 +79,13 @@ export class TrashOvtaAreaEditLocationComponent {
         this.mapIsReady = true;
     }
 
+    public handleLegendControlReady(legendControl: L.Control) {
+        this.legendControl = legendControl;
+    }
+
     ngOnInit(): void {
-        this.onlandVisualTrashAssessmentArea$ = this.route.params.pipe(
-            switchMap((params) => {
-                return this.onlandVisualTrashAssessmentAreaService.onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDGet(
-                    params[routeParams.onlandVisualTrashAssessmentAreaID]
-                );
-            })
+        this.onlandVisualTrashAssessmentArea$ = this.onlandVisualTrashAssessmentAreaService.onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDGet(
+            this.onlandVisualTrashAssessmentAreaID
         );
     }
 
@@ -135,78 +100,80 @@ export class TrashOvtaAreaEditLocationComponent {
     public save(ovtaAreaID) {
         var ovtaGeometryDto = new OnlandVisualTrashAssessmentAreaGeometryDto();
         ovtaGeometryDto.UsingParcels = this.canPickParcels;
-        this.layer.eachLayer((layer) => {
-            ovtaGeometryDto.GeometryAsGeoJson = JSON.stringify(layer.toGeoJSON());
+        let geoJson = null;
+        this.layer.eachLayer((layer: L.Path & { toGeoJSON: () => GeoJSON.Feature }) => {
+            geoJson = layer.toGeoJSON();
         });
+        ovtaGeometryDto.GeometryAsGeoJson = geoJson ? JSON.stringify(geoJson) : null;
         ovtaGeometryDto.ParcelIDs = this.selectedParcelIDs;
         ovtaGeometryDto.OnlandVisualTrashAssessmentAreaID = ovtaAreaID;
         this.onlandVisualTrashAssessmentAreaService
             .onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDParcelGeometriesPost(ovtaAreaID, ovtaGeometryDto)
             .subscribe((x) => {
-                this.router.navigate(["../"], { relativeTo: this.route });
+                this.router.navigate(`trash/onland-visual-trash-assessment-areas/${ovtaAreaID}`.split("/"));
             });
-    }
-
-    public addOrRemoveDrawControl(turnOn: boolean) {
-        if (turnOn) {
-            var drawOptions = {
-                draw: Object.assign({}, this.defaultDrawControlSpec),
-                edit: Object.assign({}, this.defaultEditControlSpec),
-            };
-            this.drawControl = new L.Control.Draw(drawOptions);
-            this.map.addControl(this.drawControl);
-            return;
-        }
-        this.drawControl.remove();
     }
 
     public setControl(): void {
-        L.EditToolbar.Delete.include({
-            removeAllLayers: false,
-        });
-
         this.map
-            .on(L.Draw.Event.CREATED, (event) => {
-                this.isPerformingDrawAction = false;
-                const layer = (event as L.DrawEvents.Created).layer;
+            .on("pm:create", (event: { shape: string; layer: L.Path & { toGeoJSON: () => GeoJSON.Feature } }) => {
+                const layer = event.layer;
+                this.layer.clearLayers();
                 this.layer.addLayer(layer);
                 this.selectFeatureImpl();
             })
-            .on(L.Draw.Event.EDITED, (event) => {
-                this.isPerformingDrawAction = false;
-                const layers = (event as L.DrawEvents.Edited).layers;
+            .on("pm:globaleditmodetoggled", (e: any) => {
+                if (e.enabled) {
+                    //MP 10/2/25 Because direct comparison of layers is proving to be difficult,
+                    // just turn off editing for all layers then re-enable only for the layer we want to edit
+                    this.map.eachLayer((layer: any) => {
+                        if (layer.pm && (this.layer != layer || !this.layer.hasLayer(layer))) {
+                            layer.pm.disable();
+                        }
+                    });
+                    // Only enable editing for layers in this.layer
+                    this.layer.eachLayer((layer: L.Path) => {
+                        layer.pm.enable();
+                    });
+                    return;
+                }
                 this.selectFeatureImpl();
             })
-            .on(L.Draw.Event.DELETED, (event) => {
-                this.isPerformingDrawAction = false;
-                const layers = (event as L.DrawEvents.Deleted).layers;
+            .on("pm:globalremovalmodetoggled", (e: any) => {
+                if (e.enabled) {
+                    // Remove geometry
+                    this.layer.clearLayers();
+                    this.map.pm.toggleGlobalRemovalMode();
+                    return;
+                }
                 this.selectFeatureImpl();
-            })
-            .on(L.Draw.Event.DRAWSTART, () => {
-                this.layer.clearLayers();
-            })
-            .on(L.Draw.Event.TOOLBAROPENED, () => {
-                this.isPerformingDrawAction = true;
-            })
-            .on(L.Draw.Event.TOOLBARCLOSED, () => {
-                this.isPerformingDrawAction = false;
             });
-        this.addOrRemoveDrawControl(true);
+        this.addOrRemoveGeomanControl(true);
     }
 
     public selectFeatureImpl() {
-        if (this.isPerformingDrawAction) {
+        if (this.isPerformingGeomanAction(true)) {
             return;
         }
-        this.map.removeControl(this.drawControl);
-        this.layer.setStyle(this.defaultStyle).bringToFront();
-        this.addOrRemoveDrawControl(true);
+        this.map.pm.removeControls();
+        this.addOrRemoveGeomanControl(true);
+    }
+
+    public isPerformingGeomanAction(skipDrawCheck: boolean = false): boolean {
+        //MP 10/1/25 - Added skipDrawCheck because the global draw mode remains enabled momentarily after drawing a shape is complete
+        return (this.map?.pm?.globalDrawModeEnabled() && !skipDrawCheck) || this.map?.pm?.globalEditModeEnabled() || this.map?.pm?.globalRemovalModeEnabled();
     }
 
     public addFeatureCollectionToFeatureGroup(featureJsons: any, featureGroup: L.FeatureGroup) {
         L.geoJson(featureJsons, {
             onEachFeature: (feature, layer) => {
-                this.addLayersToFeatureGroup(layer, featureGroup);
+                if (typeof (layer as any).getLayers === "function") {
+                    (layer as any).getLayers().forEach((l) => {
+                        featureGroup.addLayer(l);
+                    });
+                } else {
+                    featureGroup.addLayer(layer);
+                }
                 layer.on("click", (e) => {
                     this.selectFeatureImpl();
                 });
@@ -214,27 +181,27 @@ export class TrashOvtaAreaEditLocationComponent {
         });
     }
 
-    private addLayersToFeatureGroup(layer: any, featureGroup: L.FeatureGroup) {
-        if (layer.getLayers) {
-            layer.getLayers().forEach((l) => {
-                featureGroup.addLayer(l);
-            });
-        } else {
-            featureGroup.addLayer(layer);
+    public addOrRemoveGeomanControl(turnOn: boolean) {
+        if (turnOn) {
+            const hasPolygon = this.layer.getLayers().length > 0;
+            this.leafletHelperService.setupGeomanControls(this.map, !hasPolygon, hasPolygon, hasPolygon, "OVTA Area");
+            this.leafletHelperService.moveLegendToBottomOfContainer(this.legendControl);
+            return;
         }
+        this.map.pm.removeControls();
     }
 
     public setCanPickParcels(ovtaAreaID, boundingBox, geometry) {
         this.canPickParcels = !this.canPickParcels;
         this.layer.clearLayers();
         if (this.canPickParcels) {
-            this.drawControl.remove();
+            this.map.pm.removeControls();
             this.addOVTAAreaToLayer(ovtaAreaID);
             this.addParcelsToLayer(boundingBox);
             this.buttonText = "Draw OVTA Areas";
         } else {
             this.addFeatureCollectionToFeatureGroup(JSON.parse(geometry), this.layer);
-            this.addOrRemoveDrawControl(true);
+            this.addOrRemoveGeomanControl(true);
             this.buttonText = "Pick Parcels";
         }
         const bounds = this.layer.getBounds();
@@ -247,13 +214,20 @@ export class TrashOvtaAreaEditLocationComponent {
     }
 
     private addOVTAAreaToLayer(ovtaAreaID) {
-        this.onlandVisualTrashAssessmentAreaService.onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDParcelGeometriesGet(ovtaAreaID).subscribe((parcels) => {
-            this.wfsService.getGeoserverWFSLayerWithCQLFilter("OCStormwater:Parcels", `ParcelID in (${parcels.map((x) => x.ParcelID)})`, "ParcelID").subscribe((response) => {
-                const geoJson = L.geoJSON(response, { style: this.highlightStyle });
-                geoJson.addTo(this.layer);
-                this.selectedParcelIDs = parcels.map((x) => x.ParcelID);
-            });
-        });
+        this.onlandVisualTrashAssessmentAreaService.onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDParcelGeometriesGet(ovtaAreaID).pipe(
+            switchMap((parcels) => {
+                const parcelIDs = parcels.map((x) => x.ParcelID);
+                return forkJoin({
+                    response: this.wfsService.getGeoserverWFSLayerWithCQLFilter("OCStormwater:Parcels", `ParcelID in (${parcelIDs})`, "ParcelID"),
+                }).pipe(
+                    tap(({ response }) => {
+                        const geoJson = L.geoJSON(response as any, { style: this.highlightStyle });
+                        geoJson.addTo(this.layer);
+                        this.selectedParcelIDs = parcels.map((x) => x.ParcelID);
+                    })
+                );
+            })
+        );
     }
 
     private addParcelsToLayer(boundingBox) {
@@ -292,17 +266,18 @@ export class TrashOvtaAreaEditLocationComponent {
     private highlightSelectedParcel(parcelID) {
         this.layer.eachLayer((layer) => {
             // skip if well layer
-            if (layer.options?.icon) return;
+            if (layer instanceof L.Marker) return;
 
-            const geoJsonLayers = layer.getLayers();
-            if (geoJsonLayers[0].feature.properties.ParcelID == parcelID) {
-                if (geoJsonLayers[0].options.color == this.highlightStyle.color) {
-                    layer.setStyle(geoJsonLayers[0].feature.properties.WQMPCount > 0 ? this.wqmpStyle : this.noWQMPsStyle);
-                } else {
-                    layer.setStyle(this.highlightStyle);
+            if (layer instanceof L.GeoJSON) {
+                const geoJsonLayers = layer.getLayers() as L.Polygon[];
+                if (geoJsonLayers[0].feature.properties.ParcelID == parcelID) {
+                    if (geoJsonLayers[0].options.color == this.highlightStyle.color) {
+                        layer.setStyle(geoJsonLayers[0].feature.properties.WQMPCount > 0 ? this.wqmpStyle : this.noWQMPsStyle);
+                    } else {
+                        layer.setStyle(this.highlightStyle);
+                    }
+                    this.map.fitBounds(layer.getBounds());
                 }
-
-                this.map.fitBounds(layer.getBounds());
             }
         });
     }

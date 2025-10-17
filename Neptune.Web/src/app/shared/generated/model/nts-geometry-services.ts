@@ -8,16 +8,19 @@
  * Do not edit the class manually.
  */
 import { CoordinateSequenceFactory } from './coordinate-sequence-factory';
+import { ElevationModel } from './elevation-model';
 import { PrecisionModel } from './precision-model';
 
 
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class NtsGeometryServices { 
     GeometryOverlay?: object;
+    GeometryRelate?: object;
     CoordinateEqualityComparer?: object;
     readonly DefaultSRID?: number;
     DefaultCoordinateSequenceFactory?: CoordinateSequenceFactory;
     DefaultPrecisionModel?: PrecisionModel;
+    DefaultElevationModel?: ElevationModel;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
@@ -25,14 +28,26 @@ export class NtsGeometryServices {
 
 export interface NtsGeometryServicesForm { 
     GeometryOverlay?: FormControl<object>;
+    GeometryRelate?: FormControl<object>;
     CoordinateEqualityComparer?: FormControl<object>;
     DefaultSRID?: FormControl<number>;
     DefaultCoordinateSequenceFactory?: FormControl<CoordinateSequenceFactory>;
     DefaultPrecisionModel?: FormControl<PrecisionModel>;
+    DefaultElevationModel?: FormControl<ElevationModel>;
 }
 
 export class NtsGeometryServicesFormControls { 
     public static GeometryOverlay = (value: FormControlState<object> | object = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<object>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static GeometryRelate = (value: FormControlState<object> | object = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<object>(
         value,
         formControlOptions ?? 
         {
@@ -73,6 +88,16 @@ export class NtsGeometryServicesFormControls {
         }
     );
     public static DefaultPrecisionModel = (value: FormControlState<PrecisionModel> | PrecisionModel = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<PrecisionModel>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static DefaultElevationModel = (value: FormControlState<ElevationModel> | ElevationModel = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<ElevationModel>(
         value,
         formControlOptions ?? 
         {

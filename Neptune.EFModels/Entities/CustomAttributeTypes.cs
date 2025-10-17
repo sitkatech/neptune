@@ -70,15 +70,50 @@ namespace Neptune.EFModels.Entities
             return GetByID(dbContext, customAttributeTypePrimaryKey.PrimaryKeyValue);
         }
 
+        public static CustomAttributeTypeDto GetByIDAsDto(NeptuneDbContext dbContext, int customAttributeTypeID)
+        {
+            return GetByID(dbContext, customAttributeTypeID).AsDto();
+        }
+
         public static List<CustomAttributeType> List(NeptuneDbContext dbContext)
         {
             return GetImpl(dbContext).AsNoTracking().OrderBy(x => x.CustomAttributeTypeName).ToList();
+        }
+
+        public static List<CustomAttributeTypeDto> ListAsDto(NeptuneDbContext dbContext)
+        {
+            return List(dbContext).Select(x => x.AsDto()).ToList();
         }
 
         public static List<CustomAttributeType> GetCustomAttributeTypes(NeptuneDbContext dbContext, List<CustomAttributeUpsertDto> customAttributes)
         {
             var customAttributeTypeIDs = customAttributes.Select(x => x.CustomAttributeTypeID).ToList();
             return GetImpl(dbContext).AsNoTracking().Where(x => customAttributeTypeIDs.Contains(x.CustomAttributeTypeID)).OrderBy(x => x.CustomAttributeTypeName).ToList();
+        }
+
+        public static List<CustomAttributeTypeDto> GetByCustomAttributeTypePurposeAndTreatmentBMPTypeAsDto(NeptuneDbContext dbContext, int customAttributeTypePurposeID, int treatmentBmpTypeID)
+        {
+            return GetImpl(dbContext).AsNoTracking().Where(x =>
+                    x.CustomAttributeTypePurposeID == customAttributeTypePurposeID &&
+                    x.TreatmentBMPTypeCustomAttributeTypes.Any(y => y.TreatmentBMPTypeID == treatmentBmpTypeID))
+                .Select(x => x.AsDto())
+                .ToList();
+        }
+
+        public static List<CustomAttributeTypeDto> GetByCustomAttributeTypePurposeAsDto(NeptuneDbContext dbContext, int customAttributeTypePurposeID)
+        {
+            return GetImpl(dbContext).AsNoTracking().Where(x =>
+                    x.CustomAttributeTypePurposeID == customAttributeTypePurposeID)
+                .Select(x => x.AsDto())
+                .ToList();
+        }
+
+        public static List<CustomAttributeTypeWithTreatmentBMPTypeIDsDto> GetByCustomAttributeTypePurposeAsWithTreatmentBMPTypeIDsDto(NeptuneDbContext dbContext, int customAttributeTypePurposeID)
+        {
+            return GetImpl(dbContext).AsNoTracking().Where(x =>
+                    x.CustomAttributeTypePurposeID == customAttributeTypePurposeID)
+                .Select(x => x.AsDtoWithTreatmentBmpTypeIDs())
+                .ToList();
         }
     }
 }

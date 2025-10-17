@@ -10,7 +10,7 @@ import { PriorityLandUseTypeEnum, PriorityLandUseTypes } from "src/app/shared/ge
     selector: "selected-land-use-block-layer",
     imports: [],
     templateUrl: "./selected-land-use-block-layer.component.html",
-    styleUrl: "./selected-land-use-block-layer.component.scss"
+    styleUrl: "./selected-land-use-block-layer.component.scss",
 })
 export class SelectedLandUseBlockLayerComponent extends MapLayerBase implements OnChanges, AfterViewInit {
     @Input() selectedLandUseBlockID: number;
@@ -20,7 +20,7 @@ export class SelectedLandUseBlockLayerComponent extends MapLayerBase implements 
 
     public isLoading: boolean = false;
     public landUseBlockSelectedWithinLayer: boolean = false;
-    public layer: L.featureGroup;
+    public layer: L.FeatureGroup;
 
     private styleDictionary = {
         [PriorityLandUseTypeEnum.Commercial]: {
@@ -149,16 +149,21 @@ export class SelectedLandUseBlockLayerComponent extends MapLayerBase implements 
     private highlightSelectedLandUseBlock(zoomToFeature: boolean = false) {
         this.layer.eachLayer((layer) => {
             // skip if well layer
-            if (layer.options?.icon) return;
+            if (layer instanceof L.Marker && layer.options.icon) {
+                // layer has an icon
+                return;
+            }
 
-            const geoJsonLayers = layer.getLayers();
-            if (geoJsonLayers[0].feature.properties.LandUseBlockID == this.selectedLandUseBlockID) {
-                layer.setStyle(this.highlightStyle);
-                if (zoomToFeature) {
-                    this.map.fitBounds(layer.getBounds());
+            if (layer instanceof L.GeoJSON) {
+                const geoJsonLayers = layer.getLayers() as (L.Path & { feature?: GeoJSON.Feature })[];
+                if (geoJsonLayers[0].feature.properties.OnlandVisualTrashAssessmentAreaID == this.selectedLandUseBlockID) {
+                    layer.setStyle(this.highlightStyle);
+                    if (zoomToFeature) {
+                        this.map.fitBounds(layer.getBounds());
+                    }
+                } else {
+                    layer.setStyle(this.styleDictionary[geoJsonLayers[0].feature.properties.PriorityLandUseTypeID]);
                 }
-            } else {
-                layer.setStyle(this.styleDictionary[geoJsonLayers[0].feature.properties.PriorityLandUseTypeID]);
             }
         });
     }

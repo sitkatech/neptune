@@ -8,7 +8,7 @@ import { MapLayerBase } from "../map-layer-base.component";
     selector: "permit-type-layer",
     imports: [],
     templateUrl: "./permit-type-layer.component.html",
-    styleUrl: "./permit-type-layer.component.scss"
+    styleUrl: "./permit-type-layer.component.scss",
 })
 export class PermitTypeLayerComponent extends MapLayerBase implements OnChanges, AfterViewInit {
     constructor() {
@@ -24,7 +24,7 @@ export class PermitTypeLayerComponent extends MapLayerBase implements OnChanges,
             format: "image/png",
             tiled: true,
             styles: "permit_type",
-        };
+        } as any;
 
         this.layer = L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", this.wmsOptions);
         this.initLayer();

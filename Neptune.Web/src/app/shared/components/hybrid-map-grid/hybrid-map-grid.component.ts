@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { ColDef, GridApi, GridReadyEvent } from "ag-grid-community";
 import { AgGridAngular } from "ag-grid-angular";
-import { Map, layerControl } from "leaflet";
+import { Map, Control } from "leaflet";
 import { LoadingDirective } from "../../directives/loading.directive";
 import { IconComponent } from "../icon/icon.component";
 
@@ -14,7 +14,7 @@ import { BoundingBoxDto } from "../../generated/model/bounding-box-dto";
     selector: "hybrid-map-grid",
     imports: [LoadingDirective, IconComponent, NeptuneGridHeaderComponent, NeptuneGridComponent, NeptuneMapComponent],
     templateUrl: "./hybrid-map-grid.component.html",
-    styleUrl: "./hybrid-map-grid.component.scss"
+    styleUrl: "./hybrid-map-grid.component.scss",
 })
 export class HybridMapGridComponent {
     @Input() rowData: any[];
@@ -34,7 +34,7 @@ export class HybridMapGridComponent {
     public selectedPanel: "Grid" | "Hybrid" | "Map" = "Hybrid";
 
     public map: Map;
-    public layerControl: layerControl;
+    public layerControl: L.Control.Layers;
     public bounds: any;
     public mapIsReady: boolean = false;
 
@@ -45,13 +45,13 @@ export class HybridMapGridComponent {
         if (changes.selectedValue) {
             if (changes.selectedValue.previousValue == changes.selectedValue.currentValue) return;
             this.selectedValue = changes.selectedValue.currentValue;
-            
+
             // only want to call onMapSelectionChanged if the change to selectedValue originated from the Map.
             // This will find the row in the grid for the selectedValue and scroll it to the top of the grid
-            if (changes.selectionFromMap){
+            if (changes.selectionFromMap) {
                 this.selectionFromMap = changes.selectionFromMap.currentValue;
             }
-            if (this.selectionFromMap){
+            if (this.selectionFromMap) {
                 this.onMapSelectionChanged(this.selectedValue);
             }
         }

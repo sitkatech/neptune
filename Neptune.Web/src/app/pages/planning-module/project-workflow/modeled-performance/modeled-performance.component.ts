@@ -1,12 +1,13 @@
 import { ApplicationRef, ChangeDetectorRef, Component, OnInit } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import { Router } from "@angular/router";
+import { Input } from "@angular/core";
 import { BoundingBoxDto, DelineationUpsertDto, ProjectNetworkSolveHistorySimpleDto, ProjectDto, TreatmentBMPDisplayDto } from "src/app/shared/generated/model/models";
 import { Alert } from "src/app/shared/models/alert";
 import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
 import { AlertService } from "src/app/shared/services/alert.service";
 import { CustomCompileService } from "src/app/shared/services/custom-compile.service";
 import * as L from "leaflet";
-import { combineLatest, map, Observable, pipe, switchMap, tap } from "rxjs";
+import { combineLatest, map, Observable, switchMap, tap } from "rxjs";
 import { environment } from "src/environments/environment";
 import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
 import { ProjectService } from "src/app/shared/generated/api/project.service";
@@ -20,7 +21,6 @@ import { CustomRichTextComponent } from "src/app/shared/components/custom-rich-t
 import { PageHeaderComponent } from "src/app/shared/components/page-header/page-header.component";
 import { WorkflowBodyComponent } from "src/app/shared/components/workflow-body/workflow-body.component";
 import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
-import { routeParams } from "src/app/app.routes";
 import { DelineationsLayerComponent } from "src/app/shared/components/leaflet/layers/delineations-layer/delineations-layer.component";
 import { JurisdictionsLayerComponent } from "src/app/shared/components/leaflet/layers/jurisdictions-layer/jurisdictions-layer.component";
 import { RegionalSubbasinsLayerComponent } from "src/app/shared/components/leaflet/layers/regional-subbasins-layer/regional-subbasins-layer.component";
@@ -77,36 +77,29 @@ export class ModeledPerformanceComponent implements OnInit {
         opacity: 1,
     };
 
-    public projectID: number;
     public project$: Observable<ProjectDto>;
     public customRichTextTypeID = NeptunePageTypeEnum.HippocampModeledPerformance;
 
     public projectTreatmentBMPs: Array<TreatmentBMPDisplayDto>;
 
+    @Input() projectID!: number;
     constructor(
         private cdr: ChangeDetectorRef,
         private projectService: ProjectService,
         private appRef: ApplicationRef,
         private compileService: CustomCompileService,
-        private route: ActivatedRoute,
         private router: Router,
         private alertService: AlertService
     ) {}
 
     ngOnInit(): void {
-        this.project$ = this.route.params.pipe(
-            switchMap((params) => {
-                this.projectID = parseInt(params[routeParams.projectID]);
-                return this.projectService.projectsProjectIDGet(this.projectID);
-            }),
-            pipe(
-                tap((project) => {
-                    // redirect to review step if project is shared with OCTA grant program
-                    if (project.ShareOCTAM2Tier2Scores) {
-                        this.router.navigateByUrl(`/planning/projects/edit/${project.ProjectID}/review-and-share`);
-                    }
-                })
-            )
+        this.project$ = this.projectService.projectsProjectIDGet(this.projectID).pipe(
+            tap((project) => {
+                // redirect to review step if project is shared with OCTA grant program
+                if (project.ShareOCTAM2Tier2Scores) {
+                    this.router.navigateByUrl(`/planning/projects/edit/${project.ProjectID}/review-and-share`);
+                }
+            })
         );
         this.projectNetworkSolveHistories$ = this.project$.pipe(
             switchMap((project) => {
@@ -116,16 +109,14 @@ export class ModeledPerformanceComponent implements OnInit {
                     ProjectNetworkSolveHistories: this.projectService.projectsProjectIDProjectNetworkSolveHistoriesGet(project.ProjectID),
                 });
             }),
-            pipe(
-                tap((data) => {
-                    if (data.TreatmentBMPs.length == 0) {
-                        this.router.navigateByUrl(`/planning/projects/edit/${this.projectID}`);
-                    }
+            tap((data) => {
+                if (data.TreatmentBMPs.length == 0) {
+                    this.router.navigateByUrl(`/planning/projects/edit/${this.projectID}`);
+                }
 
-                    this.projectTreatmentBMPs = data.TreatmentBMPs;
-                    this.delineations = data.Delineations;
-                })
-            ),
+                this.projectTreatmentBMPs = data.TreatmentBMPs;
+                this.delineations = data.Delineations;
+            }),
             map((data) => {
                 return data.ProjectNetworkSolveHistories;
             })
@@ -154,8 +145,8 @@ export class ModeledPerformanceComponent implements OnInit {
 
     public initializeMap(): void {
         const delineationGeoJson = this.mapDelineationsToGeoJson(this.delineations);
-        this.delineationsLayer = new L.GeoJSON(delineationGeoJson, {
-            onEachFeature: (feature, layer) => {
+        this.delineationsLayer = new L.GeoJSON(delineationGeoJson as any, {
+            onEachFeature: (feature, layer: L.Path & { feature?: GeoJSON.Feature }) => {
                 layer.setStyle(this.delineationDefaultStyle);
                 layer.on("click", (e) => {
                     this.selectFeatureImpl(feature.properties.TreatmentBMPID);
@@ -165,7 +156,7 @@ export class ModeledPerformanceComponent implements OnInit {
         this.delineationsLayer.addTo(this.map);
 
         const treatmentBMPsGeoJson = this.mapTreatmentBMPsToGeoJson(this.projectTreatmentBMPs);
-        this.treatmentBMPsLayer = new L.GeoJSON(treatmentBMPsGeoJson, {
+        this.treatmentBMPsLayer = new L.GeoJSON(treatmentBMPsGeoJson as any, {
             pointToLayer: (feature, latlng) => {
                 return L.marker(latlng, { icon: MarkerHelper.treatmentBMPMarker });
             },
@@ -217,7 +208,7 @@ export class ModeledPerformanceComponent implements OnInit {
     public selectFeatureImpl(treatmentBMPID: number) {
         this.selectedTreatmentBMP = this.projectTreatmentBMPs.find((x) => x.TreatmentBMPID == treatmentBMPID);
         let hasFlownToSelectedObject = false;
-        this.delineationsLayer?.eachLayer((layer) => {
+        this.delineationsLayer?.eachLayer((layer: L.Polygon) => {
             if (this.selectedTreatmentBMP == null || this.selectedTreatmentBMP.TreatmentBMPID != layer.feature.properties.TreatmentBMPID) {
                 layer.setStyle(this.delineationDefaultStyle);
                 return;
@@ -226,7 +217,7 @@ export class ModeledPerformanceComponent implements OnInit {
             this.map.flyToBounds(layer.getBounds(), { padding: new L.Point(50, 50) });
             hasFlownToSelectedObject = true;
         });
-        this.treatmentBMPsLayer.eachLayer((layer) => {
+        this.treatmentBMPsLayer.eachLayer((layer: L.Marker) => {
             if (this.selectedTreatmentBMP == null || this.selectedTreatmentBMP.TreatmentBMPID != layer.feature.properties.TreatmentBMPID) {
                 layer.setIcon(MarkerHelper.treatmentBMPMarker).setZIndexOffset(1000);
                 return;

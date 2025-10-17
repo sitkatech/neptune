@@ -39,8 +39,6 @@ public partial class vPowerBITreatmentBMP
 
     public int? WaterQualityManagementPlanID { get; set; }
 
-    public int? TreatmentBMPModelingAttributeID { get; set; }
-
     public double? AverageDivertedFlowrate { get; set; }
 
     public double? AverageTreatmentFlowrate { get; set; }
@@ -51,13 +49,15 @@ public partial class vPowerBITreatmentBMP
 
     public double? DesignMediaFiltrationRate { get; set; }
 
-    public double? DiversionRate { get; set; }
+    public int? DiversionRate { get; set; }
 
     public double? DrawdownTimeForWQDetentionVolume { get; set; }
 
     public double? EffectiveFootprint { get; set; }
 
     public double? EffectiveRetentionDepth { get; set; }
+
+    public double? ExtendedDetentionSurchargeVolume { get; set; }
 
     public double? InfiltrationDischargeRate { get; set; }
 
@@ -67,13 +67,17 @@ public partial class vPowerBITreatmentBMP
 
     public double? PermanentPoolOrWetlandVolume { get; set; }
 
-    public int? RoutingConfigurationID { get; set; }
+    [StringLength(6)]
+    [Unicode(false)]
+    public string? RoutingConfiguration { get; set; }
 
     public double? StorageVolumeBelowLowestOutletElevation { get; set; }
 
     public double? SummerHarvestedWaterDemand { get; set; }
 
-    public int? TimeOfConcentrationID { get; set; }
+    [StringLength(1000)]
+    [Unicode(false)]
+    public string? TimeOfConcentration { get; set; }
 
     public double? DrawdownTimeForDetentionVolume { get; set; }
 
@@ -83,17 +87,21 @@ public partial class vPowerBITreatmentBMP
 
     public double? TreatmentRate { get; set; }
 
-    public int? UnderlyingHydrologicSoilGroupID { get; set; }
+    [StringLength(1000)]
+    [Unicode(false)]
+    public string? UnderlyingHydrologicSoilGroup { get; set; }
 
     public double? UnderlyingInfiltrationRate { get; set; }
-
-    public double? WaterQualityDetentionVolume { get; set; }
 
     public double? WettedFootprint { get; set; }
 
     public double? WinterHarvestedWaterDemand { get; set; }
 
-    public int? MonthsOfOperationID { get; set; }
+    [StringLength(1000)]
+    [Unicode(false)]
+    public string? MonthsOperational { get; set; }
 
-    public int? DryWeatherFlowOverrideID { get; set; }
+    [StringLength(1000)]
+    [Unicode(false)]
+    public string? DryWeatherFlowOverride { get; set; }
 }

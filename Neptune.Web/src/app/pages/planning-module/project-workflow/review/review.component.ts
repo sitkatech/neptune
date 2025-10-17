@@ -28,17 +28,17 @@ import { ProjectWorkflowProgressService } from "src/app/shared/services/project-
     templateUrl: "./review.component.html",
     styleUrls: ["./review.component.scss"],
     imports: [
-    CustomRichTextComponent,
-    NgClass,
-    ProjectMapComponent,
-    ModelResultsComponent,
-    AttachmentsDisplayComponent,
-    GrantScoresComponent,
-    DatePipe,
-    PageHeaderComponent,
-    WorkflowBodyComponent,
-    AlertDisplayComponent
-]
+        CustomRichTextComponent,
+        NgClass,
+        ProjectMapComponent,
+        ModelResultsComponent,
+        AttachmentsDisplayComponent,
+        GrantScoresComponent,
+        DatePipe,
+        PageHeaderComponent,
+        WorkflowBodyComponent,
+        AlertDisplayComponent,
+    ],
 })
 export class ReviewComponent implements OnInit {
     public projectID: number;
@@ -132,7 +132,7 @@ export class ReviewComponent implements OnInit {
                     var model = this.mapProjectToUpsertDto();
                     model.ShareOCTAM2Tier2Scores = !this.project.ShareOCTAM2Tier2Scores;
 
-                    this.projectService.projectsProjectIDUpdatePost(this.projectID, model).subscribe(
+                    this.projectService.projectsProjectIDUpdatePut(this.projectID, model).subscribe(
                         () => {
                             this.isLoadingSubmit = false;
                             this.projectWorkflowProgressService.updateProgress(this.projectID);

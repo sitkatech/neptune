@@ -51,7 +51,7 @@ namespace Neptune.WebMvc.Views.Shared.EditAttributes
             dbContext.RemoveRange(existingCustomAttributes.SelectMany(x => x.CustomAttributeValues));
             await dbContext.SaveChangesAsync();
 
-            var customAttributeUpsertDtos = CustomAttributes.Where(x => x.CustomAttributeValues != null && x.CustomAttributeValues.Count > 0).ToList();
+            var customAttributeUpsertDtos = CustomAttributes.Where(x => x.CustomAttributeValues != null && x.CustomAttributeValues.Count > 0 && x.CustomAttributeValues.All(x => x != null && x != "")).ToList();
             var customAttributeValuesToUpdate = new List<CustomAttributeValue>();
             foreach (var customAttributeUpsertDto in customAttributeUpsertDtos)
             {

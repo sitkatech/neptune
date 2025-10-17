@@ -297,6 +297,8 @@ public partial class NeptuneDbContext : DbContext
 
     public virtual DbSet<vTreatmentBMPModeledLandUseArea> vTreatmentBMPModeledLandUseAreas { get; set; }
 
+    public virtual DbSet<vTreatmentBMPModelingAttribute> vTreatmentBMPModelingAttributes { get; set; }
+
     public virtual DbSet<vTreatmentBMPObservation> vTreatmentBMPObservations { get; set; }
 
     public virtual DbSet<vTreatmentBMPObservationDiscreteValue> vTreatmentBMPObservationDiscreteValues { get; set; }
@@ -459,6 +461,8 @@ public partial class NeptuneDbContext : DbContext
             entity.HasKey(e => e.LandUseBlockID).HasName("PK_LandUseBlock_LandUseBlockID");
 
             entity.HasOne(d => d.StormwaterJurisdiction).WithMany(p => p.LandUseBlocks).OnDelete(DeleteBehavior.ClientSetNull);
+
+            entity.HasOne(d => d.UpdatePerson).WithMany(p => p.LandUseBlocks).HasConstraintName("FK_LandUseBlock_Person_UpdatePersonID_PersonID");
         });
 
         modelBuilder.Entity<LandUseBlockStaging>(entity =>
@@ -1350,6 +1354,11 @@ public partial class NeptuneDbContext : DbContext
         modelBuilder.Entity<vTreatmentBMPModeledLandUseArea>(entity =>
         {
             entity.ToView("vTreatmentBMPModeledLandUseArea");
+        });
+
+        modelBuilder.Entity<vTreatmentBMPModelingAttribute>(entity =>
+        {
+            entity.ToView("vTreatmentBMPModelingAttribute");
         });
 
         modelBuilder.Entity<vTreatmentBMPObservation>(entity =>

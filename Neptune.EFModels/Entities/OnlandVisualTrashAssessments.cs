@@ -269,6 +269,14 @@ public static class OnlandVisualTrashAssessments
         var onlandVisualTrashAssessment = dbContext.OnlandVisualTrashAssessments.Single(x =>
             x.OnlandVisualTrashAssessmentID == onlandVisualTrashAssessmentID);
 
+        if (String.IsNullOrWhiteSpace(geometryAsGeoJson))
+        {
+            onlandVisualTrashAssessment.DraftGeometry = null;
+            onlandVisualTrashAssessment.IsDraftGeometryManuallyRefined = false;
+            await dbContext.SaveChangesAsync();
+            return;
+        }
+
         var newGeometry = GeoJsonSerializer.Deserialize<IFeature>(geometryAsGeoJson);
         newGeometry.Geometry.SRID = Proj4NetHelper.WEB_MERCATOR;
         newGeometry.Geometry = newGeometry.Geometry.ProjectTo2771();

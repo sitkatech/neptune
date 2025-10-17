@@ -7,16 +7,12 @@ import { NgIf } from "@angular/common";
     selector: "button-renderer",
     templateUrl: "./button-renderer.component.html",
     styleUrls: ["./button-renderer.component.scss"],
-    standalone: true,
     imports: [NgIf],
 })
 export class ButtonRendererComponent implements AgRendererComponent {
     params: any;
 
-    constructor(
-        private ngZone: NgZone,
-        private router: Router
-    ) {}
+    constructor(private ngZone: NgZone, private router: Router) {}
 
     agInit(params: any): void {
         if (params.value === null) {

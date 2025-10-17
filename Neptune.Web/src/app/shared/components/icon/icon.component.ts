@@ -1,11 +1,10 @@
 import { Component, Input } from "@angular/core";
 
-
 @Component({
     selector: "icon",
     imports: [],
     templateUrl: "./icon.component.html",
-    styleUrls: ["./icon.component.scss"]
+    styleUrls: ["./icon.component.scss"],
 })
 export class IconComponent {
     @Input() icon: typeof IconInterface;
@@ -39,6 +38,9 @@ export var IconInterface:
     | "ExternalLink"
     | "Geography"
     | "Geography-Alt"
+    | "GeomanDelete"
+    | "GeomanEdit"
+    | "GeomanPolygon"
     | "Guide"
     | "FlowArrow"
     | "Inbox"

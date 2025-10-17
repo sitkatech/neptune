@@ -71,14 +71,6 @@ namespace Neptune.API.Controllers
             return Ok(updatedTreatmentBMPModelingTypeID);
         }
 
-        [HttpGet("modeling-attribute-dropdown-items")]
-        [UserViewFeature]
-        public ActionResult<List<TreatmentBMPModelingAttributeDropdownItemDto>> GetModelingAttributeDropdownItems()
-        {
-            var treatmentBMPModelingAttributeDropdownItemDtos = TreatmentBMPs.GetModelingAttributeDropdownItemsAsDto(DbContext);
-            return Ok(treatmentBMPModelingAttributeDropdownItemDtos);
-        }
-
         [HttpGet("{treatmentBMPID}/upstreamRSBCatchmentGeoJSON")]
         [UserViewFeature]
         public ActionResult<GeometryGeoJSONAndAreaDto> GetUpstreamRSBCatchmentGeoJSONForTreatmentBMP([FromRoute] int treatmentBMPID)
