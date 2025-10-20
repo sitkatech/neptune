@@ -4273,10 +4273,6 @@
             "type": "number",
             "format": "double"
           },
-          "EquivalentAreaAcreage": {
-            "type": "number",
-            "format": "double"
-          },
           "TotalAcresCaptured": {
             "type": "number",
             "format": "double"
