@@ -12,7 +12,6 @@
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class AreaBasedAcreCalculationsDto { 
     FullTrashCaptureAcreage?: number;
-    EquivalentAreaAcreage?: number;
     TotalAcresCaptured?: number;
     TotalPLUAcres?: number;
     PercentTreated?: number;
@@ -23,7 +22,6 @@ export class AreaBasedAcreCalculationsDto {
 
 export interface AreaBasedAcreCalculationsDtoForm { 
     FullTrashCaptureAcreage?: FormControl<number>;
-    EquivalentAreaAcreage?: FormControl<number>;
     TotalAcresCaptured?: FormControl<number>;
     TotalPLUAcres?: FormControl<number>;
     PercentTreated?: FormControl<number>;
@@ -31,16 +29,6 @@ export interface AreaBasedAcreCalculationsDtoForm {
 
 export class AreaBasedAcreCalculationsDtoFormControls { 
     public static FullTrashCaptureAcreage = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static EquivalentAreaAcreage = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
         {

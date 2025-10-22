@@ -408,7 +408,7 @@ public class AIController(
     }
 
     [HttpPost("clean-up")]
-    [AllowAnonymous]
+    [AdminFeature]
     [Experimental("OPENAI001")]
     public async Task PostChatCompletions()
     {
@@ -440,6 +440,7 @@ public class AIController(
     }
 
     [HttpGet("vector-stores")]
+    [AdminFeature]
     [Experimental("OPENAI001")]
     public async Task<ActionResult<List<object>>> GetVectorStores()
     {
