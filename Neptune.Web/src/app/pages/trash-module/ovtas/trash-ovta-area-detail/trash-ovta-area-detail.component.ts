@@ -107,16 +107,14 @@ export class TrashOvtaAreaDetailComponent {
             tap(() => {
                 this.isLoading = true;
             }),
-            switchMap(() =>
-                this.onlandVisualTrashAssessmentAreaService.onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDGet(this.onlandVisualTrashAssessmentAreaID)
-            ),
+            switchMap(() => this.onlandVisualTrashAssessmentAreaService.getOnlandVisualTrashAssessmentArea(this.onlandVisualTrashAssessmentAreaID)),
             tap(() => {
                 this.isLoading = false;
             })
         );
 
         this.onlandVisualTrashAssessments$ = this.onlandVisualTrashAssessmentAreaService
-            .onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDOnlandVisualTrashAssessmentsGet(this.onlandVisualTrashAssessmentAreaID)
+            .listAssessmentsByOVTAIDOnlandVisualTrashAssessmentArea(this.onlandVisualTrashAssessmentAreaID)
             .pipe(tap(() => (this.isLoadingGrid = false)));
     }
 
@@ -137,7 +135,7 @@ export class TrashOvtaAreaDetailComponent {
                     onlandVisualTrashAssessmentSimpleDto.OnlandVisualTrashAssessmentAreaID = onlandVisualTrashAssessmentAreaID;
                     onlandVisualTrashAssessmentSimpleDto.StormwaterJurisdictionID = stormwaterJurisdictionID;
                     onlandVisualTrashAssessmentSimpleDto.AssessingNewArea = false;
-                    this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsPost(onlandVisualTrashAssessmentSimpleDto).subscribe((response) => {
+                    this.onlandVisualTrashAssessmentService.createOnlandVisualTrashAssessment(onlandVisualTrashAssessmentSimpleDto).subscribe((response) => {
                         this.alertService.clearAlerts();
                         this.alertService.pushAlert(new Alert("The OVTA was successfully created.", AlertContext.Success));
                         this.router.navigate([`/trash/onland-visual-trash-assessments/edit/${response.OnlandVisualTrashAssessmentID}/record-observations`]);
@@ -155,13 +153,11 @@ export class TrashOvtaAreaDetailComponent {
             .confirm({ buttonClassYes: "btn-primary", buttonTextYes: "Continue", buttonTextNo: "Cancel", title: "Return OVTA to Edit", message: modalContents })
             .then((confirmed) => {
                 if (confirmed) {
-                    this.onlandVisualTrashAssessmentService
-                        .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDReturnToEditPost(onlandVisualTrashAssessmentID)
-                        .subscribe((response) => {
-                            this.alertService.clearAlerts();
-                            this.alertService.pushAlert(new Alert('The OVTA was successfully returned to the "In Progress" status.', AlertContext.Success));
-                            this.router.navigateByUrl(`/trash/onland-visual-trash-assessments/edit/${onlandVisualTrashAssessmentID}/record-observations`);
-                        });
+                    this.onlandVisualTrashAssessmentService.editStatusToAllowEditOnlandVisualTrashAssessment(onlandVisualTrashAssessmentID).subscribe((response) => {
+                        this.alertService.clearAlerts();
+                        this.alertService.pushAlert(new Alert('The OVTA was successfully returned to the "In Progress" status.', AlertContext.Success));
+                        this.router.navigateByUrl(`/trash/onland-visual-trash-assessments/edit/${onlandVisualTrashAssessmentID}/record-observations`);
+                    });
                 }
             });
     }
@@ -172,7 +168,7 @@ export class TrashOvtaAreaDetailComponent {
             .confirm({ buttonClassYes: "btn-primary", buttonTextYes: "Delete", buttonTextNo: "Cancel", title: "Delete OVTA", message: modalContents })
             .then((confirmed) => {
                 if (confirmed) {
-                    this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDDelete(onlandVisualTrashAssessmentID).subscribe((response) => {
+                    this.onlandVisualTrashAssessmentService.deleteOnlandVisualTrashAssessment(onlandVisualTrashAssessmentID).subscribe((response) => {
                         this.alertService.clearAlerts();
                         this.alertService.pushAlert(new Alert("Your OVTA was successfully deleted.", AlertContext.Success));
                         this.router.navigate([`/trash/onland-visual-trash-assessments`]);

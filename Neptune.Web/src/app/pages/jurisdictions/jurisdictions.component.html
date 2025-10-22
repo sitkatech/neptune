@@ -1,0 +1,24 @@
+<page-header pageTitle="Jurisdictions" [customRichTextTypeID]="customRichTextTypeID"></page-header>
+<app-alert-display></app-alert-display>
+<div class="page-body">
+    @if (boundingBox$ | async; as boundingBox) {
+    <hybrid-map-grid
+        [rowData]="jurisdictions$ | async"
+        [columnDefs]="columnDefs"
+        rowSelection="single"
+        downloadFileName="jurisdictions"
+        entityIDField="StormwaterJurisdictionID"
+        (onMapLoad)="handleMapReady($event, boundingBox)"
+        [selectedValue]="selectedJurisdictionID"
+        [selectionFromMap]="true"
+        (selectedValueChange)="onSelectedJurisdictionIDChanged($event)">
+        <jurisdictions-layer
+            [map]="map"
+            [layerControl]="layerControl"
+            [mode]="OverlayMode.ReferenceWithInteractivity"
+            [selectedID]="selectedJurisdictionID"
+            (selected)="onSelectedJurisdictionIDChanged($event, true)">
+        </jurisdictions-layer>
+    </hybrid-map-grid>
+    }
+</div>

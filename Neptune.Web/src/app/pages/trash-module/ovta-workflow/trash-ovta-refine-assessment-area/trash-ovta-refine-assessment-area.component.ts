@@ -69,14 +69,12 @@ export class TrashOvtaRefineAssessmentAreaComponent {
     ngOnInit(): void {
         this.isLoading = true;
         this.onlandVisualTrashAssessment$ = this.onlandVisualTrashAssessmentService
-            .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDGet(this.onlandVisualTrashAssessmentID)
+            .getOnlandVisualTrashAssessment(this.onlandVisualTrashAssessmentID)
             .pipe(tap(() => (this.isLoading = false)));
 
         this.onlandVisualTrashAssessmentArea$ = this.onlandVisualTrashAssessment$.pipe(
             switchMap(() => {
-                return this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDAreaAsFeatureCollectionGet(
-                    this.onlandVisualTrashAssessmentID
-                );
+                return this.onlandVisualTrashAssessmentService.getAreaAsFeatureCollectionOnlandVisualTrashAssessment(this.onlandVisualTrashAssessmentID);
             })
         );
     }
@@ -102,7 +100,7 @@ export class TrashOvtaRefineAssessmentAreaComponent {
             onlandVisualTrashAssessmentRefineArea.GeometryAsGeoJson = JSON.stringify(layer.toGeoJSON());
         });
         this.onlandVisualTrashAssessmentService
-            .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDRefineAreaPost(this.onlandVisualTrashAssessmentID, onlandVisualTrashAssessmentRefineArea)
+            .updateOnlandVisualTrashAssessmentWithRefinedAreaOnlandVisualTrashAssessment(this.onlandVisualTrashAssessmentID, onlandVisualTrashAssessmentRefineArea)
             .subscribe(() => {
                 this.isLoadingSubmit = false;
                 this.alertService.clearAlerts();

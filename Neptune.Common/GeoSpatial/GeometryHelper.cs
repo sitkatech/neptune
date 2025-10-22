@@ -1,5 +1,6 @@
 ﻿using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
+using NetTopologySuite.Geometries.Utilities;
 using NetTopologySuite.IO;
 
 namespace Neptune.Common.GeoSpatial;
@@ -10,7 +11,7 @@ public static class GeometryHelper
 
     public static Geometry MakeValid(this Geometry geometry)
     {
-        return !geometry.IsValid ? NetTopologySuite.Geometries.Utilities.GeometryFixer.Fix(geometry) : geometry;
+        return !geometry.IsValid ? GeometryFixer.Fix(geometry) : geometry;
     }
 
     public static Geometry CreateLocationPoint4326FromLatLong(double latitude, double longitude)

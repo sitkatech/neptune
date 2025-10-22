@@ -84,9 +84,7 @@ export class TrashOvtaAreaEditLocationComponent {
     }
 
     ngOnInit(): void {
-        this.onlandVisualTrashAssessmentArea$ = this.onlandVisualTrashAssessmentAreaService.onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDGet(
-            this.onlandVisualTrashAssessmentAreaID
-        );
+        this.onlandVisualTrashAssessmentArea$ = this.onlandVisualTrashAssessmentAreaService.getOnlandVisualTrashAssessmentArea(this.onlandVisualTrashAssessmentAreaID);
     }
 
     public handleLayerBoundsCalculated(bounds: any) {
@@ -107,11 +105,9 @@ export class TrashOvtaAreaEditLocationComponent {
         ovtaGeometryDto.GeometryAsGeoJson = geoJson ? JSON.stringify(geoJson) : null;
         ovtaGeometryDto.ParcelIDs = this.selectedParcelIDs;
         ovtaGeometryDto.OnlandVisualTrashAssessmentAreaID = ovtaAreaID;
-        this.onlandVisualTrashAssessmentAreaService
-            .onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDParcelGeometriesPost(ovtaAreaID, ovtaGeometryDto)
-            .subscribe((x) => {
-                this.router.navigate(`trash/onland-visual-trash-assessment-areas/${ovtaAreaID}`.split("/"));
-            });
+        this.onlandVisualTrashAssessmentAreaService.updateOnlandVisualTrashAssessmentWithParcelsOnlandVisualTrashAssessmentArea(ovtaAreaID, ovtaGeometryDto).subscribe((x) => {
+            this.router.navigate(`trash/onland-visual-trash-assessment-areas/${ovtaAreaID}`.split("/"));
+        });
     }
 
     public setControl(): void {
@@ -214,7 +210,7 @@ export class TrashOvtaAreaEditLocationComponent {
     }
 
     private addOVTAAreaToLayer(ovtaAreaID) {
-        this.onlandVisualTrashAssessmentAreaService.onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDParcelGeometriesGet(ovtaAreaID).pipe(
+        this.onlandVisualTrashAssessmentAreaService.getParcelGeometriesOnlandVisualTrashAssessmentArea(ovtaAreaID).pipe(
             switchMap((parcels) => {
                 const parcelIDs = parcels.map((x) => x.ParcelID);
                 return forkJoin({

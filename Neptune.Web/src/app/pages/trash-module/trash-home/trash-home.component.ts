@@ -26,7 +26,7 @@ import { LoadResultsDto } from "src/app/shared/generated/model/load-results-dto"
 import { OVTAResultsDto } from "src/app/shared/generated/model/ovta-results-dto";
 import { LeafletHelperService } from "src/app/shared/services/leaflet-helper.service";
 import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto";
-import { IFeature, StormwaterJurisdictionDto, TrashGeneratingUnitDto } from "src/app/shared/generated/model/models";
+import { IFeature, StormwaterJurisdictionDisplayDto, TrashGeneratingUnitDto } from "src/app/shared/generated/model/models";
 import { WqmpsTrashCaptureLayerComponent } from "src/app/shared/components/leaflet/layers/wqmps-trash-capture-layer/wqmps-trash-capture-layer.component";
 import { OvtaAreasLayerComponent } from "src/app/shared/components/leaflet/layers/ovta-areas-layer/ovta-areas-layer.component";
 import { TrashGeneratingUnitLoadsLayerComponent } from "src/app/shared/components/leaflet/layers/trash-generating-unit-loads-layer/trash-generating-unit-loads-layer.component";
@@ -40,6 +40,7 @@ import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.
 import { TrashCaptureStatusTypeEnum } from "src/app/shared/generated/enum/trash-capture-status-type-enum";
 import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
 import { PermitTypeLayerComponent } from "src/app/shared/components/leaflet/layers/permit-type-layer/permit-type-layer.component";
+import { OverlayMode } from "src/app/shared/components/leaflet/layers/generic-wms-wfs-layer/overlay-mode.enum";
 
 @Component({
     selector: "trash-home",
@@ -70,6 +71,8 @@ import { PermitTypeLayerComponent } from "src/app/shared/components/leaflet/laye
     ],
 })
 export class TrashHomeComponent implements OnInit, OnDestroy {
+    public OverlayMode = OverlayMode;
+
     public watchUserChangeSubscription: any;
     public currentUser$: Observable<PersonDto>;
 
@@ -79,9 +82,9 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
     public mapIsReady: boolean = false;
     public layerControl: L.Control.Layers;
 
-    public stormwaterJurisdictions$: Observable<Array<StormwaterJurisdictionDto>>;
-    public currentStormwaterJurisdiction: StormwaterJurisdictionDto;
-    private stormwaterJurisdictionSubject = new BehaviorSubject<StormwaterJurisdictionDto | null>(null);
+    public stormwaterJurisdictions$: Observable<Array<StormwaterJurisdictionDisplayDto>>;
+    public currentStormwaterJurisdiction: StormwaterJurisdictionDisplayDto;
+    private stormwaterJurisdictionSubject = new BehaviorSubject<StormwaterJurisdictionDisplayDto | null>(null);
     public stormwaterJurisdiction$ = this.stormwaterJurisdictionSubject.asObservable();
 
     public selectedStormwaterJurisdictionLayer: L.GeoJSON<any>;
@@ -163,21 +166,21 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.stormwaterJurisdictions$ = this.stormwaterJurisdictionService.jurisdictionsUserViewableGet().pipe(
+        this.stormwaterJurisdictions$ = this.stormwaterJurisdictionService.listViewableStormwaterJurisdiction().pipe(
             tap((x) => {
                 this.stormwaterJurisdictionSubject.next(x[0]);
                 this.currentStormwaterJurisdiction = x[0];
             })
         );
 
-        this.lastUpdateDate$ = this.trashGeneratingUnitService.trashGeneratingUnitsLastUpdateDateGet();
+        this.lastUpdateDate$ = this.trashGeneratingUnitService.getLastUpdateDateTrashGeneratingUnit();
 
         this.areaBasedAcreCalculationsDto$ = this.stormwaterJurisdiction$.pipe(
             tap(() => {
                 this.isLoading = true;
             }),
             switchMap((x) => {
-                return this.trashResultsByJurisdictionService.trashResultsByJurisdictionJurisdictionIDAreaBasedResultsCalculationsGet(x.StormwaterJurisdictionID);
+                return this.trashResultsByJurisdictionService.getAreaBasedResultsCalculationsTrashGeneratingUnitByStormwaterJurisdiction(x.StormwaterJurisdictionID);
             }),
             tap(() => {
                 this.isLoading = false;
@@ -189,7 +192,7 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
                 this.isLoading = true;
             }),
             switchMap((x) => {
-                return this.trashResultsByJurisdictionService.trashResultsByJurisdictionJurisdictionIDLoadBasedResultsCalculationsGet(x.StormwaterJurisdictionID);
+                return this.trashResultsByJurisdictionService.getLoadBasedResultsCalculationsTrashGeneratingUnitByStormwaterJurisdiction(x.StormwaterJurisdictionID);
             }),
             tap(() => {
                 this.isLoading = false;
@@ -201,7 +204,7 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
                 this.isLoading = true;
             }),
             switchMap((x) => {
-                return this.trashResultsByJurisdictionService.trashResultsByJurisdictionJurisdictionIDOvtaBasedResultsCalculationsGet(x.StormwaterJurisdictionID);
+                return this.trashResultsByJurisdictionService.getOVTABasedResultsCalculationsTrashGeneratingUnitByStormwaterJurisdiction(x.StormwaterJurisdictionID);
             }),
             tap(() => {
                 this.isLoading = false;
@@ -213,7 +216,7 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
                 this.addSelectedJurisdictionLayer(x.StormwaterJurisdictionID);
             }),
             switchMap((x) => {
-                return this.stormwaterJurisdictionService.jurisdictionsJurisdictionIDBoundingBoxGet(x.StormwaterJurisdictionID);
+                return this.stormwaterJurisdictionService.getBoundingBoxByJurisdictionIDStormwaterJurisdiction(x.StormwaterJurisdictionID);
             }),
             tap((boundingBox) => {
                 if (this.mapIsReady) {
@@ -224,7 +227,7 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
 
         this.treatmentBMPs$ = this.stormwaterJurisdiction$.pipe(
             switchMap((x) => {
-                return this.treatmentBMPService.treatmentBmpsJurisdictionsJurisdictionIDVerifiedFeatureCollectionGet(x.StormwaterJurisdictionID);
+                return this.treatmentBMPService.listInventoryVerifiedTreatmentBMPsByJurisdictionIDAsFeatureCollectionTreatmentBMP(x.StormwaterJurisdictionID);
             }),
             tap((treatmentBMPs) => {
                 var isCurrentlyOn = this.map.hasLayer(this.treatmentBMPClusterLayer);
@@ -284,7 +287,7 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
         this.addSelectedJurisdictionLayer(this.currentStormwaterJurisdiction.StormwaterJurisdictionID);
     }
 
-    public onJurisdictionSelected(selectedJurisdiction: StormwaterJurisdictionDto) {
+    public onJurisdictionSelected(selectedJurisdiction: StormwaterJurisdictionDisplayDto) {
         this.stormwaterJurisdictionSubject.next(selectedJurisdiction);
         this.currentStormwaterJurisdiction = selectedJurisdiction;
         this.cdr.detectChanges();
@@ -333,7 +336,7 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
                     });
 
                 featuresInRenderedOrder.forEach((feature: GeoJSON.Feature) => {
-                    this.tguDto$ = this.trashGeneratingUnitService.trashGeneratingUnitsTrashGeneratingUnitIDGet(feature.properties.TrashGeneratingUnitID);
+                    this.tguDto$ = this.trashGeneratingUnitService.getTrashGeneratingUnit(feature.properties.TrashGeneratingUnitID);
                     const geoJson = L.geoJSON(feature, {
                         style: this.highlightStyle,
                     });

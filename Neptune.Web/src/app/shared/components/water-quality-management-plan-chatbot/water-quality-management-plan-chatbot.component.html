@@ -1,0 +1,94 @@
+@if (currentUser$ | async; as currentUser) { @if (chatMessages$ | async; as chatMessages) {
+<div class="tb-dialog chatgpt-style">
+    <div class="tb-dialog__header">
+        <h2 class="tb-dialog__title">
+            <img src="./assets/main/icons/esa-ai.svg" alt="AI Icon" />
+            Extract Data from Document
+        </h2>
+    </div>
+
+    <div class="tb-dialog__body | tb-dialog__body--two-col">
+        <div class="tb-dialog__main chatgpt-main" #main [scrollTop]="main.scrollHeight">
+            <div class="chatgpt-history">
+                @if (chatMessages.length === 0 && !(extractionResult$ | async)) {
+                <div class="intro">
+                    <div class="intro__wrapper | copy copy-3">
+                        <img src="./assets/main/icons/icon-leaf.svg" alt="Leaf" />
+                        <p><strong>Hi!</strong> Type your question to start extracting data from the document.</p>
+                    </div>
+                </div>
+                } @if (extractionResult$ | async; as extractionResult) {
+                <div class="chatgpt-bubble assistant">
+                    <div class="chatgpt-meta">
+                        <span> <img src="./assets/main/icons/esa-ai.svg" alt="AI Icon" class="chatgpt-avatar" /> ESA </span>
+                        <span class="chatgpt-date">{{ extractionResult?.ExtractedAt | date : "MMM d, y h:mm a" }}</span>
+                    </div>
+                    <div class="chatgpt-content">
+                        @if (extractionResult?.FinalOutput) {
+                        <span [innerHTML]="formatFinalOutput(extractionResult.FinalOutput)"></span>
+                        } @else {
+                        <pre><code>{{ extractionResult | json }}</code></pre>
+                        }
+                    </div>
+                </div>
+                } @if (chatMessages.length > 0) { @for (chatMessage of chatMessages; track $index) { @if (chatMessage.Role === 'assistant') {
+                <div class="chatgpt-bubble assistant" [id]="'response-' + ($index + 1)">
+                    <div class="chatgpt-meta">
+                        <span> <img src="./assets/main/icons/esa-ai.svg" alt="AI Icon" class="chatgpt-avatar" /> ESA </span>
+                        <span class="chatgpt-date">{{ chatMessage.Date | date : "MMM d, y h:mm a" }}</span>
+                    </div>
+                    <div class="chatgpt-content">
+                        @if ((chatMessage.SummaryHtml || chatMessage.Content) && (chatMessage.SummaryHtml || chatMessage.Content) !== 'undefined') {
+                        <p [innerHTML]="sanitizeSummaryHtml(chatMessage.SummaryHtml || chatMessage.Content || '')"></p>
+                        } @else {
+                        <span class="chatgpt-loading"><em>Processing…</em></span>
+                        }
+                    </div>
+                </div>
+                } @else if (chatMessage.Role === 'user') {
+                <div class="chatgpt-bubble user">
+                    <div class="chatgpt-meta">
+                        <span> <icon [icon]="'Leaf'"></icon> {{ currentUser.FirstName + " " + currentUser.LastName }} </span>
+                        <span class="chatgpt-date">{{ chatMessage.Date | date : "MMM d, y h:mm a" }}</span>
+                    </div>
+                    <div class="chatgpt-content">
+                        <p>{{ chatMessage.Content }}</p>
+                    </div>
+                </div>
+                } } }
+            </div>
+        </div>
+
+        <div class="tb-dialog__sidebar chatgpt-sidebar" #sidebar [scrollTop]="sidebar.scrollHeight">
+            <!-- Prompt selection removed -->
+            <div class="tb-dialog__sidebar--footer">
+                <div class="chatgpt-context">
+                    <span class="context__badge">
+                        <icon [icon]="'File'"></icon>
+                        {{ waterQualityManagementPlanDocument.FileResource.OriginalFilename }}
+                    </span>
+                </div>
+                <div class="chatgpt-actions">
+                    <a role="button" class="chatgpt-action-link" (click)="reset()">Reset Conversation</a>
+                    <a role="button" class="chatgpt-action-link" (click)="exportChat()">Export Chat</a>
+                </div>
+                @if (isReceiving$ | async) {
+                <div class="sidebar-loading-indicator">
+                    <span class="loading-dots"> <span>.</span><span>.</span><span>.</span> </span>
+                </div>
+                } @if (chatMessages.length > 0) {
+                <div class="chatgpt-nav">
+                    <h5 class="chatgpt-nav-header">Jump to Response</h5>
+                    @if (assistantMessages$ | async; as assistantMessages) { @for (chatMessage of assistantMessages; track $index) {
+                    <a role="button" class="chatgpt-nav-link" (click)="scrollMainTo('response-' + (chatMessages.indexOf(chatMessage) + 1))"> Response {{ $index + 1 }} </a>
+                    } }
+                </div>
+                }
+                <div class="chatgpt-input-bar">
+                    <ai-chat-input placeholder="Write your own prompt..." [isReceiving]="isReceiving$ | async" (send)="send($event)"></ai-chat-input>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+} }

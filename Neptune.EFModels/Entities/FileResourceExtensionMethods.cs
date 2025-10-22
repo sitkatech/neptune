@@ -12,6 +12,7 @@ public static class FileResourceExtensionMethods
             FileResourceMimeTypeID = fileResource.FileResourceMimeTypeID,
             OriginalBaseFilename = fileResource.OriginalBaseFilename,
             OriginalFileExtension = fileResource.OriginalFileExtension,
+            OriginalFilename = fileResource.GetOriginalCompleteFileName(),
             FileResourceGUID = fileResource.FileResourceGUID,
             CreatePersonID = fileResource.CreatePersonID,
             CreateDate = fileResource.CreateDate,
@@ -28,8 +29,9 @@ public static class FileResourceExtensionMethods
             FileResourceMimeType = fileResource.FileResourceMimeType.AsSimpleDto(),
             OriginalBaseFilename = fileResource.OriginalBaseFilename,
             OriginalFileExtension = fileResource.OriginalFileExtension,
+            OriginalFilename = fileResource.GetOriginalCompleteFileName(),
             FileResourceGUID = fileResource.FileResourceGUID,
-            CreatePerson = fileResource.CreatePerson.AsDto(),
+            CreatePerson = fileResource.CreatePerson.AsDisplayDto(),
             CreateDate = fileResource.CreateDate,
             ContentLength = fileResource.ContentLength
         };

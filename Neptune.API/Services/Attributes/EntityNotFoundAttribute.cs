@@ -9,20 +9,20 @@ namespace Neptune.API.Services.Attributes;
 /// 
 /// </summary>
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
-public class EntityNotFoundAttribute : Attribute
+public class EntityNotFoundAttribute(Type entityType, string pkStringInRoute) : Attribute
 {
     /// <summary>
     /// The Entity Type to retrieve from the DbContext
     /// </summary>
-    public Type EntityType { get; set; }
+    public Type EntityType { get; set; } = entityType;
+
     /// <summary>
     /// The primary key string in the route to retrieve the entity with.
     /// </summary>
-    public string PKStringInRoute { get; set; }
+    public string PKStringInRoute { get; set; } = pkStringInRoute;
 
-    public EntityNotFoundAttribute(Type entityType, string pkStringInRoute)
-    {
-        EntityType = entityType;
-        PKStringInRoute = pkStringInRoute;
-    }
+    /// <summary>
+    /// Filter order (lower runs first)
+    /// </summary>
+    public int Order { get; set; } = -1000;
 }

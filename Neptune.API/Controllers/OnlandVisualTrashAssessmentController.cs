@@ -27,7 +27,7 @@ public class OnlandVisualTrashAssessmentController(
 {
     [HttpGet]
     [JurisdictionEditFeature]
-    public ActionResult<List<OnlandVisualTrashAssessmentGridDto>> ListForCallingUser()
+    public ActionResult<List<OnlandVisualTrashAssessmentGridDto>> List()
     {
         var stormwaterJurisdictionIDs = People.ListStormwaterJurisdictionIDsByPersonID(DbContext, CallingUser.PersonID);
         var onlandVisualTrashAssessmentGridDtos = OnlandVisualTrashAssessments.ListByStormwaterJurisdictionIDAsGridDto(DbContext, stormwaterJurisdictionIDs);
@@ -36,7 +36,7 @@ public class OnlandVisualTrashAssessmentController(
 
     [HttpPost]
     [JurisdictionEditFeature]
-    public async Task<ActionResult<OnlandVisualTrashAssessmentSimpleDto>> CreateNew([FromBody] OnlandVisualTrashAssessmentSimpleDto dto)
+    public async Task<ActionResult<OnlandVisualTrashAssessmentSimpleDto>> Create([FromBody] OnlandVisualTrashAssessmentSimpleDto dto)
     {
         var onlandVisualTrashAssessment = await OnlandVisualTrashAssessments.CreateNew(DbContext, dto, CallingUser);
         return Ok(onlandVisualTrashAssessment);
@@ -45,7 +45,7 @@ public class OnlandVisualTrashAssessmentController(
     [HttpGet("{onlandVisualTrashAssessmentID}")]
     [JurisdictionEditFeature]
     [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
-    public ActionResult<OnlandVisualTrashAssessmentDetailDto> GetByID([FromRoute] int onlandVisualTrashAssessmentID)
+    public ActionResult<OnlandVisualTrashAssessmentDetailDto> Get([FromRoute] int onlandVisualTrashAssessmentID)
     {
         var onlandVisualTrashAssessmentDetailDto = OnlandVisualTrashAssessments.GetByID(DbContext, onlandVisualTrashAssessmentID).AsDetailDto();
         return Ok(onlandVisualTrashAssessmentDetailDto);
@@ -54,7 +54,7 @@ public class OnlandVisualTrashAssessmentController(
     [HttpDelete("{onlandVisualTrashAssessmentID}")]
     [JurisdictionEditFeature]
     [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
-    public async Task<IActionResult> DeleteByID([FromRoute] int onlandVisualTrashAssessmentID)
+    public async Task<IActionResult> Delete([FromRoute] int onlandVisualTrashAssessmentID)
     {
         var onlandVisualTrashAssessment = OnlandVisualTrashAssessments.GetByIDWithChangeTracking(DbContext, onlandVisualTrashAssessmentID);
 

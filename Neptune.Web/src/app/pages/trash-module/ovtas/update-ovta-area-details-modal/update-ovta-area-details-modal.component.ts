@@ -39,7 +39,7 @@ export class UpdateOvtaAreaDetailsModalComponent implements OnInit {
 
     save(): void {
         this.onlandVisualTrashAssessmentAreaService
-            .onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDPut(this.formGroup.controls.OnlandVisualTrashAssessmentAreaID.value, this.formGroup.value)
+            .updateOnlandVisualTrashAssessmentArea(this.formGroup.controls.OnlandVisualTrashAssessmentAreaID.value, this.formGroup.value)
             .subscribe(() => {
                 this.alertService.clearAlerts();
                 this.alertService.pushAlert(new Alert("Successfully updated OVTA area.", AlertContext.Success));

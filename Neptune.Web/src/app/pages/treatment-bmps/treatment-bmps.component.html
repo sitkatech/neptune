@@ -1,0 +1,18 @@
+<page-header pageTitle="All Treatment BMPs" [customRichTextTypeID]="customRichTextTypeID"></page-header>
+
+<app-alert-display></app-alert-display>
+
+<div class="page-body" [loadingSpinner]="{ isLoading, loadingHeight: 100 }">
+    <hybrid-map-grid
+        [rowData]="treatmentBmps$ | async"
+        [columnDefs]="columnDefs"
+        downloadFileName="treatment-bmps"
+        entityIDField="TreatmentBMPID"
+        (onMapLoad)="handleMapReady($event)"
+        [selectedValue]="selectedTreatmentBMPID"
+        [selectionFromMap]="selectionFromMap"
+        (selectedValueChange)="onSelectedTreatmentBMPChangedFromGrid($event)"
+        [boundingBox]="boundingBox$ | async">
+        <div headerActions></div>
+    </hybrid-map-grid>
+</div>

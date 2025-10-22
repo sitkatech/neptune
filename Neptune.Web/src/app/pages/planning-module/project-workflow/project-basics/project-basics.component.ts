@@ -71,7 +71,7 @@ export class ProjectBasicsComponent implements OnInit {
     ngOnInit(): void {
         this.projectBasicInfo$ = combineLatest({
             CurrentUser: this.authenticationService.getCurrentUser(),
-            Project: this.projectID ? this.projectService.projectsProjectIDGet(this.projectID) : of(new ProjectDto()),
+            Project: this.projectID ? this.projectService.getProject(this.projectID) : of(new ProjectDto()),
         }).pipe(
             tap((value) => {
                 if (value.Project.ProjectID) {
@@ -96,25 +96,25 @@ export class ProjectBasicsComponent implements OnInit {
             })
         );
 
-        this.organizationOptions$ = this.organizationService.organizationsGet().pipe(
+        this.organizationOptions$ = this.organizationService.listOrganization().pipe(
             map((list) => {
                 let options = list.map((x) => ({ Value: x.OrganizationID, Label: x.OrganizationName } as SelectDropdownOption));
                 return options;
             })
         );
-        this.userOptions$ = this.userService.usersGet().pipe(
+        this.userOptions$ = this.userService.listUser().pipe(
             map((list) => {
                 let options = list.map((x) => ({ Value: x.PersonID, Label: x.FullName } as SelectDropdownOption));
                 return options;
             })
         );
-        this.stormwaterJurisdictionOptions$ = this.stormwaterJurisdictionService.jurisdictionsGet().pipe(
+        this.stormwaterJurisdictionOptions$ = this.stormwaterJurisdictionService.listViewableStormwaterJurisdiction().pipe(
             map((list) => {
                 if (list.length == 1) {
-                    return [{ Value: list[0].StormwaterJurisdictionID, Label: list[0].Organization.OrganizationName, Disabled: false }];
+                    return [{ Value: list[0].StormwaterJurisdictionID, Label: list[0].StormwaterJurisdictionName, Disabled: false }];
                 }
 
-                let options = list.map((x) => ({ Value: x.StormwaterJurisdictionID, Label: x.Organization.OrganizationName } as SelectDropdownOption));
+                let options = list.map((x) => ({ Value: x.StormwaterJurisdictionID, Label: x.StormwaterJurisdictionName } as SelectDropdownOption));
                 return options;
             })
         );
@@ -123,7 +123,7 @@ export class ProjectBasicsComponent implements OnInit {
     public save(andContinue: boolean = false) {
         this.isLoadingSubmit = true;
         if (this.projectID) {
-            this.projectService.projectsProjectIDUpdatePut(this.projectID, this.formGroup.getRawValue()).subscribe((response) => {
+            this.projectService.updateProject(this.projectID, this.formGroup.getRawValue()).subscribe((response) => {
                 this.isLoadingSubmit = false;
                 this.alertService.clearAlerts();
                 this.alertService.pushAlert(new Alert("Your project was successfully updated.", AlertContext.Success));
@@ -135,7 +135,7 @@ export class ProjectBasicsComponent implements OnInit {
                 }
             });
         } else {
-            this.projectService.projectsPost(this.formGroup.getRawValue()).subscribe((response) => {
+            this.projectService.createProject(this.formGroup.getRawValue()).subscribe((response) => {
                 this.isLoadingSubmit = false;
                 this.alertService.clearAlerts();
                 this.alertService.pushAlert(new Alert("Your project was successfully created.", AlertContext.Success));

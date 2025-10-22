@@ -13,12 +13,13 @@ import { FormControl, FormControlOptions, FormControlState, Validators } from "@
 export class FileResourceSimpleDto { 
     FileResourceID?: number;
     FileResourceMimeTypeID?: number;
-    OriginalBaseFilename?: string | null;
-    OriginalFileExtension?: string | null;
     FileResourceGUID?: string;
     CreatePersonID?: number;
     CreateDate?: string;
     ContentLength?: number;
+    OriginalBaseFilename?: string | null;
+    OriginalFileExtension?: string | null;
+    OriginalFilename?: string | null;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
@@ -27,12 +28,13 @@ export class FileResourceSimpleDto {
 export interface FileResourceSimpleDtoForm { 
     FileResourceID?: FormControl<number>;
     FileResourceMimeTypeID?: FormControl<number>;
-    OriginalBaseFilename?: FormControl<string>;
-    OriginalFileExtension?: FormControl<string>;
     FileResourceGUID?: FormControl<string>;
     CreatePersonID?: FormControl<number>;
     CreateDate?: FormControl<string>;
     ContentLength?: FormControl<number>;
+    OriginalBaseFilename?: FormControl<string>;
+    OriginalFileExtension?: FormControl<string>;
+    OriginalFilename?: FormControl<string>;
 }
 
 export class FileResourceSimpleDtoFormControls { 
@@ -47,26 +49,6 @@ export class FileResourceSimpleDtoFormControls {
         }
     );
     public static FileResourceMimeTypeID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static OriginalBaseFilename = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static OriginalFileExtension = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {
@@ -107,6 +89,36 @@ export class FileResourceSimpleDtoFormControls {
         }
     );
     public static ContentLength = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static OriginalBaseFilename = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static OriginalFileExtension = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static OriginalFilename = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {

@@ -1,0 +1,95 @@
+<ng-template #templateAbove>
+    <div class="back">
+        <a [routerLink]="['/regional-subbasins']" class="back__link">Back to Regional Subbasins</a>
+    </div>
+</ng-template>
+@if(regionalSubbasin$ | async; as regionalSubbasin) {
+<page-header [pageTitle]="'Regional Subbasin: ' + regionalSubbasin.DisplayName" [templateAbove]="templateAbove"></page-header>
+<app-alert-display></app-alert-display>
+<div class="grid-12">
+    <div class="g-col-6">
+        <div class="card">
+            <div class="card-header"><span class="card-title">Basics</span></div>
+            <div class="card-body">
+                @if (regionalSubbasin$ | async; as subbasin) {
+                <dl class="grid-12">
+                    <dt class="g-col-5">Catchment ID</dt>
+                    <dd class="g-col-7">{{ subbasin.OCSurveyCatchmentID }}</dd>
+                    <dt class="g-col-5">Downstream Catchment ID</dt>
+                    <dd class="g-col-7">
+                        @if(subbasin.OCSurveyDownstreamCatchmentID) {
+                        <a [routerLink]="['/regional-subbasins', subbasin.DownstreamRegionalSubbasinID]">{{ subbasin.OCSurveyDownstreamCatchmentID }}</a>
+                        } @else {
+                        <span class="systemText">This Regional Subbasin is the downstream terminus of its watershed and flows directly to the ocean.</span>
+                        }
+                    </dd>
+                    <dt class="g-col-5">Area (ac)</dt>
+                    <dd class="g-col-7">{{ subbasin.Area | number : "1.0-2" }}</dd>
+                    <dt class="g-col-5">Drain ID</dt>
+                    <dd class="g-col-7">{{ subbasin.DrainID }}</dd>
+                    <dt class="g-col-5">
+                        <field-definition fieldDefinitionType="Watershed">Watershed</field-definition>
+                    </dt>
+                    <dd class="g-col-7">{{ subbasin.Watershed }}</dd>
+                </dl>
+                }
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-header"><span class="card-title">Land Use Statistics</span></div>
+            <div class="card-body">
+                <land-use-table [hruCharacteristics]="hruCharacteristicsSummaries"></land-use-table>
+            </div>
+        </div>
+    </div>
+    @if(loadGeneratingUnits$ | async; as loadGeneratingUnits) {
+    <div class="g-col-6">
+        <div class="card">
+            <div class="card-header"><span class="card-title">Location</span></div>
+            <div class="card-body">
+                <neptune-map [mapHeight]="'400px'" [showLegend]="false" (onMapLoad)="handleMapReady($event)">
+                    @if (mapIsReady) {
+                    <regional-subbasins-layer
+                        [mode]="OverlayMode.Single"
+                        [map]="map"
+                        [layerControl]="layerControl"
+                        [sortOrder]="10"
+                        [selectedID]="regionalSubbasinID"></regional-subbasins-layer>
+                    @if(loadGeneratingUnitIDs$ | async; as loadGeneratingUnitIDs) {
+                    <load-generating-units-layer
+                        [mode]="OverlayMode.ReferenceOnly"
+                        [displayOnLoad]="true"
+                        [map]="map"
+                        [layerControl]="layerControl"
+                        [sortOrder]="30"
+                        [filterToIDs]="loadGeneratingUnitIDs">
+                    </load-generating-units-layer>
+                    } }
+                </neptune-map>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mt-3">
+        <div class="card-header"><span class="card-title">Load Generating Units</span></div>
+        <div class="card-body">
+            <neptune-grid
+                [rowData]="loadGeneratingUnits"
+                [columnDefs]="loadGeneratingUnitsColumnDefs"
+                [pagination]="true"
+                [height]="'200px'"
+                [downloadFileName]="'LoadGeneratingUnits'"></neptune-grid>
+        </div>
+    </div>
+    }
+    <div class="card mt-3">
+        <div class="card-header"><span class="card-title">HRU Characteristics</span></div>
+        <div class="card-body">
+            <hru-characteristics-grid
+                [rowData]="hruCharacteristics$ | async"
+                [height]="'200px'"
+                [downloadFileName]="'HRUCharacteristics_RSB' + regionalSubbasinID"></hru-characteristics-grid>
+        </div>
+    </div>
+</div>
+}

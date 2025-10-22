@@ -3,7 +3,7 @@ using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public static partial class DelineationExtensionMethods
+    public static class DelineationExtensionMethods
     {
         public static DelineationUpsertDto AsUpsertDto(this Delineation delineation)
         {
@@ -45,6 +45,11 @@ namespace Neptune.EFModels.Entities
             return delineation?.DelineationGeometry.Area != null
                 ? Math.Round(delineation.DelineationGeometry.Area * Constants.SquareMetersToAcres, 2)
                 : null;
+        }
+
+        public static string GetDelineationStatus(this Delineation? delineation)
+        {
+            return delineation != null ? delineation.IsVerified ? "Verified" : "Provisional" : "None";
         }
     }
 }

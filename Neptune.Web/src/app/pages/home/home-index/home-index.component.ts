@@ -46,7 +46,7 @@ export class HomeIndexComponent implements OnInit {
                 return;
             }
 
-            this.router.navigate(["./trash"]);
+            this.router.navigate(["./"]);
         });
     }
 

@@ -2,28 +2,27 @@
 
 namespace Neptune.EFModels.Entities;
 
-public static partial class StormwaterJurisdictionExtensionMethods
+public static class StormwaterJurisdictionExtensionMethods
 {
     public static StormwaterJurisdictionDisplayDto AsDisplayDto(this StormwaterJurisdiction stormwaterJurisdiction)
     {
         var treatmentBMPSimpleDto = new StormwaterJurisdictionDisplayDto()
         {
             StormwaterJurisdictionID = stormwaterJurisdiction.StormwaterJurisdictionID,
-            StormwaterJurisdictionDisplayName = stormwaterJurisdiction.Organization.OrganizationName
+            StormwaterJurisdictionName = stormwaterJurisdiction.Organization.OrganizationName
         };
         return treatmentBMPSimpleDto;
     }
 
-    public static StormwaterJurisdictionDto AsDto(this StormwaterJurisdiction stormwaterJurisdiction)
+    public static StormwaterJurisdictionGridDto AsGridDto(this StormwaterJurisdiction stormwaterJurisdiction)
     {
-        var dto = new StormwaterJurisdictionDto()
+        var dto = new StormwaterJurisdictionGridDto()
         {
             StormwaterJurisdictionID = stormwaterJurisdiction.StormwaterJurisdictionID,
+            StormwaterJurisdictionName = stormwaterJurisdiction.Organization.OrganizationName,
             OrganizationID = stormwaterJurisdiction.OrganizationID,
-            StateProvinceID = stormwaterJurisdiction.StateProvinceID,
-            StormwaterJurisdictionPublicBMPVisibilityTypeID = stormwaterJurisdiction.StormwaterJurisdictionPublicBMPVisibilityTypeID,
-            StormwaterJurisdictionPublicWQMPVisibilityTypeID = stormwaterJurisdiction.StormwaterJurisdictionPublicWQMPVisibilityTypeID,
-            Organization = stormwaterJurisdiction.Organization.AsSimpleDto()
+            StormwaterJurisdictionPublicBMPVisibilityTypeName = stormwaterJurisdiction.StormwaterJurisdictionPublicBMPVisibilityType.StormwaterJurisdictionPublicBMPVisibilityTypeDisplayName,
+            StormwaterJurisdictionPublicWQMPVisibilityTypeName = stormwaterJurisdiction.StormwaterJurisdictionPublicWQMPVisibilityType.StormwaterJurisdictionPublicWQMPVisibilityTypeDisplayName,
         };
         return dto;
     }

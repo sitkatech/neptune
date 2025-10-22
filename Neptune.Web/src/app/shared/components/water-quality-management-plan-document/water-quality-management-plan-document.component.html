@@ -1,0 +1,30 @@
+<div class="document">
+    <div class="document__body">
+        <a href="javascript:void(0)" (click)="onDownload()" class="document__link">
+            <span class="document__icon">
+                <icon [icon]="'PDF'"></icon>
+                <!-- TODO: get other fileType icons -->
+            </span>
+            <div class="document__title">{{ keyDocument.DisplayName }}</div>
+        </a>
+
+        <div class="document__meta">
+            <span class="document__meta-item"><strong>Size: </strong> {{ formatFileSize(keyDocument.FileResource.ContentLength) }}</span>
+            <span class="document__meta-item"><strong>Date Modified: </strong> {{ keyDocument.UploadDate | date : "MMM d, y, h:mm a" }}</span>
+            <span class="document__meta-item"
+                ><strong>Updated by: </strong>
+                <span class="document__meta-item--user"
+                    >&nbsp; @if (keyDocument.FileResource.CreatePerson) {
+                    <a [routerLink]="['/users', keyDocument.FileResource.CreatePerson.PersonID]">{{ keyDocument.FileResource.CreatePerson.FullName }}</a>
+                    }
+                </span>
+            </span>
+        </div>
+    </div>
+
+    <div class="document__actions">
+        <button type="button" class="document__actions-link" (click)="onClickExtractData()" [disabled]="disableExtract">
+            <span class="document__actions-label">Extract Data</span>
+        </button>
+    </div>
+</div>

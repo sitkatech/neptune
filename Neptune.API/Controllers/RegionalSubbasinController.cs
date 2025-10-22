@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Neptune.API.Services;
@@ -16,17 +14,57 @@ namespace Neptune.API.Controllers;
 
 [ApiController]
 [Route("regional-subbasins")]
-public class RegionalSubbasinController(
-    NeptuneDbContext dbContext,
-    ILogger<RegionalSubbasinController> logger,
-    KeystoneService keystoneService,
-    IOptions<NeptuneConfiguration> neptuneConfiguration)
-    : SitkaController<RegionalSubbasinController>(dbContext, logger, keystoneService, neptuneConfiguration)
+public class RegionalSubbasinController : SitkaController<RegionalSubbasinController>
 {
+    public RegionalSubbasinController(
+        NeptuneDbContext dbContext,
+        ILogger<RegionalSubbasinController> logger,
+        KeystoneService keystoneService,
+        IOptions<NeptuneConfiguration> neptuneConfiguration)
+        : base(dbContext, logger, keystoneService, neptuneConfiguration)
+    {
+    }
+
+    [HttpGet]
+    [AdminFeature]
+    public async Task<ActionResult<List<RegionalSubbasinDto>>> List()
+    {
+        var regionalSubbasins = await RegionalSubbasins.ListAsDtoAsync(DbContext);
+        return Ok(regionalSubbasins);
+    }
+
+    [HttpGet("{regionalSubbasinID}")]
+    [AdminFeature]
+    [EntityNotFoundAttribute(typeof(RegionalSubbasin), "regionalSubbasinID")]
+    public async Task<ActionResult<RegionalSubbasinDto>> Get([FromRoute] int regionalSubbasinID)
+    {
+        var regionalSubbasin = await RegionalSubbasins.GetByIDAsDtoAsync(DbContext, regionalSubbasinID);
+        if (regionalSubbasin == null) return NotFound();
+        return Ok(regionalSubbasin);
+    }
+
+    [HttpGet("{regionalSubbasinID}/hru-characteristics")]
+    [EntityNotFound(typeof(RegionalSubbasin), "regionalSubbasinID")]
+    [AdminFeature]
+    public async Task<ActionResult<List<HRUCharacteristicDto>>> ListHRUCharacteristics([FromRoute] int regionalSubbasinID)
+    {
+        var hruCharacteristics = await vHRUCharacteristics.ListByRegionalSubbasinAsGridDtoAsync(DbContext, regionalSubbasinID);
+        return Ok(hruCharacteristics);
+    }
+
+    [HttpGet("{regionalSubbasinID}/load-generating-units")]
+    [EntityNotFound(typeof(RegionalSubbasin), "regionalSubbasinID")]
+    [AdminFeature]
+    public async Task<ActionResult<List<LoadGeneratingUnitGridDto>>> ListLoadGeneratingUnits([FromRoute] int regionalSubbasinID)
+    {
+        var dtos = await vLoadGeneratingUnits.ListByRegionalSubbasinAsGridDtoAsync(DbContext, regionalSubbasinID);
+        return Ok(dtos);
+    }
+
     [HttpPost("/graph-trace-as-feature-collection-from-point")]
     public ActionResult<FeatureCollection> GetRegionalSubbasinGraphTraceAsFeatureCollectionFromPoint([FromBody] CoordinateDto coordinateDto)
     {
-        var featureCollection = RegionalSubbasins.GetRegionalSubbasinGraphTraceAsFeatureCollection(dbContext, coordinateDto);
+        var featureCollection = RegionalSubbasins.GetRegionalSubbasinGraphTraceAsFeatureCollection(DbContext, coordinateDto);
         return Ok(featureCollection);
     }
 }

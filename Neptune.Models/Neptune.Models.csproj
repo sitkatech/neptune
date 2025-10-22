@@ -5,11 +5,15 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="DataTransferObjects\Generated\**" />
+    <EmbeddedResource Remove="DataTransferObjects\Generated\**" />
+    <None Remove="DataTransferObjects\Generated\**" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="NetTopologySuite" Version="2.6.0" />
     <PackageReference Include="System.Text.Json" Version="8.0.6" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="DataTransferObjects\Generated\" />
     <Folder Include="Helpers\" />
   </ItemGroup>
 </Project>

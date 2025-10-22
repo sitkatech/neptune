@@ -1,0 +1,21 @@
+.modelResults {
+    th.left,
+    td.left {
+        text-align: left;
+    }
+    th,
+    td {
+        vertical-align: middle;
+        text-align: center;
+    }
+    thead tr {
+        background: #f8f9fa;
+        font-weight: 600;
+    }
+    tbody tr {
+        border-bottom: 1px solid #e9ecef;
+    }
+    .mt-4 {
+        margin-top: 1.5rem;
+    }
+}

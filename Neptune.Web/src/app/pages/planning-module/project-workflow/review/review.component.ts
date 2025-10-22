@@ -2,7 +2,6 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { forkJoin } from "rxjs";
 import { ProjectService } from "src/app/shared/generated/api/project.service";
-import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.service";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
 import { DelineationUpsertDto } from "src/app/shared/generated/model/delineation-upsert-dto";
 import { ProjectDocumentDto, ProjectDto, ProjectNetworkSolveHistorySimpleDto } from "src/app/shared/generated/model/models";
@@ -14,7 +13,7 @@ import { AlertService } from "src/app/shared/services/alert.service";
 import { ConfirmService } from "src/app/shared/services/confirm/confirm.service";
 import { GrantScoresComponent } from "src/app/pages/planning-module/projects/grant-scores/grant-scores.component";
 import { AttachmentsDisplayComponent } from "src/app/pages/planning-module/projects/attachments-display/attachments-display.component";
-import { ModelResultsComponent } from "src/app/pages/planning-module/projects/model-results/model-results.component";
+import { ProjectModelResultsComponent } from "src/app/pages/planning-module/projects/project-model-results/project-model-results.component";
 import { ProjectMapComponent } from "src/app/pages/planning-module/projects/project-map/project-map.component";
 import { NgClass, DatePipe } from "@angular/common";
 import { CustomRichTextComponent } from "src/app/shared/components/custom-rich-text/custom-rich-text.component";
@@ -31,7 +30,7 @@ import { ProjectWorkflowProgressService } from "src/app/shared/services/project-
         CustomRichTextComponent,
         NgClass,
         ProjectMapComponent,
-        ModelResultsComponent,
+        ProjectModelResultsComponent,
         AttachmentsDisplayComponent,
         GrantScoresComponent,
         DatePipe,
@@ -53,7 +52,6 @@ export class ReviewComponent implements OnInit {
 
     constructor(
         private projectService: ProjectService,
-        private treatmentBMPService: TreatmentBMPService,
         private route: ActivatedRoute,
         private alertService: AlertService,
         private confirmService: ConfirmService,
@@ -65,11 +63,11 @@ export class ReviewComponent implements OnInit {
         if (projectID) {
             this.projectID = parseInt(projectID);
             forkJoin({
-                project: this.projectService.projectsProjectIDGet(this.projectID),
-                treatmentBMPs: this.projectService.projectsProjectIDTreatmentBmpsAsUpsertDtosGet(this.projectID),
-                delineations: this.projectService.projectsProjectIDDelineationsGet(this.projectID),
-                projectNetworkSolveHistories: this.projectService.projectsProjectIDProjectNetworkSolveHistoriesGet(this.projectID),
-                attachments: this.projectService.projectsProjectIDAttachmentsGet(this.projectID),
+                project: this.projectService.getProject(this.projectID),
+                treatmentBMPs: this.projectService.listTreatmentBMPsAsUpsertDtosByProjectIDProject(this.projectID),
+                delineations: this.projectService.listDelineationsByProjectIDProject(this.projectID),
+                projectNetworkSolveHistories: this.projectService.listProjectNetworkSolveHistoriesForProjectProject(this.projectID),
+                attachments: this.projectService.listAttachmentsByProjectIDProject(this.projectID),
             }).subscribe(({ project, treatmentBMPs, delineations, projectNetworkSolveHistories, attachments }) => {
                 this.treatmentBMPs = treatmentBMPs;
                 this.delineations = delineations;
@@ -132,7 +130,7 @@ export class ReviewComponent implements OnInit {
                     var model = this.mapProjectToUpsertDto();
                     model.ShareOCTAM2Tier2Scores = !this.project.ShareOCTAM2Tier2Scores;
 
-                    this.projectService.projectsProjectIDUpdatePut(this.projectID, model).subscribe(
+                    this.projectService.updateProject(this.projectID, model).subscribe(
                         () => {
                             this.isLoadingSubmit = false;
                             this.projectWorkflowProgressService.updateProgress(this.projectID);

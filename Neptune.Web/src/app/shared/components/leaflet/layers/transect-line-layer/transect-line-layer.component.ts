@@ -34,28 +34,24 @@ export class TransectLineLayerComponent extends MapLayerBase implements OnChange
 
     ngAfterViewInit(): void {
         if (this.ovtaID) {
-            this.featureCollection$ = this.onlandVisualTrashAssessmentService
-                .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDTransectLineAsFeatureCollectionGet(this.ovtaID)
-                .pipe(
-                    tap((transectLineFeatureCollection) => {
-                        this.layer = new L.GeoJSON(transectLineFeatureCollection as any, {
-                            style: this.transectLineStyle,
-                        });
-                        this.initLayer();
-                    })
-                );
+            this.featureCollection$ = this.onlandVisualTrashAssessmentService.getTransectLineAsFeatureCollectionOnlandVisualTrashAssessment(this.ovtaID).pipe(
+                tap((transectLineFeatureCollection) => {
+                    this.layer = new L.GeoJSON(transectLineFeatureCollection as any, {
+                        style: this.transectLineStyle,
+                    });
+                    this.initLayer();
+                })
+            );
         } else if (this.ovtaAreaID) {
-            this.featureCollection$ = this.onlandVisualTrashAssessmentAreaService
-                .onlandVisualTrashAssessmentAreasOnlandVisualTrashAssessmentAreaIDTransectLineAsFeatureCollectionGet(this.ovtaAreaID)
-                .pipe(
-                    tap((transectLineFeatureCollection) => {
-                        console.log(transectLineFeatureCollection);
-                        this.layer = new L.GeoJSON(transectLineFeatureCollection as any, {
-                            style: this.transectLineStyle,
-                        });
-                        this.initLayer();
-                    })
-                );
+            this.featureCollection$ = this.onlandVisualTrashAssessmentAreaService.getTransectLineAsFeatureCollectionOnlandVisualTrashAssessmentArea(this.ovtaAreaID).pipe(
+                tap((transectLineFeatureCollection) => {
+                    console.log(transectLineFeatureCollection);
+                    this.layer = new L.GeoJSON(transectLineFeatureCollection as any, {
+                        style: this.transectLineStyle,
+                    });
+                    this.initLayer();
+                })
+            );
         }
     }
 }

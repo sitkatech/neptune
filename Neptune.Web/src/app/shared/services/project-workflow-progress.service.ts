@@ -22,7 +22,7 @@ export class ProjectWorkflowProgressService {
 
     getProgress(projectID: number) {
         if (projectID) {
-            this.progressSubscription = this.projectService.projectsProjectIDProgressGet(projectID).subscribe((response) => {
+            this.progressSubscription = this.projectService.getProjectProgressProject(projectID).subscribe((response) => {
                 this.progressSubject.next(response);
             });
         } else {

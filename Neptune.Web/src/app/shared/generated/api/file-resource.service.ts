@@ -36,12 +36,12 @@ export class FileResourceService extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public fileResourcesFileResourceGuidAsStringGet(fileResourceGuidAsString: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public fileResourcesFileResourceGuidAsStringGet(fileResourceGuidAsString: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public fileResourcesFileResourceGuidAsStringGet(fileResourceGuidAsString: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public fileResourcesFileResourceGuidAsStringGet(fileResourceGuidAsString: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public displayResourceFileResource(fileResourceGuidAsString: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public displayResourceFileResource(fileResourceGuidAsString: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public displayResourceFileResource(fileResourceGuidAsString: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public displayResourceFileResource(fileResourceGuidAsString: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (fileResourceGuidAsString === null || fileResourceGuidAsString === undefined) {
-            throw new Error('Required parameter fileResourceGuidAsString was null or undefined when calling fileResourcesFileResourceGuidAsStringGet.');
+            throw new Error('Required parameter fileResourceGuidAsString was null or undefined when calling displayResourceFileResource.');
         }
 
         let localVarHeaders = this.defaultHeaders;

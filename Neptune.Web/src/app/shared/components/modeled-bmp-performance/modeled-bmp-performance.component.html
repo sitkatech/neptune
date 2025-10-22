@@ -1,0 +1,476 @@
+<!-- <div style="color: red; font-weight: bold; margin-bottom: 8px">
+        Debug: treatmentBMPIDForLoadReducingResult = {{ treatmentBMPIDForLoadReducingResult }} (type:
+        {{ treatmentBMPIDForLoadReducingResult === -1 ? 'All BMPs (-1)' : (treatmentBMPIDForLoadReducingResult.constructor?.name || typeof treatmentBMPIDForLoadReducingResult)
+
+        }})
+    </div> -->
+<btn-group-radio-input [options]="tabs" (change)="setActiveTab($event)" [default]="activeTab" [showIcons]="true"></btn-group-radio-input>
+<div [hidden]="activeTab !== 'Wet'">
+    <!-- Wet Weather Table -->
+    <table class="table table-responsive table-striped table-condensed modelResults">
+        <thead>
+            <tr style="text-align: center">
+                <th class="left">Water Balance Components</th>
+                <th>Volume (cu-ft/yr)</th>
+                <th>Percent of Inflow</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (selectedTreatmentBMPID !== -1) {
+            <tr>
+                <td class="left">
+                    <field-definition fieldDefinitionType="SiteRunoff" labelOverride="To BMP"></field-definition>
+                </td>
+                <td>
+                    <span>{{ loadReducingResult.WetWeatherInflow | neptuneModelingResultSigFig : 3 | number }}</span>
+                </td>
+                <td>--</td>
+            </tr>
+            }
+            <tr>
+                <td class="left">
+                    <field-definition fieldDefinitionType="TreatedAndDischarged"></field-definition>
+                </td>
+                <td>
+                    <span>{{ loadReducingResult.WetWeatherTreated | neptuneModelingResultSigFig : 3 | number }}</span>
+                </td>
+                <td>
+                    <span>{{ (100 * loadReducingResult.WetWeatherTreated) / loadReducingResult.WetWeatherInflow || 0 | number : "1.0-0" }}</span
+                    >%
+                </td>
+            </tr>
+            <tr>
+                <td class="left">
+                    <field-definition fieldDefinitionType="RetainedOrRecycled"></field-definition>
+                </td>
+                <td>
+                    <span>{{ loadReducingResult.WetWeatherRetained | neptuneModelingResultSigFig : 3 | number }}</span>
+                </td>
+                <td>
+                    <span>{{ (100 * loadReducingResult.WetWeatherRetained) / loadReducingResult.WetWeatherInflow || 0 | number : "1.0-0" }}</span
+                    >%
+                </td>
+            </tr>
+            <tr>
+                <td class="left">
+                    <field-definition fieldDefinitionType="UntreatedBypassOrOverflow"></field-definition>
+                </td>
+                <td>
+                    <span>{{ loadReducingResult.WetWeatherUntreated | neptuneModelingResultSigFig : 3 | number }}</span>
+                </td>
+                <td>
+                    <span>{{ (100 * loadReducingResult.WetWeatherUntreated) / loadReducingResult.WetWeatherInflow || 0 | number : "1.0-0" }}</span
+                    >%
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <!-- Pollutant Table -->
+    <table class="table table-responsive table-striped table-condensed modelResults mt-4">
+        <thead>
+            <tr style="text-align: center">
+                <th class="left">Pollutant</th>
+                <th>Load Reduced</th>
+                <th>Percent Reduced</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="left">
+                    <field-definition fieldDefinitionType="TotalSuspendedSolids"></field-definition>
+                </td>
+                <td>
+                    <span>{{ loadReducingResult.WetWeatherTSSReduced | neptuneModelingResultSigFig : 2 | number }}</span> kg
+                </td>
+                <td>
+                    <span>{{ (100 * loadReducingResult.WetWeatherTSSReduced) / loadReducingResult.WetWeatherTSSInflow || 0 | number : "1.0-0" }}</span
+                    >%
+                </td>
+            </tr>
+            <tr>
+                <td class="left">
+                    <field-definition fieldDefinitionType="TotalNitrogen"></field-definition>
+                </td>
+                <td>
+                    <span>{{ loadReducingResult.WetWeatherTNReduced | neptuneModelingResultSigFig : 2 | number }}</span> kg
+                </td>
+                <td>
+                    <span>{{ (100 * loadReducingResult.WetWeatherTNReduced) / loadReducingResult.WetWeatherTNInflow || 0 | number : "1.0-0" }}</span
+                    >%
+                </td>
+            </tr>
+            <tr>
+                <td class="left">
+                    <field-definition fieldDefinitionType="TotalPhosphorous"></field-definition>
+                </td>
+                <td>
+                    <span>{{ loadReducingResult.WetWeatherTPReduced | neptuneModelingResultSigFig : 2 | number }}</span> kg
+                </td>
+                <td>
+                    <span>{{ (100 * loadReducingResult.WetWeatherTPReduced) / loadReducingResult.WetWeatherTPInflow || 0 | number : "1.0-0" }}</span
+                    >%
+                </td>
+            </tr>
+            <tr>
+                <td class="left">
+                    <field-definition fieldDefinitionType="FecalColiform"></field-definition>
+                </td>
+                <td>
+                    <span>{{ loadReducingResult.WetWeatherFCReduced | neptuneModelingResultSigFig : 2 | number }}</span> billion CFUs
+                </td>
+                <td>
+                    <span>{{ (100 * loadReducingResult.WetWeatherFCReduced) / loadReducingResult.WetWeatherFCInflow || 0 | number : "1.0-0" }}</span
+                    >%
+                </td>
+            </tr>
+            <tr>
+                <td class="left">
+                    <field-definition fieldDefinitionType="TotalCopper"></field-definition>
+                </td>
+                <td>
+                    <span>{{ loadReducingResult.WetWeatherTCuReduced | neptuneModelingResultSigFig : 2 | number }}</span> g
+                </td>
+                <td>
+                    <span>{{ (100 * loadReducingResult.WetWeatherTCuReduced) / loadReducingResult.WetWeatherTCuInflow || 0 | number : "1.0-0" }}</span
+                    >%
+                </td>
+            </tr>
+            <tr>
+                <td class="left">
+                    <field-definition fieldDefinitionType="TotalLead"></field-definition>
+                </td>
+                <td>
+                    <span>{{ loadReducingResult.WetWeatherTPbReduced | neptuneModelingResultSigFig : 2 | number }}</span> g
+                </td>
+                <td>
+                    <span>{{ (100 * loadReducingResult.WetWeatherTPbReduced) / loadReducingResult.WetWeatherTPbInflow || 0 | number : "1.0-0" }}</span
+                    >%
+                </td>
+            </tr>
+            <tr>
+                <td class="left">
+                    <field-definition fieldDefinitionType="TotalZinc"></field-definition>
+                </td>
+                <td>
+                    <span>{{ loadReducingResult.WetWeatherTZnReduced | neptuneModelingResultSigFig : 2 | number }}</span> g
+                </td>
+                <td>
+                    <span>{{ (100 * loadReducingResult.WetWeatherTZnReduced) / loadReducingResult.WetWeatherTZnInflow || 0 | number : "1.0-0" }}</span
+                    >%
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div [hidden]="activeTab !== 'Dry'">
+    <table class="table table-responsive table-striped table-condensed modelResults">
+        <thead>
+            <tr style="text-align: center">
+                <th class="left">Water Balance Components</th>
+                <th>Volume (cu-ft/yr)</th>
+                <th>Percent of Inflow</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (selectedTreatmentBMPID !== -1) {
+            <tr>
+                <td class="left">
+                    <field-definition fieldDefinitionType="SiteRunoff" labelOverride="To BMP"></field-definition>
+                </td>
+                <td>
+                    <span>{{ loadReducingResult.DryWeatherInflow | neptuneModelingResultSigFig : 3 | number }}</span>
+                </td>
+                <td>--</td>
+            </tr>
+            }
+            <tr>
+                <td class="left">
+                    <field-definition fieldDefinitionType="TreatedAndDischarged"></field-definition>
+                </td>
+                <td>
+                    <span>{{ loadReducingResult.DryWeatherTreated | neptuneModelingResultSigFig : 3 | number }}</span>
+                </td>
+                <td>
+                    <span>{{ (100 * loadReducingResult.DryWeatherTreated) / loadReducingResult.DryWeatherInflow || 0 | number : "1.0-0" }}</span
+                    >%
+                </td>
+            </tr>
+            <tr>
+                <td class="left">
+                    <field-definition fieldDefinitionType="RetainedOrRecycled"></field-definition>
+                </td>
+                <td>
+                    <span>{{ loadReducingResult.DryWeatherRetained | neptuneModelingResultSigFig : 3 | number }}</span>
+                </td>
+                <td>
+                    <span>{{ (100 * loadReducingResult.DryWeatherRetained) / loadReducingResult.DryWeatherInflow || 0 | number : "1.0-0" }}</span
+                    >%
+                </td>
+            </tr>
+            <tr>
+                <td class="left">
+                    <field-definition fieldDefinitionType="UntreatedBypassOrOverflow"></field-definition>
+                </td>
+                <td>
+                    <span>{{ loadReducingResult.DryWeatherUntreated | neptuneModelingResultSigFig : 3 | number }}</span>
+                </td>
+                <td>
+                    <span>{{ (100 * loadReducingResult.DryWeatherUntreated) / loadReducingResult.DryWeatherInflow || 0 | number : "1.0-0" }}</span
+                    >%
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-responsive table-striped table-condensed modelResults mt-4">
+        <thead>
+            <tr style="text-align: center">
+                <th class="left">Pollutant</th>
+                <th>Load Reduced</th>
+                <th>Percent Reduced</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="left">
+                    <field-definition fieldDefinitionType="TotalSuspendedSolids"></field-definition>
+                </td>
+                <td>
+                    <span>{{ loadReducingResult.DryWeatherTSSReduced | neptuneModelingResultSigFig : 2 | number }}</span> kg
+                </td>
+                <td>
+                    <span>{{ (100 * loadReducingResult.DryWeatherTSSReduced) / loadReducingResult.DryWeatherTSSInflow || 0 | number : "1.0-0" }}</span
+                    >%
+                </td>
+            </tr>
+            <tr>
+                <td class="left">
+                    <field-definition fieldDefinitionType="TotalNitrogen"></field-definition>
+                </td>
+                <td>
+                    <span>{{ loadReducingResult.DryWeatherTNReduced | neptuneModelingResultSigFig : 2 | number }}</span> kg
+                </td>
+                <td>
+                    <span>{{ (100 * loadReducingResult.DryWeatherTNReduced) / loadReducingResult.DryWeatherTNInflow || 0 | number : "1.0-0" }}</span
+                    >%
+                </td>
+            </tr>
+            <tr>
+                <td class="left">
+                    <field-definition fieldDefinitionType="TotalPhosphorous"></field-definition>
+                </td>
+                <td>
+                    <span>{{ loadReducingResult.DryWeatherTPReduced | neptuneModelingResultSigFig : 2 | number }}</span> kg
+                </td>
+                <td>
+                    <span>{{ (100 * loadReducingResult.DryWeatherTPReduced) / loadReducingResult.DryWeatherTPInflow || 0 | number : "1.0-0" }}</span
+                    >%
+                </td>
+            </tr>
+            <tr>
+                <td class="left">
+                    <field-definition fieldDefinitionType="FecalColiform"></field-definition>
+                </td>
+                <td>
+                    <span>{{ loadReducingResult.DryWeatherFCReduced | neptuneModelingResultSigFig : 2 | number }}</span> billion CFUs
+                </td>
+                <td>
+                    <span>{{ (100 * loadReducingResult.DryWeatherFCReduced) / loadReducingResult.DryWeatherFCInflow || 0 | number : "1.0-0" }}</span
+                    >%
+                </td>
+            </tr>
+            <tr>
+                <td class="left">
+                    <field-definition fieldDefinitionType="TotalCopper"></field-definition>
+                </td>
+                <td>
+                    <span>{{ loadReducingResult.DryWeatherTCuReduced | neptuneModelingResultSigFig : 2 | number }}</span> g
+                </td>
+                <td>
+                    <span>{{ (100 * loadReducingResult.DryWeatherTCuReduced) / loadReducingResult.DryWeatherTCuInflow || 0 | number : "1.0-0" }}</span
+                    >%
+                </td>
+            </tr>
+            <tr>
+                <td class="left">
+                    <field-definition fieldDefinitionType="TotalLead"></field-definition>
+                </td>
+                <td>
+                    <span>{{ loadReducingResult.DryWeatherTPbReduced | neptuneModelingResultSigFig : 2 | number }}</span> g
+                </td>
+                <td>
+                    <span>{{ (100 * loadReducingResult.DryWeatherTPbReduced) / loadReducingResult.DryWeatherTPbInflow || 0 | number : "1.0-0" }}</span
+                    >%
+                </td>
+            </tr>
+            <tr>
+                <td class="left">
+                    <field-definition fieldDefinitionType="TotalZinc"></field-definition>
+                </td>
+                <td>
+                    <span>{{ loadReducingResult.DryWeatherTZnReduced | neptuneModelingResultSigFig : 2 | number }}</span> g
+                </td>
+                <td>
+                    <span>{{ (100 * loadReducingResult.DryWeatherTZnReduced) / loadReducingResult.DryWeatherTZnInflow || 0 | number : "1.0-0" }}</span
+                    >%
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div [hidden]="activeTab !== 'Total'">
+    @if (activeID === ModeledPerformanceDisplayTypeEnum.Total) {
+    <table class="table table-responsive table-striped table-condensed modelResults">
+        <thead>
+            <tr style="text-align: center">
+                <th class="left">Water Balance Components</th>
+                <th>Volume (cu-ft/yr)</th>
+                <th>Percent of Inflow</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (selectedTreatmentBMPID !== -1) {
+            <tr>
+                <td class="left">
+                    <field-definition fieldDefinitionType="SiteRunoff" labelOverride="To BMP"></field-definition>
+                </td>
+                <td>
+                    <span>{{ loadReducingResult.TotalInflow | neptuneModelingResultSigFig : 3 | number }}</span>
+                </td>
+                <td>--</td>
+            </tr>
+            }
+            <tr>
+                <td class="left">
+                    <field-definition fieldDefinitionType="TreatedAndDischarged"></field-definition>
+                </td>
+                <td>
+                    <span>{{ loadReducingResult.TotalTreated | neptuneModelingResultSigFig : 3 | number }}</span>
+                </td>
+                <td>
+                    <span>{{ (100 * loadReducingResult.TotalTreated) / loadReducingResult.TotalInflow || 0 | number : "1.0-0" }}</span
+                    >%
+                </td>
+            </tr>
+            <tr>
+                <td class="left">
+                    <field-definition fieldDefinitionType="RetainedOrRecycled"></field-definition>
+                </td>
+                <td>
+                    <span>{{ loadReducingResult.TotalRetained | neptuneModelingResultSigFig : 3 | number }}</span>
+                </td>
+                <td>
+                    <span>{{ (100 * loadReducingResult.TotalRetained) / loadReducingResult.TotalInflow || 0 | number : "1.0-0" }}</span
+                    >%
+                </td>
+            </tr>
+            <tr>
+                <td class="left">
+                    <field-definition fieldDefinitionType="UntreatedBypassOrOverflow"></field-definition>
+                </td>
+                <td>
+                    <span>{{ loadReducingResult.TotalUntreated | neptuneModelingResultSigFig : 3 | number }}</span>
+                </td>
+                <td>
+                    <span>{{ (100 * loadReducingResult.TotalUntreated) / loadReducingResult.TotalInflow || 0 | number : "1.0-0" }}</span
+                    >%
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    }
+    <table class="table table-responsive table-striped table-condensed modelResults mt-4">
+        <thead>
+            <tr style="text-align: center">
+                <th class="left">Pollutant</th>
+                <th>Load Reduced</th>
+                <th>Percent Reduced</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="left">
+                    <field-definition fieldDefinitionType="TotalSuspendedSolids"></field-definition>
+                </td>
+                <td>
+                    <span>{{ loadReducingResult.TotalTSSReduced | neptuneModelingResultSigFig : 2 | number }}</span> kg
+                </td>
+                <td>
+                    <span>{{ (100 * loadReducingResult.TotalTSSReduced) / loadReducingResult.TotalTSSInflow || 0 | number : "1.0-0" }}</span
+                    >%
+                </td>
+            </tr>
+            <tr>
+                <td class="left">
+                    <field-definition fieldDefinitionType="TotalNitrogen"></field-definition>
+                </td>
+                <td>
+                    <span>{{ loadReducingResult.TotalTNReduced | neptuneModelingResultSigFig : 2 | number }}</span> kg
+                </td>
+                <td>
+                    <span>{{ (100 * loadReducingResult.TotalTNReduced) / loadReducingResult.TotalTNInflow || 0 | number : "1.0-0" }}</span
+                    >%
+                </td>
+            </tr>
+            <tr>
+                <td class="left">
+                    <field-definition fieldDefinitionType="TotalPhosphorous"></field-definition>
+                </td>
+                <td>
+                    <span>{{ loadReducingResult.TotalTPReduced | neptuneModelingResultSigFig : 2 | number }}</span> kg
+                </td>
+                <td>
+                    <span>{{ (100 * loadReducingResult.TotalTPReduced) / loadReducingResult.TotalTPInflow || 0 | number : "1.0-0" }}</span
+                    >%
+                </td>
+            </tr>
+            <tr>
+                <td class="left">
+                    <field-definition fieldDefinitionType="FecalColiform"></field-definition>
+                </td>
+                <td>
+                    <span>{{ loadReducingResult.TotalFCReduced | neptuneModelingResultSigFig : 2 | number }}</span> billion CFUs
+                </td>
+                <td>
+                    <span>{{ (100 * loadReducingResult.TotalFCReduced) / loadReducingResult.TotalFCInflow || 0 | number : "1.0-0" }}</span
+                    >%
+                </td>
+            </tr>
+            <tr>
+                <td class="left">
+                    <field-definition fieldDefinitionType="TotalCopper"></field-definition>
+                </td>
+                <td>
+                    <span>{{ loadReducingResult.TotalTCuReduced | neptuneModelingResultSigFig : 2 | number }}</span> g
+                </td>
+                <td>
+                    <span>{{ (100 * loadReducingResult.TotalTCuReduced) / loadReducingResult.TotalTCuInflow || 0 | number : "1.0-0" }}</span
+                    >%
+                </td>
+            </tr>
+            <tr>
+                <td class="left">
+                    <field-definition fieldDefinitionType="TotalLead"></field-definition>
+                </td>
+                <td>
+                    <span>{{ loadReducingResult.TotalTPbReduced | neptuneModelingResultSigFig : 2 | number }}</span> g
+                </td>
+                <td>
+                    <span>{{ (100 * loadReducingResult.TotalTPbReduced) / loadReducingResult.TotalTPbInflow || 0 | number : "1.0-0" }}</span
+                    >%
+                </td>
+            </tr>
+            <tr>
+                <td class="left">
+                    <field-definition fieldDefinitionType="TotalZinc"></field-definition>
+                </td>
+                <td>
+                    <span>{{ loadReducingResult.TotalTZnReduced | neptuneModelingResultSigFig : 2 | number }}</span> g
+                </td>
+                <td>
+                    <span>{{ (100 * loadReducingResult.TotalTZnReduced) / loadReducingResult.TotalTZnInflow || 0 | number : "1.0-0" }}</span
+                    >%
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

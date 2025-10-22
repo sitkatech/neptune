@@ -26,5 +26,10 @@ public class TreatmentBMPTypeController(
         return Ok(treatmentBMPTypeWithModelingAttributesDtos);
     }
 
-
+    [HttpGet("{treatmentBMPTypeID}/custom-attribute-types")]
+    public ActionResult<List<TreatmentBMPTypeCustomAttributeTypeDto>> ListCustomAttributeTypes([FromRoute] int treatmentBMPTypeID)
+    {
+        var treatmentBMPTypeCustomAttributeTypeDtos = TreatmentBMPTypeCustomAttributeTypes.ListByTreatmentBMPTypeAsDto(DbContext, treatmentBMPTypeID);
+        return treatmentBMPTypeCustomAttributeTypeDtos;
+    }
 }

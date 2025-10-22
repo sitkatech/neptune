@@ -181,7 +181,7 @@ namespace Neptune.WebMvc.Controllers
         [AnonymousUnclassifiedFeature] // intentionally put here to bypass having to login
         [TreatmentBMPViewFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
-        public ViewResult Detail([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
+        public async Task<ViewResult> Detail([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = TreatmentBMPs.GetByID(_dbContext, treatmentBMPPrimaryKey);
             var treatmentBMPType = TreatmentBMPTypes.GetByID(_dbContext, treatmentBMP.TreatmentBMPTypeID);
@@ -210,7 +210,7 @@ namespace Neptune.WebMvc.Controllers
             var modelingResultsUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(_linkGenerator, x => x.GetModelResults(treatmentBMP));
             var treatmentBMPNereidLog = NereidLogs.GetByTreatmentBMPID(_dbContext, treatmentBMP.TreatmentBMPID);
             var modeledBMPPerformanceViewData = new ModeledPerformanceViewData(_linkGenerator, modelingResultsUrl, "To BMP", isSitkaAdmin, treatmentBMPNereidLog?.NereidRequest, treatmentBMPNereidLog?.NereidResponse);
-            var hruCharacteristics = vHRUCharacteristics.ListByTreatmentBMP(_dbContext, upstreamestBMP ?? treatmentBMP, delineation);
+            var hruCharacteristics = await vHRUCharacteristics.ListByTreatmentBMP(_dbContext, upstreamestBMP ?? treatmentBMP, delineation);
             var hruCharacteristicsViewData = new HRUCharacteristicsViewData(hruCharacteristics);
             var otherTreatmentBmpsExistInSubbasin = treatmentBMP.GetRegionalSubbasin(_dbContext)?.GetTreatmentBMPs(_dbContext).Any(x => x.TreatmentBMPID != treatmentBMP.TreatmentBMPID) ?? false;
             var customAttributes = CustomAttributes.ListByTreatmentBMPID(_dbContext, treatmentBMP.TreatmentBMPID);
@@ -232,7 +232,7 @@ namespace Neptune.WebMvc.Controllers
         [HttpGet("{treatmentBMPPrimaryKey}")]
         [NeptuneAdminFeature]
         [ValidateEntityExistsAndPopulateParameterFilter("treatmentBMPPrimaryKey")]
-        public GridJsonNetJObjectResult<vHRUCharacteristic> HRUCharacteristicGridJsonData([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
+        public async Task<GridJsonNetJObjectResult<vHRUCharacteristic>> HRUCharacteristicGridJsonData([FromRoute] TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = TreatmentBMPs.GetByID(_dbContext, treatmentBMPPrimaryKey);
             var treatmentBMPID = treatmentBMP.TreatmentBMPID;
@@ -242,7 +242,7 @@ namespace Neptune.WebMvc.Controllers
             var upstreamestBMP = treatmentBMPTree.UpstreamBMPID.HasValue ? TreatmentBMPs.GetByID(_dbContext, treatmentBMPTree.UpstreamBMPID) : null;
             var delineation = Delineations.GetByTreatmentBMPID(_dbContext, upstreamestBMP?.TreatmentBMPID ?? treatmentBMPID);
             var gridSpec = new HRUCharacteristicGridSpec(_linkGenerator);
-            var hruCharacteristics = vHRUCharacteristics.ListByTreatmentBMP(_dbContext, upstreamestBMP ?? treatmentBMP, delineation);
+            var hruCharacteristics = await vHRUCharacteristics.ListByTreatmentBMP(_dbContext, upstreamestBMP ?? treatmentBMP, delineation);
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<vHRUCharacteristic>(hruCharacteristics, gridSpec);
             return gridJsonNetJObjectResult;
         }

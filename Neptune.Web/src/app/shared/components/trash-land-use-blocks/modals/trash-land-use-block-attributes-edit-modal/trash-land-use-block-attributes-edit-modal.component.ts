@@ -46,7 +46,7 @@ export class TrashLandUseBlockAttributesEditModalComponent implements OnInit {
     }
 
     save(): void {
-        this.landUseBlockService.landUseBlocksPut(this.ref.data.LandUseBlockID, this.formGroup.getRawValue()).subscribe(() => {
+        this.landUseBlockService.updateLandUseBlock(this.ref.data.LandUseBlockID, this.formGroup.getRawValue()).subscribe(() => {
             this.alertService.clearAlerts();
             this.alertService.pushAlert(
                 new Alert(

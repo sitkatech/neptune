@@ -65,14 +65,12 @@ export class TrashOvtaAddRemoveParcelsComponent {
 
     ngOnInit(): void {
         this.isLoading = true;
-        this.onlandVisualTrashAssessment$ = this.onlandVisualTrashAssessmentService
-            .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDParcelsGet(this.onlandVisualTrashAssessmentID)
-            .pipe(
-                tap((ovta) => {
-                    this.selectedParcelIDs = ovta.SelectedParcelIDs;
-                    this.isLoading = false;
-                })
-            );
+        this.onlandVisualTrashAssessment$ = this.onlandVisualTrashAssessmentService.getByIDForAddOrRemoveParcelOnlandVisualTrashAssessment(this.onlandVisualTrashAssessmentID).pipe(
+            tap((ovta) => {
+                this.selectedParcelIDs = ovta.SelectedParcelIDs;
+                this.isLoading = false;
+            })
+        );
     }
 
     public handleMapReady(event: NeptuneMapInitEvent, onlandVisualTrashAssessment: OnlandVisualTrashAssessmentAddRemoveParcelsDto): void {
@@ -98,7 +96,7 @@ export class TrashOvtaAddRemoveParcelsComponent {
 
     public save(andContinue: boolean = false) {
         this.onlandVisualTrashAssessmentService
-            .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDParcelsPost(this.onlandVisualTrashAssessmentID, this.selectedParcelIDs)
+            .updateOnlandVisualTrashAssessmentWithParcelsOnlandVisualTrashAssessment(this.onlandVisualTrashAssessmentID, this.selectedParcelIDs)
             .subscribe(() => {
                 this.alertService.clearAlerts();
                 this.alertService.pushAlert(new Alert("Your observations were successfully updated.", AlertContext.Success));
@@ -110,14 +108,12 @@ export class TrashOvtaAddRemoveParcelsComponent {
     }
 
     public refreshParcels() {
-        this.onlandVisualTrashAssessmentService
-            .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDRefreshParcelsPost(this.onlandVisualTrashAssessmentID)
-            .subscribe((ovta) => {
-                this.selectedParcelIDs = ovta.SelectedParcelIDs;
-                this.addSelectedParcelsToMap();
-                this.enableDisableParcelClickEvent(ovta);
-                this.onlandVisualTrashAssessment$ = of(ovta);
-            });
+        this.onlandVisualTrashAssessmentService.refreshOnlandVisualTrashAssessmentParcelsOnlandVisualTrashAssessment(this.onlandVisualTrashAssessmentID).subscribe((ovta) => {
+            this.selectedParcelIDs = ovta.SelectedParcelIDs;
+            this.addSelectedParcelsToMap();
+            this.enableDisableParcelClickEvent(ovta);
+            this.onlandVisualTrashAssessment$ = of(ovta);
+        });
     }
 
     private enableDisableParcelClickEvent(ovta: OnlandVisualTrashAssessmentAddRemoveParcelsDto) {

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Neptune.Common.DesignByContract;
+using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities;
 
@@ -57,6 +58,11 @@ public static class CustomAttributes
     public static List<CustomAttribute> ListByTreatmentBMPID(NeptuneDbContext dbContext, int treatmentBMPID)
     {
         return GetImpl(dbContext).AsNoTracking().Where(x => x.TreatmentBMPID == treatmentBMPID).OrderBy(x => x.CustomAttributeType.CustomAttributeTypeName).ToList();
+    }
+
+    public static List<CustomAttributeDto> ListByTreatmentBMPIDAsDto(NeptuneDbContext dbContext, int treatmentBMPID)
+    {
+        return ListByTreatmentBMPID(dbContext, treatmentBMPID).Select(x => x.AsDto()).ToList();
     }
 
     public static List<CustomAttribute> ListByTreatmentBMPIDWithChangeTracking(NeptuneDbContext dbContext, int treatmentBMPID)

@@ -61,7 +61,7 @@ export class CustomRichTextComponent implements OnInit, AfterViewChecked, OnDest
             this.currentUser = currentUser;
         });
 
-        this.publicService.customRichTextsCustomRichTextTypeIDGet(this.customRichTextTypeID).subscribe((x) => {
+        this.publicService.getCustomRichTextCustomRichText(this.customRichTextTypeID).subscribe((x) => {
             this.loadCustomRichText(x);
         });
     }
@@ -96,7 +96,7 @@ export class CustomRichTextComponent implements OnInit, AfterViewChecked, OnDest
         this.isEditing = false;
         this.isLoading = true;
         const updateDto = new NeptunePageDto({ NeptunePageContent: this.editedContent });
-        this.customRichTextService.customRichTextsCustomRichTextTypeIDPut(this.customRichTextTypeID, updateDto).subscribe(
+        this.customRichTextService.updateCustomRichTextCustomRichText(this.customRichTextTypeID, updateDto).subscribe(
             (x) => {
                 this.loadCustomRichText(x);
             },

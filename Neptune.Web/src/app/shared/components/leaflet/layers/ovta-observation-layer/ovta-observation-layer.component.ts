@@ -25,7 +25,7 @@ export class OvtaObservationLayerComponent extends MapLayerBase implements OnCha
 
     ngOnInit() {
         this.onlandVisualTrashAssessmentObservations$ = this.onlandVisualTrashAssessmentObservationService
-            .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsFeatureCollectionGet(this.ovtaID)
+            .getAsFeatureCollectionOnlandVisualTrashAssessmentObservation(this.ovtaID)
             .pipe(
                 tap((locations) => {
                     const ovtaObservationGeoJSON = this.mapObservationsToGeoJson(locations);

@@ -61,6 +61,7 @@
         "ngx-cookie-service": "^20.0.1",
         "ngx-mask": "^19.0.7",
         "rxjs": "^7.0.0",
+        "sse.js": "^2.7.2",
         "tinymce": "^7.9.1",
         "tslib": "^2.8.1",
         "webpack": "^5.30.0",

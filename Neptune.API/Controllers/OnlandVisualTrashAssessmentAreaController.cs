@@ -25,7 +25,7 @@ public class OnlandVisualTrashAssessmentAreaController(
 {
     [HttpGet]
     [JurisdictionEditFeature]
-    public ActionResult<List<OnlandVisualTrashAssessmentAreaGridDto>> ListForCallingUser()
+    public ActionResult<List<OnlandVisualTrashAssessmentAreaGridDto>> List()
     {
         var stormwaterJurisdictionIDs = People.ListStormwaterJurisdictionIDsByPersonID(DbContext, CallingUser.PersonID);
         var onlandVisualTrashAssessmentAreaGridDtos = OnlandVisualTrashAssessmentAreas
@@ -36,7 +36,7 @@ public class OnlandVisualTrashAssessmentAreaController(
     [HttpGet("{onlandVisualTrashAssessmentAreaID}")]
     [JurisdictionEditFeature]
     [EntityNotFound(typeof(OnlandVisualTrashAssessmentArea), "onlandVisualTrashAssessmentAreaID")]
-    public ActionResult<OnlandVisualTrashAssessmentAreaDetailDto> GetByID([FromRoute] int onlandVisualTrashAssessmentAreaID)
+    public ActionResult<OnlandVisualTrashAssessmentAreaDetailDto> Get([FromRoute] int onlandVisualTrashAssessmentAreaID)
     {
         var onlandVisualTrashAssessmentAreaDetailDto = OnlandVisualTrashAssessmentAreas.GetByID(DbContext, onlandVisualTrashAssessmentAreaID).AsDetailDto();
         return Ok(onlandVisualTrashAssessmentAreaDetailDto);
@@ -54,7 +54,7 @@ public class OnlandVisualTrashAssessmentAreaController(
     [HttpGet("{onlandVisualTrashAssessmentAreaID}/onland-visual-trash-assessments")]
     [JurisdictionEditFeature]
     [EntityNotFound(typeof(OnlandVisualTrashAssessmentArea), "onlandVisualTrashAssessmentAreaID")]
-    public ActionResult<List<OnlandVisualTrashAssessmentGridDto>> GetByAreaID([FromRoute] int onlandVisualTrashAssessmentAreaID)
+    public ActionResult<List<OnlandVisualTrashAssessmentGridDto>> ListAssessmentsByOVTAID([FromRoute] int onlandVisualTrashAssessmentAreaID)
     {
         var visualTrashAssessmentGridDtos = OnlandVisualTrashAssessments.ListByOnlandVisualTrashAssessmentAreaID(DbContext, onlandVisualTrashAssessmentAreaID).Select(x => x.AsGridDto());
         return Ok(visualTrashAssessmentGridDtos);

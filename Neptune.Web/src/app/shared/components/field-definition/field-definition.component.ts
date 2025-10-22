@@ -48,7 +48,7 @@ export class FieldDefinitionComponent implements OnInit, AfterViewInit, OnDestro
     }
 
     ngOnInit() {
-        this.fieldDefinitionService.fieldDefinitionsFieldDefinitionTypeIDGet(FieldDefinitionTypeEnum[this.fieldDefinitionType]).subscribe((x) => this.loadFieldDefinition(x));
+        this.fieldDefinitionService.getFieldDefinition(FieldDefinitionTypeEnum[this.fieldDefinitionType]).subscribe((x) => this.loadFieldDefinition(x));
     }
 
     ngOnDestroy() {
@@ -90,7 +90,7 @@ export class FieldDefinitionComponent implements OnInit, AfterViewInit, OnDestro
         this.isLoading = true;
 
         this.fieldDefinition.FieldDefinitionValue = this.editedContent;
-        this.fieldDefinitionService.fieldDefinitionsFieldDefinitionTypeIDPut(this.fieldDefinition.FieldDefinitionType.FieldDefinitionTypeID, this.fieldDefinition).subscribe(
+        this.fieldDefinitionService.updateFieldDefinition(this.fieldDefinition.FieldDefinitionType.FieldDefinitionTypeID, this.fieldDefinition).subscribe(
             (x) => this.loadFieldDefinition(x),
             (error) => {
                 this.isLoading = false;

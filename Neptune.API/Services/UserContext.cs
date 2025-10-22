@@ -8,7 +8,13 @@ namespace Neptune.API.Services
 {
     public static class UserContext
     {
-        public static PersonDto GetUserFromHttpContext(NeptuneDbContext dbContext, HttpContext httpContext)
+        public static PersonDto GetUserAsDtoFromHttpContext(NeptuneDbContext dbContext, HttpContext httpContext)
+        {
+            var user = GetUserFromHttpContext(dbContext, httpContext);
+            return user.AsDto();
+        }
+
+        public static Person GetUserFromHttpContext(NeptuneDbContext dbContext, HttpContext httpContext)
         {
 
             var claimsPrincipal = httpContext.User;
@@ -18,7 +24,7 @@ namespace Neptune.API.Services
             }
 
             var userGuid = Guid.Parse(claimsPrincipal.Claims.Single(c => c.Type == "sub").Value);
-            var keystoneUser = People.GetByGuidAsDto(dbContext, userGuid);
+            var keystoneUser = People.GetByGuid(dbContext, userGuid);
 
             return keystoneUser;
         }
