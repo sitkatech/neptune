@@ -36,10 +36,6 @@
                         <img src="assets/main/icons/inventoryIcon.png" style="height: 35px; padding-right: 15px" />
                         Inventory Module
                     </a>
-                    <a [routerLink]="['/']" class="dropdown-item">
-                        <img src="assets/main/icons/inventoryIcon.png" style="height: 35px; padding-right: 15px" />
-                        New Inventory Module
-                    </a>
                     <a href="{{ ocStormwaterToolsMainUrl() }}/Home/Modeling" class="dropdown-item">
                         <img src="assets/main/icons/modelingIcon.png" style="height: 35px; padding-right: 15px" />
                         Modeling Module
@@ -52,10 +48,16 @@
                         <img src="assets/main/icons/trashIcon.png" style="height: 35px; padding-right: 15px" />
                         Trash Module
                     </a>
+                    @if(isUserAnAdministrator()) {
+                    <a [routerLink]="['/']" class="dropdown-item">
+                        <img src="assets/main/icons/inventoryIcon.png" style="height: 35px; padding-right: 15px" />
+                        New Inventory Module
+                    </a>
                     <a [routerLink]="['/ai']" class="dropdown-item">
                         <img src="assets/main/icons/ai-icon.png" style="height: 35px; padding-right: 15px" />
                         AI Module
                     </a>
+                    }
                 </div>
             </li>
         </ul>

@@ -31,9 +31,7 @@ public class TrashGeneratingUnitByStormwaterJurisdictionController(
 
         var fullTrashCapture = trashGeneratingUnits.FullTrashCaptureAcreage();
 
-        var equivalentArea = trashGeneratingUnits.EquivalentAreaAcreageFromAssessments();
-
-        var totalAcresCaptured = fullTrashCapture + equivalentArea;
+        var totalAcresCaptured = fullTrashCapture;
 
         var totalPLUAcres = DbContext.LandUseBlocks.AsNoTracking()
             .Where(x => x.StormwaterJurisdictionID == jurisdictionID && x.PriorityLandUseTypeID != (int)PriorityLandUseTypeEnum.ALU && x.PermitTypeID == (int)PermitTypeEnum.PhaseIMS4).Sum(x =>
@@ -44,7 +42,6 @@ public class TrashGeneratingUnitByStormwaterJurisdictionController(
         var areaBasedAcreCalculationsDto = new AreaBasedAcreCalculationsDto
         {
             FullTrashCaptureAcreage = fullTrashCapture,
-            EquivalentAreaAcreage = equivalentArea,
             TotalAcresCaptured = totalAcresCaptured,
             TotalPLUAcres = totalPLUAcres,
             PercentTreated = percentTreated

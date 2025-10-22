@@ -186,9 +186,9 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
                 if (LeafletHelperService.hasLegendHtml(obj.layer)) {
                     const legendHtml = obj.layer.legendHtml;
                     legendItem.LegendHtml = this.sanitizer.bypassSecurityTrustHtml(legendHtml);
-                } else if (LeafletHelperService.hasUrl(obj.layer)) {
+                } else if (LeafletHelperService.hasUrl(obj.layer) && LeafletHelperService.hasWMSParams(obj.layer)) {
                     legendItem.WmsUrl = LeafletHelperService.getLayerUrl(obj.layer);
-                    const wmsParams = (obj.layer as unknown as L.TileLayer.WMS).wmsParams;
+                    const wmsParams = LeafletHelperService.getWMSParams(obj.layer) as any;
                     legendItem.WmsLayerName = wmsParams ? wmsParams.layers : undefined;
                     legendItem.WmsLayerStyle = wmsParams ? wmsParams.styles : undefined;
                 }
