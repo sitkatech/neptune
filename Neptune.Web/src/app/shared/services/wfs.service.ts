@@ -3,6 +3,8 @@ import { HttpClient, HttpParams } from "@angular/common/http";
 import { FeatureCollection } from "geojson";
 import { Observable, map } from "rxjs";
 import { environment } from "src/environments/environment";
+import { bbox } from "@turf/turf";
+import { WaterQualityManagementPlanDto } from "src/app/shared/generated/model/water-quality-management-plan-dto";
 
 @Injectable({
     providedIn: "root",
@@ -110,5 +112,35 @@ export class WfsService {
                 cql_filter: `intersects(ParcelGeometry, POINT(${latitude} ${longitude}))`,
             },
         });
+    }
+
+    public getWQMPPreviewImage(waterQualityManagementPlan: WaterQualityManagementPlanDto): Observable<string> {
+        const url: string = `${environment.geoserverMapServiceUrl}/wms`;
+        // Request the image as a blob and convert to an object URL for use in an <img [src]>.
+        // HttpClient defaults to parsing JSON which will fail for binary image responses.
+        return this.http
+            .get(url, {
+                params: {
+                    service: "WMS",
+                    version: "1.3.0",
+                    request: "GetMap",
+                    layers: "OCStormwater:WaterQualityManagementPlans",
+                    width: 100,
+                    height: 100,
+                    format: "image/png",
+                    transparent: true,
+                    styles: "water_quality_management_plan",
+                    cql_filter: `WaterQualityManagementPlanID=${waterQualityManagementPlan.WaterQualityManagementPlanID}`,
+                    //California state extent to ensure we get a response
+                    bbox: waterQualityManagementPlan.WaterQualityManagementPlanBoundaryBBox,
+                },
+                responseType: "blob",
+            })
+            .pipe(
+                map((blob: Blob) => {
+                    // Convert the blob to an object URL the template can bind to.
+                    return URL.createObjectURL(blob);
+                })
+            );
     }
 }

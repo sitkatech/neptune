@@ -1,11 +1,4 @@
 @use "/src/scss/abstracts" as *;
-
-h3 {
-    margin-top: $spacing-400;
-    margin-bottom: $spacing-400;
-    font-size: $type-size-400;
-}
-
 .document {
     background: $gray-0;
     padding: $spacing-400;
@@ -15,6 +8,17 @@ h3 {
     gap: $spacing-400;
     border: 1px solid $gray-200;
     border-radius: $border-radius-200;
+
+    &.selected {
+        border-color: $blue-600;
+        box-shadow:
+            0 1px 3px hsl(0deg 0% 0% / 0.1),
+            0 1px 2px hsl(0deg 0% 0% / 0.06);
+    }
+
+    &__icon {
+        color: $gray-500;
+    }
 
     &__sub-header {
         margin: 0;

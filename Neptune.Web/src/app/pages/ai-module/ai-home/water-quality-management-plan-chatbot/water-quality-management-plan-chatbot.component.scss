@@ -196,7 +196,11 @@
     border: 1px solid $gray-200;
     padding: $spacing-400;
     background: $gray-0;
-    box-shadow: -15px 59px 17px 0px rgba(0, 0, 0, 0), -10px 38px 16px 0px rgba(0, 0, 0, 0.01), -5px 21px 13px 0px rgba(0, 0, 0, 0.05), -2px 9px 10px 0px rgba(0, 0, 0, 0.09),
+    box-shadow:
+        -15px 59px 17px 0px rgba(0, 0, 0, 0),
+        -10px 38px 16px 0px rgba(0, 0, 0, 0.01),
+        -5px 21px 13px 0px rgba(0, 0, 0, 0.05),
+        -2px 9px 10px 0px rgba(0, 0, 0, 0.09),
         -1px 2px 5px 0px rgba(0, 0, 0, 0.1);
 
     &__textarea {

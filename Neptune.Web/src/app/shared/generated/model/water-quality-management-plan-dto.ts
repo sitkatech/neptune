@@ -13,10 +13,14 @@ import { FormControl, FormControlOptions, FormControlState, Validators } from "@
 export class WaterQualityManagementPlanDto { 
     WaterQualityManagementPlanID?: number;
     StormwaterJurisdictionID?: number;
+    StormwaterJurisdictionOrganizationName?: string | null;
     WaterQualityManagementPlanLandUseID?: number | null;
     WaterQualityManagementPlanPriorityID?: number | null;
+    WaterQualityManagementPlanPriorityDisplayName?: string | null;
     WaterQualityManagementPlanStatusID?: number | null;
+    WaterQualityManagementPlanStatusDisplayName?: string | null;
     WaterQualityManagementPlanDevelopmentTypeID?: number | null;
+    WaterQualityManagementPlanDevelopmentTypeDisplayName?: string | null;
     WaterQualityManagementPlanName?: string | null;
     ApprovalDate?: string | null;
     MaintenanceContactName?: string | null;
@@ -38,6 +42,7 @@ export class WaterQualityManagementPlanDto {
     WaterQualityManagementPlanModelingApproachID?: number;
     LastNereidLogID?: number | null;
     WaterQualityManagementPlanBoundaryNotes?: string | null;
+    WaterQualityManagementPlanBoundaryBBox?: string | null;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
@@ -46,10 +51,14 @@ export class WaterQualityManagementPlanDto {
 export interface WaterQualityManagementPlanDtoForm { 
     WaterQualityManagementPlanID?: FormControl<number>;
     StormwaterJurisdictionID?: FormControl<number>;
+    StormwaterJurisdictionOrganizationName?: FormControl<string>;
     WaterQualityManagementPlanLandUseID?: FormControl<number>;
     WaterQualityManagementPlanPriorityID?: FormControl<number>;
+    WaterQualityManagementPlanPriorityDisplayName?: FormControl<string>;
     WaterQualityManagementPlanStatusID?: FormControl<number>;
+    WaterQualityManagementPlanStatusDisplayName?: FormControl<string>;
     WaterQualityManagementPlanDevelopmentTypeID?: FormControl<number>;
+    WaterQualityManagementPlanDevelopmentTypeDisplayName?: FormControl<string>;
     WaterQualityManagementPlanName?: FormControl<string>;
     ApprovalDate?: FormControl<string>;
     MaintenanceContactName?: FormControl<string>;
@@ -71,6 +80,7 @@ export interface WaterQualityManagementPlanDtoForm {
     WaterQualityManagementPlanModelingApproachID?: FormControl<number>;
     LastNereidLogID?: FormControl<number>;
     WaterQualityManagementPlanBoundaryNotes?: FormControl<string>;
+    WaterQualityManagementPlanBoundaryBBox?: FormControl<string>;
 }
 
 export class WaterQualityManagementPlanDtoFormControls { 
@@ -85,6 +95,16 @@ export class WaterQualityManagementPlanDtoFormControls {
         }
     );
     public static StormwaterJurisdictionID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static StormwaterJurisdictionOrganizationName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {
@@ -114,6 +134,16 @@ export class WaterQualityManagementPlanDtoFormControls {
             ],
         }
     );
+    public static WaterQualityManagementPlanPriorityDisplayName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
     public static WaterQualityManagementPlanStatusID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
@@ -124,7 +154,27 @@ export class WaterQualityManagementPlanDtoFormControls {
             ],
         }
     );
+    public static WaterQualityManagementPlanStatusDisplayName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
     public static WaterQualityManagementPlanDevelopmentTypeID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static WaterQualityManagementPlanDevelopmentTypeDisplayName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {
@@ -335,6 +385,16 @@ export class WaterQualityManagementPlanDtoFormControls {
         }
     );
     public static WaterQualityManagementPlanBoundaryNotes = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static WaterQualityManagementPlanBoundaryBBox = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {

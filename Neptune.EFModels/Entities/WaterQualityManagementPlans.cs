@@ -9,9 +9,8 @@ public static class WaterQualityManagementPlans
     public static IQueryable<WaterQualityManagementPlan> GetImpl(NeptuneDbContext dbContext)
     {
         return dbContext.WaterQualityManagementPlans
-            .Include(x => x.StormwaterJurisdiction)
-            .ThenInclude(x => x.Organization)
-            ;
+            .Include(x => x.WaterQualityManagementPlanBoundary)
+            .Include(x => x.StormwaterJurisdiction).ThenInclude(x => x.Organization);
     }
 
     public static WaterQualityManagementPlan GetByIDWithChangeTracking(NeptuneDbContext dbContext,
@@ -136,9 +135,9 @@ public static class WaterQualityManagementPlans
             3066, 2845, 2856, 2857, 2850, 1623, 1632, 2528, 2531, 2343, 2527
         };
         var entities = await dbContext.WaterQualityManagementPlans
-            .Include(x => x.StormwaterJurisdiction)
-            .ThenInclude(x => x.Organization)
+            .Include(x => x.StormwaterJurisdiction).ThenInclude(x => x.Organization)
             .Include(x => x.WaterQualityManagementPlanDocuments)
+            .Include(x => x.WaterQualityManagementPlanBoundary)
             .Where(x => wqmpIDsToFilterBy.Contains(x.WaterQualityManagementPlanID) && x.WaterQualityManagementPlanDocuments
                 .Any(y => y.WaterQualityManagementPlanDocumentTypeID == (int) WaterQualityManagementPlanDocumentTypeEnum.FinalWQMP))
             .AsNoTracking()

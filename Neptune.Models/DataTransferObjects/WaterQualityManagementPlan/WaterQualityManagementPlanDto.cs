@@ -4,10 +4,14 @@ public class WaterQualityManagementPlanDto
 {
     public int WaterQualityManagementPlanID { get; set; }
     public int StormwaterJurisdictionID { get; set; }
+    public string? StormwaterJurisdictionOrganizationName { get; set; }
     public int? WaterQualityManagementPlanLandUseID { get; set; }
     public int? WaterQualityManagementPlanPriorityID { get; set; }
+    public string? WaterQualityManagementPlanPriorityDisplayName { get; set; }
     public int? WaterQualityManagementPlanStatusID { get; set; }
+    public string? WaterQualityManagementPlanStatusDisplayName { get; set; }
     public int? WaterQualityManagementPlanDevelopmentTypeID { get; set; }
+    public string? WaterQualityManagementPlanDevelopmentTypeDisplayName { get; set; }
     public string? WaterQualityManagementPlanName { get; set; }
     public DateTime? ApprovalDate { get; set; }
     public string? MaintenanceContactName { get; set; }
@@ -29,4 +33,5 @@ public class WaterQualityManagementPlanDto
     public int WaterQualityManagementPlanModelingApproachID { get; set; }
     public int? LastNereidLogID { get; set; }
     public string? WaterQualityManagementPlanBoundaryNotes { get; set; }
+    public string? WaterQualityManagementPlanBoundaryBBox { get; set; }
 }

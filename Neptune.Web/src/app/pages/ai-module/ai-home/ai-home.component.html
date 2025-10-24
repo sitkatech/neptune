@@ -1,17 +1,137 @@
-<h1>Welcome to the AI Module</h1>
-<div class="ai-home">
-    <div class="plan-selector">
-        <form-field
-            fieldLabel="Select a Water Quality Management Plan"
-            [formControl]="planControl"
-            [formInputOptions]="waterQualityManagementPlans$ | async"
-            [type]="FormFieldType.Select"
-            name="planSelect"></form-field>
+<h1>WQMP PDF Extraction via AI</h1>
+<div class="ai-home grid-12">
+    <div class="step g-col-12 grid-12">
+        <div class="step-header g-col-12 mt-4">
+            <span class="step-circle">1</span>
+            <h3>Select a Water Quality Management Plan</h3>
+        </div>
+        <div class="plan-selector g-col-4">
+            <form-field [formControl]="planControl" [formInputOptions]="waterQualityManagementPlans$ | async" [type]="FormFieldType.Select" name="planSelect"></form-field>
+        </div>
+        <div class="g-col-2">
+            <!-- Spacer -->
+        </div>
+        @if (selectedPlan$ | async; as selectedPlan) {
+            <div class="selected-plan-preview g-col-6 grid-12">
+                @if (selectedPlan.WaterQualityManagementPlanBoundaryBBox) {
+                    <div class="location-preview g-col-2">
+                        @if (imagePreview$ | async; as preview) {
+                            <img [src]="preview" alt="WQMP Preview Image" />
+                        }
+                    </div>
+                }
+                <div class="g-col-10">
+                    <h3>{{ selectedPlan?.WaterQualityManagementPlanName }}</h3>
+                    <div class="jurisdiction-organization-name mb-3">{{ selectedPlan?.StormwaterJurisdictionOrganizationName }}</div>
+                    <a class="view-detail-page-link" [routerLink]="['/wqmps', selectedPlan?.WaterQualityManagementPlanID]">View WQMP Detail Page</a>
+                </div>
+            </div>
+        }
     </div>
 
-    @if (planControl.value) {
-    <water-quality-management-plan-documents
-        [waterQualityManagementPlanID]="planControl.value"
-        (extractingChange)="onExtractingChange($event)"></water-quality-management-plan-documents>
+    @if (selectedPlan$ | async; as selectedPlan) {
+        <hr />
+
+        <div class="step g-col-12 grid-12">
+            <div class="step-header g-col-12">
+                <span class="step-circle">2</span>
+                <h3>Extract Data with AI</h3>
+            </div>
+
+            <div class="g-col-6">
+                <button class="btn btn-blue" (click)="onClickExtractData()" [disabled]="!selectedDocument"><icon icon="Stars"></icon> Run Data Extraction</button>
+            </div>
+
+            <div class="g-col-6">
+                <water-quality-management-plan-documents
+                    [waterQualityManagementPlanID]="selectedPlan.WaterQualityManagementPlanID"
+                    [activeChatbotDocument]="activeChatbotDocument"
+                    (documentSelectedChange)="onDocumentSelectedChange($event)"
+                    (extractingChange)="onExtractingChange($event)"></water-quality-management-plan-documents>
+            </div>
+        </div>
+        @if (activeChatbotDocument) {
+            <hr />
+            <div class="step g-col-12 grid-12">
+                <div class="step-header g-col-12">
+                    <span class="step-circle">3</span>
+                    <h3>Review Output</h3>
+                </div>
+                <div class="extracted-data-panel grid-12 g-col-12" [loadingSpinner]="{ isLoading: isExtracting, loadingHeight: 100 }">
+                    <div class="existing-basic-data section g-col-6">
+                        <div class="section-header">
+                            <h5 class="section-title">Basics</h5>
+                            <div class="tag orange">OCST Existing WQMP Data</div>
+                        </div>
+                        <div class="section-body grid-12">
+                            <div class="field g-col-12 grid-12">
+                                <label class="g-col-4">Name</label>
+                                <div class="g-col-8">{{ selectedPlan.WaterQualityManagementPlanName }}</div>
+                            </div>
+                            <div class="field grid-12">
+                                <label class="g-col-4">Jurisdiction</label>
+                                <div class="g-col-8">{{ selectedPlan.StormwaterJurisdictionOrganizationName }}</div>
+                            </div>
+                            <div class="field grid-12">
+                                <label class="g-col-4">Priority</label>
+                                <div class="g-col-8">{{ selectedPlan.WaterQualityManagementPlanPriorityDisplayName }}</div>
+                            </div>
+                            <div class="field grid-12">
+                                <label class="g-col-4">Status</label>
+                                <div class="g-col-8">{{ selectedPlan.WaterQualityManagementPlanStatusDisplayName }}</div>
+                            </div>
+                            <div class="field grid-12">
+                                <label class="g-col-4">Development Type</label>
+                                <div class="g-col-8">{{ selectedPlan.WaterQualityManagementPlanDevelopmentTypeDisplayName }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="extracted-basic-data section g-col-6">
+                        <div class="section-header">
+                            <h5 class="section-title">Basics</h5>
+                            <div class="tag blue"><icon icon="Stars"></icon> AI Extracted Data</div>
+                        </div>
+                        <div class="section-body grid-12">
+                            <div class="field g-col-12 grid-12">
+                                <label class="g-col-4">Name</label>
+                                <div class="g-col-8">{{ finalOutputObject?.WQMP?.WaterQualityManagementPlanName?.Value ?? "&lt;Not Extracted&gt;" }}</div>
+                            </div>
+                            <div class="field g-col-12 grid-12">
+                                <label class="g-col-4">Jurisdiction</label>
+                                <div class="g-col-8">{{ finalOutputObject?.WQMP?.Jurisdiction?.Value ?? "&lt;Not Extracted&gt;" }}</div>
+                            </div>
+                            <div class="field g-col-12 grid-12">
+                                <label class="g-col-4">Priority</label>
+                                <div class="g-col-8">{{ finalOutputObject?.WQMP?.WaterQualityManagementPlanPriority?.Value ?? "&lt;Not Extracted&gt;" }}</div>
+                            </div>
+                            <div class="field g-col-12 grid-12">
+                                <label class="g-col-4">Status</label>
+                                <div class="g-col-8">{{ finalOutputObject?.WQMP?.WaterQualityManagementPlanStatus?.Value ?? "&lt;Not Extracted&gt;" }}</div>
+                            </div>
+                            <div class="field g-col-12 grid-12">
+                                <label class="g-col-4">Development Type</label>
+                                <div class="g-col-8">{{ finalOutputObject?.WQMP?.WaterQualityManagementPlanDevelopmentType?.Value ?? "&lt;Not Extracted&gt;" }}</div>
+                            </div>
+                            <pre>{{ finalOutputObject | json }}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (activeChatbotDocument) {
+            <hr />
+
+            <div class="step g-col-12 grid-12">
+                <div class="step-header g-col-12">
+                    <span class="step-circle">4</span>
+                    <h3>Ask the AI</h3>
+                </div>
+                <div class="extracted-data-panel g-col-12" [loadingSpinner]="{ isLoading: isExtracting, loadingHeight: 100 }">
+                    <water-quality-management-plan-chatbot [waterQualityManagementPlanDocument]="activeChatbotDocument" [extractionResult]="extractionResult">
+                    </water-quality-management-plan-chatbot>
+                </div>
+            </div>
+        }
     }
 </div>

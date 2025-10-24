@@ -1,12 +1,120 @@
+@use "/src/scss/abstracts" as *;
+
 .ai-landing {
     text-align: center;
     margin-top: 4rem;
 }
+
 .ai-landing h1 {
     font-size: 2.5rem;
     color: #22223b;
 }
+
 .ai-landing p {
     color: #4a4e69;
     font-size: 1.2rem;
+}
+
+.step {
+    gap: 0.5rem;
+    min-height: 10rem;
+    .step-header {
+        display: flex;
+        align-items: center;
+        gap: $spacing-200;
+        margin-bottom: $spacing-300;
+
+        .step-circle {
+            display: inline-block;
+            width: 1.5rem;
+            height: 1.5rem;
+            line-height: 1.4rem;
+            border-radius: 50%;
+            background-color: $orange-default;
+            color: $white;
+            text-align: center;
+            font-weight: bold;
+        }
+    }
+}
+
+.selected-plan-preview {
+    background-color: $gray-50;
+    border: 1px solid $gray-200;
+    border-radius: $spacing-100;
+    padding: $spacing-400;
+
+    .location-preview {
+        height: 100px;
+        width: 100px;
+
+        img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+    }
+    .jurisdiction-organization-name {
+        color: $gray-800;
+    }
+
+    .view-detail-page-link {
+        color: $neptune-blue;
+        text-decoration: underline;
+        font-weight: 600;
+    }
+}
+
+.section {
+    .section-header {
+        display: flex;
+        align-items: center;
+        background-color: $gray-600;
+        border: 1px solid $gray-700;
+        border-top-left-radius: $spacing-100;
+        border-top-right-radius: $spacing-100;
+        padding: $spacing-400;
+        .section-title {
+            color: $white;
+            font-weight: 700;
+            font-size: $type-size-300;
+            padding-bottom: 0;
+            margin-right: $spacing-200;
+        }
+
+        .tag {
+            padding: $spacing-100 $spacing-200;
+            border-radius: $spacing-100;
+            width: fit-content;
+            font-size: $type-size-200;
+            font-weight: 600;
+
+            &.orange {
+                background-color: $neptune-orange;
+                color: $white;
+            }
+            &.blue {
+                background-color: $neptune-blue;
+                color: $white;
+            }
+        }
+    }
+
+    .section-body {
+        background-color: $gray-50;
+        border: 1px solid $gray-200;
+        border-top: none;
+        border-bottom-left-radius: $spacing-100;
+        border-bottom-right-radius: $spacing-100;
+        padding: $spacing-400;
+        gap: $spacing-400;
+
+        .field {
+            label {
+                font-weight: 700;
+                cursor: default;
+                margin-left: auto;
+            }
+        }
+    }
 }

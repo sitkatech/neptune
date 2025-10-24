@@ -12,12 +12,15 @@
     border: none;
     font-family: $lato;
     font-size: $type-size-200;
-    font-weight: 400;
+    font-weight: 700;
     letter-spacing: 0.045em;
     line-height: 1;
     padding: 0.875rem 1.25rem 0.675rem;
     transition: all 300ms ease;
-    box-shadow: 0 1px 1px hsl(0deg 0% 0% / 0.075), 0 2px 2px hsl(0deg 0% 0% / 0.075), 0 4px 4px hsl(0deg 0% 0% / 0.075);
+    box-shadow:
+        0 1px 1px hsl(0deg 0% 0% / 0.075),
+        0 2px 2px hsl(0deg 0% 0% / 0.075),
+        0 4px 4px hsl(0deg 0% 0% / 0.075);
 
     &:focus,
     &.focus {
@@ -192,6 +195,16 @@
         }
     }
 
+    &-blue {
+        background: $neptune-blue;
+        color: $white;
+
+        &:hover {
+            background-color: color.adjust($neptune-blue, $lightness: -10%);
+            color: $white;
+        }
+    }
+
     &-danger {
         background: $red-default;
         color: $white;
@@ -208,7 +221,10 @@
         color: $gray-default;
         box-shadow: none;
         &:hover {
-            box-shadow: 0 1px 1px hsl(0deg 0% 0% / 0.075), 0 2px 2px hsl(0deg 0% 0% / 0.075), 0 4px 4px hsl(0deg 0% 0% / 0.075);
+            box-shadow:
+                0 1px 1px hsl(0deg 0% 0% / 0.075),
+                0 2px 2px hsl(0deg 0% 0% / 0.075),
+                0 4px 4px hsl(0deg 0% 0% / 0.075);
             color: $black;
         }
     }
@@ -268,7 +284,7 @@
 }
 
 button.btn:not(.btn-sm) {
-    padding-bottom: 0.75rem;
+    padding-bottom: 1rem;
 }
 
 .filter-btn-group {

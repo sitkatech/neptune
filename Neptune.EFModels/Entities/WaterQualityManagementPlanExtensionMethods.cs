@@ -51,10 +51,14 @@ public static  class WaterQualityManagementPlanExtensionMethods
         {
             WaterQualityManagementPlanID = plan.WaterQualityManagementPlanID,
             StormwaterJurisdictionID = plan.StormwaterJurisdictionID,
+            StormwaterJurisdictionOrganizationName = plan.StormwaterJurisdiction?.GetOrganizationDisplayName(),
             WaterQualityManagementPlanLandUseID = plan.WaterQualityManagementPlanLandUseID,
             WaterQualityManagementPlanPriorityID = plan.WaterQualityManagementPlanPriorityID,
+            WaterQualityManagementPlanPriorityDisplayName = plan.WaterQualityManagementPlanPriority?.WaterQualityManagementPlanPriorityDisplayName,
             WaterQualityManagementPlanStatusID = plan.WaterQualityManagementPlanStatusID,
+            WaterQualityManagementPlanStatusDisplayName = plan.WaterQualityManagementPlanStatus?.WaterQualityManagementPlanStatusDisplayName,
             WaterQualityManagementPlanDevelopmentTypeID = plan.WaterQualityManagementPlanDevelopmentTypeID,
+            WaterQualityManagementPlanDevelopmentTypeDisplayName = plan.WaterQualityManagementPlanDevelopmentType?.WaterQualityManagementPlanDevelopmentTypeDisplayName,
             WaterQualityManagementPlanName = plan.WaterQualityManagementPlanName,
             ApprovalDate = plan.ApprovalDate,
             MaintenanceContactName = plan.MaintenanceContactName,
@@ -75,7 +79,11 @@ public static  class WaterQualityManagementPlanExtensionMethods
             TrashCaptureEffectiveness = plan.TrashCaptureEffectiveness,
             WaterQualityManagementPlanModelingApproachID = plan.WaterQualityManagementPlanModelingApproachID,
             LastNereidLogID = plan.LastNereidLogID,
-            WaterQualityManagementPlanBoundaryNotes = plan.WaterQualityManagementPlanBoundaryNotes
+            WaterQualityManagementPlanBoundaryNotes = plan.WaterQualityManagementPlanBoundaryNotes,
+            //boundary bbox as WMS string
+            WaterQualityManagementPlanBoundaryBBox = plan.WaterQualityManagementPlanBoundary?.Geometry4326 != null 
+                ? $"{plan.WaterQualityManagementPlanBoundary.Geometry4326.EnvelopeInternal.MinX}, {plan.WaterQualityManagementPlanBoundary.Geometry4326.EnvelopeInternal.MinY}, {plan.WaterQualityManagementPlanBoundary.Geometry4326.EnvelopeInternal.MaxX}, {plan.WaterQualityManagementPlanBoundary.Geometry4326.EnvelopeInternal.MaxY}" 
+                : null,
         };
     }
 

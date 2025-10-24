@@ -12242,6 +12242,10 @@
             "type": "integer",
             "format": "int32"
           },
+          "StormwaterJurisdictionOrganizationName": {
+            "type": "string",
+            "nullable": true
+          },
           "WaterQualityManagementPlanLandUseID": {
             "type": "integer",
             "format": "int32",
@@ -12252,14 +12256,26 @@
             "format": "int32",
             "nullable": true
           },
+          "WaterQualityManagementPlanPriorityDisplayName": {
+            "type": "string",
+            "nullable": true
+          },
           "WaterQualityManagementPlanStatusID": {
             "type": "integer",
             "format": "int32",
             "nullable": true
           },
+          "WaterQualityManagementPlanStatusDisplayName": {
+            "type": "string",
+            "nullable": true
+          },
           "WaterQualityManagementPlanDevelopmentTypeID": {
             "type": "integer",
             "format": "int32",
+            "nullable": true
+          },
+          "WaterQualityManagementPlanDevelopmentTypeDisplayName": {
+            "type": "string",
             "nullable": true
           },
           "WaterQualityManagementPlanName": {
@@ -12351,6 +12367,10 @@
             "nullable": true
           },
           "WaterQualityManagementPlanBoundaryNotes": {
+            "type": "string",
+            "nullable": true
+          },
+          "WaterQualityManagementPlanBoundaryBBox": {
             "type": "string",
             "nullable": true
           }

@@ -10,14 +10,14 @@ import { AsyncPipe, DatePipe, CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
 import { AiChatInputComponent } from "src/app/shared/components/ai-chat-input/ai-chat-input.component";
-import { IconComponent } from "../icon/icon.component";
+import { IconComponent } from "../../../../shared/components/icon/icon.component";
 import {
     ChatMessageDto,
     ChatRequestDto,
     PersonDto,
     WaterQualityManagementPlanDocumentDto,
     WaterQualityManagementPlanDocumentExtractionResultDto,
-} from "../../generated/model/models";
+} from "../../../../shared/generated/model/models";
 
 @Component({
     selector: "water-quality-management-plan-chatbot",
@@ -65,7 +65,11 @@ export class WaterQualityManagementPlanChatbotComponent implements OnDestroy, On
     };
 
     currentUserSubscription: Subscription;
-    constructor(private authenticationService: AuthenticationService, private eventSourceService: EventSourceService, private sanitizer: DomSanitizer) {}
+    constructor(
+        private authenticationService: AuthenticationService,
+        private eventSourceService: EventSourceService,
+        private sanitizer: DomSanitizer
+    ) {}
 
     ngOnInit(): void {
         this.currentUser$ = this.authenticationService.getCurrentUser();
