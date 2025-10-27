@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { ParcelDisplayDto } from './parcel-display-dto';
 
 
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
@@ -15,6 +16,7 @@ export class WaterQualityManagementPlanDto {
     StormwaterJurisdictionID?: number;
     StormwaterJurisdictionOrganizationName?: string | null;
     WaterQualityManagementPlanLandUseID?: number | null;
+    WaterQualityManagementPlanLandUseDisplayName?: string | null;
     WaterQualityManagementPlanPriorityID?: number | null;
     WaterQualityManagementPlanPriorityDisplayName?: string | null;
     WaterQualityManagementPlanStatusID?: number | null;
@@ -32,17 +34,22 @@ export class WaterQualityManagementPlanDto {
     MaintenanceContactState?: string | null;
     MaintenanceContactZip?: string | null;
     WaterQualityManagementPlanPermitTermID?: number | null;
+    WaterQualityManagementPlanPermitTermDisplayName?: string | null;
     HydromodificationAppliesTypeID?: number | null;
+    HydromodificationAppliesTypeDisplayName?: string | null;
     DateOfConstruction?: string | null;
     HydrologicSubareaID?: number | null;
+    HydrologicSubareaName?: string | null;
     RecordNumber?: string | null;
     RecordedWQMPAreaInAcres?: number | null;
     TrashCaptureStatusTypeID?: number;
     TrashCaptureEffectiveness?: number | null;
+    TrashCaptureStatusTypeDisplayName?: string | null;
     WaterQualityManagementPlanModelingApproachID?: number;
     LastNereidLogID?: number | null;
     WaterQualityManagementPlanBoundaryNotes?: string | null;
     WaterQualityManagementPlanBoundaryBBox?: string | null;
+    Parcels?: Array<ParcelDisplayDto> | null;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
@@ -53,6 +60,7 @@ export interface WaterQualityManagementPlanDtoForm {
     StormwaterJurisdictionID?: FormControl<number>;
     StormwaterJurisdictionOrganizationName?: FormControl<string>;
     WaterQualityManagementPlanLandUseID?: FormControl<number>;
+    WaterQualityManagementPlanLandUseDisplayName?: FormControl<string>;
     WaterQualityManagementPlanPriorityID?: FormControl<number>;
     WaterQualityManagementPlanPriorityDisplayName?: FormControl<string>;
     WaterQualityManagementPlanStatusID?: FormControl<number>;
@@ -70,17 +78,22 @@ export interface WaterQualityManagementPlanDtoForm {
     MaintenanceContactState?: FormControl<string>;
     MaintenanceContactZip?: FormControl<string>;
     WaterQualityManagementPlanPermitTermID?: FormControl<number>;
+    WaterQualityManagementPlanPermitTermDisplayName?: FormControl<string>;
     HydromodificationAppliesTypeID?: FormControl<number>;
+    HydromodificationAppliesTypeDisplayName?: FormControl<string>;
     DateOfConstruction?: FormControl<string>;
     HydrologicSubareaID?: FormControl<number>;
+    HydrologicSubareaName?: FormControl<string>;
     RecordNumber?: FormControl<string>;
     RecordedWQMPAreaInAcres?: FormControl<number>;
     TrashCaptureStatusTypeID?: FormControl<number>;
     TrashCaptureEffectiveness?: FormControl<number>;
+    TrashCaptureStatusTypeDisplayName?: FormControl<string>;
     WaterQualityManagementPlanModelingApproachID?: FormControl<number>;
     LastNereidLogID?: FormControl<number>;
     WaterQualityManagementPlanBoundaryNotes?: FormControl<string>;
     WaterQualityManagementPlanBoundaryBBox?: FormControl<string>;
+    Parcels?: FormControl<Array<ParcelDisplayDto>>;
 }
 
 export class WaterQualityManagementPlanDtoFormControls { 
@@ -115,6 +128,16 @@ export class WaterQualityManagementPlanDtoFormControls {
         }
     );
     public static WaterQualityManagementPlanLandUseID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static WaterQualityManagementPlanLandUseDisplayName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {
@@ -294,7 +317,27 @@ export class WaterQualityManagementPlanDtoFormControls {
             ],
         }
     );
+    public static WaterQualityManagementPlanPermitTermDisplayName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
     public static HydromodificationAppliesTypeID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static HydromodificationAppliesTypeDisplayName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {
@@ -315,6 +358,16 @@ export class WaterQualityManagementPlanDtoFormControls {
         }
     );
     public static HydrologicSubareaID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static HydrologicSubareaName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {
@@ -364,6 +417,16 @@ export class WaterQualityManagementPlanDtoFormControls {
             ],
         }
     );
+    public static TrashCaptureStatusTypeDisplayName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
     public static WaterQualityManagementPlanModelingApproachID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
@@ -395,6 +458,16 @@ export class WaterQualityManagementPlanDtoFormControls {
         }
     );
     public static WaterQualityManagementPlanBoundaryBBox = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static Parcels = (value: FormControlState<Array<ParcelDisplayDto>> | Array<ParcelDisplayDto> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<ParcelDisplayDto>>(
         value,
         formControlOptions ?? 
         {

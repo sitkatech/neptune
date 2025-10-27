@@ -8,9 +8,10 @@
     gap: $spacing-400;
     border: 1px solid $gray-200;
     border-radius: $border-radius-200;
+    cursor: pointer;
 
     &.selected {
-        border-color: $blue-600;
+        border: 2px solid #30748a;
         box-shadow:
             0 1px 3px hsl(0deg 0% 0% / 0.1),
             0 1px 2px hsl(0deg 0% 0% / 0.06);
@@ -39,6 +40,7 @@
         align-items: center;
         text-decoration: none;
         color: $gray-1000;
+        width: fit-content;
 
         &:hover {
             .document__title {
@@ -50,6 +52,7 @@
     &__title {
         font-size: 1rem;
         font-weight: 500;
+        width: fit-content;
     }
 
     &__meta {

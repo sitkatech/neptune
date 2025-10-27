@@ -223,6 +223,7 @@ public class AIController(
             {
                 ["TreatmentBMPName"] = Prop("BMP name."),
                 ["TreatmentBMPType"] = Prop("BMP type/classification."),
+                ["Area"] = PropNullable("Area in acres."),
                 ["LocationPointAsWellKnownText"] = Prop("Location WKT point."),
                 ["Jurisdiction"] = Prop("Responsible jurisdiction."),
                 ["Notes"] = Prop("Notes/comments."),

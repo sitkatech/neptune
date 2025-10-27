@@ -1,16 +1,15 @@
 <div class="document mb-2" [ngClass]="{ selected: selected }">
     <div class="document__body">
-        <a href="javascript:void(0)" (click)="onDownload()" class="document__link">
+        <a href="javascript:void(0)" (click)="onDownload()" title="Download File" class="document__link">
             <span class="document__icon">
                 <icon [icon]="'PDF'"></icon>
-                <!-- TODO: get other fileType icons -->
             </span>
             <div class="document__title">{{ keyDocument.DisplayName }}</div>
         </a>
 
         <div class="document__meta">
-            <span class="document__meta-item"><strong>Size: </strong> {{ formatFileSize(keyDocument.FileResource.ContentLength) }}</span>
-            <span class="document__meta-item"><strong>Date Modified: </strong> {{ keyDocument.UploadDate | date: "MMM d, y, h:mm a" }}</span>
+            <span class="document__meta-item"><strong>Size: </strong>&nbsp;{{ formatFileSize(keyDocument.FileResource.ContentLength) }}</span>
+            <span class="document__meta-item"><strong>Date Modified:&nbsp;</strong> {{ keyDocument.UploadDate | date: "MMM d, y, h:mm a" }}</span>
             <span class="document__meta-item"
                 ><strong>Updated by: </strong>
                 <span class="document__meta-item--user"

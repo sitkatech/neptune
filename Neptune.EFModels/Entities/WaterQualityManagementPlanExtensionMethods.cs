@@ -53,6 +53,7 @@ public static  class WaterQualityManagementPlanExtensionMethods
             StormwaterJurisdictionID = plan.StormwaterJurisdictionID,
             StormwaterJurisdictionOrganizationName = plan.StormwaterJurisdiction?.GetOrganizationDisplayName(),
             WaterQualityManagementPlanLandUseID = plan.WaterQualityManagementPlanLandUseID,
+            WaterQualityManagementPlanLandUseDisplayName = plan.WaterQualityManagementPlanLandUse?.WaterQualityManagementPlanLandUseDisplayName,
             WaterQualityManagementPlanPriorityID = plan.WaterQualityManagementPlanPriorityID,
             WaterQualityManagementPlanPriorityDisplayName = plan.WaterQualityManagementPlanPriority?.WaterQualityManagementPlanPriorityDisplayName,
             WaterQualityManagementPlanStatusID = plan.WaterQualityManagementPlanStatusID,
@@ -70,13 +71,17 @@ public static  class WaterQualityManagementPlanExtensionMethods
             MaintenanceContactState = plan.MaintenanceContactState,
             MaintenanceContactZip = plan.MaintenanceContactZip,
             WaterQualityManagementPlanPermitTermID = plan.WaterQualityManagementPlanPermitTermID,
+            WaterQualityManagementPlanPermitTermDisplayName = plan.WaterQualityManagementPlanPermitTerm?.WaterQualityManagementPlanPermitTermDisplayName,
             HydromodificationAppliesTypeID = plan.HydromodificationAppliesTypeID,
+            HydromodificationAppliesTypeDisplayName = plan.HydromodificationAppliesType?.HydromodificationAppliesTypeDisplayName,
             DateOfConstruction = plan.DateOfConstruction,
             HydrologicSubareaID = plan.HydrologicSubareaID,
+            HydrologicSubareaName = plan.HydrologicSubarea?.HydrologicSubareaName,
             RecordNumber = plan.RecordNumber,
             RecordedWQMPAreaInAcres = plan.RecordedWQMPAreaInAcres,
             TrashCaptureStatusTypeID = plan.TrashCaptureStatusTypeID,
             TrashCaptureEffectiveness = plan.TrashCaptureEffectiveness,
+            TrashCaptureStatusTypeDisplayName = plan.TrashCaptureStatusType?.TrashCaptureStatusTypeDisplayName,
             WaterQualityManagementPlanModelingApproachID = plan.WaterQualityManagementPlanModelingApproachID,
             LastNereidLogID = plan.LastNereidLogID,
             WaterQualityManagementPlanBoundaryNotes = plan.WaterQualityManagementPlanBoundaryNotes,
@@ -84,6 +89,12 @@ public static  class WaterQualityManagementPlanExtensionMethods
             WaterQualityManagementPlanBoundaryBBox = plan.WaterQualityManagementPlanBoundary?.Geometry4326 != null 
                 ? $"{plan.WaterQualityManagementPlanBoundary.Geometry4326.EnvelopeInternal.MinX}, {plan.WaterQualityManagementPlanBoundary.Geometry4326.EnvelopeInternal.MinY}, {plan.WaterQualityManagementPlanBoundary.Geometry4326.EnvelopeInternal.MaxX}, {plan.WaterQualityManagementPlanBoundary.Geometry4326.EnvelopeInternal.MaxY}" 
                 : null,
+
+            Parcels = plan.WaterQualityManagementPlanParcels.Select(x => new ParcelDisplayDto()
+            {
+                ParcelID = x.ParcelID,
+                ParcelNumber = x.Parcel.ParcelNumber,
+            }).ToList()
         };
     }
 

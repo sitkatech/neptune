@@ -84,6 +84,42 @@
                                 <label class="g-col-4">Development Type</label>
                                 <div class="g-col-8">{{ selectedPlan.WaterQualityManagementPlanDevelopmentTypeDisplayName }}</div>
                             </div>
+                            <div class="field grid-12">
+                                <label class="g-col-4">Land Use</label>
+                                <div class="g-col-8">{{ selectedPlan.WaterQualityManagementPlanLandUseDisplayName }}</div>
+                            </div>
+                            <div class="field grid-12">
+                                <label class="g-col-4">Permit Term</label>
+                                <div class="g-col-8">{{ selectedPlan.WaterQualityManagementPlanPermitTermDisplayName }}</div>
+                            </div>
+                            <div class="field grid-12">
+                                <label class="g-col-4">Approval Date</label>
+                                <div class="g-col-8">{{ selectedPlan.ApprovalDate | date: "MM/dd/yyyy" }}</div>
+                            </div>
+                            <div class="field grid-12">
+                                <label class="g-col-4">Date of Construction</label>
+                                <div class="g-col-8">{{ selectedPlan.DateOfConstruction | date: "MM/dd/yyyy" }}</div>
+                            </div>
+                            <div class="field grid-12">
+                                <label class="g-col-4">Hydromodification Controls Apply</label>
+                                <div class="g-col-8">{{ selectedPlan.HydromodificationAppliesTypeDisplayName }}</div>
+                            </div>
+                            <div class="field grid-12">
+                                <label class="g-col-4">Hydrologic Subarea</label>
+                                <div class="g-col-8">{{ selectedPlan.HydrologicSubareaName }}</div>
+                            </div>
+                            <div class="field grid-12">
+                                <label class="g-col-4">Record Number</label>
+                                <div class="g-col-8">{{ selectedPlan.RecordNumber }}</div>
+                            </div>
+                            <div class="field grid-12">
+                                <label class="g-col-4">Recorded WQMP Area (Acres)</label>
+                                <div class="g-col-8">{{ selectedPlan.RecordedWQMPAreaInAcres }}</div>
+                            </div>
+                            <div class="field grid-12">
+                                <label class="g-col-4">Trash Capture Status</label>
+                                <div class="g-col-8">{{ selectedPlan.TrashCaptureStatusTypeDisplayName }}</div>
+                            </div>
                         </div>
                     </div>
                     <div class="extracted-basic-data section g-col-6">
@@ -94,25 +130,126 @@
                         <div class="section-body grid-12">
                             <div class="field g-col-12 grid-12">
                                 <label class="g-col-4">Name</label>
-                                <div class="g-col-8">{{ finalOutputObject?.WQMP?.WaterQualityManagementPlanName?.Value ?? "&lt;Not Extracted&gt;" }}</div>
+                                <div class="g-col-8">{{ finalOutputObject?.WQMP?.WaterQualityManagementPlanName?.Value ?? "" }}</div>
                             </div>
                             <div class="field g-col-12 grid-12">
                                 <label class="g-col-4">Jurisdiction</label>
-                                <div class="g-col-8">{{ finalOutputObject?.WQMP?.Jurisdiction?.Value ?? "&lt;Not Extracted&gt;" }}</div>
+                                <div class="g-col-8">{{ finalOutputObject?.WQMP?.Jurisdiction?.Value ?? "" }}</div>
                             </div>
                             <div class="field g-col-12 grid-12">
                                 <label class="g-col-4">Priority</label>
-                                <div class="g-col-8">{{ finalOutputObject?.WQMP?.WaterQualityManagementPlanPriority?.Value ?? "&lt;Not Extracted&gt;" }}</div>
+                                <div class="g-col-8">{{ finalOutputObject?.WQMP?.WaterQualityManagementPlanPriority?.Value ?? "" }}</div>
                             </div>
                             <div class="field g-col-12 grid-12">
                                 <label class="g-col-4">Status</label>
-                                <div class="g-col-8">{{ finalOutputObject?.WQMP?.WaterQualityManagementPlanStatus?.Value ?? "&lt;Not Extracted&gt;" }}</div>
+                                <div class="g-col-8">{{ finalOutputObject?.WQMP?.WaterQualityManagementPlanStatus?.Value ?? "" }}</div>
                             </div>
                             <div class="field g-col-12 grid-12">
                                 <label class="g-col-4">Development Type</label>
-                                <div class="g-col-8">{{ finalOutputObject?.WQMP?.WaterQualityManagementPlanDevelopmentType?.Value ?? "&lt;Not Extracted&gt;" }}</div>
+                                <div class="g-col-8">{{ finalOutputObject?.WQMP?.WaterQualityManagementPlanDevelopmentType?.Value ?? "" }}</div>
                             </div>
-                            <pre>{{ finalOutputObject | json }}</pre>
+                            <div class="field g-col-12 grid-12">
+                                <label class="g-col-4">Land Use</label>
+                                <div class="g-col-8">{{ finalOutputObject?.WQMP?.WaterQualityManagementPlanLandUse?.Value ?? "" }}</div>
+                            </div>
+                            <div class="field g-col-12 grid-12">
+                                <label class="g-col-4">Permit Term</label>
+                                <div class="g-col-8">{{ finalOutputObject?.WQMP?.WaterQualityManagementPlanPermitTerm?.Value ?? "" }}</div>
+                            </div>
+                            <div class="field g-col-12 grid-12">
+                                <label class="g-col-4">Approval Date</label>
+                                <div class="g-col-8">{{ finalOutputObject?.WQMP?.ApprovalDate?.Value ?? "" }}</div>
+                            </div>
+                            <div class="field g-col-12 grid-12">
+                                <label class="g-col-4">Date of Construction</label>
+                                <div class="g-col-8">{{ finalOutputObject?.WQMP?.DateOfConstruction?.Value ?? "" }}</div>
+                            </div>
+                            <div class="field g-col-12 grid-12">
+                                <label class="g-col-4">Hydromodification Controls Apply</label>
+                                <div class="g-col-8">{{ finalOutputObject?.WQMP?.HydromodificationAppliesType?.Value ?? "" }}</div>
+                            </div>
+                            <div class="field g-col-12 grid-12">
+                                <label class="g-col-4">Hydrologic Subarea</label>
+                                <div class="g-col-8">{{ finalOutputObject?.WQMP?.HydrologicSubarea?.Value ?? "" }}</div>
+                            </div>
+                            <div class="field g-col-12 grid-12">
+                                <label class="g-col-4">Record Number</label>
+                                <div class="g-col-8">{{ finalOutputObject?.WQMP?.RecordNumber?.Value ?? "" }}</div>
+                            </div>
+                            <div class="field g-col-12 grid-12">
+                                <label class="g-col-4">Recorded WQMP Area (Acres)</label>
+                                <div class="g-col-8">{{ finalOutputObject?.WQMP?.RecordedWQMPAreaInAcres?.Value ?? "" }}</div>
+                            </div>
+                            <div class="field g-col-12 grid-12">
+                                <label class="g-col-4">Trash Capture Status</label>
+                                <div class="g-col-8">{{ finalOutputObject?.WQMP?.TrashCaptureStatusType?.Value ?? "" }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="existing-parcel section g-col-6">
+                        <div class="section-header">
+                            <h5 class="section-title">Associated Parcels</h5>
+                            <div class="tag orange">OCST Existing WQMP Data</div>
+                        </div>
+
+                        <div class="section-body grid-12">
+                            <div class="field g-col-12 grid-12">
+                                <label class="g-col-4">Parcels</label>
+                                <div class="g-col-8">
+                                    <ul>
+                                        @for (parcel of selectedPlan.Parcels; track parcel.ParcelID) {
+                                            <li>
+                                                {{ parcel.ParcelNumber }}
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="extracted-parcel section g-col-6">
+                        <div class="section-header">
+                            <h5 class="section-title">Associated Parcels</h5>
+                            <div class="tag blue"><icon icon="Stars"></icon> AI Extracted Data</div>
+                        </div>
+                        <div class="section-body grid-12">
+                            <div class="field g-col-12 grid-12">
+                                <label class="g-col-4">Parcels</label>
+                                <div class="g-col-8">
+                                    <ul>
+                                        @for (parcel of finalOutputObject?.Parcels || []; track parcel.ParcelNumber) {
+                                            <li>
+                                                {{ parcel.ParcelNumber?.Value || "" }}
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="existing-parcel section g-col-6">
+                        <div class="section-header">
+                            <h5 class="section-title">BMPs</h5>
+                            <div class="tag orange">OCST Existing WQMP Data</div>
+                        </div>
+                        <div class="section-body grid-12"></div>
+                    </div>
+                    <div class="extracted-parcel section g-col-6">
+                        <div class="section-header">
+                            <h5 class="section-title">BMPs</h5>
+                            <div class="tag blue"><icon icon="Stars"></icon> AI Extracted Data</div>
+                        </div>
+                        <div class="section-body grid-12">
+                            <div class="field g-col-12 grid-12">
+                                <label class="g-col-4">BMPs</label>
+                                <div class="g-col-8">
+                                    <ul>
+                                        @for (bmp of finalOutputObject?.TreatmentBMPs || []; track bmp.TreatmentBMPName) {
+                                            <li>{{ bmp.TreatmentBMPName?.Value || "" }} {{ bmp.Area?.Value || "" }}</li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -131,6 +268,10 @@
                     <water-quality-management-plan-chatbot [waterQualityManagementPlanDocument]="activeChatbotDocument" [extractionResult]="extractionResult">
                     </water-quality-management-plan-chatbot>
                 </div>
+            </div>
+
+            <div class="g-col-12">
+                <pre>{{ finalOutputObject | json }}</pre>
             </div>
         }
     }

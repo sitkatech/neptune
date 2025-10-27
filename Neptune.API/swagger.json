@@ -9495,6 +9495,20 @@
         },
         "additionalProperties": false
       },
+      "ParcelDisplayDto": {
+        "type": "object",
+        "properties": {
+          "ParcelID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ParcelNumber": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "ParcelGeometrySimpleDto": {
         "type": "object",
         "properties": {
@@ -12251,6 +12265,10 @@
             "format": "int32",
             "nullable": true
           },
+          "WaterQualityManagementPlanLandUseDisplayName": {
+            "type": "string",
+            "nullable": true
+          },
           "WaterQualityManagementPlanPriorityID": {
             "type": "integer",
             "format": "int32",
@@ -12324,9 +12342,17 @@
             "format": "int32",
             "nullable": true
           },
+          "WaterQualityManagementPlanPermitTermDisplayName": {
+            "type": "string",
+            "nullable": true
+          },
           "HydromodificationAppliesTypeID": {
             "type": "integer",
             "format": "int32",
+            "nullable": true
+          },
+          "HydromodificationAppliesTypeDisplayName": {
+            "type": "string",
             "nullable": true
           },
           "DateOfConstruction": {
@@ -12337,6 +12363,10 @@
           "HydrologicSubareaID": {
             "type": "integer",
             "format": "int32",
+            "nullable": true
+          },
+          "HydrologicSubareaName": {
+            "type": "string",
             "nullable": true
           },
           "RecordNumber": {
@@ -12357,6 +12387,10 @@
             "format": "int32",
             "nullable": true
           },
+          "TrashCaptureStatusTypeDisplayName": {
+            "type": "string",
+            "nullable": true
+          },
           "WaterQualityManagementPlanModelingApproachID": {
             "type": "integer",
             "format": "int32"
@@ -12372,6 +12406,13 @@
           },
           "WaterQualityManagementPlanBoundaryBBox": {
             "type": "string",
+            "nullable": true
+          },
+          "Parcels": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ParcelDisplayDto"
+            },
             "nullable": true
           }
         },

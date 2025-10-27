@@ -115,6 +115,11 @@
                 cursor: default;
                 margin-left: auto;
             }
+
+            ul {
+                list-style: circle;
+                margin-left: 1rem;
+            }
         }
     }
 }

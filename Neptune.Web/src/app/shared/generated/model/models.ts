@@ -66,6 +66,7 @@ export * from './organization-dto';
 export * from './organization-simple-dto';
 export * from './organization-type-simple-dto';
 export * from './organization-upsert-dto';
+export * from './parcel-display-dto';
 export * from './parcel-geometry-simple-dto';
 export * from './person-create-dto';
 export * from './person-display-dto';
