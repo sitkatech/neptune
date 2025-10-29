@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { TreatmentBMPMinimalDto } from './treatment-bmp-minimal-dto';
 import { ParcelDisplayDto } from './parcel-display-dto';
 
 
@@ -50,6 +51,7 @@ export class WaterQualityManagementPlanDto {
     WaterQualityManagementPlanBoundaryNotes?: string | null;
     WaterQualityManagementPlanBoundaryBBox?: string | null;
     Parcels?: Array<ParcelDisplayDto> | null;
+    TreatmentBMPs?: Array<TreatmentBMPMinimalDto> | null;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
@@ -94,6 +96,7 @@ export interface WaterQualityManagementPlanDtoForm {
     WaterQualityManagementPlanBoundaryNotes?: FormControl<string>;
     WaterQualityManagementPlanBoundaryBBox?: FormControl<string>;
     Parcels?: FormControl<Array<ParcelDisplayDto>>;
+    TreatmentBMPs?: FormControl<Array<TreatmentBMPMinimalDto>>;
 }
 
 export class WaterQualityManagementPlanDtoFormControls { 
@@ -468,6 +471,16 @@ export class WaterQualityManagementPlanDtoFormControls {
         }
     );
     public static Parcels = (value: FormControlState<Array<ParcelDisplayDto>> | Array<ParcelDisplayDto> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<ParcelDisplayDto>>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static TreatmentBMPs = (value: FormControlState<Array<TreatmentBMPMinimalDto>> | Array<TreatmentBMPMinimalDto> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<TreatmentBMPMinimalDto>>(
         value,
         formControlOptions ?? 
         {

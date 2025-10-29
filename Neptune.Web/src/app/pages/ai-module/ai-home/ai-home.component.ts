@@ -12,6 +12,9 @@ import { IconComponent } from "src/app/shared/components/icon/icon.component";
 import { AIService } from "src/app/shared/generated/api/ai.service";
 import { WaterQualityManagementPlanChatbotComponent } from "./water-quality-management-plan-chatbot/water-quality-management-plan-chatbot.component";
 import { LoadingDirective } from "src/app/shared/directives/loading.directive";
+import { environment } from "src/environments/environment.qa";
+import { ModalService, ModalSizeEnum } from "src/app/shared/services/modal/modal.service";
+import { FieldSourceModalComponent } from "./field-source-modal/field-source-modal.component";
 
 @Component({
     selector: "ai-home",
@@ -46,11 +49,33 @@ export class AiHomeComponent implements OnInit {
     public FormFieldType = FormFieldType;
 
     public isExtracting: boolean = false;
+    public currentExtractingTextIndex: number = 0;
+    public extractingTexts: string[] = [
+        "Extracting water quality plan data",
+        "Parsing report structure and contents",
+        "Analyzing document text for key water quality details",
+        "Identifying relevant sections and data fields",
+        "Processing water management plan tables and figures",
+        "Mapping extracted data to standardized schema",
+        "Performing quality checks on extracted values",
+        "Generating structured summary for review",
+        "Scanning your PDF for water quality parameters and management data",
+        "Looking for treatment details, monitoring plans, and compliance info",
+        "Reviewing extracted sections for accuracy",
+        "Sifting through sediment... I mean, text",
+        "Filtering the noise to find clean data",
+        "Analyzing flow... of text and tables",
+        "Your plan is under the microscope — extracting key water data",
+        "Performing a final consistency check before returning results",
+    ];
+
+    public isChatbotOpen: boolean = false;
 
     constructor(
         private waterQualityManagementPlanService: WaterQualityManagementPlanService,
         private aiService: AIService,
-        private wfsService: WfsService
+        private wfsService: WfsService,
+        private modalService: ModalService
     ) {}
 
     ngOnInit(): void {
@@ -92,12 +117,24 @@ export class AiHomeComponent implements OnInit {
 
     onDocumentSelectedChange(document: WaterQualityManagementPlanDocumentDto) {
         this.selectedDocument = document;
+        this.activeChatbotDocument = null;
+        this.extractionResult = null;
+        this.isChatbotOpen = false;
     }
 
     onClickExtractData() {
         this.activeChatbotDocument = this.selectedDocument;
         this.isExtracting = true;
         this.extractionResult = null;
+
+        this.currentExtractingTextIndex = 0;
+        let interval = setInterval(() => {
+            this.currentExtractingTextIndex++;
+            if (this.currentExtractingTextIndex >= this.extractingTexts.length) {
+                this.currentExtractingTextIndex = this.extractingTexts.length - 1;
+            }
+        }, 7500);
+
         this.aiService.extractAllAI(this.selectedDocument.WaterQualityManagementPlanDocumentID).subscribe({
             next: (result) => {
                 this.extractionResult = result;
@@ -105,9 +142,11 @@ export class AiHomeComponent implements OnInit {
                 this.finalOutputObject = JSON.parse(this.extractionResult.FinalOutput);
 
                 this.isExtracting = false;
+                clearInterval(interval);
             },
             error: () => {
                 this.isExtracting = false;
+                clearInterval(interval);
             },
         });
     }
@@ -119,5 +158,20 @@ export class AiHomeComponent implements OnInit {
         } else {
             this.planControl.enable();
         }
+    }
+
+    toggleChatbot() {
+        if (this.activeChatbotDocument) {
+            this.isChatbotOpen = !this.isChatbotOpen;
+        }
+    }
+
+    onViewSource(fieldLabel: string, field: any) {
+        if (!field) return;
+        this.modalService.open(FieldSourceModalComponent, null, { ModalSize: ModalSizeEnum.Medium, CloseOnClickOut: true }, { FieldLabel: fieldLabel, Field: field });
+    }
+
+    ocStormwaterToolsMainUrl(): string {
+        return environment.ocStormwaterToolsBaseUrl;
     }
 }

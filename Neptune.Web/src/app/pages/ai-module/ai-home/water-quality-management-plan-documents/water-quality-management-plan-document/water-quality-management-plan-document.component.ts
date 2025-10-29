@@ -4,6 +4,7 @@ import { DatePipe, NgClass } from "@angular/common";
 import { IconComponent } from "../../../../../shared/components/icon/icon.component";
 import { WaterQualityManagementPlanDto } from "../../../../../shared/generated/model/water-quality-management-plan-dto";
 import { WaterQualityManagementPlanDocumentDto } from "../../../../../shared/generated/model/water-quality-management-plan-document-dto";
+import { environment } from "src/environments/environment.prod";
 
 @Component({
     selector: "water-quality-management-plan-document",
@@ -34,5 +35,9 @@ export class WaterQualityManagementPlanDocumentComponent {
 
         const i = Math.floor(Math.log(bytes) / Math.log(k));
         return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
+    }
+
+    public ocStormwaterToolsMainUrl(): string {
+        return environment.ocStormwaterToolsBaseUrl;
     }
 }

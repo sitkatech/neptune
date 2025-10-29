@@ -141,6 +141,7 @@ model/treatment-bmp-dto.ts
 model/treatment-bmp-grid-dto.ts
 model/treatment-bmp-image-dto.ts
 model/treatment-bmp-life-span-type-dto.ts
+model/treatment-bmp-minimal-dto.ts
 model/treatment-bmp-modeling-attributes-dto.ts
 model/treatment-bmp-type-custom-attribute-type-dto.ts
 model/treatment-bmp-type-with-modeling-attributes-dto.ts

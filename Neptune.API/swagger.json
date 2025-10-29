@@ -11834,6 +11834,25 @@
         },
         "additionalProperties": false
       },
+      "TreatmentBMPMinimalDto": {
+        "type": "object",
+        "properties": {
+          "TreatmentBMPID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TreatmentBMPName": {
+            "type": "string",
+            "nullable": true
+          },
+          "Area": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "TreatmentBMPModelingAttributesDto": {
         "type": "object",
         "properties": {
@@ -12412,6 +12431,13 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/ParcelDisplayDto"
+            },
+            "nullable": true
+          },
+          "TreatmentBMPs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TreatmentBMPMinimalDto"
             },
             "nullable": true
           }

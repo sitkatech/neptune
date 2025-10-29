@@ -94,6 +94,13 @@ public static  class WaterQualityManagementPlanExtensionMethods
             {
                 ParcelID = x.ParcelID,
                 ParcelNumber = x.Parcel.ParcelNumber,
+            }).ToList(),
+
+            TreatmentBMPs = plan.TreatmentBMPs.Select(x => new TreatmentBMPMinimalDto()
+            {
+                TreatmentBMPID = x.TreatmentBMPID,
+                TreatmentBMPName = x.TreatmentBMPName,
+                Area = x.Delineation.GetDelineationArea()
             }).ToList()
         };
     }

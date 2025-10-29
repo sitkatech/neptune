@@ -15,7 +15,9 @@
                 <span class="document__meta-item--user"
                     >&nbsp;
                     @if (keyDocument.FileResource.CreatePerson) {
-                        <a [routerLink]="['/users', keyDocument.FileResource.CreatePerson.PersonID]">{{ keyDocument.FileResource.CreatePerson.FullName }}</a>
+                        <a href="{{ ocStormwaterToolsMainUrl() }}/User/Detail/{{ keyDocument.FileResource.CreatePerson.PersonID }}">
+                            {{ keyDocument.FileResource.CreatePerson.FullName }}
+                        </a>
                     }
                 </span>
             </span>

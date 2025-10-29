@@ -41,4 +41,5 @@ public class WaterQualityManagementPlanDto
     public string? WaterQualityManagementPlanBoundaryBBox { get; set; }
 
     public List<ParcelDisplayDto> Parcels { get; set; }
+    public List<TreatmentBMPMinimalDto> TreatmentBMPs { get; set; }
  }
