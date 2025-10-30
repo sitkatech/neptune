@@ -6,8 +6,9 @@
 }
 
 .context-menu {
-    display: none;
+    display: grid;
     position: absolute;
+    min-width: 8rem;
     top: 0.65rem;
     left: 0.25rem;
     background: white;
@@ -15,11 +16,6 @@
     box-shadow: $shadow-100;
     border-radius: 0.25rem;
     border: 1px solid rgba($primary, 1);
-
-    &.active {
-        display: grid;
-        min-width: 8rem;
-    }
 
     button,
     a {

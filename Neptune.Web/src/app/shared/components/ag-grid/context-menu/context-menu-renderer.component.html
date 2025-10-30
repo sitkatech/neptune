@@ -1,30 +1,27 @@
 @if (params && !params.hidden) {
-  <div class="menu-container">
-    <a class="btn btn-primary-outline btn-small" id="menu-dropdown" [dropdownToggle]="contextMenu">
-      {{ params.title }}
-      <icon icon="CaretDown"></icon>
+<div class="menu-container">
+    <a class="btn btn-primary-outline btn-small" id="menu-dropdown" [dropdownToggle]="contextMenuTemplate" [attachToBody]="true" [dropdownContext]="{ params: params }">
+        {{ params.title }}
+        <icon icon="CaretDown"></icon>
     </a>
-    <div class="context-menu-wrapper">
-      <div #contextMenu class="context-menu" aria-labelledby="menu-dropdown">
-        @for (action of params.value; track action) {
-          @if (action.ActionHandler) {
+    <ng-template #contextMenuTemplate let-params="params">
+        <div class="context-menu" aria-labelledby="menu-dropdown">
+            @for (action of params.value; track action) { @if (action.ActionHandler) {
             <button (click)="action.ActionHandler()">
-              @if (action.ActionIcon) {
+                @if (action.ActionIcon) {
                 <span [class]="action.ActionIcon"></span>
-              }
-              {{ action.ActionName }}
+                }
+                {{ action.ActionName }}
             </button>
-          }
-          @if (!action.ActionHandler) {
+            } @if (!action.ActionHandler) {
             <a [routerLink]="[action.ActionLink]">
-              @if (action.ActionIcon) {
+                @if (action.ActionIcon) {
                 <span [class]="action.ActionIcon"></span>
-              }
-              {{ action.ActionName }}
+                }
+                {{ action.ActionName }}
             </a>
-          }
-        }
-      </div>
-    </div>
-  </div>
+            } }
+        </div>
+    </ng-template>
+</div>
 }

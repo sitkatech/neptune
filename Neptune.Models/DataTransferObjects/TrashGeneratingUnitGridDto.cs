@@ -7,6 +7,7 @@ namespace Neptune.Models.DataTransferObjects;
 public class TrashGeneratingUnitGridDto
 {
     public int TrashGeneratingUnitID { get; set; }
+    public int? LandUseBlockID { get; set; }
     public int? TrashCaptureEffectivenessBMP { get; set; }
     public int? TreatmentBMPID { get; set; }
     public string? TreatmentBMPName { get; set; }

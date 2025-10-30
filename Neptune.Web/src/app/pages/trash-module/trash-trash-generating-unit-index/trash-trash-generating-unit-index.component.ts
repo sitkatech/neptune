@@ -27,6 +27,7 @@ export class TrashTrashGeneratingUnitIndexComponent {
     ngOnInit() {
         this.trashGeneratingUnitsColumnDefs = [
             this.utilityFunctionsService.createBasicColumnDef("Trash Analysis Area ID", "TrashGeneratingUnitID"),
+            this.utilityFunctionsService.createBasicColumnDef("Land Use Block ID", "LandUseBlockID"),
             this.utilityFunctionsService.createBasicColumnDef("Land Use Type", "PriorityLandUseTypeDisplayName", {
                 CustomDropdownFilterField: "PriorityLandUseTypeDisplayName",
             }),
