@@ -156,7 +156,7 @@ export class SelectedLandUseBlockLayerComponent extends MapLayerBase implements 
 
             if (layer instanceof L.GeoJSON) {
                 const geoJsonLayers = layer.getLayers() as (L.Path & { feature?: GeoJSON.Feature })[];
-                if (geoJsonLayers[0].feature.properties.OnlandVisualTrashAssessmentAreaID == this.selectedLandUseBlockID) {
+                if (geoJsonLayers[0].feature.properties.LandUseBlockID == this.selectedLandUseBlockID) {
                     layer.setStyle(this.highlightStyle);
                     if (zoomToFeature) {
                         this.map.fitBounds(layer.getBounds());
