@@ -1,11 +1,5 @@
 @use "/src/scss/abstracts" as *;
 
-h3 {
-    margin-top: $spacing-400;
-    margin-bottom: $spacing-400;
-    font-size: $type-size-400;
-}
-
 .document {
     background: $gray-0;
     padding: $spacing-400;

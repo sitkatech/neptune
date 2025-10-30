@@ -17,3 +17,10 @@ public class TreatmentBMPDisplayDto
     public string Notes { get; set; }
     public int TreatmentBMPTypeID { get; set; }
 }
+
+public class TreatmentBMPMinimalDto
+{
+    public int TreatmentBMPID { get; set; }
+    public string TreatmentBMPName { get; set; }
+    public double? Area { get; set; }
+}

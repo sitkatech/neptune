@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit, AfterViewInit } from "@angular/core";
 import { ElementRef, ViewChild } from "@angular/core";
 import { Observable, Subscription, SubscriptionLike, BehaviorSubject } from "rxjs";
 import { map } from "rxjs/operators";
@@ -10,14 +10,14 @@ import { AsyncPipe, DatePipe, CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
 import { AiChatInputComponent } from "src/app/shared/components/ai-chat-input/ai-chat-input.component";
-import { IconComponent } from "../icon/icon.component";
+import { IconComponent } from "../../../../shared/components/icon/icon.component";
 import {
     ChatMessageDto,
     ChatRequestDto,
     PersonDto,
     WaterQualityManagementPlanDocumentDto,
     WaterQualityManagementPlanDocumentExtractionResultDto,
-} from "../../generated/model/models";
+} from "../../../../shared/generated/model/models";
 
 @Component({
     selector: "water-quality-management-plan-chatbot",
@@ -48,8 +48,8 @@ export class WaterQualityManagementPlanChatbotComponent implements OnDestroy, On
         return this._extractionResultSubject.value;
     }
     public assistantMessages$: Observable<ChatMessageDto[]>;
-    @ViewChild("main") mainScrollContainer: ElementRef;
-    @ViewChild("sidebar") sidebarScrollContainer: ElementRef;
+    @ViewChild("main", { static: false }) mainScrollContainer: ElementRef;
+    @ViewChild("sidebar", { static: false }) sidebarScrollContainer: ElementRef;
 
     private eventSourceSubscription: SubscriptionLike;
     public currentUser$: Observable<PersonDto>;
@@ -65,7 +65,11 @@ export class WaterQualityManagementPlanChatbotComponent implements OnDestroy, On
     };
 
     currentUserSubscription: Subscription;
-    constructor(private authenticationService: AuthenticationService, private eventSourceService: EventSourceService, private sanitizer: DomSanitizer) {}
+    constructor(
+        private authenticationService: AuthenticationService,
+        private eventSourceService: EventSourceService,
+        private sanitizer: DomSanitizer
+    ) {}
 
     ngOnInit(): void {
         this.currentUser$ = this.authenticationService.getCurrentUser();
@@ -89,6 +93,11 @@ export class WaterQualityManagementPlanChatbotComponent implements OnDestroy, On
 
     ngOnDestroy(): void {
         this.eventSourceSubscription?.unsubscribe(); // Unsubscribe from any previous subscriptions
+    }
+
+    ngAfterViewInit(): void {
+        // Initial scroll in case there are preloaded messages
+        this.scrollToBottom();
     }
 
     send(event: { message: string; knowledgeScope?: string }) {
@@ -188,8 +197,26 @@ export class WaterQualityManagementPlanChatbotComponent implements OnDestroy, On
 
     scrollToBottom(): void {
         try {
-            this.mainScrollContainer.nativeElement.scrollTop = this.mainScrollContainer.nativeElement.scrollHeight;
-            this.sidebarScrollContainer.nativeElement.scrollTop = this.sidebarScrollContainer.nativeElement.scrollHeight;
+            const mainEl = this.mainScrollContainer?.nativeElement as HTMLElement;
+            const sideEl = this.sidebarScrollContainer?.nativeElement as HTMLElement;
+
+            // Use requestAnimationFrame to ensure the DOM has updated with the latest messages
+            if (mainEl || sideEl) {
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        try {
+                            if (mainEl) {
+                                mainEl.scrollTop = mainEl.scrollHeight;
+                            }
+                            if (sideEl) {
+                                sideEl.scrollTop = sideEl.scrollHeight;
+                            }
+                        } catch (_) {
+                            // ignore
+                        }
+                    });
+                });
+            }
         } catch (err) {}
     }
 

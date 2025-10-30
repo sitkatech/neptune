@@ -1,0 +1,19 @@
+<div class="documents">
+    @if (waterQualityManagementPlan$ | async; as waterQualityManagementPlan) {
+        <div class="page-body">
+            @if (waterQualityManagementPlanDocuments$ | async; as waterQualityManagementPlanDocuments) {
+                @for (waterQualityManagementPlanDocument of waterQualityManagementPlanDocuments; track $index) {
+                    <water-quality-management-plan-document
+                        [keyDocument]="waterQualityManagementPlanDocument"
+                        [waterQualityManagementPlan]="waterQualityManagementPlan"
+                        [isLoading]="isLoading"
+                        [disableExtract]="isExtracting"
+                        [selected]="waterQualityManagementPlanDocument === selectedDocument"
+                        (click)="onDocumentClicked(waterQualityManagementPlanDocument)"
+                        (download)="downloadFile($event)">
+                    </water-quality-management-plan-document>
+                }
+            }
+        </div>
+    }
+</div>
