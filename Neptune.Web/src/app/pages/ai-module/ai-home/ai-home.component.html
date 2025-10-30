@@ -41,7 +41,7 @@
             </div>
 
             <div class="g-col-6">
-                <button class="btn btn-blue" (click)="onClickExtractData()" [disabled]="!selectedDocument"><icon icon="Stars"></icon> Run Data Extraction</button>
+                <button class="btn btn-orange" (click)="onClickExtractData()" [disabled]="!selectedDocument"><icon icon="Stars"></icon> Run Data Extraction</button>
             </div>
 
             <div class="g-col-6">
@@ -64,7 +64,7 @@
                         <div class="extracted-basic-data card g-col-6">
                             <div class="card-header">
                                 <h5 class="card-title">Basics</h5>
-                                <div class="tag blue"><icon icon="Stars"></icon> AI Extracted Data</div>
+                                <div class="tag ai"><icon icon="Stars"></icon> AI Extracted Data</div>
                             </div>
                             <div class="card-body grid-12">
                                 <div class="field g-col-12 grid-12">
@@ -72,30 +72,16 @@
                                     <div class="g-col-8">
                                         {{ finalOutputObject?.WQMP?.WaterQualityManagementPlanName?.Value ?? "" }}
                                         @if (finalOutputObject?.WQMP?.WaterQualityManagementPlanName?.Value) {
-                                            <span class="view-source" (click)="onViewSource('Name', finalOutputObject.WQMP.WaterQualityManagementPlanName)">(View Source)</span>
+                                            <icon icon="Info" class="ml-2 view-source" (click)="onViewSource('Name', finalOutputObject.WQMP.WaterQualityManagementPlanName)"></icon>
                                         }
                                     </div>
                                 </div>
-                                @if (finalOutputObject.WQMP.WaterQualityManagementPlanName.$showSource) {
-                                    <div class="field-source g-col-12 grid-12">
-                                        <div class="g-col-2"></div>
-                                        <label class="g-col-4">Document Source</label>
-                                        <div class="g-col-6">
-                                            {{ finalOutputObject?.WQMP?.WaterQualityManagementPlanName?.DocumentSource ?? "" }}
-                                        </div>
-                                        <div class="g-col-2"></div>
-                                        <label class="g-col-4">Evidence</label>
-                                        <div class="g-col-6">
-                                            {{ finalOutputObject?.WQMP?.WaterQualityManagementPlanName?.ExtractionEvidence ?? "" }}
-                                        </div>
-                                    </div>
-                                }
                                 <div class="field g-col-12 grid-12">
                                     <label class="g-col-4">Jurisdiction</label>
                                     <div class="g-col-8">
                                         {{ finalOutputObject?.WQMP?.Jurisdiction?.Value ?? "" }}
                                         @if (finalOutputObject?.WQMP?.Jurisdiction?.Value) {
-                                            <span class="view-source" (click)="onViewSource('Jurisdiction', finalOutputObject.WQMP.Jurisdiction)">(View Source)</span>
+                                            <icon icon="Info" class="ml-2 view-source" (click)="onViewSource('Jurisdiction', finalOutputObject.WQMP.Jurisdiction)"></icon>
                                         }
                                     </div>
                                 </div>
@@ -104,9 +90,10 @@
                                     <div class="g-col-8">
                                         {{ finalOutputObject?.WQMP?.WaterQualityManagementPlanPriority?.Value ?? "" }}
                                         @if (finalOutputObject?.WQMP?.WaterQualityManagementPlanPriority?.Value) {
-                                            <span class="view-source" (click)="onViewSource('Priority', finalOutputObject.WQMP.WaterQualityManagementPlanPriority)"
-                                                >(View Source)</span
-                                            >
+                                            <icon
+                                                icon="Info"
+                                                class="ml-2 view-source"
+                                                (click)="onViewSource('Priority', finalOutputObject.WQMP.WaterQualityManagementPlanPriority)"></icon>
                                         }
                                     </div>
                                 </div>
@@ -115,7 +102,10 @@
                                     <div class="g-col-8">
                                         {{ finalOutputObject?.WQMP?.WaterQualityManagementPlanStatus?.Value ?? "" }}
                                         @if (finalOutputObject?.WQMP?.WaterQualityManagementPlanStatus?.Value) {
-                                            <span class="view-source" (click)="onViewSource('Status', finalOutputObject.WQMP.WaterQualityManagementPlanStatus)">(View Source)</span>
+                                            <icon
+                                                icon="Info"
+                                                class="ml-2 view-source"
+                                                (click)="onViewSource('Status', finalOutputObject.WQMP.WaterQualityManagementPlanStatus)"></icon>
                                         }
                                     </div>
                                 </div>
@@ -124,9 +114,10 @@
                                     <div class="g-col-8">
                                         {{ finalOutputObject?.WQMP?.WaterQualityManagementPlanDevelopmentType?.Value ?? "" }}
                                         @if (finalOutputObject?.WQMP?.WaterQualityManagementPlanDevelopmentType?.Value) {
-                                            <span class="view-source" (click)="onViewSource('Development Type', finalOutputObject.WQMP.WaterQualityManagementPlanDevelopmentType)"
-                                                >(View Source)</span
-                                            >
+                                            <icon
+                                                icon="Info"
+                                                class="ml-2 view-source"
+                                                (click)="onViewSource('Development Type', finalOutputObject.WQMP.WaterQualityManagementPlanDevelopmentType)"></icon>
                                         }
                                     </div>
                                 </div>
@@ -135,9 +126,10 @@
                                     <div class="g-col-8">
                                         {{ finalOutputObject?.WQMP?.WaterQualityManagementPlanLandUse?.Value ?? "" }}
                                         @if (finalOutputObject?.WQMP?.WaterQualityManagementPlanLandUse?.Value) {
-                                            <span class="view-source" (click)="onViewSource('Land Use', finalOutputObject.WQMP.WaterQualityManagementPlanLandUse)"
-                                                >(View Source)</span
-                                            >
+                                            <icon
+                                                icon="Info"
+                                                class="ml-2 view-source"
+                                                (click)="onViewSource('Land Use', finalOutputObject.WQMP.WaterQualityManagementPlanLandUse)"></icon>
                                         }
                                     </div>
                                 </div>
@@ -146,9 +138,10 @@
                                     <div class="g-col-8">
                                         {{ finalOutputObject?.WQMP?.WaterQualityManagementPlanPermitTerm?.Value ?? "" }}
                                         @if (finalOutputObject?.WQMP?.WaterQualityManagementPlanPermitTerm?.Value) {
-                                            <span class="view-source" (click)="onViewSource('Permit Term', finalOutputObject.WQMP.WaterQualityManagementPlanPermitTerm)"
-                                                >(View Source)</span
-                                            >
+                                            <icon
+                                                icon="Info"
+                                                class="ml-2 view-source"
+                                                (click)="onViewSource('Permit Term', finalOutputObject.WQMP.WaterQualityManagementPlanPermitTerm)"></icon>
                                         }
                                     </div>
                                 </div>
@@ -157,7 +150,7 @@
                                     <div class="g-col-8">
                                         {{ finalOutputObject?.WQMP?.ApprovalDate?.Value ?? "" }}
                                         @if (finalOutputObject?.WQMP?.ApprovalDate?.Value) {
-                                            <span class="view-source" (click)="onViewSource('Approval Date', finalOutputObject.WQMP.ApprovalDate)">(View Source)</span>
+                                            <icon icon="Info" class="ml-2 view-source" (click)="onViewSource('Approval Date', finalOutputObject.WQMP.ApprovalDate)"></icon>
                                         }
                                     </div>
                                 </div>
@@ -166,7 +159,10 @@
                                     <div class="g-col-8">
                                         {{ finalOutputObject?.WQMP?.DateOfConstruction?.Value ?? "" }}
                                         @if (finalOutputObject?.WQMP?.DateOfConstruction?.Value) {
-                                            <span class="view-source" (click)="onViewSource('Date of Construction', finalOutputObject.WQMP.DateOfConstruction)">(View Source)</span>
+                                            <icon
+                                                icon="Info"
+                                                class="ml-2 view-source"
+                                                (click)="onViewSource('Date of Construction', finalOutputObject.WQMP.DateOfConstruction)"></icon>
                                         }
                                     </div>
                                 </div>
@@ -175,11 +171,10 @@
                                     <div class="g-col-8">
                                         {{ finalOutputObject?.WQMP?.HydromodificationAppliesType?.Value ?? "" }}
                                         @if (finalOutputObject?.WQMP?.HydromodificationAppliesType?.Value) {
-                                            <span
-                                                class="view-source"
-                                                (click)="onViewSource('Hydromodification Controls Apply', finalOutputObject.WQMP.HydromodificationAppliesType)"
-                                                >(View Source)</span
-                                            >
+                                            <icon
+                                                icon="Info"
+                                                class="ml-2 view-source"
+                                                (click)="onViewSource('Hydromodification Controls Apply', finalOutputObject.WQMP.HydromodificationAppliesType)"></icon>
                                         }
                                     </div>
                                 </div>
@@ -188,7 +183,10 @@
                                     <div class="g-col-8">
                                         {{ finalOutputObject?.WQMP?.HydrologicSubarea?.Value ?? "" }}
                                         @if (finalOutputObject?.WQMP?.HydrologicSubarea?.Value) {
-                                            <span class="view-source" (click)="onViewSource('Hydrologic Subarea', finalOutputObject.WQMP.HydrologicSubarea)">(View Source)</span>
+                                            <icon
+                                                icon="Info"
+                                                class="ml-2 view-source"
+                                                (click)="onViewSource('Hydrologic Subarea', finalOutputObject.WQMP.HydrologicSubarea)"></icon>
                                         }
                                     </div>
                                 </div>
@@ -197,7 +195,7 @@
                                     <div class="g-col-8">
                                         {{ finalOutputObject?.WQMP?.RecordNumber?.Value ?? "" }}
                                         @if (finalOutputObject?.WQMP?.RecordNumber?.Value) {
-                                            <span class="view-source" (click)="onViewSource('Record Number', finalOutputObject.WQMP.RecordNumber)">(View Source)</span>
+                                            <icon icon="Info" class="ml-2 view-source" (click)="onViewSource('Record Number', finalOutputObject.WQMP.RecordNumber)"></icon>
                                         }
                                     </div>
                                 </div>
@@ -206,9 +204,10 @@
                                     <div class="g-col-8">
                                         {{ finalOutputObject?.WQMP?.RecordedWQMPAreaInAcres?.Value ?? "" }}
                                         @if (finalOutputObject?.WQMP?.RecordedWQMPAreaInAcres?.Value) {
-                                            <span class="view-source" (click)="onViewSource('Recorded WQMP Area (Acres)', finalOutputObject.WQMP.RecordedWQMPAreaInAcres)"
-                                                >(View Source)</span
-                                            >
+                                            <icon
+                                                icon="Info"
+                                                class="ml-2 view-source"
+                                                (click)="onViewSource('Recorded WQMP Area (Acres)', finalOutputObject.WQMP.RecordedWQMPAreaInAcres)"></icon>
                                         }
                                     </div>
                                 </div>
@@ -217,9 +216,10 @@
                                     <div class="g-col-8">
                                         {{ finalOutputObject?.WQMP?.TrashCaptureStatusType?.Value ?? "" }}
                                         @if (finalOutputObject?.WQMP?.TrashCaptureStatusType?.Value) {
-                                            <span class="view-source" (click)="onViewSource('Trash Capture Status', finalOutputObject.WQMP.TrashCaptureStatusType)"
-                                                >(View Source)</span
-                                            >
+                                            <icon
+                                                icon="Info"
+                                                class="ml-2 view-source"
+                                                (click)="onViewSource('Trash Capture Status', finalOutputObject.WQMP.TrashCaptureStatusType)"></icon>
                                         }
                                     </div>
                                 </div>
@@ -228,7 +228,7 @@
                         <div class="existing-basic-data card g-col-6">
                             <div class="card-header">
                                 <h5 class="card-title">Basics</h5>
-                                <div class="tag orange">OCST Existing WQMP Data</div>
+                                <div class="tag existing">OCST Existing WQMP Data</div>
                             </div>
                             <div class="card-body grid-12">
                                 <div class="field g-col-12 grid-12">
@@ -292,7 +292,7 @@
                         <div class="extracted-parcel card g-col-6">
                             <div class="card-header">
                                 <h5 class="card-title">Associated Parcels</h5>
-                                <div class="tag blue"><icon icon="Stars"></icon> AI Extracted Data</div>
+                                <div class="tag ai"><icon icon="Stars"></icon> AI Extracted Data</div>
                             </div>
                             <div class="card-body grid-12">
                                 <div class="field g-col-12 grid-12">
@@ -302,7 +302,7 @@
                                             @for (parcel of finalOutputObject?.Parcels || []; track parcel.ParcelNumber) {
                                                 <li>
                                                     {{ parcel.ParcelNumber?.Value || "" }}
-                                                    <span class="view-source" (click)="onViewSource('Parcel Number', parcel.ParcelNumber)">(View Source)</span>
+                                                    <icon icon="Info" class="ml-2 view-source" (click)="onViewSource('Parcel Number', parcel.ParcelNumber)"></icon>
                                                 </li>
                                             }
                                         </ul>
@@ -313,7 +313,7 @@
                         <div class="existing-parcel card g-col-6">
                             <div class="card-header">
                                 <h5 class="card-title">Associated Parcels</h5>
-                                <div class="tag orange">OCST Existing WQMP Data</div>
+                                <div class="tag existing">OCST Existing WQMP Data</div>
                             </div>
 
                             <div class="card-body grid-12">
@@ -334,7 +334,7 @@
                         <div class="extracted-parcel card g-col-6">
                             <div class="card-header">
                                 <h5 class="card-title">BMPs</h5>
-                                <div class="tag blue"><icon icon="Stars"></icon> AI Extracted Data</div>
+                                <div class="tag ai"><icon icon="Stars"></icon> AI Extracted Data</div>
                             </div>
                             <div class="card-body grid-12">
                                 <div class="field g-col-12 grid-12">
@@ -347,7 +347,7 @@
                                                     @if (bmp.Area?.Value) {
                                                         ({{ bmp.Area?.Value }})
                                                     }
-                                                    <span class="view-source" (click)="onViewSource('BMP', bmp.TreatmentBMPName)">(View Source)</span>
+                                                    <icon icon="Info" class="ml-2 view-source" (click)="onViewSource('BMP', bmp.TreatmentBMPName)"></icon>
                                                 </li>
                                             }
                                         </ul>
@@ -358,7 +358,7 @@
                         <div class="existing-parcel card g-col-6">
                             <div class="card-header">
                                 <h5 class="card-title">BMPs</h5>
-                                <div class="tag orange">OCST Existing WQMP Data</div>
+                                <div class="tag existing">OCST Existing WQMP Data</div>
                             </div>
                             <div class="card-body grid-12">
                                 <div class="field g-col-12 grid-12">
@@ -390,8 +390,8 @@
 </div>
 
 <div
-    class="chatgpt-open"
-    [ngClass]="{ disabled: !activeChatbotDocument || isExtracting }"
+    class="chatgpt-toggle"
+    [ngClass]="{ disabled: !activeChatbotDocument || isExtracting, open: isChatbotOpen }"
     (click)="toggleChatbot()"
     [title]="activeChatbotDocument && !isExtracting ? (isChatbotOpen ? 'Close AI Chatbot' : 'Open AI Chatbot') : 'Select a document to enable the AI Chatbot'">
     <icon icon="Stars" [enableFontSize]="true"></icon>
