@@ -11161,6 +11161,11 @@
             "type": "integer",
             "format": "int32"
           },
+          "LandUseBlockID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
           "TrashCaptureEffectivenessBMP": {
             "type": "integer",
             "format": "int32",
