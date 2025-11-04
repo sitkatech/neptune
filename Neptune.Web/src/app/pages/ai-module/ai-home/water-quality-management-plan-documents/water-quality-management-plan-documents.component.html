@@ -1,7 +1,11 @@
 <div class="documents">
     @if (waterQualityManagementPlan$ | async; as waterQualityManagementPlan) {
-        <div class="page-body">
+        <div>
             @if (waterQualityManagementPlanDocuments$ | async; as waterQualityManagementPlanDocuments) {
+                @if (waterQualityManagementPlanDocuments.length > 1) {
+                    <h4 class="documents-help-text">Select a document to continue:</h4>
+                }
+
                 @for (waterQualityManagementPlanDocument of waterQualityManagementPlanDocuments; track $index) {
                     <water-quality-management-plan-document
                         [keyDocument]="waterQualityManagementPlanDocument"
