@@ -66,6 +66,12 @@
     }
 }
 
+.existing-basic-data {
+    .card-body {
+        gap: 1.5rem !important;
+    }
+}
+
 .card {
     .card-header {
         display: flex;
@@ -123,6 +129,10 @@
             white-space: pre-wrap;
         }
     }
+}
+
+.value-with-icon {
+    line-height: 2rem;
 }
 
 .view-source {
@@ -191,11 +201,16 @@
 
     &:hover {
         background-color: color.adjust($neptune-orange, $lightness: -10%);
+
+        .toggle-text {
+            background-color: rgba(0, 0, 0, 0.85);
+        }
     }
 
     icon {
         position: relative;
         top: -4px;
+        right: 53px;
         width: 24px;
         height: 24px;
         color: $white;
@@ -207,6 +222,9 @@
         &:hover {
             background-color: $gray-400;
         }
+        icon {
+            right: 0px;
+        }
     }
 
     transition:
@@ -216,6 +234,23 @@
 
     &.open {
         transform: translateX(calc(-25vw));
+        icon {
+            right: 0px;
+        }
+    }
+
+    .toggle-text {
+        background-color: rgba(0, 0, 0, 0.7);
+        padding: 0.5rem 1rem;
+        border-radius: 1rem;
+        color: white;
+        font-size: 0.875rem;
+        position: relative;
+        right: 70px;
+        width: fit-content;
+        word-break: keep-all;
+        white-space: nowrap;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 }
 
