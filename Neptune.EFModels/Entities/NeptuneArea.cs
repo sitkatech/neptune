@@ -20,6 +20,29 @@ namespace Neptune.EFModels.Entities
 
     }
 
+    public partial class NeptuneAreaAI
+    {
+        public override IRole GetRole(int roleID)
+        {
+            return Role.AllLookupDictionary[roleID];
+        }
+
+        public override bool IsAreaVisibleToPerson(Person person)
+        {
+            return person.RoleID == Role.Admin.RoleID || person.RoleID == Role.SitkaAdmin.RoleID;
+        }
+
+        public override string GetIconUrl()
+        {
+            return "/Content/img/icons/ai-icon.png";
+        }
+
+        protected override Func<Person, IRole> GetPersonRoleToUseFunc()
+        {
+            return x => x.Role;
+        }
+    }
+
     public partial class NeptuneAreaTrash
     {
         public override IRole GetRole(int roleID)

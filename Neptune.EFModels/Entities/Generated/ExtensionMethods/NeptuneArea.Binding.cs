@@ -15,6 +15,7 @@ namespace Neptune.EFModels.Entities
         public static readonly NeptuneAreaOCStormwaterTools OCStormwaterTools = NeptuneAreaOCStormwaterTools.Instance;
         public static readonly NeptuneAreaModeling Modeling = NeptuneAreaModeling.Instance;
         public static readonly NeptuneAreaPlanning Planning = NeptuneAreaPlanning.Instance;
+        public static readonly NeptuneAreaAI AI = NeptuneAreaAI.Instance;
 
         public static readonly List<NeptuneArea> All;
         public static readonly ReadOnlyDictionary<int, NeptuneArea> AllLookupDictionary;
@@ -24,7 +25,7 @@ namespace Neptune.EFModels.Entities
         /// </summary>
         static NeptuneArea()
         {
-            All = new List<NeptuneArea> { Trash, OCStormwaterTools, Modeling, Planning };
+            All = new List<NeptuneArea> { Trash, OCStormwaterTools, Modeling, Planning, AI };
             AllLookupDictionary = new ReadOnlyDictionary<int, NeptuneArea>(All.ToDictionary(x => x.NeptuneAreaID));
         }
 
@@ -98,6 +99,8 @@ namespace Neptune.EFModels.Entities
         {
             switch (enumValue)
             {
+                case NeptuneAreaEnum.AI:
+                    return AI;
                 case NeptuneAreaEnum.Modeling:
                     return Modeling;
                 case NeptuneAreaEnum.OCStormwaterTools:
@@ -117,13 +120,14 @@ namespace Neptune.EFModels.Entities
         Trash = 1,
         OCStormwaterTools = 2,
         Modeling = 3,
-        Planning = 4
+        Planning = 4,
+        AI = 5
     }
 
     public partial class NeptuneAreaTrash : NeptuneArea
     {
         private NeptuneAreaTrash(int neptuneAreaID, string neptuneAreaName, string neptuneAreaDisplayName, int sortOrder, bool showOnPrimaryNavigation) : base(neptuneAreaID, neptuneAreaName, neptuneAreaDisplayName, sortOrder, showOnPrimaryNavigation) {}
-        public static readonly NeptuneAreaTrash Instance = new NeptuneAreaTrash(1, @"Trash", @"Trash Module", 30, true);
+        public static readonly NeptuneAreaTrash Instance = new NeptuneAreaTrash(1, @"Trash", @"Trash Module", 40, true);
     }
 
     public partial class NeptuneAreaOCStormwaterTools : NeptuneArea
@@ -141,6 +145,12 @@ namespace Neptune.EFModels.Entities
     public partial class NeptuneAreaPlanning : NeptuneArea
     {
         private NeptuneAreaPlanning(int neptuneAreaID, string neptuneAreaName, string neptuneAreaDisplayName, int sortOrder, bool showOnPrimaryNavigation) : base(neptuneAreaID, neptuneAreaName, neptuneAreaDisplayName, sortOrder, showOnPrimaryNavigation) {}
-        public static readonly NeptuneAreaPlanning Instance = new NeptuneAreaPlanning(4, @"Planning", @"Planning Module", 40, true);
+        public static readonly NeptuneAreaPlanning Instance = new NeptuneAreaPlanning(4, @"Planning", @"Planning Module", 30, true);
+    }
+
+    public partial class NeptuneAreaAI : NeptuneArea
+    {
+        private NeptuneAreaAI(int neptuneAreaID, string neptuneAreaName, string neptuneAreaDisplayName, int sortOrder, bool showOnPrimaryNavigation) : base(neptuneAreaID, neptuneAreaName, neptuneAreaDisplayName, sortOrder, showOnPrimaryNavigation) {}
+        public static readonly NeptuneAreaAI Instance = new NeptuneAreaAI(5, @"AI", @"AI Module", 50, true);
     }
 }
