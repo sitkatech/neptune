@@ -226,6 +226,102 @@
                                         }
                                     </div>
                                 </div>
+                                <div class="field g-col-12 grid-12">
+                                    <label class="g-col-4">Maintenance Contact Name</label>
+                                    <div class="g-col-8">
+                                        <span class="value-with-icon">{{ finalOutputObject?.WQMP?.MaintenanceContactName?.Value ?? "" }}</span>
+                                        @if (finalOutputObject?.WQMP?.MaintenanceContactName?.Value) {
+                                            <icon
+                                                icon="Info"
+                                                class="ml-2 view-source"
+                                                (click)="onViewSource('Maintenance Contact Name', finalOutputObject.WQMP.MaintenanceContactName)"></icon>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="field g-col-12 grid-12">
+                                    <label class="g-col-4">Maintenance Contact Organization</label>
+                                    <div class="g-col-8">
+                                        <span class="value-with-icon">{{ finalOutputObject?.WQMP?.MaintenanceContactOrganization?.Value ?? "" }}</span>
+                                        @if (finalOutputObject?.WQMP?.MaintenanceContactOrganization?.Value) {
+                                            <icon
+                                                icon="Info"
+                                                class="ml-2 view-source"
+                                                (click)="onViewSource('Maintenance Contact Organization', finalOutputObject.WQMP.MaintenanceContactOrganization)"></icon>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="field g-col-12 grid-12">
+                                    <label class="g-col-4">Maintenance Contact Phone</label>
+                                    <div class="g-col-8">
+                                        <span class="value-with-icon">{{ finalOutputObject?.WQMP?.MaintenanceContactPhone?.Value ?? "" }}</span>
+                                        @if (finalOutputObject?.WQMP?.MaintenanceContactPhone?.Value) {
+                                            <icon
+                                                icon="Info"
+                                                class="ml-2 view-source"
+                                                (click)="onViewSource('Maintenance Contact Phone', finalOutputObject.WQMP.MaintenanceContactPhone)"></icon>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="field g-col-12 grid-12">
+                                    <label class="g-col-4">Maintenance Contact Address 1</label>
+                                    <div class="g-col-8">
+                                        <span class="value-with-icon">{{ finalOutputObject?.WQMP?.MaintenanceContactAddress1?.Value ?? "" }}</span>
+                                        @if (finalOutputObject?.WQMP?.MaintenanceContactAddress1?.Value) {
+                                            <icon
+                                                icon="Info"
+                                                class="ml-2 view-source"
+                                                (click)="onViewSource('Maintenance Contact Address 1', finalOutputObject.WQMP.MaintenanceContactAddress1)"></icon>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="field g-col-12 grid-12">
+                                    <label class="g-col-4">Maintenance Contact Address 2</label>
+                                    <div class="g-col-8">
+                                        <span class="value-with-icon">{{ finalOutputObject?.WQMP?.MaintenanceContactAddress2?.Value ?? "" }}</span>
+                                        @if (finalOutputObject?.WQMP?.MaintenanceContactAddress2?.Value) {
+                                            <icon
+                                                icon="Info"
+                                                class="ml-2 view-source"
+                                                (click)="onViewSource('Maintenance Contact Address 2', finalOutputObject.WQMP.MaintenanceContactAddress2)"></icon>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="field g-col-12 grid-12">
+                                    <label class="g-col-4">Maintenance Contact City</label>
+                                    <div class="g-col-8">
+                                        <span class="value-with-icon">{{ finalOutputObject?.WQMP?.MaintenanceContactCity?.Value ?? "" }}</span>
+                                        @if (finalOutputObject?.WQMP?.MaintenanceContactCity?.Value) {
+                                            <icon
+                                                icon="Info"
+                                                class="ml-2 view-source"
+                                                (click)="onViewSource('Maintenance Contact City', finalOutputObject.WQMP.MaintenanceContactCity)"></icon>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="field g-col-12 grid-12">
+                                    <label class="g-col-4">Maintenance Contact State</label>
+                                    <div class="g-col-8">
+                                        <span class="value-with-icon">{{ finalOutputObject?.WQMP?.MaintenanceContactState?.Value ?? "" }}</span>
+                                        @if (finalOutputObject?.WQMP?.MaintenanceContactState?.Value) {
+                                            <icon
+                                                icon="Info"
+                                                class="ml-2 view-source"
+                                                (click)="onViewSource('Maintenance Contact State', finalOutputObject.WQMP.MaintenanceContactState)"></icon>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="field g-col-12 grid-12">
+                                    <label class="g-col-4">Maintenance Contact ZIP</label>
+                                    <div class="g-col-8">
+                                        <span class="value-with-icon">{{ finalOutputObject?.WQMP?.MaintenanceContactZIP?.Value ?? "" }}</span>
+                                        @if (finalOutputObject?.WQMP?.MaintenanceContactZIP?.Value) {
+                                            <icon
+                                                icon="Info"
+                                                class="ml-2 view-source"
+                                                (click)="onViewSource('Maintenance Contact ZIP', finalOutputObject.WQMP.MaintenanceContactZIP)"></icon>
+                                        }
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="existing-basic-data card g-col-6">
@@ -289,6 +385,38 @@
                                 <div class="field grid-12">
                                     <label class="g-col-4">Trash Capture Status</label>
                                     <div class="g-col-8">{{ selectedPlan.TrashCaptureStatusTypeDisplayName }}</div>
+                                </div>
+                                <div class="field grid-12">
+                                    <label class="g-col-4">Maintenance Contact Name</label>
+                                    <div class="g-col-8">{{ selectedPlan.MaintenanceContactName }}</div>
+                                </div>
+                                <div class="field grid-12">
+                                    <label class="g-col-4">Maintenance Contact Organization</label>
+                                    <div class="g-col-8">{{ selectedPlan.MaintenanceContactOrganization }}</div>
+                                </div>
+                                <div class="field grid-12">
+                                    <label class="g-col-4">Maintenance Contact Phone</label>
+                                    <div class="g-col-8">{{ selectedPlan.MaintenanceContactPhone }}</div>
+                                </div>
+                                <div class="field grid-12">
+                                    <label class="g-col-4">Maintenance Contact Address 1</label>
+                                    <div class="g-col-8">{{ selectedPlan.MaintenanceContactAddress1 }}</div>
+                                </div>
+                                <div class="field grid-12">
+                                    <label class="g-col-4">Maintenance Contact Address 2</label>
+                                    <div class="g-col-8">{{ selectedPlan.MaintenanceContactAddress2 }}</div>
+                                </div>
+                                <div class="field grid-12">
+                                    <label class="g-col-4">Maintenance Contact City</label>
+                                    <div class="g-col-8">{{ selectedPlan.MaintenanceContactCity }}</div>
+                                </div>
+                                <div class="field grid-12">
+                                    <label class="g-col-4">Maintenance Contact State</label>
+                                    <div class="g-col-8">{{ selectedPlan.MaintenanceContactState }}</div>
+                                </div>
+                                <div class="field grid-12">
+                                    <label class="g-col-4">Maintenance Contact ZIP</label>
+                                    <div class="g-col-8">{{ selectedPlan.MaintenanceContactZip }}</div>
                                 </div>
                             </div>
                         </div>
