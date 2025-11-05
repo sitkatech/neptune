@@ -74,11 +74,19 @@ public static class TrashGeneratingUnitHelper
         ).GetArea();
     }
 
-    public static double FullTrashCaptureAcreage(this List<TrashGeneratingUnit> trashGeneratingUnits)
+    public static double FullTrashCaptureAcreage(this List<TrashGeneratingUnit> trashGeneratingUnits, bool isPLU)
     {
         return trashGeneratingUnits.Where(x =>
             x.IsFullTrashCapture() &&
-            x.IsPLU()
+            x.IsPLU() == isPLU
+        ).GetArea();
+    }
+
+    public static double PartialTrashCaptureAcreage(this List<TrashGeneratingUnit> trashGeneratingUnits, bool isPLU)
+    {
+        return trashGeneratingUnits.Where(x =>
+            x.IsPartialTrashCapture() &&
+            x.IsPLU() == isPLU
         ).GetArea();
     }
 
@@ -95,7 +103,15 @@ public static class TrashGeneratingUnitHelper
             trashGeneratingUnit.WaterQualityManagementPlan?.TrashCaptureStatusTypeID ==
             (int)TrashCaptureStatusTypeEnum.Full);
     }
-    
+
+    public static bool IsPartialTrashCapture(this TrashGeneratingUnit trashGeneratingUnit)
+    {
+        return (trashGeneratingUnit.Delineation?.TreatmentBMP.TrashCaptureStatusTypeID ==
+                (int)TrashCaptureStatusTypeEnum.Partial ||
+                trashGeneratingUnit.WaterQualityManagementPlan?.TrashCaptureStatusTypeID ==
+                (int)TrashCaptureStatusTypeEnum.Partial);
+    }
+
     public static bool IsPLU(this TrashGeneratingUnit trashGeneratingUnit)
     {
         // This is how to check "PLU == true"

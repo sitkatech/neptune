@@ -7,7 +7,7 @@
       <FeatureTypeStyle>
         <Rule>
           <Name>0</Name>
-          <Title>0</Title>
+          <Title>0 (Full Capture)</Title>
           <ogc:Filter>
             <ogc:PropertyIsEqualTo>
               <ogc:PropertyName>CurrentLoadingRate</ogc:PropertyName>

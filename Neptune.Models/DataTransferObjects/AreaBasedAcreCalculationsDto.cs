@@ -2,10 +2,14 @@
 {
     public class AreaBasedAcreCalculationsDto
     {
-        public double FullTrashCaptureAcreage { get; set; }
-        public double TotalAcresCaptured { get; set; }
-        public double TotalPLUAcres { get; set; }
+        public double FullTrashCaptureAcreagePLU { get; set; }
+        public double PartialTrashCaptureAcreagePLU { get; set; }
+        public double UntreatedAcreagePLU { get; set; }
 
-        public double PercentTreated { get; set; }
+
+        public double FullTrashCaptureAcreageALU { get; set; }
+        public double PartialTrashCaptureAcreageALU { get; set; }
+        public double UntreatedAcreageALU { get; set; }
+
     }
 }

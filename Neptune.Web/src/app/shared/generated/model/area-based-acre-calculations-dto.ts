@@ -11,24 +11,28 @@
 
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class AreaBasedAcreCalculationsDto { 
-    FullTrashCaptureAcreage?: number;
-    TotalAcresCaptured?: number;
-    TotalPLUAcres?: number;
-    PercentTreated?: number;
+    FullTrashCaptureAcreagePLU?: number;
+    PartialTrashCaptureAcreagePLU?: number;
+    UntreatedAcreagePLU?: number;
+    FullTrashCaptureAcreageALU?: number;
+    PartialTrashCaptureAcreageALU?: number;
+    UntreatedAcreageALU?: number;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
 }
 
 export interface AreaBasedAcreCalculationsDtoForm { 
-    FullTrashCaptureAcreage?: FormControl<number>;
-    TotalAcresCaptured?: FormControl<number>;
-    TotalPLUAcres?: FormControl<number>;
-    PercentTreated?: FormControl<number>;
+    FullTrashCaptureAcreagePLU?: FormControl<number>;
+    PartialTrashCaptureAcreagePLU?: FormControl<number>;
+    UntreatedAcreagePLU?: FormControl<number>;
+    FullTrashCaptureAcreageALU?: FormControl<number>;
+    PartialTrashCaptureAcreageALU?: FormControl<number>;
+    UntreatedAcreageALU?: FormControl<number>;
 }
 
 export class AreaBasedAcreCalculationsDtoFormControls { 
-    public static FullTrashCaptureAcreage = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+    public static FullTrashCaptureAcreagePLU = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
         {
@@ -38,7 +42,7 @@ export class AreaBasedAcreCalculationsDtoFormControls {
             ],
         }
     );
-    public static TotalAcresCaptured = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+    public static PartialTrashCaptureAcreagePLU = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
         {
@@ -48,7 +52,7 @@ export class AreaBasedAcreCalculationsDtoFormControls {
             ],
         }
     );
-    public static TotalPLUAcres = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+    public static UntreatedAcreagePLU = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
         {
@@ -58,7 +62,27 @@ export class AreaBasedAcreCalculationsDtoFormControls {
             ],
         }
     );
-    public static PercentTreated = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+    public static FullTrashCaptureAcreageALU = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static PartialTrashCaptureAcreageALU = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static UntreatedAcreageALU = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
         {

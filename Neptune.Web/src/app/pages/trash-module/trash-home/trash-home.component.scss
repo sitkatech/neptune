@@ -213,12 +213,6 @@
     tr:nth-of-type(even) {
         background: transparent;
     }
-
-    tr {
-        & > td:first-of-type {
-            font-weight: normal;
-        }
-    }
 }
 
 .font25 {

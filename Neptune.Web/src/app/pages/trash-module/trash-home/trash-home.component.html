@@ -78,28 +78,46 @@
                       <tbody>
                         <tr>
                           <td class="TGUColumn">
-                            <div id="fullTrashCapture" class="font25" style="color: rgb(76, 146, 76)">
-                              {{ areaBasedAcreCalculationsDto.FullTrashCaptureAcreage | number : "1.0-0" }}
+                            <div class="grid-12">
+                              <div class="g-col-4">
+                                <div id="fullTrashCapturePlu" class="font25" style="color: rgb(76, 146, 76)">
+                                  {{ areaBasedAcreCalculationsDto.FullTrashCaptureAcreagePLU | number : "1.0-0" }}
+                                </div>
+                                <p class="greyLabel">acres Full Capture</p>
+                              </div>
+                              <div class="g-col-4">
+                                <div id="partialTrashCapturePlu" class="font25" style="color: rgb(202, 255, 207)">
+                                  {{ areaBasedAcreCalculationsDto.PartialTrashCaptureAcreagePLU | number : "1.0-0" }}
+                                </div>
+                                <p class="greyLabel">acres Partial Capture</p>
+                              </div>
+                              <div class="g-col-4">
+                                <div id="untreatedPlu" class="font25" style="color: rgb(214, 76, 255)">
+                                  {{ areaBasedAcreCalculationsDto.UntreatedAcreagePLU | number : "1.0-0" }}
+                                </div>
+                                <p class="greyLabel">acres Untreated</p>
+                              </div>
                             </div>
-                            <p class="greyLabel">acres</p>
                           </td>
                           <td class="TGUColumn">
                             <div class="grid-12">
-                              <!-- <div class="col-sm-5 col-xs-12" style=""> -->
-                              <div class="g-col-5">
-                                <div id="totalAcresCaptured" class="font25" style="color: rgb(76, 146, 76)">
-                                  {{ areaBasedAcreCalculationsDto.TotalAcresCaptured | number : "1.0-0" }}
+                              <div class="g-col-4">
+                                <div id="fullTrashCaptureAlu" class="font25" style="color: rgb(178,161,139)"><!--style="width: 40%"  rgb(196, 168, 131)-->
+                                  {{ areaBasedAcreCalculationsDto.FullTrashCaptureAcreageALU | number : "1.0-0" }}
                                 </div>
-                                <p class="greyLabel">acres captured</p>
+                                <p class="greyLabel">acres Full Capture</p>
                               </div>
-                              <!-- <div class="col-sm-1 col-xs-12 table-of"> -->
-                              <div class="g-col-1 table-of">
-                                <strong> of </strong>
+                              <div class="g-col-4">
+                                <div id="partialTrashCaptureAlu" class="font25" style="color: rgb(223, 202, 174)">
+                                  {{ areaBasedAcreCalculationsDto.PartialTrashCaptureAcreageALU | number : "1.0-0" }}
+                                </div>
+                                <p class="greyLabel">acres Partial Capture</p>
                               </div>
-                              <!-- <div class="col-sm-5 col-xs-12" style=""> -->
-                              <div class="g-col-5">
-                                <div id="totalPLUAcres" class="font25">{{ areaBasedAcreCalculationsDto.TotalPLUAcres | number : "1.0-0" }}</div>
-                                <p class="greyLabel">total PLU acres</p>
+                              <div class="g-col-4">
+                                <div id="untreatedAlu" class="font25" style="color: rgb(223, 223, 223)">
+                                  {{ areaBasedAcreCalculationsDto.UntreatedAcreageALU | number : "1.0-0" }}
+                                </div>
+                                <p class="greyLabel">acres Untreated</p>
                               </div>
                             </div>
                           </td>
@@ -107,11 +125,11 @@
                       </tbody>
                       <tfoot>
                         <tr>
-                          <td class="TGUColumn" style="width: 20%">
-                            <strong>Full Trash Capture</strong>
+                          <td class="TGUColumn" > <!--style="width: 40%"  rgb(196, 168, 131)-->
+                            <strong>Priority Lane Use</strong>
                           </td>
-                          <td class="TGUColumn" style="border-left: none; width: 60%">
-                            <strong>Total Full Capture Equivalent</strong>
+                          <td class="TGUColumn" style="border-left: none">
+                            <strong>Alternate Lane Use</strong>
                           </td>
                         </tr>
                       </tfoot>
@@ -119,7 +137,7 @@
                   }
                 </div>
               }
-              @if (currentResultType == 'Load-Based Results (Current)' || currentResultType == 'Load-Based (Net Change)') {
+              @if (currentResultType == 'Current Net Loading Rate with Controls' || currentResultType == 'Net change in Trash Loading Rate with Controls') {
                 <div
                   [loadingSpinner]="{ isLoading: isLoading, loadingHeight: 100 }"
                   id="LoadBasedResultsControlTemplate"
@@ -244,49 +262,61 @@
               <dl>
                 <div class="tgu-grid-data-column">
                   <dt>Analysis Area ID</dt>
-                  <dd>{{ tguDto.TrashGeneratingUnitID }}</dd>
+                  <dd>{{ tguDto.TrashGeneratingUnitID != null ? tguDto.TrashGeneratingUnitID : '-' }}</dd>
                   <dt><field-definition fieldDefinitionType="LandUseType"></field-definition></dt>
-                  <dd>{{ tguDto.LandUseType }}</dd>
+                  <dd>{{ tguDto.LandUseType ? tguDto.LandUseType : '-' }}</dd>
                   <dt><field-definition fieldDefinitionType="CurrentLoadingRate"></field-definition></dt>
-                  <dd>{{ tguDto.CurrentLoadingRate }} gal/ac/yr</dd>
+                  <dd>{{ tguDto.CurrentLoadingRate != null ? (tguDto.CurrentLoadingRate + ' gal/ac/yr') : '-' }}</dd>
                   <dt><field-definition fieldDefinitionType="BaselineLoadingRate"></field-definition></dt>
-                  <dd>{{ tguDto.BaselineLoadingRate }}{{ tguDto.BaselineLoadingRate != null ? " gal/ac/yr" : "" }}</dd>
+                  <dd>{{ tguDto.BaselineLoadingRate != null ? (tguDto.BaselineLoadingRate + ' gal/ac/yr') : '-' }}</dd>
                   <dt>Progress Trash Generation Rate</dt>
-                  <dd>{{ tguDto.ProgressLoadingRate }}{{ tguDto.ProgressLoadingRate != null ? " gal/ac/yr" : "" }}</dd>
+                  <dd>{{ tguDto.ProgressLoadingRate != null ? (tguDto.ProgressLoadingRate + ' gal/ac/yr') : '-' }}</dd>
+                  <dt>Net Change in Loading Rate with Controls</dt>
+                  <dd>{{ tguDto.LoadingRateDelta != null ? (tguDto.LoadingRateDelta + ' gal/ac/yr') : '-' }}</dd>
+                  <dt>Permit Type</dt>
+                  <dd>{{ tguDto.PermitClass ? tguDto.PermitClass : '-' }}</dd>
                   <dt>Jurisdiction</dt>
-                  <dd>{{ tguDto.StormwaterJurisdictionName }}</dd>
+                  <dd>{{ tguDto.StormwaterJurisdictionName ? tguDto.StormwaterJurisdictionName : '-' }}</dd>
                 </div>
                 <div class="tgu-grid-data-column">
                   <dt>BMP</dt>
                   <dd>
-                    <a href="{{ ocstBaseUrl() }}/TreatmentBMP/Detail/{{ tguDto.TreatmentBMPID }}">{{ tguDto.TreatmentBMPName }}</a>
+                    @if (tguDto.TreatmentBMPID && tguDto.TreatmentBMPName) {
+                      <a href="{{ ocstBaseUrl() }}/TreatmentBMP/Detail/{{ tguDto.TreatmentBMPID }}">{{ tguDto.TreatmentBMPName }}</a>
+                    } @else {
+                      -
+                    }
                   </dd>
                   <dt>BMP Type</dt>
-                  <dd>{{ tguDto.TreatmentBMPTypeName }}</dd>
+                  <dd>{{ tguDto.TreatmentBMPTypeName ? tguDto.TreatmentBMPTypeName : '-' }}</dd>
                   <dt><field-definition fieldDefinitionType="BMPTrashTreatmentStatus" labelOverride="BMP Status"></field-definition></dt>
-                  <dd>{{ tguDto.TrashCaptureStatusBMP }}</dd>
+                  <dd>{{ tguDto.TrashCaptureStatusBMP ? tguDto.TrashCaptureStatusBMP : '-' }}</dd>
                   <dt>WQMP</dt>
                   <dd>
-                    <a href="{{ ocstBaseUrl() }}/WaterQualityManagementPlan/Detail/{{ tguDto.WaterQualityManagementPlanID }}">{{
-                      tguDto.WaterQualityManagementPlanName
-                    }}</a>
+                    @if (tguDto.WaterQualityManagementPlanID && tguDto.WaterQualityManagementPlanName) {
+                      <a href="{{ ocstBaseUrl() }}/WaterQualityManagementPlan/Detail/{{ tguDto.WaterQualityManagementPlanID }}">{{ tguDto.WaterQualityManagementPlanName }}</a>
+                    } @else {
+                      -
+                    }
                   </dd>
                   <dt><field-definition fieldDefinitionType="WQMPTrashTreatmentStatus" labelOverride="WQMP Status"></field-definition></dt>
-                  <dd>{{ tguDto.TrashCaptureStatusWQMP }}</dd>
+                  <dd>{{ tguDto.TrashCaptureStatusWQMP ? tguDto.TrashCaptureStatusWQMP : '-' }}</dd>
                   <dt>OVTA Area</dt>
                   <dd>
-                    <a [routerLink]="['/trash/onland-visual-trash-assessment-areas', tguDto.OnlandVisualTrashAssessmentAreaID]">{{
-                      tguDto.OnlandVisualTrashAssessmentAreaName
-                    }}</a>
+                    @if (tguDto.OnlandVisualTrashAssessmentAreaID && tguDto.OnlandVisualTrashAssessmentAreaName) {
+                      <a [routerLink]="['/trash/onland-visual-trash-assessment-areas', tguDto.OnlandVisualTrashAssessmentAreaID]">{{ tguDto.OnlandVisualTrashAssessmentAreaName }}</a>
+                    } @else {
+                      -
+                    }
                   </dd>
                   <dt><field-definition fieldDefinitionType="BaselineScore" labelOverride="OVTA Baseline Score"></field-definition></dt>
-                  <dd>{{ tguDto.OnlandVisualTrashAssessmentAreaBaselineScore }}</dd>
+                  <dd>{{ tguDto.OnlandVisualTrashAssessmentAreaBaselineScore != null ? tguDto.OnlandVisualTrashAssessmentAreaBaselineScore : '-' }}</dd>
                   <dt><field-definition fieldDefinitionType="ProgressScore" labelOverride="OVTA Progress Score"></field-definition></dt>
-                  <dd>{{ tguDto.OnlandVisualTrashAssessmentAreaProgressScore }}</dd>
+                  <dd>{{ tguDto.OnlandVisualTrashAssessmentAreaProgressScore != null ? tguDto.OnlandVisualTrashAssessmentAreaProgressScore : '-' }}</dd>
                   <dt># of Assessments</dt>
-                  <dd>{{ tguDto.CompletedAssessmentCount }}</dd>
+                  <dd>{{ tguDto.CompletedAssessmentCount != null ? tguDto.CompletedAssessmentCount : '-' }}</dd>
                   <dt>Last Assessed Date</dt>
-                  <dd>{{ tguDto.AssessmentDate | date : "shortDate" }}</dd>
+                  <dd>@if (tguDto.AssessmentDate) { {{ tguDto.AssessmentDate | date : "shortDate" }} } @else { - }</dd>
                 </div>
               </dl>
             </div>
@@ -334,7 +364,7 @@
                   [sortOrder]="1"
                 [selectedJurisdictionID]="this.currentStormwaterJurisdiction.StormwaterJurisdictionID"></trash-generating-unit-layer>
               }
-              @if (mapIsReady && currentResultType == 'Load-Based Results (Current)') {
+              @if (mapIsReady && currentResultType == 'Current Net Loading Rate with Controls') {
                 <trash-generating-unit-loads-layer
                   [displayOnLoad]="true"
                   [map]="map"
@@ -343,7 +373,7 @@
                   [style]="'current_load'"
                 [selectedJurisdictionID]="this.currentStormwaterJurisdiction.StormwaterJurisdictionID"></trash-generating-unit-loads-layer>
               }
-              @if (mapIsReady && currentResultType == 'Load-Based (Net Change)') {
+              @if (mapIsReady && currentResultType == 'Net change in Trash Loading Rate with Controls') {
                 <trash-generating-unit-loads-layer
                   [displayOnLoad]="true"
                   [map]="map"
