@@ -141,8 +141,8 @@ USING (VALUES
 (140, 'LandUseType', 'Land Use Type'),
 (141, 'LandUseDescription', 'Land Use Description'),
 (142, 'OVTAScoreEquivalentCalculation', 'OVTA Score Equivalent Calculation'),
-(143, 'BaselineLoadingRate', 'Baseline Loading Rate'),
-(144, 'CurrentLoadingRate', 'Current Loading Rate'),
+(143, 'BaselineLoadingRate', 'Baseline Trash Generation Rate'),
+(144, 'CurrentLoadingRate', 'Current Net Loading Rate'),
 (145, 'BMPTrashTreatmentStatus', 'BMP Trash Treatment Status'),
 (146, 'WQMPTrashTreatmentStatus', 'WQMP Trash Treatment Status'),
 (147, 'DownstreamOfNonModeledBMP', 'Downstream of Non-Modeled BMP?')
