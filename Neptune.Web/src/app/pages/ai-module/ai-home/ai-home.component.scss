@@ -68,7 +68,7 @@
 
 .existing-basic-data {
     .card-body {
-        gap: 1.5rem !important;
+        //gap: 1.5rem !important;
     }
 }
 
@@ -104,6 +104,7 @@
 
         .field {
             align-items: center;
+            min-height: 2.25rem;
             label {
                 font-weight: 700;
                 cursor: default;
