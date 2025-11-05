@@ -12,7 +12,9 @@ public class TrashGeneratingUnitDto
     public string StormwaterJurisdictionName { get; set; } = null!;
     public decimal? BaselineLoadingRate { get; set; }
     public decimal? ProgressLoadingRate { get; set; }
+    public decimal? LoadingRateDelta { get; set; }
     public string? LandUseType { get; set; }
+    public string? PermitClass { get; set; }
     public decimal? CurrentLoadingRate { get; set; }
     public int? OnlandVisualTrashAssessmentAreaID { get; set; }
     public string? OnlandVisualTrashAssessmentAreaName { get; set; }

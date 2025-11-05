@@ -10,6 +10,7 @@ using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Neptune.API.Controllers;
 
@@ -29,22 +30,37 @@ public class TrashGeneratingUnitByStormwaterJurisdictionController(
     {
         var trashGeneratingUnits = GetRelevantTrashGeneratingUnitsForCalculations(jurisdictionID);
 
-        var fullTrashCapture = trashGeneratingUnits.FullTrashCaptureAcreage();
+        var fullTrashCapturePLU = trashGeneratingUnits.FullTrashCaptureAcreage(true);
+        var partialTrashCapturePLU = trashGeneratingUnits.PartialTrashCaptureAcreage(true);
 
-        var totalAcresCaptured = fullTrashCapture;
+        var totalAcresCapturedPLU = fullTrashCapturePLU + partialTrashCapturePLU;
 
         var totalPLUAcres = DbContext.LandUseBlocks.AsNoTracking()
             .Where(x => x.StormwaterJurisdictionID == jurisdictionID && x.PriorityLandUseTypeID != (int)PriorityLandUseTypeEnum.ALU && x.PermitTypeID == (int)PermitTypeEnum.PhaseIMS4).Sum(x =>
                 x.LandUseBlockGeometry.Area * Constants.SquareMetersToAcres);
 
-        var percentTreated = totalPLUAcres != 0 ? totalAcresCaptured / totalPLUAcres : 0;
+        var untreatedPLU = totalPLUAcres != 0 ?  totalPLUAcres - totalAcresCapturedPLU : 0;
+
+
+
+        var fullTrashCaptureALU = trashGeneratingUnits.FullTrashCaptureAcreage(false);
+        var partialTrashCaptureALU = trashGeneratingUnits.PartialTrashCaptureAcreage(false);
+
+        var totalAcresCapturedALU = fullTrashCaptureALU + partialTrashCaptureALU;
+
+        var totalALUAcres = DbContext.LandUseBlocks.AsNoTracking()
+            .Where(x => x.StormwaterJurisdictionID == jurisdictionID && x.PriorityLandUseTypeID == (int)PriorityLandUseTypeEnum.ALU && x.PermitTypeID == (int)PermitTypeEnum.PhaseIMS4).Sum(x =>
+                x.LandUseBlockGeometry.Area * Constants.SquareMetersToAcres);
+        var untreatedALU = totalALUAcres != 0 ? totalALUAcres - totalAcresCapturedALU : 0;
 
         var areaBasedAcreCalculationsDto = new AreaBasedAcreCalculationsDto
         {
-            FullTrashCaptureAcreage = fullTrashCapture,
-            TotalAcresCaptured = totalAcresCaptured,
-            TotalPLUAcres = totalPLUAcres,
-            PercentTreated = percentTreated
+            FullTrashCaptureAcreagePLU = fullTrashCapturePLU,
+            PartialTrashCaptureAcreagePLU = partialTrashCapturePLU,
+            UntreatedAcreagePLU = untreatedPLU,
+            FullTrashCaptureAcreageALU = fullTrashCaptureALU,
+            PartialTrashCaptureAcreageALU = partialTrashCaptureALU,
+            UntreatedAcreageALU = untreatedALU
         };
         return Ok(areaBasedAcreCalculationsDto);
     }
@@ -104,20 +120,31 @@ public class TrashGeneratingUnitByStormwaterJurisdictionController(
 
     [HttpGet("load-based-results-calculations")]
     [EntityNotFound(typeof(StormwaterJurisdiction), "jurisdictionID")]
-    public ActionResult<LoadResultsDto> GetLoadBasedResultsCalculations([FromRoute] int jurisdictionID)
+    public async Task<ActionResult<LoadResultsDto>> GetLoadBasedResultsCalculations([FromRoute] int jurisdictionID)
     {
         var vTrashGeneratingUnitLoadStatistics =
             DbContext.vTrashGeneratingUnitLoadStatistics.Where(x => x.StormwaterJurisdictionID == jurisdictionID);
 
-        var viaFullCapture = vTrashGeneratingUnitLoadStatistics.Where(x => x.IsFullTrashCapture && x.BaselineLoadingRate.HasValue).Sum(x =>
-            x.Area * (double)(x.BaselineLoadingRate - TrashGeneratingUnitHelper.FullTrashCaptureLoading) * Constants.SquareMetersToAcres);
-        var viaPartialCapture = vTrashGeneratingUnitLoadStatistics.Where(x => x.IsPartialTrashCapture && x.BaselineLoadingRate.HasValue).Sum(x => 
-            x.Area * (double)(x.BaselineLoadingRate - x.CurrentLoadingRate) * Constants.SquareMetersToAcres);
-        var viaOVTAs = vTrashGeneratingUnitLoadStatistics.Where(x => x.HasBaselineScore == true && x.HasProgressScore == true && x.BaselineLoadingRate.HasValue).Sum(x =>
-            x.Area * (double)(x.BaselineLoadingRate - x.ProgressLoadingRate) * Constants.SquareMetersToAcres);
+        // Single DB round-trip: compute all three conditional sums in one aggregate
+        var aggregates = await vTrashGeneratingUnitLoadStatistics
+            .GroupBy(x => 1)
+            .Select(g => new
+            {
+                Full = g.Where(x => x.IsFullTrashCapture && x.BaselineLoadingRate.HasValue)
+                    .Sum(x => x.Area * (double)(x.BaselineLoadingRate - TrashGeneratingUnitHelper.FullTrashCaptureLoading) * Constants.SquareMetersToAcres),
+                Partial = g.Where(x => x.IsPartialTrashCapture && x.BaselineLoadingRate.HasValue)
+                    .Sum(x => x.Area * (double)(x.BaselineLoadingRate - x.CurrentLoadingRate) * Constants.SquareMetersToAcres),
+                Ovta = g.Where(x => x.HasBaselineScore == true && x.HasProgressScore == true && x.BaselineLoadingRate.HasValue)
+                    .Sum(x => x.Area * (double)(x.BaselineLoadingRate - x.ProgressLoadingRate) * Constants.SquareMetersToAcres)
+            })
+            .SingleOrDefaultAsync();
+
+        var viaFullCapture = aggregates?.Full ?? 0;
+        var viaPartialCapture = aggregates?.Partial ?? 0;
+        var viaOVTAs = aggregates?.Ovta ?? 0;
 
         var totalAchieved = viaFullCapture + viaPartialCapture + viaOVTAs;
-        var targetLoadReduction = TrashGeneratingUnitHelper.TargetLoadReduction(DbContext, jurisdictionID);
+        var targetLoadReduction = TrashGeneratingUnitHelper.TargetLoadReduction(DbContext, jurisdictionID, vTrashGeneratingUnitLoadStatistics);
 
         var loadResultsDto = new LoadResultsDto
         {

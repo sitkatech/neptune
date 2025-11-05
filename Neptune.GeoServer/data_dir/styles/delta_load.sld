@@ -7,7 +7,7 @@
       <FeatureTypeStyle>
         <Rule>
           <Name>Less than -30</Name>
-          <Title>Less Than -30</Title>
+          <Title>More than 30 reduction</Title>
           <ogc:Filter>
             <ogc:PropertyIsLessThan>
               <ogc:PropertyName>LoadingRateDelta</ogc:PropertyName>
@@ -22,7 +22,7 @@
         </Rule>
         <Rule>
           <Name>-30 to less than -7.6 </Name>
-          <Title>-30 to -7.6</Title>
+          <Title>7.6 to 30 reduction</Title>
           <ogc:Filter>
             <ogc:And>
               <ogc:PropertyIsGreaterThanOrEqualTo>
@@ -43,7 +43,7 @@
         </Rule>
         <Rule>
           <Name>-7.5 to less than -2.6</Name>
-          <Title>-7.5 to -2.6</Title>
+          <Title>2.6 to 7.5 reduction</Title>
           <ogc:Filter>
             <ogc:And>
               <ogc:PropertyIsGreaterThanOrEqualTo>
@@ -64,7 +64,7 @@
         </Rule>
         <Rule>
           <Name>-2.5 to less than -0.1</Name>
-          <Title>-2.5 to -0.1</Title>
+          <Title>0.1 to 2.5 reduction</Title>
           <ogc:Filter>
             <ogc:And>
               <ogc:PropertyIsGreaterThanOrEqualTo>
@@ -85,7 +85,7 @@
         </Rule>
         <Rule>
           <Name>0</Name>
-          <Title>0</Title>
+          <Title>0 (no change)</Title>
           <ogc:Filter>
             <ogc:PropertyIsEqualTo>
               <ogc:PropertyName>LoadingRateDelta</ogc:PropertyName>
@@ -100,7 +100,7 @@
         </Rule>
         <Rule>
           <Name>0.1 to less than 2.5</Name>
-          <Title>0.1 to 2.5</Title>
+          <Title>0.1 to 2.5 addition</Title>
           <ogc:Filter>
             <ogc:And>
               <ogc:PropertyIsGreaterThan>
@@ -121,7 +121,7 @@
         </Rule>
         <Rule>
           <Name>2.6 to less than 7.5</Name>
-          <Title>2.6 to 7.5</Title>
+          <Title>2.6 to 7.5 addition</Title>
           <ogc:Filter>
             <ogc:And>
               <ogc:PropertyIsGreaterThan>
@@ -142,7 +142,7 @@
         </Rule>
         <Rule>
           <Name>7.6 to less than 30</Name>
-          <Title>7.6 to 30</Title>
+          <Title>7.6 to 30 addition</Title>
           <ogc:Filter>
             <ogc:And>
               <ogc:PropertyIsGreaterThan>
@@ -160,20 +160,21 @@
               <CssParameter name="fill">#cb181d</CssParameter>
             </Fill>
           </PolygonSymbolizer>
-        </Rule><Rule>
-        <Name>Greater than 30</Name>
-        <Title>Greater Than 30</Title>
-        <ogc:Filter>
-          <ogc:PropertyIsGreaterThan>
-            <ogc:PropertyName>LoadingRateDelta</ogc:PropertyName>
-            <ogc:Literal>30</ogc:Literal>
-          </ogc:PropertyIsGreaterThan>
-        </ogc:Filter>
-        <PolygonSymbolizer>
-          <Fill>
-            <CssParameter name="fill">#99000d</CssParameter>
-          </Fill>
-        </PolygonSymbolizer>
+        </Rule>
+        <Rule>
+          <Name>Greater than 30</Name>
+          <Title>Greater Than 30 addition</Title>
+          <ogc:Filter>
+            <ogc:PropertyIsGreaterThan>
+              <ogc:PropertyName>LoadingRateDelta</ogc:PropertyName>
+              <ogc:Literal>30</ogc:Literal>
+            </ogc:PropertyIsGreaterThan>
+          </ogc:Filter>
+          <PolygonSymbolizer>
+            <Fill>
+              <CssParameter name="fill">#99000d</CssParameter>
+            </Fill>
+          </PolygonSymbolizer>
         </Rule>
       </FeatureTypeStyle>
     </UserStyle>

@@ -213,16 +213,26 @@
     tr:nth-of-type(even) {
         background: transparent;
     }
-
-    tr {
-        & > td:first-of-type {
-            font-weight: normal;
-        }
-    }
 }
 
 .font25 {
     font-size: 25px;
+}
+
+/* Outline text helper: uses -webkit-text-stroke where available and a text-shadow fallback for broader support */
+.outlined-text {
+    /* Keep the fill color the same; add a black outline */
+    // -webkit-text-stroke: 1px rgb(116, 116, 114, 0.5); /* Chrome, Safari */
+    /* fallback: 8-directional thin shadows to simulate an outline in browsers that don't support text-stroke */
+    text-shadow:
+        -1px -1px 0 rgb(116, 116, 114, 0.5),
+        1px -1px 0 rgb(116, 116, 114, 0.5),
+        -1px 1px 0 rgb(116, 116, 114, 0.5),
+        1px 1px 0 rgb(116, 116, 114, 0.5),
+        0px -1px 0 rgb(116, 116, 114, 0.5),
+        0px 1px 0 rgb(116, 116, 114, 0.5),
+        -1px 0px 0 rgb(116, 116, 114, 0.5),
+        1px 0px 0 rgb(116, 116, 114, 0.5);
 }
 
 .font15 {

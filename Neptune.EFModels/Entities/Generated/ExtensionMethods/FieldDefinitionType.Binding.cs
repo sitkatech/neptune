@@ -1533,13 +1533,13 @@ namespace Neptune.EFModels.Entities
     public partial class FieldDefinitionTypeBaselineLoadingRate : FieldDefinitionType
     {
         private FieldDefinitionTypeBaselineLoadingRate(int fieldDefinitionTypeID, string fieldDefinitionTypeName, string fieldDefinitionTypeDisplayName) : base(fieldDefinitionTypeID, fieldDefinitionTypeName, fieldDefinitionTypeDisplayName) {}
-        public static readonly FieldDefinitionTypeBaselineLoadingRate Instance = new FieldDefinitionTypeBaselineLoadingRate(143, @"BaselineLoadingRate", @"Baseline Loading Rate");
+        public static readonly FieldDefinitionTypeBaselineLoadingRate Instance = new FieldDefinitionTypeBaselineLoadingRate(143, @"BaselineLoadingRate", @"Baseline Trash Generation Rate");
     }
 
     public partial class FieldDefinitionTypeCurrentLoadingRate : FieldDefinitionType
     {
         private FieldDefinitionTypeCurrentLoadingRate(int fieldDefinitionTypeID, string fieldDefinitionTypeName, string fieldDefinitionTypeDisplayName) : base(fieldDefinitionTypeID, fieldDefinitionTypeName, fieldDefinitionTypeDisplayName) {}
-        public static readonly FieldDefinitionTypeCurrentLoadingRate Instance = new FieldDefinitionTypeCurrentLoadingRate(144, @"CurrentLoadingRate", @"Current Loading Rate");
+        public static readonly FieldDefinitionTypeCurrentLoadingRate Instance = new FieldDefinitionTypeCurrentLoadingRate(144, @"CurrentLoadingRate", @"Current Net Loading Rate");
     }
 
     public partial class FieldDefinitionTypeBMPTrashTreatmentStatus : FieldDefinitionType

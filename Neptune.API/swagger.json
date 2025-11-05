@@ -7015,19 +7015,27 @@
       "AreaBasedAcreCalculationsDto": {
         "type": "object",
         "properties": {
-          "FullTrashCaptureAcreage": {
+          "FullTrashCaptureAcreagePLU": {
             "type": "number",
             "format": "double"
           },
-          "TotalAcresCaptured": {
+          "PartialTrashCaptureAcreagePLU": {
             "type": "number",
             "format": "double"
           },
-          "TotalPLUAcres": {
+          "UntreatedAcreagePLU": {
             "type": "number",
             "format": "double"
           },
-          "PercentTreated": {
+          "FullTrashCaptureAcreageALU": {
+            "type": "number",
+            "format": "double"
+          },
+          "PartialTrashCaptureAcreageALU": {
+            "type": "number",
+            "format": "double"
+          },
+          "UntreatedAcreageALU": {
             "type": "number",
             "format": "double"
           }
@@ -11102,7 +11110,16 @@
             "format": "double",
             "nullable": true
           },
+          "LoadingRateDelta": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
           "LandUseType": {
+            "type": "string",
+            "nullable": true
+          },
+          "PermitClass": {
             "type": "string",
             "nullable": true
           },

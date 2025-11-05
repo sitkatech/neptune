@@ -296,8 +296,8 @@ export const FieldDefinitionTypes: LookupTableEntry[]  = [
   { Name: "LandUseType", DisplayName: "Land Use Type", Value: 140 },
   { Name: "LandUseDescription", DisplayName: "Land Use Description", Value: 141 },
   { Name: "OVTAScoreEquivalentCalculation", DisplayName: "OVTA Score Equivalent Calculation", Value: 142 },
-  { Name: "BaselineLoadingRate", DisplayName: "Baseline Loading Rate", Value: 143 },
-  { Name: "CurrentLoadingRate", DisplayName: "Current Loading Rate", Value: 144 },
+  { Name: "BaselineLoadingRate", DisplayName: "Baseline Trash Generation Rate", Value: 143 },
+  { Name: "CurrentLoadingRate", DisplayName: "Current Net Loading Rate", Value: 144 },
   { Name: "BMPTrashTreatmentStatus", DisplayName: "BMP Trash Treatment Status", Value: 145 },
   { Name: "WQMPTrashTreatmentStatus", DisplayName: "WQMP Trash Treatment Status", Value: 146 },
   { Name: "DownstreamOfNonModeledBMP", DisplayName: "Downstream of Non-Modeled BMP?", Value: 147 }

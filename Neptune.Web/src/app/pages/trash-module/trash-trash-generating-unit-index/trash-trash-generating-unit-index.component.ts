@@ -47,13 +47,13 @@ export class TrashTrashGeneratingUnitIndexComponent {
                 CustomDropdownFilterField: "StormwaterJurisdictionName",
             }),
             this.utilityFunctionsService.createDecimalColumnDef("Area", "Area"),
-            this.utilityFunctionsService.createDecimalColumnDef("Baseline Loading Rate", "BaselineLoadingRate", {
+            this.utilityFunctionsService.createDecimalColumnDef("Baseline Trash Generation Rate", "BaselineLoadingRate", {
                 CustomDropdownFilterField: "BaselineLoadingRate",
             }),
-            this.utilityFunctionsService.createDecimalColumnDef("Progress Loading Rate", "ProgressLoadingRate", {
+            this.utilityFunctionsService.createDecimalColumnDef("Progress Trash Generation Rate", "ProgressLoadingRate", {
                 CustomDropdownFilterField: "ProgressLoadingRate",
             }),
-            this.utilityFunctionsService.createDecimalColumnDef("Current Loading Rate", "CurrentLoadingRate", {
+            this.utilityFunctionsService.createDecimalColumnDef("Current Net Loading Rate", "CurrentLoadingRate", {
                 CustomDropdownFilterField: "CurrentLoadingRate",
             }),
             this.utilityFunctionsService.createBasicColumnDef("Trash Capture Status via BMP", "TrashCaptureStatusBMP"),

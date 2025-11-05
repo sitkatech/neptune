@@ -12,16 +12,56 @@ public static class TrashGeneratingUnitHelper
 {
     public const decimal FullTrashCaptureLoading = 0m;
 
-    public static double TargetLoadReduction(NeptuneDbContext dbContext, int stormwaterJurisdictionID)
+    public static double TargetLoadReduction(NeptuneDbContext dbContext, int stormwaterJurisdictionID, IQueryable<vTrashGeneratingUnitLoadStatistic> vTrashGeneratingUnitLoadStatistics)
     {
-        var landUseBlocks = dbContext.LandUseBlocks.AsNoTracking().Where(x => x.PermitTypeID == (int)PermitTypeEnum.PhaseIMS4 &&
-            x.StormwaterJurisdictionID == stormwaterJurisdictionID && x.PriorityLandUseTypeID != (int)PriorityLandUseTypeEnum.ALU);
+        // Get only the IDs for land use blocks in the target jurisdiction and permit/priority filters.
+        var lubIds = dbContext.LandUseBlocks.AsNoTracking()
+            .Where(x => x.PermitTypeID == (int)PermitTypeEnum.PhaseIMS4 &&
+                        x.StormwaterJurisdictionID == stormwaterJurisdictionID &&
+                        x.PriorityLandUseTypeID != (int)PriorityLandUseTypeEnum.ALU)
+            .Select(x => x.LandUseBlockID)
+            .ToList();
 
-        return landUseBlocks.Any()
-            ? landUseBlocks.Sum(x =>
-                x.LandUseBlockGeometry.Area * (double)(x.TrashGenerationRate - FullTrashCaptureLoading) *
-                Constants.SquareMetersToAcres)
-            : 0;
+        if (!lubIds.Any()) return 0;
+
+        // Aggregate vTrashGeneratingUnitLoadStatistics on the DB side for only the relevant land use block IDs
+        var lubSums = vTrashGeneratingUnitLoadStatistics
+            .Where(x => x.LandUseBlockID.HasValue && lubIds.Contains(x.LandUseBlockID.Value))
+            .GroupBy(x => x.LandUseBlockID.Value)
+            .Select(g => new
+            {
+                LandUseBlockID = g.Key,
+                Sum = g.Sum(y => y.Area * (double)y.BaselineLoadingRate * Constants.SquareMetersToAcres)
+            })
+            .ToDictionary(x => x.LandUseBlockID, x => x.Sum);
+
+        double total = 0;
+
+        // Add sums for LandUseBlocks that have aggregated vTGU stats
+        if (lubSums.Any())
+        {
+            total += lubSums.Values.Sum();
+        }
+
+        // For LandUseBlocks without aggregated stats, fetch only those IDs and compute fallback locally.
+        var missingLubIds = lubIds.Except(lubSums.Keys).ToList();
+        if (missingLubIds.Any())
+        {
+            var missingLubs = dbContext.LandUseBlocks.AsNoTracking()
+                .Where(x => missingLubIds.Contains(x.LandUseBlockID))
+                .Select(x => new { x.LandUseBlockID, x.LandUseBlockGeometry, x.TrashGenerationRate })
+                .ToList();
+
+            foreach (var lub in missingLubs)
+            {
+                // LandUseBlockGeometry.Area may not be translatable; compute client-side
+                var area = lub.LandUseBlockGeometry?.Area ?? 0;
+                var trashGenRate = lub.TrashGenerationRate ?? 0;
+                total += area * (double)(trashGenRate - FullTrashCaptureLoading) * Constants.SquareMetersToAcres;
+            }
+        }
+
+        return total;
     }
 
     public static double EquivalentAreaAcreageFromAssessments(this List<TrashGeneratingUnit> trashGeneratingUnits)
@@ -34,11 +74,19 @@ public static class TrashGeneratingUnitHelper
         ).GetArea();
     }
 
-    public static double FullTrashCaptureAcreage(this List<TrashGeneratingUnit> trashGeneratingUnits)
+    public static double FullTrashCaptureAcreage(this List<TrashGeneratingUnit> trashGeneratingUnits, bool isPLU)
     {
         return trashGeneratingUnits.Where(x =>
             x.IsFullTrashCapture() &&
-            x.IsPLU()
+            x.IsPLU() == isPLU
+        ).GetArea();
+    }
+
+    public static double PartialTrashCaptureAcreage(this List<TrashGeneratingUnit> trashGeneratingUnits, bool isPLU)
+    {
+        return trashGeneratingUnits.Where(x =>
+            x.IsPartialTrashCapture() &&
+            x.IsPLU() == isPLU
         ).GetArea();
     }
 
@@ -55,7 +103,15 @@ public static class TrashGeneratingUnitHelper
             trashGeneratingUnit.WaterQualityManagementPlan?.TrashCaptureStatusTypeID ==
             (int)TrashCaptureStatusTypeEnum.Full);
     }
-    
+
+    public static bool IsPartialTrashCapture(this TrashGeneratingUnit trashGeneratingUnit)
+    {
+        return (trashGeneratingUnit.Delineation?.TreatmentBMP.TrashCaptureStatusTypeID ==
+                (int)TrashCaptureStatusTypeEnum.Partial ||
+                trashGeneratingUnit.WaterQualityManagementPlan?.TrashCaptureStatusTypeID ==
+                (int)TrashCaptureStatusTypeEnum.Partial);
+    }
+
     public static bool IsPLU(this TrashGeneratingUnit trashGeneratingUnit)
     {
         // This is how to check "PLU == true"

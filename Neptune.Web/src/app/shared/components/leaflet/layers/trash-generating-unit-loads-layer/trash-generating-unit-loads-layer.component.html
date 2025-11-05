@@ -1,3 +1,8 @@
 <ng-template #layerName>
-    <span>Loading rate (gal/ac/year)</span>
+    <span>{{ layerDisplayName }}</span>
 </ng-template>
+@if (style == "delta_load") {
+    <ng-template #legend>
+        <p style="margin-left: -5px"><img src="./assets/main/map-legend-images/tguDeltaLoadLengend.png" /></p>
+    </ng-template>
+}
