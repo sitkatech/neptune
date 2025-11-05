@@ -117,7 +117,7 @@ public class TrashGeneratingUnitByStormwaterJurisdictionController(
             x.Area * (double)(x.BaselineLoadingRate - x.ProgressLoadingRate) * Constants.SquareMetersToAcres);
 
         var totalAchieved = viaFullCapture + viaPartialCapture + viaOVTAs;
-        var targetLoadReduction = TrashGeneratingUnitHelper.TargetLoadReduction(DbContext, jurisdictionID);
+        var targetLoadReduction = TrashGeneratingUnitHelper.TargetLoadReduction(DbContext, jurisdictionID, vTrashGeneratingUnitLoadStatistics);
 
         var loadResultsDto = new LoadResultsDto
         {
