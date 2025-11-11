@@ -8733,6 +8733,14 @@
             "format": "date",
             "nullable": true
           },
+          "NumberOfAssessmentsInProgress": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "NumberOfAssessmentsCompleted": {
+            "type": "integer",
+            "format": "int32"
+          },
           "BoundingBox": {
             "$ref": "#/components/schemas/BoundingBoxDto"
           },

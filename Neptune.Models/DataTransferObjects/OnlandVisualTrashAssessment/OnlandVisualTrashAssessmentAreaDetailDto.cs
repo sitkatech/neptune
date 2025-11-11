@@ -12,6 +12,8 @@ public class OnlandVisualTrashAssessmentAreaDetailDto
     public string? OnlandVisualTrashAssessmentProgressScoreName { get; set; }
     public decimal? OnlandVisualTrashAssessmentProgressScoreTrashGenerationRate { get; set; }
     public DateOnly? LastAssessmentDate { get; set; }
+    public int NumberOfAssessmentsInProgress { get; set; }
+    public int NumberOfAssessmentsCompleted { get; set; }
     public BoundingBoxDto BoundingBox { get; set; }
     public string Geometry { get; set; }
 }

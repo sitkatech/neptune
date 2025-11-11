@@ -257,71 +257,86 @@
           <div class="card-header">
             <h3 class="card-title">Selected Feature</h3>
           </div>
-          @if (tguDto$ | async; as tguDto) {
+          @if (selectedFeature$ | async; as selected) {
             <div class="card-body tgu-grid-data-container">
               <dl>
                 <div class="tgu-grid-data-column">
                   <dt>Analysis Area ID</dt>
-                  <dd>{{ tguDto.TrashGeneratingUnitID != null ? tguDto.TrashGeneratingUnitID : '-' }}</dd>
+                  <dd>{{ selected.tgu?.TrashGeneratingUnitID != null ? selected.tgu?.TrashGeneratingUnitID : '-' }}</dd>
                   <dt><field-definition fieldDefinitionType="LandUseType"></field-definition></dt>
-                  <dd>{{ tguDto.LandUseType ? tguDto.LandUseType : '-' }}</dd>
+                  <dd>{{ selected.tgu?.LandUseType ? selected.tgu?.LandUseType : '-' }}</dd>
                   <dt><field-definition fieldDefinitionType="CurrentLoadingRate"></field-definition></dt>
-                  <dd>{{ tguDto.CurrentLoadingRate != null ? (tguDto.CurrentLoadingRate + ' gal/ac/yr') : '-' }}</dd>
+                  <dd>{{ selected.tgu?.CurrentLoadingRate != null ? (selected.tgu?.CurrentLoadingRate + ' gal/ac/yr') : '-' }}</dd>
                   <dt><field-definition fieldDefinitionType="BaselineLoadingRate"></field-definition></dt>
-                  <dd>{{ tguDto.BaselineLoadingRate != null ? (tguDto.BaselineLoadingRate + ' gal/ac/yr') : '-' }}</dd>
+                  <dd>{{ selected.tgu?.BaselineLoadingRate != null ? (selected.tgu?.BaselineLoadingRate + ' gal/ac/yr') : '-' }}</dd>
                   <dt>Progress Trash Generation Rate</dt>
-                  <dd>{{ tguDto.ProgressLoadingRate != null ? (tguDto.ProgressLoadingRate + ' gal/ac/yr') : '-' }}</dd>
+                  <dd>{{ selected.tgu?.ProgressLoadingRate != null ? (selected.tgu?.ProgressLoadingRate + ' gal/ac/yr') : '-' }}</dd>
                   <dt>Net Change in Loading Rate with Controls</dt>
-                  <dd>{{ tguDto.LoadingRateDelta != null ? (tguDto.LoadingRateDelta + ' gal/ac/yr') : '-' }}</dd>
+                  <dd>{{ selected.tgu?.LoadingRateDelta != null ? (selected.tgu?.LoadingRateDelta + ' gal/ac/yr') : '-' }}</dd>
                   <dt>Permit Type</dt>
-                  <dd>{{ tguDto.PermitClass ? tguDto.PermitClass : '-' }}</dd>
+                  <dd>{{ selected.tgu?.PermitClass ? selected.tgu?.PermitClass : '-' }}</dd>
                   <dt>Jurisdiction</dt>
-                  <dd>{{ tguDto.StormwaterJurisdictionName ? tguDto.StormwaterJurisdictionName : '-' }}</dd>
+                  <dd>{{ selected.tgu?.StormwaterJurisdictionName ? selected.tgu?.StormwaterJurisdictionName : '-' }}</dd>
                 </div>
                 <div class="tgu-grid-data-column">
                   <dt>BMP</dt>
                   <dd>
-                    @if (tguDto.TreatmentBMPID && tguDto.TreatmentBMPName) {
-                      <a href="{{ ocstBaseUrl() }}/TreatmentBMP/Detail/{{ tguDto.TreatmentBMPID }}">{{ tguDto.TreatmentBMPName }}</a>
+                    @if (selected.tgu?.TreatmentBMPID && selected.tgu?.TreatmentBMPName) {
+                      <a href="{{ ocstBaseUrl() }}/TreatmentBMP/Detail/{{ selected.tgu?.TreatmentBMPID }}">{{ selected.tgu?.TreatmentBMPName }}</a>
                     } @else {
                       -
                     }
                   </dd>
                   <dt>BMP Type</dt>
-                  <dd>{{ tguDto.TreatmentBMPTypeName ? tguDto.TreatmentBMPTypeName : '-' }}</dd>
+                  <dd>{{ selected.tgu?.TreatmentBMPTypeName ? selected.tgu?.TreatmentBMPTypeName : '-' }}</dd>
                   <dt><field-definition fieldDefinitionType="BMPTrashTreatmentStatus" labelOverride="BMP Status"></field-definition></dt>
-                  <dd>{{ tguDto.TrashCaptureStatusBMP ? tguDto.TrashCaptureStatusBMP : '-' }}</dd>
+                  <dd>{{ selected.tgu?.TrashCaptureStatusBMP ? selected.tgu?.TrashCaptureStatusBMP : '-' }}</dd>
                   <dt>WQMP</dt>
                   <dd>
-                    @if (tguDto.WaterQualityManagementPlanID && tguDto.WaterQualityManagementPlanName) {
-                      <a href="{{ ocstBaseUrl() }}/WaterQualityManagementPlan/Detail/{{ tguDto.WaterQualityManagementPlanID }}">{{ tguDto.WaterQualityManagementPlanName }}</a>
+                    @if (selected.tgu?.WaterQualityManagementPlanID && selected.tgu?.WaterQualityManagementPlanName) {
+                      <a href="{{ ocstBaseUrl() }}/WaterQualityManagementPlan/Detail/{{ selected.tgu?.WaterQualityManagementPlanID }}">{{ selected.tgu?.WaterQualityManagementPlanName }}</a>
                     } @else {
                       -
                     }
                   </dd>
                   <dt><field-definition fieldDefinitionType="WQMPTrashTreatmentStatus" labelOverride="WQMP Status"></field-definition></dt>
-                  <dd>{{ tguDto.TrashCaptureStatusWQMP ? tguDto.TrashCaptureStatusWQMP : '-' }}</dd>
+                  <dd>{{ selected.tgu?.TrashCaptureStatusWQMP ? selected.tgu?.TrashCaptureStatusWQMP : '-' }}</dd>
                   <dt>OVTA Area</dt>
                   <dd>
-                    @if (tguDto.OnlandVisualTrashAssessmentAreaID && tguDto.OnlandVisualTrashAssessmentAreaName) {
-                      <a [routerLink]="['/trash/onland-visual-trash-assessment-areas', tguDto.OnlandVisualTrashAssessmentAreaID]">{{ tguDto.OnlandVisualTrashAssessmentAreaName }}</a>
+                    @if (selected.ovta) {
+                      <a [routerLink]="['/trash/onland-visual-trash-assessment-areas', selected.ovta?.OnlandVisualTrashAssessmentAreaID]">{{ selected.ovta?.OnlandVisualTrashAssessmentAreaName }}</a>
                     } @else {
-                      -
+                      @if (selected.tgu?.OnlandVisualTrashAssessmentAreaID && selected.tgu?.OnlandVisualTrashAssessmentAreaName) {
+                        <a [routerLink]="['/trash/onland-visual-trash-assessment-areas', selected.tgu?.OnlandVisualTrashAssessmentAreaID]">{{ selected.tgu?.OnlandVisualTrashAssessmentAreaName }}</a>
+                      } @else {
+                        -
+                      }
                     }
                   </dd>
                   <dt><field-definition fieldDefinitionType="BaselineScore" labelOverride="OVTA Baseline Score"></field-definition></dt>
-                  <dd>{{ tguDto.OnlandVisualTrashAssessmentAreaBaselineScore != null ? tguDto.OnlandVisualTrashAssessmentAreaBaselineScore : '-' }}</dd>
+                  <dd>{{ selected.tgu?.OnlandVisualTrashAssessmentAreaBaselineScore != null ? selected.tgu?.OnlandVisualTrashAssessmentAreaBaselineScore : '-' }}</dd>
                   <dt><field-definition fieldDefinitionType="ProgressScore" labelOverride="OVTA Progress Score"></field-definition></dt>
-                  <dd>{{ tguDto.OnlandVisualTrashAssessmentAreaProgressScore != null ? tguDto.OnlandVisualTrashAssessmentAreaProgressScore : '-' }}</dd>
+                  <dd>{{ selected.tgu?.OnlandVisualTrashAssessmentAreaProgressScore != null ? selected.tgu?.OnlandVisualTrashAssessmentAreaProgressScore : '-' }}</dd>
                   <dt># of Assessments</dt>
-                  <dd>{{ tguDto.CompletedAssessmentCount != null ? tguDto.CompletedAssessmentCount : '-' }}</dd>
+                  <dd>
+                    @if (selected.ovta) {
+                      {{ (selected.ovta?.NumberOfAssessmentsCompleted != null) ? selected.ovta?.NumberOfAssessmentsCompleted : ((selected.tgu?.CompletedAssessmentCount != null) ? selected.tgu?.CompletedAssessmentCount : '-') }}
+                    } @else {
+                      {{ selected.tgu?.CompletedAssessmentCount != null ? selected.tgu?.CompletedAssessmentCount : '-' }}
+                    }
+                  </dd>
                   <dt>Last Assessed Date</dt>
-                  <dd>@if (tguDto.AssessmentDate) { {{ tguDto.AssessmentDate | date : "shortDate" }} } @else { - }</dd>
+                  <dd>
+                    @if (selected.ovta) {
+                      @if (selected.ovta?.LastAssessmentDate) { {{ selected.ovta?.LastAssessmentDate | date : "shortDate" }} } @else { @if (selected.tgu?.AssessmentDate) { {{ selected.tgu?.AssessmentDate | date : "shortDate" }} } @else { - } }
+                    } @else {
+                      @if (selected.tgu?.AssessmentDate) { {{ selected.tgu?.AssessmentDate | date : "shortDate" }} } @else { - }
+                    }
+                  </dd>
                 </div>
               </dl>
             </div>
-          }
-          @if (!tguDto$) {
+          } @else {
             <div class="card-body">
               <span>
                 Select a Trash Analysis Area on the map to see land use block details, loading rates, and links to assets in the Inventory that are providing treatment

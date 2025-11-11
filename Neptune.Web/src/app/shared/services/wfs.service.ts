@@ -99,6 +99,21 @@ export class WfsService {
         });
     }
 
+    public getOVTAAreaByCoordinate(longitude: number, latitude: number): Observable<FeatureCollection> {
+        const url: string = `${environment.geoserverMapServiceUrl}/wms`;
+        return this.http.get<FeatureCollection>(url, {
+            params: {
+                service: "WFS",
+                version: "2.0",
+                request: "GetFeature",
+                outputFormat: "application/json",
+                SrsName: "EPSG:4326",
+                typeName: "OnlandVisualTrashAssessmentAreas",
+                cql_filter: `intersects(OnlandVisualTrashAssessmentAreaGeometry, POINT(${latitude} ${longitude}))`,
+            },
+        });
+    }
+
     public getParcelByCoordinate(longitude: number, latitude: number): Observable<FeatureCollection> {
         const url: string = `${environment.geoserverMapServiceUrl}/wms`;
         return this.http.get<FeatureCollection>(url, {
