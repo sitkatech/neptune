@@ -22,6 +22,8 @@ export class OnlandVisualTrashAssessmentAreaDetailDto {
     OnlandVisualTrashAssessmentProgressScoreName?: string | null;
     OnlandVisualTrashAssessmentProgressScoreTrashGenerationRate?: number | null;
     LastAssessmentDate?: string | null;
+    NumberOfAssessmentsInProgress?: number;
+    NumberOfAssessmentsCompleted?: number;
     BoundingBox?: BoundingBoxDto;
     Geometry?: string | null;
     constructor(obj?: any) {
@@ -40,6 +42,8 @@ export interface OnlandVisualTrashAssessmentAreaDetailDtoForm {
     OnlandVisualTrashAssessmentProgressScoreName?: FormControl<string>;
     OnlandVisualTrashAssessmentProgressScoreTrashGenerationRate?: FormControl<number>;
     LastAssessmentDate?: FormControl<string>;
+    NumberOfAssessmentsInProgress?: FormControl<number>;
+    NumberOfAssessmentsCompleted?: FormControl<number>;
     BoundingBox?: FormControl<BoundingBoxDto>;
     Geometry?: FormControl<string>;
 }
@@ -136,6 +140,26 @@ export class OnlandVisualTrashAssessmentAreaDetailDtoFormControls {
         }
     );
     public static LastAssessmentDate = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static NumberOfAssessmentsInProgress = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static NumberOfAssessmentsCompleted = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
         {

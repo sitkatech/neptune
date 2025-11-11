@@ -213,10 +213,10 @@ export class TrashOvtaAreaDetailComponent {
         const completedAssessments = onlandVisualTrashAssessments.filter((x) => x.OnlandVisualTrashAssessmentStatusID == OnlandVisualTrashAssessmentStatusEnum.Complete);
         if (completedAssessments.length > 0) {
             const latestAssessmentDate = completedAssessments.sort((a, b) => {
-                if (a.CompletedDate > b.CompletedDate) {
+                if (a.CompletedDate < b.CompletedDate) {
                     return 1;
                 }
-                if (b.CompletedDate > a.CompletedDate) {
+                if (b.CompletedDate < a.CompletedDate) {
                     return -1;
                 }
                 return 0;

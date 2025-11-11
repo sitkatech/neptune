@@ -8,7 +8,7 @@ import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-
 import { CustomRichTextComponent } from "src/app/shared/components/custom-rich-text/custom-rich-text.component";
 import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
 import { AsyncPipe, DatePipe, DecimalPipe } from "@angular/common";
-import { BehaviorSubject, Observable, switchMap, tap } from "rxjs";
+import { BehaviorSubject, Observable, switchMap, tap, combineLatest, map } from "rxjs";
 import { NeptuneMapComponent, NeptuneMapInitEvent } from "../../../shared/components/leaflet/neptune-map/neptune-map.component";
 import "leaflet.markercluster";
 import * as L from "leaflet";
@@ -26,7 +26,7 @@ import { LoadResultsDto } from "src/app/shared/generated/model/load-results-dto"
 import { OVTAResultsDto } from "src/app/shared/generated/model/ovta-results-dto";
 import { LeafletHelperService } from "src/app/shared/services/leaflet-helper.service";
 import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto";
-import { IFeature, StormwaterJurisdictionDisplayDto, TrashGeneratingUnitDto } from "src/app/shared/generated/model/models";
+import { IFeature, OnlandVisualTrashAssessmentAreaDetailDto, StormwaterJurisdictionDisplayDto, TrashGeneratingUnitDto } from "src/app/shared/generated/model/models";
 import { WqmpsTrashCaptureLayerComponent } from "src/app/shared/components/leaflet/layers/wqmps-trash-capture-layer/wqmps-trash-capture-layer.component";
 import { OvtaAreasLayerComponent } from "src/app/shared/components/leaflet/layers/ovta-areas-layer/ovta-areas-layer.component";
 import { TrashGeneratingUnitLoadsLayerComponent } from "src/app/shared/components/leaflet/layers/trash-generating-unit-loads-layer/trash-generating-unit-loads-layer.component";
@@ -41,6 +41,7 @@ import { TrashCaptureStatusTypeEnum } from "src/app/shared/generated/enum/trash-
 import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
 import { PermitTypeLayerComponent } from "src/app/shared/components/leaflet/layers/permit-type-layer/permit-type-layer.component";
 import { OverlayMode } from "src/app/shared/components/leaflet/layers/generic-wms-wfs-layer/overlay-mode.enum";
+import { OnlandVisualTrashAssessmentAreaService } from "src/app/shared/generated/api/onland-visual-trash-assessment-area.service";
 
 @Component({
     selector: "trash-home",
@@ -104,7 +105,9 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
 
     public isLoading: boolean;
 
-    public tguDto$: Observable<TrashGeneratingUnitDto>;
+    // Subjects and observables for the selected feature (TGU and OVTA)
+    private tguSubject = new BehaviorSubject<TrashGeneratingUnitDto | null>(null);
+    public tguDto$: Observable<TrashGeneratingUnitDto | null> = this.tguSubject.asObservable(); //OnlandVisualTrashAssessmentAreaSimpleDto
     public tguLayer: L.GeoJSON<any>;
     private highlightStyle = {
         color: "#fcfc12",
@@ -112,6 +115,11 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
         opacity: 0.65,
         fillOpacity: 0.1,
     };
+    private ovtaSubject = new BehaviorSubject<OnlandVisualTrashAssessmentAreaDetailDto | null>(null);
+    public ovtaAreaDto$: Observable<OnlandVisualTrashAssessmentAreaDetailDto | null> = this.ovtaSubject.asObservable();
+
+    // Combined observable used by the template for a single async subscription
+    public selectedFeature$: Observable<{ tgu: TrashGeneratingUnitDto | null; ovta: OnlandVisualTrashAssessmentAreaDetailDto | null }>;
 
     public lastUpdateDate$: Observable<string>;
 
@@ -139,6 +147,7 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
         private wfsService: WfsService,
         private trashGeneratingUnitService: TrashGeneratingUnitService,
         private treatmentBMPService: TreatmentBMPService,
+        private onlandVisualTrashAssessmentAreaService: OnlandVisualTrashAssessmentAreaService,
         private modalService: ModalService,
         private cdr: ChangeDetectorRef
     ) {}
@@ -276,6 +285,11 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
                 }
             })
         );
+
+        // combined selected feature stream (tgu + ovta)
+        this.selectedFeature$ = combineLatest([this.tguDto$, this.ovtaAreaDto$]).pipe(
+            map(([tgu, ovta]) => ({ tgu, ovta }))
+        );
     }
 
     public handleMapReady(event: NeptuneMapInitEvent): void {
@@ -299,7 +313,7 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
         this.map.on("click", (event: L.LeafletMouseEvent): void => {
             wfsService.getTrashGeneratingUnitByCoordinate(event.latlng.lng, event.latlng.lat).subscribe((tguFeatureCollection: GeoJSON.FeatureCollection) => {
                 if (tguFeatureCollection.features.length == 0) {
-                    this.tguDto$ = null;
+                    this.tguSubject.next(null);
                     if (this.tguLayer) {
                         this.map.removeLayer(this.tguLayer);
                     }
@@ -336,7 +350,10 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
                     });
 
                 featuresInRenderedOrder.forEach((feature: GeoJSON.Feature) => {
-                    this.tguDto$ = this.trashGeneratingUnitService.getTrashGeneratingUnit(feature.properties.TrashGeneratingUnitID);
+                    // load the selected TGU and push into the subject so selectedFeature$ updates
+                    this.trashGeneratingUnitService.getTrashGeneratingUnit(feature.properties.TrashGeneratingUnitID).subscribe((dto) => {
+                        this.tguSubject.next(dto);
+                    });
                     const geoJson = L.geoJSON(feature, {
                         style: this.highlightStyle,
                     });
@@ -349,6 +366,18 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
                     //this.map.fitBounds(this.tguLayer.getBounds());
                     this.tguLayer.addTo(this.map);
                 });
+            });
+            wfsService.getOVTAAreaByCoordinate(event.latlng.lng, event.latlng.lat).subscribe((ovtaAreaFeatureCollection: GeoJSON.FeatureCollection) => {
+                if (ovtaAreaFeatureCollection.features.length == 0) {
+                    // if there is more than one OVTA area, we can't decide which one to show
+                    this.ovtaSubject.next(null);
+                } else {
+                    this.onlandVisualTrashAssessmentAreaService
+                        .getOnlandVisualTrashAssessmentArea(ovtaAreaFeatureCollection.features[0].properties.OnlandVisualTrashAssessmentAreaID)
+                        .subscribe((dto) => {
+                            this.ovtaSubject.next(dto);
+                        });
+                }
             });
         });
     }
