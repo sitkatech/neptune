@@ -25,17 +25,7 @@ import { NgSelectModule } from "@ng-select/ng-select";
         },
         provideNgxMask(),
     ],
-    imports: [
-    NgxMaskDirective,
-    FormsModule,
-    ReactiveFormsModule,
-    EditorComponent,
-    FieldDefinitionComponent,
-    InputErrorsComponent,
-    RequiredPipe,
-    TinyMceConfigPipe,
-    NgSelectModule
-]
+    imports: [NgxMaskDirective, FormsModule, ReactiveFormsModule, EditorComponent, FieldDefinitionComponent, InputErrorsComponent, RequiredPipe, TinyMceConfigPipe, NgSelectModule],
 })
 export class FormFieldComponent {
     public FormFieldType = FormFieldType;
@@ -127,7 +117,7 @@ export enum FormFieldType {
 export interface FormInputOption {
     Value: any;
     Label: string;
-    Disabled: boolean | null | undefined;
+    disabled: boolean | null | undefined;
     Group?: string | null | undefined;
 }
 

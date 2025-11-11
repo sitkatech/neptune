@@ -136,6 +136,8 @@ model/trash-generating-unit-dto.ts
 model/trash-generating-unit-grid-dto.ts
 model/treatment-bmp-benchmark-and-threshold-dto.ts
 model/treatment-bmp-benchmark-and-threshold-upsert-dto.ts
+model/treatment-bmp-create-dto.ts
+model/treatment-bmp-delineation-errors-dto.ts
 model/treatment-bmp-display-dto.ts
 model/treatment-bmp-dto.ts
 model/treatment-bmp-grid-dto.ts
@@ -143,11 +145,13 @@ model/treatment-bmp-image-dto.ts
 model/treatment-bmp-life-span-type-dto.ts
 model/treatment-bmp-minimal-dto.ts
 model/treatment-bmp-modeling-attributes-dto.ts
+model/treatment-bmp-parameterization-errors-dto.ts
 model/treatment-bmp-type-custom-attribute-type-dto.ts
 model/treatment-bmp-type-with-modeling-attributes-dto.ts
 model/treatment-bmp-upsert-dto.ts
 model/treatment-bmphru-characteristics-summary-simple-dto.ts
 model/v-treatment-bmp-modeling-attribute-dto.ts
+model/water-quality-management-plan-display-dto.ts
 model/water-quality-management-plan-document-dto.ts
 model/water-quality-management-plan-document-extraction-result-dto.ts
 model/water-quality-management-plan-document-upsert-dto.ts

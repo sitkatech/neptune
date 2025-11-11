@@ -372,6 +372,12 @@ export const routes: Routes = [
                 loadComponent: () => import("./pages/treatment-bmps/treatment-bmps.component").then((m) => m.TreatmentBmpsComponent),
             },
             {
+                path: "treatment-bmps/new",
+                title: "Create New BMP",
+                loadComponent: () => import("./pages/treatment-bmps/create-treatment-bmp/create-treatment-bmp.component").then((m) => m.CreateTreatmentBmpComponent),
+                canDeactivate: [UnsavedChangesGuard],
+            },
+            {
                 path: `treatment-bmps/:${routeParams.treatmentBMPID}`,
                 title: "Treatment BMP Detail",
                 loadComponent: () => import("./pages/treatment-bmps/treatment-bmp-detail/treatment-bmp-detail.component").then((m) => m.TreatmentBmpDetailComponent),

@@ -4994,6 +4994,53 @@
       }
     },
     "/treatment-bmps": {
+      "post": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "operationId": "Create_TreatmentBMP",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TreatmentBMPCreateDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TreatmentBMPCreateDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/TreatmentBMPCreateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPDto"
+                }
+              }
+            }
+          }
+        }
+      },
       "get": {
         "tags": [
           "TreatmentBMP"
@@ -5538,6 +5585,88 @@
                   "items": {
                     "$ref": "#/components/schemas/TreatmentBMPModelingAttributesDto"
                   }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/treatment-bmps/{treatmentBMPID}/delineation-errors": {
+      "get": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "operationId": "GetDelineationErrors_TreatmentBMP",
+        "parameters": [
+          {
+            "name": "treatmentBMPID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPDelineationErrorsDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPDelineationErrorsDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPDelineationErrorsDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/treatment-bmps/{treatmentBMPID}/parameterization-errors": {
+      "get": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "operationId": "GetParameterizationErrors_TreatmentBMP",
+        "parameters": [
+          {
+            "name": "treatmentBMPID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPParameterizationErrorsDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPParameterizationErrorsDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPParameterizationErrorsDto"
                 }
               }
             }
@@ -6585,6 +6714,45 @@
               "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/WaterQualityManagementPlanDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/water-quality-management-plans/display-dtos": {
+      "get": {
+        "tags": [
+          "WaterQualityManagementPlan"
+        ],
+        "operationId": "ListAsDisplayDtos_WaterQualityManagementPlan",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WaterQualityManagementPlanDisplayDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WaterQualityManagementPlanDisplayDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WaterQualityManagementPlanDisplayDto"
+                  }
                 }
               }
             }
@@ -11377,6 +11545,121 @@
         },
         "additionalProperties": false
       },
+      "TreatmentBMPCreateDto": {
+        "required": [
+          "Latitude",
+          "Longitude",
+          "SizingBasisTypeID",
+          "StormwaterJurisdictionID",
+          "TrashCaptureStatusTypeID",
+          "TreatmentBMPLifespanTypeID",
+          "TreatmentBMPName",
+          "TreatmentBMPTypeID",
+          "WaterQualityManagementPlanID"
+        ],
+        "type": "object",
+        "properties": {
+          "TreatmentBMPName": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "TreatmentBMPTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "StormwaterJurisdictionID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OwnerOrganizationID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "YearBuilt": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "SystemOfRecordID": {
+            "type": "string",
+            "nullable": true
+          },
+          "WaterQualityManagementPlanID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TreatmentBMPLifespanTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TreatmentBMPLifespanEndDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "SizingBasisTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TrashCaptureStatusTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TrashCaptureEffectiveness": {
+            "maximum": 99,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "RequiredFieldVisitsPerYear": {
+            "maximum": 2147483647,
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "RequiredPostStormFieldVisitsPerYear": {
+            "maximum": 2147483647,
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Notes": {
+            "maxLength": 2000,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Latitude": {
+            "type": "number",
+            "format": "double"
+          },
+          "Longitude": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TreatmentBMPDelineationErrorsDto": {
+        "type": "object",
+        "properties": {
+          "HasDiscrepancies": {
+            "type": "boolean"
+          },
+          "OverlappingTreatmentBMPs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "TreatmentBMPDisplayDto": {
         "type": "object",
         "properties": {
@@ -11636,20 +11919,6 @@
           },
           "StormwaterJurisdiction": {
             "$ref": "#/components/schemas/StormwaterJurisdictionDisplayDto"
-          },
-          "DelineationErrors": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true
-          },
-          "ParameterizationErrors": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true
           },
           "SizingBasisType": {
             "$ref": "#/components/schemas/SizingBasisTypeDto"
@@ -12085,6 +12354,24 @@
         },
         "additionalProperties": false
       },
+      "TreatmentBMPParameterizationErrorsDto": {
+        "type": "object",
+        "properties": {
+          "HasDelineation": {
+            "type": "boolean"
+          },
+          "LinkToDelineationMap": {
+            "type": "boolean"
+          },
+          "SimplifiedWQMP": {
+            "$ref": "#/components/schemas/WaterQualityManagementPlanDisplayDto"
+          },
+          "MissingModelAttributes": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
       "TreatmentBMPTypeCustomAttributeTypeDto": {
         "type": "object",
         "properties": {
@@ -12200,6 +12487,20 @@
           },
           "IsFullyParameterized": {
             "type": "boolean",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "WaterQualityManagementPlanDisplayDto": {
+        "type": "object",
+        "properties": {
+          "WaterQualityManagementPlanID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "WaterQualityManagementPlanName": {
+            "type": "string",
             "nullable": true
           }
         },

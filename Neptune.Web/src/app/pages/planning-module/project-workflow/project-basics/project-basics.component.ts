@@ -98,23 +98,23 @@ export class ProjectBasicsComponent implements OnInit {
 
         this.organizationOptions$ = this.organizationService.listOrganization().pipe(
             map((list) => {
-                let options = list.map((x) => ({ Value: x.OrganizationID, Label: x.OrganizationName } as SelectDropdownOption));
+                let options = list.map((x) => ({ Value: x.OrganizationID, Label: x.OrganizationName }) as SelectDropdownOption);
                 return options;
             })
         );
         this.userOptions$ = this.userService.listUser().pipe(
             map((list) => {
-                let options = list.map((x) => ({ Value: x.PersonID, Label: x.FullName } as SelectDropdownOption));
+                let options = list.map((x) => ({ Value: x.PersonID, Label: x.FullName }) as SelectDropdownOption);
                 return options;
             })
         );
         this.stormwaterJurisdictionOptions$ = this.stormwaterJurisdictionService.listViewableStormwaterJurisdiction().pipe(
             map((list) => {
                 if (list.length == 1) {
-                    return [{ Value: list[0].StormwaterJurisdictionID, Label: list[0].StormwaterJurisdictionName, Disabled: false }];
+                    return [{ Value: list[0].StormwaterJurisdictionID, Label: list[0].StormwaterJurisdictionName, disabled: false }];
                 }
 
-                let options = list.map((x) => ({ Value: x.StormwaterJurisdictionID, Label: x.StormwaterJurisdictionName } as SelectDropdownOption));
+                let options = list.map((x) => ({ Value: x.StormwaterJurisdictionID, Label: x.StormwaterJurisdictionName }) as SelectDropdownOption);
                 return options;
             })
         );

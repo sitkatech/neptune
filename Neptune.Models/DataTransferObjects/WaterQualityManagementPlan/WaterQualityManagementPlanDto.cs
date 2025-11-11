@@ -42,4 +42,10 @@ public class WaterQualityManagementPlanDto
 
     public List<ParcelDisplayDto> Parcels { get; set; }
     public List<TreatmentBMPMinimalDto> TreatmentBMPs { get; set; }
- }
+}
+
+public class WaterQualityManagementPlanDisplayDto
+{
+    public int WaterQualityManagementPlanID { get; set; }
+    public string? WaterQualityManagementPlanName { get; set; }
+}

@@ -66,8 +66,6 @@ export class TreatmentBMPDto {
     Project?: ProjectDto;
     OwnerOrganization?: OrganizationDisplayDto;
     StormwaterJurisdiction?: StormwaterJurisdictionDisplayDto;
-    DelineationErrors?: Array<string> | null;
-    ParameterizationErrors?: Array<string> | null;
     SizingBasisType?: SizingBasisTypeDto;
     TrashCaptureStatusType?: TrashCaptureStatusTypeDto;
     TreatmentBMPLifespanType?: TreatmentBMPLifeSpanTypeDto;
@@ -121,8 +119,6 @@ export interface TreatmentBMPDtoForm {
     Project?: FormControl<ProjectDto>;
     OwnerOrganization?: FormControl<OrganizationDisplayDto>;
     StormwaterJurisdiction?: FormControl<StormwaterJurisdictionDisplayDto>;
-    DelineationErrors?: FormControl<Array<string>>;
-    ParameterizationErrors?: FormControl<Array<string>>;
     SizingBasisType?: FormControl<SizingBasisTypeDto>;
     TrashCaptureStatusType?: FormControl<TrashCaptureStatusTypeDto>;
     TreatmentBMPLifespanType?: FormControl<TreatmentBMPLifeSpanTypeDto>;
@@ -560,26 +556,6 @@ export class TreatmentBMPDtoFormControls {
         }
     );
     public static StormwaterJurisdiction = (value: FormControlState<StormwaterJurisdictionDisplayDto> | StormwaterJurisdictionDisplayDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<StormwaterJurisdictionDisplayDto>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static DelineationErrors = (value: FormControlState<Array<string>> | Array<string> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<string>>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static ParameterizationErrors = (value: FormControlState<Array<string>> | Array<string> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<string>>(
         value,
         formControlOptions ?? 
         {

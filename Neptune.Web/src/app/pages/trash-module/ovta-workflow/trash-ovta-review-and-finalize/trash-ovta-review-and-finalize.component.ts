@@ -44,8 +44,8 @@ export class TrashOvtaReviewAndFinalizeComponent {
     public onlandVisualTrashAssessmentScoreDropdown = OnlandVisualTrashAssessmentScoresAsSelectDropdownOptions;
 
     public ProgressScoreOptions: FormInputOption[] = [
-        { Value: false, Label: "Baseline", Disabled: false },
-        { Value: true, Label: "Progress", Disabled: false },
+        { Value: false, Label: "Baseline", disabled: false },
+        { Value: true, Label: "Progress", disabled: false },
     ];
 
     public formGroup: FormGroup<OnlandVisualTrashAssessmentReviewAndFinalizeDtoCustomForm> = new FormGroup<OnlandVisualTrashAssessmentReviewAndFinalizeDtoCustomForm>({

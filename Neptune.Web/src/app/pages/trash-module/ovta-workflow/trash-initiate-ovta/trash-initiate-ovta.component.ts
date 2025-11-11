@@ -59,8 +59,8 @@ export class TrashInitiateOvtaComponent {
     public selectedOVTAAreaName: string = "";
 
     public layerIsOnByDefaultOptions: FormInputOption[] = [
-        { Value: false, Label: "Reassess existing area", Disabled: false },
-        { Value: true, Label: "Assess new area", Disabled: false },
+        { Value: false, Label: "Reassess existing area", disabled: false },
+        { Value: true, Label: "Assess new area", disabled: false },
     ];
 
     private defaultStyle = {

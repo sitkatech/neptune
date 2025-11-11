@@ -1,0 +1,260 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Neptune.API.Common;
+using Neptune.API.Services;
+using Neptune.API.Services.Attributes;
+using Neptune.API.Services.Authorization;
+using Neptune.EFModels.Entities;
+using Neptune.Models.DataTransferObjects;
+using NetTopologySuite.Features;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace Neptune.API.Controllers;
+
+[ApiController]
+[Route("treatment-bmps")]
+public class TreatmentBMPController(NeptuneDbContext dbContext, ILogger<TreatmentBMPController> logger, KeystoneService keystoneService, IOptions<NeptuneConfiguration> neptuneConfiguration)
+    : SitkaController<TreatmentBMPController>(dbContext, logger, keystoneService, neptuneConfiguration)
+{
+    [HttpPost]
+    [UserViewFeature]
+    public async Task<ActionResult<TreatmentBMPDto>> Create([FromBody] TreatmentBMPCreateDto treatmentBMPCreateDto)
+    {
+        var errors = await TreatmentBMPs.ValidateCreateAsync(DbContext, treatmentBMPCreateDto);
+        errors.ForEach(e => ModelState.AddModelError(e.Type, e.Message));
+
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        var treatmentBMPDto = await TreatmentBMPs.CreateAsync(DbContext, treatmentBMPCreateDto, CallingUser);
+        return CreatedAtAction(nameof(GetByID), new { treatmentBMPID = treatmentBMPDto.TreatmentBMPID }, treatmentBMPDto);
+    }
+
+    [HttpGet]
+    [LoggedInUnclassifiedFeature]
+    public async Task<ActionResult<List<TreatmentBMPGridDto>>> List()
+    {
+        var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonIDForBMPs(DbContext, CallingUser.PersonID);
+
+        var entities = await DbContext.vTreatmentBMPDetaileds.AsNoTracking()
+            .Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID))
+            .ToListAsync();
+
+        var treatmentBMPGridDtos = entities.Select(x => x.AsGridDto()).ToList();
+        return Ok(treatmentBMPGridDtos);
+    }
+
+    [HttpGet("verified/feature-collection")]
+    public ActionResult<FeatureCollection> ListInventoryVerifiedTreatmentBMPsAsFeatureCollection()
+    {
+        var featureCollection = TreatmentBMPs.ListInventoryIsVerifiedByPersonAsFeatureCollection(DbContext, CallingUser);
+        return Ok(featureCollection);
+    }
+
+    [HttpGet("jurisdictions/{jurisdictionID}/verified/feature-collection")]
+    public ActionResult<FeatureCollection> ListInventoryVerifiedTreatmentBMPsByJurisdictionIDAsFeatureCollection([FromRoute] int jurisdictionID)
+    {
+        var featureCollection = TreatmentBMPs.ListInventoryIsVerifiedByPersonAndJurisdictionIDAsFeatureCollection(DbContext, CallingUser, jurisdictionID);
+        return Ok(featureCollection);
+    }
+
+    [HttpGet("planned-projects")]
+    [JurisdictionEditFeature]
+    public ActionResult<List<TreatmentBMPDisplayDto>> ListTreatmentBMPsWithProjectIDAsFeatureCollection()
+    {
+        var featureCollection = TreatmentBMPs.ListWithProjectByPerson(DbContext, CallingUser);
+        return Ok(featureCollection);
+    }
+
+    [HttpGet("octa-m2-tier2-grant-program")]
+    [JurisdictionEditFeature]
+    public ActionResult<List<TreatmentBMPDisplayDto>> ListOCTAM2Tier2GrantProgramTreatmentBMPs()
+    {
+        var featureCollection = TreatmentBMPs.ListWithOCTAM2Tier2GrantProgramByPerson(DbContext, CallingUser);
+        return Ok(featureCollection);
+    }
+
+    [HttpPut("{treatmentBMPID}/treatment-bmp-types/{treatmentBMPTypeID}")]
+    [UserViewFeature]
+    [EntityNotFound(typeof(TreatmentBMP), "treatmentBMPID")]
+    public ActionResult<int> ChangeTreatmentBMPType([FromRoute] int treatmentBMPID, int treatmentBMPTypeID)
+    {
+        var updatedTreatmentBMPModelingTypeID = TreatmentBMPs.ChangeTreatmentBMPType(DbContext, treatmentBMPID, treatmentBMPTypeID);
+        var projectID = TreatmentBMPs.GetByTreatmentBMPID(DbContext, treatmentBMPID)!.ProjectID;
+        if (projectID != null)
+        {
+            Projects.SetUpdatePersonAndDate(DbContext, (int)projectID, CallingUser.PersonID);
+        }
+
+        return Ok(updatedTreatmentBMPModelingTypeID);
+    }
+
+    [HttpGet("{treatmentBMPID}/upstreamRSBCatchmentGeoJSON")]
+    [UserViewFeature]
+    [EntityNotFound(typeof(TreatmentBMP), "treatmentBMPID")]
+    public ActionResult<GeometryGeoJSONAndAreaDto> GetUpstreamRSBCatchmentGeoJSONForTreatmentBMP([FromRoute] int treatmentBMPID)
+    {
+        var treatmentBMP = TreatmentBMPs.GetByTreatmentBMPID(DbContext, treatmentBMPID);
+        var delineation = Delineations.GetByTreatmentBMPID(DbContext, treatmentBMPID);
+        var regionalSubbasin = RegionalSubbasins.GetFirstByContainsGeometry(DbContext, treatmentBMP.LocationPoint);
+        var geometries = RegionalSubbasins.GetUpstreamCatchmentGeometry4326GeoJSONAndArea(DbContext, regionalSubbasin.RegionalSubbasinID, treatmentBMPID, delineation?.DelineationID);
+        return Ok(geometries);
+    }
+
+    [HttpGet("{treatmentBMPID}")]
+    [UserViewFeature]
+    [EntityNotFound(typeof(TreatmentBMP), "treatmentBMPID")]
+    public async Task<ActionResult<TreatmentBMPDto>> GetByID([FromRoute] int treatmentBMPID)
+    {
+        var treatmentBMPDto = await TreatmentBMPs.GetByIDAsDtoAsync(dbContext, treatmentBMPID);
+        return Ok(treatmentBMPDto);
+    }
+
+    [HttpDelete("{treatmentBMPID}")]
+    [JurisdictionEditFeature]
+    [EntityNotFound(typeof(TreatmentBMP), "treatmentBMPID")]
+    public async Task<IActionResult> Delete([FromRoute] int treatmentBMPID)
+    {
+        var treatmentBMP = TreatmentBMPs.GetByIDWithChangeTracking(DbContext, treatmentBMPID);
+
+        var delineation = Delineations.GetByTreatmentBMPIDWithChangeTracking(DbContext, treatmentBMP.TreatmentBMPID);
+        var delineationGeometry = delineation?.DelineationGeometry;
+        var isDelineationDistributed = delineation != null && delineation.DelineationTypeID == (int)DelineationTypeEnum.Distributed;
+
+        await EFModels.Nereid.NereidUtilities.MarkDownstreamNodeDirty(treatmentBMP, DbContext);
+
+        // Remove upstream references
+        foreach (var downstreamBMP in treatmentBMP.InverseUpstreamBMP)
+        {
+            downstreamBMP.UpstreamBMPID = null;
+        }
+        await DbContext.SaveChangesAsync();
+
+        await treatmentBMP.DeleteFull(DbContext);
+
+        // Queue LGU refresh if needed
+        if (isDelineationDistributed && delineationGeometry != null)
+        {
+            await ModelingEngineUtilities.QueueLGURefreshForArea(delineationGeometry, null, DbContext);
+        }
+
+        return NoContent();
+    }
+
+    [HttpGet("{treatmentBMPID}/hru-characteristics")]
+    [SitkaAdminFeature]
+    [EntityNotFound(typeof(TreatmentBMP), "treatmentBMPID")]
+    public async Task<ActionResult<List<HRUCharacteristicDto>>> ListHRUCharacteristics([FromRoute] int treatmentBMPID)
+    {
+        var treatmentBMP = TreatmentBMPs.GetByID(DbContext, treatmentBMPID);
+        var treatmentBMPTree = DbContext.vTreatmentBMPUpstreams.AsNoTracking()
+            .Single(x => x.TreatmentBMPID == treatmentBMP.TreatmentBMPID);
+        var upstreamestBMP = treatmentBMPTree.UpstreamBMPID.HasValue ? TreatmentBMPs.GetByID(DbContext, treatmentBMPTree.UpstreamBMPID) : null;
+        var delineation = Delineations.GetByTreatmentBMPID(DbContext, upstreamestBMP?.TreatmentBMPID ?? treatmentBMP.TreatmentBMPID);
+        var hruCharacteristics = await vHRUCharacteristics.ListByTreatmentBMPAsDtoAsync(DbContext, upstreamestBMP ?? treatmentBMP, delineation);
+        return Ok(hruCharacteristics);
+    }
+
+    [HttpGet("{treatmentBMPID}/custom-attributes")]
+    [SitkaAdminFeature]
+    [EntityNotFound(typeof(TreatmentBMP), "treatmentBMPID")]
+    public ActionResult<List<CustomAttributeDto>> ListCustomAttributes([FromRoute] int treatmentBMPID)
+    {
+        var customAttributes = CustomAttributes.ListByTreatmentBMPIDAsDto(DbContext, treatmentBMPID);
+        return Ok(customAttributes);
+    }
+
+    [HttpGet("{treatmentBMPID}/field-visits")]
+    [TreatmentBMPViewFeature]
+    [EntityNotFound(typeof(TreatmentBMP), "treatmentBMPID")]
+    public ActionResult<List<FieldVisitDto>> FieldVisitGridJsonData([FromRoute] int treatmentBMPID)
+    {
+        var fieldVisits = vFieldVisitDetaileds.ListAsDtoByTreatmentBMPID(DbContext, treatmentBMPID);
+        return Ok(fieldVisits);
+    }
+
+    [HttpGet("modeling-attributes")]
+    [LoggedInUnclassifiedFeature]
+    public async Task<ActionResult<List<TreatmentBMPModelingAttributesDto>>> ListWithModelingAttributes()
+    {
+        var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonIDForBMPs(DbContext, CallingUser.PersonID);
+        var dtos = await TreatmentBMPs.ListWithModelingAttributesAsync(DbContext, stormwaterJurisdictionIDsPersonCanView);
+        return Ok(dtos);
+    }
+
+    [HttpGet("{treatmentBMPID}/delineation-errors")]
+    [UserViewFeature]
+    [EntityNotFound(typeof(TreatmentBMP), "treatmentBMPID")]
+    public ActionResult<TreatmentBMPDelineationErrorsDto> GetDelineationErrors([FromRoute] int treatmentBMPID)
+    {
+        var treatmentBMP = DbContext.TreatmentBMPs
+            .Include(x => x.Delineation).ThenInclude(delineation => delineation.DelineationOverlapDelineations).ThenInclude(overlap => overlap.OverlappingDelineation).ThenInclude(d => d.TreatmentBMP)
+            .Single(x => x.TreatmentBMPID == treatmentBMPID);
+
+        var upstreamestBMP = TreatmentBMPs.GetUpstreamestTreatmentBMP(DbContext, treatmentBMPID);
+        var delineation = upstreamestBMP?.Delineation ?? treatmentBMP.Delineation;
+
+        var dto = new TreatmentBMPDelineationErrorsDto
+        {
+            HasDiscrepancies = delineation != null && delineation.HasDiscrepancies,
+            OverlappingTreatmentBMPs = new List<TreatmentBMPDisplayDto>()
+        };
+
+        if (delineation != null && delineation.DelineationOverlapDelineations.Any())
+        {
+            dto.OverlappingTreatmentBMPs = delineation.DelineationOverlapDelineations
+                .Select(x => x.OverlappingDelineation.TreatmentBMP.AsDisplayDto(null))
+                .ToList();
+        }
+
+        return Ok(dto);
+    }
+
+    [HttpGet("{treatmentBMPID}/parameterization-errors")]
+    [UserViewFeature]
+    [EntityNotFound(typeof(TreatmentBMP), "treatmentBMPID")]
+    public ActionResult<TreatmentBMPParameterizationErrorsDto> GetParameterizationErrors([FromRoute] int treatmentBMPID)
+    {
+        var treatmentBMP = DbContext.TreatmentBMPs
+            .Include(x => x.Delineation)
+            .Include(x => x.WaterQualityManagementPlan)
+            .Include(x => x.TreatmentBMPType)
+            .Single(x => x.TreatmentBMPID == treatmentBMPID);
+
+        var delineation = treatmentBMP.Delineation;
+        var hasDelineation = delineation != null;
+        var linkToDelineationMap = !hasDelineation && (treatmentBMP.UpstreamBMPID == null);
+        WaterQualityManagementPlanDisplayDto? simplifiedWQMP = null;
+        if (treatmentBMP.WaterQualityManagementPlan != null && treatmentBMP.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproach == WaterQualityManagementPlanModelingApproach.Simplified)
+        {
+            simplifiedWQMP = new WaterQualityManagementPlanDisplayDto
+            {
+                WaterQualityManagementPlanID = treatmentBMP.WaterQualityManagementPlan.WaterQualityManagementPlanID,
+                WaterQualityManagementPlanName = treatmentBMP.WaterQualityManagementPlan.WaterQualityManagementPlanName
+            };
+        }
+
+        var missingModelAttributes = false;
+        if (!linkToDelineationMap && simplifiedWQMP == null)
+        {
+            var treatmentBMPModelingAttribute = vTreatmentBMPModelingAttributes.GetByTreatmentBMPID(DbContext, treatmentBMP.TreatmentBMPID);
+            missingModelAttributes = treatmentBMP.TreatmentBMPType.MissingModelingAttributes(treatmentBMPModelingAttribute).Any();
+        }
+
+        var dto = new TreatmentBMPParameterizationErrorsDto
+        {
+            HasDelineation = hasDelineation,
+            LinkToDelineationMap = linkToDelineationMap,
+            SimplifiedWQMP = simplifiedWQMP,
+            MissingModelAttributes = missingModelAttributes
+        };
+
+        return Ok(dto);
+    }
+}

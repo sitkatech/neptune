@@ -33,7 +33,13 @@ import { UtilityFunctionsService } from "src/app/services/utility-functions.serv
 import { LandUseTableComponent } from "src/app/shared/components/land-use-table/land-use-table.component";
 import { NeptuneGridComponent } from "src/app/shared/components/neptune-grid/neptune-grid.component";
 import { CustomAttributesDisplayComponent } from "src/app/shared/components/custom-attributes-display/custom-attributes-display.component";
-import { CustomAttributeDto, TreatmentBMPHRUCharacteristicsSummarySimpleDto, TreatmentBMPTypeCustomAttributeTypeDto } from "src/app/shared/generated/model/models";
+import {
+    CustomAttributeDto,
+    TreatmentBMPDelineationErrorsDto,
+    TreatmentBMPHRUCharacteristicsSummarySimpleDto,
+    TreatmentBMPParameterizationErrorsDto,
+    TreatmentBMPTypeCustomAttributeTypeDto,
+} from "src/app/shared/generated/model/models";
 import { FieldVisitDto } from "src/app/shared/generated/model/field-visit-dto";
 import { FundingEventByTreatmentBMPIDService } from "src/app/shared/generated/api/funding-event-by-treatment-bmpid.service";
 import { FundingEventDto } from "src/app/shared/generated/model/funding-event-dto";
@@ -74,6 +80,11 @@ import { HruCharacteristicsGridComponent } from "src/app/shared/components/hru-c
     ],
 })
 export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
+    @ViewChild("templateRight", { static: true }) templateRight!: TemplateRef<any>;
+    @ViewChild("templateAbove", { static: true }) templateAbove!: TemplateRef<any>;
+
+    @Input() treatmentBMPID!: number;
+
     public OverlayMode = OverlayMode;
 
     fundingEvents$: Observable<FundingEventDto[]>;
@@ -99,12 +110,11 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
     map: any;
     layerControl: any;
     mapIsReady = false;
-    @ViewChild("templateRight", { static: true }) templateRight!: TemplateRef<any>;
-    @ViewChild("templateAbove", { static: true }) templateAbove!: TemplateRef<any>;
-    @Input() treatmentBMPID!: number;
 
     // Observables for async pipe
     treatmentBMP$!: Observable<TreatmentBMPDto>;
+    delineationErrors$: Observable<TreatmentBMPDelineationErrorsDto>;
+    parameterizationErrors$: Observable<TreatmentBMPParameterizationErrorsDto>;
     customAttributes$: Observable<CustomAttributeDto[]>;
     treatmentBMPTypeCustomAttributeTypes$: Observable<TreatmentBMPTypeCustomAttributeTypeDto[]>;
     attachments$!: Observable<any[]>; // TODO: Replace 'any' with ProjectDocumentDto
@@ -117,8 +127,6 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
 
     // Placeholder properties for template bindings
     isAnonymousOrUnassigned = false;
-    delineationErrors: string[] = [];
-    parameterizationErrors: string[] = [];
     openRevisionRequest: any = null;
     openRevisionRequestDetailUrl = "";
     upstreamestBMP: any = null;
@@ -214,6 +222,10 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
                 }
             })
         );
+
+        this.delineationErrors$ = this.treatmentBMP$.pipe(switchMap((bmp) => this.treatmentBMPService.getDelineationErrorsTreatmentBMP(bmp.TreatmentBMPID)));
+        this.parameterizationErrors$ = this.treatmentBMP$.pipe(switchMap((bmp) => this.treatmentBMPService.getParameterizationErrorsTreatmentBMP(bmp.TreatmentBMPID)));
+
         this.customAttributes$ = this.treatmentBMP$.pipe(switchMap((bmp) => this.treatmentBMPService.listCustomAttributesTreatmentBMP(bmp.TreatmentBMPID)));
         this.treatmentBMPTypeCustomAttributeTypes$ = this.treatmentBMP$.pipe(
             switchMap((bmp) =>
