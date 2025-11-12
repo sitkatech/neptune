@@ -27,5 +27,6 @@ public class TrashGeneratingUnitDto
     public DateTime? LastUpdateDate { get; set; }
     public double Area { get; set; }
     public DateOnly? AssessmentDate { get; set; }
-    public int? CompletedAssessmentCount { get; set; }
+    public int? CompletedBaselineAssessmentCount { get; set; }
+    public int? CompletedProgressAssessmentCount { get; set; }
 }

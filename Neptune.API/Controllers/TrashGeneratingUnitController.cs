@@ -60,7 +60,8 @@ public class TrashGeneratingUnitController(
                 LastUpdateDate = x.LastUpdateDate,
                 Area = x.Area * Constants.SquareMetersToAcres,
                 AssessmentDate = x.MostRecentAssessmentDate,
-                CompletedAssessmentCount = x.CompletedAssessmentCount
+                CompletedBaselineAssessmentCount = x.CompletedBaselineAssessmentCount,
+                CompletedProgressAssessmentCount = x.CompletedProgressAssessmentCount
             }).FirstOrDefault();
         
         return Ok(trashGeneratingUnitDto);

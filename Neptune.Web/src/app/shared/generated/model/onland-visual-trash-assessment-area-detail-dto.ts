@@ -22,8 +22,8 @@ export class OnlandVisualTrashAssessmentAreaDetailDto {
     OnlandVisualTrashAssessmentProgressScoreName?: string | null;
     OnlandVisualTrashAssessmentProgressScoreTrashGenerationRate?: number | null;
     LastAssessmentDate?: string | null;
-    NumberOfAssessmentsInProgress?: number;
-    NumberOfAssessmentsCompleted?: number;
+    CompletedBaselineAssessmentCount?: number;
+    CompletedProgressAssessmentCount?: number;
     BoundingBox?: BoundingBoxDto;
     Geometry?: string | null;
     constructor(obj?: any) {
@@ -42,8 +42,8 @@ export interface OnlandVisualTrashAssessmentAreaDetailDtoForm {
     OnlandVisualTrashAssessmentProgressScoreName?: FormControl<string>;
     OnlandVisualTrashAssessmentProgressScoreTrashGenerationRate?: FormControl<number>;
     LastAssessmentDate?: FormControl<string>;
-    NumberOfAssessmentsInProgress?: FormControl<number>;
-    NumberOfAssessmentsCompleted?: FormControl<number>;
+    CompletedBaselineAssessmentCount?: FormControl<number>;
+    CompletedProgressAssessmentCount?: FormControl<number>;
     BoundingBox?: FormControl<BoundingBoxDto>;
     Geometry?: FormControl<string>;
 }
@@ -149,7 +149,7 @@ export class OnlandVisualTrashAssessmentAreaDetailDtoFormControls {
             ],
         }
     );
-    public static NumberOfAssessmentsInProgress = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+    public static CompletedBaselineAssessmentCount = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
         {
@@ -159,7 +159,7 @@ export class OnlandVisualTrashAssessmentAreaDetailDtoFormControls {
             ],
         }
     );
-    public static NumberOfAssessmentsCompleted = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+    public static CompletedProgressAssessmentCount = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
         {

@@ -134,7 +134,9 @@ public partial class vTrashGeneratingUnitLoadStatistic
 
     public DateOnly? MostRecentAssessmentDate { get; set; }
 
-    public int? CompletedAssessmentCount { get; set; }
+    public int? CompletedBaselineAssessmentCount { get; set; }
+
+    public int? CompletedProgressAssessmentCount { get; set; }
 
     public int IsPriorityLandUse { get; set; }
 
