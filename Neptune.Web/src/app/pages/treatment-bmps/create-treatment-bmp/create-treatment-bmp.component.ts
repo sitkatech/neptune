@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from "@angular/core";
 import { FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { Router, RouterModule } from "@angular/router";
 import { FormFieldComponent, FormFieldType, SelectDropdownOption } from "src/app/shared/components/forms/form-field/form-field.component";
+import { LatLonPickerComponent } from "src/app/shared/components/lat-lon-picker/lat-lon-picker.component";
 import { PageHeaderComponent } from "src/app/shared/components/page-header/page-header.component";
 import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
 import { TreatmentBMPCreateDto, TreatmentBMPCreateDtoForm, TreatmentBMPCreateDtoFormControls } from "src/app/shared/generated/model/treatment-bmp-create-dto";
@@ -20,7 +21,7 @@ import { TreatmentBMPDto } from "src/app/shared/generated/model/treatment-bmp-dt
 
 @Component({
     selector: "create-treatment-bmp",
-    imports: [PageHeaderComponent, RouterModule, ReactiveFormsModule, FormFieldComponent, AlertDisplayComponent, AsyncPipe],
+    imports: [PageHeaderComponent, RouterModule, ReactiveFormsModule, FormFieldComponent, AlertDisplayComponent, AsyncPipe, LatLonPickerComponent],
     templateUrl: "./create-treatment-bmp.component.html",
     styleUrls: ["./create-treatment-bmp.component.scss"],
 })

@@ -13,6 +13,8 @@
         [selectionFromMap]="selectionFromMap"
         (selectedValueChange)="onSelectedTreatmentBMPChangedFromGrid($event)"
         [boundingBox]="boundingBox$ | async">
-        <div headerActions></div>
+        <div headerActions>
+            <button class="btn btn-primary btn-sm" [routerLink]="['/treatment-bmps/new']" type="button">+ Create New Treatment BMP</button>
+        </div>
     </hybrid-map-grid>
 </div>

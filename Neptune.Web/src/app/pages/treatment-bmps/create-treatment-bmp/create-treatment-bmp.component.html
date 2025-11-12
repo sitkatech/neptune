@@ -118,9 +118,22 @@
         placeholder="Required post-storm visits per year">
     </form-field>
 
-    <form-field [formControl]="formGroup.controls.Latitude" fieldLabel="Latitude" [type]="FormFieldType.Number" placeholder="Latitude"> </form-field>
+    <div class="g-col-12">
+        <lat-lon-picker [latControl]="formGroup.controls.Latitude" [lonControl]="formGroup.controls.Longitude" [instructionsTemplate]="latLonInstructions">
+            <ng-template #latLonInstructions>
+                <div class="lat-lon-instructions">
+                    To set the location of the Treatment BMP:
+                    <ul>
+                        <li>Place the BMP at your current location (using GPS if available) <strong>OR</strong></li>
+                        <li>Click on the location of the BMP on the map <strong>OR</strong></li>
+                        <li>Directly type in the latitude and longitude</li>
+                    </ul>
 
-    <form-field [formControl]="formGroup.controls.Longitude" fieldLabel="Longitude" [type]="FormFieldType.Number" placeholder="Longitude"> </form-field>
+                    <p class="mt-1">For centralized BMPs, any existing delineation will automatically be re-calculated based on the new saved location.</p>
+                </div>
+            </ng-template>
+        </lat-lon-picker>
+    </div>
 
     <form-field [formControl]="formGroup.controls.Notes" fieldLabel="Notes" [type]="FormFieldType.Textarea" placeholder="Notes"> </form-field>
 </form>

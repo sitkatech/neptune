@@ -38,3 +38,9 @@
     align-items: center;
     height: $spacing-700;
 }
+
+input[type="number"]::placeholder,
+input[type="text"]::placeholder,
+textarea::placeholder {
+    color: #999;
+}

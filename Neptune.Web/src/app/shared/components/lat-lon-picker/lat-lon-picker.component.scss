@@ -1,0 +1,40 @@
+.lat-lon-picker {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    align-items: start;
+
+    .left-col {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+
+        .inputs-row {
+            display: flex;
+            gap: 0.75rem;
+
+            .col {
+                flex: 1 1 0;
+            }
+        }
+
+        .buttons-row {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .instructions {
+            color: #555;
+            font-size: 0.95rem;
+        }
+    }
+
+    .right-col {
+        min-height: 400px;
+    }
+
+    @media (max-width: 900px) {
+        grid-template-columns: 1fr;
+    }
+}
