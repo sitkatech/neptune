@@ -112,6 +112,7 @@ export * from './treatment-bmp-minimal-dto';
 export * from './treatment-bmp-modeling-attributes-dto';
 export * from './treatment-bmp-parameterization-errors-dto';
 export * from './treatment-bmp-type-custom-attribute-type-dto';
+export * from './treatment-bmp-type-update';
 export * from './treatment-bmp-type-with-modeling-attributes-dto';
 export * from './treatment-bmp-upsert-dto';
 export * from './v-treatment-bmp-modeling-attribute-dto';

@@ -4,8 +4,8 @@ import { ConfirmService } from "src/app/shared/services/confirm/confirm.service"
 import { Component, OnInit, OnChanges, SimpleChanges, ViewChild, TemplateRef, Input } from "@angular/core";
 import { Router, RouterLink } from "@angular/router";
 import { DatePipe, AsyncPipe, CommonModule } from "@angular/common";
-import { Observable } from "rxjs";
-import { switchMap, tap } from "rxjs/operators";
+import { BehaviorSubject, Observable } from "rxjs";
+import { shareReplay, switchMap, tap } from "rxjs/operators";
 import { PageHeaderComponent } from "src/app/shared/components/page-header/page-header.component";
 import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
 import * as L from "leaflet";
@@ -51,6 +51,13 @@ import { OverlayMode } from "src/app/shared/components/leaflet/layers/generic-wm
 import { HruCharacteristicsGridComponent } from "src/app/shared/components/hru-characteristics-grid/hru-characteristics-grid.component";
 import { IconComponent } from "src/app/shared/components/icon/icon.component";
 import { TrashCaptureStatusTypeEnum } from "src/app/shared/generated/enum/trash-capture-status-type-enum";
+import {
+    TreatmentBmpUpdateTypeModalComponent,
+    TreatmentBmpUpdateTypeModalContext,
+} from "src/app/pages/treatment-bmps/treatment-bmp-detail/treatment-bmp-update-type-modal/treatment-bmp-update-type-modal.component";
+import { AlertService } from "src/app/shared/services/alert.service";
+import { Alert } from "src/app/shared/models/alert";
+import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
 
 @Component({
     selector: "treatment-bmp-detail",
@@ -158,7 +165,6 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
     public CustomAttributeTypePurposeEnum = CustomAttributeTypePurposeEnum;
 
     constructor(
-        private router: Router,
         private treatmentBMPService: TreatmentBMPService,
         private treatmentBMPImageByTreatmentBMPService: TreatmentBMPImageByTreatmentBMPService,
         private treatmentBMPTypeService: TreatmentBMPTypeService,
@@ -167,7 +173,8 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
         private sumPipe: SumPipe,
         private fundingEventByTreatmentBMPIDService: FundingEventByTreatmentBMPIDService,
         private dialogService: DialogService,
-        private confirmService: ConfirmService
+        private confirmService: ConfirmService,
+        private alertService: AlertService
     ) {}
 
     ngOnInit(): void {
@@ -225,7 +232,8 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
                         Top: bmp.Latitude + 0.001,
                     });
                 }
-            })
+            }),
+            shareReplay(1)
         );
 
         this.delineationErrors$ = this.treatmentBMP$.pipe(switchMap((bmp) => this.treatmentBMPService.getDelineationErrorsTreatmentBMP(bmp.TreatmentBMPID)));
@@ -258,13 +266,28 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
         );
     }
 
+    openUpdateTypeModal(treatmentBMP: TreatmentBMPDto): void {
+        this.dialogService
+            .open(TreatmentBmpUpdateTypeModalComponent, {
+                data: { treatmentBMPID: this.treatmentBMPID, currentTreatmentBMPTypeID: treatmentBMP.TreatmentBMPTypeID } as TreatmentBmpUpdateTypeModalContext,
+            })
+            .afterClosed$.subscribe((result) => {
+                if (result) {
+                    this.loadData();
+                    this.alertService.pushAlert(new Alert("BMP type updated successfully.", AlertContext.Success));
+                }
+            });
+    }
+
     openAddFundingEventModal(): void {
         this.dialogService
             .open(FundingEventModalComponent, {
                 data: { treatmentBMPID: this.treatmentBMPID } as FundingEventModalContext,
             })
             .afterClosed$.subscribe((result) => {
-                if (result) this.loadData();
+                if (result) {
+                    this.loadData();
+                }
             });
     }
 

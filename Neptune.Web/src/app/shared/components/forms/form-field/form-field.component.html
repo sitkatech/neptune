@@ -89,7 +89,10 @@
                         bindLabel="Label"
                         bindValue="Value"
                         [placeholder]="placeholder"
-                        (change)="onNgSelectChange($event)"></ng-select>
+                        appendTo="body"
+                        dropdownPosition="bottom">
+                        (change)="onNgSelectChange($event)"></ng-select
+                    >
                 }
             }
             <!-- Radio -->

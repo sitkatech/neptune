@@ -149,6 +149,7 @@ model/treatment-bmp-minimal-dto.ts
 model/treatment-bmp-modeling-attributes-dto.ts
 model/treatment-bmp-parameterization-errors-dto.ts
 model/treatment-bmp-type-custom-attribute-type-dto.ts
+model/treatment-bmp-type-update.ts
 model/treatment-bmp-type-with-modeling-attributes-dto.ts
 model/treatment-bmp-upsert-dto.ts
 model/treatment-bmphru-characteristics-summary-simple-dto.ts

@@ -115,3 +115,9 @@ public class TreatmentBMPLocationUpdate
     [Required]
     public double? Longitude { get; set; }
 }
+
+public class TreatmentBMPTypeUpdate
+{
+    [Required]
+    public int TreatmentBMPTypeID { get; set; }
+}

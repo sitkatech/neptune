@@ -42,6 +42,8 @@ import { TreatmentBMPLocationUpdate } from '../model/treatment-bmp-location-upda
 import { TreatmentBMPModelingAttributesDto } from '../model/treatment-bmp-modeling-attributes-dto';
 // @ts-ignore
 import { TreatmentBMPParameterizationErrorsDto } from '../model/treatment-bmp-parameterization-errors-dto';
+// @ts-ignore
+import { TreatmentBMPTypeUpdate } from '../model/treatment-bmp-type-update';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -1055,6 +1057,74 @@ export class TreatmentBMPService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: treatmentBMPLocationUpdate,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * @param treatmentBMPID 
+     * @param treatmentBMPTypeUpdate 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public updateTypeTreatmentBMP(treatmentBMPID: number, treatmentBMPTypeUpdate?: TreatmentBMPTypeUpdate, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<TreatmentBMPDto>;
+    public updateTypeTreatmentBMP(treatmentBMPID: number, treatmentBMPTypeUpdate?: TreatmentBMPTypeUpdate, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TreatmentBMPDto>>;
+    public updateTypeTreatmentBMP(treatmentBMPID: number, treatmentBMPTypeUpdate?: TreatmentBMPTypeUpdate, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TreatmentBMPDto>>;
+    public updateTypeTreatmentBMP(treatmentBMPID: number, treatmentBMPTypeUpdate?: TreatmentBMPTypeUpdate, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (treatmentBMPID === null || treatmentBMPID === undefined) {
+            throw new Error('Required parameter treatmentBMPID was null or undefined when calling updateTypeTreatmentBMP.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'text/plain',
+            'application/json',
+            'text/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json',
+            'text/json',
+            'application/*+json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/treatment-bmps/${this.configuration.encodeParam({name: "treatmentBMPID", value: treatmentBMPID, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}/type`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<TreatmentBMPDto>('put', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: treatmentBMPTypeUpdate,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

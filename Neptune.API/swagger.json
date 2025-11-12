@@ -5463,6 +5463,66 @@
         }
       }
     },
+    "/treatment-bmps/{treatmentBMPID}/type": {
+      "put": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "operationId": "UpdateType_TreatmentBMP",
+        "parameters": [
+          {
+            "name": "treatmentBMPID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TreatmentBMPTypeUpdate"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TreatmentBMPTypeUpdate"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/TreatmentBMPTypeUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/treatment-bmps/{treatmentBMPID}/location": {
       "put": {
         "tags": [
@@ -12611,6 +12671,19 @@
             "type": "integer",
             "format": "int32",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TreatmentBMPTypeUpdate": {
+        "required": [
+          "TreatmentBMPTypeID"
+        ],
+        "type": "object",
+        "properties": {
+          "TreatmentBMPTypeID": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false

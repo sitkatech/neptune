@@ -78,12 +78,12 @@ public static class TreatmentBMPs
             SystemOfRecordID = createDto.SystemOfRecordID,
             WaterQualityManagementPlanID = createDto.WaterQualityManagementPlanID,
             TreatmentBMPLifespanTypeID = createDto.TreatmentBMPLifespanTypeID,
-            TreatmentBMPLifespanEndDate = createDto.TreatmentBMPLifespanTypeID == TreatmentBMPLifespanType.FixedEndDate.TreatmentBMPLifespanTypeID 
-                ? createDto.TreatmentBMPLifespanEndDate 
+            TreatmentBMPLifespanEndDate = createDto.TreatmentBMPLifespanTypeID == TreatmentBMPLifespanType.FixedEndDate.TreatmentBMPLifespanTypeID
+                ? createDto.TreatmentBMPLifespanEndDate
                 : null,
             SizingBasisTypeID = createDto.SizingBasisTypeID,
             TrashCaptureStatusTypeID = createDto.TrashCaptureStatusTypeID,
-            TrashCaptureEffectiveness = createDto.TrashCaptureStatusTypeID == TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID 
+            TrashCaptureEffectiveness = createDto.TrashCaptureStatusTypeID == TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID
                 ? createDto.TrashCaptureEffectiveness
                 : null,
             RequiredFieldVisitsPerYear = createDto.RequiredFieldVisitsPerYear,
@@ -104,6 +104,7 @@ public static class TreatmentBMPs
         await dbContext.Entry(treatmentBMP).ReloadAsync();
 
         var createdBMP = await GetByIDAsDtoAsync(dbContext, treatmentBMP.TreatmentBMPID);
+
         return createdBMP;
     }
 
@@ -112,7 +113,8 @@ public static class TreatmentBMPs
     private static IQueryable<TreatmentBMP> GetTreatmentBMPsDisplayOnlyImpl(NeptuneDbContext dbContext, bool checkIsAnalyzedInModelingModule = true)
     {
         return dbContext.TreatmentBMPs
-            .Include(x => x.TreatmentBMPType).Where(x => !checkIsAnalyzedInModelingModule || x.TreatmentBMPType.IsAnalyzedInModelingModule)
+            .Include(x => x.TreatmentBMPType)
+            .Where(x => !checkIsAnalyzedInModelingModule || x.TreatmentBMPType.IsAnalyzedInModelingModule)
             .Include(x => x.CustomAttributes)
             .ThenInclude(x => x.CustomAttributeValues)
             .Include(x => x.Delineation)
@@ -122,8 +124,12 @@ public static class TreatmentBMPs
 
     public static List<TreatmentBMP> GetProvisionalTreatmentBMPs(NeptuneDbContext dbContext, Person currentPerson)
     {
-        return GetNonPlanningModuleBMPs(dbContext).Where(x => x.InventoryIsVerified == false).ToList()
-            .Where(x => x.CanView(currentPerson)).OrderBy(x => x.TreatmentBMPName).ToList();
+        return GetNonPlanningModuleBMPs(dbContext)
+            .Where(x => x.InventoryIsVerified == false)
+            .ToList()
+            .Where(x => x.CanView(currentPerson))
+            .OrderBy(x => x.TreatmentBMPName)
+            .ToList();
     }
 
     public static IQueryable<TreatmentBMP> GetNonPlanningModuleBMPs(NeptuneDbContext dbContext)
@@ -135,19 +141,23 @@ public static class TreatmentBMPs
     {
         return dbContext.TreatmentBMPs
             .Include(x => x.TreatmentBMPType)
-            .Include(x => x.StormwaterJurisdiction).ThenInclude(x => x.Organization)
+            .Include(x => x.StormwaterJurisdiction)
+            .ThenInclude(x => x.Organization)
             .Include(x => x.OwnerOrganization)
             .Include(x => x.UpstreamBMP)
             .Include(x => x.InventoryVerifiedByPerson)
             .Include(x => x.WaterQualityManagementPlan)
-            .Include(x => x.CustomAttributes).ThenInclude(x => x.CustomAttributeValues);
+            .Include(x => x.CustomAttributes)
+            .ThenInclude(x => x.CustomAttributeValues);
     }
 
     public static TreatmentBMP GetByIDWithChangeTracking(NeptuneDbContext dbContext, int treatmentBMPID)
     {
         var treatmentBMP = GetImpl(dbContext)
             .SingleOrDefault(x => x.TreatmentBMPID == treatmentBMPID);
+
         Check.RequireNotNull(treatmentBMP, $"TreatmentBMP with ID {treatmentBMPID} not found!");
+
         return treatmentBMP;
     }
 
@@ -196,6 +206,7 @@ public static class TreatmentBMPs
                 { "TrashCaptureStatusTypeID", treatmentBMP.TrashCaptureStatusTypeID },
                 { "StormwaterJurisdictionID", treatmentBMP.StormwaterJurisdictionID }
             };
+
             var feature = new Feature(treatmentBMP.LocationPoint4326, attributesTable);
             featureCollection.Add(feature);
         }
@@ -206,20 +217,24 @@ public static class TreatmentBMPs
     public static FeatureCollection ListInventoryIsVerifiedByPersonAsFeatureCollection(NeptuneDbContext dbContext, PersonDto person)
     {
         var treatmentBmps = ListByPerson(dbContext, person);
+
         return AsFeatureCollection(treatmentBmps.Where(x => x.ProjectID == null && x.InventoryIsVerified).ToList());
     }
 
     public static FeatureCollection ListInventoryIsVerifiedByPersonAndJurisdictionIDAsFeatureCollection(
         NeptuneDbContext dbContext,
-        PersonDto person, int jurisdictionID)
+        PersonDto person,
+        int jurisdictionID)
     {
         var treatmentBmps = ListByPerson(dbContext, person, false);
+
         return AsFeatureCollection(treatmentBmps.Where(x => x.ProjectID == null && x.StormwaterJurisdictionID == jurisdictionID && x.InventoryIsVerified).ToList());
     }
 
     public static List<TreatmentBMPDisplayDto> ListWithProjectByPerson(NeptuneDbContext dbContext, PersonDto person)
     {
         var treatmentBmps = ListByPerson(dbContext, person).Where(x => x.ProjectID != null).ToList();
+
         return GetDisplayDtos(dbContext, treatmentBmps);
     }
 
@@ -227,6 +242,7 @@ public static class TreatmentBMPs
                                                                                        PersonDto person)
     {
         var treatmentBmps = ListByPerson(dbContext, person).Where(x => x.Project is { ShareOCTAM2Tier2Scores: true }).ToList();
+
         return GetDisplayDtos(dbContext, treatmentBmps);
     }
 
@@ -237,7 +253,8 @@ public static class TreatmentBMPs
         {
             var jurisdictionIDs = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonIDForBMPs(dbContext, person?.PersonID);
             treatmentBmps = GetTreatmentBMPsDisplayOnlyImpl(dbContext, checkIsAnalyzedInModelingModule)
-                .Where(x => jurisdictionIDs.Contains(x.StormwaterJurisdictionID)).ToList();
+                .Where(x => jurisdictionIDs.Contains(x.StormwaterJurisdictionID))
+                .ToList();
         }
         else
         {
@@ -250,7 +267,8 @@ public static class TreatmentBMPs
     public static List<TreatmentBMPUpsertDto> ListByProjectIDAsUpsertDto(NeptuneDbContext dbContext, int projectID)
     {
         var treatmentBMPs = dbContext.TreatmentBMPs
-            .Include(x => x.StormwaterJurisdiction).ThenInclude(x => x.Organization)
+            .Include(x => x.StormwaterJurisdiction)
+            .ThenInclude(x => x.Organization)
             .Include(x => x.TreatmentBMPType)
             .Include(x => x.Watershed)
             .Include(x => x.OwnerOrganization)
@@ -260,7 +278,8 @@ public static class TreatmentBMPs
             .Include(x => x.CustomAttributes)
             .ThenInclude(x => x.CustomAttributeType)
             .AsNoTracking()
-            .Where(x => x.ProjectID == projectID).ToList();
+            .Where(x => x.ProjectID == projectID)
+            .ToList();
 
         var treatmentBMPIDs = treatmentBMPs.Select(x => x.TreatmentBMPID).ToList();
 
@@ -296,7 +315,8 @@ public static class TreatmentBMPs
         var jurisdictionIDs = People.ListStormwaterJurisdictionIDsByPersonID(dbContext, personID);
 
         var treatmentBMPs = GetTreatmentBMPsDisplayOnlyImpl(dbContext)
-            .Where(x => jurisdictionIDs.Contains(x.StormwaterJurisdictionID)).ToList();
+            .Where(x => jurisdictionIDs.Contains(x.StormwaterJurisdictionID))
+            .ToList();
 
         return GetDisplayDtos(dbContext, treatmentBMPs);
     }
@@ -319,6 +339,7 @@ public static class TreatmentBMPs
                         }
                    )
             .ToList();
+
         return treatmentBMPTypeWithModelingAttributesDtos;
     }
 
@@ -326,13 +347,15 @@ public static class TreatmentBMPs
     {
         var treatmentBMP = await dbContext.TreatmentBMPs.AsNoTracking()
             .Include(x => x.TreatmentBMPType)
-            .Include(x => x.StormwaterJurisdiction).ThenInclude(x => x.Organization)
+            .Include(x => x.StormwaterJurisdiction)
+            .ThenInclude(x => x.Organization)
             .Include(x => x.OwnerOrganization)
             .Include(x => x.WaterQualityManagementPlan)
             .Include(x => x.Delineation)
             .SingleAsync(x => x.TreatmentBMPID == treatmentBMPID);
 
         var dto = treatmentBMP.AsDto();
+
         return dto;
     }
 
@@ -344,9 +367,12 @@ public static class TreatmentBMPs
 
     public static TreatmentBMP GetByID(NeptuneDbContext dbContext, int treatmentBMPID)
     {
-        var treatmentBMP = GetImpl(dbContext).AsNoTracking()
+        var treatmentBMP = GetImpl(dbContext)
+            .AsNoTracking()
             .SingleOrDefault(x => x.TreatmentBMPID == treatmentBMPID);
+
         Check.RequireNotNull(treatmentBMP, $"TreatmentBMP with ID {treatmentBMPID} not found!");
+
         return treatmentBMP;
     }
 
@@ -381,20 +407,24 @@ public static class TreatmentBMPs
             .ThenInclude(x => x.Organization)
             .Include(x => x.OwnerOrganization)
             .Include(x => x.UpstreamBMP)
-            .AsNoTracking().Where(x => x.TreatmentBMPType.IsAnalyzedInModelingModule)
-            .OrderBy(x => x.TreatmentBMPName).ToList();
+            .AsNoTracking()
+            .Where(x => x.TreatmentBMPType.IsAnalyzedInModelingModule)
+            .OrderBy(x => x.TreatmentBMPName)
+            .ToList();
     }
 
     public static Dictionary<int, int> ListCountByTreatmentBMPType(NeptuneDbContext dbContext)
     {
-        return dbContext.TreatmentBMPs.AsNoTracking().GroupBy(x => x.TreatmentBMPTypeID)
+        return dbContext.TreatmentBMPs.AsNoTracking()
+            .GroupBy(x => x.TreatmentBMPTypeID)
             .Select(x => new { x.Key, Count = x.Count() })
             .ToDictionary(x => x.Key, x => x.Count);
     }
 
     public static Dictionary<int, int> ListCountByStormwaterJurisdiction(NeptuneDbContext dbContext)
     {
-        return dbContext.TreatmentBMPs.AsNoTracking().GroupBy(x => x.StormwaterJurisdictionID)
+        return dbContext.TreatmentBMPs.AsNoTracking()
+            .GroupBy(x => x.StormwaterJurisdictionID)
             .Select(x => new { x.Key, Count = x.Count() })
             .ToDictionary(x => x.Key, x => x.Count);
     }
@@ -403,9 +433,12 @@ public static class TreatmentBMPs
     {
         var treatmentBMP = dbContext.TreatmentBMPs
             .Include(x => x.StormwaterJurisdiction)
-            .ThenInclude(x => x.Organization).AsNoTracking()
+            .ThenInclude(x => x.Organization)
+            .AsNoTracking()
             .SingleOrDefault(x => x.TreatmentBMPID == treatmentBMPID);
+
         Check.RequireNotNull(treatmentBMP, $"TreatmentBMP with ID {treatmentBMPID} not found!");
+
         return treatmentBMP;
     }
 
@@ -418,29 +451,37 @@ public static class TreatmentBMPs
     public static List<TreatmentBMP> ListByStormwaterJurisdictionIDList(NeptuneDbContext dbContext,
                                                                         List<int> stormwaterJurisdictionIDList)
     {
-        return GetImpl(dbContext).AsNoTracking()
-            .Where(x => stormwaterJurisdictionIDList.Contains(x.StormwaterJurisdictionID)).ToList();
+        return GetImpl(dbContext)
+            .AsNoTracking()
+            .Where(x => stormwaterJurisdictionIDList.Contains(x.StormwaterJurisdictionID))
+            .ToList();
     }
 
     public static List<TreatmentBMP> ListByWaterQualityManagementPlanID(NeptuneDbContext dbContext,
                                                                         int waterQualityManagementPlanID)
     {
-        return GetImpl(dbContext).AsNoTracking()
-            .Where(x => x.WaterQualityManagementPlanID == waterQualityManagementPlanID).ToList();
+        return GetImpl(dbContext)
+            .AsNoTracking()
+            .Where(x => x.WaterQualityManagementPlanID == waterQualityManagementPlanID)
+            .ToList();
     }
 
     public static List<TreatmentBMP> ListByWaterQualityManagementPlanIDWithChangeTracking(
-        NeptuneDbContext dbContext, int waterQualityManagementPlanID)
+        NeptuneDbContext dbContext,
+        int waterQualityManagementPlanID)
     {
-        return GetImpl(dbContext).Where(x => x.WaterQualityManagementPlanID == waterQualityManagementPlanID)
+        return GetImpl(dbContext)
+            .Where(x => x.WaterQualityManagementPlanID == waterQualityManagementPlanID)
             .ToList();
     }
 
     public static List<TreatmentBMP> ListByTreatmentBMPIDList(NeptuneDbContext dbContext,
                                                               List<int> treatmentBMPIDList)
     {
-        return GetImpl(dbContext).AsNoTracking()
-            .Where(x => treatmentBMPIDList.Contains(x.TreatmentBMPID)).ToList();
+        return GetImpl(dbContext)
+            .AsNoTracking()
+            .Where(x => treatmentBMPIDList.Contains(x.TreatmentBMPID))
+            .ToList();
     }
 
     public static List<TreatmentBMP> ListByTreatmentBMPIDListWithChangeTracking(NeptuneDbContext dbContext,
@@ -454,8 +495,11 @@ public static class TreatmentBMPs
         dbContext.Database.ExecuteSqlRaw(
                                          "EXECUTE dbo.pTreatmentBMPUpdateTreatmentBMPType @treatmentBMPID={0}, @treatmentBMPTypeID={1}",
                                          treatmentBMPID, treatmentBMPTypeID);
+
         var treatmentBMPModelingType = dbContext.TreatmentBMPTypes
-            .SingleOrDefault(x => x.TreatmentBMPTypeID == treatmentBMPTypeID)?.TreatmentBMPModelingTypeID;
+            .SingleOrDefault(x => x.TreatmentBMPTypeID == treatmentBMPTypeID)
+            ?.TreatmentBMPModelingTypeID;
+
         return treatmentBMPModelingType;
     }
 
@@ -470,10 +514,12 @@ public static class TreatmentBMPs
     }
 
     public static TreatmentBMP TreatmentBMPFromUpsertDtoAndProject(NeptuneDbContext dbContext,
-                                                                   TreatmentBMPUpsertDto treatmentBMPUpsertDto, Project project)
+                                                                   TreatmentBMPUpsertDto treatmentBMPUpsertDto,
+                                                                   Project project)
     {
         var locationPointGeometry4326 = CreateLocationPoint4326FromLatLong(treatmentBMPUpsertDto.Latitude.Value,
                                                                            treatmentBMPUpsertDto.Longitude.Value);
+
         var locationPoint = locationPointGeometry4326.ProjectTo2771();
         var treatmentBMP = new TreatmentBMP()
         {
@@ -500,7 +546,8 @@ public static class TreatmentBMPs
         return treatmentBMP;
     }
 
-    public static List<TreatmentBMP> ListModelingTreatmentBMPs(NeptuneDbContext dbContext, int? projectID = null,
+    public static List<TreatmentBMP> ListModelingTreatmentBMPs(NeptuneDbContext dbContext,
+                                                               int? projectID = null,
                                                                List<int>? projectRSBIDs = null)
     {
         var toReturn = dbContext.TreatmentBMPs
@@ -508,15 +555,18 @@ public static class TreatmentBMPs
             .Include(x => x.StormwaterJurisdiction)
             .ThenInclude(x => x.Organization)
             .Include(x => x.OwnerOrganization)
-            .Include(x => x.WaterQualityManagementPlan).AsNoTracking()
+            .Include(x => x.WaterQualityManagementPlan)
+            .AsNoTracking()
             .Where(x => x.RegionalSubbasinID != null && x.TreatmentBMPType.TreatmentBMPModelingTypeID != null &&
-                        x.ModelBasinID != null).ToList();
+                        x.ModelBasinID != null)
+            .ToList();
 
         if (projectID != null && projectRSBIDs != null)
         {
             toReturn = toReturn.Where(x =>
                                           projectRSBIDs.Contains(x.RegionalSubbasinID.Value) &&
-                                          (x.ProjectID == null || x.ProjectID == projectID)).ToList();
+                                          (x.ProjectID == null || x.ProjectID == projectID))
+                .ToList();
         }
         else
         {
@@ -551,65 +601,68 @@ public static class TreatmentBMPs
         var modelingAttributes = await dbContext.vTreatmentBMPModelingAttributes.AsNoTracking().ToDictionaryAsync(x => x.TreatmentBMPID, x => x);
 
         return treatmentBmps.Select(bmp =>
-        {
-            var delineation = bmp.Delineation ?? (delineations.GetValueOrDefault(bmp.TreatmentBMPID));
-            var modeling = modelingAttributes.GetValueOrDefault(bmp.TreatmentBMPID);
-            var watershedName = bmp.WatershedID.HasValue && watersheds.TryGetValue(bmp.WatershedID.Value, out var watershed) ? watershed : null;
-            var precipitationDepth = bmp.PrecipitationZoneID.HasValue && precipitationZones.TryGetValue(bmp.PrecipitationZoneID.Value, out var zone) ? zone : (double?)null;
-            var modeledArea = modeledLandUseAreas.GetValueOrDefault(bmp.TreatmentBMPID, null);
-            return new TreatmentBMPModelingAttributesDto
             {
-                TreatmentBMPID = bmp.TreatmentBMPID,
-                TreatmentBMPName = bmp.TreatmentBMPName,
-                TreatmentBMPTypeID = bmp.TreatmentBMPTypeID,
-                TreatmentBMPTypeName = bmp.TreatmentBMPType?.TreatmentBMPTypeName,
-                StormwaterJurisdictionID = bmp.StormwaterJurisdictionID,
-                StormwaterJurisdictionName = bmp.StormwaterJurisdiction?.Organization?.OrganizationName,
-                WatershedID = bmp.WatershedID,
-                WatershedName = watershedName,
-                PrecipitationZoneID = bmp.PrecipitationZoneID,
-                DesignStormwaterDepthInInches = precipitationDepth,
-                DelineationID = delineation?.DelineationID,
-                DelineationTypeName = delineation?.DelineationType?.DelineationTypeDisplayName,
-                DelineationStatus = delineation?.GetDelineationStatus(),
-                DelineationAreaAcres = delineation?.GetDelineationArea(),
-                ModeledLandUseAreaAcres = modeledArea,
-                IsFullyParameterized = bmp.IsFullyParameterized(delineation, modeling),
-                AverageDivertedFlowrate = modeling?.AverageDivertedFlowrate,
-                AverageTreatmentFlowrate = modeling?.AverageTreatmentFlowrate,
-                DesignDryWeatherTreatmentCapacity = modeling?.DesignDryWeatherTreatmentCapacity,
-                DesignLowFlowDiversionCapacity = modeling?.DesignLowFlowDiversionCapacity,
-                DesignMediaFiltrationRate = modeling?.DesignMediaFiltrationRate,
-                DrawdownTimeForWQDetentionVolume = modeling?.DrawdownTimeForWQDetentionVolume,
-                EffectiveFootprint = modeling?.EffectiveFootprint,
-                EffectiveRetentionDepth = modeling?.EffectiveRetentionDepth,
-                InfiltrationDischargeRate = modeling?.InfiltrationDischargeRate,
-                InfiltrationSurfaceArea = modeling?.InfiltrationSurfaceArea,
-                MediaBedFootprint = modeling?.MediaBedFootprint,
-                MonthsOperational = modeling?.MonthsOperational,
-                PermanentPoolOrWetlandVolume = modeling?.PermanentPoolOrWetlandVolume,
-                StorageVolumeBelowLowestOutletElevation = modeling?.StorageVolumeBelowLowestOutletElevation,
-                SummerHarvestedWaterDemand = modeling?.SummerHarvestedWaterDemand,
-                TimeOfConcentration = modeling?.TimeOfConcentration,
-                TotalEffectiveBMPVolume = modeling?.TotalEffectiveBMPVolume,
-                TotalEffectiveDrywellBMPVolume = modeling?.TotalEffectiveDrywellBMPVolume,
-                TreatmentRate = modeling?.TreatmentRate,
-                UnderlyingHydrologicSoilGroup = modeling?.UnderlyingHydrologicSoilGroup,
-                UnderlyingInfiltrationRate = modeling?.UnderlyingInfiltrationRate,
-                ExtendedDetentionSurchargeVolume = modeling?.ExtendedDetentionSurchargeVolume,
-                WettedFootprint = modeling?.WettedFootprint,
-                WinterHarvestedWaterDemand = modeling?.WinterHarvestedWaterDemand,
-                UpstreamBMPID = bmp.UpstreamBMPID,
-                UpstreamBMPName = bmp.UpstreamBMP?.TreatmentBMPName,
-                DownstreamOfNonModeledBMP = bmp is { UpstreamBMPID: not null, UpstreamBMP: not null } && !(bmp.UpstreamBMP.TreatmentBMPType?.IsAnalyzedInModelingModule ?? true),
-                DryWeatherFlowOverride = modeling?.DryWeatherFlowOverride
-            };
-        }).ToList();
+                var delineation = bmp.Delineation ?? (delineations.GetValueOrDefault(bmp.TreatmentBMPID));
+                var modeling = modelingAttributes.GetValueOrDefault(bmp.TreatmentBMPID);
+                var watershedName = bmp.WatershedID.HasValue && watersheds.TryGetValue(bmp.WatershedID.Value, out var watershed) ? watershed : null;
+                var precipitationDepth = bmp.PrecipitationZoneID.HasValue && precipitationZones.TryGetValue(bmp.PrecipitationZoneID.Value, out var zone) ? zone : (double?)null;
+                var modeledArea = modeledLandUseAreas.GetValueOrDefault(bmp.TreatmentBMPID, null);
+
+                return new TreatmentBMPModelingAttributesDto
+                {
+                    TreatmentBMPID = bmp.TreatmentBMPID,
+                    TreatmentBMPName = bmp.TreatmentBMPName,
+                    TreatmentBMPTypeID = bmp.TreatmentBMPTypeID,
+                    TreatmentBMPTypeName = bmp.TreatmentBMPType?.TreatmentBMPTypeName,
+                    StormwaterJurisdictionID = bmp.StormwaterJurisdictionID,
+                    StormwaterJurisdictionName = bmp.StormwaterJurisdiction?.Organization?.OrganizationName,
+                    WatershedID = bmp.WatershedID,
+                    WatershedName = watershedName,
+                    PrecipitationZoneID = bmp.PrecipitationZoneID,
+                    DesignStormwaterDepthInInches = precipitationDepth,
+                    DelineationID = delineation?.DelineationID,
+                    DelineationTypeName = delineation?.DelineationType?.DelineationTypeDisplayName,
+                    DelineationStatus = delineation?.GetDelineationStatus(),
+                    DelineationAreaAcres = delineation?.GetDelineationArea(),
+                    ModeledLandUseAreaAcres = modeledArea,
+                    IsFullyParameterized = bmp.IsFullyParameterized(delineation, modeling),
+                    AverageDivertedFlowrate = modeling?.AverageDivertedFlowrate,
+                    AverageTreatmentFlowrate = modeling?.AverageTreatmentFlowrate,
+                    DesignDryWeatherTreatmentCapacity = modeling?.DesignDryWeatherTreatmentCapacity,
+                    DesignLowFlowDiversionCapacity = modeling?.DesignLowFlowDiversionCapacity,
+                    DesignMediaFiltrationRate = modeling?.DesignMediaFiltrationRate,
+                    DrawdownTimeForWQDetentionVolume = modeling?.DrawdownTimeForWQDetentionVolume,
+                    EffectiveFootprint = modeling?.EffectiveFootprint,
+                    EffectiveRetentionDepth = modeling?.EffectiveRetentionDepth,
+                    InfiltrationDischargeRate = modeling?.InfiltrationDischargeRate,
+                    InfiltrationSurfaceArea = modeling?.InfiltrationSurfaceArea,
+                    MediaBedFootprint = modeling?.MediaBedFootprint,
+                    MonthsOperational = modeling?.MonthsOperational,
+                    PermanentPoolOrWetlandVolume = modeling?.PermanentPoolOrWetlandVolume,
+                    StorageVolumeBelowLowestOutletElevation = modeling?.StorageVolumeBelowLowestOutletElevation,
+                    SummerHarvestedWaterDemand = modeling?.SummerHarvestedWaterDemand,
+                    TimeOfConcentration = modeling?.TimeOfConcentration,
+                    TotalEffectiveBMPVolume = modeling?.TotalEffectiveBMPVolume,
+                    TotalEffectiveDrywellBMPVolume = modeling?.TotalEffectiveDrywellBMPVolume,
+                    TreatmentRate = modeling?.TreatmentRate,
+                    UnderlyingHydrologicSoilGroup = modeling?.UnderlyingHydrologicSoilGroup,
+                    UnderlyingInfiltrationRate = modeling?.UnderlyingInfiltrationRate,
+                    ExtendedDetentionSurchargeVolume = modeling?.ExtendedDetentionSurchargeVolume,
+                    WettedFootprint = modeling?.WettedFootprint,
+                    WinterHarvestedWaterDemand = modeling?.WinterHarvestedWaterDemand,
+                    UpstreamBMPID = bmp.UpstreamBMPID,
+                    UpstreamBMPName = bmp.UpstreamBMP?.TreatmentBMPName,
+                    DownstreamOfNonModeledBMP = bmp is { UpstreamBMPID: not null, UpstreamBMP: not null } && !(bmp.UpstreamBMP.TreatmentBMPType?.IsAnalyzedInModelingModule ?? true),
+                    DryWeatherFlowOverride = modeling?.DryWeatherFlowOverride
+                };
+            })
+            .ToList();
     }
 
     public static async Task<List<ErrorMessage>> ValidateUpdateBasicInfoAsync(NeptuneDbContext dbContext, int treatmentBMPID, TreatmentBMPBasicInfoUpdate updateDto)
     {
         var errors = await ValidateBasicInfoAsync(dbContext, updateDto, treatmentBMPID);
+
         return errors;
     }
 
@@ -628,11 +681,13 @@ public static class TreatmentBMPs
         treatmentBMPToUpdate.TreatmentBMPLifespanEndDate = updateDto.TreatmentBMPLifespanTypeID == TreatmentBMPLifespanType.FixedEndDate.TreatmentBMPLifespanTypeID
             ? updateDto.TreatmentBMPLifespanEndDate
             : null;
+
         treatmentBMPToUpdate.SizingBasisTypeID = updateDto.SizingBasisTypeID;
         treatmentBMPToUpdate.TrashCaptureStatusTypeID = updateDto.TrashCaptureStatusTypeID;
-        treatmentBMPToUpdate.TrashCaptureEffectiveness = updateDto.TrashCaptureStatusTypeID == TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID 
+        treatmentBMPToUpdate.TrashCaptureEffectiveness = updateDto.TrashCaptureStatusTypeID == TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID
             ? updateDto.TrashCaptureEffectiveness
             : null;
+
         treatmentBMPToUpdate.RequiredFieldVisitsPerYear = updateDto.RequiredFieldVisitsPerYear;
         treatmentBMPToUpdate.RequiredPostStormFieldVisitsPerYear = updateDto.RequiredPostStormFieldVisitsPerYear;
         treatmentBMPToUpdate.Notes = updateDto.Notes;
@@ -641,9 +696,10 @@ public static class TreatmentBMPs
         await dbContext.Entry(treatmentBMPToUpdate).ReloadAsync();
 
         var updatedTreatmentBMPDto = await GetByIDAsDtoAsync(dbContext, treatmentBMPID);
+
         return updatedTreatmentBMPDto;
-    } 
-    
+    }
+
     // Shared validation for fields present on both Create and BasicInfo Update DTOs
     private static async Task<List<ErrorMessage>> ValidateBasicInfoAsync(NeptuneDbContext dbContext, IHaveTreatmentBMPBasicInfo dto, int? existingTreatmentBMPID = null)
     {
@@ -708,6 +764,7 @@ public static class TreatmentBMPs
     public static async Task<List<ErrorMessage>> ValidateUpdateLocationAsync(NeptuneDbContext dbContext, int treatmentBMPID, TreatmentBMPLocationUpdate locationUpdateDto)
     {
         var errors = new List<ErrorMessage>();
+
         return errors;
     }
 
@@ -719,15 +776,38 @@ public static class TreatmentBMPs
 
         var locationPointGeometry4326 = CreateLocationPoint4326FromLatLong(locationUpdateDto.Latitude!.Value, locationUpdateDto.Longitude!.Value);
         var locationPoint = locationPointGeometry4326.ProjectTo2771();
-       
+
         treatmentBMPToUpdate.LocationPoint4326 = locationPointGeometry4326;
         treatmentBMPToUpdate.LocationPoint = locationPoint;
-       
+
         treatmentBMPToUpdate.SetTreatmentBMPPointInPolygonDataByLocationPoint(locationPoint, dbContext);
-        
+
         await dbContext.SaveChangesAsync();
         await dbContext.Entry(treatmentBMPToUpdate).ReloadAsync();
-        
+
+        var updatedTreatmentBMPDto = await GetByIDAsDtoAsync(dbContext, treatmentBMPID);
+
+        return updatedTreatmentBMPDto;
+    }
+
+    public static async Task<List<ErrorMessage>> ValidateUpdateTypeAsync(NeptuneDbContext dbContext, int treatmentBMPID, TreatmentBMPTypeUpdate typeUpdateDto)
+    {
+        var errors = new List<ErrorMessage>();
+
+        var hasValidType = await dbContext.TreatmentBMPTypes.AnyAsync(x => x.TreatmentBMPTypeID == typeUpdateDto.TreatmentBMPTypeID);
+        if (!hasValidType)
+        {
+            errors.Add(new ErrorMessage("TreatmentBMPTypeID", "Valid Treatment BMP Type is required."));
+        }
+
+        return errors;
+    }
+
+    public static async Task<TreatmentBMPDto> UpdateTypeAsync(NeptuneDbContext dbContext, int treatmentBMPID, TreatmentBMPTypeUpdate typeUpdateDto, PersonDto callingUser)
+    {
+        await dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pTreatmentBMPUpdateTreatmentBMPType @treatmentBMPID={0}, @treatmentBMPTypeID={1}",
+                                                    treatmentBMPID, typeUpdateDto.TreatmentBMPTypeID);
+
         var updatedTreatmentBMPDto = await GetByIDAsDtoAsync(dbContext, treatmentBMPID);
         return updatedTreatmentBMPDto;
     }
