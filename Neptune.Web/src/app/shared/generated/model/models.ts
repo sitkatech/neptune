@@ -107,6 +107,7 @@ export * from './treatment-bmp-grid-dto';
 export * from './treatment-bmphru-characteristics-summary-simple-dto';
 export * from './treatment-bmp-image-dto';
 export * from './treatment-bmp-life-span-type-dto';
+export * from './treatment-bmp-location-update';
 export * from './treatment-bmp-minimal-dto';
 export * from './treatment-bmp-modeling-attributes-dto';
 export * from './treatment-bmp-parameterization-errors-dto';

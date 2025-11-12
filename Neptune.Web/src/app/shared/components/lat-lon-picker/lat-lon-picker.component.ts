@@ -81,6 +81,10 @@ export class LatLonPickerComponent implements OnInit, OnDestroy {
     }
 
     private setLatLon(lat: number, lon: number) {
+        //Round to 5 decimal places
+        lat = Math.round(lat * 100000) / 100000;
+        lon = Math.round(lon * 100000) / 100000;
+
         if (this.latControl) {
             this.latControl.setValue(lat);
             try {

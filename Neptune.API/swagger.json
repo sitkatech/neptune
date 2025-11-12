@@ -5380,6 +5380,30 @@
           }
         }
       },
+      "delete": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "operationId": "Delete_TreatmentBMP",
+        "parameters": [
+          {
+            "name": "treatmentBMPID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/treatment-bmps/{treatmentBMPID}/basic-info": {
       "put": {
         "tags": [
           "TreatmentBMP"
@@ -5437,12 +5461,14 @@
             }
           }
         }
-      },
-      "delete": {
+      }
+    },
+    "/treatment-bmps/{treatmentBMPID}/location": {
+      "put": {
         "tags": [
           "TreatmentBMP"
         ],
-        "operationId": "Delete_TreatmentBMP",
+        "operationId": "UpdateLocation_TreatmentBMP",
         "parameters": [
           {
             "name": "treatmentBMPID",
@@ -5454,9 +5480,45 @@
             }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TreatmentBMPLocationUpdate"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TreatmentBMPLocationUpdate"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/TreatmentBMPLocationUpdate"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPDto"
+                }
+              }
+            }
           }
         }
       }
@@ -12258,6 +12320,24 @@
           "TreatmentBMPLifeSpanTypeDisplayName": {
             "type": "string",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TreatmentBMPLocationUpdate": {
+        "required": [
+          "Latitude",
+          "Longitude"
+        ],
+        "type": "object",
+        "properties": {
+          "Latitude": {
+            "type": "number",
+            "format": "double"
+          },
+          "Longitude": {
+            "type": "number",
+            "format": "double"
           }
         },
         "additionalProperties": false

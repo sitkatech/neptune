@@ -1,40 +1,43 @@
 <div class="image-carousel">
     <div class="carousel-wrapper" style="position: relative; text-align: center">
         @if (images?.length > 0) {
-        <div class="carousel-wrapper" style="position: relative; text-align: center">
-            <button
-                type="button"
-                class="carousel-nav left"
-                (click)="setImageIndex(currentImageIndex - 1)"
-                style="position: absolute; left: 0; top: 50%; transform: translateY(-50%); background: none; border: none; font-size: 2rem; cursor: pointer">
-                &#8592;
-            </button>
-            <img
-                [src]="images[currentImageIndex]?.FileResourceGUID ? getFileResourceUrl(images[currentImageIndex].FileResourceGUID) : ''"
-                alt="Image"
-                class="carousel-image"
-                style="max-width: 100%; max-height: 300px; margin-bottom: 1rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1)" />
-            <button
-                type="button"
-                class="carousel-nav right"
-                (click)="setImageIndex(currentImageIndex + 1)"
-                style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); background: none; border: none; font-size: 2rem; cursor: pointer">
-                &#8594;
-            </button>
-        </div>
+            <div class="carousel-wrapper" style="position: relative; text-align: center">
+                <button
+                    type="button"
+                    class="carousel-nav left"
+                    (click)="setImageIndex(currentImageIndex - 1)"
+                    style="position: absolute; left: 0; top: 50%; transform: translateY(-50%); background: none; border: none; font-size: 2rem; cursor: pointer">
+                    &#8592;
+                </button>
+                <img
+                    [src]="images[currentImageIndex]?.FileResourceGUID ? getFileResourceUrl(images[currentImageIndex].FileResourceGUID) : ''"
+                    alt="Image"
+                    class="carousel-image"
+                    style="max-width: 100%; max-height: 300px; margin-bottom: 1rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1)" />
+                <button
+                    type="button"
+                    class="carousel-nav right"
+                    (click)="setImageIndex(currentImageIndex + 1)"
+                    style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); background: none; border: none; font-size: 2rem; cursor: pointer">
+                    &#8594;
+                </button>
+            </div>
+            <div class="carousel-indicator" style="margin-top: 0.5rem">Image {{ currentImageIndex + 1 }} of {{ images.length }}</div>
+            @if (images[currentImageIndex]?.Caption) {
+                <div class="carousel-caption" style="margin-top: 0.5rem; color: #555">
+                    {{ images[currentImageIndex]?.Caption }}
+                </div>
+            }
+        } @else {
+            <em class="text-muted">{{ noImagesMessage }}</em>
+        }
+    </div>
+    @if (images?.length > 0) {
         <div class="carousel-indicator" style="margin-top: 0.5rem">Image {{ currentImageIndex + 1 }} of {{ images.length }}</div>
-        @if (images[currentImageIndex]?.Caption) {
+    }
+    @if (images[currentImageIndex]?.Caption) {
         <div class="carousel-caption" style="margin-top: 0.5rem; color: #555">
             {{ images[currentImageIndex]?.Caption }}
         </div>
-        } } @else {
-        <em class="text-muted">{{ noImagesMessage }}</em>
-        }
-    </div>
-    <div class="carousel-indicator" style="margin-top: 0.5rem">Image {{ currentImageIndex + 1 }} of {{ images.length }}</div>
-    @if (images[currentImageIndex]?.Caption) {
-    <div class="carousel-caption" style="margin-top: 0.5rem; color: #555">
-        {{ images[currentImageIndex]?.Caption }}
-    </div>
     }
 </div>

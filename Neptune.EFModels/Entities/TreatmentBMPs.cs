@@ -704,4 +704,31 @@ public static class TreatmentBMPs
 
         return errors;
     }
+
+    public static async Task<List<ErrorMessage>> ValidateUpdateLocationAsync(NeptuneDbContext dbContext, int treatmentBMPID, TreatmentBMPLocationUpdate locationUpdateDto)
+    {
+        var errors = new List<ErrorMessage>();
+        return errors;
+    }
+
+    public static async Task<TreatmentBMPDto> UpdateLocationAsync(NeptuneDbContext dbContext, int treatmentBMPID, TreatmentBMPLocationUpdate locationUpdateDto, PersonDto callingUser)
+    {
+        var treatmentBMPToUpdate = dbContext.TreatmentBMPs
+            .Include(x => x.StormwaterJurisdiction)
+            .Single(x => x.TreatmentBMPID == treatmentBMPID);
+
+        var locationPointGeometry4326 = CreateLocationPoint4326FromLatLong(locationUpdateDto.Latitude!.Value, locationUpdateDto.Longitude!.Value);
+        var locationPoint = locationPointGeometry4326.ProjectTo2771();
+       
+        treatmentBMPToUpdate.LocationPoint4326 = locationPointGeometry4326;
+        treatmentBMPToUpdate.LocationPoint = locationPoint;
+       
+        treatmentBMPToUpdate.SetTreatmentBMPPointInPolygonDataByLocationPoint(locationPoint, dbContext);
+        
+        await dbContext.SaveChangesAsync();
+        await dbContext.Entry(treatmentBMPToUpdate).ReloadAsync();
+        
+        var updatedTreatmentBMPDto = await GetByIDAsDtoAsync(dbContext, treatmentBMPID);
+        return updatedTreatmentBMPDto;
+    }
 }

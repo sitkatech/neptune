@@ -40,8 +40,12 @@
         grid-template-columns: 1fr;
     }
 
-    ul {
-        list-style-type: disc;
-        margin-left: $spacing-600;
+    .instructions {
+        ::ng-deep {
+            ul {
+                list-style-type: disc;
+                margin-left: $spacing-600;
+            }
+        }
     }
 }
