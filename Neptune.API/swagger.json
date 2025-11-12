@@ -5380,6 +5380,64 @@
           }
         }
       },
+      "put": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "operationId": "UpdateBasicInfo_TreatmentBMP",
+        "parameters": [
+          {
+            "name": "treatmentBMPID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TreatmentBMPBasicInfoUpdate"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TreatmentBMPBasicInfoUpdate"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/TreatmentBMPBasicInfoUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPDto"
+                }
+              }
+            }
+          }
+        }
+      },
       "delete": {
         "tags": [
           "TreatmentBMP"
@@ -11480,6 +11538,85 @@
           "LoadingRateDelta": {
             "type": "number",
             "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TreatmentBMPBasicInfoUpdate": {
+        "required": [
+          "SizingBasisTypeID",
+          "TrashCaptureStatusTypeID",
+          "TreatmentBMPLifespanTypeID",
+          "TreatmentBMPName",
+          "WaterQualityManagementPlanID"
+        ],
+        "type": "object",
+        "properties": {
+          "TreatmentBMPName": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "OwnerOrganizationID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "YearBuilt": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "SystemOfRecordID": {
+            "type": "string",
+            "nullable": true
+          },
+          "WaterQualityManagementPlanID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TreatmentBMPLifespanTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TreatmentBMPLifespanEndDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "SizingBasisTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TrashCaptureStatusTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TrashCaptureEffectiveness": {
+            "maximum": 99,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "RequiredFieldVisitsPerYear": {
+            "maximum": 2147483647,
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "RequiredPostStormFieldVisitsPerYear": {
+            "maximum": 2147483647,
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Notes": {
+            "maxLength": 2000,
+            "minLength": 0,
+            "type": "string",
             "nullable": true
           }
         },

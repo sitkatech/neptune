@@ -1,0 +1,126 @@
+<page-header [pageTitle]="'Edit BMP Basics'" [templateAbove]="templateAbove">
+    <ng-template #templateAbove>
+        <div class="back">
+            <a [routerLink]="['/treatment-bmps', treatmentBMPID]" class="back__link">Back to BMP Detail</a>
+        </div>
+    </ng-template>
+</page-header>
+
+<app-alert-display></app-alert-display>
+
+@if (treatmentBMP$ | async; as treatmentBMP) {
+    <form [formGroup]="formGroup" class="grid-12">
+        <form-field class="g-col-6" [formControl]="formGroup.controls.TreatmentBMPName" fieldLabel="BMP Name" [type]="FormFieldType.Text" placeholder="Name"></form-field>
+
+        <div class="g-col-6">
+            <label class="field-label required">BMP Type</label>
+            <div class="form-control-readonly">{{ treatmentBMP.TreatmentBMPTypeName }}</div>
+        </div>
+
+        <div class="g-col-6">
+            <label class="field-label required">Stormwater Jurisdiction</label>
+            <div class="form-control-readonly">{{ treatmentBMP.StormwaterJurisdictionName }}</div>
+        </div>
+
+        <form-field
+            class="g-col-6"
+            [formControl]="formGroup.controls.OwnerOrganizationID"
+            fieldLabel="Owner Organization"
+            [type]="FormFieldType.Select"
+            [formInputOptions]="organizationSelectOptions$ | async"
+            placeholder="Select Organization">
+        </form-field>
+
+        <form-field class="g-col-6" [formControl]="formGroup.controls.YearBuilt" fieldLabel="Year Built" [type]="FormFieldType.Number" placeholder="Year built"> </form-field>
+
+        <form-field
+            class="g-col-6"
+            [formControl]="formGroup.controls.SystemOfRecordID"
+            fieldLabel="System Of Record ID"
+            [type]="FormFieldType.Text"
+            placeholder="System of Record ID">
+        </form-field>
+
+        <form-field
+            class="g-col-6"
+            [formControl]="formGroup.controls.WaterQualityManagementPlanID"
+            fieldLabel="Water Quality Management Plan"
+            [type]="FormFieldType.Select"
+            [formInputOptions]="wqmpSelectOptions$ | async"
+            placeholder="Select WQMP">
+        </form-field>
+
+        <form-field
+            class="g-col-6"
+            [formControl]="formGroup.controls.TreatmentBMPLifespanTypeID"
+            fieldLabel="Lifespan Type"
+            [type]="FormFieldType.Select"
+            [formInputOptions]="lifeSpanTypeSelectOptions$ | async"
+            placeholder="Select Lifespan Type">
+        </form-field>
+
+        @if (showLifeSpanEndDateField$ | async) {
+            <div class="g-col-6"><!-- Empty for spacing--></div>
+            <form-field
+                class="g-col-6"
+                [formControl]="formGroup.controls.TreatmentBMPLifespanEndDate"
+                fieldLabel="Lifespan End Date"
+                [type]="FormFieldType.Date"
+                placeholder="End Date">
+            </form-field>
+        }
+
+        <form-field
+            class="g-col-6"
+            [formControl]="formGroup.controls.SizingBasisTypeID"
+            fieldLabel="Sizing Basis"
+            [type]="FormFieldType.Select"
+            [formInputOptions]="sizingBasisTypeSelectOptions$ | async"
+            placeholder="Select Sizing Basis">
+        </form-field>
+
+        <form-field
+            class="g-col-6"
+            [formControl]="formGroup.controls.TrashCaptureStatusTypeID"
+            fieldLabel="Trash Capture Status"
+            [type]="FormFieldType.Select"
+            [formInputOptions]="trashCaptureStatusTypeSelectOptions$ | async"
+            placeholder="Select Trash Capture Status">
+        </form-field>
+
+        @if (showTrashCaptureEffectivenessField$ | async) {
+            <div class="g-col-6"><!-- Empty for spacing--></div>
+            <form-field
+                class="g-col-6"
+                [formControl]="formGroup.controls.TrashCaptureEffectiveness"
+                fieldLabel="Trash Capture Effectiveness (%)"
+                [type]="FormFieldType.Number"
+                units="%"
+                placeholder="Effectiveness (1-99)">
+            </form-field>
+        }
+
+        <form-field
+            class="g-col-6"
+            [formControl]="formGroup.controls.RequiredFieldVisitsPerYear"
+            fieldLabel="Required Field Visits Per Year"
+            [type]="FormFieldType.Number"
+            placeholder="Required visits per year">
+        </form-field>
+
+        <form-field
+            class="g-col-6"
+            [formControl]="formGroup.controls.RequiredPostStormFieldVisitsPerYear"
+            fieldLabel="Required Post-Storm Field Visits Per Year"
+            [type]="FormFieldType.Number"
+            placeholder="Required post-storm visits per year">
+        </form-field>
+
+        <form-field [formControl]="formGroup.controls.Notes" fieldLabel="Notes" [type]="FormFieldType.Textarea" placeholder="Notes"> </form-field>
+    </form>
+
+    <div class="page-footer">
+        <button class="btn btn-primary mr-2" (click)="save()" [disabled]="isLoadingSubmit || formGroup.invalid">Save</button>
+        <button class="btn btn-secondary" (click)="cancel()">Cancel</button>
+    </div>
+}

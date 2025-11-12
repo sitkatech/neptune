@@ -26,6 +26,7 @@ export var IconInterface:
     | "CaretUp"
     | "ChatBubble"
     | "CircleCheckmark"
+    | "CirclePencil"
     | "CircleX"
     | "Configure"
     | "Data"

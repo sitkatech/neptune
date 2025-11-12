@@ -49,6 +49,8 @@ import { GroupByPipe } from "src/app/shared/pipes/group-by.pipe";
 import { SumPipe } from "src/app/shared/pipes/sum.pipe";
 import { OverlayMode } from "src/app/shared/components/leaflet/layers/generic-wms-wfs-layer/overlay-mode.enum";
 import { HruCharacteristicsGridComponent } from "src/app/shared/components/hru-characteristics-grid/hru-characteristics-grid.component";
+import { IconComponent } from "src/app/shared/components/icon/icon.component";
+import { TrashCaptureStatusTypeEnum } from "src/app/shared/generated/enum/trash-capture-status-type-enum";
 
 @Component({
     selector: "treatment-bmp-detail",
@@ -77,6 +79,7 @@ import { HruCharacteristicsGridComponent } from "src/app/shared/components/hru-c
         NeptuneGridComponent,
         CustomAttributesDisplayComponent,
         HruCharacteristicsGridComponent,
+        IconComponent,
     ],
 })
 export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
@@ -143,7 +146,9 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
     hasModelingAttributes = false;
     // TODO: Add more properties as needed
 
+    public TrashCaptureStatusTypeEnum = TrashCaptureStatusTypeEnum;
     public TreatmentBMPLifespanTypeEnum = TreatmentBMPLifespanTypeEnum;
+
     /**
      * Stub for HRU characteristics summaries used in the land use panel template.
      * Replace with actual data wiring when available.

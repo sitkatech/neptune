@@ -383,6 +383,15 @@ export const routes: Routes = [
                 loadComponent: () => import("./pages/treatment-bmps/treatment-bmp-detail/treatment-bmp-detail.component").then((m) => m.TreatmentBmpDetailComponent),
             },
             {
+                path: `treatment-bmps/:${routeParams.treatmentBMPID}/edit-basic-info`,
+                title: "Edit BMP Basic Info",
+                loadComponent: () =>
+                    import("./pages/treatment-bmps/treatment-bmp-detail/treatment-bmp-update-basic-info/treatment-bmp-update-basic-info.component").then(
+                        (m) => m.TreatmentBmpUpdateBasicInfoComponent
+                    ),
+                canDeactivate: [UnsavedChangesGuard],
+            },
+            {
                 path: "latest-bmp-assessments",
                 title: "View Latest BMP Assessments",
                 loadComponent: () => import("./pages/latest-bmp-assessments/latest-bmp-assessments.component").then((m) => m.LatestBmpAssessmentsComponent),

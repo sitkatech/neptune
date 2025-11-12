@@ -134,6 +134,7 @@ model/system-info-dto.ts
 model/trash-capture-status-type-dto.ts
 model/trash-generating-unit-dto.ts
 model/trash-generating-unit-grid-dto.ts
+model/treatment-bmp-basic-info-update.ts
 model/treatment-bmp-benchmark-and-threshold-dto.ts
 model/treatment-bmp-benchmark-and-threshold-upsert-dto.ts
 model/treatment-bmp-create-dto.ts

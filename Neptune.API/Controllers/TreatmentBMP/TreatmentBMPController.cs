@@ -116,6 +116,23 @@ public class TreatmentBMPController(NeptuneDbContext dbContext, ILogger<Treatmen
         return Ok(treatmentBMPDto);
     }
 
+    [HttpPut("{treatmentBMPID}")]
+    [UserViewFeature]
+    [EntityNotFound(typeof(TreatmentBMP), "treatmentBMPID")]
+    public async Task<ActionResult<TreatmentBMPDto>> UpdateBasicInfo([FromRoute] int treatmentBMPID, [FromBody] TreatmentBMPBasicInfoUpdate updateDto)
+    {
+        var errors = await TreatmentBMPs.ValidateUpdateBasicInfoAsync(DbContext, treatmentBMPID, updateDto);
+        errors.ForEach(e => ModelState.AddModelError(e.Type, e.Message));
+
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        var treatmentBMPDto = await TreatmentBMPs.UpdateBasicInfoAsync(DbContext, treatmentBMPID, updateDto, CallingUser);
+        return Ok(treatmentBMPDto);
+    }
+
     [HttpDelete("{treatmentBMPID}")]
     [JurisdictionEditFeature]
     [EntityNotFound(typeof(TreatmentBMP), "treatmentBMPID")]

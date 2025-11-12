@@ -36,6 +36,7 @@ public abstract class BlobStorageWritingJob<T>(
                 PropertyNamingPolicy = null,
             };
             jsonSerializerOptions.Converters.Add(new DateTimeConverter());
+            jsonSerializerOptions.Converters.Add(new NullableDateTimeConverter());
             jsonSerializerOptions.Converters.Add(new DoubleConverter(10));
             jsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             await GeoJsonSerializer.SerializeToStream(list, jsonSerializerOptions, stream);

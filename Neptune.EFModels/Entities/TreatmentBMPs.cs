@@ -37,63 +37,21 @@ public static class TreatmentBMPs
     {
         var errors = new List<ErrorMessage>();
 
-        //Validate Name Uniqueness
-        var hasUniqueName = await dbContext.TreatmentBMPs.AsNoTracking()
-            .AllAsync(x => x.TreatmentBMPName != createDto.TreatmentBMPName);
+        // Validate basic shared fields
+        errors.AddRange(await ValidateBasicInfoAsync(dbContext, createDto));
 
-        if (!hasUniqueName)
-        {
-            errors.Add(new ErrorMessage("TreatmentBMPName", "Treatment BMP Name must be unique."));
-        }
-
+        // Validate Treatment BMP Type
         var hasValidType = await dbContext.TreatmentBMPTypes.AnyAsync(x => x.TreatmentBMPTypeID == createDto.TreatmentBMPTypeID);
         if (!hasValidType)
         {
             errors.Add(new ErrorMessage("TreatmentBMPTypeID", "Valid Treatment BMP Type is required."));
         }
 
+        // Validate Stormwater Jurisdiction
         var hasValidJurisdiction = await dbContext.StormwaterJurisdictions.AnyAsync(x => x.StormwaterJurisdictionID == createDto.StormwaterJurisdictionID);
         if (!hasValidJurisdiction)
         {
             errors.Add(new ErrorMessage("StormwaterJurisdictionID", "Valid Stormwater Jurisdiction is required."));
-        }
-
-        if (createDto.OwnerOrganizationID.HasValue)
-        {
-            var hasValidOwner = await dbContext.Organizations.AnyAsync(x => x.OrganizationID == createDto.OwnerOrganizationID);
-            if (!hasValidOwner)
-            {
-                errors.Add(new ErrorMessage("OwnerOrganizationID", "Valid Owner Organization is required."));
-            }
-        }
-
-        var hasValidSizingBasis = SizingBasisType.All.Any(x => x.SizingBasisTypeID == createDto.SizingBasisTypeID);
-        if (!hasValidSizingBasis)
-        {
-            errors.Add(new ErrorMessage("SizingBasisTypeID", "Valid Sizing Basis Type is required."));
-        }
-
-        var hasValidTrashCapture = TrashCaptureStatusType.All.Any(x => x.TrashCaptureStatusTypeID == createDto.TrashCaptureStatusTypeID);
-        if (!hasValidTrashCapture)
-        {
-            errors.Add(new ErrorMessage("TrashCaptureStatusTypeID", "Valid Trash Capture Status Type is required."));
-        }
-
-        var hasValidLifespan = TreatmentBMPLifespanType.All.Any(x => x.TreatmentBMPLifespanTypeID == createDto.TreatmentBMPLifespanTypeID);
-        if (!hasValidLifespan)
-        {
-            errors.Add(new ErrorMessage("TreatmentBMPLifespanTypeID", "Valid Lifespan Type is required."));
-        }
-
-        if (createDto.TreatmentBMPLifespanTypeID == TreatmentBMPLifespanType.FixedEndDate.TreatmentBMPLifespanTypeID && !createDto.TreatmentBMPLifespanEndDate.HasValue)
-        {
-            errors.Add(new ErrorMessage("LifespanEndDate", "The Lifespan End Date must be set if the Lifespan Type is Fixed End Date."));
-        }
-
-        var hasValidWQMP = await dbContext.WaterQualityManagementPlans.AnyAsync(x => x.WaterQualityManagementPlanID == createDto.WaterQualityManagementPlanID);
-        if (!hasValidWQMP)
-        {
-            errors.Add(new ErrorMessage("WaterQualityManagementPlanID", "Valid Water Quality Management Plan is required."));
         }
 
         return errors;
@@ -120,10 +78,14 @@ public static class TreatmentBMPs
             SystemOfRecordID = createDto.SystemOfRecordID,
             WaterQualityManagementPlanID = createDto.WaterQualityManagementPlanID,
             TreatmentBMPLifespanTypeID = createDto.TreatmentBMPLifespanTypeID,
-            TreatmentBMPLifespanEndDate = createDto.TreatmentBMPLifespanEndDate,
+            TreatmentBMPLifespanEndDate = createDto.TreatmentBMPLifespanTypeID == TreatmentBMPLifespanType.FixedEndDate.TreatmentBMPLifespanTypeID 
+                ? createDto.TreatmentBMPLifespanEndDate 
+                : null,
             SizingBasisTypeID = createDto.SizingBasisTypeID,
             TrashCaptureStatusTypeID = createDto.TrashCaptureStatusTypeID,
-            TrashCaptureEffectiveness = createDto.TrashCaptureEffectiveness,
+            TrashCaptureEffectiveness = createDto.TrashCaptureStatusTypeID == TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID 
+                ? createDto.TrashCaptureEffectiveness
+                : null,
             RequiredFieldVisitsPerYear = createDto.RequiredFieldVisitsPerYear,
             RequiredPostStormFieldVisitsPerYear = createDto.RequiredPostStormFieldVisitsPerYear,
             Notes = createDto.Notes,
@@ -643,5 +605,103 @@ public static class TreatmentBMPs
                 DryWeatherFlowOverride = modeling?.DryWeatherFlowOverride
             };
         }).ToList();
+    }
+
+    public static async Task<List<ErrorMessage>> ValidateUpdateBasicInfoAsync(NeptuneDbContext dbContext, int treatmentBMPID, TreatmentBMPBasicInfoUpdate updateDto)
+    {
+        var errors = await ValidateBasicInfoAsync(dbContext, updateDto, treatmentBMPID);
+        return errors;
+    }
+
+    public static async Task<TreatmentBMPDto> UpdateBasicInfoAsync(NeptuneDbContext dbContext, int treatmentBMPID, TreatmentBMPBasicInfoUpdate updateDto, PersonDto callingUser)
+    {
+        var treatmentBMPToUpdate = dbContext.TreatmentBMPs
+            .Include(x => x.StormwaterJurisdiction)
+            .Single(x => x.TreatmentBMPID == treatmentBMPID);
+
+        treatmentBMPToUpdate.TreatmentBMPName = updateDto.TreatmentBMPName;
+        treatmentBMPToUpdate.OwnerOrganizationID = updateDto.OwnerOrganizationID ?? treatmentBMPToUpdate.StormwaterJurisdiction.OrganizationID;
+        treatmentBMPToUpdate.YearBuilt = updateDto.YearBuilt;
+        treatmentBMPToUpdate.SystemOfRecordID = updateDto.SystemOfRecordID;
+        treatmentBMPToUpdate.WaterQualityManagementPlanID = updateDto.WaterQualityManagementPlanID;
+        treatmentBMPToUpdate.TreatmentBMPLifespanTypeID = updateDto.TreatmentBMPLifespanTypeID;
+        treatmentBMPToUpdate.TreatmentBMPLifespanEndDate = updateDto.TreatmentBMPLifespanTypeID == TreatmentBMPLifespanType.FixedEndDate.TreatmentBMPLifespanTypeID
+            ? updateDto.TreatmentBMPLifespanEndDate
+            : null;
+        treatmentBMPToUpdate.SizingBasisTypeID = updateDto.SizingBasisTypeID;
+        treatmentBMPToUpdate.TrashCaptureStatusTypeID = updateDto.TrashCaptureStatusTypeID;
+        treatmentBMPToUpdate.TrashCaptureEffectiveness = updateDto.TrashCaptureStatusTypeID == TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID 
+            ? updateDto.TrashCaptureEffectiveness
+            : null;
+        treatmentBMPToUpdate.RequiredFieldVisitsPerYear = updateDto.RequiredFieldVisitsPerYear;
+        treatmentBMPToUpdate.RequiredPostStormFieldVisitsPerYear = updateDto.RequiredPostStormFieldVisitsPerYear;
+        treatmentBMPToUpdate.Notes = updateDto.Notes;
+
+        await dbContext.SaveChangesAsync();
+        await dbContext.Entry(treatmentBMPToUpdate).ReloadAsync();
+
+        var updatedTreatmentBMPDto = await GetByIDAsDtoAsync(dbContext, treatmentBMPID);
+        return updatedTreatmentBMPDto;
+    } 
+    
+    // Shared validation for fields present on both Create and BasicInfo Update DTOs
+    private static async Task<List<ErrorMessage>> ValidateBasicInfoAsync(NeptuneDbContext dbContext, IHaveTreatmentBMPBasicInfo dto, int? existingTreatmentBMPID = null)
+    {
+        var errors = new List<ErrorMessage>();
+
+        // Validate Name Uniqueness (exclude existingTreatmentBMPID when updating)
+        var hasUniqueName = await dbContext.TreatmentBMPs.AsNoTracking()
+            .AllAsync(x => x.TreatmentBMPID == existingTreatmentBMPID || x.TreatmentBMPName != dto.TreatmentBMPName);
+
+        if (!hasUniqueName)
+        {
+            errors.Add(new ErrorMessage("TreatmentBMPName", "Treatment BMP Name must be unique."));
+        }
+
+        // Owner organization (optional)
+        if (dto.OwnerOrganizationID.HasValue)
+        {
+            var hasValidOwner = await dbContext.Organizations.AnyAsync(x => x.OrganizationID == dto.OwnerOrganizationID.Value);
+            if (!hasValidOwner)
+            {
+                errors.Add(new ErrorMessage("OwnerOrganizationID", "Valid Owner Organization is required."));
+            }
+        }
+
+        // Sizing basis
+        var hasValidSizingBasis = SizingBasisType.All.Any(x => x.SizingBasisTypeID == dto.SizingBasisTypeID);
+        if (!hasValidSizingBasis)
+        {
+            errors.Add(new ErrorMessage("SizingBasisTypeID", "Valid Sizing Basis Type is required."));
+        }
+
+        // Trash capture status
+        var hasValidTrashCapture = TrashCaptureStatusType.All.Any(x => x.TrashCaptureStatusTypeID == dto.TrashCaptureStatusTypeID);
+        if (!hasValidTrashCapture)
+        {
+            errors.Add(new ErrorMessage("TrashCaptureStatusTypeID", "Valid Trash Capture Status Type is required."));
+        }
+
+        // Lifespan type
+        var hasValidLifespan = TreatmentBMPLifespanType.All.Any(x => x.TreatmentBMPLifespanTypeID == dto.TreatmentBMPLifespanTypeID);
+        if (!hasValidLifespan)
+        {
+            errors.Add(new ErrorMessage("TreatmentBMPLifespanTypeID", "Valid Lifespan Type is required."));
+        }
+
+        // Lifespan end date required if type is Fixed End Date
+        if (dto.TreatmentBMPLifespanTypeID == TreatmentBMPLifespanType.FixedEndDate.TreatmentBMPLifespanTypeID && !dto.TreatmentBMPLifespanEndDate.HasValue)
+        {
+            errors.Add(new ErrorMessage("LifespanEndDate", "The Lifespan End Date must be set if the Lifespan Type is Fixed End Date."));
+        }
+
+        // Water quality management plan
+        var hasValidWQMP = await dbContext.WaterQualityManagementPlans.AnyAsync(x => x.WaterQualityManagementPlanID == dto.WaterQualityManagementPlanID);
+        if (!hasValidWQMP)
+        {
+            errors.Add(new ErrorMessage("WaterQualityManagementPlanID", "Valid Water Quality Management Plan is required."));
+        }
+
+        return errors;
     }
 }

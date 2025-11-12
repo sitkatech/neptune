@@ -96,6 +96,7 @@ export * from './system-info-dto';
 export * from './trash-capture-status-type-dto';
 export * from './trash-generating-unit-dto';
 export * from './trash-generating-unit-grid-dto';
+export * from './treatment-bmp-basic-info-update';
 export * from './treatment-bmp-benchmark-and-threshold-dto';
 export * from './treatment-bmp-benchmark-and-threshold-upsert-dto';
 export * from './treatment-bmp-create-dto';

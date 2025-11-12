@@ -1,3 +1,5 @@
+@use "/src/scss/abstracts" as *;
+
 .lat-lon-picker {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -36,5 +38,10 @@
 
     @media (max-width: 900px) {
         grid-template-columns: 1fr;
+    }
+
+    ul {
+        list-style-type: disc;
+        margin-left: $spacing-600;
     }
 }

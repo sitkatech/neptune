@@ -77,6 +77,8 @@
             <div class="card">
                 <div class="card-header">
                     <span class="card-title">Basics</span>
+
+                    <a style="color: white" [routerLink]="['edit-basic-info']"><icon class="icon-button" icon="CirclePencil"></icon></a>
                 </div>
                 <div class="card-body">
                     <dl class="grid-12">
@@ -110,7 +112,7 @@
                         <dd class="g-col-7">{{ treatmentBMP.SizingBasisType.SizingBasisTypeDisplayName }}</dd>
                         <dt class="g-col-5"><field-definition fieldDefinitionType="TrashCaptureStatus"></field-definition></dt>
                         <dd class="g-col-7">{{ treatmentBMP.TrashCaptureStatusType.TrashCaptureStatusTypeDisplayName }}</dd>
-                        @if (false) {
+                        @if (treatmentBMP.TrashCaptureStatusType?.TrashCaptureStatusTypeID == TrashCaptureStatusTypeEnum.Partial) {
                             <dt class="g-col-5">Trash Capture Effectiveness</dt>
                             <dd class="g-col-7">{{ treatmentBMP.TrashCaptureEffectiveness }}</dd>
                         }
@@ -118,7 +120,7 @@
                         <dd class="g-col-7">
                             @if (treatmentBMP.TreatmentBMPLifespanType?.TreatmentBMPLifeSpanTypeID == TreatmentBMPLifespanTypeEnum.FixedEndDate) {
                                 Maintain until at least
-                                {{ treatmentBMP.TreatmentBMPLifespanEndDate | date: "MM/dd/yyyy" }}
+                                {{ treatmentBMP.TreatmentBMPLifespanEndDate | date: "MM/dd/yyyy" : "+0000" }}
                             } @else {
                                 {{ treatmentBMP.TreatmentBMPLifespanType?.TreatmentBMPLifeSpanTypeDisplayName || "Unknown" }}
                             }
