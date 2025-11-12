@@ -247,7 +247,7 @@
                         </div>
                         <div class="g-col-3">
                             @if (!upstreamestBMP && canEditStormwaterJurisdiction) {
-                                <a [routerLink]="delineationMapUrl" class="btn btn-neptune">Edit</a>
+                                <a [routerLink]="delineationMapUrl" class="btn btn-primary">Edit</a>
                             }
                         </div>
                     </div>
@@ -292,9 +292,9 @@
                                 <div class="g-col-3" style="margin-top: 6px">
                                     @if (!isAnonymousOrUnassigned) {
                                         @if (treatmentBMP.UpstreamBMP) {
-                                            <button class="btn btn-sm btn-neptune" (click)="removeUpstreamBMP()"><span class="icon-trash"></span></button>
+                                            <button class="btn btn-sm btn-primary" (click)="removeUpstreamBMP()"><span class="icon-trash"></span></button>
                                         }
-                                        <a [routerLink]="editUpstreamBMPUrl" class="btn btn-sm btn-neptune">Edit</a>
+                                        <a [routerLink]="editUpstreamBMPUrl" class="btn btn-sm btn-primary">Edit</a>
                                     }
                                 </div>
                             } @else {
@@ -356,7 +356,7 @@
                 @if (currentPersonCanManage) {
                     <span class="card-actions">
                         <!-- TODO: Implement modal dialog for Begin Field Visit -->
-                        <button class="btn btn-neptune"><span class="icon-plus"></span> Begin Field Visit</button>
+                        <button class="btn btn-primary"><span class="icon-plus"></span> Begin Field Visit</button>
                     </span>
                 }
             </div>
@@ -378,7 +378,7 @@
                 <span class="card-title">Funding Events</span>
                 @if (currentPersonCanManage) {
                     <span class="card-actions">
-                        <button class="btn btn-neptune" (click)="openAddFundingEventModal()"><span class="icon-plus"></span> Add Funding Event</button>
+                        <button class="btn btn-primary" (click)="openAddFundingEventModal()"><span class="icon-plus"></span> Add Funding Event</button>
                     </span>
                 }
             </div>
@@ -460,7 +460,7 @@
                     <span class="card-actions">
                         @if (currentPersonCanManage) {
                             <!-- TODO: Implement modal dialog for Upload New Document -->
-                            <button class="btn btn-neptune"><span class="icon-plus"></span> Upload New Document</button>
+                            <button class="btn btn-primary"><span class="icon-plus"></span> Upload New Document</button>
                         }
                     </span>
                 </div>

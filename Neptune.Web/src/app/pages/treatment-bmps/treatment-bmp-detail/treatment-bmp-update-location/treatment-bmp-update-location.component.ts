@@ -10,6 +10,9 @@ import { TreatmentBMPDto } from "src/app/shared/generated/model/treatment-bmp-dt
 import { AsyncPipe } from "@angular/common";
 import { Observable } from "rxjs";
 import { tap } from "rxjs/operators";
+import { AlertService } from "src/app/shared/services/alert.service";
+import { Alert } from "src/app/shared/models/alert";
+import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
 
 @Component({
     selector: "treatment-bmp-update-location",
@@ -21,7 +24,7 @@ import { tap } from "rxjs/operators";
 export class TreatmentBmpUpdateLocationComponent implements OnInit {
     private treatmentBMPService = inject(TreatmentBMPService);
     private router = inject(Router);
-
+    private alertService = inject(AlertService);
     @Input() treatmentBMPID?: number;
 
     public formGroup: FormGroup<TreatmentBMPLocationUpdateForm> = new FormGroup<TreatmentBMPLocationUpdateForm>({
@@ -52,7 +55,9 @@ export class TreatmentBmpUpdateLocationComponent implements OnInit {
             next: (bmp: TreatmentBMPDto) => {
                 this.isLoadingSubmit = false;
                 this.formGroup.markAsPristine();
-                this.router.navigate(["/treatment-bmps", bmp.TreatmentBMPID]);
+                this.router.navigate(["/treatment-bmps", bmp.TreatmentBMPID]).then(() => {
+                    this.alertService.pushAlert(new Alert("Treatment BMP location updated successfully.", AlertContext.Success));
+                });
             },
             error: () => {
                 this.isLoadingSubmit = false;
