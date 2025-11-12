@@ -314,23 +314,32 @@
                     }
                   </dd>
                   <dt><field-definition fieldDefinitionType="BaselineScore" labelOverride="OVTA Baseline Score"></field-definition></dt>
-                  <dd>{{ selected.tgu?.OnlandVisualTrashAssessmentAreaBaselineScore != null ? selected.tgu?.OnlandVisualTrashAssessmentAreaBaselineScore : '-' }}</dd>
-                  <dt><field-definition fieldDefinitionType="ProgressScore" labelOverride="OVTA Progress Score"></field-definition></dt>
-                  <dd>{{ selected.tgu?.OnlandVisualTrashAssessmentAreaProgressScore != null ? selected.tgu?.OnlandVisualTrashAssessmentAreaProgressScore : '-' }}</dd>
-                  <dt># of Assessments</dt>
                   <dd>
-                    @if (selected.ovta) {
-                      {{ (selected.ovta?.NumberOfAssessmentsCompleted != null) ? selected.ovta?.NumberOfAssessmentsCompleted : ((selected.tgu?.CompletedAssessmentCount != null) ? selected.tgu?.CompletedAssessmentCount : '-') }}
+                    @if(selected.tgu?.OnlandVisualTrashAssessmentAreaBaselineScore != null ){
+                      {{ selected.tgu?.OnlandVisualTrashAssessmentAreaBaselineScore + ' (' + selected.tgu.CompletedBaselineAssessmentCount + ' Assessment' + (selected.tgu.CompletedBaselineAssessmentCount === 1 ? '' : 's') + ')' }}
+                    } @else if(selected.ovta?.OnlandVisualTrashAssessmentBaselineScoreName != null ){
+                      {{ selected.ovta?.OnlandVisualTrashAssessmentBaselineScoreName + ' (' + selected.ovta?.CompletedBaselineAssessmentCount + ' Assessment' + (selected.ovta?.CompletedBaselineAssessmentCount === 1 ? '' : 's') + ')' }}
+                    } @else{
+                      {{ selected.ovta?.CompletedBaselineAssessmentCount != null ? ( '- (' + selected.ovta?.CompletedBaselineAssessmentCount + ' Assessment' + (selected.ovta?.CompletedBaselineAssessmentCount === 1 ? '' : 's') + ')') : '-' }}
+                    }
+                  <dt><field-definition fieldDefinitionType="ProgressScore" labelOverride="OVTA Progress Score"></field-definition></dt>
+                  <dd>
+                    @if(selected.tgu?.OnlandVisualTrashAssessmentAreaProgressScore != null ){
+                      {{ selected.tgu?.OnlandVisualTrashAssessmentAreaProgressScore + ' (' + selected.tgu.CompletedProgressAssessmentCount + ' Assessment' + (selected.tgu.CompletedProgressAssessmentCount === 1 ? '' : 's') + ')' }}
+                    } @else if(selected.ovta?.OnlandVisualTrashAssessmentProgressScoreName != null ){
+                      {{ selected.ovta?.OnlandVisualTrashAssessmentProgressScoreName + ' (' + selected.ovta?.CompletedProgressAssessmentCount + ' Assessment' + (selected.ovta?.CompletedProgressAssessmentCount === 1 ? '' : 's') + ')' }}
                     } @else {
-                      {{ selected.tgu?.CompletedAssessmentCount != null ? selected.tgu?.CompletedAssessmentCount : '-' }}
+                      {{ selected.ovta?.CompletedProgressAssessmentCount != null ? ( '- (' + selected.ovta?.CompletedProgressAssessmentCount + ' Assessment' + (selected.ovta?.CompletedProgressAssessmentCount === 1 ? '' : 's') + ')') : '-' }}
                     }
                   </dd>
                   <dt>Last Assessed Date</dt>
                   <dd>
-                    @if (selected.ovta) {
-                      @if (selected.ovta?.LastAssessmentDate) { {{ selected.ovta?.LastAssessmentDate | date : "shortDate" }} } @else { @if (selected.tgu?.AssessmentDate) { {{ selected.tgu?.AssessmentDate | date : "shortDate" }} } @else { - } }
+                    @if(selected.tgu?.AssessmentDate){
+                      {{selected.tgu?.AssessmentDate | date : "shortDate"}}
+                    } @else if(selected.ovta?.LastAssessmentDate){
+                      {{selected.ovta?.LastAssessmentDate | date : "shortDate"}}
                     } @else {
-                      @if (selected.tgu?.AssessmentDate) { {{ selected.tgu?.AssessmentDate | date : "shortDate" }} } @else { - }
+                      -
                     }
                   </dd>
                 </div>

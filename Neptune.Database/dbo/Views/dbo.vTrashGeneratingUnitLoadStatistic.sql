@@ -63,7 +63,8 @@ Select
 	TrashCaptureStatusSortOrder,
 	AssessmentScore,
 	MostRecentAssessmentDate,
-	CompletedAssessmentCount,
+	CompletedBaselineAssessmentCount,
+	CompletedProgressAssessmentCount,
 	IsPriorityLandUse -- ALUs are not PLUs
 
 From (
@@ -148,7 +149,8 @@ From (
 	    end as TrashCaptureStatusSortOrder,
 	    case when ovtaad.MostRecentAssessmentScore is null then 'NotProvided' else ovtaad.MostRecentAssessmentScore end as AssessmentScore,
 	    ovtaad.MostRecentAssessmentDate,
-		ovtac.CompletedAssessmentCount,
+		ovtacb.CompletedBaselineAssessmentCount,
+		ovtacp.CompletedProgressAssessmentCount,
 	    Case when tgu.LandUseBlockID is null then 0 when plut.PriorityLandUseTypeName = 'ALU' then 0 else 1 end as IsPriorityLandUse -- ALUs are not PLUs
 
 	From
@@ -199,10 +201,20 @@ From (
 		(
 			Select
 				OnlandVisualTrashAssessmentAreaID,
-				count (*) as CompletedAssessmentCount
+				count (*) as CompletedBaselineAssessmentCount
 			from dbo.OnlandVisualTrashAssessment ovta
+			where ovta.IsProgressAssessment = 0
 			group by OnlandVisualTrashAssessmentAreaID
-		) ovtac on tgu.OnlandVisualTrashAssessmentAreaID = ovtac.OnlandVisualTrashAssessmentAreaID
+		) ovtacb on tgu.OnlandVisualTrashAssessmentAreaID = ovtacb.OnlandVisualTrashAssessmentAreaID
+		left join 
+		(
+			Select
+				OnlandVisualTrashAssessmentAreaID,
+				count (*) as CompletedProgressAssessmentCount
+			from dbo.OnlandVisualTrashAssessment ovta
+			where ovta.IsProgressAssessment = 1
+			group by OnlandVisualTrashAssessmentAreaID
+		) ovtacp on tgu.OnlandVisualTrashAssessmentAreaID = ovtacp.OnlandVisualTrashAssessmentAreaID
 	Where 
 		tgu.LandUseBlockID is not null
 		and lub.PermitTypeID = 1

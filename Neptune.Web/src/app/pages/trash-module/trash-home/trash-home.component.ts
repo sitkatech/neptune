@@ -96,7 +96,7 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
     };
 
     public currentResultType: string = "Area-Based Results";
-    public resultTypes = ["Area-Based Results", "Current Net Loading Rate with Controls", "Net change in Trash Loading Rate with Controls", "OVTA-Based Results", "No Metric, Map Overlay"];
+    public resultTypes = ["Area-Based Results", "Current Net Loading Rate With Controls", "Net Change In Trash Loading Rate With Controls", "OVTA-Based Results", "No Metric, Map Overlay"];
 
     public areaBasedAcreCalculationsDto$: Observable<AreaBasedAcreCalculationsDto>;
     public loadResultsDto$: Observable<LoadResultsDto>;

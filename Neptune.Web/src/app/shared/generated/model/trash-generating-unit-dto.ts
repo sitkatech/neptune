@@ -36,7 +36,8 @@ export class TrashGeneratingUnitDto {
     LastUpdateDate?: string | null;
     Area?: number;
     AssessmentDate?: string | null;
-    CompletedAssessmentCount?: number | null;
+    CompletedBaselineAssessmentCount?: number | null;
+    CompletedProgressAssessmentCount?: number | null;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
@@ -68,7 +69,8 @@ export interface TrashGeneratingUnitDtoForm {
     LastUpdateDate?: FormControl<string>;
     Area?: FormControl<number>;
     AssessmentDate?: FormControl<string>;
-    CompletedAssessmentCount?: FormControl<number>;
+    CompletedBaselineAssessmentCount?: FormControl<number>;
+    CompletedProgressAssessmentCount?: FormControl<number>;
 }
 
 export class TrashGeneratingUnitDtoFormControls { 
@@ -322,7 +324,17 @@ export class TrashGeneratingUnitDtoFormControls {
             ],
         }
     );
-    public static CompletedAssessmentCount = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+    public static CompletedBaselineAssessmentCount = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static CompletedProgressAssessmentCount = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
         {

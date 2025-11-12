@@ -8733,11 +8733,11 @@
             "format": "date",
             "nullable": true
           },
-          "NumberOfAssessmentsInProgress": {
+          "CompletedBaselineAssessmentCount": {
             "type": "integer",
             "format": "int32"
           },
-          "NumberOfAssessmentsCompleted": {
+          "CompletedProgressAssessmentCount": {
             "type": "integer",
             "format": "int32"
           },
@@ -11185,7 +11185,12 @@
             "format": "date",
             "nullable": true
           },
-          "CompletedAssessmentCount": {
+          "CompletedBaselineAssessmentCount": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "CompletedProgressAssessmentCount": {
             "type": "integer",
             "format": "int32",
             "nullable": true

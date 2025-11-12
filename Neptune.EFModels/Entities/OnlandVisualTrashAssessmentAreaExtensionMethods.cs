@@ -50,8 +50,8 @@ public static class OnlandVisualTrashAssessmentAreaExtensionMethods
             OnlandVisualTrashAssessmentProgressScoreName = onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentProgressScore?.OnlandVisualTrashAssessmentScoreDisplayName,
             OnlandVisualTrashAssessmentProgressScoreTrashGenerationRate= onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentProgressScore?.TrashGenerationRate,
             LastAssessmentDate = onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessments.Where(x => x.OnlandVisualTrashAssessmentStatusID == (int)OnlandVisualTrashAssessmentStatusEnum.Complete).Select(x => x.CompletedDate).Max(),
-            NumberOfAssessmentsInProgress = onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessments.Count(x => x.OnlandVisualTrashAssessmentStatusID == (int)OnlandVisualTrashAssessmentStatusEnum.InProgress),
-            NumberOfAssessmentsCompleted = onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessments.Count(x => x.OnlandVisualTrashAssessmentStatusID == (int)OnlandVisualTrashAssessmentStatusEnum.Complete),
+            CompletedBaselineAssessmentCount = onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessments.Count(x => x.OnlandVisualTrashAssessmentStatusID == (int)OnlandVisualTrashAssessmentStatusEnum.Complete && !x.IsProgressAssessment),
+            CompletedProgressAssessmentCount = onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessments.Count(x => x.OnlandVisualTrashAssessmentStatusID == (int)OnlandVisualTrashAssessmentStatusEnum.Complete && x.IsProgressAssessment),
             BoundingBox = new BoundingBoxDto(onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaGeometry4326),
             Geometry = onlandVisualTrashAssessmentArea.GetGeometry4326GeoJson()
         };
