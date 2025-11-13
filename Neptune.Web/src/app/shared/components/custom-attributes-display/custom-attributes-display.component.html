@@ -1,43 +1,32 @@
-<div class="card mt-3">
-    <div class="card-header">
-        <span class="card-title">{{ customAttributeTypePurposeDisplayName }}</span>
-        @if (canManage && hasAttributes){
-        <span class="card-actions">
-            <a [routerLink]="editUrl"><span class="icon-edit"></span></a>
-        </span>
-        }
-    </div>
-    <div class="card-body">
-        @if (!hasAttributes) {
-        <p class="systemText">This type of treatment BMP does not have any {{ customAttributeTypePurposeDisplayName }}</p>
-        } @if (hasAttributes) {
-        <table class="table table-condensed">
-            <thead>
-                <tr>
-                    <th>Attribute</th>
-                    <th class="text-right">Value</th>
-                </tr>
-            </thead>
-            <tbody>
-                @for (attrType of filteredAttributeTypes; track attrType.CustomAttributeType.CustomAttributeTypeID) {
+@if (!hasAttributes) {
+    <p class="systemText">This type of treatment BMP does not have any {{ customAttributeTypePurposeDisplayName }}</p>
+}
+@if (hasAttributes) {
+    <table class="table table-condensed">
+        <thead>
+            <tr>
+                <th>Attribute</th>
+                <th class="text-right">Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (attrType of filteredAttributeTypes; track attrType.CustomAttributeType.CustomAttributeTypeID) {
                 <tr>
                     <td>
                         @if (isAdmin) {
-                        <a [routerLink]="['/custom-attribute-types/' + attrType.CustomAttributeType.CustomAttributeTypeID]">
-                            {{ attrType.CustomAttributeType.CustomAttributeTypeName }}
-                        </a>
+                            <a [routerLink]="['/custom-attribute-types/' + attrType.CustomAttributeType.CustomAttributeTypeID]">
+                                {{ attrType.CustomAttributeType.CustomAttributeTypeName }}
+                            </a>
                         } @else {
-                        {{ attrType.CustomAttributeType.CustomAttributeTypeName }}
+                            {{ attrType.CustomAttributeType.CustomAttributeTypeName }}
                         }
                         <span class="help-block extra-small">{{ attrType.CustomAttributeType.CustomAttributeTypeDescription }}</span>
                     </td>
                     <td class="text-right" style="min-width: 150px">
-                        {{ getAttributeValueWithUnits(attrType.CustomAttributeType.CustomAttributeTypeID) }}
+                        {{ attributeValuesByTypeID[attrType.CustomAttributeType.CustomAttributeTypeID] }}
                     </td>
                 </tr>
-                }
-            </tbody>
-        </table>
-        }
-    </div>
-</div>
+            }
+        </tbody>
+    </table>
+}

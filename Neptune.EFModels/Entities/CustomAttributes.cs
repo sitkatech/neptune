@@ -10,37 +10,31 @@ public static class CustomAttributes
     {
         return dbContext.CustomAttributes
                 .Include(x => x.CustomAttributeType)
-                .Include(x => x.CustomAttributeValues)
-            ;
+                .Include(x => x.CustomAttributeValues);
     }
 
-    public static CustomAttribute GetByIDWithChangeTracking(NeptuneDbContext dbContext,
-        int customAttributeID)
+    public static CustomAttribute GetByIDWithChangeTracking(NeptuneDbContext dbContext, int customAttributeID)
     {
         var customAttribute = GetImpl(dbContext)
             .SingleOrDefault(x => x.CustomAttributeID == customAttributeID);
-        Check.RequireNotNull(customAttribute,
-            $"CustomAttribute with ID {customAttributeID} not found!");
+
+        Check.RequireNotNull(customAttribute,$"CustomAttribute with ID {customAttributeID} not found!");
         return customAttribute;
     }
 
-    public static CustomAttribute GetByIDWithChangeTracking(NeptuneDbContext dbContext,
-        CustomAttributePrimaryKey customAttributePrimaryKey)
+    public static CustomAttribute GetByIDWithChangeTracking(NeptuneDbContext dbContext, CustomAttributePrimaryKey customAttributePrimaryKey)
     {
         return GetByIDWithChangeTracking(dbContext, customAttributePrimaryKey.PrimaryKeyValue);
     }
 
     public static CustomAttribute GetByID(NeptuneDbContext dbContext, int customAttributeID)
     {
-        var customAttribute = GetImpl(dbContext).AsNoTracking()
-            .SingleOrDefault(x => x.CustomAttributeID == customAttributeID);
-        Check.RequireNotNull(customAttribute,
-            $"CustomAttribute with ID {customAttributeID} not found!");
+        var customAttribute = GetImpl(dbContext).AsNoTracking().SingleOrDefault(x => x.CustomAttributeID == customAttributeID);
+        Check.RequireNotNull(customAttribute, $"CustomAttribute with ID {customAttributeID} not found!");
         return customAttribute;
     }
 
-    public static CustomAttribute GetByID(NeptuneDbContext dbContext,
-        CustomAttributePrimaryKey customAttributePrimaryKey)
+    public static CustomAttribute GetByID(NeptuneDbContext dbContext, CustomAttributePrimaryKey customAttributePrimaryKey)
     {
         return GetByID(dbContext, customAttributePrimaryKey.PrimaryKeyValue);
     }
@@ -72,11 +66,107 @@ public static class CustomAttributes
 
     public static List<CustomAttribute> ListByTreatmentBMPIDAndPurposes(NeptuneDbContext dbContext, int treatmentBMPID, CustomAttributeTypePurposeEnum customAttributeTypePurposeEnum)
     {
-        return GetImpl(dbContext).AsNoTracking().Where(x => x.TreatmentBMPID == treatmentBMPID && x.CustomAttributeType.CustomAttributeTypePurposeID == (int) customAttributeTypePurposeEnum).OrderBy(x => x.CustomAttributeType.CustomAttributeTypeName).ToList();
+        return GetImpl(dbContext).AsNoTracking().Where(x => x.TreatmentBMPID == treatmentBMPID && x.CustomAttributeType.CustomAttributeTypePurposeID == (int)customAttributeTypePurposeEnum).OrderBy(x => x.CustomAttributeType.CustomAttributeTypeName).ToList();
     }
 
     public static List<CustomAttribute> ListByTreatmentBMPIDAndPurposesWithChangeTracking(NeptuneDbContext dbContext, int treatmentBMPID, CustomAttributeTypePurposeEnum customAttributeTypePurposeEnum)
     {
-        return GetImpl(dbContext).Where(x => x.TreatmentBMPID == treatmentBMPID && x.CustomAttributeType.CustomAttributeTypePurposeID == (int) customAttributeTypePurposeEnum).OrderBy(x => x.CustomAttributeType.CustomAttributeTypeName).ToList();
+        return GetImpl(dbContext).Where(x => x.TreatmentBMPID == treatmentBMPID && x.CustomAttributeType.CustomAttributeTypePurposeID == (int)customAttributeTypePurposeEnum).OrderBy(x => x.CustomAttributeType.CustomAttributeTypeName).ToList();
+    }
+
+    public static async Task<List<ErrorMessage>> ValidateUpdateCustomAttributesAsync(NeptuneDbContext dbContext, int treatmentBMPID, int customAttributeTypePurposeID, List<CustomAttributeUpsertDto> customAttributeUpsertDtos)
+    {
+        var errors = new List<ErrorMessage>();
+
+        var customAttributeTypes = CustomAttributeTypes.GetCustomAttributeTypes(dbContext, customAttributeUpsertDtos);
+        foreach (var customAttributeUpsertDto in customAttributeUpsertDtos.Where(x => x.CustomAttributeValues != null && x.CustomAttributeValues.Count > 0))
+        {
+            var customAttributeType = customAttributeTypes.SingleOrDefault(x => x.CustomAttributeTypeID == customAttributeUpsertDto.CustomAttributeTypeID);
+            if (customAttributeType == null)
+            {
+                errors.Add(new ErrorMessage("CustomAttributeType", $"CustomAttributeType with ID {customAttributeUpsertDto.CustomAttributeTypeID} not found."));
+                continue;
+            }
+
+            var customAttributeDataType = customAttributeType.CustomAttributeDataType;
+            foreach (var value in customAttributeUpsertDto.CustomAttributeValues ?? new List<string>())
+            {
+                if (!string.IsNullOrWhiteSpace(value) && !customAttributeDataType.ValueIsCorrectDataType(value))
+                {
+                    errors.Add(new ErrorMessage($"{customAttributeType.CustomAttributeTypeName}", $"Entered value for {customAttributeType.CustomAttributeTypeName} does not match expected type ({customAttributeDataType.CustomAttributeDataTypeDisplayName})."));
+                }
+            }
+        }
+
+        await Task.CompletedTask;
+
+        return errors;
+    }
+
+    public static async Task<List<CustomAttributeDto>> UpdateCustomAttributesAsync(NeptuneDbContext dbContext, int treatmentBMPID, int customAttributeTypePurposeID, List<CustomAttributeUpsertDto> customAttributeUpsertDtos, PersonDto callingUser)
+    {
+        var treatmentBMP = TreatmentBMPs.GetByID(dbContext, treatmentBMPID);
+
+        await dbContext.CustomAttributeValues
+            .Include(x => x.CustomAttribute)
+            .ThenInclude(x => x.CustomAttributeType)
+            .Where(x => x.CustomAttribute.TreatmentBMPID == treatmentBMPID && x.CustomAttribute.CustomAttributeType.CustomAttributeTypePurposeID == customAttributeTypePurposeID)
+            .ExecuteDeleteAsync();
+
+        var existingCustomAttributes = await dbContext.CustomAttributes
+            .Include(x => x.CustomAttributeType)
+            .Where(x => x.TreatmentBMPID == treatmentBMPID && x.CustomAttributeType.CustomAttributeTypePurposeID == customAttributeTypePurposeID)
+            .ToListAsync();
+
+        var validIncomingUpsertDtos = customAttributeUpsertDtos
+            .Where(x => x.CustomAttributeValues != null && x.CustomAttributeValues.Count(v => !string.IsNullOrWhiteSpace(v)) > 0)
+            .ToList();
+
+        foreach (var customAttributeUpsertDto in validIncomingUpsertDtos)
+        {
+            var customAttribute = existingCustomAttributes.SingleOrDefault(x => x.TreatmentBMPID == treatmentBMPID && x.CustomAttributeTypeID == customAttributeUpsertDto.CustomAttributeTypeID);
+            if (customAttribute == null)
+            {
+                customAttribute = new CustomAttribute
+                {
+                    TreatmentBMPID = treatmentBMPID,
+                    TreatmentBMPTypeID = treatmentBMP.TreatmentBMPTypeID,
+                    CustomAttributeTypeID = customAttributeUpsertDto.CustomAttributeTypeID,
+                    TreatmentBMPTypeCustomAttributeTypeID = customAttributeUpsertDto.TreatmentBMPTypeCustomAttributeTypeID
+                };
+
+                dbContext.CustomAttributes.Add(customAttribute);
+            }
+
+            foreach (var customAttributeValueString in customAttributeUpsertDto.CustomAttributeValues!)
+            {
+                if (!string.IsNullOrWhiteSpace(customAttributeValueString))
+                {
+                    var customAttributeValue = new CustomAttributeValue
+                    {
+                        CustomAttribute = customAttribute,
+                        AttributeValue = customAttributeValueString.Trim()
+                    };
+
+                    dbContext.CustomAttributeValues.Add(customAttributeValue);
+                }
+            }
+        }
+
+        foreach (var existingCustomAttribute in existingCustomAttributes)
+        {
+            var customAttributeUpsertDto = validIncomingUpsertDtos.SingleOrDefault(x => x.CustomAttributeTypeID == existingCustomAttribute.CustomAttributeTypeID);
+            if (customAttributeUpsertDto == null)
+            {
+                dbContext.CustomAttributes.Remove(existingCustomAttribute);
+            }
+        }
+
+        await dbContext.SaveChangesAsync();
+
+        var purposeEnum = (CustomAttributeTypePurposeEnum) customAttributeTypePurposeID;
+        var updatedCustomAttributes = ListByTreatmentBMPIDAndPurposes(dbContext, treatmentBMPID, purposeEnum);
+        var updatedCustomAttributeDtos = updatedCustomAttributes.Select(x => x.AsDto()).ToList();
+        return updatedCustomAttributeDtos;
     }
 }

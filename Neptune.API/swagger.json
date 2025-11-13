@@ -5583,6 +5583,93 @@
         }
       }
     },
+    "/treatment-bmps/{treatmentBMPID}/custom-attribute-type-purposes/{customAttributeTypePurposeID}/custom-attributes": {
+      "put": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "operationId": "UpdateCustomAttributes_TreatmentBMP",
+        "parameters": [
+          {
+            "name": "treatmentBMPID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "customAttributeTypePurposeID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/CustomAttributeUpsertDto"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/CustomAttributeUpsertDto"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/CustomAttributeUpsertDto"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CustomAttributeDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CustomAttributeDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CustomAttributeDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/treatment-bmps/{treatmentBMPID}/hru-characteristics": {
       "get": {
         "tags": [
@@ -7592,6 +7679,13 @@
             "type": "integer",
             "format": "int32"
           },
+          "CustomAttributeValues": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
           "CustomAttributeValueWithUnits": {
             "type": "string",
             "nullable": true
@@ -7631,6 +7725,10 @@
             "format": "int32"
           },
           "CustomAttributeTypeOptionsSchema": {
+            "type": "string",
+            "nullable": true
+          },
+          "DataTypeName": {
             "type": "string",
             "nullable": true
           },
@@ -7690,6 +7788,10 @@
             "format": "int32"
           },
           "CustomAttributeTypeOptionsSchema": {
+            "type": "string",
+            "nullable": true
+          },
+          "DataTypeName": {
             "type": "string",
             "nullable": true
           },

@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 // @ts-ignore
 import { CustomAttributeDto } from '../model/custom-attribute-dto';
 // @ts-ignore
+import { CustomAttributeUpsertDto } from '../model/custom-attribute-upsert-dto';
+// @ts-ignore
 import { FieldVisitDto } from '../model/field-visit-dto';
 // @ts-ignore
 import { GeometryGeoJSONAndAreaDto } from '../model/geometry-geo-json-and-area-dto';
@@ -989,6 +991,78 @@ export class TreatmentBMPService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: treatmentBMPBasicInfoUpdate,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * @param treatmentBMPID 
+     * @param customAttributeTypePurposeID 
+     * @param customAttributeUpsertDto 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public updateCustomAttributesTreatmentBMP(treatmentBMPID: number, customAttributeTypePurposeID: number, customAttributeUpsertDto?: Array<CustomAttributeUpsertDto>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<CustomAttributeDto>>;
+    public updateCustomAttributesTreatmentBMP(treatmentBMPID: number, customAttributeTypePurposeID: number, customAttributeUpsertDto?: Array<CustomAttributeUpsertDto>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<CustomAttributeDto>>>;
+    public updateCustomAttributesTreatmentBMP(treatmentBMPID: number, customAttributeTypePurposeID: number, customAttributeUpsertDto?: Array<CustomAttributeUpsertDto>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<CustomAttributeDto>>>;
+    public updateCustomAttributesTreatmentBMP(treatmentBMPID: number, customAttributeTypePurposeID: number, customAttributeUpsertDto?: Array<CustomAttributeUpsertDto>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (treatmentBMPID === null || treatmentBMPID === undefined) {
+            throw new Error('Required parameter treatmentBMPID was null or undefined when calling updateCustomAttributesTreatmentBMP.');
+        }
+        if (customAttributeTypePurposeID === null || customAttributeTypePurposeID === undefined) {
+            throw new Error('Required parameter customAttributeTypePurposeID was null or undefined when calling updateCustomAttributesTreatmentBMP.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'text/plain',
+            'application/json',
+            'text/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json',
+            'text/json',
+            'application/*+json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/treatment-bmps/${this.configuration.encodeParam({name: "treatmentBMPID", value: treatmentBMPID, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}/custom-attribute-type-purposes/${this.configuration.encodeParam({name: "customAttributeTypePurposeID", value: customAttributeTypePurposeID, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}/custom-attributes`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<CustomAttributeDto>>('put', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: customAttributeUpsertDto,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

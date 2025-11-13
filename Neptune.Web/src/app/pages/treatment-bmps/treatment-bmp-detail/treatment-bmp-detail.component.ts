@@ -151,18 +151,13 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
     delineationMapUrl = "";
     editUpstreamBMPUrl = "";
     hasModelingAttributes = false;
-    // TODO: Add more properties as needed
 
-    public TrashCaptureStatusTypeEnum = TrashCaptureStatusTypeEnum;
-    public TreatmentBMPLifespanTypeEnum = TreatmentBMPLifespanTypeEnum;
-
-    /**
-     * Stub for HRU characteristics summaries used in the land use panel template.
-     * Replace with actual data wiring when available.
-     */
     hruCharacteristicsSummaries: TreatmentBMPHRUCharacteristicsSummarySimpleDto[] = [];
+
     public WaterQualityManagementPlanModelingApproachEnum = WaterQualityManagementPlanModelingApproachEnum;
     public CustomAttributeTypePurposeEnum = CustomAttributeTypePurposeEnum;
+    public TrashCaptureStatusTypeEnum = TrashCaptureStatusTypeEnum;
+    public TreatmentBMPLifespanTypeEnum = TreatmentBMPLifespanTypeEnum;
 
     constructor(
         private treatmentBMPService: TreatmentBMPService,

@@ -14,6 +14,7 @@ export const routeParams = {
     loadGeneratingUnitID: "loadGeneratingUnitID",
     jurisdictionID: "jurisdictionID",
     regionalSubbasinID: "regionalSubbasinID",
+    customAttributePurposeID: "customAttributePurposeID",
 };
 
 export const routes: Routes = [
@@ -397,6 +398,15 @@ export const routes: Routes = [
                 loadComponent: () =>
                     import("./pages/treatment-bmps/treatment-bmp-detail/treatment-bmp-update-location/treatment-bmp-update-location.component").then(
                         (m) => m.TreatmentBmpUpdateLocationComponent
+                    ),
+                canDeactivate: [UnsavedChangesGuard],
+            },
+            {
+                path: `treatment-bmps/:${routeParams.treatmentBMPID}/edit-custom-attributes/:${routeParams.customAttributePurposeID}`,
+                title: "Edit BMP Custom Attributes",
+                loadComponent: () =>
+                    import("./pages/treatment-bmps/treatment-bmp-detail/treatment-bmp-update-custom-attributes/treatment-bmp-update-custom-attributes.component").then(
+                        (m) => m.TreatmentBmpUpdateCustomAttributesComponent
                     ),
                 canDeactivate: [UnsavedChangesGuard],
             },

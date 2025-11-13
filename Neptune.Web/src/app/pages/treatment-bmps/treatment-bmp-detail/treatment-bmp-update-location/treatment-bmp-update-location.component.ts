@@ -13,6 +13,7 @@ import { tap } from "rxjs/operators";
 import { AlertService } from "src/app/shared/services/alert.service";
 import { Alert } from "src/app/shared/models/alert";
 import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
+import { IDeactivateComponent } from "src/app/shared/guards/unsaved-changes.guard";
 
 @Component({
     selector: "treatment-bmp-update-location",
@@ -21,7 +22,7 @@ import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
     templateUrl: "./treatment-bmp-update-location.component.html",
     styleUrls: ["./treatment-bmp-update-location.component.scss"],
 })
-export class TreatmentBmpUpdateLocationComponent implements OnInit {
+export class TreatmentBmpUpdateLocationComponent implements OnInit, IDeactivateComponent {
     private treatmentBMPService = inject(TreatmentBMPService);
     private router = inject(Router);
     private alertService = inject(AlertService);
@@ -46,6 +47,10 @@ export class TreatmentBmpUpdateLocationComponent implements OnInit {
                 }
             })
         );
+    }
+
+    public canExit(): boolean {
+        return this.formGroup.pristine;
     }
 
     public save(): void {

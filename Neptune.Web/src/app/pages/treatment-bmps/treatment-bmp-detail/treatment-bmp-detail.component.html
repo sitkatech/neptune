@@ -141,13 +141,25 @@
                 @if (customAttributes$ | async; as customAttributes) {
                     @if (hasModelingAttributes) {
                         <!-- Modeling Attributes Panel -->
-                        <custom-attributes-display
-                            [canManage]="currentPersonCanManage"
-                            [editUrl]="editTreatmentBMPModelingAttributesUrl"
-                            [isAdmin]="isSitkaAdmin"
-                            [customAttributeTypePurposeEnum]="CustomAttributeTypePurposeEnum.Modeling"
-                            [treatmentBMPTypeCustomAttributeTypes]="treatmentBMPTypeCustomAttributeTypes"
-                            [customAttributes]="customAttributes"></custom-attributes-display>
+                        <div class="card mt-3">
+                            <div class="card-header">
+                                <span class="card-title">Modeling Attributes</span>
+                                @if (currentPersonCanManage) {
+                                    <span class="card-actions">
+                                        <a [routerLink]="['/treatment-bmps', treatmentBMP.TreatmentBMPID, 'edit-custom-attributes', CustomAttributeTypePurposeEnum.Modeling]">
+                                            <icon class="icon-button" icon="CirclePencil"></icon>
+                                        </a>
+                                    </span>
+                                }
+                            </div>
+                            <div class="card-body">
+                                <custom-attributes-display
+                                    [customAttributeTypePurposeEnum]="CustomAttributeTypePurposeEnum.Modeling"
+                                    [treatmentBMPTypeCustomAttributeTypes]="treatmentBMPTypeCustomAttributeTypes"
+                                    [customAttributes]="customAttributes"></custom-attributes-display>
+                            </div>
+                        </div>
+
                         <div class="card mt-3">
                             <div class="card-header">
                                 <span class="card-title">Modeled BMP Performance</span>
@@ -178,13 +190,31 @@
                     }
                     @if (!isAnonymousOrUnassigned) {
                         <!-- Other Design Attributes Panel -->
-                        <custom-attributes-display
-                            [canManage]="currentPersonCanManage"
-                            [editUrl]="editTreatmentBMPOtherDesignAttributesUrl"
-                            [isAdmin]="isSitkaAdmin"
-                            [customAttributeTypePurposeEnum]="CustomAttributeTypePurposeEnum.OtherDesignAttributes"
-                            [treatmentBMPTypeCustomAttributeTypes]="treatmentBMPTypeCustomAttributeTypes"
-                            [customAttributes]="customAttributes"></custom-attributes-display>
+                        <div class="card mt-3">
+                            <div class="card-header">
+                                <span class="card-title">Other Design Attributes</span>
+                                @if (currentPersonCanManage) {
+                                    <span class="card-actions">
+                                        <a
+                                            [routerLink]="[
+                                                '/treatment-bmps',
+                                                treatmentBMP.TreatmentBMPID,
+                                                'edit-custom-attributes',
+                                                CustomAttributeTypePurposeEnum.OtherDesignAttributes,
+                                            ]">
+                                            <icon class="icon-button" icon="CirclePencil"></icon>
+                                        </a>
+                                    </span>
+                                }
+                            </div>
+                            <div class="card-body">
+                                <custom-attributes-display
+                                    [isAdmin]="isSitkaAdmin"
+                                    [customAttributeTypePurposeEnum]="CustomAttributeTypePurposeEnum.OtherDesignAttributes"
+                                    [treatmentBMPTypeCustomAttributeTypes]="treatmentBMPTypeCustomAttributeTypes"
+                                    [customAttributes]="customAttributes"></custom-attributes-display>
+                            </div>
+                        </div>
                     }
                 }
             }
@@ -313,7 +343,7 @@
                     <div class="card-body">
                         @if (!isAnonymousOrUnassigned && currentPersonCanManage) {
                             <!-- TODO: Implement Refresh Land Use button logic and modal -->
-                            <button class="btn btn-neptune" [disabled]="!treatmentBMP.Delineation?.IsVerified">Refresh Land Use</button>
+                            <button class="btn btn-primary" [disabled]="!treatmentBMP.Delineation?.IsVerified">Refresh Land Use</button>
                         }
                         @if (hruCharacteristicsSummaries?.length && treatmentBMP.Delineation?.IsVerified) {
                             <land-use-table [hruCharacteristics]="hruCharacteristicsSummaries"></land-use-table>
@@ -333,7 +363,6 @@
             }
         </div>
 
-        <!-- more content can be added here -->
         <!-- HRU Characteristics (Sitka Admin only) -->
         @if (isSitkaAdmin && isAnalyzedInModelingModule) {
             <div class="card mt-3">

@@ -166,6 +166,28 @@ public class TreatmentBMPController(NeptuneDbContext dbContext, ILogger<Treatmen
         return Ok(treatmentBMPDto);
     }
 
+    [HttpPut("{treatmentBMPID}/custom-attribute-type-purposes/{customAttributeTypePurposeID}/custom-attributes")]
+    [UserViewFeature]
+    [EntityNotFound(typeof(TreatmentBMP), "treatmentBMPID")]
+    public async Task<ActionResult<List<CustomAttributeDto>>> UpdateCustomAttributes([FromRoute] int treatmentBMPID, [FromRoute] int customAttributeTypePurposeID, [FromBody] List<CustomAttributeUpsertDto> customAttributes)
+    {
+        var customAttributePurposeType = CustomAttributeTypePurpose.All.FirstOrDefault(x => x.CustomAttributeTypePurposeID == customAttributeTypePurposeID);
+        if (customAttributePurposeType == null)
+        {
+            return NotFound();
+        }
+
+        var errors = await CustomAttributes.ValidateUpdateCustomAttributesAsync(DbContext, treatmentBMPID, customAttributeTypePurposeID, customAttributes);
+        errors.ForEach(e => ModelState.AddModelError(e.Type, e.Message));
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        var updatedCustomAttributes = await CustomAttributes.UpdateCustomAttributesAsync(DbContext, treatmentBMPID, customAttributeTypePurposeID, customAttributes, CallingUser);
+        return Ok(updatedCustomAttributes);
+    }
+
     [HttpDelete("{treatmentBMPID}")]
     [JurisdictionEditFeature]
     [EntityNotFound(typeof(TreatmentBMP), "treatmentBMPID")]

@@ -16,6 +16,7 @@ public static partial class CustomAttributeTypeExtensionMethods
             CustomAttributeTypeDescription = customAttributeType.CustomAttributeTypeDescription,
             CustomAttributeTypePurposeID = customAttributeType.CustomAttributeTypePurposeID,
             CustomAttributeTypeOptionsSchema = customAttributeType.CustomAttributeTypeOptionsSchema,
+            DataTypeName = customAttributeType.CustomAttributeDataType.CustomAttributeDataTypeName,
             DataTypeDisplayName = customAttributeType.CustomAttributeDataType.CustomAttributeDataTypeDisplayName,
             MeasurementUnitDisplayName = customAttributeType.GetMeasurementUnitDisplayName(),
             Purpose = customAttributeType.CustomAttributeTypePurpose
@@ -37,6 +38,7 @@ public static partial class CustomAttributeTypeExtensionMethods
             CustomAttributeTypeDescription = customAttributeType.CustomAttributeTypeDescription,
             CustomAttributeTypePurposeID = customAttributeType.CustomAttributeTypePurposeID,
             CustomAttributeTypeOptionsSchema = customAttributeType.CustomAttributeTypeOptionsSchema,
+            DataTypeName = customAttributeType.CustomAttributeDataType.CustomAttributeDataTypeName,
             DataTypeDisplayName = customAttributeType.CustomAttributeDataType.CustomAttributeDataTypeDisplayName,
             MeasurementUnitDisplayName = customAttributeType.GetMeasurementUnitDisplayName(),
             Purpose = customAttributeType.CustomAttributeTypePurpose

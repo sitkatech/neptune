@@ -9,6 +9,7 @@ namespace Neptune.Models.DataTransferObjects
         public int TreatmentBMPTypeCustomAttributeTypeID { get; set; }
         public int TreatmentBMPTypeID { get; set; }
         public int CustomAttributeTypeID { get; set; }
+        public List<string> CustomAttributeValues { get; set; }
         public string CustomAttributeValueWithUnits { get; set; }
     }
 }

@@ -1,0 +1,20 @@
+@if (!hasAttributes) {
+    <p class="systemText">This type of treatment BMP does not have any {{ customAttributeTypePurposeDisplayName }}</p>
+}
+@if (hasAttributes) {
+    <form [formGroup]="formGroup" class="grid-12">
+        @for (attrType of filteredAttributeTypes; track attrType.CustomAttributeType.CustomAttributeTypeID) {
+            <div class="g-col-6 mb-3">
+                <form-field
+                    [formControl]="attributeValuesByTypeIDFormControls[attrType.CustomAttributeType.CustomAttributeTypeID]"
+                    [fieldLabel]="attrType.CustomAttributeType.CustomAttributeTypeName"
+                    [type]="attributeFormTypeByTypeID[attrType.CustomAttributeType.CustomAttributeTypeID]"
+                    [formInputOptions]="selectOptionsByTypeID[attrType.CustomAttributeType.CustomAttributeTypeID]"
+                    [placeholder]="'Enter ' + attrType.CustomAttributeType.CustomAttributeTypeName"
+                    [units]="attrType.CustomAttributeType.MeasurementUnitDisplayName"
+                    [multiple]="attrType.CustomAttributeType.DataTypeName == 'MultiSelect'">
+                </form-field>
+            </div>
+        }
+    </form>
+}
