@@ -6,12 +6,14 @@ export interface ImageCarouselItem {
     Caption?: string | null;
 }
 import { environment } from "src/environments/environment";
+import { LoadingDirective } from "../../directives/loading.directive";
 
 @Component({
     selector: "image-carousel",
     templateUrl: "./image-carousel.component.html",
     styleUrls: ["./image-carousel.component.scss"],
     standalone: true,
+    imports: [LoadingDirective],
 })
 export class ImageCarouselComponent implements OnChanges {
     private fileResourceService = inject(FileResourceService);
