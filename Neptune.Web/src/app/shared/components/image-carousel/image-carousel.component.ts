@@ -1,4 +1,5 @@
-import { Component, Input } from "@angular/core";
+import { Component, inject, Input, OnChanges, SimpleChanges } from "@angular/core";
+import { FileResourceService } from "src/app/shared/generated/api/file-resource.service";
 
 export interface ImageCarouselItem {
     FileResourceGUID: string;
@@ -12,18 +13,41 @@ import { environment } from "src/environments/environment";
     styleUrls: ["./image-carousel.component.scss"],
     standalone: true,
 })
-export class ImageCarouselComponent {
+export class ImageCarouselComponent implements OnChanges {
+    private fileResourceService = inject(FileResourceService);
+
     @Input() images: ImageCarouselItem[] = [];
     @Input() noImagesMessage: string = "No images available.";
-    currentImageIndex = 0;
+    public currentImageIndex = 0;
+    public imagePreviewUrls: { [guid: string]: string } = {};
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes.images && this.images && this.images.length > 0) {
+            this.setImageIndex(0);
+        }
+    }
 
     setImageIndex(idx: number): void {
         if (this.images && this.images.length > 0) {
             this.currentImageIndex = (idx + this.images.length) % this.images.length;
+            this.loadImagePreview({ FileResourceGUID: this.images[this.currentImageIndex].FileResourceGUID });
         }
     }
 
-    getFileResourceUrl(fileResourceGUID: string): string {
-        return environment.ocStormwaterToolsBaseUrl + "/FileResource/DisplayResource/" + fileResourceGUID;
+    // Call this to load the image preview for a file resource
+    public loadImagePreview(image: IHaveFileResourceGUID): void {
+        const guid = image?.FileResourceGUID;
+        if (!guid || this.imagePreviewUrls[guid]) {
+            return;
+        }
+
+        this.fileResourceService.displayResourceFileResource(guid).subscribe((blob: Blob) => {
+            const url = URL.createObjectURL(blob);
+            this.imagePreviewUrls[guid] = url;
+        });
     }
+}
+
+export interface IHaveFileResourceGUID {
+    FileResourceGUID: string;
 }

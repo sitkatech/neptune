@@ -2,15 +2,13 @@ import { Component, inject, OnInit } from "@angular/core";
 import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
 import { FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { FormFieldComponent, FormFieldType, SelectDropdownOption } from "src/app/shared/components/forms/form-field/form-field.component";
-import { AsyncPipe, CommonModule } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.service";
 import { TreatmentBMPTypeService } from "src/app/shared/generated/api/treatment-bmp-type.service";
 import { map, Observable } from "rxjs";
 import { TreatmentBMPTypeUpdate, TreatmentBMPTypeUpdateForm, TreatmentBMPTypeUpdateFormControls } from "src/app/shared/generated/model/treatment-bmp-type-update";
 import { DialogRef } from "@ngneat/dialog";
 import { AlertService } from "src/app/shared/services/alert.service";
-import { Alert } from "src/app/shared/models/alert";
-import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
 
 @Component({
     selector: "treatment-bmp-update-type-modal",

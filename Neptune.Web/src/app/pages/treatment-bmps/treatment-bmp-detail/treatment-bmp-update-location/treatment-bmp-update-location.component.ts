@@ -26,6 +26,7 @@ export class TreatmentBmpUpdateLocationComponent implements OnInit, IDeactivateC
     private treatmentBMPService = inject(TreatmentBMPService);
     private router = inject(Router);
     private alertService = inject(AlertService);
+
     @Input() treatmentBMPID?: number;
 
     public formGroup: FormGroup<TreatmentBMPLocationUpdateForm> = new FormGroup<TreatmentBMPLocationUpdateForm>({

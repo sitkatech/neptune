@@ -16,6 +16,8 @@ import { Observable }                                        from 'rxjs';
 
 // @ts-ignore
 import { TreatmentBMPImageDto } from '../model/treatment-bmp-image-dto';
+// @ts-ignore
+import { TreatmentBMPImageUpdateDto } from '../model/treatment-bmp-image-update-dto';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -35,16 +37,20 @@ export class TreatmentBMPImageByTreatmentBMPService extends BaseService {
 
     /**
      * @param treatmentBMPID 
-     * @param treatmentBMPImageDto 
+     * @param file 
+     * @param caption 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createTreatmentBMPImageByTreatmentBMP(treatmentBMPID: number, treatmentBMPImageDto?: TreatmentBMPImageDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<TreatmentBMPImageDto>;
-    public createTreatmentBMPImageByTreatmentBMP(treatmentBMPID: number, treatmentBMPImageDto?: TreatmentBMPImageDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TreatmentBMPImageDto>>;
-    public createTreatmentBMPImageByTreatmentBMP(treatmentBMPID: number, treatmentBMPImageDto?: TreatmentBMPImageDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TreatmentBMPImageDto>>;
-    public createTreatmentBMPImageByTreatmentBMP(treatmentBMPID: number, treatmentBMPImageDto?: TreatmentBMPImageDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createTreatmentBMPImageByTreatmentBMP(treatmentBMPID: number, file: Blob, caption?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<TreatmentBMPImageDto>;
+    public createTreatmentBMPImageByTreatmentBMP(treatmentBMPID: number, file: Blob, caption?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TreatmentBMPImageDto>>;
+    public createTreatmentBMPImageByTreatmentBMP(treatmentBMPID: number, file: Blob, caption?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TreatmentBMPImageDto>>;
+    public createTreatmentBMPImageByTreatmentBMP(treatmentBMPID: number, file: Blob, caption?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (treatmentBMPID === null || treatmentBMPID === undefined) {
             throw new Error('Required parameter treatmentBMPID was null or undefined when calling createTreatmentBMPImageByTreatmentBMP.');
+        }
+        if (file === null || file === undefined) {
+            throw new Error('Required parameter file was null or undefined when calling createTreatmentBMPImageByTreatmentBMP.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -62,16 +68,30 @@ export class TreatmentBMPImageByTreatmentBMPService extends BaseService {
 
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
-
         // to determine the Content-Type header
         const consumes: string[] = [
-            'application/json',
-            'text/json',
-            'application/*+json'
+            'multipart/form-data'
         ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+
+        const canConsumeForm = this.canConsumeForm(consumes);
+
+        let localVarFormParams: { append(param: string, value: any): any; };
+        let localVarUseForm = false;
+        let localVarConvertFormParamsToString = false;
+        // use FormData to transmit files using content-type "multipart/form-data"
+        // see https://stackoverflow.com/questions/4007969/application-x-www-form-urlencoded-or-multipart-form-data
+        localVarUseForm = canConsumeForm;
+        if (localVarUseForm) {
+            localVarFormParams = new FormData();
+        } else {
+            localVarFormParams = new HttpParams({encoder: this.encoder});
+        }
+
+        if (file !== undefined) {
+            localVarFormParams = localVarFormParams.append('File', <any>file) as any || localVarFormParams;
+        }
+        if (caption !== undefined) {
+            localVarFormParams = localVarFormParams.append('Caption', <any>caption) as any || localVarFormParams;
         }
 
         let responseType_: 'text' | 'json' | 'blob' = 'json';
@@ -90,7 +110,7 @@ export class TreatmentBMPImageByTreatmentBMPService extends BaseService {
         return this.httpClient.request<TreatmentBMPImageDto>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: treatmentBMPImageDto,
+                body: localVarConvertFormParamsToString ? localVarFormParams.toString() : localVarFormParams,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -274,14 +294,14 @@ export class TreatmentBMPImageByTreatmentBMPService extends BaseService {
     /**
      * @param treatmentBMPID 
      * @param treatmentBMPImageID 
-     * @param treatmentBMPImageDto 
+     * @param treatmentBMPImageUpdateDto 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public updateTreatmentBMPImageByTreatmentBMP(treatmentBMPID: number, treatmentBMPImageID: number, treatmentBMPImageDto?: TreatmentBMPImageDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public updateTreatmentBMPImageByTreatmentBMP(treatmentBMPID: number, treatmentBMPImageID: number, treatmentBMPImageDto?: TreatmentBMPImageDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public updateTreatmentBMPImageByTreatmentBMP(treatmentBMPID: number, treatmentBMPImageID: number, treatmentBMPImageDto?: TreatmentBMPImageDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public updateTreatmentBMPImageByTreatmentBMP(treatmentBMPID: number, treatmentBMPImageID: number, treatmentBMPImageDto?: TreatmentBMPImageDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public updateTreatmentBMPImageByTreatmentBMP(treatmentBMPID: number, treatmentBMPImageID: number, treatmentBMPImageUpdateDto?: TreatmentBMPImageUpdateDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public updateTreatmentBMPImageByTreatmentBMP(treatmentBMPID: number, treatmentBMPImageID: number, treatmentBMPImageUpdateDto?: TreatmentBMPImageUpdateDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public updateTreatmentBMPImageByTreatmentBMP(treatmentBMPID: number, treatmentBMPImageID: number, treatmentBMPImageUpdateDto?: TreatmentBMPImageUpdateDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public updateTreatmentBMPImageByTreatmentBMP(treatmentBMPID: number, treatmentBMPImageID: number, treatmentBMPImageUpdateDto?: TreatmentBMPImageUpdateDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (treatmentBMPID === null || treatmentBMPID === undefined) {
             throw new Error('Required parameter treatmentBMPID was null or undefined when calling updateTreatmentBMPImageByTreatmentBMP.');
         }
@@ -329,7 +349,7 @@ export class TreatmentBMPImageByTreatmentBMPService extends BaseService {
         return this.httpClient.request<any>('put', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: treatmentBMPImageDto,
+                body: treatmentBMPImageUpdateDto,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

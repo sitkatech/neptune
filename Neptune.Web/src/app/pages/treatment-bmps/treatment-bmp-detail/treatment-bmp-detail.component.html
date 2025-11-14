@@ -225,6 +225,7 @@
             <div class="card">
                 <div class="card-header">
                     <span class="card-title">Images</span>
+                    <a [routerLink]="['edit-images']"><icon class="icon-button" icon="CirclePencil"></icon></a>
                 </div>
                 <div class="card-body" [loadingSpinner]="{ isLoading: imagesLoading, loadingHeight: 100 }">
                     @if (treatmentBMPImages$ | async; as images) {

@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Neptune.API.Services;
 using Neptune.EFModels.Entities;
 using System;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Options;
 
 namespace Neptune.API.Controllers
 {
@@ -21,6 +22,7 @@ namespace Neptune.API.Controllers
         : SitkaController<FileResourceController>(dbContext, logger, keystoneService, neptuneConfiguration)
     {
         [HttpGet("{fileResourceGuidAsString}")]
+        [ProducesResponseType(typeof(FileStreamResult), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> DisplayResource(string fileResourceGuidAsString)
         {
             var isStringAGuid = Guid.TryParse(fileResourceGuidAsString, out var fileResourceGuid);
@@ -51,7 +53,7 @@ namespace Neptune.API.Controllers
             var blobDownloadResult =
                 await azureBlobStorageService.DownloadFileResourceFromBlobStorage(fileResource);
 
-            return File(blobDownloadResult.Content.ToArray(), blobDownloadResult.Details.ContentType);
+            return File(blobDownloadResult.Content.ToArray(), blobDownloadResult.Details.ContentType, contentDisposition.FileName);
         }
 
     }

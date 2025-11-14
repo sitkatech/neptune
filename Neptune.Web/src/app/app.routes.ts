@@ -393,6 +393,15 @@ export const routes: Routes = [
                 canDeactivate: [UnsavedChangesGuard],
             },
             {
+                path: `treatment-bmps/:${routeParams.treatmentBMPID}/edit-images`,
+                title: "Edit BMP Images",
+                loadComponent: () =>
+                    import("./pages/treatment-bmps/treatment-bmp-detail/treatment-bmp-update-images/treatment-bmp-update-images.component").then(
+                        (m) => m.TreatmentBmpUpdateImagesComponent
+                    ),
+                canDeactivate: [UnsavedChangesGuard],
+            },
+            {
                 path: `treatment-bmps/:${routeParams.treatmentBMPID}/edit-location`,
                 title: "Edit BMP Location",
                 loadComponent: () =>

@@ -1,102 +1,70 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Neptune.API.Services;
+using Neptune.API.Services.Attributes;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Neptune.API.Controllers
 {
     [ApiController]
     [Route("treatment-bmps/{treatmentBMPID}/treatment-bmp-images")]
-    public class TreatmentBMPImageByTreatmentBMPController : SitkaController<TreatmentBMPImageByTreatmentBMPController>
+    public class TreatmentBMPImageByTreatmentBMPController(NeptuneDbContext dbContext, ILogger<TreatmentBMPImageByTreatmentBMPController> logger, KeystoneService keystoneService, IOptions<NeptuneConfiguration> neptuneConfiguration, AzureBlobStorageService blobStorageService, PersonDto callingPerson)
+        : SitkaController<TreatmentBMPImageByTreatmentBMPController>(dbContext, logger, keystoneService, neptuneConfiguration)
     {
-        public TreatmentBMPImageByTreatmentBMPController(
-            NeptuneDbContext dbContext,
-            ILogger<TreatmentBMPImageByTreatmentBMPController> logger,
-            KeystoneService keystoneService,
-            IOptions<NeptuneConfiguration> neptuneConfiguration)
-            : base(dbContext, logger, keystoneService, neptuneConfiguration)
+        [HttpPost]
+        [EntityNotFound(typeof(TreatmentBMP), "treatmentBMPID")]
+        public async Task<ActionResult<TreatmentBMPImageDto>> Create([FromRoute] int treatmentBMPID, [FromForm] TreatmentBMPImageCreateDto imageCreateDto)
         {
+            var errors = FileResources.ValidateFileUpload(imageCreateDto.File, true);
+            if (!ModelState.IsValid || errors.Any())
+            {
+                errors.ForEach(x => ModelState.AddModelError(x.Type, x.Message));
+                return BadRequest(ModelState);
+            }
+
+            var fileResource = await HttpUtilities.MakeFileResourceFromFormFileAsync(DbContext, HttpContext, blobStorageService, imageCreateDto.File);
+
+            var treatmentBMPImageDto = await TreatmentBMPImages.CreateAsync(DbContext, treatmentBMPID, fileResource.FileResourceID, imageCreateDto, callingPerson.PersonID);
+            return CreatedAtAction(nameof(Get), new { treatmentBMPID, treatmentBMPImageID = treatmentBMPImageDto.TreatmentBMPImageID }, treatmentBMPImageDto);
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<TreatmentBMPImageDto>> List([FromRoute] int treatmentBMPID)
+        [EntityNotFound(typeof(TreatmentBMP), "treatmentBMPID")]
+        public async Task<ActionResult<IEnumerable<TreatmentBMPImageDto>>> List([FromRoute] int treatmentBMPID)
         {
-            var images = DbContext.TreatmentBMPImages.Include(x => x.FileResource)
-                .Where(x => x.TreatmentBMPID == treatmentBMPID)
-                .Select(x => x.AsDto())
-                .ToList();
-            return Ok(images);
+            var treatmentBMPImageDtos = await TreatmentBMPImages.ListAsync(DbContext, treatmentBMPID);
+            return Ok(treatmentBMPImageDtos);
         }
 
         [HttpGet("{treatmentBMPImageID}")]
-        public ActionResult<TreatmentBMPImageDto> Get([FromRoute] int treatmentBMPID, [FromRoute] int treatmentBMPImageID)
+        [EntityNotFound(typeof(TreatmentBMP), "treatmentBMPID")]
+        [EntityNotFound(typeof(TreatmentBMPImage), "treatmentBMPImageID")]
+        public async Task<ActionResult<TreatmentBMPImageDto>> Get([FromRoute] int treatmentBMPID, [FromRoute] int treatmentBMPImageID)
         {
-            var image = DbContext.TreatmentBMPImages.Include(x => x.FileResource)
-                .Where(x => x.TreatmentBMPID == treatmentBMPID && x.TreatmentBMPImageID == treatmentBMPImageID)
-                .Select(x => x.AsDto())
-                .FirstOrDefault();
-            if (image == null)
-            {
-                return NotFound();
-            }
-            return Ok(image);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<TreatmentBMPImageDto>> Create([FromRoute] int treatmentBMPID, [FromBody] TreatmentBMPImageDto dto)
-        {
-            // Validate FileResourceID
-            var fileResource = await DbContext.FileResources.FindAsync(dto.FileResourceID);
-            if (fileResource == null)
-            {
-                return BadRequest($"FileResourceID {dto.FileResourceID} does not exist.");
-            }
-
-            var entity = new TreatmentBMPImage
-            {
-                TreatmentBMPID = treatmentBMPID,
-                FileResourceID = dto.FileResourceID,
-                FileResource = fileResource,
-                Caption = dto.Caption,
-                UploadDate = DateOnly.FromDateTime(DateTime.UtcNow)
-            };
-            DbContext.TreatmentBMPImages.Add(entity);
-            await DbContext.SaveChangesAsync();
-            return CreatedAtAction(nameof(Get), new { treatmentBMPID, treatmentBMPImageID = entity.TreatmentBMPImageID }, entity.AsDto());
+            var treatmentBMPImageDto = await TreatmentBMPImages.GetAsync(DbContext, treatmentBMPID, treatmentBMPImageID);
+            return Ok(treatmentBMPImageDto);
         }
 
         [HttpPut("{treatmentBMPImageID}")]
-        public async Task<IActionResult> Update([FromRoute] int treatmentBMPID, [FromRoute] int treatmentBMPImageID, [FromBody] TreatmentBMPImageDto dto)
+        [EntityNotFound(typeof(TreatmentBMP), "treatmentBMPID")]
+        [EntityNotFound(typeof(TreatmentBMPImage), "treatmentBMPImageID")]
+        public async Task<IActionResult> Update([FromRoute] int treatmentBMPID, [FromRoute] int treatmentBMPImageID, [FromBody] TreatmentBMPImageUpdateDto updateDto)
         {
-            var entity = await DbContext.TreatmentBMPImages
-                .FirstOrDefaultAsync(x => x.TreatmentBMPID == treatmentBMPID && x.TreatmentBMPImageID == treatmentBMPImageID);
-            if (entity == null)
-            {
-                return NotFound();
-            }
-            entity.Caption = dto.Caption;
-            await DbContext.SaveChangesAsync();
-            return NoContent();
+            var updatedTreatmentBMPImageDto = await TreatmentBMPImages.UpdateAsync(DbContext, treatmentBMPID, treatmentBMPImageID, updateDto);
+            return Ok(updatedTreatmentBMPImageDto);
         }
 
         [HttpDelete("{treatmentBMPImageID}")]
+        [EntityNotFound(typeof(TreatmentBMP), "treatmentBMPID")]
+        [EntityNotFound(typeof(TreatmentBMPImage), "treatmentBMPImageID")]
         public async Task<IActionResult> Delete([FromRoute] int treatmentBMPID, [FromRoute] int treatmentBMPImageID)
         {
-            var entity = await DbContext.TreatmentBMPImages
-                .FirstOrDefaultAsync(x => x.TreatmentBMPID == treatmentBMPID && x.TreatmentBMPImageID == treatmentBMPImageID);
-            if (entity == null)
-            {
-                return NotFound();
-            }
-            DbContext.TreatmentBMPImages.Remove(entity);
-            await DbContext.SaveChangesAsync();
+            await TreatmentBMPImages.DeleteAsync(DbContext, treatmentBMPID, treatmentBMPImageID);
             return NoContent();
         }
     }

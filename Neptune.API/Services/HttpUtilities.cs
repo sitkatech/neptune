@@ -9,7 +9,7 @@ namespace Neptune.API.Services
 {
     public static class HttpUtilities
     {
-        public static async Task<FileResource> MakeFileResourceFromFormFile(IFormFile inputFile, NeptuneDbContext dbContext, HttpContext httpContext, AzureBlobStorageService blobStorageService)
+        public static async Task<FileResource> MakeFileResourceFromFormFileAsync(NeptuneDbContext dbContext, HttpContext httpContext, AzureBlobStorageService blobStorageService, IFormFile inputFile)
         {
             byte[] bytes;
             await using(var ms = new MemoryStream())

@@ -143,6 +143,7 @@ model/treatment-bmp-display-dto.ts
 model/treatment-bmp-dto.ts
 model/treatment-bmp-grid-dto.ts
 model/treatment-bmp-image-dto.ts
+model/treatment-bmp-image-update-dto.ts
 model/treatment-bmp-life-span-type-dto.ts
 model/treatment-bmp-location-update.ts
 model/treatment-bmp-minimal-dto.ts

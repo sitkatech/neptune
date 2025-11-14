@@ -559,7 +559,27 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
           }
         }
       }
@@ -6198,6 +6218,74 @@
       }
     },
     "/treatment-bmps/{treatmentBMPID}/treatment-bmp-images": {
+      "post": {
+        "tags": [
+          "TreatmentBMPImageByTreatmentBMP"
+        ],
+        "operationId": "Create_TreatmentBMPImageByTreatmentBMP",
+        "parameters": [
+          {
+            "name": "treatmentBMPID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "required": [
+                  "File"
+                ],
+                "type": "object",
+                "properties": {
+                  "File": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "Caption": {
+                    "type": "string"
+                  }
+                }
+              },
+              "encoding": {
+                "File": {
+                  "style": "form"
+                },
+                "Caption": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPImageDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPImageDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPImageDto"
+                }
+              }
+            }
+          }
+        }
+      },
       "get": {
         "tags": [
           "TreatmentBMPImageByTreatmentBMP"
@@ -6240,64 +6328,6 @@
                   "items": {
                     "$ref": "#/components/schemas/TreatmentBMPImageDto"
                   }
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "TreatmentBMPImageByTreatmentBMP"
-        ],
-        "operationId": "Create_TreatmentBMPImageByTreatmentBMP",
-        "parameters": [
-          {
-            "name": "treatmentBMPID",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TreatmentBMPImageDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TreatmentBMPImageDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/TreatmentBMPImageDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/TreatmentBMPImageDto"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TreatmentBMPImageDto"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TreatmentBMPImageDto"
                 }
               }
             }
@@ -6383,17 +6413,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/TreatmentBMPImageDto"
+                "$ref": "#/components/schemas/TreatmentBMPImageUpdateDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/TreatmentBMPImageDto"
+                "$ref": "#/components/schemas/TreatmentBMPImageUpdateDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/TreatmentBMPImageDto"
+                "$ref": "#/components/schemas/TreatmentBMPImageUpdateDto"
               }
             }
           }
@@ -12445,6 +12475,10 @@
             "type": "integer",
             "format": "int32"
           },
+          "TreatmentBMPID": {
+            "type": "integer",
+            "format": "int32"
+          },
           "FileResourceID": {
             "type": "integer",
             "format": "int32"
@@ -12457,13 +12491,19 @@
             "type": "string",
             "nullable": true
           },
-          "TreatmentBMPID": {
-            "type": "integer",
-            "format": "int32"
-          },
           "UploadDate": {
             "type": "string",
             "format": "date"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TreatmentBMPImageUpdateDto": {
+        "type": "object",
+        "properties": {
+          "Caption": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
