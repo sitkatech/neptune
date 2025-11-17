@@ -110,6 +110,7 @@
                 </div>
             }
             <!-- File -->
+
             @case (FormFieldType.File) {
                 <div class="field-label" [class.required]="formControl | isRequired">
                     {{ fieldLabel }}
@@ -123,7 +124,12 @@
                         [placeholder]="placeholder"
                         [formControl]="formControl"
                         [name]="name" />
-                    {{ formControl.value ? formControl.value.name : "No file chosen..." }}
+                    <span class="file-name" [title]="fileName + fileExtension || 'No file chosen...'">
+                        <span class="base"> {{ fileName }} </span>
+                        <span class="ext">
+                            {{ fileExtension }}
+                        </span>
+                    </span>
                     <button type="button" class="btn btn-lg btn-primary" (click)="onClickFileUpload($event)">
                         <i class="fas fa-folder-open"></i>
                         Browse

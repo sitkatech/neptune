@@ -13,13 +13,16 @@ public class TreatmentBMPImageDto
     public DateOnly UploadDate { get; set; }
 }
 
-public class TreatmentBMPImageCreateDto : TreatmentBMPImageUpdateDto
+public class TreatmentBMPImageCreateDto
 {
     [Required]
     public IFormFile File { get; set; }
+    public string? Caption { get; set; }
 }
 
 public class TreatmentBMPImageUpdateDto
 {
+    // include the id so update DTO can be used in batch updates
+    public int TreatmentBMPImageID { get; set; }
     public string? Caption { get; set; }
 }

@@ -6333,6 +6333,56 @@
             }
           }
         }
+      },
+      "put": {
+        "tags": [
+          "TreatmentBMPImageByTreatmentBMP"
+        ],
+        "operationId": "Update_TreatmentBMPImageByTreatmentBMP",
+        "parameters": [
+          {
+            "name": "treatmentBMPID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TreatmentBMPImageUpdateDto"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TreatmentBMPImageUpdateDto"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TreatmentBMPImageUpdateDto"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
       }
     },
     "/treatment-bmps/{treatmentBMPID}/treatment-bmp-images/{treatmentBMPImageID}": {
@@ -6381,56 +6431,6 @@
                 }
               }
             }
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "TreatmentBMPImageByTreatmentBMP"
-        ],
-        "operationId": "Update_TreatmentBMPImageByTreatmentBMP",
-        "parameters": [
-          {
-            "name": "treatmentBMPID",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "treatmentBMPImageID",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TreatmentBMPImageUpdateDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TreatmentBMPImageUpdateDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/TreatmentBMPImageUpdateDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
           }
         }
       },
@@ -12501,6 +12501,10 @@
       "TreatmentBMPImageUpdateDto": {
         "type": "object",
         "properties": {
+          "TreatmentBMPImageID": {
+            "type": "integer",
+            "format": "int32"
+          },
           "Caption": {
             "type": "string",
             "nullable": true

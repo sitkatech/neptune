@@ -11,6 +11,7 @@
 
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class TreatmentBMPImageUpdateDto { 
+    TreatmentBMPImageID?: number;
     Caption?: string | null;
     constructor(obj?: any) {
         Object.assign(this, obj);
@@ -18,10 +19,21 @@ export class TreatmentBMPImageUpdateDto {
 }
 
 export interface TreatmentBMPImageUpdateDtoForm { 
+    TreatmentBMPImageID?: FormControl<number>;
     Caption?: FormControl<string>;
 }
 
 export class TreatmentBMPImageUpdateDtoFormControls { 
+    public static TreatmentBMPImageID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
     public static Caption = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 

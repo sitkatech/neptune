@@ -1,3 +1,52 @@
-<div>
-    <pre>{{ images | json }}</pre>
+<div class="grid-12">
+    <div class="g-col-12">
+        <div class="well">
+            <div class="grid-12">
+                <div class="g-col-6 grid-12">
+                    <form-field
+                        class="g-col-12"
+                        [formControl]="newPhotoFormGroup.controls.newPhoto"
+                        fieldLabel="Photo"
+                        [type]="FormFieldType.File"
+                        placeholder="Choose photo"
+                        uploadFileAccepts=".jpg,.jpeg,.png"></form-field>
+                    @if (newPhotoPreviewUrl) {
+                        <form-field
+                            class="g-col-12"
+                            [formControl]="newPhotoFormGroup.controls.newPhotoCaption"
+                            fieldLabel="Caption"
+                            [type]="FormFieldType.Textarea"
+                            placeholder="Caption"></form-field>
+                        <div class="g-col-12">
+                            <button class="btn btn-primary" style="float: right" (click)="addNewImage()">Add Photo</button>
+                        </div>
+                    }
+                </div>
+                @if (newPhotoPreviewUrl) {
+                    <div class="g-col-6">
+                        <img class="new-image-preview" [src]="newPhotoPreviewUrl" alt="Preview of photo to upload." />
+                        <div class="image-preview-ribbon">Preview</div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<div class="grid-12">
+    @for (image of images; track image.FileResourceGUID) {
+        <div class="g-col-2">
+            <img class="existing-image-preview" [src]="imagePreviewUrls[image.FileResourceGUID]" alt="Preview of existing photo." />
+        </div>
+        <div class="g-col-8">
+            <form-field [formControl]="captionControls[image.FileResourceGUID]" fieldLabel="Caption" [type]="FormFieldType.Textarea" placeholder="Caption"></form-field>
+        </div>
+        <div class="g-col-2">
+            <button class="btn btn-danger mt-4" [disabled]="isLoadingSubmit" (click)="deleteImage(image)">Delete Photo</button>
+        </div>
+    }
+</div>
+
+<div class="page-footer">
+    <button class="btn btn-primary mr-2" [disabled]="isLoadingSubmit || captionControlForm.pristine" (click)="save()">Save</button>
+    <button class="btn btn-secondary" [disabled]="isLoadingSubmit" (click)="cancel()">Cancel</button>
 </div>

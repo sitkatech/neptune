@@ -293,20 +293,16 @@ export class TreatmentBMPImageByTreatmentBMPService extends BaseService {
 
     /**
      * @param treatmentBMPID 
-     * @param treatmentBMPImageID 
      * @param treatmentBMPImageUpdateDto 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public updateTreatmentBMPImageByTreatmentBMP(treatmentBMPID: number, treatmentBMPImageID: number, treatmentBMPImageUpdateDto?: TreatmentBMPImageUpdateDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public updateTreatmentBMPImageByTreatmentBMP(treatmentBMPID: number, treatmentBMPImageID: number, treatmentBMPImageUpdateDto?: TreatmentBMPImageUpdateDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public updateTreatmentBMPImageByTreatmentBMP(treatmentBMPID: number, treatmentBMPImageID: number, treatmentBMPImageUpdateDto?: TreatmentBMPImageUpdateDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public updateTreatmentBMPImageByTreatmentBMP(treatmentBMPID: number, treatmentBMPImageID: number, treatmentBMPImageUpdateDto?: TreatmentBMPImageUpdateDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public updateTreatmentBMPImageByTreatmentBMP(treatmentBMPID: number, treatmentBMPImageUpdateDto?: Array<TreatmentBMPImageUpdateDto>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public updateTreatmentBMPImageByTreatmentBMP(treatmentBMPID: number, treatmentBMPImageUpdateDto?: Array<TreatmentBMPImageUpdateDto>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public updateTreatmentBMPImageByTreatmentBMP(treatmentBMPID: number, treatmentBMPImageUpdateDto?: Array<TreatmentBMPImageUpdateDto>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public updateTreatmentBMPImageByTreatmentBMP(treatmentBMPID: number, treatmentBMPImageUpdateDto?: Array<TreatmentBMPImageUpdateDto>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (treatmentBMPID === null || treatmentBMPID === undefined) {
             throw new Error('Required parameter treatmentBMPID was null or undefined when calling updateTreatmentBMPImageByTreatmentBMP.');
-        }
-        if (treatmentBMPImageID === null || treatmentBMPImageID === undefined) {
-            throw new Error('Required parameter treatmentBMPImageID was null or undefined when calling updateTreatmentBMPImageByTreatmentBMP.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -344,7 +340,7 @@ export class TreatmentBMPImageByTreatmentBMPService extends BaseService {
             }
         }
 
-        let localVarPath = `/treatment-bmps/${this.configuration.encodeParam({name: "treatmentBMPID", value: treatmentBMPID, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}/treatment-bmp-images/${this.configuration.encodeParam({name: "treatmentBMPImageID", value: treatmentBMPImageID, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}`;
+        let localVarPath = `/treatment-bmps/${this.configuration.encodeParam({name: "treatmentBMPID", value: treatmentBMPID, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}/treatment-bmp-images`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<any>('put', `${basePath}${localVarPath}`,
             {

@@ -9,52 +9,46 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace Neptune.API.Controllers
+namespace Neptune.API.Controllers;
+
+[ApiController]
+[Route("file-resources")]
+public class FileResourceController(NeptuneDbContext dbContext, ILogger<FileResourceController> logger, KeystoneService keystoneService, IOptions<NeptuneConfiguration> neptuneConfiguration, AzureBlobStorageService azureBlobStorageService)
+    : SitkaController<FileResourceController>(dbContext, logger, keystoneService, neptuneConfiguration)
 {
-    [ApiController]
-    [Route("file-resources")]
-    public class FileResourceController(
-        NeptuneDbContext dbContext,
-        ILogger<FileResourceController> logger,
-        KeystoneService keystoneService,
-        IOptions<NeptuneConfiguration> neptuneConfiguration,
-        AzureBlobStorageService azureBlobStorageService)
-        : SitkaController<FileResourceController>(dbContext, logger, keystoneService, neptuneConfiguration)
+    [HttpGet("{fileResourceGuidAsString}")]
+    [ProducesResponseType(typeof(FileStreamResult), (int)HttpStatusCode.OK)]
+    public async Task<IActionResult> DisplayResource(string fileResourceGuidAsString)
     {
-        [HttpGet("{fileResourceGuidAsString}")]
-        [ProducesResponseType(typeof(FileStreamResult), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> DisplayResource(string fileResourceGuidAsString)
+        var isStringAGuid = Guid.TryParse(fileResourceGuidAsString, out var fileResourceGuid);
+        if (isStringAGuid)
         {
-            var isStringAGuid = Guid.TryParse(fileResourceGuidAsString, out var fileResourceGuid);
-            if (isStringAGuid)
+            var fileResource = DbContext.FileResources.AsNoTracking().SingleOrDefault(x => x.FileResourceGUID == fileResourceGuid);
+            if (fileResource != null)
             {
-                var fileResource = DbContext.FileResources.AsNoTracking().SingleOrDefault(x => x.FileResourceGUID == fileResourceGuid);
-                if (fileResource != null)
-                {
-                    return await DisplayFileResource(fileResource);
-                }
+                return await DisplayFileResource(fileResource);
             }
-            // Unhappy path - return an HTTP 404
-            // ---------------------------------
-            var message = $"File Resource {fileResourceGuidAsString} Not Found in database. It may have been deleted.";
-            Logger.LogError(message);
-            return new NotFoundResult();
         }
+        
+        // Unhappy path - return an HTTP 404
+        // ---------------------------------
+        var message = $"File Resource {fileResourceGuidAsString} Not Found in database. It may have been deleted.";
+        Logger.LogError(message);
+        return new NotFoundResult();
+    }
 
-        private async Task<IActionResult> DisplayFileResource(FileResource fileResource)
+    private async Task<IActionResult> DisplayFileResource(FileResource fileResource)
+    {
+        var contentDisposition = new System.Net.Mime.ContentDisposition
         {
-            var contentDisposition = new System.Net.Mime.ContentDisposition
-            {
-                FileName = fileResource.GetOriginalCompleteFileName(),
-                Inline = false
-            };
-            Response.Headers.Add("Content-Disposition", contentDisposition.ToString());
+            FileName = fileResource.GetOriginalCompleteFileName(),
+            Inline = false
+        };
+        Response.Headers.Add("Content-Disposition", contentDisposition.ToString());
 
-            var blobDownloadResult =
-                await azureBlobStorageService.DownloadFileResourceFromBlobStorage(fileResource);
+        var blobDownloadResult =
+            await azureBlobStorageService.DownloadFileResourceFromBlobStorage(fileResource);
 
-            return File(blobDownloadResult.Content.ToArray(), blobDownloadResult.Details.ContentType, contentDisposition.FileName);
-        }
-
+        return File(blobDownloadResult.Content.ToArray(), blobDownloadResult.Details.ContentType, contentDisposition.FileName);
     }
 }
