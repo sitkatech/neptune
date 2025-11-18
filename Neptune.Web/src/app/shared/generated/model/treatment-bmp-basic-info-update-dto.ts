@@ -10,7 +10,7 @@
 
 
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
-export class TreatmentBMPBasicInfoUpdate { 
+export class TreatmentBMPBasicInfoUpdateDto { 
     TreatmentBMPName: string;
     OwnerOrganizationID?: number | null;
     YearBuilt?: number | null;
@@ -29,7 +29,7 @@ export class TreatmentBMPBasicInfoUpdate {
     }
 }
 
-export interface TreatmentBMPBasicInfoUpdateForm { 
+export interface TreatmentBMPBasicInfoUpdateDtoForm { 
     TreatmentBMPName: FormControl<string>;
     OwnerOrganizationID?: FormControl<number>;
     YearBuilt?: FormControl<number>;
@@ -45,7 +45,7 @@ export interface TreatmentBMPBasicInfoUpdateForm {
     Notes?: FormControl<string>;
 }
 
-export class TreatmentBMPBasicInfoUpdateFormControls { 
+export class TreatmentBMPBasicInfoUpdateDtoFormControls { 
     public static TreatmentBMPName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 

@@ -61,7 +61,7 @@ namespace Neptune.WebMvc.Views.TreatmentBMPType
             TreatmentBMPTypeName = treatmentBMPType.TreatmentBMPTypeName;
             TreatmentBMPTypeDescription = treatmentBMPType.TreatmentBMPTypeDescription;
             TreatmentBMPTypeObservationTypes = treatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes.Select(x => x.AsTreatmentBMPTypeObservationTypeDto()).ToList();
-            TreatmentBMPTypeAttributeTypes = treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Select(x => x.AsTreatmentBMPTypeAttributeTypeDtoDto()).ToList();
+            TreatmentBMPTypeAttributeTypes = treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Select(x => x.AsTreatmentBMPTypeAttributeTypeDto()).ToList();
         }
 
 

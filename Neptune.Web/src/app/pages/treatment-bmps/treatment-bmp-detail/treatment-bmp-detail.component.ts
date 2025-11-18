@@ -64,6 +64,10 @@ import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
 import { FileResourceListComponent, IHaveFileResource } from "src/app/shared/components/file-resource-list/file-resource-list.component";
 import { TreatmentBMPDocumentByTreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp-document-by-treatment-bmp.service";
 import { FileUploadModalComponent, IFileResourceUpload } from "src/app/shared/components/file-resource-list/file-upload-modal/file-upload-modal.component";
+import {
+    TreatmentBmpUpdateUpstreamBmpModalComponent,
+    TreatmentBmpUpdateUpstreamBmpModalContext,
+} from "src/app/pages/treatment-bmps/treatment-bmp-detail/treatment-bmp-update-upstream-bmp-modal/treatment-bmp-update-upstream-bmp-modal.component";
 
 @Component({
     selector: "treatment-bmp-detail",
@@ -153,9 +157,7 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
     canEditStormwaterJurisdiction = false;
     isAnalyzedInModelingModule = true;
     isSitkaAdmin = true;
-    otherTreatmentBmpsExistInSubbasin = false;
     upstreamestBMPDetailUrl = "";
-    upstreamBMPDetailUrl = "";
     delineationMapUrl = "";
     editUpstreamBMPUrl = "";
     hasModelingAttributes = false;
@@ -289,6 +291,19 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
             });
     }
 
+    openEditUpstreamBMPModal(treatmentBMP: TreatmentBMPDto): void {
+        this.dialogService
+            .open(TreatmentBmpUpdateUpstreamBmpModalComponent, {
+                data: { treatmentBMPID: this.treatmentBMPID, currentUpstreamBMPID: treatmentBMP?.UpstreamBMPID } as TreatmentBmpUpdateUpstreamBmpModalContext,
+            })
+            .afterClosed$.subscribe((result) => {
+                if (result) {
+                    this.loadData();
+                    this.alertService.pushAlert(new Alert("Upstream BMP updated successfully.", AlertContext.Success));
+                }
+            });
+    }
+
     openAddFundingEventModal(): void {
         this.dialogService
             .open(FundingEventModalComponent, {
@@ -365,18 +380,6 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
         if (!fundingEvent.FundingEventFundingSources) return 0;
         return fundingEvent.FundingEventFundingSources.reduce((acc, s) => acc + (s.Amount || 0), 0);
     }
-
-    getEditLink(treatmentBMP: any): string {
-        // TODO: Return the correct edit route for this BMP
-        return `/treatment-bmps/edit/${treatmentBMP.TreatmentBMPID}`;
-    }
-
-    removeUpstreamBMP(): void {
-        // Implement the logic to remove the upstream BMP association
-        // This might involve calling a service method to update the backend
-        // and then updating the local state accordingly
-    }
-
     openDocumentUploadModal(): void {
         const dialogRef = this.dialogService.open(FileUploadModalComponent, {
             data: {},

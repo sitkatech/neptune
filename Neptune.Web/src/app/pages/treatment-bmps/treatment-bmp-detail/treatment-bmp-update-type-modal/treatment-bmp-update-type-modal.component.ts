@@ -6,7 +6,7 @@ import { AsyncPipe } from "@angular/common";
 import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.service";
 import { TreatmentBMPTypeService } from "src/app/shared/generated/api/treatment-bmp-type.service";
 import { map, Observable } from "rxjs";
-import { TreatmentBMPTypeUpdate, TreatmentBMPTypeUpdateForm, TreatmentBMPTypeUpdateFormControls } from "src/app/shared/generated/model/treatment-bmp-type-update";
+import { TreatmentBMPTypeUpdateDto, TreatmentBMPTypeUpdateDtoForm, TreatmentBMPTypeUpdateDtoFormControls } from "src/app/shared/generated/model/treatment-bmp-type-update-dto";
 import { DialogRef } from "@ngneat/dialog";
 import { AlertService } from "src/app/shared/services/alert.service";
 
@@ -24,11 +24,10 @@ export class TreatmentBmpUpdateTypeModalComponent implements OnInit {
 
     public FormFieldType = FormFieldType;
 
-    public formGroup: FormGroup<TreatmentBMPTypeUpdateForm> = new FormGroup<TreatmentBMPTypeUpdateForm>({
-        TreatmentBMPTypeID: TreatmentBMPTypeUpdateFormControls.TreatmentBMPTypeID(undefined),
+    public formGroup: FormGroup<TreatmentBMPTypeUpdateDtoForm> = new FormGroup<TreatmentBMPTypeUpdateDtoForm>({
+        TreatmentBMPTypeID: TreatmentBMPTypeUpdateDtoFormControls.TreatmentBMPTypeID(undefined),
     });
 
-    // populate select options observable
     public treatmentBMPTypeOptions$: Observable<SelectDropdownOption[]>;
 
     ngOnInit(): void {
@@ -48,7 +47,7 @@ export class TreatmentBmpUpdateTypeModalComponent implements OnInit {
 
     public save(): void {
         const treatmentBMPID = this.ref.data?.treatmentBMPID;
-        const updateTypeDto = this.formGroup.value as TreatmentBMPTypeUpdate;
+        const updateTypeDto = this.formGroup.value as TreatmentBMPTypeUpdateDto;
         this.treatmentBMPService.updateTypeTreatmentBMP(treatmentBMPID, updateTypeDto).subscribe(() => {
             this.ref.close(true);
         });

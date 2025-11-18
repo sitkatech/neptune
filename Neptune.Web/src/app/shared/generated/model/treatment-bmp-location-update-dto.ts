@@ -10,7 +10,7 @@
 
 
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
-export class TreatmentBMPLocationUpdate { 
+export class TreatmentBMPLocationUpdateDto { 
     Latitude: number;
     Longitude: number;
     constructor(obj?: any) {
@@ -18,12 +18,12 @@ export class TreatmentBMPLocationUpdate {
     }
 }
 
-export interface TreatmentBMPLocationUpdateForm { 
+export interface TreatmentBMPLocationUpdateDtoForm { 
     Latitude: FormControl<number>;
     Longitude: FormControl<number>;
 }
 
-export class TreatmentBMPLocationUpdateFormControls { 
+export class TreatmentBMPLocationUpdateDtoFormControls { 
     public static Latitude = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 

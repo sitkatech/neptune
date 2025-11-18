@@ -229,7 +229,7 @@
                 </div>
                 <div class="card-body" [loadingSpinner]="{ isLoading: imagesLoading, loadingHeight: 100 }">
                     @if (treatmentBMPImages$ | async; as images) {
-                        <image-carousel [images]="images" [noImagesMessage]="'No images available for this BMP.'"></image-carousel>
+                        <image-carousel [images]="images" noImagesMessage="No images available for this Treatment BMP."></image-carousel>
                     }
                 </div>
             </div>
@@ -308,24 +308,21 @@
                         </div>
                     }
                     <div class="grid-12 mt-3">
-                        <div id="upstreamBMPInfo" class="g-col-12" [class.collapse]="!upstreamestBMP">
+                        <div id="upstreamBMPInfo" class="grid-12 g-col-12" [class.collapse]="!upstreamestBMP">
                             <div class="g-col-4 control-label" style="margin-top: 8px">
                                 <field-definition fieldDefinitionType="UpstreamBMP"></field-definition>
                             </div>
-                            @if (otherTreatmentBmpsExistInSubbasin) {
+                            @if (treatmentBMP.OtherTreatmentBMPsExistInSubbasin) {
                                 <div class="g-col-4" style="margin-top: 8px">
                                     @if (!treatmentBMP.UpstreamBMP) {
-                                        <span>Not Provided</span>
+                                        <span class="system-text">Not Provided</span>
                                     } @else {
-                                        <a [routerLink]="upstreamBMPDetailUrl">{{ treatmentBMP.UpstreamBMP.TreatmentBMPName }}</a>
+                                        <a [routerLink]="['treatment-bmps', treatmentBMP.UpstreamBMP.TreatmentBMPID]">{{ treatmentBMP.UpstreamBMP.TreatmentBMPName }}</a>
                                     }
                                 </div>
                                 <div class="g-col-3" style="margin-top: 6px">
                                     @if (!isAnonymousOrUnassigned) {
-                                        @if (treatmentBMP.UpstreamBMP) {
-                                            <button class="btn btn-sm btn-primary" (click)="removeUpstreamBMP()"><span class="icon-trash"></span></button>
-                                        }
-                                        <a [routerLink]="editUpstreamBMPUrl" class="btn btn-sm btn-primary">Edit</a>
+                                        <button class="btn btn-sm btn-primary" (click)="openEditUpstreamBMPModal(treatmentBMP)">Edit</button>
                                     }
                                 </div>
                             } @else {
@@ -474,7 +471,7 @@
             </div>
             <div class="card-body">
                 @if (!hasSettableBenchmarkAndThresholdValues) {
-                    <p class="system-text">This type of treatment BMP does not have settable benchmark and threshold values</p>
+                    <p class="system-text">This type of Treatment BMP does not have settable benchmark and threshold values</p>
                 } @else {
                     <!-- TODO: Replace with actual table for benchmark and threshold values -->
                     <p class="system-text">[Benchmark & Threshold Table goes here]</p>
@@ -496,7 +493,7 @@
                 <div class="card-body">
                     @if (treatmentBMPDocuments$ | async; as treatmentBMPDocuments) {
                         @if (treatmentBMPDocuments.length === 0) {
-                            <p class="system-text">No documents have been uploaded for this BMP</p>
+                            <p class="system-text">No documents have been uploaded for this Treatment BMP</p>
                         } @else {
                             <file-resource-list
                                 [fileResources]="treatmentBMPDocuments"

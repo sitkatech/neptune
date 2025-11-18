@@ -10,10 +10,10 @@ import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.
 import { WaterQualityManagementPlanService } from "src/app/shared/generated/api/water-quality-management-plan.service";
 import { OrganizationService } from "src/app/shared/generated/api/organization.service";
 import {
-    TreatmentBMPBasicInfoUpdate,
-    TreatmentBMPBasicInfoUpdateForm,
-    TreatmentBMPBasicInfoUpdateFormControls,
-} from "src/app/shared/generated/model/treatment-bmp-basic-info-update";
+    TreatmentBMPBasicInfoUpdateDto,
+    TreatmentBMPBasicInfoUpdateDtoForm,
+    TreatmentBMPBasicInfoUpdateDtoFormControls,
+} from "src/app/shared/generated/model/treatment-bmp-basic-info-update-dto";
 import { TreatmentBMPLifespanTypeEnum, TreatmentBMPLifespanTypesAsSelectDropdownOptions } from "src/app/shared/generated/enum/treatment-b-m-p-lifespan-type-enum";
 import { SizingBasisTypesAsSelectDropdownOptions } from "src/app/shared/generated/enum/sizing-basis-type-enum";
 import { TrashCaptureStatusTypeEnum, TrashCaptureStatusTypesAsSelectDropdownOptions } from "src/app/shared/generated/enum/trash-capture-status-type-enum";
@@ -51,20 +51,20 @@ export class TreatmentBmpUpdateBasicInfoComponent implements OnInit {
 
     public isLoadingSubmit: boolean = false;
 
-    public formGroup: FormGroup<TreatmentBMPBasicInfoUpdateForm> = new FormGroup<TreatmentBMPBasicInfoUpdateForm>({
-        TreatmentBMPName: TreatmentBMPBasicInfoUpdateFormControls.TreatmentBMPName(undefined),
-        OwnerOrganizationID: TreatmentBMPBasicInfoUpdateFormControls.OwnerOrganizationID(undefined),
-        YearBuilt: TreatmentBMPBasicInfoUpdateFormControls.YearBuilt(undefined),
-        SystemOfRecordID: TreatmentBMPBasicInfoUpdateFormControls.SystemOfRecordID(undefined),
-        WaterQualityManagementPlanID: TreatmentBMPBasicInfoUpdateFormControls.WaterQualityManagementPlanID(undefined),
-        TreatmentBMPLifespanTypeID: TreatmentBMPBasicInfoUpdateFormControls.TreatmentBMPLifespanTypeID(undefined),
-        TreatmentBMPLifespanEndDate: TreatmentBMPBasicInfoUpdateFormControls.TreatmentBMPLifespanEndDate(undefined),
-        SizingBasisTypeID: TreatmentBMPBasicInfoUpdateFormControls.SizingBasisTypeID(undefined),
-        TrashCaptureStatusTypeID: TreatmentBMPBasicInfoUpdateFormControls.TrashCaptureStatusTypeID(undefined),
-        TrashCaptureEffectiveness: TreatmentBMPBasicInfoUpdateFormControls.TrashCaptureEffectiveness(undefined),
-        RequiredFieldVisitsPerYear: TreatmentBMPBasicInfoUpdateFormControls.RequiredFieldVisitsPerYear(undefined),
-        RequiredPostStormFieldVisitsPerYear: TreatmentBMPBasicInfoUpdateFormControls.RequiredPostStormFieldVisitsPerYear(undefined),
-        Notes: TreatmentBMPBasicInfoUpdateFormControls.Notes(undefined),
+    public formGroup: FormGroup<TreatmentBMPBasicInfoUpdateDtoForm> = new FormGroup<TreatmentBMPBasicInfoUpdateDtoForm>({
+        TreatmentBMPName: TreatmentBMPBasicInfoUpdateDtoFormControls.TreatmentBMPName(undefined),
+        OwnerOrganizationID: TreatmentBMPBasicInfoUpdateDtoFormControls.OwnerOrganizationID(undefined),
+        YearBuilt: TreatmentBMPBasicInfoUpdateDtoFormControls.YearBuilt(undefined),
+        SystemOfRecordID: TreatmentBMPBasicInfoUpdateDtoFormControls.SystemOfRecordID(undefined),
+        WaterQualityManagementPlanID: TreatmentBMPBasicInfoUpdateDtoFormControls.WaterQualityManagementPlanID(undefined),
+        TreatmentBMPLifespanTypeID: TreatmentBMPBasicInfoUpdateDtoFormControls.TreatmentBMPLifespanTypeID(undefined),
+        TreatmentBMPLifespanEndDate: TreatmentBMPBasicInfoUpdateDtoFormControls.TreatmentBMPLifespanEndDate(undefined),
+        SizingBasisTypeID: TreatmentBMPBasicInfoUpdateDtoFormControls.SizingBasisTypeID(undefined),
+        TrashCaptureStatusTypeID: TreatmentBMPBasicInfoUpdateDtoFormControls.TrashCaptureStatusTypeID(undefined),
+        TrashCaptureEffectiveness: TreatmentBMPBasicInfoUpdateDtoFormControls.TrashCaptureEffectiveness(undefined),
+        RequiredFieldVisitsPerYear: TreatmentBMPBasicInfoUpdateDtoFormControls.RequiredFieldVisitsPerYear(undefined),
+        RequiredPostStormFieldVisitsPerYear: TreatmentBMPBasicInfoUpdateDtoFormControls.RequiredPostStormFieldVisitsPerYear(undefined),
+        Notes: TreatmentBMPBasicInfoUpdateDtoFormControls.Notes(undefined),
     });
 
     public FormFieldType = FormFieldType;
@@ -135,7 +135,7 @@ export class TreatmentBmpUpdateBasicInfoComponent implements OnInit {
         if (!this.treatmentBMPID) return;
 
         this.isLoadingSubmit = true;
-        const updateDto = this.formGroup.value as TreatmentBMPBasicInfoUpdate;
+        const updateDto = this.formGroup.value as TreatmentBMPBasicInfoUpdateDto;
         this.treatmentBMPService.updateBasicInfoTreatmentBMP(this.treatmentBMPID, updateDto).subscribe({
             next: (treatmentBMPDto: TreatmentBMPDto) => {
                 this.isLoadingSubmit = false;

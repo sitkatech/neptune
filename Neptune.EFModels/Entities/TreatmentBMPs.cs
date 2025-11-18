@@ -25,6 +25,7 @@ using Neptune.Common.GeoSpatial;
 using Neptune.Models.DataTransferObjects;
 using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
+using System.ComponentModel.DataAnnotations;
 
 namespace Neptune.EFModels.Entities;
 
@@ -347,14 +348,24 @@ public static class TreatmentBMPs
     {
         var treatmentBMP = await dbContext.TreatmentBMPs.AsNoTracking()
             .Include(x => x.TreatmentBMPType)
-            .Include(x => x.StormwaterJurisdiction)
-            .ThenInclude(x => x.Organization)
+            .Include(x => x.StormwaterJurisdiction).ThenInclude(x => x.Organization)
             .Include(x => x.OwnerOrganization)
             .Include(x => x.WaterQualityManagementPlan)
             .Include(x => x.Delineation)
             .SingleAsync(x => x.TreatmentBMPID == treatmentBMPID);
 
         var dto = treatmentBMP.AsDto();
+
+        var subregion = treatmentBMP.GetRegionalSubbasin(dbContext);
+        var otherBMPsInSubregion = subregion?.GetTreatmentBMPs(dbContext);
+
+        dto.OtherTreatmentBMPsExistInSubbasin = otherBMPsInSubregion?.Where(x => x.TreatmentBMPID != treatmentBMPID).Any() ?? false;
+
+        if (treatmentBMP.UpstreamBMPID.HasValue)
+        {
+            var upstreamBMPDto = await GetByIDAsDtoAsync(dbContext, treatmentBMP.UpstreamBMPID.Value);
+            dto.UpstreamBMP = upstreamBMPDto;
+        }
 
         return dto;
     }
@@ -659,14 +670,13 @@ public static class TreatmentBMPs
             .ToList();
     }
 
-    public static async Task<List<ErrorMessage>> ValidateUpdateBasicInfoAsync(NeptuneDbContext dbContext, int treatmentBMPID, TreatmentBMPBasicInfoUpdate updateDto)
+    public static async Task<List<ErrorMessage>> ValidateUpdateBasicInfoAsync(NeptuneDbContext dbContext, int treatmentBMPID, TreatmentBMPBasicInfoUpdateDto updateDto)
     {
         var errors = await ValidateBasicInfoAsync(dbContext, updateDto, treatmentBMPID);
-
         return errors;
     }
 
-    public static async Task<TreatmentBMPDto> UpdateBasicInfoAsync(NeptuneDbContext dbContext, int treatmentBMPID, TreatmentBMPBasicInfoUpdate updateDto, PersonDto callingUser)
+    public static async Task<TreatmentBMPDto> UpdateBasicInfoAsync(NeptuneDbContext dbContext, int treatmentBMPID, TreatmentBMPBasicInfoUpdateDto updateDto, PersonDto callingUser)
     {
         var treatmentBMPToUpdate = dbContext.TreatmentBMPs
             .Include(x => x.StormwaterJurisdiction)
@@ -761,14 +771,14 @@ public static class TreatmentBMPs
         return errors;
     }
 
-    public static async Task<List<ErrorMessage>> ValidateUpdateLocationAsync(NeptuneDbContext dbContext, int treatmentBMPID, TreatmentBMPLocationUpdate locationUpdateDto)
+    public static async Task<List<ErrorMessage>> ValidateUpdateLocationAsync(NeptuneDbContext dbContext, int treatmentBMPID, TreatmentBMPLocationUpdateDto locationUpdateDto)
     {
         var errors = new List<ErrorMessage>();
 
         return errors;
     }
 
-    public static async Task<TreatmentBMPDto> UpdateLocationAsync(NeptuneDbContext dbContext, int treatmentBMPID, TreatmentBMPLocationUpdate locationUpdateDto, PersonDto callingUser)
+    public static async Task<TreatmentBMPDto> UpdateLocationAsync(NeptuneDbContext dbContext, int treatmentBMPID, TreatmentBMPLocationUpdateDto locationUpdateDto, PersonDto callingUser)
     {
         var treatmentBMPToUpdate = dbContext.TreatmentBMPs
             .Include(x => x.StormwaterJurisdiction)
@@ -790,7 +800,7 @@ public static class TreatmentBMPs
         return updatedTreatmentBMPDto;
     }
 
-    public static async Task<List<ErrorMessage>> ValidateUpdateTypeAsync(NeptuneDbContext dbContext, int treatmentBMPID, TreatmentBMPTypeUpdate typeUpdateDto)
+    public static async Task<List<ErrorMessage>> ValidateUpdateTypeAsync(NeptuneDbContext dbContext, int treatmentBMPID, TreatmentBMPTypeUpdateDto typeUpdateDto)
     {
         var errors = new List<ErrorMessage>();
 
@@ -803,10 +813,101 @@ public static class TreatmentBMPs
         return errors;
     }
 
-    public static async Task<TreatmentBMPDto> UpdateTypeAsync(NeptuneDbContext dbContext, int treatmentBMPID, TreatmentBMPTypeUpdate typeUpdateDto, PersonDto callingUser)
+    public static async Task<TreatmentBMPDto> UpdateTypeAsync(NeptuneDbContext dbContext, int treatmentBMPID, TreatmentBMPTypeUpdateDto typeUpdateDto, PersonDto callingUser)
     {
         await dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pTreatmentBMPUpdateTreatmentBMPType @treatmentBMPID={0}, @treatmentBMPTypeID={1}",
                                                     treatmentBMPID, typeUpdateDto.TreatmentBMPTypeID);
+
+        var updatedTreatmentBMPDto = await GetByIDAsDtoAsync(dbContext, treatmentBMPID);
+        return updatedTreatmentBMPDto;
+    }
+
+    public static async Task<List<ErrorMessage>> ValidateUpdateUpstreamBMPAsync(NeptuneDbContext dbContext, int treatmentBMPID, TreatmentBMPUpstreamBMPUpdateDto upstreamUpdateDto)
+    {
+        var errors = new List<ErrorMessage>();
+
+        if (upstreamUpdateDto.UpstreamBMPID.HasValue)
+        {
+            var treatmentBMP = await dbContext.TreatmentBMPs.AsNoTracking()
+                .SingleAsync(x => x.TreatmentBMPID == treatmentBMPID);
+
+            var regionSubbasin = treatmentBMP.GetRegionalSubbasin(dbContext);
+            var otherTreatmentBMPsInSubbasin = regionSubbasin?.GetTreatmentBMPs(dbContext).Where(x => x.TreatmentBMPID != treatmentBMPID) ?? new List<TreatmentBMP>();
+
+            var hasValidBMP = otherTreatmentBMPsInSubbasin.Any(x => x.TreatmentBMPID == upstreamUpdateDto.UpstreamBMPID);
+            if (!hasValidBMP)
+            {
+                errors.Add(new ErrorMessage("UpstreamBMPID", "Must be a valid Treatment BMP in regional subbasin."));
+            }
+
+            var alreadyUpstreamBMP = dbContext.TreatmentBMPs.AsNoTracking().Any(x => x.TreatmentBMPID != treatmentBMPID && x.UpstreamBMPID == upstreamUpdateDto.UpstreamBMPID);
+            if (alreadyUpstreamBMP)
+            {
+                errors.Add(new ErrorMessage("UpstreamBMPID", "The BMP is already set as the Upstream BMP for another BMP."));
+            }
+
+            var isClosedLoop = IsClosedLoop(dbContext, upstreamUpdateDto.UpstreamBMPID.Value);
+            if (isClosedLoop)
+            {
+                errors.Add(new ErrorMessage("UpstreamBMPID", "The choice of Upstream BMP would create a closed loop."));
+            }
+
+            var isInfiniteLoop = IsInfiniteLoop(dbContext, upstreamUpdateDto.UpstreamBMPID.Value);
+            if (isInfiniteLoop)
+            {
+                errors.Add(new ErrorMessage("UpstreamBMPID", "The choice of Upstream BMP would create an infinite loop."));
+            }
+        }
+
+        return errors;
+    }
+
+    private static bool IsClosedLoop(NeptuneDbContext dbContext, int upstreamBMPID)
+    {
+        var upstreamBMPChoice = dbContext.TreatmentBMPs.Find(upstreamBMPID);
+
+        var nextUpstreamBMPID = upstreamBMPChoice?.UpstreamBMPID;
+
+        while (nextUpstreamBMPID != null)
+        {
+            if (nextUpstreamBMPID == upstreamBMPID)
+            {
+                return true;
+            }
+
+            nextUpstreamBMPID = dbContext.TreatmentBMPs.Find(nextUpstreamBMPID.Value)?.UpstreamBMPID;
+        }
+
+        return false;
+    }
+
+    private static bool IsInfiniteLoop(NeptuneDbContext dbContext, int upstreamBMPID)
+    {
+        var upstreamBMPChoice = dbContext.TreatmentBMPs.Find(upstreamBMPID);
+
+        var nextUpstreamBMPID = upstreamBMPChoice?.UpstreamBMPID;
+
+        while (nextUpstreamBMPID != null)
+        {
+            if (nextUpstreamBMPID == upstreamBMPID)
+            {
+                return true;
+            }
+
+            nextUpstreamBMPID = dbContext.TreatmentBMPs.Find(nextUpstreamBMPID.Value)?.UpstreamBMPID;
+        }
+
+        return false;
+    }
+
+    public static async Task<TreatmentBMPDto> UpdateUpstreamBMPAsync(NeptuneDbContext dbContext, int treatmentBMPID, TreatmentBMPUpstreamBMPUpdateDto upstreamUpdateDto)
+    {
+        var treatmentBMP = await dbContext.TreatmentBMPs
+            .SingleAsync(x => x.TreatmentBMPID == treatmentBMPID);
+
+        treatmentBMP.UpstreamBMPID = upstreamUpdateDto.UpstreamBMPID;
+
+        await dbContext.SaveChangesAsync();
 
         var updatedTreatmentBMPDto = await GetByIDAsDtoAsync(dbContext, treatmentBMPID);
         return updatedTreatmentBMPDto;

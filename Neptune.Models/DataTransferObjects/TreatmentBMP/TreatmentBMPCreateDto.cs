@@ -69,7 +69,7 @@ public class TreatmentBMPCreateDto : IHaveTreatmentBMPBasicInfo
     public double? Longitude { get; set; }
 }
 
-public class TreatmentBMPBasicInfoUpdate : IHaveTreatmentBMPBasicInfo
+public class TreatmentBMPBasicInfoUpdateDto : IHaveTreatmentBMPBasicInfo
 {
     [Required]
     public string? TreatmentBMPName { get; set; }
@@ -107,7 +107,7 @@ public class TreatmentBMPBasicInfoUpdate : IHaveTreatmentBMPBasicInfo
     public string? Notes { get; set; }
 }
 
-public class TreatmentBMPLocationUpdate
+public class TreatmentBMPLocationUpdateDto
 {
     [Required]
     public double? Latitude { get; set; }
@@ -116,8 +116,13 @@ public class TreatmentBMPLocationUpdate
     public double? Longitude { get; set; }
 }
 
-public class TreatmentBMPTypeUpdate
+public class TreatmentBMPTypeUpdateDto
 {
     [Required]
     public int TreatmentBMPTypeID { get; set; }
+}
+
+public class TreatmentBMPUpstreamBMPUpdateDto
+{
+    public int? UpstreamBMPID { get; set; }
 }

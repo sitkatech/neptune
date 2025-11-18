@@ -119,7 +119,7 @@ public class TreatmentBMPController(NeptuneDbContext dbContext, ILogger<Treatmen
     [HttpPut("{treatmentBMPID}/basic-info")]
     [UserViewFeature]
     [EntityNotFound(typeof(TreatmentBMP), "treatmentBMPID")]
-    public async Task<ActionResult<TreatmentBMPDto>> UpdateBasicInfo([FromRoute] int treatmentBMPID, [FromBody] TreatmentBMPBasicInfoUpdate updateDto)
+    public async Task<ActionResult<TreatmentBMPDto>> UpdateBasicInfo([FromRoute] int treatmentBMPID, [FromBody] TreatmentBMPBasicInfoUpdateDto updateDto)
     {
         var errors = await TreatmentBMPs.ValidateUpdateBasicInfoAsync(DbContext, treatmentBMPID, updateDto);
         errors.ForEach(e => ModelState.AddModelError(e.Type, e.Message));
@@ -136,7 +136,7 @@ public class TreatmentBMPController(NeptuneDbContext dbContext, ILogger<Treatmen
     [HttpPut("{treatmentBMPID}/type")]
     [UserViewFeature]
     [EntityNotFound(typeof(TreatmentBMP), "treatmentBMPID")]
-    public async Task<ActionResult<TreatmentBMPDto>> UpdateType([FromRoute] int treatmentBMPID, [FromBody] TreatmentBMPTypeUpdate typeUpdateDto)
+    public async Task<ActionResult<TreatmentBMPDto>> UpdateType([FromRoute] int treatmentBMPID, [FromBody] TreatmentBMPTypeUpdateDto typeUpdateDto)
     {
         var errors = await TreatmentBMPs.ValidateUpdateTypeAsync(DbContext, treatmentBMPID, typeUpdateDto);
         errors.ForEach(e => ModelState.AddModelError(e.Type, e.Message));
@@ -153,7 +153,7 @@ public class TreatmentBMPController(NeptuneDbContext dbContext, ILogger<Treatmen
     [HttpPut("{treatmentBMPID}/location")]
     [UserViewFeature]
     [EntityNotFound(typeof(TreatmentBMP), "treatmentBMPID")]
-    public async Task<ActionResult<TreatmentBMPDto>> UpdateLocation([FromRoute] int treatmentBMPID, [FromBody] TreatmentBMPLocationUpdate locationUpdateDto)
+    public async Task<ActionResult<TreatmentBMPDto>> UpdateLocation([FromRoute] int treatmentBMPID, [FromBody] TreatmentBMPLocationUpdateDto locationUpdateDto)
     {
         var errors = await TreatmentBMPs.ValidateUpdateLocationAsync(DbContext, treatmentBMPID, locationUpdateDto);
         errors.ForEach(e => ModelState.AddModelError(e.Type, e.Message));
@@ -186,6 +186,23 @@ public class TreatmentBMPController(NeptuneDbContext dbContext, ILogger<Treatmen
 
         var updatedCustomAttributes = await CustomAttributes.UpdateCustomAttributesAsync(DbContext, treatmentBMPID, customAttributeTypePurposeID, customAttributes, CallingUser);
         return Ok(updatedCustomAttributes);
+    }
+
+    [HttpPut("{treatmentBMPID}/upstream-bmp")]
+    [UserViewFeature]
+    [EntityNotFound(typeof(TreatmentBMP), "treatmentBMPID")]
+    public async Task<ActionResult<TreatmentBMPDto>> UpdateUpstreamBMP([FromRoute] int treatmentBMPID, [FromBody] TreatmentBMPUpstreamBMPUpdateDto upstreamBMPUpdateDto)
+    {
+        var errors = await TreatmentBMPs.ValidateUpdateUpstreamBMPAsync(DbContext, treatmentBMPID, upstreamBMPUpdateDto);
+        errors.ForEach(e => ModelState.AddModelError(e.Type, e.Message));
+
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        var treatmentBMPDto = await TreatmentBMPs.UpdateUpstreamBMPAsync(DbContext, treatmentBMPID, upstreamBMPUpdateDto);
+        return Ok(treatmentBMPDto);
     }
 
     [HttpDelete("{treatmentBMPID}")]
@@ -328,5 +345,26 @@ public class TreatmentBMPController(NeptuneDbContext dbContext, ILogger<Treatmen
         };
 
         return Ok(dto);
+    }
+
+    [HttpGet("{treatmentBMPID}/other-treatment-bmps-in-regional-subbasin")]
+    [UserViewFeature]
+    [EntityNotFound(typeof(TreatmentBMP), "treatmentBMPID")]
+    public ActionResult<List<TreatmentBMPDisplayDto>> ListOtherTreatmentBMPsInRegionalSubbasin([FromRoute] int treatmentBMPID)
+    {
+        var treatmentBMP = TreatmentBMPs.GetByID(dbContext, treatmentBMPID);
+        var subbasin = treatmentBMP.GetRegionalSubbasin(dbContext);
+        if (subbasin != null)
+        {
+            var otherTreatmentBMPs = subbasin.GetTreatmentBMPs(dbContext)
+                .Where(x => x.TreatmentBMPID != treatmentBMP.TreatmentBMPID)
+                .Select(x => x.AsDisplayDto(null))
+                .OrderBy(x => x.DisplayName)
+                .ToList();
+
+            return Ok(otherTreatmentBMPs);
+        }
+
+        return Ok(new List<TreatmentBMPDisplayDto>());
     }
 }

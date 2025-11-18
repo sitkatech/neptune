@@ -5,7 +5,11 @@ import { PageHeaderComponent } from "src/app/shared/components/page-header/page-
 import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
 import { LatLonPickerComponent } from "src/app/shared/components/lat-lon-picker/lat-lon-picker.component";
 import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.service";
-import { TreatmentBMPLocationUpdate, TreatmentBMPLocationUpdateForm, TreatmentBMPLocationUpdateFormControls } from "src/app/shared/generated/model/treatment-bmp-location-update";
+import {
+    TreatmentBMPLocationUpdateDto,
+    TreatmentBMPLocationUpdateDtoForm,
+    TreatmentBMPLocationUpdateDtoFormControls,
+} from "src/app/shared/generated/model/treatment-bmp-location-update-dto";
 import { TreatmentBMPDto } from "src/app/shared/generated/model/treatment-bmp-dto";
 import { AsyncPipe } from "@angular/common";
 import { Observable } from "rxjs";
@@ -29,9 +33,9 @@ export class TreatmentBmpUpdateLocationComponent implements OnInit, IDeactivateC
 
     @Input() treatmentBMPID?: number;
 
-    public formGroup: FormGroup<TreatmentBMPLocationUpdateForm> = new FormGroup<TreatmentBMPLocationUpdateForm>({
-        Latitude: TreatmentBMPLocationUpdateFormControls.Latitude(undefined),
-        Longitude: TreatmentBMPLocationUpdateFormControls.Longitude(undefined),
+    public formGroup: FormGroup<TreatmentBMPLocationUpdateDtoForm> = new FormGroup<TreatmentBMPLocationUpdateDtoForm>({
+        Latitude: TreatmentBMPLocationUpdateDtoFormControls.Latitude(undefined),
+        Longitude: TreatmentBMPLocationUpdateDtoFormControls.Longitude(undefined),
     });
 
     public treatmentBMP$: Observable<TreatmentBMPDto>;
@@ -56,7 +60,7 @@ export class TreatmentBmpUpdateLocationComponent implements OnInit, IDeactivateC
 
     public save(): void {
         this.isLoadingSubmit = true;
-        const updateLocationDto = this.formGroup.value as TreatmentBMPLocationUpdate;
+        const updateLocationDto = this.formGroup.value as TreatmentBMPLocationUpdateDto;
         this.treatmentBMPService.updateLocationTreatmentBMP(this.treatmentBMPID, updateLocationDto).subscribe({
             next: (bmp: TreatmentBMPDto) => {
                 this.isLoadingSubmit = false;

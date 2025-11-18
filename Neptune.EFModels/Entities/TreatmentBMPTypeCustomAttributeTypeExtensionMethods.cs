@@ -4,7 +4,7 @@ namespace Neptune.EFModels.Entities;
 
 public static partial class TreatmentBMPTypeCustomAttributeTypeExtensionMethods
 {
-    public static TreatmentBMPTypeAttributeTypeDto AsTreatmentBMPTypeAttributeTypeDtoDto(
+    public static TreatmentBMPTypeAttributeTypeDto AsTreatmentBMPTypeAttributeTypeDto(
         this TreatmentBMPTypeCustomAttributeType treatmentBMPTypeCustomAttributeType)
     {
         var treatmentBMPTypeAttributeTypeDto = new TreatmentBMPTypeAttributeTypeDto()

@@ -135,7 +135,7 @@ model/system-info-dto.ts
 model/trash-capture-status-type-dto.ts
 model/trash-generating-unit-dto.ts
 model/trash-generating-unit-grid-dto.ts
-model/treatment-bmp-basic-info-update.ts
+model/treatment-bmp-basic-info-update-dto.ts
 model/treatment-bmp-benchmark-and-threshold-dto.ts
 model/treatment-bmp-benchmark-and-threshold-upsert-dto.ts
 model/treatment-bmp-create-dto.ts
@@ -148,14 +148,15 @@ model/treatment-bmp-grid-dto.ts
 model/treatment-bmp-image-dto.ts
 model/treatment-bmp-image-update-dto.ts
 model/treatment-bmp-life-span-type-dto.ts
-model/treatment-bmp-location-update.ts
+model/treatment-bmp-location-update-dto.ts
 model/treatment-bmp-minimal-dto.ts
 model/treatment-bmp-modeling-attributes-dto.ts
 model/treatment-bmp-parameterization-errors-dto.ts
 model/treatment-bmp-type-custom-attribute-type-dto.ts
-model/treatment-bmp-type-update.ts
+model/treatment-bmp-type-update-dto.ts
 model/treatment-bmp-type-with-modeling-attributes-dto.ts
 model/treatment-bmp-upsert-dto.ts
+model/treatment-bmp-upstream-bmp-update-dto.ts
 model/treatment-bmphru-characteristics-summary-simple-dto.ts
 model/v-treatment-bmp-modeling-attribute-dto.ts
 model/water-quality-management-plan-display-dto.ts

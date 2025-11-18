@@ -41,7 +41,7 @@ public class TreatmentBMPDto
     public vTreatmentBMPModelingAttributeDto? TreatmentBMPModelingAttribute { get; set; }
 
     // Related Entities
-    public bool? OtherTreatmentBmpsExistInSubbasin { get; set; }
+    public bool? OtherTreatmentBMPsExistInSubbasin { get; set; }
     public DelineationDto? Delineation { get; set; }
     public TreatmentBMPDto? UpstreamBMP { get; set; }
     public bool? IsUpstreamestBMPAnalyzedInModelingModule { get; set; }

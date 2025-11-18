@@ -10,18 +10,18 @@
 
 
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
-export class TreatmentBMPTypeUpdate { 
+export class TreatmentBMPTypeUpdateDto { 
     TreatmentBMPTypeID: number;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
 }
 
-export interface TreatmentBMPTypeUpdateForm { 
+export interface TreatmentBMPTypeUpdateDtoForm { 
     TreatmentBMPTypeID: FormControl<number>;
 }
 
-export class TreatmentBMPTypeUpdateFormControls { 
+export class TreatmentBMPTypeUpdateDtoFormControls { 
     public static TreatmentBMPTypeID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
