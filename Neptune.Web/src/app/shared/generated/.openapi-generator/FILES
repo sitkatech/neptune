@@ -25,6 +25,7 @@ api/system-info.service.ts
 api/trash-generating-unit-by-stormwater-jurisdiction.service.ts
 api/trash-generating-unit.service.ts
 api/treatment-bmp-benchmark-and-threshold.service.ts
+api/treatment-bmp-document-by-treatment-bmp.service.ts
 api/treatment-bmp-image-by-treatment-bmp.service.ts
 api/treatment-bmp-type-custom-attribute-type.service.ts
 api/treatment-bmp-type.service.ts
@@ -140,6 +141,8 @@ model/treatment-bmp-benchmark-and-threshold-upsert-dto.ts
 model/treatment-bmp-create-dto.ts
 model/treatment-bmp-delineation-errors-dto.ts
 model/treatment-bmp-display-dto.ts
+model/treatment-bmp-document-dto.ts
+model/treatment-bmp-document-update-dto.ts
 model/treatment-bmp-dto.ts
 model/treatment-bmp-grid-dto.ts
 model/treatment-bmp-image-dto.ts

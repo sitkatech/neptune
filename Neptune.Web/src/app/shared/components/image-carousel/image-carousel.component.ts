@@ -1,10 +1,6 @@
 import { Component, inject, Input, OnChanges, SimpleChanges } from "@angular/core";
 import { FileResourceService } from "src/app/shared/generated/api/file-resource.service";
 
-export interface ImageCarouselItem {
-    FileResourceGUID: string;
-    Caption?: string | null;
-}
 import { environment } from "src/environments/environment";
 import { LoadingDirective } from "../../directives/loading.directive";
 
@@ -37,7 +33,7 @@ export class ImageCarouselComponent implements OnChanges {
     }
 
     // Call this to load the image preview for a file resource
-    public loadImagePreview(image: IHaveFileResourceGUID): void {
+    public loadImagePreview(image: ImageCarouselItem): void {
         const guid = image?.FileResourceGUID;
         if (!guid || this.imagePreviewUrls[guid]) {
             return;
@@ -50,6 +46,7 @@ export class ImageCarouselComponent implements OnChanges {
     }
 }
 
-export interface IHaveFileResourceGUID {
-    FileResourceGUID: string;
+export interface ImageCarouselItem {
+    FileResourceGUID?: string;
+    Caption?: string | null;
 }

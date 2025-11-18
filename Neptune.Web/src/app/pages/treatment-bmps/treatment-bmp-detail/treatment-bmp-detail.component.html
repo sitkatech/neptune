@@ -487,16 +487,21 @@
             <div class="card mt-3">
                 <div class="card-header">
                     <span class="card-title">Documents</span>
-                    <span class="card-actions">
-                        @if (currentPersonCanManage) {
-                            <!-- TODO: Implement modal dialog for Upload New Document -->
-                            <button class="btn btn-primary"><span class="icon-plus"></span> Upload New Document</button>
-                        }
-                    </span>
+                    @if (currentPersonCanManage) {
+                        <span class="card-actions">
+                            <button class="btn btn-primary" (click)="openDocumentUploadModal()"><span class="icon-plus"></span> Upload Document</button>
+                        </span>
+                    }
                 </div>
                 <div class="card-body">
-                    <!-- TODO: Replace with actual documents list/table -->
-                    <p class="systemText">[Documents List goes here]</p>
+                    <file-resource-list
+                        [fileResources]="treatmentBMPDocuments$ | async"
+                        [showHeader]="false"
+                        [allowUploading]="false"
+                        [allowEditing]="true"
+                        (fileResourceUpdated)="onDocumentUpdated($event)"
+                        (fileResourceDeleted)="onDocumentDeleted($event)">
+                    </file-resource-list>
                 </div>
             </div>
         }

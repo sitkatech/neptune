@@ -102,6 +102,8 @@ export * from './treatment-bmp-benchmark-and-threshold-upsert-dto';
 export * from './treatment-bmp-create-dto';
 export * from './treatment-bmp-delineation-errors-dto';
 export * from './treatment-bmp-display-dto';
+export * from './treatment-bmp-document-dto';
+export * from './treatment-bmp-document-update-dto';
 export * from './treatment-bmp-dto';
 export * from './treatment-bmp-grid-dto';
 export * from './treatment-bmphru-characteristics-summary-simple-dto';

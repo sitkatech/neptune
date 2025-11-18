@@ -36,7 +36,10 @@ import { CustomAttributesDisplayComponent } from "src/app/shared/components/cust
 import {
     CustomAttributeDto,
     TreatmentBMPDelineationErrorsDto,
+    TreatmentBMPDocumentDto,
+    TreatmentBMPDocumentUpdateDto,
     TreatmentBMPHRUCharacteristicsSummarySimpleDto,
+    TreatmentBMPImageDto,
     TreatmentBMPParameterizationErrorsDto,
     TreatmentBMPTypeCustomAttributeTypeDto,
 } from "src/app/shared/generated/model/models";
@@ -58,6 +61,9 @@ import {
 import { AlertService } from "src/app/shared/services/alert.service";
 import { Alert } from "src/app/shared/models/alert";
 import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
+import { FileResourceListComponent, IHaveFileResource } from "src/app/shared/components/file-resource-list/file-resource-list.component";
+import { TreatmentBMPDocumentByTreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp-document-by-treatment-bmp.service";
+import { FileUploadModalComponent, IFileResourceUpload } from "src/app/shared/components/file-resource-list/file-upload-modal/file-upload-modal.component";
 
 @Component({
     selector: "treatment-bmp-detail",
@@ -87,6 +93,7 @@ import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
         CustomAttributesDisplayComponent,
         HruCharacteristicsGridComponent,
         IconComponent,
+        FileResourceListComponent,
     ],
 })
 export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
@@ -127,8 +134,9 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
     parameterizationErrors$: Observable<TreatmentBMPParameterizationErrorsDto>;
     customAttributes$: Observable<CustomAttributeDto[]>;
     treatmentBMPTypeCustomAttributeTypes$: Observable<TreatmentBMPTypeCustomAttributeTypeDto[]>;
-    attachments$!: Observable<any[]>; // TODO: Replace 'any' with ProjectDocumentDto
-    treatmentBMPImages$!: Observable<any[]>;
+    treatmentBMPImages$: Observable<TreatmentBMPImageDto[]>;
+    treatmentBMPDocuments$: Observable<TreatmentBMPDocumentDto[]>;
+    refreshTreatmentBMPDocumentsTrigger$: BehaviorSubject<void> = new BehaviorSubject<void>(undefined);
     hruCharacteristics$: Observable<HRUCharacteristicDto[]>;
     fieldVisits$: Observable<FieldVisitDto[]>;
     fieldVisitColumnDefs: Array<ColDef>;
@@ -162,6 +170,7 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
     constructor(
         private treatmentBMPService: TreatmentBMPService,
         private treatmentBMPImageByTreatmentBMPService: TreatmentBMPImageByTreatmentBMPService,
+        private treatmentBMPDocumentByTreatmentBMPService: TreatmentBMPDocumentByTreatmentBMPService,
         private treatmentBMPTypeService: TreatmentBMPTypeService,
         private utilityFunctionsService: UtilityFunctionsService,
         private groupByPipe: GroupByPipe,
@@ -259,6 +268,12 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
                 },
             })
         );
+
+        this.treatmentBMPDocuments$ = this.refreshTreatmentBMPDocumentsTrigger$.pipe(
+            switchMap(() => this.treatmentBMPDocumentByTreatmentBMPService.listTreatmentBMPDocumentByTreatmentBMP(this.treatmentBMPID))
+        );
+
+        this.refreshTreatmentBMPDocumentsTrigger$.next();
     }
 
     openUpdateTypeModal(treatmentBMP: TreatmentBMPDto): void {
@@ -360,5 +375,47 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
         // Implement the logic to remove the upstream BMP association
         // This might involve calling a service method to update the backend
         // and then updating the local state accordingly
+    }
+
+    openDocumentUploadModal(): void {
+        const dialogRef = this.dialogService.open(FileUploadModalComponent, {
+            data: {},
+            size: "sm",
+        });
+
+        dialogRef.afterClosed$.subscribe((result: IFileResourceUpload) => {
+            if (result) {
+                this.uploadDocument(result);
+            }
+        });
+    }
+
+    uploadDocument(fileResource: IFileResourceUpload): void {
+        this.treatmentBMPDocumentByTreatmentBMPService
+            .createTreatmentBMPDocumentByTreatmentBMP(this.treatmentBMPID, fileResource.File, fileResource.DocumentDescription)
+            .subscribe((result) => {
+                this.alertService.pushAlert(new Alert("Successfully uploaded document.", AlertContext.Success));
+                this.refreshTreatmentBMPDocumentsTrigger$.next();
+            });
+    }
+
+    onDocumentUpdated(fileResource: any): void {
+        let updateDto = {
+            Description: fileResource.DocumentDescription,
+        } as TreatmentBMPDocumentUpdateDto;
+
+        this.treatmentBMPDocumentByTreatmentBMPService
+            .updateTreatmentBMPDocumentByTreatmentBMP(this.treatmentBMPID, fileResource.FileResource.TreatmentBMPDocumentID!, updateDto)
+            .subscribe(() => {
+                this.alertService.pushAlert(new Alert("Successfully updated document.", AlertContext.Success));
+                this.refreshTreatmentBMPDocumentsTrigger$.next();
+            });
+    }
+
+    onDocumentDeleted(treatmentBMPDocument: TreatmentBMPDocumentDto): void {
+        this.treatmentBMPDocumentByTreatmentBMPService.deleteTreatmentBMPDocumentByTreatmentBMP(this.treatmentBMPID, treatmentBMPDocument.TreatmentBMPDocumentID).subscribe(() => {
+            this.alertService.pushAlert(new Alert("Successfully deleted document.", AlertContext.Success));
+            this.refreshTreatmentBMPDocumentsTrigger$.next();
+        });
     }
 }
