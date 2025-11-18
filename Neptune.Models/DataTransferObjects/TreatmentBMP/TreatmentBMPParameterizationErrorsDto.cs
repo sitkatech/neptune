@@ -7,3 +7,9 @@ public class TreatmentBMPParameterizationErrorsDto
     public WaterQualityManagementPlanDisplayDto? SimplifiedWQMP { get; set; }
     public bool MissingModelAttributes { get; set; }
 }
+
+public class TreatmentBMPUpstreamestErrorsDto
+{
+    public TreatmentBMPDisplayDto? UpstreamestBMP { get; set; }
+    public bool IsUpstreamestBMPAnalyzedInModelingModule { get; set; }
+}

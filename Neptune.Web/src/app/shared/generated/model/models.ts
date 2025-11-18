@@ -119,6 +119,7 @@ export * from './treatment-bmp-type-update-dto';
 export * from './treatment-bmp-type-with-modeling-attributes-dto';
 export * from './treatment-bmp-upsert-dto';
 export * from './treatment-bmp-upstream-bmp-update-dto';
+export * from './treatment-bmp-upstreamest-errors-dto';
 export * from './v-treatment-bmp-modeling-attribute-dto';
 export * from './water-quality-management-plan-display-dto';
 export * from './water-quality-management-plan-document-dto';

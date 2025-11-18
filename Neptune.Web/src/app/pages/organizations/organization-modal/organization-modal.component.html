@@ -10,10 +10,22 @@
             [type]="FormFieldType.Text"
             [required]="true"
             placeholder="Name"></form-field>
-        <form-field [formControl]="formGroup.controls.OrganizationShortName" fieldLabel="Short Name" [type]="FormFieldType.Text" placeholder="Short Name"> </form-field>
-        <form-field [formControl]="formGroup.controls.OrganizationUrl" fieldLabel="Organization URL" [type]="FormFieldType.Text" placeholder="https://example.com"> </form-field>
-        <form-field [formControl]="formGroup.controls.OrganizationTypeID" fieldLabel="Organization Type" [type]="FormFieldType.Select" placeholder="Select type"> </form-field>
-        <form-field [formControl]="formGroup.controls.PrimaryContactPersonID" fieldLabel="Primary Contact" [type]="FormFieldType.Select" placeholder="Select contact"> </form-field>
+        <form-field [formControl]="formGroup.controls.OrganizationShortName" fieldLabel="Short Name" [type]="FormFieldType.Text" placeholder="Short Name"></form-field>
+        <form-field [formControl]="formGroup.controls.OrganizationUrl" fieldLabel="Organization URL" [type]="FormFieldType.Text" placeholder="https://example.com"></form-field>
+        <form-field
+            [formControl]="formGroup.controls.OrganizationTypeID"
+            fieldLabel="Organization Type"
+            [type]="FormFieldType.Select"
+            placeholder="Select type"
+            [formInputOptions]="organizationTypeOptions$ | async">
+        </form-field>
+        <form-field
+            [formControl]="formGroup.controls.PrimaryContactPersonID"
+            fieldLabel="Primary Contact"
+            [type]="FormFieldType.Select"
+            placeholder="Select contact"
+            [formInputOptions]="peopleOptions$ | async">
+        </form-field>
         <form-field
             [formControl]="formGroup.controls.LogoFileResourceID"
             fieldLabel="Logo File"
@@ -21,7 +33,7 @@
             uploadFileAccepts="image/*"
             placeholder="Choose logo image">
         </form-field>
-        <form-field [formControl]="formGroup.controls.IsActive" fieldLabel="Active?" [type]="FormFieldType.Check" checkLabel="Active"> </form-field>
+        <form-field [formControl]="formGroup.controls.IsActive" fieldLabel="Active?" [type]="FormFieldType.Check" checkLabel="Active"></form-field>
     </form>
 </div>
 <div class="modal-footer">

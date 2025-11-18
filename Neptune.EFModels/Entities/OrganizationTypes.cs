@@ -20,24 +20,34 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using Microsoft.EntityFrameworkCore;
+using Neptune.Models.DataTransferObjects;
 
-namespace Neptune.EFModels.Entities
+namespace Neptune.EFModels.Entities;
+
+public static class OrganizationTypes
 {
-    public static class OrganizationTypes
+    public static OrganizationType GetDefaultOrganizationType(NeptuneDbContext dbContext)
     {
-        public static OrganizationType GetDefaultOrganizationType(NeptuneDbContext dbContext)
+        var defaultOrganizationType = dbContext.OrganizationTypes.AsNoTracking().SingleOrDefault(x => x.IsDefaultOrganizationType);
+        if (defaultOrganizationType == null)
         {
-            var defaultOrganizationType = dbContext.OrganizationTypes.AsNoTracking().SingleOrDefault(x => x.IsDefaultOrganizationType);
-            if (defaultOrganizationType == null)
-            {
-                defaultOrganizationType = dbContext.OrganizationTypes.AsNoTracking().OrderBy(x => x.OrganizationTypeID).First();
-            }
-            return defaultOrganizationType;
+            defaultOrganizationType = dbContext.OrganizationTypes.AsNoTracking().OrderBy(x => x.OrganizationTypeID).First();
         }
+        return defaultOrganizationType;
+    }
 
-        public static List<OrganizationType> List(NeptuneDbContext dbContext)
-        {
-            return dbContext.OrganizationTypes.AsNoTracking().OrderBy(x => x.OrganizationTypeName).ToList();
-        }
+    public static List<OrganizationType> List(NeptuneDbContext dbContext)
+    {
+        return dbContext.OrganizationTypes.AsNoTracking().OrderBy(x => x.OrganizationTypeName).ToList();
+    }
+
+    public static async Task<List<OrganizationTypeSimpleDto>> ListAsSimpleDtosAsync(NeptuneDbContext dbContext)
+    {
+        var organizationTypes = await dbContext.OrganizationTypes.AsNoTracking()
+            .OrderBy(x => x.OrganizationTypeName)
+            .ToListAsync();
+
+        var organizationTypeSimpleDtos = organizationTypes.Select(x => x.AsSimpleDto()).ToList();
+        return organizationTypeSimpleDtos;
     }
 }

@@ -2955,6 +2955,45 @@
         }
       }
     },
+    "/organization-types": {
+      "get": {
+        "tags": [
+          "OrganizationType"
+        ],
+        "operationId": "ListSimple_OrganizationType",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OrganizationTypeSimpleDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OrganizationTypeSimpleDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OrganizationTypeSimpleDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/projects": {
       "get": {
         "tags": [
@@ -6014,6 +6053,47 @@
               "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TreatmentBMPParameterizationErrorsDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/treatment-bmps/{treatmentBMPID}/upstreamest-errors": {
+      "get": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "operationId": "GetUpstreamestErrors_TreatmentBMP",
+        "parameters": [
+          {
+            "name": "treatmentBMPID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPUpstreamestErrorsDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPUpstreamestErrorsDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPUpstreamestErrorsDto"
                 }
               }
             }
@@ -13342,6 +13422,18 @@
             "type": "integer",
             "format": "int32",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TreatmentBMPUpstreamestErrorsDto": {
+        "type": "object",
+        "properties": {
+          "UpstreamestBMP": {
+            "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
+          },
+          "IsUpstreamestBMPAnalyzedInModelingModule": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false

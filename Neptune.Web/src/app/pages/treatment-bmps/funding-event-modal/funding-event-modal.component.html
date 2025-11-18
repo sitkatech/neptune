@@ -25,30 +25,30 @@
             [type]="FormFieldType.Textarea"></form-field>
         <div class="g-col-12 mt-3">
             @if (hasDuplicateFundingSources) {
-            <div class="alert alert-danger mb-2">Duplicate funding sources are not allowed. Please select unique sources for each row.</div>
+                <div class="alert alert-danger mb-2">Duplicate funding sources are not allowed. Please select unique sources for each row.</div>
             }
             <label class="form-label">Funding Sources</label>
             @for (source of getFundingSourceGroups(); track $index) {
-            <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.5rem">
-                <form-field
-                    style="flex: 2 1 0; min-width: 120px"
-                    [formControl]="getFundingSourceIDControl(source)"
-                    fieldLabel="Source Name"
-                    [type]="FormFieldType.Select"
-                    [formInputOptions]="fundingSourceOptions$ | async"
-                    placeholder="Select Source"></form-field>
-                <form-field
-                    style="flex: 1 1 0; min-width: 80px"
-                    [formControl]="getFundingSourceAmountControl(source)"
-                    fieldLabel="Amount"
-                    placeholder="Amount"
-                    [type]="FormFieldType.Number"></form-field>
-                <button type="button" class="btn btn-danger btn-sm" (click)="removeFundingSource($index)" style="flex: 0 0 auto">
-                    <icon icon="Delete"></icon>
-                </button>
-            </div>
+                <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.5rem">
+                    <form-field
+                        style="flex: 2 1 0; min-width: 120px"
+                        [formControl]="getFundingSourceIDControl(source)"
+                        fieldLabel="Source Name"
+                        [type]="FormFieldType.Select"
+                        [formInputOptions]="fundingSourceOptions$ | async"
+                        placeholder="Select Source"></form-field>
+                    <form-field
+                        style="flex: 1 1 0; min-width: 80px"
+                        [formControl]="getFundingSourceAmountControl(source)"
+                        fieldLabel="Amount"
+                        placeholder="Amount"
+                        [type]="FormFieldType.Number"></form-field>
+                    <button type="button" class="btn btn-danger btn-sm mt-3" (click)="removeFundingSource($index)" style="flex: 0 0 auto">
+                        <icon icon="Delete"></icon>
+                    </button>
+                </div>
             }
-            <button type="button" class="btn btn-outline-primary btn-sm" (click)="addFundingSource()">Add Funding Source</button>
+            <button type="button" class="btn btn-primary-outline btn-sm" (click)="addFundingSource()">Add Funding Source</button>
         </div>
     </form>
 </div>

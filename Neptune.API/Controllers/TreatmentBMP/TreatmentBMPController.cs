@@ -347,6 +347,26 @@ public class TreatmentBMPController(NeptuneDbContext dbContext, ILogger<Treatmen
         return Ok(dto);
     }
 
+    [HttpGet("{treatmentBMPID}/upstreamest-errors")]
+    [UserViewFeature]
+    [EntityNotFound(typeof(TreatmentBMP), "treatmentBMPID")]
+    public ActionResult<TreatmentBMPUpstreamestErrorsDto> GetUpstreamestErrors([FromRoute] int treatmentBMPID)
+    {
+        var treatmentBMPTree = dbContext.vTreatmentBMPUpstreams.AsNoTracking()
+            .Single(x => x.TreatmentBMPID == treatmentBMPID);
+
+        var upstreamestBMP = treatmentBMPTree.UpstreamBMPID.HasValue ? TreatmentBMPs.GetByID(dbContext, treatmentBMPTree.UpstreamBMPID) : null;
+        var isUpstreamestBMPAnalyzedInModelingModule = upstreamestBMP != null && upstreamestBMP.TreatmentBMPType.IsAnalyzedInModelingModule;
+        
+        var dto = new TreatmentBMPUpstreamestErrorsDto
+        {
+            UpstreamestBMP = upstreamestBMP?.AsDisplayDto(null),
+            IsUpstreamestBMPAnalyzedInModelingModule = isUpstreamestBMPAnalyzedInModelingModule
+        };
+
+        return Ok(dto);
+    }
+
     [HttpGet("{treatmentBMPID}/other-treatment-bmps-in-regional-subbasin")]
     [UserViewFeature]
     [EntityNotFound(typeof(TreatmentBMP), "treatmentBMPID")]

@@ -42,6 +42,8 @@ import {
     TreatmentBMPImageDto,
     TreatmentBMPParameterizationErrorsDto,
     TreatmentBMPTypeCustomAttributeTypeDto,
+    TreatmentBMPUpstreamestErrorsDto,
+    TreatmentBMPUpstreamestErrorsDtoForm,
 } from "src/app/shared/generated/model/models";
 import { FieldVisitDto } from "src/app/shared/generated/model/field-visit-dto";
 import { FundingEventByTreatmentBMPIDService } from "src/app/shared/generated/api/funding-event-by-treatment-bmpid.service";
@@ -136,6 +138,7 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
     treatmentBMP$!: Observable<TreatmentBMPDto>;
     delineationErrors$: Observable<TreatmentBMPDelineationErrorsDto>;
     parameterizationErrors$: Observable<TreatmentBMPParameterizationErrorsDto>;
+    upstreamestBMPErrors$: Observable<TreatmentBMPUpstreamestErrorsDto>;
     customAttributes$: Observable<CustomAttributeDto[]>;
     treatmentBMPTypeCustomAttributeTypes$: Observable<TreatmentBMPTypeCustomAttributeTypeDto[]>;
     treatmentBMPImages$: Observable<TreatmentBMPImageDto[]>;
@@ -151,8 +154,6 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
     isAnonymousOrUnassigned = false;
     openRevisionRequest: any = null;
     openRevisionRequestDetailUrl = "";
-    upstreamestBMP: any = null;
-    isUpstreamestBMPAnalyzedInModelingModule = false;
     currentPersonCanManage = true;
     canEditStormwaterJurisdiction = false;
     isAnalyzedInModelingModule = true;
@@ -244,6 +245,10 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
 
         this.delineationErrors$ = this.treatmentBMP$.pipe(switchMap((bmp) => this.treatmentBMPService.getDelineationErrorsTreatmentBMP(bmp.TreatmentBMPID)));
         this.parameterizationErrors$ = this.treatmentBMP$.pipe(switchMap((bmp) => this.treatmentBMPService.getParameterizationErrorsTreatmentBMP(bmp.TreatmentBMPID)));
+        this.upstreamestBMPErrors$ = this.treatmentBMP$.pipe(
+            switchMap((bmp) => this.treatmentBMPService.getUpstreamestErrorsTreatmentBMP(bmp.TreatmentBMPID)),
+            shareReplay(1)
+        );
 
         this.customAttributes$ = this.treatmentBMP$.pipe(switchMap((bmp) => this.treatmentBMPService.listCustomAttributesTreatmentBMP(bmp.TreatmentBMPID)));
         this.treatmentBMPTypeCustomAttributeTypes$ = this.treatmentBMP$.pipe(
