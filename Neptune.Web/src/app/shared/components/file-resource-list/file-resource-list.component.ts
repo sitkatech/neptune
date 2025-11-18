@@ -8,6 +8,7 @@ import { IconComponent } from "../icon/icon.component";
 import { FileUploadModalComponent, IFileResourceUpload } from "./file-upload-modal/file-upload-modal.component";
 import { FileDescriptionUpdateModalComponent } from "./file-description-update-modal/file-description-update-modal.component";
 import { DialogService } from "@ngneat/dialog";
+import { ConfirmService } from "src/app/shared/services/confirm/confirm.service";
 
 @Component({
     selector: "file-resource-list",
@@ -19,6 +20,7 @@ export class FileResourceListComponent implements OnDestroy {
     private fileResourceService: FileResourceService = inject(FileResourceService);
     private dialogService: DialogService = inject(DialogService);
     private subscriptions: Subscription[] = [];
+    private confirmService = inject(ConfirmService);
 
     @Input() title: string = "Documents";
     @Input() fileResources: IHaveFileResource[];
@@ -96,7 +98,19 @@ export class FileResourceListComponent implements OnDestroy {
     }
 
     public deleteFileResource(fileResource: IHaveFileResource) {
-        this.fileResourceDeleted.emit(fileResource);
+        const confirmOptions = {
+            title: "Delete Document",
+            message: `<p>You are about to delete ${fileResource.OriginalBaseFilename ?? "this document"}.</p><p>Are you sure you wish to proceed?</p>`,
+            buttonClassYes: "btn btn-danger",
+            buttonTextYes: "Delete",
+            buttonTextNo: "Cancel",
+        };
+
+        this.confirmService.confirm(confirmOptions).then((confirmed) => {
+            if (confirmed) {
+                this.fileResourceDeleted.emit(fileResource);
+            }
+        });
     }
 
     // Map to store preview URLs for images by GUID

@@ -88,8 +88,15 @@ public static class TreatmentBMPImages
 
     public static async Task DeleteAsync(NeptuneDbContext dbContext, int treatmentBMPID, int treatmentBMPImageID)
     {
+        var treatmentBMPImage = await dbContext.TreatmentBMPImages.AsNoTracking()
+            .SingleAsync(x => x.TreatmentBMPID == treatmentBMPID && x.TreatmentBMPImageID == treatmentBMPImageID);
+
         await dbContext.TreatmentBMPImages
             .Where(x => x.TreatmentBMPID == treatmentBMPID && x.TreatmentBMPImageID == treatmentBMPImageID)
+            .ExecuteDeleteAsync();
+
+        await dbContext.FileResources
+            .Where(x => x.FileResourceID == treatmentBMPImage.FileResourceID)
             .ExecuteDeleteAsync();
     }
 

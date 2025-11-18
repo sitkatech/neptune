@@ -171,13 +171,13 @@
                                         treatmentBMP.WaterQualityManagementPlan.WaterQualityManagementPlanModelingApproachID ==
                                             WaterQualityManagementPlanModelingApproachEnum.Simplified
                                     ) {
-                                        <p class="systemText">
+                                        <p class="system-text">
                                             This BMP is associated with a
                                             <a [routerLink]="['/water-quality-management-plans', treatmentBMP.WaterQualityManagementPlan.WaterQualityManagementPlanID]">WQMP</a>
                                             that is modeled using the simplified approach; this BMP will not be modeled explicitly.
                                         </p>
                                     } @else {
-                                        <p class="systemText">
+                                        <p class="system-text">
                                             This Treatment BMP record is missing fields required to calculate model results. Please provide a verified delineation and required
                                             Modeling Parameters above.
                                         </p>
@@ -273,7 +273,7 @@
                             @if (treatmentBMP.Delineation) {
                                 {{ treatmentBMP.Delineation.DelineationTypeName }}
                             } @else {
-                                <span class="systemText">No Delineation Provided</span>
+                                <span class="system-text">No Delineation Provided</span>
                             }
                         </div>
                         <div class="g-col-3">
@@ -349,15 +349,15 @@
                         @if (hruCharacteristicsSummaries?.length && treatmentBMP.Delineation?.IsVerified) {
                             <land-use-table [hruCharacteristics]="hruCharacteristicsSummaries"></land-use-table>
                         } @else if (!treatmentBMP.Delineation) {
-                            <p class="systemText">
+                            <p class="system-text">
                                 No delineation is provided for this Treatment BMP. Land Use Statistics cannot be determined until a verified delineation is provided.
                             </p>
                         } @else if (treatmentBMP.Delineation && !treatmentBMP.Delineation.IsVerified) {
-                            <p class="systemText">
+                            <p class="system-text">
                                 The Delineation for this Treatment BMP is marked as provisional. Land Use Statistics will not be calculated until the Delineation is verified.
                             </p>
                         } @else {
-                            <p class="systemText">Land Use Statistics have not been calculated for this Treatment BMP</p>
+                            <p class="system-text">Land Use Statistics have not been calculated for this Treatment BMP</p>
                         }
                     </div>
                 </div>
@@ -452,11 +452,11 @@
                                     </table>
                                 </div>
                             } @else {
-                                <p class="systemText mb-0">No Funding Sources identified for this Funding Event</p>
+                                <p class="system-text mb-0">No Funding Sources identified for this Funding Event</p>
                             }
                         }
                     } @else {
-                        <p class="systemText">No Funding Events identified for this Treatment BMP</p>
+                        <p class="system-text">No Funding Events identified for this Treatment BMP</p>
                     }
                 }
             </div>
@@ -474,10 +474,10 @@
             </div>
             <div class="card-body">
                 @if (!hasSettableBenchmarkAndThresholdValues) {
-                    <p class="systemText">This type of treatment BMP does not have settable benchmark and threshold values</p>
+                    <p class="system-text">This type of treatment BMP does not have settable benchmark and threshold values</p>
                 } @else {
                     <!-- TODO: Replace with actual table for benchmark and threshold values -->
-                    <p class="systemText">[Benchmark & Threshold Table goes here]</p>
+                    <p class="system-text">[Benchmark & Threshold Table goes here]</p>
                 }
             </div>
         </div>
@@ -494,14 +494,22 @@
                     }
                 </div>
                 <div class="card-body">
-                    <file-resource-list
-                        [fileResources]="treatmentBMPDocuments$ | async"
-                        [showHeader]="false"
-                        [allowUploading]="false"
-                        [allowEditing]="true"
-                        (fileResourceUpdated)="onDocumentUpdated($event)"
-                        (fileResourceDeleted)="onDocumentDeleted($event)">
-                    </file-resource-list>
+                    @if (treatmentBMPDocuments$ | async; as treatmentBMPDocuments) {
+                        @if (treatmentBMPDocuments.length === 0) {
+                            <p class="system-text">No documents have been uploaded for this BMP</p>
+                        } @else {
+                            <file-resource-list
+                                [fileResources]="treatmentBMPDocuments"
+                                [showHeader]="false"
+                                [allowUploading]="false"
+                                [allowEditing]="true"
+                                (fileResourceUpdated)="onDocumentUpdated($event)"
+                                (fileResourceDeleted)="onDocumentDeleted($event)">
+                            </file-resource-list>
+                        }
+                    } @else {
+                        <div [loadingSpinner]="{ isLoading: true, loadingHeight: 100 }"></div>
+                    }
                 </div>
             </div>
         }
