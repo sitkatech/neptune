@@ -35,6 +35,8 @@ import { NeptuneGridComponent } from "src/app/shared/components/neptune-grid/nep
 import { CustomAttributesDisplayComponent } from "src/app/shared/components/custom-attributes-display/custom-attributes-display.component";
 import {
     CustomAttributeDto,
+    PersonDto,
+    RegionalSubbasinRevisionRequestDto,
     TreatmentBMPDelineationErrorsDto,
     TreatmentBMPDocumentDto,
     TreatmentBMPDocumentUpdateDto,
@@ -70,6 +72,9 @@ import {
     TreatmentBmpUpdateUpstreamBmpModalComponent,
     TreatmentBmpUpdateUpstreamBmpModalContext,
 } from "src/app/pages/treatment-bmps/treatment-bmp-detail/treatment-bmp-update-upstream-bmp-modal/treatment-bmp-update-upstream-bmp-modal.component";
+import { RegionalSubbasinRevisionRequestStatusEnum } from "src/app/shared/generated/enum/regional-subbasin-revision-request-status-enum";
+import { AuthenticationService } from "src/app/services/authentication.service";
+import { RoleEnum } from "src/app/shared/generated/enum/role-enum";
 
 @Component({
     selector: "treatment-bmp-detail",
@@ -150,17 +155,15 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
 
     imagesLoading = true;
 
+    currentUser: PersonDto;
     // Placeholder properties for template bindings
     isAnonymousOrUnassigned = false;
-    openRevisionRequest: any = null;
+    openRevisionRequest: RegionalSubbasinRevisionRequestDto = null;
     openRevisionRequestDetailUrl = "";
     currentPersonCanManage = true;
     canEditStormwaterJurisdiction = false;
     isAnalyzedInModelingModule = true;
     isSitkaAdmin = true;
-    upstreamestBMPDetailUrl = "";
-    delineationMapUrl = "";
-    editUpstreamBMPUrl = "";
     hasModelingAttributes = false;
 
     hruCharacteristicsSummaries: TreatmentBMPHRUCharacteristicsSummarySimpleDto[] = [];
@@ -181,7 +184,8 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
         private fundingEventByTreatmentBMPIDService: FundingEventByTreatmentBMPIDService,
         private dialogService: DialogService,
         private confirmService: ConfirmService,
-        private alertService: AlertService
+        private alertService: AlertService,
+        private authenticationService: AuthenticationService
     ) {}
 
     ngOnInit(): void {
@@ -203,6 +207,14 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
             this.utilityFunctionsService.createDecimalColumnDef("Post-Maintenance Assessment Score", "AssessmentScorePM"),
         ];
         this.loadData();
+
+        this.authenticationService.getCurrentUser().subscribe((user) => {
+            this.currentUser = user;
+            this.isAnonymousOrUnassigned = !user || user.RoleID == RoleEnum.Unassigned;
+            this.isSitkaAdmin = user.RoleID == RoleEnum.SitkaAdmin;
+            this.currentPersonCanManage = this.authenticationService.doesCurrentUserHaveJurisdictionManagePermission();
+            this.canEditStormwaterJurisdiction = this.authenticationService.doesCurrentUserHaveJurisdictionManagePermission();
+        });
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -239,6 +251,12 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
                         Top: bmp.Latitude + 0.001,
                     });
                 }
+
+                if (bmp && bmp.RegionalSubbasinRevisionRequests) {
+                    this.openRevisionRequest = bmp.RegionalSubbasinRevisionRequests.find(
+                        (r) => r.RegionalSubbasinRevisionRequestStatusID == RegionalSubbasinRevisionRequestStatusEnum.Open
+                    );
+                }
             }),
             shareReplay(1)
         );
@@ -262,6 +280,7 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
                 )
             )
         );
+
         this.treatmentBMPImages$ = this.treatmentBMPImageByTreatmentBMPService.listTreatmentBMPImageByTreatmentBMP(this.treatmentBMPID).pipe(
             tap({
                 next: () => {

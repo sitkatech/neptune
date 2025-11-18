@@ -58,6 +58,7 @@ export class OrganizationModalComponent implements OnInit {
                 LogoFileResourceID: this.ref.data.organization.LogoFileResourceID,
             });
         }
+
         this.organizationTypeOptions$ = this.organizationTypeService
             .listSimpleOrganizationType()
             .pipe(map((types) => types.map((type) => ({ Label: type.OrganizationTypeName, Value: type.OrganizationTypeID, disabled: false }) as SelectDropdownOption)));

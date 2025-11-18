@@ -352,6 +352,7 @@ public static class TreatmentBMPs
             .Include(x => x.OwnerOrganization)
             .Include(x => x.WaterQualityManagementPlan)
             .Include(x => x.Delineation)
+            .Include(x => x.RegionalSubbasinRevisionRequests)
             .SingleAsync(x => x.TreatmentBMPID == treatmentBMPID);
 
         var dto = treatmentBMP.AsDto();

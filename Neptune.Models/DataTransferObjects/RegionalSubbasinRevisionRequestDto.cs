@@ -1,8 +1,7 @@
-namespace Neptune.Models.DataTransferObjects
+namespace Neptune.Models.DataTransferObjects;
+
+public class RegionalSubbasinRevisionRequestDto
 {
-    public class RegionalSubbasinRevisionRequestDto
-    {
-        public int RegionalSubbasinRevisionRequestID { get; set; }
-        public string? Name { get; set; }
-    }
+    public int RegionalSubbasinRevisionRequestID { get; set; }
+    public int RegionalSubbasinRevisionRequestStatusID { get; set; }
 }

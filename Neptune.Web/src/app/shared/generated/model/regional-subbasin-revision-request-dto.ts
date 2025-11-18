@@ -12,7 +12,7 @@
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class RegionalSubbasinRevisionRequestDto { 
     RegionalSubbasinRevisionRequestID?: number;
-    Name?: string | null;
+    RegionalSubbasinRevisionRequestStatusID?: number;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
@@ -20,7 +20,7 @@ export class RegionalSubbasinRevisionRequestDto {
 
 export interface RegionalSubbasinRevisionRequestDtoForm { 
     RegionalSubbasinRevisionRequestID?: FormControl<number>;
-    Name?: FormControl<string>;
+    RegionalSubbasinRevisionRequestStatusID?: FormControl<number>;
 }
 
 export class RegionalSubbasinRevisionRequestDtoFormControls { 
@@ -34,7 +34,7 @@ export class RegionalSubbasinRevisionRequestDtoFormControls {
             ],
         }
     );
-    public static Name = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+    public static RegionalSubbasinRevisionRequestStatusID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
         {

@@ -11856,9 +11856,9 @@
             "type": "integer",
             "format": "int32"
           },
-          "Name": {
-            "type": "string",
-            "nullable": true
+          "RegionalSubbasinRevisionRequestStatusID": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
