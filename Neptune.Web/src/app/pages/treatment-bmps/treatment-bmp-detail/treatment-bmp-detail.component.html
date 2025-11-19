@@ -353,8 +353,9 @@
                         </div>
                         <div class="card-body">
                             @if (!isAnonymousOrUnassigned && currentPersonCanManage) {
-                                <!-- TODO: Implement Refresh Land Use button logic and modal -->
-                                <button class="btn btn-primary" [disabled]="!treatmentBMP.Delineation?.IsVerified">Refresh Land Use</button>
+                                <button class="btn btn-primary mb-2" (click)="confirmRefreshLandUse(treatmentBMP)" [disabled]="!treatmentBMP.Delineation?.IsVerified">
+                                    Refresh Land Use
+                                </button>
                             }
                             @if (hruCharacteristicsSummaries?.length && treatmentBMP.Delineation?.IsVerified) {
                                 <land-use-table [hruCharacteristics]="hruCharacteristicsSummaries"></land-use-table>

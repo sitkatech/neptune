@@ -387,4 +387,27 @@ public class TreatmentBMPController(NeptuneDbContext dbContext, ILogger<Treatmen
 
         return Ok(new List<TreatmentBMPDisplayDto>());
     }
+
+    [HttpPut("{treatmentBMPID}/queue-refresh-land-use")]
+    [UserViewFeature]
+    [EntityNotFound(typeof(TreatmentBMP), "treatmentBMPID")]
+    public async Task<ActionResult<List<TreatmentBMPDisplayDto>>> QueueRefreshLandUse([FromRoute] int treatmentBMPID)
+    {
+        var delineation = Delineations.GetByTreatmentBMPID(dbContext, treatmentBMPID);
+        if (delineation == null)
+        {
+            ModelState.AddModelError("Delineation Required", "Treatment BMPs require a delineation in order to refresh their Land Use.");
+            return BadRequest(ModelState);
+        }
+
+        if (delineation.DelineationTypeID != DelineationType.Distributed.DelineationTypeID)
+        {
+            ModelState.AddModelError("Delineation is Distributed", "This delineation cannot be refreshed because it is not distributed.");
+            return BadRequest(ModelState);
+        }
+
+        await ModelingEngineUtilities.QueueLGURefreshForArea(delineation.DelineationGeometry, null, DbContext);
+
+        return Ok();
+    }
 }

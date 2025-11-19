@@ -45,7 +45,6 @@ import {
     TreatmentBMPParameterizationErrorsDto,
     TreatmentBMPTypeCustomAttributeTypeDto,
     TreatmentBMPUpstreamestErrorsDto,
-    TreatmentBMPUpstreamestErrorsDtoForm,
 } from "src/app/shared/generated/model/models";
 import { FieldVisitDto } from "src/app/shared/generated/model/field-visit-dto";
 import { FundingEventByTreatmentBMPIDService } from "src/app/shared/generated/api/funding-event-by-treatment-bmpid.service";
@@ -362,6 +361,29 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
             .then((confirmed) => {
                 if (confirmed) {
                     this.fundingEventByTreatmentBMPIDService.deleteFundingEventByTreatmentBMPID(this.treatmentBMPID, fundingEvent.FundingEventID).subscribe(() => this.loadData());
+                }
+            });
+    }
+
+    confirmRefreshLandUse(treatmentBMP: TreatmentBMPDto): void {
+        this.confirmService
+            .confirm({
+                buttonClassYes: "btn-primary",
+                buttonTextYes: "Refresh Land Use",
+                buttonTextNo: "Cancel",
+                title: "Refresh Land Use",
+                message: `<p>Are you sure you want to refresh the Land Use Area for '${treatmentBMP.TreatmentBMPName}' treatment BMP?</p>`,
+            })
+            .then((confirmed) => {
+                if (confirmed) {
+                    this.treatmentBMPService.queueRefreshLandUseTreatmentBMP(treatmentBMP.TreatmentBMPID).subscribe(() => {
+                        this.alertService.pushAlert(
+                            new Alert(
+                                `Successfully queued a Land Use refresh for the Treatment BMP ${treatmentBMP.TreatmentBMPName}. It will run in the background, please check back later to view the results.`,
+                                AlertContext.Success
+                            )
+                        );
+                    });
                 }
             });
     }
