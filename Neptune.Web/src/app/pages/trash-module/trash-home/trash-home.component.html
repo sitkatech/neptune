@@ -102,13 +102,13 @@
                           <td class="TGUColumn">
                             <div class="grid-12">
                               <div class="g-col-4">
-                                <div id="fullTrashCaptureAlu" class="font25 outlined-text" style="color: rgb(178,161,139)">
+                                <div id="fullTrashCaptureAlu" class="font25 outlined-text" style="color: #B2A38E">
                                   {{ areaBasedAcreCalculationsDto.FullTrashCaptureAcreageALU | number : "1.0-0" }}
                                 </div>
                                 <p class="greyLabel">acres Full Capture</p>
                               </div>
                               <div class="g-col-4">
-                                <div id="partialTrashCaptureAlu" class="font25 outlined-text" style="color: rgb(223, 202, 174)">
+                                <div id="partialTrashCaptureAlu" class="font25 outlined-text" style="color: #DFCAAE">
                                   {{ areaBasedAcreCalculationsDto.PartialTrashCaptureAcreageALU | number : "1.0-0" }}
                                 </div>
                                 <p class="greyLabel">acres Partial Capture</p>
@@ -137,7 +137,7 @@
                   }
                 </div>
               }
-              @if (currentResultType == 'Current Net Loading Rate with Controls' || currentResultType == 'Net change in Trash Loading Rate with Controls') {
+              @if (currentResultType == 'Current Net Loading Rate With Controls' || currentResultType == 'Net Change In Trash Loading Rate With Controls') {
                 <div
                   [loadingSpinner]="{ isLoading: isLoading, loadingHeight: 100 }"
                   id="LoadBasedResultsControlTemplate"
@@ -388,7 +388,7 @@
                   [sortOrder]="1"
                 [selectedJurisdictionID]="this.currentStormwaterJurisdiction.StormwaterJurisdictionID"></trash-generating-unit-layer>
               }
-              @if (mapIsReady && currentResultType == 'Current Net Loading Rate with Controls') {
+              @if (mapIsReady && currentResultType == 'Current Net Loading Rate With Controls') {
                 <trash-generating-unit-loads-layer
                   [displayOnLoad]="true"
                   [map]="map"
@@ -397,7 +397,7 @@
                   [style]="'current_load'"
                 [selectedJurisdictionID]="this.currentStormwaterJurisdiction.StormwaterJurisdictionID"></trash-generating-unit-loads-layer>
               }
-              @if (mapIsReady && currentResultType == 'Net change in Trash Loading Rate with Controls') {
+              @if (mapIsReady && currentResultType == 'Net Change In Trash Loading Rate With Controls') {
                 <trash-generating-unit-loads-layer
                   [displayOnLoad]="true"
                   [map]="map"

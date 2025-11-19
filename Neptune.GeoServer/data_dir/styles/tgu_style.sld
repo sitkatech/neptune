@@ -174,6 +174,38 @@
           </ogc:Filter>
           <PolygonSymbolizer>
             <Fill>
+              <CssParameter name="fill">#937d62</CssParameter>
+              <CssParameter name="fill-opacity">.7</CssParameter>
+            </Fill>
+          </PolygonSymbolizer>
+        </Rule>
+        <Rule>
+          <Name>AluPartialTrashCapturePolygon</Name>
+          <Title>ALU: Partial Trash Capture Polygon</Title>
+          <ogc:Filter>
+            <ogc:And>
+              <ogc:PropertyIsEqualTo>
+                <ogc:PropertyName>IsPriorityLandUse</ogc:PropertyName>
+                <ogc:Literal>0</ogc:Literal>
+              </ogc:PropertyIsEqualTo>
+              <ogc:PropertyIsEqualTo>
+                <ogc:PropertyName>TrashCaptureStatus</ogc:PropertyName>
+                <ogc:Literal>Partial</ogc:Literal>
+              </ogc:PropertyIsEqualTo> 
+              <ogc:PropertyIsEqualTo>
+                <ogc:Function name="in2">
+                  <ogc:Function name="geometryType">
+                    <ogc:PropertyName>TrashGeneratingUnitGeometry</ogc:PropertyName>
+                  </ogc:Function>
+                  <ogc:Literal>Polygon</ogc:Literal>
+                  <ogc:Literal>MultiPolygon</ogc:Literal>
+                </ogc:Function>
+                <ogc:Literal>true</ogc:Literal>
+              </ogc:PropertyIsEqualTo>
+            </ogc:And>
+          </ogc:Filter>
+          <PolygonSymbolizer>
+            <Fill>
               <CssParameter name="fill">#d2b48c</CssParameter>
               <CssParameter name="fill-opacity">.7</CssParameter>
             </Fill>
@@ -191,6 +223,10 @@
               <ogc:PropertyIsNotEqualTo>
                 <ogc:PropertyName>TrashCaptureStatus</ogc:PropertyName>
                 <ogc:Literal>Full</ogc:Literal>
+              </ogc:PropertyIsNotEqualTo>
+              <ogc:PropertyIsNotEqualTo>
+                <ogc:PropertyName>TrashCaptureStatus</ogc:PropertyName>
+                <ogc:Literal>Partial</ogc:Literal>
               </ogc:PropertyIsNotEqualTo> 
               <ogc:PropertyIsEqualTo>
                 <ogc:Function name="in2">
@@ -388,6 +424,43 @@
               <ogc:PropertyIsEqualTo>
                 <ogc:PropertyName>TrashCaptureStatus</ogc:PropertyName>
                 <ogc:Literal>Full</ogc:Literal>
+              </ogc:PropertyIsEqualTo> 
+              <ogc:PropertyIsEqualTo>
+                <ogc:Function name="in3">
+                  <ogc:Function name="geometryType">
+                    <ogc:PropertyName>TrashGeneratingUnitGeometry</ogc:PropertyName>
+                  </ogc:Function>
+                  <ogc:Literal>LineString</ogc:Literal>
+                  <ogc:Literal>LinearRing</ogc:Literal>
+                  <ogc:Literal>MultiLineString</ogc:Literal>
+                </ogc:Function>
+                <ogc:Literal>true</ogc:Literal>
+              </ogc:PropertyIsEqualTo>              
+            </ogc:And>
+          </ogc:Filter>
+          <LineSymbolizer>
+            <Stroke>
+              <CssParameter name="stroke">
+                <ogc:Literal>#937d62</ogc:Literal>
+              </CssParameter>
+              <CssParameter name="stroke-width">
+                <ogc:Literal>2</ogc:Literal>
+              </CssParameter>
+            </Stroke>
+          </LineSymbolizer>
+        </Rule>
+        <Rule>
+          <Name>AluPartialTrashCaptureLine</Name>
+          <Title>ALU: Partial Trash Capture Line</Title>
+          <ogc:Filter>
+            <ogc:And>
+              <ogc:PropertyIsEqualTo>
+                <ogc:PropertyName>IsPriorityLandUse</ogc:PropertyName>
+                <ogc:Literal>0</ogc:Literal>
+              </ogc:PropertyIsEqualTo>
+              <ogc:PropertyIsEqualTo>
+                <ogc:PropertyName>TrashCaptureStatus</ogc:PropertyName>
+                <ogc:Literal>Partial</ogc:Literal>
               </ogc:PropertyIsEqualTo> 
               <ogc:PropertyIsEqualTo>
                 <ogc:Function name="in3">
