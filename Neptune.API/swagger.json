@@ -559,7 +559,27 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
           }
         }
       }
@@ -2935,6 +2955,45 @@
         }
       }
     },
+    "/organization-types": {
+      "get": {
+        "tags": [
+          "OrganizationType"
+        ],
+        "operationId": "ListSimple_OrganizationType",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OrganizationTypeSimpleDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OrganizationTypeSimpleDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OrganizationTypeSimpleDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/projects": {
       "get": {
         "tags": [
@@ -4994,6 +5053,53 @@
       }
     },
     "/treatment-bmps": {
+      "post": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "operationId": "Create_TreatmentBMP",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TreatmentBMPCreateDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TreatmentBMPCreateDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/TreatmentBMPCreateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPDto"
+                }
+              }
+            }
+          }
+        }
+      },
       "get": {
         "tags": [
           "TreatmentBMP"
@@ -5356,6 +5462,333 @@
         }
       }
     },
+    "/treatment-bmps/{treatmentBMPID}/basic-info": {
+      "put": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "operationId": "UpdateBasicInfo_TreatmentBMP",
+        "parameters": [
+          {
+            "name": "treatmentBMPID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TreatmentBMPBasicInfoUpdateDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TreatmentBMPBasicInfoUpdateDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/TreatmentBMPBasicInfoUpdateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/treatment-bmps/{treatmentBMPID}/type": {
+      "put": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "operationId": "UpdateType_TreatmentBMP",
+        "parameters": [
+          {
+            "name": "treatmentBMPID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TreatmentBMPTypeUpdateDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TreatmentBMPTypeUpdateDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/TreatmentBMPTypeUpdateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/treatment-bmps/{treatmentBMPID}/location": {
+      "put": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "operationId": "UpdateLocation_TreatmentBMP",
+        "parameters": [
+          {
+            "name": "treatmentBMPID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TreatmentBMPLocationUpdateDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TreatmentBMPLocationUpdateDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/TreatmentBMPLocationUpdateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/treatment-bmps/{treatmentBMPID}/custom-attribute-type-purposes/{customAttributeTypePurposeID}/custom-attributes": {
+      "put": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "operationId": "UpdateCustomAttributes_TreatmentBMP",
+        "parameters": [
+          {
+            "name": "treatmentBMPID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "customAttributeTypePurposeID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/CustomAttributeUpsertDto"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/CustomAttributeUpsertDto"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/CustomAttributeUpsertDto"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CustomAttributeDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CustomAttributeDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CustomAttributeDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/treatment-bmps/{treatmentBMPID}/upstream-bmp": {
+      "put": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "operationId": "UpdateUpstreamBMP_TreatmentBMP",
+        "parameters": [
+          {
+            "name": "treatmentBMPID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TreatmentBMPUpstreamBMPUpdateDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TreatmentBMPUpstreamBMPUpdateDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/TreatmentBMPUpstreamBMPUpdateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/treatment-bmps/{treatmentBMPID}/hru-characteristics": {
       "get": {
         "tags": [
@@ -5537,6 +5970,229 @@
                   "type": "array",
                   "items": {
                     "$ref": "#/components/schemas/TreatmentBMPModelingAttributesDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/treatment-bmps/{treatmentBMPID}/delineation-errors": {
+      "get": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "operationId": "GetDelineationErrors_TreatmentBMP",
+        "parameters": [
+          {
+            "name": "treatmentBMPID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPDelineationErrorsDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPDelineationErrorsDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPDelineationErrorsDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/treatment-bmps/{treatmentBMPID}/parameterization-errors": {
+      "get": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "operationId": "GetParameterizationErrors_TreatmentBMP",
+        "parameters": [
+          {
+            "name": "treatmentBMPID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPParameterizationErrorsDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPParameterizationErrorsDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPParameterizationErrorsDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/treatment-bmps/{treatmentBMPID}/upstreamest-errors": {
+      "get": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "operationId": "GetUpstreamestErrors_TreatmentBMP",
+        "parameters": [
+          {
+            "name": "treatmentBMPID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPUpstreamestErrorsDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPUpstreamestErrorsDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPUpstreamestErrorsDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/treatment-bmps/{treatmentBMPID}/other-treatment-bmps-in-regional-subbasin": {
+      "get": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "operationId": "ListOtherTreatmentBMPsInRegionalSubbasin_TreatmentBMP",
+        "parameters": [
+          {
+            "name": "treatmentBMPID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/treatment-bmps/{treatmentBMPID}/queue-refresh-land-use": {
+      "put": {
+        "tags": [
+          "TreatmentBMP"
+        ],
+        "operationId": "QueueRefreshLandUse_TreatmentBMP",
+        "parameters": [
+          {
+            "name": "treatmentBMPID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
                   }
                 }
               }
@@ -5801,7 +6457,324 @@
         }
       }
     },
+    "/treatment-bmps/{treatmentBMPID}/treatment-bmp-documents": {
+      "post": {
+        "tags": [
+          "TreatmentBMPDocumentByTreatmentBMP"
+        ],
+        "operationId": "Create_TreatmentBMPDocumentByTreatmentBMP",
+        "parameters": [
+          {
+            "name": "treatmentBMPID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "required": [
+                  "File"
+                ],
+                "type": "object",
+                "properties": {
+                  "File": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "Description": {
+                    "type": "string"
+                  }
+                }
+              },
+              "encoding": {
+                "File": {
+                  "style": "form"
+                },
+                "Description": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPDocumentDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPDocumentDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPDocumentDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "TreatmentBMPDocumentByTreatmentBMP"
+        ],
+        "operationId": "List_TreatmentBMPDocumentByTreatmentBMP",
+        "parameters": [
+          {
+            "name": "treatmentBMPID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPDocumentDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPDocumentDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TreatmentBMPDocumentDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/treatment-bmps/{treatmentBMPID}/treatment-bmp-documents/{treatmentBMPDocumentID}": {
+      "get": {
+        "tags": [
+          "TreatmentBMPDocumentByTreatmentBMP"
+        ],
+        "operationId": "Get_TreatmentBMPDocumentByTreatmentBMP",
+        "parameters": [
+          {
+            "name": "treatmentBMPID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "treatmentBMPDocumentID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPDocumentDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPDocumentDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPDocumentDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "TreatmentBMPDocumentByTreatmentBMP"
+        ],
+        "operationId": "Update_TreatmentBMPDocumentByTreatmentBMP",
+        "parameters": [
+          {
+            "name": "treatmentBMPID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "treatmentBMPDocumentID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TreatmentBMPDocumentUpdateDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TreatmentBMPDocumentUpdateDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/TreatmentBMPDocumentUpdateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "TreatmentBMPDocumentByTreatmentBMP"
+        ],
+        "operationId": "Delete_TreatmentBMPDocumentByTreatmentBMP",
+        "parameters": [
+          {
+            "name": "treatmentBMPID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "treatmentBMPDocumentID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/treatment-bmps/{treatmentBMPID}/treatment-bmp-images": {
+      "post": {
+        "tags": [
+          "TreatmentBMPImageByTreatmentBMP"
+        ],
+        "operationId": "Create_TreatmentBMPImageByTreatmentBMP",
+        "parameters": [
+          {
+            "name": "treatmentBMPID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "required": [
+                  "File"
+                ],
+                "type": "object",
+                "properties": {
+                  "File": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "Caption": {
+                    "type": "string"
+                  }
+                }
+              },
+              "encoding": {
+                "File": {
+                  "style": "form"
+                },
+                "Caption": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPImageDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPImageDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreatmentBMPImageDto"
+                }
+              }
+            }
+          }
+        }
+      },
       "get": {
         "tags": [
           "TreatmentBMPImageByTreatmentBMP"
@@ -5850,11 +6823,11 @@
           }
         }
       },
-      "post": {
+      "put": {
         "tags": [
           "TreatmentBMPImageByTreatmentBMP"
         ],
-        "operationId": "Create_TreatmentBMPImageByTreatmentBMP",
+        "operationId": "Update_TreatmentBMPImageByTreatmentBMP",
         "parameters": [
           {
             "name": "treatmentBMPID",
@@ -5870,41 +6843,33 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/TreatmentBMPImageDto"
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TreatmentBMPImageUpdateDto"
+                }
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/TreatmentBMPImageDto"
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TreatmentBMPImageUpdateDto"
+                }
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/TreatmentBMPImageDto"
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TreatmentBMPImageUpdateDto"
+                }
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/TreatmentBMPImageDto"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TreatmentBMPImageDto"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TreatmentBMPImageDto"
-                }
-              }
-            }
+            "description": "OK"
           }
         }
       }
@@ -5955,56 +6920,6 @@
                 }
               }
             }
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "TreatmentBMPImageByTreatmentBMP"
-        ],
-        "operationId": "Update_TreatmentBMPImageByTreatmentBMP",
-        "parameters": [
-          {
-            "name": "treatmentBMPID",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "treatmentBMPImageID",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TreatmentBMPImageDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TreatmentBMPImageDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/TreatmentBMPImageDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
           }
         }
       },
@@ -6585,6 +7500,45 @@
               "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/WaterQualityManagementPlanDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/water-quality-management-plans/display-dtos": {
+      "get": {
+        "tags": [
+          "WaterQualityManagementPlan"
+        ],
+        "operationId": "ListAsDisplayDtos_WaterQualityManagementPlan",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WaterQualityManagementPlanDisplayDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WaterQualityManagementPlanDisplayDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WaterQualityManagementPlanDisplayDto"
+                  }
                 }
               }
             }
@@ -7244,6 +8198,13 @@
             "type": "integer",
             "format": "int32"
           },
+          "CustomAttributeValues": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
           "CustomAttributeValueWithUnits": {
             "type": "string",
             "nullable": true
@@ -7283,6 +8244,10 @@
             "format": "int32"
           },
           "CustomAttributeTypeOptionsSchema": {
+            "type": "string",
+            "nullable": true
+          },
+          "DataTypeName": {
             "type": "string",
             "nullable": true
           },
@@ -7342,6 +8307,10 @@
             "format": "int32"
           },
           "CustomAttributeTypeOptionsSchema": {
+            "type": "string",
+            "nullable": true
+          },
+          "DataTypeName": {
             "type": "string",
             "nullable": true
           },
@@ -10945,9 +11914,9 @@
             "type": "integer",
             "format": "int32"
           },
-          "Name": {
-            "type": "string",
-            "nullable": true
+          "RegionalSubbasinRevisionRequestStatusID": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
@@ -11330,6 +12299,85 @@
         },
         "additionalProperties": false
       },
+      "TreatmentBMPBasicInfoUpdateDto": {
+        "required": [
+          "SizingBasisTypeID",
+          "TrashCaptureStatusTypeID",
+          "TreatmentBMPLifespanTypeID",
+          "TreatmentBMPName",
+          "WaterQualityManagementPlanID"
+        ],
+        "type": "object",
+        "properties": {
+          "TreatmentBMPName": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "OwnerOrganizationID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "YearBuilt": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "SystemOfRecordID": {
+            "type": "string",
+            "nullable": true
+          },
+          "WaterQualityManagementPlanID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TreatmentBMPLifespanTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TreatmentBMPLifespanEndDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "SizingBasisTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TrashCaptureStatusTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TrashCaptureEffectiveness": {
+            "maximum": 99,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "RequiredFieldVisitsPerYear": {
+            "maximum": 2147483647,
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "RequiredPostStormFieldVisitsPerYear": {
+            "maximum": 2147483647,
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Notes": {
+            "maxLength": 2000,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "TreatmentBMPBenchmarkAndThresholdDto": {
         "type": "object",
         "properties": {
@@ -11386,6 +12434,121 @@
           "ThresholdValue": {
             "type": "number",
             "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TreatmentBMPCreateDto": {
+        "required": [
+          "Latitude",
+          "Longitude",
+          "SizingBasisTypeID",
+          "StormwaterJurisdictionID",
+          "TrashCaptureStatusTypeID",
+          "TreatmentBMPLifespanTypeID",
+          "TreatmentBMPName",
+          "TreatmentBMPTypeID",
+          "WaterQualityManagementPlanID"
+        ],
+        "type": "object",
+        "properties": {
+          "TreatmentBMPName": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "TreatmentBMPTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "StormwaterJurisdictionID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "OwnerOrganizationID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "YearBuilt": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "SystemOfRecordID": {
+            "type": "string",
+            "nullable": true
+          },
+          "WaterQualityManagementPlanID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TreatmentBMPLifespanTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TreatmentBMPLifespanEndDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "SizingBasisTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TrashCaptureStatusTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TrashCaptureEffectiveness": {
+            "maximum": 99,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "RequiredFieldVisitsPerYear": {
+            "maximum": 2147483647,
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "RequiredPostStormFieldVisitsPerYear": {
+            "maximum": 2147483647,
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Notes": {
+            "maxLength": 2000,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Latitude": {
+            "type": "number",
+            "format": "double"
+          },
+          "Longitude": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TreatmentBMPDelineationErrorsDto": {
+        "type": "object",
+        "properties": {
+          "HasDiscrepancies": {
+            "type": "boolean"
+          },
+          "OverlappingTreatmentBMPs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -11449,6 +12612,54 @@
           "TreatmentBMPTypeID": {
             "type": "integer",
             "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TreatmentBMPDocumentDto": {
+        "type": "object",
+        "properties": {
+          "TreatmentBMPDocumentID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "FileResourceID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "FileResourceGUID": {
+            "type": "string",
+            "nullable": true
+          },
+          "OriginalBaseFilename": {
+            "type": "string",
+            "nullable": true
+          },
+          "OriginalFileExtension": {
+            "type": "string",
+            "nullable": true
+          },
+          "DocumentDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "DisplayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "CreateDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TreatmentBMPDocumentUpdateDto": {
+        "type": "object",
+        "properties": {
+          "Description": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -11614,7 +12825,7 @@
           "TreatmentBMPModelingAttribute": {
             "$ref": "#/components/schemas/vTreatmentBMPModelingAttributeDto"
           },
-          "OtherTreatmentBmpsExistInSubbasin": {
+          "OtherTreatmentBMPsExistInSubbasin": {
             "type": "boolean",
             "nullable": true
           },
@@ -11649,20 +12860,6 @@
           },
           "StormwaterJurisdiction": {
             "$ref": "#/components/schemas/StormwaterJurisdictionDisplayDto"
-          },
-          "DelineationErrors": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true
-          },
-          "ParameterizationErrors": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true
           },
           "SizingBasisType": {
             "$ref": "#/components/schemas/SizingBasisTypeDto"
@@ -11828,6 +13025,10 @@
             "type": "integer",
             "format": "int32"
           },
+          "TreatmentBMPID": {
+            "type": "integer",
+            "format": "int32"
+          },
           "FileResourceID": {
             "type": "integer",
             "format": "int32"
@@ -11840,13 +13041,23 @@
             "type": "string",
             "nullable": true
           },
-          "TreatmentBMPID": {
-            "type": "integer",
-            "format": "int32"
-          },
           "UploadDate": {
             "type": "string",
             "format": "date"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TreatmentBMPImageUpdateDto": {
+        "type": "object",
+        "properties": {
+          "TreatmentBMPImageID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Caption": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -11865,6 +13076,24 @@
           "TreatmentBMPLifeSpanTypeDisplayName": {
             "type": "string",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TreatmentBMPLocationUpdateDto": {
+        "required": [
+          "Latitude",
+          "Longitude"
+        ],
+        "type": "object",
+        "properties": {
+          "Latitude": {
+            "type": "number",
+            "format": "double"
+          },
+          "Longitude": {
+            "type": "number",
+            "format": "double"
           }
         },
         "additionalProperties": false
@@ -12098,6 +13327,24 @@
         },
         "additionalProperties": false
       },
+      "TreatmentBMPParameterizationErrorsDto": {
+        "type": "object",
+        "properties": {
+          "HasDelineation": {
+            "type": "boolean"
+          },
+          "LinkToDelineationMap": {
+            "type": "boolean"
+          },
+          "SimplifiedWQMP": {
+            "$ref": "#/components/schemas/WaterQualityManagementPlanDisplayDto"
+          },
+          "MissingModelAttributes": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
       "TreatmentBMPTypeCustomAttributeTypeDto": {
         "type": "object",
         "properties": {
@@ -12120,6 +13367,19 @@
             "type": "integer",
             "format": "int32",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TreatmentBMPTypeUpdateDto": {
+        "required": [
+          "TreatmentBMPTypeID"
+        ],
+        "type": "object",
+        "properties": {
+          "TreatmentBMPTypeID": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
@@ -12213,6 +13473,43 @@
           },
           "IsFullyParameterized": {
             "type": "boolean",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TreatmentBMPUpstreamBMPUpdateDto": {
+        "type": "object",
+        "properties": {
+          "UpstreamBMPID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TreatmentBMPUpstreamestErrorsDto": {
+        "type": "object",
+        "properties": {
+          "UpstreamestBMP": {
+            "$ref": "#/components/schemas/TreatmentBMPDisplayDto"
+          },
+          "IsUpstreamestBMPAnalyzedInModelingModule": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "WaterQualityManagementPlanDisplayDto": {
+        "type": "object",
+        "properties": {
+          "WaterQualityManagementPlanID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "WaterQualityManagementPlanName": {
+            "type": "string",
             "nullable": true
           }
         },

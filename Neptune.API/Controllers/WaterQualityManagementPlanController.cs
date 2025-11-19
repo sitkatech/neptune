@@ -33,9 +33,17 @@ namespace Neptune.API.Controllers
             return Ok(plans);
         }
 
+        [HttpGet("display-dtos")]
+        [AdminFeature]
+        public async Task<ActionResult<List<WaterQualityManagementPlanDisplayDto>>> ListAsDisplayDtos()
+        {
+            var plans = await WaterQualityManagementPlans.ListAsDisplayDtoAsync(DbContext);
+            return Ok(plans);
+        }
+
         [HttpGet("{waterQualityManagementPlanID}")]
         [AdminFeature]
-        [EntityNotFoundAttribute(typeof(WaterQualityManagementPlan), "waterQualityManagementPlanID")]
+        [EntityNotFound(typeof(WaterQualityManagementPlan), "waterQualityManagementPlanID")]
         public async Task<ActionResult<WaterQualityManagementPlanDto>> Get([FromRoute] int waterQualityManagementPlanID)
         {
             var entity = await WaterQualityManagementPlans.GetByIDAsDtoAsync(DbContext, waterQualityManagementPlanID);
@@ -53,7 +61,7 @@ namespace Neptune.API.Controllers
 
         [HttpPut("{waterQualityManagementPlanID}")]
         [AdminFeature]
-        [EntityNotFoundAttribute(typeof(WaterQualityManagementPlan), "waterQualityManagementPlanID")]
+        [EntityNotFound(typeof(WaterQualityManagementPlan), "waterQualityManagementPlanID")]
         public async Task<ActionResult<WaterQualityManagementPlanDto>> Update([FromRoute] int waterQualityManagementPlanID, [FromBody] WaterQualityManagementPlanUpsertDto dto)
         {
             var updated = await WaterQualityManagementPlans.UpdateAsync(DbContext, waterQualityManagementPlanID, dto);
@@ -63,7 +71,7 @@ namespace Neptune.API.Controllers
 
         [HttpDelete("{waterQualityManagementPlanID}")]
         [AdminFeature]
-        [EntityNotFoundAttribute(typeof(WaterQualityManagementPlan), "waterQualityManagementPlanID")]
+        [EntityNotFound(typeof(WaterQualityManagementPlan), "waterQualityManagementPlanID")]
         public async Task<IActionResult> Delete([FromRoute] int waterQualityManagementPlanID)
         {
             var deleted = await WaterQualityManagementPlans.DeleteAsync(DbContext, waterQualityManagementPlanID);
@@ -73,7 +81,7 @@ namespace Neptune.API.Controllers
 
         [HttpGet("{waterQualityManagementPlanID}/documents")]
         [AdminFeature]
-        [EntityNotFoundAttribute(typeof(WaterQualityManagementPlan), "waterQualityManagementPlanID")]
+        [EntityNotFound(typeof(WaterQualityManagementPlan), "waterQualityManagementPlanID")]
         public async Task<ActionResult<IEnumerable<WaterQualityManagementPlanDocumentDto>>> ListDocuments([FromRoute] int waterQualityManagementPlanID)
         {
             var waterQualityManagementPlanDocumentDtos = await WaterQualityManagementPlanDocuments.ListByWaterQualityManagementPlanIDAsDtoAsync(DbContext, waterQualityManagementPlanID);

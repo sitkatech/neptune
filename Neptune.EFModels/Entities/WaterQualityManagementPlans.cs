@@ -99,6 +99,23 @@ public static class WaterQualityManagementPlans
         return entities.Select(x => x.AsDto()).ToList();
     }
 
+    public static async Task<List<WaterQualityManagementPlanDisplayDto>> ListAsDisplayDtoAsync(NeptuneDbContext dbContext)
+    {
+        var wqmps = await dbContext.WaterQualityManagementPlans.AsNoTracking()
+            .ToListAsync();
+
+        var displayDtos = wqmps
+            .OrderBy(x => x.WaterQualityManagementPlanName)
+            .Select(x => new WaterQualityManagementPlanDisplayDto()
+            {
+                WaterQualityManagementPlanID = x.WaterQualityManagementPlanID,
+                WaterQualityManagementPlanName = x.WaterQualityManagementPlanName
+            })
+            .ToList();
+
+        return displayDtos;
+    }
+
     public static async Task<WaterQualityManagementPlanDto?> GetByIDAsDtoAsync(NeptuneDbContext dbContext, int waterQualityManagementPlanID)
     {
         var entity = await GetImpl(dbContext).AsNoTracking().FirstOrDefaultAsync(x => x.WaterQualityManagementPlanID == waterQualityManagementPlanID);
@@ -143,7 +160,7 @@ public static class WaterQualityManagementPlans
             .Include(x => x.WaterQualityManagementPlanParcels).ThenInclude(x => x.Parcel)
             .Include(x => x.TreatmentBMPs).ThenInclude(x => x.Delineation)
             .Where(x => wqmpIDsToFilterBy.Contains(x.WaterQualityManagementPlanID) && x.WaterQualityManagementPlanDocuments
-                .Any(y => y.WaterQualityManagementPlanDocumentTypeID == (int) WaterQualityManagementPlanDocumentTypeEnum.FinalWQMP))
+                .Any(y => y.WaterQualityManagementPlanDocumentTypeID == (int)WaterQualityManagementPlanDocumentTypeEnum.FinalWQMP))
             .AsNoTracking()
             .ToListAsync();
         return entities.Select(x => x.AsDto()).ToList();

@@ -1,0 +1,29 @@
+<div class="lat-lon-picker grid-two-col">
+    <div class="left-col">
+        <div class="field-label">Location</div>
+        <div class="instructions">
+            @if (instructionsTemplate) {
+                <ng-container *ngTemplateOutlet="instructionsTemplate"></ng-container>
+            } @else {
+                <ng-content select="[lat-lon-instructions]"></ng-content>
+            }
+        </div>
+
+        <div class="inputs-row mt-4">
+            <form-field class="col" [fieldLabel]="'Latitude'" [formControl]="latControl" [type]="FormFieldType.Number"></form-field>
+            <form-field class="col" [fieldLabel]="'Longitude'" [formControl]="lonControl" [type]="FormFieldType.Number"></form-field>
+        </div>
+
+        <div class="buttons-row">
+            <button class="btn btn-secondary" type="button" (click)="useCurrentLocation()">
+                <icon name="crosshair"></icon>
+                Use Current Location
+            </button>
+            <button class="btn btn-outline-secondary" type="button" (click)="clearLocation()">Clear</button>
+        </div>
+    </div>
+
+    <div class="right-col">
+        <neptune-map [mapHeight]="mapHeight" (onMapLoad)="onMapLoad($event)"></neptune-map>
+    </div>
+</div>

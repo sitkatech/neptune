@@ -72,7 +72,11 @@ export class FundingEventModalComponent implements OnInit {
         FundingEventFundingSources: new FormArray([]),
     });
 
-    constructor(private fundingEventService: FundingEventByTreatmentBMPIDService, private alertService: AlertService, private fundingSourceService: FundingSourceService) {}
+    constructor(
+        private fundingEventService: FundingEventByTreatmentBMPIDService,
+        private alertService: AlertService,
+        private fundingSourceService: FundingSourceService
+    ) {}
 
     ngOnInit(): void {
         this.alertService.clearAlerts();
@@ -104,8 +108,8 @@ export class FundingEventModalComponent implements OnInit {
                         ({
                             Value: src.FundingSourceID,
                             Label: src.DisplayName,
-                            Disabled: false,
-                        } as FormInputOption)
+                            disabled: false,
+                        }) as FormInputOption
                 )
             )
         );

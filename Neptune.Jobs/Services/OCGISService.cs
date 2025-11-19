@@ -556,6 +556,7 @@ public class OCGISService(
             };
             jsonSerializerOptions.Converters.Add(new GeoJsonConverterFactory());
             jsonSerializerOptions.Converters.Add(new DateTimeConverter());
+            jsonSerializerOptions.Converters.Add(new NullableDateTimeConverter());
             jsonSerializerOptions.Converters.Add(new DoubleConverter(4));
             jsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             await GeoJsonSerializer.SerializeToStream(list, jsonSerializerOptions, stream);

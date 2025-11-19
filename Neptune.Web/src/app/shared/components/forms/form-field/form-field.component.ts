@@ -25,17 +25,7 @@ import { NgSelectModule } from "@ng-select/ng-select";
         },
         provideNgxMask(),
     ],
-    imports: [
-    NgxMaskDirective,
-    FormsModule,
-    ReactiveFormsModule,
-    EditorComponent,
-    FieldDefinitionComponent,
-    InputErrorsComponent,
-    RequiredPipe,
-    TinyMceConfigPipe,
-    NgSelectModule
-]
+    imports: [NgxMaskDirective, FormsModule, ReactiveFormsModule, EditorComponent, FieldDefinitionComponent, InputErrorsComponent, RequiredPipe, TinyMceConfigPipe, NgSelectModule],
 })
 export class FormFieldComponent {
     public FormFieldType = FormFieldType;
@@ -65,6 +55,8 @@ export class FormFieldComponent {
     @Input() uploadFileAccepts: string;
 
     @ViewChild("fileUploadField") fileUploadField: any;
+    public fileName: string = null;
+    public fileExtension: string = null;
 
     public val: any;
     set value(val) {
@@ -97,8 +89,17 @@ export class FormFieldComponent {
     }
 
     onFileChange(event: any): void {
-        console.log(event.target.files[0]);
-        this.value = event.target.files[0];
+        let file = event.target.files[0];
+        this.value = file;
+        if (file) {
+            const name = file.name;
+            const i = name.lastIndexOf(".");
+            this.fileName = i > 0 ? name.slice(0, i) : name;
+            this.fileExtension = i > 0 ? name.slice(i) : "";
+        } else {
+            this.fileName = null;
+            this.fileExtension = null;
+        }
     }
 
     onClickFileUpload(event: any): void {
@@ -127,7 +128,7 @@ export enum FormFieldType {
 export interface FormInputOption {
     Value: any;
     Label: string;
-    Disabled: boolean | null | undefined;
+    disabled: boolean | null | undefined;
     Group?: string | null | undefined;
 }
 

@@ -14,6 +14,7 @@ export const routeParams = {
     loadGeneratingUnitID: "loadGeneratingUnitID",
     jurisdictionID: "jurisdictionID",
     regionalSubbasinID: "regionalSubbasinID",
+    customAttributePurposeID: "customAttributePurposeID",
 };
 
 export const routes: Routes = [
@@ -372,9 +373,51 @@ export const routes: Routes = [
                 loadComponent: () => import("./pages/treatment-bmps/treatment-bmps.component").then((m) => m.TreatmentBmpsComponent),
             },
             {
+                path: "treatment-bmps/new",
+                title: "Create New BMP",
+                loadComponent: () => import("./pages/treatment-bmps/create-treatment-bmp/create-treatment-bmp.component").then((m) => m.CreateTreatmentBmpComponent),
+                canDeactivate: [UnsavedChangesGuard],
+            },
+            {
                 path: `treatment-bmps/:${routeParams.treatmentBMPID}`,
                 title: "Treatment BMP Detail",
                 loadComponent: () => import("./pages/treatment-bmps/treatment-bmp-detail/treatment-bmp-detail.component").then((m) => m.TreatmentBmpDetailComponent),
+            },
+            {
+                path: `treatment-bmps/:${routeParams.treatmentBMPID}/edit-basic-info`,
+                title: "Edit BMP Basic Info",
+                loadComponent: () =>
+                    import("./pages/treatment-bmps/treatment-bmp-detail/treatment-bmp-update-basic-info/treatment-bmp-update-basic-info.component").then(
+                        (m) => m.TreatmentBmpUpdateBasicInfoComponent
+                    ),
+                canDeactivate: [UnsavedChangesGuard],
+            },
+            {
+                path: `treatment-bmps/:${routeParams.treatmentBMPID}/edit-images`,
+                title: "Edit BMP Images",
+                loadComponent: () =>
+                    import("./pages/treatment-bmps/treatment-bmp-detail/treatment-bmp-update-images/treatment-bmp-update-images.component").then(
+                        (m) => m.TreatmentBmpUpdateImagesComponent
+                    ),
+                canDeactivate: [UnsavedChangesGuard],
+            },
+            {
+                path: `treatment-bmps/:${routeParams.treatmentBMPID}/edit-location`,
+                title: "Edit BMP Location",
+                loadComponent: () =>
+                    import("./pages/treatment-bmps/treatment-bmp-detail/treatment-bmp-update-location/treatment-bmp-update-location.component").then(
+                        (m) => m.TreatmentBmpUpdateLocationComponent
+                    ),
+                canDeactivate: [UnsavedChangesGuard],
+            },
+            {
+                path: `treatment-bmps/:${routeParams.treatmentBMPID}/edit-custom-attributes/:${routeParams.customAttributePurposeID}`,
+                title: "Edit BMP Custom Attributes",
+                loadComponent: () =>
+                    import("./pages/treatment-bmps/treatment-bmp-detail/treatment-bmp-update-custom-attributes/treatment-bmp-update-custom-attributes.component").then(
+                        (m) => m.TreatmentBmpUpdateCustomAttributesComponent
+                    ),
+                canDeactivate: [UnsavedChangesGuard],
             },
             {
                 path: "latest-bmp-assessments",

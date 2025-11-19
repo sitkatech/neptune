@@ -12,10 +12,10 @@
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class TreatmentBMPImageDto { 
     TreatmentBMPImageID?: number;
+    TreatmentBMPID?: number;
     FileResourceID?: number;
     FileResourceGUID?: string | null;
     Caption?: string | null;
-    TreatmentBMPID?: number;
     UploadDate?: string;
     constructor(obj?: any) {
         Object.assign(this, obj);
@@ -24,15 +24,25 @@ export class TreatmentBMPImageDto {
 
 export interface TreatmentBMPImageDtoForm { 
     TreatmentBMPImageID?: FormControl<number>;
+    TreatmentBMPID?: FormControl<number>;
     FileResourceID?: FormControl<number>;
     FileResourceGUID?: FormControl<string>;
     Caption?: FormControl<string>;
-    TreatmentBMPID?: FormControl<number>;
     UploadDate?: FormControl<string>;
 }
 
 export class TreatmentBMPImageDtoFormControls { 
     public static TreatmentBMPImageID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static TreatmentBMPID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
         {
@@ -63,16 +73,6 @@ export class TreatmentBMPImageDtoFormControls {
         }
     );
     public static Caption = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static TreatmentBMPID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
         {

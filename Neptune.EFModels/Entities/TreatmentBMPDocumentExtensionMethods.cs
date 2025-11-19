@@ -9,7 +9,13 @@ namespace Neptune.EFModels.Entities
             return new TreatmentBMPDocumentDto
             {
                 TreatmentBMPDocumentID = entity.TreatmentBMPDocumentID,
-                DisplayName = entity.DisplayName
+                FileResourceID = entity.FileResourceID,
+                FileResourceGUID = entity.FileResource.FileResourceGUID.ToString(),
+                OriginalBaseFilename = entity.FileResource.OriginalBaseFilename,
+                OriginalFileExtension = entity.FileResource.OriginalFileExtension,
+                DisplayName = entity.DisplayName,
+                DocumentDescription = entity.DocumentDescription,
+                CreateDate = entity.FileResource.CreateDate
             };
         }
     }

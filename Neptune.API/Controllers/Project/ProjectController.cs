@@ -129,8 +129,8 @@ namespace Neptune.API.Controllers
         public async Task<ActionResult<ProjectDocumentDto>> AddAttachment([FromRoute] int projectID, [FromForm] ProjectDocumentUpsertDto projectDocumentUpsertDto)
         {
             var fileResource =
-                await HttpUtilities.MakeFileResourceFromFormFile(projectDocumentUpsertDto.FileResource, DbContext,
-                    HttpContext, azureBlobStorageService);
+                await HttpUtilities.MakeFileResourceFromFormFileAsync(DbContext,
+                                                                 HttpContext, azureBlobStorageService, projectDocumentUpsertDto.FileResource);
 
             var projectDocument = new ProjectDocument()
             {

@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { Router } from "@angular/router";
+import { Router, RouterModule } from "@angular/router";
 import { ConfirmService } from "src/app/shared/services/confirm/confirm.service";
 import { AlertService } from "src/app/shared/services/alert.service";
 import { Alert } from "src/app/shared/models/alert";
@@ -12,7 +12,6 @@ import * as L from "leaflet";
 import { ColDef } from "ag-grid-community";
 import { Observable, tap } from "rxjs";
 import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.service";
-import { TreatmentBMPDisplayDto } from "src/app/shared/generated/model/treatment-bmp-display-dto";
 import { UtilityFunctionsService } from "src/app/services/utility-functions.service";
 import { AsyncPipe } from "@angular/common";
 import { LoadingDirective } from "src/app/shared/directives/loading.directive";
@@ -20,11 +19,12 @@ import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto"
 import { StormwaterJurisdictionService } from "src/app/shared/generated/api/stormwater-jurisdiction.service";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
 import { TreatmentBMPGridDto } from "src/app/shared/generated/model/treatment-bmp-grid-dto";
+import { IconComponent } from "src/app/shared/components/icon/icon.component";
 
 @Component({
     selector: "treatment-bmps",
     standalone: true,
-    imports: [PageHeaderComponent, AlertDisplayComponent, HybridMapGridComponent, AsyncPipe, LoadingDirective],
+    imports: [PageHeaderComponent, AlertDisplayComponent, HybridMapGridComponent, AsyncPipe, LoadingDirective, RouterModule],
     templateUrl: "./treatment-bmps.component.html",
 })
 export class TreatmentBmpsComponent {
