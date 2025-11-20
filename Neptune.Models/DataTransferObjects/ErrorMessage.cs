@@ -1,8 +1,13 @@
-﻿namespace Neptune.Models.DataTransferObjects
+﻿namespace Neptune.Models.DataTransferObjects;
+
+public class ErrorMessage()
 {
-    public class ErrorMessage
+    public string Type { get; set; }
+    public string Message { get; set; }
+
+    public ErrorMessage(string type, string message) : this()
     {
-        public string Type { get; set; }
-        public string Message { get; set; }
+        Type = type;
+        Message = message;
     }
 }

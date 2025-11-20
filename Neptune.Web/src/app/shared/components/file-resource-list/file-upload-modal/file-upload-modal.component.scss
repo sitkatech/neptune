@@ -1,0 +1,24 @@
+@use "/src/scss/abstracts" as *;
+
+input[type="file"] {
+    display: none;
+}
+
+.file-name {
+    flex: 1 1 auto;
+    min-width: 0;
+    .base {
+        display: inline-block;
+        max-width: 90%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        vertical-align: bottom;
+        font-size: $type-size-200;
+    }
+    .ext {
+        flex-shrink: 0;
+        margin-left: -0.25rem;
+        font-size: $type-size-200;
+    }
+}

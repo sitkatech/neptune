@@ -13,17 +13,9 @@ namespace Neptune.API.Controllers;
 
 [ApiController]
 [Route("organizations")]
-public class OrganizationController : SitkaController<OrganizationController>
+public class OrganizationController(NeptuneDbContext dbContext, ILogger<OrganizationController> logger, KeystoneService keystoneService, IOptions<NeptuneConfiguration> neptuneConfiguration)
+    : SitkaController<OrganizationController>(dbContext, logger, keystoneService, neptuneConfiguration)
 {
-    public OrganizationController(
-        NeptuneDbContext dbContext,
-        ILogger<OrganizationController> logger,
-        KeystoneService keystoneService,
-        IOptions<NeptuneConfiguration> neptuneConfiguration)
-        : base(dbContext, logger, keystoneService, neptuneConfiguration)
-    {
-    }
-
     [HttpGet]
     [AdminFeature]
     public async Task<ActionResult<List<OrganizationDto>>> List()
@@ -34,7 +26,7 @@ public class OrganizationController : SitkaController<OrganizationController>
 
     [HttpGet("{organizationID}")]
     [AdminFeature]
-    [EntityNotFoundAttribute(typeof(Organization), "organizationID")]
+    [EntityNotFound(typeof(Organization), "organizationID")]
     public async Task<ActionResult<OrganizationDto>> Get([FromRoute] int organizationID)
     {
         var organization = await Organizations.GetByIDAsDtoAsync(DbContext, organizationID);
@@ -52,7 +44,7 @@ public class OrganizationController : SitkaController<OrganizationController>
 
     [HttpPut("{organizationID}")]
     [AdminFeature]
-    [EntityNotFoundAttribute(typeof(Organization), "organizationID")]
+    [EntityNotFound(typeof(Organization), "organizationID")]
     public async Task<ActionResult<OrganizationDto>> Update([FromRoute] int organizationID, [FromBody] OrganizationUpsertDto dto)
     {
         var updated = await Organizations.UpdateAsync(DbContext, organizationID, dto);
@@ -62,7 +54,7 @@ public class OrganizationController : SitkaController<OrganizationController>
 
     [HttpDelete("{organizationID}")]
     [AdminFeature]
-    [EntityNotFoundAttribute(typeof(Organization), "organizationID")]
+    [EntityNotFound(typeof(Organization), "organizationID")]
     public async Task<IActionResult> Delete([FromRoute] int organizationID)
     {
         var deleted = await Organizations.DeleteAsync(DbContext, organizationID);

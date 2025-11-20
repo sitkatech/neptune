@@ -9,7 +9,7 @@ namespace Neptune.EFModels.Entities
             return new RegionalSubbasinRevisionRequestDto
             {
                 RegionalSubbasinRevisionRequestID = entity.RegionalSubbasinRevisionRequestID,
-                Name = null
+                RegionalSubbasinRevisionRequestStatusID = entity.RegionalSubbasinRevisionRequestStatusID
             };
         }
     }

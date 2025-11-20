@@ -1,17 +1,19 @@
 using Neptune.Models.DataTransferObjects;
 
-namespace Neptune.EFModels.Entities
+namespace Neptune.EFModels.Entities;
+
+public static class TreatmentBMPImageExtensionMethods
 {
-    public static class TreatmentBMPImageExtensionMethods
+    public static TreatmentBMPImageDto AsDto(this TreatmentBMPImage entity)
     {
-        public static TreatmentBMPImageDto AsDto(this TreatmentBMPImage entity)
+        return new TreatmentBMPImageDto
         {
-            return new TreatmentBMPImageDto
-            {
-                TreatmentBMPImageID = entity.TreatmentBMPImageID,
-                FileResourceGUID = entity.FileResource.FileResourceGUID.ToString(),
-                Caption = entity.Caption
-            };
-        }
+            TreatmentBMPImageID = entity.TreatmentBMPImageID,
+            TreatmentBMPID = entity.TreatmentBMPID,
+            FileResourceID = entity.FileResourceID,
+            FileResourceGUID = entity.FileResource.FileResourceGUID.ToString(),
+            Caption = entity.Caption,
+            UploadDate = entity.UploadDate
+        };
     }
 }

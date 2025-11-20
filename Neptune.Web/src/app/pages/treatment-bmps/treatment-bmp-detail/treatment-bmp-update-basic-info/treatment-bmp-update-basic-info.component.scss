@@ -1,0 +1,7 @@
+@use "/src/scss/abstracts" as *;
+
+.form-control-readonly {
+    height: 3rem;
+    line-height: 3rem;
+    font-size: clamp(0.87rem, 0.74rem + 0.62vw, 1.13rem);
+}

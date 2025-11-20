@@ -1,10 +1,106 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Neptune.Common.DesignByContract;
+using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities;
 
 public static class TreatmentBMPImages
 {
+    public static async Task<TreatmentBMPImageDto> CreateAsync(NeptuneDbContext dbContext, int treatmentBMPID, int fileResourceID, TreatmentBMPImageCreateDto createDto, int callingPerson)
+    {
+        var treatmentBMPImage = new TreatmentBMPImage()
+        {
+            TreatmentBMPID = treatmentBMPID,
+            FileResourceID = fileResourceID,
+            Caption = createDto.Caption,
+            UploadDate = DateOnly.FromDateTime(DateTime.UtcNow)
+        };
+
+        await dbContext.TreatmentBMPImages.AddAsync(treatmentBMPImage);
+        await dbContext.SaveChangesAsync();
+        await dbContext.Entry(treatmentBMPImage).ReloadAsync();
+
+        var treatmentBMPImageDto = treatmentBMPImage.AsDto();
+        return treatmentBMPImageDto;
+    }
+
+    public static async Task<List<TreatmentBMPImageDto>> ListAsync(NeptuneDbContext dbContext, int treatmentBMPID)
+    {
+        var treatmentBMPImages = await dbContext.TreatmentBMPImages.AsNoTracking()
+            .Include(x => x.FileResource)
+            .Where(x => x.TreatmentBMPID == treatmentBMPID)
+            .ToListAsync();
+
+        var treatmentBMPImageDtos = treatmentBMPImages.Select(x => x.AsDto()).ToList();
+        return treatmentBMPImageDtos;
+    }
+
+    public static async Task<TreatmentBMPImageDto?> GetAsync(NeptuneDbContext dbContext, int treatmentBMPID, int treatmentBMPImageID)
+    {
+        var treatmentBMPImage = await dbContext.TreatmentBMPImages.AsNoTracking()
+            .Include(x => x.FileResource)
+            .SingleOrDefaultAsync(x => x.TreatmentBMPID == treatmentBMPID && x.TreatmentBMPImageID == treatmentBMPImageID);
+
+        var treatmentBMPImageDto = treatmentBMPImage?.AsDto();
+        return treatmentBMPImageDto;
+    }
+
+    public static async Task<List<ErrorMessage>> ValidateUpdateAsync(NeptuneDbContext dbContext, int treatmentBMPID, List<TreatmentBMPImageUpdateDto> updateDtos)
+    {
+        var errors = new List<ErrorMessage>();
+
+        var treatmentBMPImageIDs = updateDtos.Select(x => x.TreatmentBMPImageID).ToList();
+        var existingTreatmentBMPImages = await dbContext.TreatmentBMPImages.AsNoTracking()
+            .Where(x => x.TreatmentBMPID == treatmentBMPID && treatmentBMPImageIDs.Contains(x.TreatmentBMPImageID))
+            .Select(x => x.TreatmentBMPImageID)
+            .ToListAsync();
+
+        var missingIDs = treatmentBMPImageIDs.Except(existingTreatmentBMPImages).ToList();
+        if (missingIDs.Any())
+        {
+            errors.Add(new ErrorMessage("TreatmentBMPImageID", $"TreatmentBMPImageIDs not found or not associated with TreatmentBMP {treatmentBMPID}: {string.Join(',', missingIDs)}"));
+        }
+
+        return errors;
+    }
+
+    public static async Task<List<TreatmentBMPImageDto>> UpdateAsync(NeptuneDbContext dbContext, int treatmentBMPID, List<TreatmentBMPImageUpdateDto> updateDtos)
+    {
+        var idsToUpdate = updateDtos.Select(x => x.TreatmentBMPImageID).ToList();
+
+        var treatmentBMPImages = await dbContext.TreatmentBMPImages
+            .Include(x => x.FileResource)
+            .Where(x => x.TreatmentBMPID == treatmentBMPID && idsToUpdate.Contains(x.TreatmentBMPImageID))
+            .ToListAsync();
+
+        // Apply updates
+        foreach (var dto in updateDtos)
+        {
+            var entity = treatmentBMPImages.Single(x => x.TreatmentBMPImageID == dto.TreatmentBMPImageID);
+            entity.Caption = dto.Caption;
+        }
+
+        await dbContext.SaveChangesAsync();
+
+        var treatmentBMPImageDtos = await ListAsync(dbContext, treatmentBMPID);
+        return treatmentBMPImageDtos;
+    }
+
+    public static async Task DeleteAsync(NeptuneDbContext dbContext, int treatmentBMPID, int treatmentBMPImageID)
+    {
+        var treatmentBMPImage = await dbContext.TreatmentBMPImages.AsNoTracking()
+            .SingleAsync(x => x.TreatmentBMPID == treatmentBMPID && x.TreatmentBMPImageID == treatmentBMPImageID);
+
+        await dbContext.TreatmentBMPImages
+            .Where(x => x.TreatmentBMPID == treatmentBMPID && x.TreatmentBMPImageID == treatmentBMPImageID)
+            .ExecuteDeleteAsync();
+
+        await dbContext.FileResources
+            .Where(x => x.FileResourceID == treatmentBMPImage.FileResourceID)
+            .ExecuteDeleteAsync();
+    }
+
+    #region Used by WebMVC
     public static List<TreatmentBMPImage> ListByTreatmentBMPID(NeptuneDbContext dbContext, int treatmentBMPID)
     {
         return GetImpl(dbContext).AsNoTracking().Where(x => x.TreatmentBMPID == treatmentBMPID).OrderBy(ht => ht.Caption).ToList();
@@ -47,4 +143,6 @@ public static class TreatmentBMPImages
         return dbContext.TreatmentBMPImages
             .Include(x => x.FileResource);
     }
+
+    #endregion
 }

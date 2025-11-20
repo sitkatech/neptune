@@ -59,6 +59,7 @@ namespace Neptune.API
                 var geometryFactory = new GeometryFactory(new PrecisionModel(scale), 4326);
                 options.JsonSerializerOptions.Converters.Add(new GeoJsonConverterFactory(geometryFactory, false));
                 options.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
+                options.JsonSerializerOptions.Converters.Add(new NullableDateTimeConverter());
                 options.JsonSerializerOptions.Converters.Add(new DoubleConverter(7));
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                 options.JsonSerializerOptions.ReadCommentHandling = JsonCommentHandling.Skip;

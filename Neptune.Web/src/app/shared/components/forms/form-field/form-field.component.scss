@@ -38,3 +38,28 @@
     align-items: center;
     height: $spacing-700;
 }
+
+input[type="number"]::placeholder,
+input[type="text"]::placeholder,
+textarea::placeholder {
+    color: #999;
+}
+
+.file-name {
+    flex: 1 1 auto;
+    min-width: 0;
+    .base {
+        display: inline-block;
+        max-width: 90%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        vertical-align: bottom;
+        font-size: $type-size-200;
+    }
+    .ext {
+        flex-shrink: 0;
+        margin-left: -0.25rem;
+        font-size: $type-size-200;
+    }
+}

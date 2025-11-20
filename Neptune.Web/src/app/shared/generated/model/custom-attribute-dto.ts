@@ -16,6 +16,7 @@ export class CustomAttributeDto {
     TreatmentBMPTypeCustomAttributeTypeID?: number;
     TreatmentBMPTypeID?: number;
     CustomAttributeTypeID?: number;
+    CustomAttributeValues?: Array<string> | null;
     CustomAttributeValueWithUnits?: string | null;
     constructor(obj?: any) {
         Object.assign(this, obj);
@@ -28,6 +29,7 @@ export interface CustomAttributeDtoForm {
     TreatmentBMPTypeCustomAttributeTypeID?: FormControl<number>;
     TreatmentBMPTypeID?: FormControl<number>;
     CustomAttributeTypeID?: FormControl<number>;
+    CustomAttributeValues?: FormControl<Array<string>>;
     CustomAttributeValueWithUnits?: FormControl<string>;
 }
 
@@ -73,6 +75,16 @@ export class CustomAttributeDtoFormControls {
         }
     );
     public static CustomAttributeTypeID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static CustomAttributeValues = (value: FormControlState<Array<string>> | Array<string> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<string>>(
         value,
         formControlOptions ?? 
         {

@@ -4,8 +4,8 @@ import { ConfirmService } from "src/app/shared/services/confirm/confirm.service"
 import { Component, OnInit, OnChanges, SimpleChanges, ViewChild, TemplateRef, Input } from "@angular/core";
 import { Router, RouterLink } from "@angular/router";
 import { DatePipe, AsyncPipe, CommonModule } from "@angular/common";
-import { Observable } from "rxjs";
-import { switchMap, tap } from "rxjs/operators";
+import { BehaviorSubject, Observable } from "rxjs";
+import { shareReplay, switchMap, tap } from "rxjs/operators";
 import { PageHeaderComponent } from "src/app/shared/components/page-header/page-header.component";
 import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
 import * as L from "leaflet";
@@ -33,7 +33,19 @@ import { UtilityFunctionsService } from "src/app/services/utility-functions.serv
 import { LandUseTableComponent } from "src/app/shared/components/land-use-table/land-use-table.component";
 import { NeptuneGridComponent } from "src/app/shared/components/neptune-grid/neptune-grid.component";
 import { CustomAttributesDisplayComponent } from "src/app/shared/components/custom-attributes-display/custom-attributes-display.component";
-import { CustomAttributeDto, TreatmentBMPHRUCharacteristicsSummarySimpleDto, TreatmentBMPTypeCustomAttributeTypeDto } from "src/app/shared/generated/model/models";
+import {
+    CustomAttributeDto,
+    PersonDto,
+    RegionalSubbasinRevisionRequestDto,
+    TreatmentBMPDelineationErrorsDto,
+    TreatmentBMPDocumentDto,
+    TreatmentBMPDocumentUpdateDto,
+    TreatmentBMPHRUCharacteristicsSummarySimpleDto,
+    TreatmentBMPImageDto,
+    TreatmentBMPParameterizationErrorsDto,
+    TreatmentBMPTypeCustomAttributeTypeDto,
+    TreatmentBMPUpstreamestErrorsDto,
+} from "src/app/shared/generated/model/models";
 import { FieldVisitDto } from "src/app/shared/generated/model/field-visit-dto";
 import { FundingEventByTreatmentBMPIDService } from "src/app/shared/generated/api/funding-event-by-treatment-bmpid.service";
 import { FundingEventDto } from "src/app/shared/generated/model/funding-event-dto";
@@ -43,6 +55,25 @@ import { GroupByPipe } from "src/app/shared/pipes/group-by.pipe";
 import { SumPipe } from "src/app/shared/pipes/sum.pipe";
 import { OverlayMode } from "src/app/shared/components/leaflet/layers/generic-wms-wfs-layer/overlay-mode.enum";
 import { HruCharacteristicsGridComponent } from "src/app/shared/components/hru-characteristics-grid/hru-characteristics-grid.component";
+import { IconComponent } from "src/app/shared/components/icon/icon.component";
+import { TrashCaptureStatusTypeEnum } from "src/app/shared/generated/enum/trash-capture-status-type-enum";
+import {
+    TreatmentBmpUpdateTypeModalComponent,
+    TreatmentBmpUpdateTypeModalContext,
+} from "src/app/pages/treatment-bmps/treatment-bmp-detail/treatment-bmp-update-type-modal/treatment-bmp-update-type-modal.component";
+import { AlertService } from "src/app/shared/services/alert.service";
+import { Alert } from "src/app/shared/models/alert";
+import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
+import { FileResourceListComponent, IHaveFileResource } from "src/app/shared/components/file-resource-list/file-resource-list.component";
+import { TreatmentBMPDocumentByTreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp-document-by-treatment-bmp.service";
+import { FileUploadModalComponent, IFileResourceUpload } from "src/app/shared/components/file-resource-list/file-upload-modal/file-upload-modal.component";
+import {
+    TreatmentBmpUpdateUpstreamBmpModalComponent,
+    TreatmentBmpUpdateUpstreamBmpModalContext,
+} from "src/app/pages/treatment-bmps/treatment-bmp-detail/treatment-bmp-update-upstream-bmp-modal/treatment-bmp-update-upstream-bmp-modal.component";
+import { RegionalSubbasinRevisionRequestStatusEnum } from "src/app/shared/generated/enum/regional-subbasin-revision-request-status-enum";
+import { AuthenticationService } from "src/app/services/authentication.service";
+import { RoleEnum } from "src/app/shared/generated/enum/role-enum";
 
 @Component({
     selector: "treatment-bmp-detail",
@@ -71,9 +102,16 @@ import { HruCharacteristicsGridComponent } from "src/app/shared/components/hru-c
         NeptuneGridComponent,
         CustomAttributesDisplayComponent,
         HruCharacteristicsGridComponent,
+        IconComponent,
+        FileResourceListComponent,
     ],
 })
 export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
+    @ViewChild("templateRight", { static: true }) templateRight!: TemplateRef<any>;
+    @ViewChild("templateAbove", { static: true }) templateAbove!: TemplateRef<any>;
+
+    @Input() treatmentBMPID!: number;
+
     public OverlayMode = OverlayMode;
 
     fundingEvents$: Observable<FundingEventDto[]>;
@@ -99,62 +137,54 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
     map: any;
     layerControl: any;
     mapIsReady = false;
-    @ViewChild("templateRight", { static: true }) templateRight!: TemplateRef<any>;
-    @ViewChild("templateAbove", { static: true }) templateAbove!: TemplateRef<any>;
-    @Input() treatmentBMPID!: number;
 
     // Observables for async pipe
     treatmentBMP$!: Observable<TreatmentBMPDto>;
+    delineationErrors$: Observable<TreatmentBMPDelineationErrorsDto>;
+    parameterizationErrors$: Observable<TreatmentBMPParameterizationErrorsDto>;
+    upstreamestBMPErrors$: Observable<TreatmentBMPUpstreamestErrorsDto>;
     customAttributes$: Observable<CustomAttributeDto[]>;
     treatmentBMPTypeCustomAttributeTypes$: Observable<TreatmentBMPTypeCustomAttributeTypeDto[]>;
-    attachments$!: Observable<any[]>; // TODO: Replace 'any' with ProjectDocumentDto
-    treatmentBMPImages$!: Observable<any[]>;
+    treatmentBMPImages$: Observable<TreatmentBMPImageDto[]>;
+    treatmentBMPDocuments$: Observable<TreatmentBMPDocumentDto[]>;
+    refreshTreatmentBMPDocumentsTrigger$: BehaviorSubject<void> = new BehaviorSubject<void>(undefined);
     hruCharacteristics$: Observable<HRUCharacteristicDto[]>;
     fieldVisits$: Observable<FieldVisitDto[]>;
     fieldVisitColumnDefs: Array<ColDef>;
 
     imagesLoading = true;
 
+    currentUser: PersonDto;
     // Placeholder properties for template bindings
     isAnonymousOrUnassigned = false;
-    delineationErrors: string[] = [];
-    parameterizationErrors: string[] = [];
-    openRevisionRequest: any = null;
+    openRevisionRequest: RegionalSubbasinRevisionRequestDto = null;
     openRevisionRequestDetailUrl = "";
-    upstreamestBMP: any = null;
-    isUpstreamestBMPAnalyzedInModelingModule = false;
     currentPersonCanManage = true;
     canEditStormwaterJurisdiction = false;
     isAnalyzedInModelingModule = true;
     isSitkaAdmin = true;
-    otherTreatmentBmpsExistInSubbasin = false;
-    upstreamestBMPDetailUrl = "";
-    upstreamBMPDetailUrl = "";
-    delineationMapUrl = "";
-    editUpstreamBMPUrl = "";
     hasModelingAttributes = false;
-    // TODO: Add more properties as needed
 
-    public TreatmentBMPLifespanTypeEnum = TreatmentBMPLifespanTypeEnum;
-    /**
-     * Stub for HRU characteristics summaries used in the land use panel template.
-     * Replace with actual data wiring when available.
-     */
     hruCharacteristicsSummaries: TreatmentBMPHRUCharacteristicsSummarySimpleDto[] = [];
+
     public WaterQualityManagementPlanModelingApproachEnum = WaterQualityManagementPlanModelingApproachEnum;
     public CustomAttributeTypePurposeEnum = CustomAttributeTypePurposeEnum;
+    public TrashCaptureStatusTypeEnum = TrashCaptureStatusTypeEnum;
+    public TreatmentBMPLifespanTypeEnum = TreatmentBMPLifespanTypeEnum;
 
     constructor(
-        private router: Router,
         private treatmentBMPService: TreatmentBMPService,
         private treatmentBMPImageByTreatmentBMPService: TreatmentBMPImageByTreatmentBMPService,
+        private treatmentBMPDocumentByTreatmentBMPService: TreatmentBMPDocumentByTreatmentBMPService,
         private treatmentBMPTypeService: TreatmentBMPTypeService,
         private utilityFunctionsService: UtilityFunctionsService,
         private groupByPipe: GroupByPipe,
         private sumPipe: SumPipe,
         private fundingEventByTreatmentBMPIDService: FundingEventByTreatmentBMPIDService,
         private dialogService: DialogService,
-        private confirmService: ConfirmService
+        private confirmService: ConfirmService,
+        private alertService: AlertService,
+        private authenticationService: AuthenticationService
     ) {}
 
     ngOnInit(): void {
@@ -176,6 +206,14 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
             this.utilityFunctionsService.createDecimalColumnDef("Post-Maintenance Assessment Score", "AssessmentScorePM"),
         ];
         this.loadData();
+
+        this.authenticationService.getCurrentUser().subscribe((user) => {
+            this.currentUser = user;
+            this.isAnonymousOrUnassigned = !user || user.RoleID == RoleEnum.Unassigned;
+            this.isSitkaAdmin = user.RoleID == RoleEnum.SitkaAdmin;
+            this.currentPersonCanManage = this.authenticationService.doesCurrentUserHaveJurisdictionManagePermission();
+            this.canEditStormwaterJurisdiction = this.authenticationService.doesCurrentUserHaveJurisdictionManagePermission();
+        });
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -212,8 +250,23 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
                         Top: bmp.Latitude + 0.001,
                     });
                 }
-            })
+
+                if (bmp && bmp.RegionalSubbasinRevisionRequests) {
+                    this.openRevisionRequest = bmp.RegionalSubbasinRevisionRequests.find(
+                        (r) => r.RegionalSubbasinRevisionRequestStatusID == RegionalSubbasinRevisionRequestStatusEnum.Open
+                    );
+                }
+            }),
+            shareReplay(1)
         );
+
+        this.delineationErrors$ = this.treatmentBMP$.pipe(switchMap((bmp) => this.treatmentBMPService.getDelineationErrorsTreatmentBMP(bmp.TreatmentBMPID)));
+        this.parameterizationErrors$ = this.treatmentBMP$.pipe(switchMap((bmp) => this.treatmentBMPService.getParameterizationErrorsTreatmentBMP(bmp.TreatmentBMPID)));
+        this.upstreamestBMPErrors$ = this.treatmentBMP$.pipe(
+            switchMap((bmp) => this.treatmentBMPService.getUpstreamestErrorsTreatmentBMP(bmp.TreatmentBMPID)),
+            shareReplay(1)
+        );
+
         this.customAttributes$ = this.treatmentBMP$.pipe(switchMap((bmp) => this.treatmentBMPService.listCustomAttributesTreatmentBMP(bmp.TreatmentBMPID)));
         this.treatmentBMPTypeCustomAttributeTypes$ = this.treatmentBMP$.pipe(
             switchMap((bmp) =>
@@ -226,6 +279,7 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
                 )
             )
         );
+
         this.treatmentBMPImages$ = this.treatmentBMPImageByTreatmentBMPService.listTreatmentBMPImageByTreatmentBMP(this.treatmentBMPID).pipe(
             tap({
                 next: () => {
@@ -239,6 +293,38 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
                 },
             })
         );
+
+        this.treatmentBMPDocuments$ = this.refreshTreatmentBMPDocumentsTrigger$.pipe(
+            switchMap(() => this.treatmentBMPDocumentByTreatmentBMPService.listTreatmentBMPDocumentByTreatmentBMP(this.treatmentBMPID))
+        );
+
+        this.refreshTreatmentBMPDocumentsTrigger$.next();
+    }
+
+    openUpdateTypeModal(treatmentBMP: TreatmentBMPDto): void {
+        this.dialogService
+            .open(TreatmentBmpUpdateTypeModalComponent, {
+                data: { treatmentBMPID: this.treatmentBMPID, currentTreatmentBMPTypeID: treatmentBMP.TreatmentBMPTypeID } as TreatmentBmpUpdateTypeModalContext,
+            })
+            .afterClosed$.subscribe((result) => {
+                if (result) {
+                    this.loadData();
+                    this.alertService.pushAlert(new Alert("BMP type updated successfully.", AlertContext.Success));
+                }
+            });
+    }
+
+    openEditUpstreamBMPModal(treatmentBMP: TreatmentBMPDto): void {
+        this.dialogService
+            .open(TreatmentBmpUpdateUpstreamBmpModalComponent, {
+                data: { treatmentBMPID: this.treatmentBMPID, currentUpstreamBMPID: treatmentBMP?.UpstreamBMPID } as TreatmentBmpUpdateUpstreamBmpModalContext,
+            })
+            .afterClosed$.subscribe((result) => {
+                if (result) {
+                    this.loadData();
+                    this.alertService.pushAlert(new Alert("Upstream BMP updated successfully.", AlertContext.Success));
+                }
+            });
     }
 
     openAddFundingEventModal(): void {
@@ -247,7 +333,9 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
                 data: { treatmentBMPID: this.treatmentBMPID } as FundingEventModalContext,
             })
             .afterClosed$.subscribe((result) => {
-                if (result) this.loadData();
+                if (result) {
+                    this.loadData();
+                }
             });
     }
 
@@ -273,6 +361,29 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
             .then((confirmed) => {
                 if (confirmed) {
                     this.fundingEventByTreatmentBMPIDService.deleteFundingEventByTreatmentBMPID(this.treatmentBMPID, fundingEvent.FundingEventID).subscribe(() => this.loadData());
+                }
+            });
+    }
+
+    confirmRefreshLandUse(treatmentBMP: TreatmentBMPDto): void {
+        this.confirmService
+            .confirm({
+                buttonClassYes: "btn-primary",
+                buttonTextYes: "Refresh Land Use",
+                buttonTextNo: "Cancel",
+                title: "Refresh Land Use",
+                message: `<p>Are you sure you want to refresh the Land Use Area for '${treatmentBMP.TreatmentBMPName}' treatment BMP?</p>`,
+            })
+            .then((confirmed) => {
+                if (confirmed) {
+                    this.treatmentBMPService.queueRefreshLandUseTreatmentBMP(treatmentBMP.TreatmentBMPID).subscribe(() => {
+                        this.alertService.pushAlert(
+                            new Alert(
+                                `Successfully queued a Land Use refresh for the Treatment BMP ${treatmentBMP.TreatmentBMPName}. It will run in the background, please check back later to view the results.`,
+                                AlertContext.Success
+                            )
+                        );
+                    });
                 }
             });
     }
@@ -315,15 +426,45 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
         if (!fundingEvent.FundingEventFundingSources) return 0;
         return fundingEvent.FundingEventFundingSources.reduce((acc, s) => acc + (s.Amount || 0), 0);
     }
+    openDocumentUploadModal(): void {
+        const dialogRef = this.dialogService.open(FileUploadModalComponent, {
+            data: {},
+            size: "sm",
+        });
 
-    getEditLink(treatmentBMP: any): string {
-        // TODO: Return the correct edit route for this BMP
-        return `/treatment-bmps/edit/${treatmentBMP.TreatmentBMPID}`;
+        dialogRef.afterClosed$.subscribe((result: IFileResourceUpload) => {
+            if (result) {
+                this.uploadDocument(result);
+            }
+        });
     }
 
-    removeUpstreamBMP(): void {
-        // Implement the logic to remove the upstream BMP association
-        // This might involve calling a service method to update the backend
-        // and then updating the local state accordingly
+    uploadDocument(fileResource: IFileResourceUpload): void {
+        this.treatmentBMPDocumentByTreatmentBMPService
+            .createTreatmentBMPDocumentByTreatmentBMP(this.treatmentBMPID, fileResource.File, fileResource.DocumentDescription)
+            .subscribe((result) => {
+                this.alertService.pushAlert(new Alert("Successfully uploaded document.", AlertContext.Success));
+                this.refreshTreatmentBMPDocumentsTrigger$.next();
+            });
+    }
+
+    onDocumentUpdated(fileResource: any): void {
+        let updateDto = {
+            Description: fileResource.DocumentDescription,
+        } as TreatmentBMPDocumentUpdateDto;
+
+        this.treatmentBMPDocumentByTreatmentBMPService
+            .updateTreatmentBMPDocumentByTreatmentBMP(this.treatmentBMPID, fileResource.FileResource.TreatmentBMPDocumentID!, updateDto)
+            .subscribe(() => {
+                this.alertService.pushAlert(new Alert("Successfully updated document.", AlertContext.Success));
+                this.refreshTreatmentBMPDocumentsTrigger$.next();
+            });
+    }
+
+    onDocumentDeleted(treatmentBMPDocument: TreatmentBMPDocumentDto): void {
+        this.treatmentBMPDocumentByTreatmentBMPService.deleteTreatmentBMPDocumentByTreatmentBMP(this.treatmentBMPID, treatmentBMPDocument.TreatmentBMPDocumentID).subscribe(() => {
+            this.alertService.pushAlert(new Alert("Successfully deleted document.", AlertContext.Success));
+            this.refreshTreatmentBMPDocumentsTrigger$.next();
+        });
     }
 }

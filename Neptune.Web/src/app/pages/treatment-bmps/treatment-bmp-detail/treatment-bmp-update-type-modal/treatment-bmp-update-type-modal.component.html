@@ -1,0 +1,22 @@
+<div class="modal-header">
+    <h3 class="section-title">Change BMP Type</h3>
+</div>
+
+<div class="modal-body grid-12">
+    <app-alert-display></app-alert-display>
+    <form class="form grid-12" [formGroup]="formGroup">
+        <form-field
+            class="g-col-12"
+            [formControl]="formGroup.controls.TreatmentBMPTypeID"
+            fieldLabel="Type"
+            placeholder="Type"
+            [required]="true"
+            [type]="FormFieldType.Select"
+            [formInputOptions]="treatmentBMPTypeOptions$ | async"></form-field>
+    </form>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-primary" (click)="save()" [disabled]="formGroup.invalid">Convert</button>
+    <button class="btn btn-primary-outline" (click)="cancel()">Cancel</button>
+</div>

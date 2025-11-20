@@ -10,6 +10,7 @@ public class CustomAttributeTypeDto
     public string CustomAttributeTypeDescription { get; set; }
     public int CustomAttributeTypePurposeID { get; set; }
     public string CustomAttributeTypeOptionsSchema { get; set; }
+    public string DataTypeName { get; set; }
     public string DataTypeDisplayName { get; set; }
     public string MeasurementUnitDisplayName { get; set; }
     public string Purpose { get; set; }

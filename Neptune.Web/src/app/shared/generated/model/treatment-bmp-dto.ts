@@ -56,7 +56,7 @@ export class TreatmentBMPDto {
     LastNereidLogID?: number | null;
     IsFullyParameterized?: boolean | null;
     TreatmentBMPModelingAttribute?: VTreatmentBMPModelingAttributeDto;
-    OtherTreatmentBmpsExistInSubbasin?: boolean | null;
+    OtherTreatmentBMPsExistInSubbasin?: boolean | null;
     Delineation?: DelineationDto;
     UpstreamBMP?: TreatmentBMPDto;
     IsUpstreamestBMPAnalyzedInModelingModule?: boolean | null;
@@ -66,8 +66,6 @@ export class TreatmentBMPDto {
     Project?: ProjectDto;
     OwnerOrganization?: OrganizationDisplayDto;
     StormwaterJurisdiction?: StormwaterJurisdictionDisplayDto;
-    DelineationErrors?: Array<string> | null;
-    ParameterizationErrors?: Array<string> | null;
     SizingBasisType?: SizingBasisTypeDto;
     TrashCaptureStatusType?: TrashCaptureStatusTypeDto;
     TreatmentBMPLifespanType?: TreatmentBMPLifeSpanTypeDto;
@@ -111,7 +109,7 @@ export interface TreatmentBMPDtoForm {
     LastNereidLogID?: FormControl<number>;
     IsFullyParameterized?: FormControl<boolean>;
     TreatmentBMPModelingAttribute?: FormControl<VTreatmentBMPModelingAttributeDto>;
-    OtherTreatmentBmpsExistInSubbasin?: FormControl<boolean>;
+    OtherTreatmentBMPsExistInSubbasin?: FormControl<boolean>;
     Delineation?: FormControl<DelineationDto>;
     UpstreamBMP?: FormControl<TreatmentBMPDto>;
     IsUpstreamestBMPAnalyzedInModelingModule?: FormControl<boolean>;
@@ -121,8 +119,6 @@ export interface TreatmentBMPDtoForm {
     Project?: FormControl<ProjectDto>;
     OwnerOrganization?: FormControl<OrganizationDisplayDto>;
     StormwaterJurisdiction?: FormControl<StormwaterJurisdictionDisplayDto>;
-    DelineationErrors?: FormControl<Array<string>>;
-    ParameterizationErrors?: FormControl<Array<string>>;
     SizingBasisType?: FormControl<SizingBasisTypeDto>;
     TrashCaptureStatusType?: FormControl<TrashCaptureStatusTypeDto>;
     TreatmentBMPLifespanType?: FormControl<TreatmentBMPLifeSpanTypeDto>;
@@ -469,7 +465,7 @@ export class TreatmentBMPDtoFormControls {
             ],
         }
     );
-    public static OtherTreatmentBmpsExistInSubbasin = (value: FormControlState<boolean> | boolean = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<boolean>(
+    public static OtherTreatmentBMPsExistInSubbasin = (value: FormControlState<boolean> | boolean = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<boolean>(
         value,
         formControlOptions ?? 
         {
@@ -560,26 +556,6 @@ export class TreatmentBMPDtoFormControls {
         }
     );
     public static StormwaterJurisdiction = (value: FormControlState<StormwaterJurisdictionDisplayDto> | StormwaterJurisdictionDisplayDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<StormwaterJurisdictionDisplayDto>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static DelineationErrors = (value: FormControlState<Array<string>> | Array<string> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<string>>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static ParameterizationErrors = (value: FormControlState<Array<string>> | Array<string> = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<Array<string>>(
         value,
         formControlOptions ?? 
         {

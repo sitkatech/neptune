@@ -159,6 +159,7 @@ public static class TreatmentBMPTypeExtensionMethods
                 CustomAttributeTypeDescription = x.CustomAttributeType.CustomAttributeTypeDescription,
                 CustomAttributeTypePurposeID = x.CustomAttributeType.CustomAttributeTypePurposeID,
                 CustomAttributeTypeOptionsSchema = x.CustomAttributeType.CustomAttributeTypeOptionsSchema,
+                DataTypeName = x.CustomAttributeType.CustomAttributeDataType.CustomAttributeDataTypeName,
                 DataTypeDisplayName = x.CustomAttributeType.CustomAttributeDataType.CustomAttributeDataTypeDisplayName,
                 MeasurementUnitDisplayName = x.CustomAttributeType.MeasurementUnitType?.MeasurementUnitTypeDisplayName,
                 Purpose = x.CustomAttributeType.CustomAttributeTypePurpose.CustomAttributeTypePurposeDisplayName,

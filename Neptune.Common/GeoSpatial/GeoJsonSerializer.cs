@@ -124,6 +124,7 @@ public static class GeoJsonSerializer
             PropertyNamingPolicy = null,
         };
         jsonSerializerOptions.Converters.Add(new DateTimeConverter());
+        jsonSerializerOptions.Converters.Add(new NullableDateTimeConverter());
         jsonSerializerOptions.Converters.Add(new DoubleConverter(numberOfSignificantDigits));
         jsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         return jsonSerializerOptions;

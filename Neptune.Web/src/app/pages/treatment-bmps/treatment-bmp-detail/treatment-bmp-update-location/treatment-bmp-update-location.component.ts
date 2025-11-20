@@ -1,0 +1,83 @@
+import { Component, inject, Input, OnInit } from "@angular/core";
+import { FormGroup, ReactiveFormsModule } from "@angular/forms";
+import { Router, RouterModule } from "@angular/router";
+import { PageHeaderComponent } from "src/app/shared/components/page-header/page-header.component";
+import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
+import { LatLonPickerComponent } from "src/app/shared/components/lat-lon-picker/lat-lon-picker.component";
+import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.service";
+import {
+    TreatmentBMPLocationUpdateDto,
+    TreatmentBMPLocationUpdateDtoForm,
+    TreatmentBMPLocationUpdateDtoFormControls,
+} from "src/app/shared/generated/model/treatment-bmp-location-update-dto";
+import { TreatmentBMPDto } from "src/app/shared/generated/model/treatment-bmp-dto";
+import { AsyncPipe } from "@angular/common";
+import { Observable } from "rxjs";
+import { tap } from "rxjs/operators";
+import { AlertService } from "src/app/shared/services/alert.service";
+import { Alert } from "src/app/shared/models/alert";
+import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
+import { IDeactivateComponent } from "src/app/shared/guards/unsaved-changes.guard";
+
+@Component({
+    selector: "treatment-bmp-update-location",
+    standalone: true,
+    imports: [PageHeaderComponent, RouterModule, ReactiveFormsModule, AlertDisplayComponent, LatLonPickerComponent, AsyncPipe],
+    templateUrl: "./treatment-bmp-update-location.component.html",
+    styleUrls: ["./treatment-bmp-update-location.component.scss"],
+})
+export class TreatmentBmpUpdateLocationComponent implements OnInit, IDeactivateComponent {
+    private treatmentBMPService = inject(TreatmentBMPService);
+    private router = inject(Router);
+    private alertService = inject(AlertService);
+
+    @Input() treatmentBMPID?: number;
+
+    public formGroup: FormGroup<TreatmentBMPLocationUpdateDtoForm> = new FormGroup<TreatmentBMPLocationUpdateDtoForm>({
+        Latitude: TreatmentBMPLocationUpdateDtoFormControls.Latitude(undefined),
+        Longitude: TreatmentBMPLocationUpdateDtoFormControls.Longitude(undefined),
+    });
+
+    public treatmentBMP$: Observable<TreatmentBMPDto>;
+
+    public isLoadingSubmit = false;
+
+    ngOnInit(): void {
+        this.treatmentBMP$ = this.treatmentBMPService.getByIDTreatmentBMP(this.treatmentBMPID!).pipe(
+            tap((bmp) => {
+                if (bmp.Latitude != null && bmp.Longitude != null) {
+                    this.formGroup.controls.Latitude.setValue(bmp.Latitude);
+                    this.formGroup.controls.Longitude.setValue(bmp.Longitude);
+                    this.formGroup.markAsPristine();
+                }
+            })
+        );
+    }
+
+    public canExit(): boolean {
+        return this.formGroup.pristine;
+    }
+
+    public save(): void {
+        this.isLoadingSubmit = true;
+        const updateLocationDto = this.formGroup.value as TreatmentBMPLocationUpdateDto;
+        this.treatmentBMPService.updateLocationTreatmentBMP(this.treatmentBMPID, updateLocationDto).subscribe({
+            next: (bmp: TreatmentBMPDto) => {
+                this.isLoadingSubmit = false;
+                this.formGroup.markAsPristine();
+                this.router.navigate(["/treatment-bmps", bmp.TreatmentBMPID]).then(() => {
+                    this.alertService.pushAlert(new Alert("Treatment BMP location updated successfully.", AlertContext.Success));
+                });
+            },
+            error: () => {
+                this.isLoadingSubmit = false;
+            },
+        });
+    }
+
+    public cancel(): void {
+        if (this.treatmentBMPID) {
+            this.router.navigate(["/treatment-bmps", this.treatmentBMPID]);
+        }
+    }
+}

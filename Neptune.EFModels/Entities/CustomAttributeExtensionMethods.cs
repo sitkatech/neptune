@@ -24,6 +24,7 @@ public static partial class CustomAttributeExtensionMethods
             TreatmentBMPTypeCustomAttributeTypeID = customAttribute.TreatmentBMPTypeCustomAttributeTypeID,
             TreatmentBMPTypeID = customAttribute.TreatmentBMPTypeID,
             CustomAttributeTypeID = customAttribute.CustomAttributeTypeID,
+            CustomAttributeValues = customAttribute.CustomAttributeValues.Where(x => !string.IsNullOrWhiteSpace(x.AttributeValue)).OrderBy(x => x.AttributeValue).Select(x => x.AttributeValue!).ToList(),
             CustomAttributeValueWithUnits = GetCustomAttributeValueWithUnits(customAttribute)
         };
 
