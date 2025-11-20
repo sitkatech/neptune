@@ -69,7 +69,7 @@ Select
 
 From (
 	Select
-		TrashGeneratingUnitID,
+		tgu.TrashGeneratingUnitID,
 		tbmp.TreatmentBMPID,
 		tbmp.TreatmentBMPName,
 		tbmpt.TreatmentBMPTypeID,
@@ -156,11 +156,7 @@ From (
 	From
 		dbo.TrashGeneratingUnit tgu
         join dbo.TrashGeneratingUnit4326 tgu4326 on 
-            tgu.StormwaterJurisdictionID = tgu4326.StormwaterJurisdictionID and
-            isnull(tgu.OnlandVisualTrashAssessmentAreaID, 0) = isnull(tgu4326.OnlandVisualTrashAssessmentAreaID, 0) and
-            isnull(tgu.LandUseBlockID, 0) = isnull(tgu4326.LandUseBlockID, 0) and
-            isnull(tgu.DelineationID, 0) = isnull(tgu4326.DelineationID, 0) and
-            isnull(tgu.WaterQualityManagementPlanID, 0) = isnull(tgu4326.WaterQualityManagementPlanID, 0)
+            tgu.TrashGeneratingUnitID = tgu4326.TrashGeneratingUnitID
 		join dbo.StormwaterJurisdiction sj on tgu.StormwaterJurisdictionID = sj.StormwaterJurisdictionID
 		join dbo.Organization o on sj.OrganizationID = o.OrganizationID
 		left join dbo.LandUseBlock lub on tgu.LandUseBlockID = lub.LandUseBlockID
