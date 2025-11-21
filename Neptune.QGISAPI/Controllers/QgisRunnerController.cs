@@ -239,7 +239,8 @@ public class QgisRunnerController : ControllerBase
                     WaterQualityManagementPlanID = waterQualityManagementPlanID,
                     LandUseBlockID = landUseBlockID,
                     OnlandVisualTrashAssessmentAreaID = onlandVisualTrashAssessmentAreaID,
-                    LastUpdateDate = DateTime.UtcNow
+                    LastUpdateDate = DateTime.UtcNow,
+                    TrashGeneratingUnit = trashGeneratingUnit
                 };
                 trashGeneratingUnit4326s.Add(trashGeneratingUnit4326);
             }
