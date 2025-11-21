@@ -110,10 +110,10 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
     public tguDto$: Observable<TrashGeneratingUnitDto | null> = this.tguSubject.asObservable(); //OnlandVisualTrashAssessmentAreaSimpleDto
     public tguLayer: L.GeoJSON<any>;
     private highlightStyle = {
-        color: "#fcfc12",
+        color: "#FF6C2D",
         weight: 2,
         opacity: 0.65,
-        fillOpacity: 0.1,
+        fillOpacity: 0.3,
     };
     private ovtaSubject = new BehaviorSubject<OnlandVisualTrashAssessmentAreaDetailDto | null>(null);
     public ovtaAreaDto$: Observable<OnlandVisualTrashAssessmentAreaDetailDto | null> = this.ovtaSubject.asObservable();

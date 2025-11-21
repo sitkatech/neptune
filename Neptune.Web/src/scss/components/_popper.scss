@@ -4,7 +4,7 @@
     display: none;
     min-width: 300px;
     max-width: 300px;
-    z-index: 400;
+    z-index: 1010;
 
     &[data-popper-placement^="right"] > [data-popper-arrow] {
         left: -5px;
