@@ -46,6 +46,9 @@ public partial class TrashGeneratingUnit
     [InverseProperty("TrashGeneratingUnits")]
     public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; } = null!;
 
+    [InverseProperty("TrashGeneratingUnit")]
+    public virtual ICollection<TrashGeneratingUnit4326> TrashGeneratingUnit4326s { get; set; } = new List<TrashGeneratingUnit4326>();
+
     [ForeignKey("WaterQualityManagementPlanID")]
     [InverseProperty("TrashGeneratingUnits")]
     public virtual WaterQualityManagementPlan? WaterQualityManagementPlan { get; set; }

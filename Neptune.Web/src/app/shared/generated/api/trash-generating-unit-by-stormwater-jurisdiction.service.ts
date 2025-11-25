@@ -42,12 +42,12 @@ export class TrashGeneratingUnitByStormwaterJurisdictionService extends BaseServ
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public trashResultsByJurisdictionJurisdictionIDAreaBasedResultsCalculationsGet(jurisdictionID: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<AreaBasedAcreCalculationsDto>;
-    public trashResultsByJurisdictionJurisdictionIDAreaBasedResultsCalculationsGet(jurisdictionID: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AreaBasedAcreCalculationsDto>>;
-    public trashResultsByJurisdictionJurisdictionIDAreaBasedResultsCalculationsGet(jurisdictionID: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AreaBasedAcreCalculationsDto>>;
-    public trashResultsByJurisdictionJurisdictionIDAreaBasedResultsCalculationsGet(jurisdictionID: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getAreaBasedResultsCalculationsTrashGeneratingUnitByStormwaterJurisdiction(jurisdictionID: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<AreaBasedAcreCalculationsDto>;
+    public getAreaBasedResultsCalculationsTrashGeneratingUnitByStormwaterJurisdiction(jurisdictionID: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AreaBasedAcreCalculationsDto>>;
+    public getAreaBasedResultsCalculationsTrashGeneratingUnitByStormwaterJurisdiction(jurisdictionID: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AreaBasedAcreCalculationsDto>>;
+    public getAreaBasedResultsCalculationsTrashGeneratingUnitByStormwaterJurisdiction(jurisdictionID: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (jurisdictionID === null || jurisdictionID === undefined) {
-            throw new Error('Required parameter jurisdictionID was null or undefined when calling trashResultsByJurisdictionJurisdictionIDAreaBasedResultsCalculationsGet.');
+            throw new Error('Required parameter jurisdictionID was null or undefined when calling getAreaBasedResultsCalculationsTrashGeneratingUnitByStormwaterJurisdiction.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -97,12 +97,12 @@ export class TrashGeneratingUnitByStormwaterJurisdictionService extends BaseServ
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public trashResultsByJurisdictionJurisdictionIDLoadBasedResultsCalculationsGet(jurisdictionID: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<LoadResultsDto>;
-    public trashResultsByJurisdictionJurisdictionIDLoadBasedResultsCalculationsGet(jurisdictionID: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<LoadResultsDto>>;
-    public trashResultsByJurisdictionJurisdictionIDLoadBasedResultsCalculationsGet(jurisdictionID: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<LoadResultsDto>>;
-    public trashResultsByJurisdictionJurisdictionIDLoadBasedResultsCalculationsGet(jurisdictionID: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getLoadBasedResultsCalculationsTrashGeneratingUnitByStormwaterJurisdiction(jurisdictionID: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<LoadResultsDto>;
+    public getLoadBasedResultsCalculationsTrashGeneratingUnitByStormwaterJurisdiction(jurisdictionID: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<LoadResultsDto>>;
+    public getLoadBasedResultsCalculationsTrashGeneratingUnitByStormwaterJurisdiction(jurisdictionID: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<LoadResultsDto>>;
+    public getLoadBasedResultsCalculationsTrashGeneratingUnitByStormwaterJurisdiction(jurisdictionID: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (jurisdictionID === null || jurisdictionID === undefined) {
-            throw new Error('Required parameter jurisdictionID was null or undefined when calling trashResultsByJurisdictionJurisdictionIDLoadBasedResultsCalculationsGet.');
+            throw new Error('Required parameter jurisdictionID was null or undefined when calling getLoadBasedResultsCalculationsTrashGeneratingUnitByStormwaterJurisdiction.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -152,12 +152,12 @@ export class TrashGeneratingUnitByStormwaterJurisdictionService extends BaseServ
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public trashResultsByJurisdictionJurisdictionIDOvtaBasedResultsCalculationsGet(jurisdictionID: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<OVTAResultsDto>;
-    public trashResultsByJurisdictionJurisdictionIDOvtaBasedResultsCalculationsGet(jurisdictionID: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<OVTAResultsDto>>;
-    public trashResultsByJurisdictionJurisdictionIDOvtaBasedResultsCalculationsGet(jurisdictionID: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<OVTAResultsDto>>;
-    public trashResultsByJurisdictionJurisdictionIDOvtaBasedResultsCalculationsGet(jurisdictionID: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getOVTABasedResultsCalculationsTrashGeneratingUnitByStormwaterJurisdiction(jurisdictionID: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<OVTAResultsDto>;
+    public getOVTABasedResultsCalculationsTrashGeneratingUnitByStormwaterJurisdiction(jurisdictionID: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<OVTAResultsDto>>;
+    public getOVTABasedResultsCalculationsTrashGeneratingUnitByStormwaterJurisdiction(jurisdictionID: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<OVTAResultsDto>>;
+    public getOVTABasedResultsCalculationsTrashGeneratingUnitByStormwaterJurisdiction(jurisdictionID: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (jurisdictionID === null || jurisdictionID === undefined) {
-            throw new Error('Required parameter jurisdictionID was null or undefined when calling trashResultsByJurisdictionJurisdictionIDOvtaBasedResultsCalculationsGet.');
+            throw new Error('Required parameter jurisdictionID was null or undefined when calling getOVTABasedResultsCalculationsTrashGeneratingUnitByStormwaterJurisdiction.');
         }
 
         let localVarHeaders = this.defaultHeaders;

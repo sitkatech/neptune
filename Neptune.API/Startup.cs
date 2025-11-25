@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using Neptune.API.Services;
 using Neptune.API.Services.Filter;
 using Neptune.API.Services.Middleware;
@@ -21,12 +22,15 @@ using Neptune.Jobs.Hangfire;
 using Neptune.Jobs.Services;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.IO.Converters;
+using OpenAI;
 using SendGrid.Extensions.DependencyInjection;
 using Serilog;
 using System;
+using System.ClientModel;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using System.Threading;
 using LogHelper = Neptune.API.Services.Logging.LogHelper;
@@ -55,6 +59,7 @@ namespace Neptune.API
                 var geometryFactory = new GeometryFactory(new PrecisionModel(scale), 4326);
                 options.JsonSerializerOptions.Converters.Add(new GeoJsonConverterFactory(geometryFactory, false));
                 options.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
+                options.JsonSerializerOptions.Converters.Add(new NullableDateTimeConverter());
                 options.JsonSerializerOptions.Converters.Add(new DoubleConverter(7));
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                 options.JsonSerializerOptions.ReadCommentHandling = JsonCommentHandling.Skip;
@@ -107,7 +112,22 @@ namespace Neptune.API
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped(s => s.GetService<IHttpContextAccessor>().HttpContext);
-            services.AddScoped(s => UserContext.GetUserFromHttpContext(s.GetService<NeptuneDbContext>(), s.GetService<IHttpContextAccessor>().HttpContext));
+            services.AddScoped(s => UserContext.GetUserAsDtoFromHttpContext(s.GetService<NeptuneDbContext>(), s.GetService<IHttpContextAccessor>().HttpContext));
+
+            #region OpenAI
+            services.AddSingleton(_ =>
+            {
+                ApiKeyCredential nonAzureOpenAIApiKey = new(configuration.OpenAIApiKey);
+                OpenAIClient client = new(nonAzureOpenAIApiKey,
+                    new OpenAIClientOptions
+                    {
+                        OrganizationId = configuration.OpenAIOrganizationID,
+                        ProjectId = configuration.OpenAIProjectID
+                    });
+
+                return client;
+            });
+            #endregion
 
             #region Sendgrid
             services.AddSendGrid(options => { options.ApiKey = configuration.SendGridApiKey; });
@@ -138,7 +158,7 @@ namespace Neptune.API
             // Base swagger services
             services.AddSwaggerGen(options =>
             {
-                // extra options here if you wanted
+                options.DocumentFilter<UseMethodNameAsOperationIdFilter>();
             });
             #endregion
 

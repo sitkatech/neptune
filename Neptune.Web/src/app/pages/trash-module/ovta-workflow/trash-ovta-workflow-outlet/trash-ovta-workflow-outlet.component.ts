@@ -51,7 +51,7 @@ export class TrashOvtaWorkflowOutletComponent implements OnInit {
             .confirm({ buttonClassYes: "btn-primary", buttonTextYes: "Delete", buttonTextNo: "Cancel", title: "Delete OVTA", message: modalContents })
             .then((confirmed) => {
                 if (confirmed) {
-                    this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDDelete(onlandVisualTrashAssessmentID).subscribe(() => {
+                    this.onlandVisualTrashAssessmentService.deleteOnlandVisualTrashAssessment(onlandVisualTrashAssessmentID).subscribe(() => {
                         this.alertService.clearAlerts();
                         this.alertService.pushAlert(new Alert("Your OVTA was successfully deleted.", AlertContext.Success));
                         this.router.navigate([`/trash/onland-visual-trash-assessments`]);

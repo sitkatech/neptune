@@ -28,6 +28,10 @@ export class HeaderNavComponent implements OnInit {
         return this.authenticationService.isAuthenticated();
     }
 
+    public isUserAnAdministrator() {
+        return this.authenticationService.isCurrentUserAnAdministrator();
+    }
+
     public login(): void {
         this.authenticationService.login(true);
     }

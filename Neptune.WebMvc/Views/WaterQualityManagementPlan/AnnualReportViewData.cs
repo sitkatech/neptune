@@ -69,7 +69,7 @@ namespace Neptune.WebMvc.Views.WaterQualityManagementPlan
             ReportingYearSimples = range.Select(x => new ReportingYearSimple(x)).OrderByDescending(x => x.ReportingYear).ToList();
             StormwaterJurisdictions = stormwaterJurisdictions.OrderBy(x => x.Organization.GetDisplayName())
                 .Select(x => x.AsDisplayDto()).ToList();
-            StormwaterJurisdictions.Insert(0, new StormwaterJurisdictionDisplayDto() {StormwaterJurisdictionID = -1, StormwaterJurisdictionDisplayName = "All"});
+            StormwaterJurisdictions.Insert(0, new StormwaterJurisdictionDisplayDto() {StormwaterJurisdictionID = -1, StormwaterJurisdictionName = "All"});
 
             ApprovalSummaryGridUrlTemplateString = approvalSummaryGridUrlTemplateString;
             PostConstructionInspectionAndVerificationGridUrlTemplateString = postConstructionInspectionAndVerificationGridUrlTemplateString;

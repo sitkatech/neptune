@@ -82,12 +82,10 @@ export class TrashOvtaRecordObservationsComponent {
     ) {}
 
     ngOnInit() {
-        this.onlandVisualTrashAssessment$ = this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDGet(
-            this.onlandVisualTrashAssessmentID
-        );
+        this.onlandVisualTrashAssessment$ = this.onlandVisualTrashAssessmentService.getOnlandVisualTrashAssessment(this.onlandVisualTrashAssessmentID);
         this.onlandVisualTrashAssessmentObservations$ = this.onlandVisualTrashAssessment$.pipe(
             switchMap((onlandVisualTrashAssessment) => {
-                return this.onlandVisualTrashAssessmentObservationService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsGet(
+                return this.onlandVisualTrashAssessmentObservationService.listByOnlandVisualTrashAssessmentIDOnlandVisualTrashAssessmentObservation(
                     onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID
                 );
             }),
@@ -192,7 +190,7 @@ export class TrashOvtaRecordObservationsComponent {
 
     save(andContinue: boolean = false) {
         this.onlandVisualTrashAssessmentObservationService
-            .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsPost(this.onlandVisualTrashAssessmentID, this.formGroup.value)
+            .updateObservationsOnlandVisualTrashAssessmentObservation(this.onlandVisualTrashAssessmentID, this.formGroup.value)
             .subscribe(() => {
                 this.isLoadingSubmit = false;
                 this.alertService.clearAlerts();
@@ -200,15 +198,13 @@ export class TrashOvtaRecordObservationsComponent {
                 this.ovtaWorkflowProgressService.updateProgress(this.onlandVisualTrashAssessmentID);
 
                 if (andContinue) {
-                    this.onlandVisualTrashAssessmentService
-                        .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDProgressGet(this.onlandVisualTrashAssessmentID)
-                        .subscribe((response) => {
-                            if (response.Steps.RefineAssessmentArea.Disabled) {
-                                this.router.navigate([`/trash/onland-visual-trash-assessments/edit/${this.onlandVisualTrashAssessmentID}/review-and-finalize`]);
-                            } else {
-                                this.router.navigate([`/trash/onland-visual-trash-assessments/edit/${this.onlandVisualTrashAssessmentID}/add-or-remove-parcels`]);
-                            }
-                        });
+                    this.onlandVisualTrashAssessmentService.getWorkflowProgressOnlandVisualTrashAssessment(this.onlandVisualTrashAssessmentID).subscribe((response) => {
+                        if (response.Steps.RefineAssessmentArea.Disabled) {
+                            this.router.navigate([`/trash/onland-visual-trash-assessments/edit/${this.onlandVisualTrashAssessmentID}/review-and-finalize`]);
+                        } else {
+                            this.router.navigate([`/trash/onland-visual-trash-assessments/edit/${this.onlandVisualTrashAssessmentID}/add-or-remove-parcels`]);
+                        }
+                    });
                 }
             });
     }
@@ -272,7 +268,7 @@ export class TrashOvtaRecordObservationsComponent {
         if (typeof this.uploadFormField.value != typeof "string") {
             this.isLoadingSubmit = true;
             this.onlandVisualTrashAssessmentObservationService
-                .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsObservationPhotoPost(this.onlandVisualTrashAssessmentID, this.uploadFormField.value)
+                .stageObservationPhotoOnlandVisualTrashAssessmentObservation(this.onlandVisualTrashAssessmentID, this.uploadFormField.value)
                 .subscribe((response) => {
                     const observation = this.formGroup.controls.Observations.controls[index].value;
                     observation.FileResourceID = response.FileResourceID;
@@ -291,10 +287,7 @@ export class TrashOvtaRecordObservationsComponent {
         const observation = this.formGroup.controls.Observations.controls[index].value;
         if (observation.FileResourceID) {
             this.onlandVisualTrashAssessmentObservationService
-                .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsObservationPhotosFileResourceIDDelete(
-                    this.onlandVisualTrashAssessmentID,
-                    observation.FileResourceID
-                )
+                .deleteObservationPhotoOnlandVisualTrashAssessmentObservation(this.onlandVisualTrashAssessmentID, observation.FileResourceID)
                 .subscribe((x) => {
                     observation.FileResourceID = null;
                     observation.FileResourceGUID = null;

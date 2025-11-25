@@ -73,7 +73,7 @@
                         </dd>
                         <dt class="g-col-4">Jurisdiction</dt>
                         <dd class="g-col-8">
-                            {{ selectedProject.StormwaterJurisdiction.Organization.OrganizationName }}
+                            {{ selectedProject.StormwaterJurisdiction.StormwaterJurisdictionName }}
                         </dd>
                     </dl>
                     @if (selectedTreatmentBMP != null) {
@@ -137,11 +137,11 @@
             @if (boundingBox$ | async; as boundingBox) {
             <neptune-map (onMapLoad)="handleMapReady($event)" [mapHeight]="mapHeight" [showLegend]="true" [boundingBox]="boundingBox">
                 @if (mapIsReady) {
-                <regional-subbasins-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></regional-subbasins-layer>
+                <regional-subbasins-layer [mode]="OverlayMode.ReferenceOnly" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></regional-subbasins-layer>
 
                 <stormwater-network-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="20"></stormwater-network-layer>
 
-                <jurisdictions-layer [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="30"></jurisdictions-layer>
+                <jurisdictions-layer [mode]="OverlayMode.ReferenceOnly" [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="30"></jurisdictions-layer>
 
                 <wqmps-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="40"></wqmps-layer>
 

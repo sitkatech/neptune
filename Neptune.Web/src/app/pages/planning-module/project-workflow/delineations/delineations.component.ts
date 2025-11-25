@@ -32,6 +32,7 @@ import { WqmpsLayerComponent } from "src/app/shared/components/leaflet/layers/wq
 import { NeptuneMapComponent, NeptuneMapInitEvent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
 import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet/layers/inventoried-bmps-layer/inventoried-bmps-layer.component";
 import { LeafletHelperService } from "src/app/shared/services/leaflet-helper.service";
+import { OverlayMode } from "src/app/shared/components/leaflet/layers/generic-wms-wfs-layer/overlay-mode.enum";
 
 @Component({
     selector: "delineations",
@@ -54,6 +55,7 @@ import { LeafletHelperService } from "src/app/shared/services/leaflet-helper.ser
     ],
 })
 export class DelineationsComponent implements OnInit {
+    public OverlayMode = OverlayMode;
     @ViewChild("mapContainer") mapContainer: ElementRef;
     public mapIsReady: boolean = false;
 
@@ -119,7 +121,7 @@ export class DelineationsComponent implements OnInit {
     ) {}
 
     public ngOnInit(): void {
-        this.boundingBox$ = this.projectService.projectsProjectIDBoundingBoxGet(this.projectID);
+        this.boundingBox$ = this.projectService.getBoundingBoxByProjectIDProject(this.projectID);
     }
 
     ngOnDestroy() {
@@ -139,9 +141,9 @@ export class DelineationsComponent implements OnInit {
 
         if (this.projectID) {
             forkJoin({
-                project: this.projectService.projectsProjectIDGet(this.projectID),
-                treatmentBMPs: this.projectService.projectsProjectIDTreatmentBmpsGet(this.projectID),
-                delineations: this.projectService.projectsProjectIDDelineationsGet(this.projectID),
+                project: this.projectService.getProject(this.projectID),
+                treatmentBMPs: this.projectService.listTreatmentBMPsByProjectIDProject(this.projectID),
+                delineations: this.projectService.listDelineationsByProjectIDProject(this.projectID),
             }).subscribe(({ project, treatmentBMPs, delineations }) => {
                 // redirect to review step if project is shared with OCTA grant program
                 if (project.ShareOCTAM2Tier2Scores) {
@@ -463,7 +465,7 @@ export class DelineationsComponent implements OnInit {
     }
 
     public getUpstreamRSBCatchmentForTreatmentBMP(treatmentBMPID: number) {
-        this.treatmentBMPService.treatmentBmpsTreatmentBMPIDUpstreamRSBCatchmentGeoJSONGet(treatmentBMPID).subscribe((result) => {
+        this.treatmentBMPService.getUpstreamRSBCatchmentGeoJSONForTreatmentBMPTreatmentBMP(treatmentBMPID).subscribe((result) => {
             let currentDelineationForTreatmentBMP = this.delineations.find((x) => x.TreatmentBMPID == treatmentBMPID);
             if (currentDelineationForTreatmentBMP == null) {
                 currentDelineationForTreatmentBMP = new DelineationUpsertDto({
@@ -485,14 +487,14 @@ export class DelineationsComponent implements OnInit {
         this.getFullyQualifiedJSONGeometryForDelineations(this.delineations);
         var updatedDelineations = this.delineations.filter((x) => x.Geometry != null);
         forkJoin({
-            delineations: this.projectService.projectsProjectIDDelineationsPut(this.projectID, updatedDelineations),
-            treatmentBMPs: this.projectService.projectsProjectIDTreatmentBmpsUpdateLocationsPut(this.projectID, this.projectTreatmentBMPs),
+            delineations: this.projectService.mergeDelineationsForProjectProject(this.projectID, updatedDelineations),
+            treatmentBMPs: this.projectService.mergeTreatmentBMPLocationsProject(this.projectID, this.projectTreatmentBMPs),
         }).subscribe({
             next: ({ delineations, treatmentBMPs }) => {
                 window.scroll(0, 0);
                 this.isLoadingSubmit = false;
                 this.projectWorkflowProgressService.updateProgress(this.projectID);
-                this.projectService.projectsProjectIDDelineationsGet(this.projectID).subscribe((delineations) => {
+                this.projectService.listDelineationsByProjectIDProject(this.projectID).subscribe((delineations) => {
                     this.delineations = delineations;
                     this.originalDelineations = JSON.stringify(this.mapDelineationsToGeoJson(this.delineations));
                     this.resetDelineationFeatureGroups();

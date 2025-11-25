@@ -1,0 +1,34 @@
+<div class="compose">
+    <div class="compose__input">
+        <textarea
+            #textarea
+            class="compose__textarea"
+            [placeholder]="effectivePlaceholder"
+            value=""
+            [disabled]="isReceiving && !isDisabled"
+            (input)="autoResize()"
+            (keyup.enter)="onSend(textarea.value)"
+            (keyup.enter.shift)="addNewLineToTextarea(textarea)"
+            (keyup.control.enter)="addNewLineToTextarea(textarea)"
+            (keyup.alt.enter)="addNewLineToTextarea(textarea)"></textarea>
+    </div>
+    <div class="compose__controls">
+        <div class="compose__options">
+            @if (context?.showKnowledgeScope && context?.knowledgeScopeOptions?.length) {
+                <div class="compose__word-limit | compose__select">
+                    <select class="custom-select" name="knowledgeScope" [ngModel]="knowledgeScope" (ngModelChange)="onScopeChange($event)">
+                        @for (opt of context.knowledgeScopeOptions; track opt.value) {
+                            <option [value]="opt.value">{{ opt.label }}</option>
+                        }
+                    </select>
+                    <icon [icon]="'DownCarrot'"></icon>
+                </div>
+            }
+        </div>
+        <div class="compose__submit">
+            <button class="compose__submit-btn" (click)="onSend(textarea.value)" [disabled]="isReceiving && !isDisabled">
+                <icon [icon]="'UpArrow'"></icon>
+            </button>
+        </div>
+    </div>
+</div>

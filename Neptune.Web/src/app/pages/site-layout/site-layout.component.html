@@ -1,62 +1,71 @@
 <header class="site-header">
-  <header-nav moduleTitle=""></header-nav>
-
-  <nav class="site-nav">
-    @if (currentUser$ | async; as currentUser) {
-      <div  style="width: 100%">
-        <button class="hamburger-btn navbar-toggle collapsed" type="button" [dropdownToggle]="mainMenuToggle" aria-controls="hamburger-btn" aria-expanded="false">
-          <span class="sr-only">Open main menu</span>
-          <svg aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-            <path
-              fill-rule="evenodd"
-              d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-            clip-rule="evenodd"></path>
-          </svg>
-        </button>
-        <div #mainMenuToggle class="site-nav__wrapper collapse navbar-collapse">
-          <ul class="site-nav__links site-nav__main">
-            <li class="nav-item" routerLinkActive="active">
-              <a [href]="siteUrl + '/DataHub/Index'" class="nav-link" role="button"> Data Hub </a>
-            </li>
-            @if (isAdministrator(currentUser) || isJurisdicionManager(currentUser)) {
-              <li class="nav-item dropdown" routerLinkActive="active">
-                <a
-                  href="javascript:void(0);"
-                  [dropdownToggle]="manageToggle"
-                  class="nav-link dropdown-toggle"
-                  role="button"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false">
-                  <span class="nav-link__label">
-                    Manage
-                    <icon icon="AngleDown"></icon>
-                  </span>
-                </a>
-                <div #manageToggle class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <div class="dropdown-divider"></div>
-                  @if (isAdministrator(currentUser) || isJurisdicionManager(currentUser)) {
-                    <a href="{{ usersListUrl() }}" class="dropdown-item"> Users </a>
-                  }
-                  @if (isAdministrator(currentUser)) {
-                    <a href="{{ organizationsIndexUrl() }}" class="dropdown-item"> Organizations </a>
-                  }
-                  @if (isAdministrator(currentUser)) {
-                    <a [routerLink]="['/labels-and-definitions']" class="dropdown-item"> Labels and Definitions </a>
-                  }
-                </div>
-              </li>
-            }
-          </ul>
+    <header-nav moduleTitle="Inventory Module"></header-nav>
+    <nav class="site-nav">
+        <div style="width: 100%">
+            <ul class="site-nav__links site-nav__main">
+                <!-- BMP Inventory Dropdown -->
+                <li class="nav-item dropdown" routerLinkActive="active">
+                    <a href="javascript:void(0);" [dropdownToggle]="bmpMenu" class="nav-link dropdown-toggle"> BMP Inventory <icon icon="AngleDown"></icon> </a>
+                    <ul #bmpMenu class="dropdown-menu">
+                        <li><a [routerLink]="['/jurisdictions']" class="dropdown-item">Jurisdictions</a></li>
+                        <li><a [routerLink]="['/find-bmp']" class="dropdown-item">Find a BMP</a></li>
+                        <li><a [routerLink]="['/modeling-parameters']" class="dropdown-item">Modeling Parameters</a></li>
+                        <li><a [routerLink]="['/treatment-bmps']" class="dropdown-item">View All BMPs</a></li>
+                        <li><a [routerLink]="['/latest-bmp-assessments']" class="dropdown-item">View Latest BMP Assessments</a></li>
+                        <li><a [routerLink]="['/field-records']" class="dropdown-item">View All Field Records</a></li>
+                        <li><a [routerLink]="['/wqmps']" class="dropdown-item">Water Quality Management Plans</a></li>
+                        <li><a [routerLink]="['/wqmp-annual-report']" class="dropdown-item">WQMP Annual Report</a></li>
+                        <li><a [routerLink]="['/parcels']" class="dropdown-item">Parcels</a></li>
+                    </ul>
+                </li>
+                <!-- Program Info Dropdown -->
+                <li class="nav-item dropdown" routerLinkActive="active">
+                    <a href="javascript:void(0);" [dropdownToggle]="programInfoMenu" class="nav-link dropdown-toggle"> Program Info <icon icon="AngleDown"></icon> </a>
+                    <ul #programInfoMenu class="dropdown-menu">
+                        <li><a [routerLink]="['/program-info/observation-types']" class="dropdown-item">Observation Types</a></li>
+                        <li><a [routerLink]="['/program-info/treatment-bmp-types']" class="dropdown-item">Treatment BMP Types</a></li>
+                        <li><a [routerLink]="['/funding-sources']" class="dropdown-item">Funding Sources</a></li>
+                    </ul>
+                </li>
+                <!-- Dashboard -->
+                <li class="nav-item" routerLinkActive="active">
+                    <a [routerLink]="['/dashboard']" class="nav-link">Dashboard</a>
+                </li>
+                <!-- Delineation Dropdown -->
+                <li class="nav-item dropdown" routerLinkActive="active">
+                    <a href="javascript:void(0);" [dropdownToggle]="delineationMenu" class="nav-link dropdown-toggle"> Delineation <icon icon="AngleDown"></icon> </a>
+                    <ul #delineationMenu class="dropdown-menu">
+                        <li><a [routerLink]="['/delineation/delineation-map']" class="dropdown-item">Delineation Map</a></li>
+                        <li><a [routerLink]="['/delineation/delineation-reconciliation-report']" class="dropdown-item">Delineation Reconciliation Report</a></li>
+                    </ul>
+                </li>
+                <!-- Data Hub -->
+                <li class="nav-item" routerLinkActive="active">
+                    <a [routerLink]="['/data-hub']" class="nav-link">Data Hub</a>
+                </li>
+                <!-- Manage Dropdown -->
+                <li class="nav-item dropdown" routerLinkActive="active">
+                    <a href="javascript:void(0);" [dropdownToggle]="manageMenu" class="nav-link dropdown-toggle"> Manage <icon icon="AngleDown"></icon> </a>
+                    <ul #manageMenu class="dropdown-menu">
+                        <li><a [routerLink]="['/manage/homepage-configuration']" class="dropdown-item">Homepage Configuration</a></li>
+                        <li><a [routerLink]="['/manage/page-content']" class="dropdown-item">Page Content</a></li>
+                        <li><a [routerLink]="['/labels-and-definitions']" class="dropdown-item">Custom Labels & Definitions</a></li>
+                        <li><a [routerLink]="['/users']" class="dropdown-item">Users</a></li>
+                        <li><a [routerLink]="['/organizations']" class="dropdown-item">Organizations</a></li>
+                        <li><a [routerLink]="['/manage/custom-attributes']" class="dropdown-item">Custom Attributes</a></li>
+                        <li><a [routerLink]="['/load-generating-units']" class="dropdown-item">Load Generating Units</a></li>
+                        <li><a [routerLink]="['/hru-characteristics']" class="dropdown-item">HRU Characteristics</a></li>
+                        <li><a [routerLink]="['/regional-subbasins']" class="dropdown-item">Regional Subbasins</a></li>
+                        <li><a [routerLink]="['/manage/regional-subbasin-revision-requests']" class="dropdown-item">Regional Subbasin Revision Requests</a></li>
+                        <li><a [routerLink]="['/manage/wqmp-lgu-audit']" class="dropdown-item">Water Quality Management Plan LGU Audit</a></li>
+                    </ul>
+                </li>
+            </ul>
         </div>
-      </div>
-    }
-
-  </nav>
+    </nav>
 </header>
-
 <main class="site">
-  <div class="site-wrapper">
-    <router-outlet></router-outlet>
-  </div>
+    <div class="site-wrapper">
+        <router-outlet></router-outlet>
+    </div>
 </main>

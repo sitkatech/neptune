@@ -36,6 +36,7 @@ import { StormwaterNetworkLayerComponent } from "src/app/shared/components/leafl
 import { WqmpsLayerComponent } from "src/app/shared/components/leaflet/layers/wqmps-layer/wqmps-layer.component";
 import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet/layers/inventoried-bmps-layer/inventoried-bmps-layer.component";
 import { DropdownToggleDirective } from "src/app/shared/directives/dropdown-toggle.directive";
+import { OverlayMode } from "src/app/shared/components/leaflet/layers/generic-wms-wfs-layer/overlay-mode.enum";
 
 @Component({
     selector: "octa-m2-tier2-dashboard",
@@ -64,6 +65,7 @@ import { DropdownToggleDirective } from "src/app/shared/directives/dropdown-togg
     ],
 })
 export class OCTAM2Tier2DashboardComponent implements OnInit {
+    public OverlayMode = OverlayMode;
     public mapIsReady: boolean = false;
     public customRichTextTypeID = NeptunePageTypeEnum.OCTAM2Tier2GrantProgramDashboard;
 
@@ -113,7 +115,7 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.boundingBox$ = this.stormwaterJurisdictionService.jurisdictionsBoundingBoxGet();
+        this.boundingBox$ = this.stormwaterJurisdictionService.getBoundingBoxStormwaterJurisdiction();
 
         this.columnDefs = [
             this.utilityFunctionsService.createLinkColumnDef("Project Name", "ProjectName", "ProjectID", {
@@ -148,9 +150,9 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
         });
 
         this.octaM2Tier2MapInitData$ = combineLatest({
-            Projects: this.projectService.projectsOCTAM2Tier2GrantProgramGet(),
-            TreatmentBMPs: this.treatmentBMPService.treatmentBmpsOctaM2Tier2GrantProgramGet(),
-            Delineations: this.projectService.projectsDelineationsGet(),
+            Projects: this.projectService.listProjectsSharedWithOCTAM2Tier2GrantProgramProject(),
+            TreatmentBMPs: this.treatmentBMPService.listOCTAM2Tier2GrantProgramTreatmentBMPsTreatmentBMP(),
+            Delineations: this.projectService.listDelineationsProject(),
         }).pipe(
             tap((data) => {
                 this.projects = data.Projects;
@@ -347,7 +349,7 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
     }
 
     public downloadProjectModelResults() {
-        this.projectService.projectsOCTAM2Tier2GrantProgramDownloadGet().subscribe(
+        this.projectService.downloadProjectsSharedWithOCTAM2Tier2GrantProgramProject().subscribe(
             (csv) => {
                 //Create a fake object for us to click and download
                 var a = document.createElement("a");
@@ -366,7 +368,7 @@ export class OCTAM2Tier2DashboardComponent implements OnInit {
     }
 
     public downloadTreatmentBMPModelResults() {
-        this.projectService.projectsOCTAM2Tier2GrantProgramTreatmentBMPsDownloadGet().subscribe(
+        this.projectService.downloadTreatmentBMPsForProjectsSharedWithOCTAM2Tier2GrantProgramProject().subscribe(
             (csv) => {
                 //Create a fake object for us to click and download
                 var a = document.createElement("a");

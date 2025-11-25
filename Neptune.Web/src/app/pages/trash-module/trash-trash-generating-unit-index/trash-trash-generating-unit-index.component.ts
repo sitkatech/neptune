@@ -15,7 +15,7 @@ import { environment } from "src/environments/environment";
     selector: "trash-trash-generating-unit-index",
     imports: [PageHeaderComponent, AlertDisplayComponent, NeptuneGridComponent, AsyncPipe, LoadingDirective],
     templateUrl: "./trash-trash-generating-unit-index.component.html",
-    styleUrl: "./trash-trash-generating-unit-index.component.scss"
+    styleUrl: "./trash-trash-generating-unit-index.component.scss",
 })
 export class TrashTrashGeneratingUnitIndexComponent {
     public trashGeneratingUnits$: Observable<TrashGeneratingUnitGridDto[]>;
@@ -27,32 +27,33 @@ export class TrashTrashGeneratingUnitIndexComponent {
     ngOnInit() {
         this.trashGeneratingUnitsColumnDefs = [
             this.utilityFunctionsService.createBasicColumnDef("Trash Analysis Area ID", "TrashGeneratingUnitID"),
+            this.utilityFunctionsService.createBasicColumnDef("Land Use Block ID", "LandUseBlockID"),
             this.utilityFunctionsService.createBasicColumnDef("Land Use Type", "PriorityLandUseTypeDisplayName", {
                 CustomDropdownFilterField: "PriorityLandUseTypeDisplayName",
             }),
             this.utilityFunctionsService.createLinkColumnDef("Governing OVTA Area", "OnlandVisualTrashAssessmentAreaName", "OnlandVisualTrashAssessmentAreaID", {
-                InRouterLink: "../onland-visual-trash-assessment-areas/"
+                InRouterLink: "../onland-visual-trash-assessment-areas/",
             }),
             this.utilityFunctionsService.createBasicColumnDef("Governing OVTA Area Baseline Score", "OnlandVisualTrashAssessmentAreaBaselineScore", {
                 CustomDropdownFilterField: "OnlandVisualTrashAssessmentAreaBaselineScore",
             }),
             this.utilityFunctionsService.createLinkHrefColumnDef("Governing Treatment BMP", "TreatmentBMPName", "TreatmentBMPID", {
-                HrefTemplate: `${environment.ocStormwaterToolsBaseUrl}/TreatmentBMP/Detail`
+                HrefTemplate: `${environment.ocStormwaterToolsBaseUrl}/TreatmentBMP/Detail`,
             }),
             this.utilityFunctionsService.createLinkHrefColumnDef("Governing WQMP", "WaterQualityManagementPlanName", "WaterQualityManagementPlanID", {
-                HrefTemplate: `${environment.ocStormwaterToolsBaseUrl}/WaterQualityManagementPlan/Detail`
+                HrefTemplate: `${environment.ocStormwaterToolsBaseUrl}/WaterQualityManagementPlan/Detail`,
             }),
             this.utilityFunctionsService.createBasicColumnDef("Jurisdiction", "StormwaterJurisdictionName", {
                 CustomDropdownFilterField: "StormwaterJurisdictionName",
             }),
             this.utilityFunctionsService.createDecimalColumnDef("Area", "Area"),
-            this.utilityFunctionsService.createDecimalColumnDef("Baseline Loading Rate", "BaselineLoadingRate", {
+            this.utilityFunctionsService.createDecimalColumnDef("Baseline Trash Generation Rate", "BaselineLoadingRate", {
                 CustomDropdownFilterField: "BaselineLoadingRate",
             }),
-            this.utilityFunctionsService.createDecimalColumnDef("Progress Loading Rate", "ProgressLoadingRate", {
+            this.utilityFunctionsService.createDecimalColumnDef("Progress Trash Generation Rate", "ProgressLoadingRate", {
                 CustomDropdownFilterField: "ProgressLoadingRate",
             }),
-            this.utilityFunctionsService.createDecimalColumnDef("Current Loading Rate", "CurrentLoadingRate", {
+            this.utilityFunctionsService.createDecimalColumnDef("Current Net Loading Rate", "CurrentLoadingRate", {
                 CustomDropdownFilterField: "CurrentLoadingRate",
             }),
             this.utilityFunctionsService.createBasicColumnDef("Trash Capture Status via BMP", "TrashCaptureStatusBMP"),
@@ -76,6 +77,6 @@ export class TrashTrashGeneratingUnitIndexComponent {
             }),
             this.utilityFunctionsService.createDateColumnDef("Last Updated Date", "LastUpdateDate", "MM/dd/yyyy"),
         ];
-        this.trashGeneratingUnits$ = this.trashGeneratingUnitService.trashGeneratingUnitsGet().pipe(tap((x) => (this.isLoading = false)));
+        this.trashGeneratingUnits$ = this.trashGeneratingUnitService.listForCallingUserTrashGeneratingUnit().pipe(tap((x) => (this.isLoading = false)));
     }
 }

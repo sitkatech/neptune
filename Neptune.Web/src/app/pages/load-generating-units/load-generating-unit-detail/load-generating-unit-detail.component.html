@@ -1,0 +1,101 @@
+<ng-template #templateAbove>
+    <div class="back">
+        <a [routerLink]="['/load-generating-units']" class="back__link">Back to Load Generating Units</a>
+    </div>
+</ng-template>
+@if (loadGeneratingUnit$ | async; as loadGeneratingUnit) {
+    <page-header [pageTitle]="'Load Generating Unit: ' + loadGeneratingUnit.LoadGeneratingUnitID" [templateAbove]="templateAbove"></page-header>
+    <app-alert-display></app-alert-display>
+    <div class="grid-12">
+        <div class="g-col-6">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Basics</span>
+                </div>
+                <div class="card-body">
+                    @if (loadGeneratingUnit$ | async; as lgu) {
+                        <dl class="grid-12">
+                            <dt class="g-col-5">
+                                <field-definition fieldDefinitionType="RegionalSubbasin">Regional Subbasin</field-definition>
+                            </dt>
+                            <dd class="g-col-7">
+                                @if (lgu.RegionalSubbasinName) {
+                                    <a [routerLink]="['/regional-subbasins', lgu.RegionalSubbasinID]">{{ lgu.RegionalSubbasinName }}</a>
+                                } @else {
+                                    <em class="text-muted">Is not linked to a Regional Subbasin</em>
+                                }
+                            </dd>
+
+                            <dt class="g-col-5">
+                                <field-definition fieldDefinitionType="TreatmentBMP">Treatment BMP</field-definition>
+                            </dt>
+                            <dd class="g-col-7">
+                                @if (lgu.TreatmentBMPName) {
+                                    <a [routerLink]="['/treatment-bmps', lgu.TreatmentBMPID]">{{ lgu.TreatmentBMPName }}</a>
+                                } @else {
+                                    <em class="text-muted">Is not linked to a Treatment BMP</em>
+                                }
+                            </dd>
+
+                            <dt class="g-col-5">
+                                <field-definition fieldDefinitionType="WaterQualityManagementPlan">Water Quality Management Plan</field-definition>
+                            </dt>
+                            <dd class="g-col-7">
+                                @if (lgu.WaterQualityManagementPlanName) {
+                                    <a [routerLink]="['/water-quality-management-plans', lgu.WaterQualityManagementPlanID]">{{ lgu.WaterQualityManagementPlanName }}</a>
+                                } @else {
+                                    <em class="text-muted">Is not linked to a Water Quality Management Plan</em>
+                                }
+                            </dd>
+
+                            <dt class="g-col-5">Area (ac)</dt>
+                            <dd class="g-col-7">{{ lgu.Area | number: "1.2-2" }}</dd>
+                        </dl>
+
+                        <div class="mt-3">
+                            @if (lgu.HRULog) {
+                                <p class="system-text">Most recent HRU Request made at {{ lgu.DateHRURequested | date: "MM/dd/yyyy hh:mm a" }}</p>
+                                <a role="button" (click)="downloadHRURequest(lgu.HRULog)">Latest HRU Request</a>
+                                @if (lgu.HRULog.HRUResponse) {
+                                    <span> | </span>
+                                    <a role="button" (click)="downloadHRUResponse(lgu.HRULog)">Latest HRU Response</a>
+                                }
+                            } @else {
+                                <p class="system-text">There are no HRU Request logs for this Load Generating Unit</p>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="g-col-6">
+            <div class="card">
+                <div class="card-header"><span class="card-title">Map</span></div>
+                <div class="card-body">
+                    <neptune-map [mapHeight]="'400px'" [showLegend]="false" [boundingBox]="boundingBox" (onMapLoad)="handleMapReady($event)">
+                        @if (mapIsReady) {
+                            <regional-subbasins-layer [mode]="OverlayMode.ReferenceOnly" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></regional-subbasins-layer>
+                            <load-generating-units-layer
+                                [mode]="OverlayMode.Single"
+                                [map]="map"
+                                [layerControl]="layerControl"
+                                [sortOrder]="30"
+                                [selectedID]="loadGeneratingUnit.LoadGeneratingUnitID">
+                            </load-generating-units-layer>
+                        }
+                    </neptune-map>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card mt-3">
+        <div class="card-header">
+            <span class="card-title">HRU Characteristics</span>
+        </div>
+        <div class="card-body">
+            <hru-characteristics-grid
+                [rowData]="hruCharacteristics$ | async"
+                [downloadFileName]="'HRUCharacteristics_LGU' + loadGeneratingUnit.LoadGeneratingUnitID"></hru-characteristics-grid>
+        </div>
+    </div>
+}

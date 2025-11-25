@@ -19,6 +19,7 @@ import { OAuthStorage, OAuthModule } from "angular-oauth2-oidc";
 import { PhonePipe } from "./shared/pipes/phone.pipe";
 import { GroupByPipe } from "./shared/pipes/group-by.pipe";
 import { provideDialogConfig } from "@ngneat/dialog";
+import { SumPipe } from "./shared/pipes/sum.pipe";
 
 export const appConfig: ApplicationConfig = {
     providers: [
@@ -66,6 +67,7 @@ export const appConfig: ApplicationConfig = {
         DatePipe,
         PhonePipe,
         GroupByPipe,
+        SumPipe,
         {
             provide: OAuthStorage,
             useClass: CookieStorageService,

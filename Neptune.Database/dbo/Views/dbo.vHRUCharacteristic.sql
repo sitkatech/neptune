@@ -11,7 +11,7 @@ select  hru.HRUCharacteristicID, hru.LastUpdated, hru.LoadGeneratingUnitID,
         rsb.RegionalSubbasinID, concat(rsb.Watershed, ' - ', rsb.DrainID, ': ', rsb.RegionalSubbasinID) as RegionalSubbasinName,
         hru.HydrologicSoilGroup, hru.SlopePercentage, hru.Area, 
         hru.ImperviousAcres, hru.HRUCharacteristicLandUseCodeID, hruc.HRUCharacteristicLandUseCodeDisplayName, 
-        hru.BaselineImperviousAcres, hru.BaselineHRUCharacteristicLandUseCodeID, bhruc.HRUCharacteristicLandUseCodeDisplayName as BaslineHRUCharacteristicLandUseCodeDisplayName
+        hru.BaselineImperviousAcres, hru.BaselineHRUCharacteristicLandUseCodeID, bhruc.HRUCharacteristicLandUseCodeDisplayName as BaselineHRUCharacteristicLandUseCodeDisplayName
 from dbo.HRUCharacteristic hru
 join dbo.HRUCharacteristicLandUseCode hruc on hru.HRUCharacteristicLandUseCodeID = hruc.HRUCharacteristicLandUseCodeID
 join dbo.HRUCharacteristicLandUseCode bhruc on hru.BaselineHRUCharacteristicLandUseCodeID = bhruc.HRUCharacteristicLandUseCodeID

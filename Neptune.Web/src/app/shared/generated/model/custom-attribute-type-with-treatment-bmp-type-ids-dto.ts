@@ -19,6 +19,7 @@ export class CustomAttributeTypeWithTreatmentBMPTypeIDsDto {
     CustomAttributeTypeDescription?: string | null;
     CustomAttributeTypePurposeID?: number;
     CustomAttributeTypeOptionsSchema?: string | null;
+    DataTypeName?: string | null;
     DataTypeDisplayName?: string | null;
     MeasurementUnitDisplayName?: string | null;
     Purpose?: string | null;
@@ -39,6 +40,7 @@ export interface CustomAttributeTypeWithTreatmentBMPTypeIDsDtoForm {
     CustomAttributeTypeDescription?: FormControl<string>;
     CustomAttributeTypePurposeID?: FormControl<number>;
     CustomAttributeTypeOptionsSchema?: FormControl<string>;
+    DataTypeName?: FormControl<string>;
     DataTypeDisplayName?: FormControl<string>;
     MeasurementUnitDisplayName?: FormControl<string>;
     Purpose?: FormControl<string>;
@@ -119,6 +121,16 @@ export class CustomAttributeTypeWithTreatmentBMPTypeIDsDtoFormControls {
         }
     );
     public static CustomAttributeTypeOptionsSchema = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static DataTypeName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {

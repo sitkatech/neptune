@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Neptune.Common.DesignByContract;
+using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities;
 
@@ -8,9 +9,10 @@ public static class WaterQualityManagementPlans
     public static IQueryable<WaterQualityManagementPlan> GetImpl(NeptuneDbContext dbContext)
     {
         return dbContext.WaterQualityManagementPlans
-            .Include(x => x.StormwaterJurisdiction)
-            .ThenInclude(x => x.Organization)
-            ;
+            .Include(x => x.WaterQualityManagementPlanBoundary)
+            .Include(x => x.StormwaterJurisdiction).ThenInclude(x => x.Organization)
+            .Include(x => x.WaterQualityManagementPlanParcels).ThenInclude(x => x.Parcel)
+            .Include(x => x.TreatmentBMPs).ThenInclude(x => x.Delineation);
     }
 
     public static WaterQualityManagementPlan GetByIDWithChangeTracking(NeptuneDbContext dbContext,
@@ -89,5 +91,78 @@ public static class WaterQualityManagementPlans
         return GetImpl(dbContext)
             .AsNoTracking()
             .Where(x => x.StormwaterJurisdictionID == stormwaterJurisdictionID).ToList();
+    }
+
+    public static async Task<List<WaterQualityManagementPlanDto>> ListAsDtoAsync(NeptuneDbContext dbContext)
+    {
+        var entities = await GetImpl(dbContext).AsNoTracking().ToListAsync();
+        return entities.Select(x => x.AsDto()).ToList();
+    }
+
+    public static async Task<List<WaterQualityManagementPlanDisplayDto>> ListAsDisplayDtoAsync(NeptuneDbContext dbContext)
+    {
+        var wqmps = await dbContext.WaterQualityManagementPlans.AsNoTracking()
+            .ToListAsync();
+
+        var displayDtos = wqmps
+            .OrderBy(x => x.WaterQualityManagementPlanName)
+            .Select(x => new WaterQualityManagementPlanDisplayDto()
+            {
+                WaterQualityManagementPlanID = x.WaterQualityManagementPlanID,
+                WaterQualityManagementPlanName = x.WaterQualityManagementPlanName
+            })
+            .ToList();
+
+        return displayDtos;
+    }
+
+    public static async Task<WaterQualityManagementPlanDto?> GetByIDAsDtoAsync(NeptuneDbContext dbContext, int waterQualityManagementPlanID)
+    {
+        var entity = await GetImpl(dbContext).AsNoTracking().FirstOrDefaultAsync(x => x.WaterQualityManagementPlanID == waterQualityManagementPlanID);
+        return entity?.AsDto();
+    }
+
+    public static async Task<WaterQualityManagementPlanDto> CreateAsync(NeptuneDbContext dbContext, WaterQualityManagementPlanUpsertDto dto)
+    {
+        var entity = dto.AsEntity();
+        dbContext.WaterQualityManagementPlans.Add(entity);
+        await dbContext.SaveChangesAsync();
+        return await GetByIDAsDtoAsync(dbContext, entity.WaterQualityManagementPlanID);
+    }
+
+    public static async Task<WaterQualityManagementPlanDto?> UpdateAsync(NeptuneDbContext dbContext, int waterQualityManagementPlanID, WaterQualityManagementPlanUpsertDto dto)
+    {
+        var entity = await dbContext.WaterQualityManagementPlans.FirstAsync(x => x.WaterQualityManagementPlanID == waterQualityManagementPlanID);
+        entity.UpdateFromUpsertDto(dto);
+        await dbContext.SaveChangesAsync();
+        return await GetByIDAsDtoAsync(dbContext, entity.WaterQualityManagementPlanID);
+    }
+
+    public static async Task<bool> DeleteAsync(NeptuneDbContext dbContext, int waterQualityManagementPlanID)
+    {
+        var entity = await dbContext.WaterQualityManagementPlans.FirstOrDefaultAsync(x => x.WaterQualityManagementPlanID == waterQualityManagementPlanID);
+        if (entity == null) return false;
+        await entity.DeleteFull(dbContext);
+        return true;
+    }
+
+    public static async Task<List<WaterQualityManagementPlanDto>> ListWithFinalWQMPDocumentAsync(NeptuneDbContext dbContext)
+    {
+        // todo: filtering by a hardcoded list of WQMP IDs is temporary until we can get the full list of WQMPs that should be included
+        var wqmpIDsToFilterBy = new List<int>
+            {
+            3066, 2845, 2856, 2857, 2850, 1623, 1632, 2528, 2531, 2343, 2527
+        };
+        var entities = await dbContext.WaterQualityManagementPlans
+            .Include(x => x.StormwaterJurisdiction).ThenInclude(x => x.Organization)
+            .Include(x => x.WaterQualityManagementPlanDocuments)
+            .Include(x => x.WaterQualityManagementPlanBoundary)
+            .Include(x => x.WaterQualityManagementPlanParcels).ThenInclude(x => x.Parcel)
+            .Include(x => x.TreatmentBMPs).ThenInclude(x => x.Delineation)
+            .Where(x => wqmpIDsToFilterBy.Contains(x.WaterQualityManagementPlanID) && x.WaterQualityManagementPlanDocuments
+                .Any(y => y.WaterQualityManagementPlanDocumentTypeID == (int)WaterQualityManagementPlanDocumentTypeEnum.FinalWQMP))
+            .AsNoTracking()
+            .ToListAsync();
+        return entities.Select(x => x.AsDto()).ToList();
     }
 }

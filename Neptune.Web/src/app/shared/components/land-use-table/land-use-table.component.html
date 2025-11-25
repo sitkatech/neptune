@@ -1,0 +1,29 @@
+<table class="table table-striped land-use-table" style="text-align: center">
+    <thead>
+        <tr>
+            <th style="text-align: left; min-width: 270px">
+                <field-definition fieldDefinitionType="LandUse"></field-definition>
+            </th>
+            <th style="text-align: center">
+                <field-definition fieldDefinitionType="Area" [labelOverride]="'Area (ac)'"></field-definition>
+            </th>
+            <th style="text-align: center">
+                <field-definition fieldDefinitionType="ImperviousArea" [labelOverride]="'Impervious Area (ac)'"></field-definition>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (hruCharacteristicSummary of hruCharacteristics; track hruCharacteristicSummary) {
+        <tr>
+            <td style="text-align: left">{{ hruCharacteristicSummary.LandUse }}</td>
+            <td>{{ hruCharacteristicSummary.Area | number : "1.2-2" }}</td>
+            <td>{{ hruCharacteristicSummary.ImperviousCover | number : "1.2-2" }}</td>
+        </tr>
+        }
+        <tr style="font-weight: bold">
+            <td style="text-align: left">Total</td>
+            <td>{{ hruCharacteristics | sum : "Area" | number : "1.2-2" }}</td>
+            <td>{{ hruCharacteristics | sum : "ImperviousCover" | number : "1.2-2" }}</td>
+        </tr>
+    </tbody>
+</table>

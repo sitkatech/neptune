@@ -37,6 +37,7 @@ namespace Neptune.WebMvc.Views.Shared
         public string CurrentPersonDetailUrl { get; }
         public string PlanningModuleUrl { get; }
         public string TrashModuleUrl { get; }
+        public string AIModuleUrl { get; }
         public readonly string HomeUrl;
 
         public NeptuneArea NeptuneArea { get; }
@@ -61,10 +62,11 @@ namespace Neptune.WebMvc.Views.Shared
             AboutUrl = SitkaRoute<HomeController>.BuildUrlFromExpression(linkGenerator, hc => hc.About());
             TopLevelNeptuneMenus = MakeNeptuneHelpMenu(currentPerson);
 
-            NeptuneAreas = NeptuneArea.All.Where(x => x.ShowOnPrimaryNavigation).OrderBy(x => x.NeptuneAreaDisplayName);
+            NeptuneAreas = NeptuneArea.All.Where(x => x.ShowOnPrimaryNavigation).OrderBy(x => x.SortOrder);
             NeptuneArea = neptuneArea;
             PlanningModuleUrl = planningModuleUrl;
             TrashModuleUrl = trashModuleUrl;
+            AIModuleUrl = trashModuleUrl.Replace("trash", "ai");
             ShowLinkToArea = !isHomePage;
         }
 
@@ -96,6 +98,8 @@ namespace Neptune.WebMvc.Views.Shared
             var neptuneAreaEnum = neptuneArea.ToEnum;
             switch (neptuneAreaEnum)
             {
+                case NeptuneAreaEnum.AI:
+                    return AIModuleUrl;
                 case NeptuneAreaEnum.Planning:
                     return PlanningModuleUrl;
                 case NeptuneAreaEnum.Trash:

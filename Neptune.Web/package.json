@@ -51,6 +51,7 @@
         "angular-oauth2-oidc-jwks": "^20.0.0",
         "core-js": "^3.43.0",
         "esri-leaflet": "^3.0.10",
+        "file-saver": "^2.0.5",
         "font-awesome": "^4.7.0",
         "leaflet": "^1.9.4",
         "leaflet-arrowheads": "1.2.3",
@@ -61,6 +62,7 @@
         "ngx-cookie-service": "^20.0.1",
         "ngx-mask": "^19.0.7",
         "rxjs": "^7.0.0",
+        "sse.js": "^2.7.2",
         "tinymce": "^7.9.1",
         "tslib": "^2.8.1",
         "webpack": "^5.30.0",
@@ -92,6 +94,7 @@
         "eslint-plugin-simple-import-sort": "^10.0.0",
         "eslint-plugin-unused-imports": "^3.0.0",
         "npm": "^11.4.2",
+        "prettier": "^3.6.2",
         "ts-node": "~10.9.2",
         "typescript": "^5.8.3"
     }

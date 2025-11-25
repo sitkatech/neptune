@@ -14,6 +14,7 @@ public static class TrashGeneratingUnits
             .Select(x => new TrashGeneratingUnitGridDto()
             {
                 TrashGeneratingUnitID = x.TrashGeneratingUnitID,
+                LandUseBlockID = x.LandUseBlockID,
                 TrashCaptureEffectivenessBMP = x.TrashCaptureEffectivenessBMP,
                 TrashCaptureStatusBMP = x.TrashCaptureStatusBMP,
                 TreatmentBMPName = x.TreatmentBMPName,

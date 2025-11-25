@@ -63,7 +63,7 @@ Source code is available upon request via <support@sitkatech.com>.
             <label class="control-label">Jurisdiction to Add:</label>
             <div class="input-group">
                 <select data-ng-model="StormwaterJurisdictionToAdd"
-                        data-ng-options="stormwaterJurisdiction as stormwaterJurisdiction.StormwaterJurisdictionDisplayName for stormwaterJurisdiction in filteredStormwaterJurisdictions() track by stormwaterJurisdiction.StormwaterJurisdictionID"
+                        data-ng-options="stormwaterJurisdiction as stormwaterJurisdiction.StormwaterJurisdictionName for stormwaterJurisdiction in filteredStormwaterJurisdictions() track by stormwaterJurisdiction.StormwaterJurisdictionID"
                         selectpicker
                         data-live-search="true"
                         data-container="body"
@@ -84,11 +84,11 @@ Source code is available upon request via <support@sitkatech.com>.
                 <th>@Html.LabelWithSugarFor(FieldDefinitionType.Jurisdiction, "Jurisdiction")</th>
                 <th></th>
             </tr>
-            <tr ng-repeat="stormwaterJurisdictionSimple in AngularModel.StormwaterJurisdictionPersonSimples | orderBy: getStormwaterJurisdictionDisplayName">
+            <tr ng-repeat="stormwaterJurisdictionSimple in AngularModel.StormwaterJurisdictionPersonSimples | orderBy: getStormwaterJurisdictionName">
                 <td style="width: 60px;">
                     <span ng-if="canRemoveRow(stormwaterJurisdictionSimple)" class="glyphicon glyphicon-trash blue" title="Remove row'" alt="Remove row" ng-click="deleteRow(stormwaterJurisdictionSimple)" style="cursor: pointer"></span>
                 </td>
-                <td ng-bind="getStormwaterJurisdictionDisplayName(stormwaterJurisdictionSimple)"></td>
+                <td ng-bind="getStormwaterJurisdictionName(stormwaterJurisdictionSimple)"></td>
                 <td style="width: 0px;">
                     <input type="hidden" value="{{stormwaterJurisdictionSimple.StormwaterJurisdictionPersonID}}"
                            name="StormwaterJurisdictionPersonSimples[{{$index}}].StormwaterJurisdictionPersonID"/>

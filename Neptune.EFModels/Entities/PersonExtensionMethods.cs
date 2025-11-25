@@ -4,6 +4,18 @@ namespace Neptune.EFModels.Entities;
 
 public static class PersonExtensionMethods
 {
+    public static PersonDisplayDto AsDisplayDto(this Person person)
+    {
+        var dto = new PersonDisplayDto()
+        {
+            PersonID = person.PersonID,
+            FirstName = person.FirstName,
+            LastName = person.LastName,
+            OrganizationID = person.OrganizationID,
+            OrganizationName = person.Organization.OrganizationName,
+        };
+        return dto;
+    }
     public static PersonSimpleDto AsSimpleDto(this Person person)
     {
         var dto = new PersonSimpleDto()

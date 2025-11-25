@@ -3,6 +3,9 @@ using Neptune.Common.DesignByContract;
 using Neptune.Models.DataTransferObjects;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.Features;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Neptune.EFModels.Entities;
 
@@ -10,8 +13,7 @@ public static class RegionalSubbasins
 {
     private static IQueryable<RegionalSubbasin> GetImpl(NeptuneDbContext dbContext)
     {
-        return dbContext.RegionalSubbasins
-            ;
+        return dbContext.RegionalSubbasins;
     }
 
     public static RegionalSubbasin GetByIDWithChangeTracking(NeptuneDbContext dbContext, int regionalSubbasinID)
@@ -53,12 +55,63 @@ public static class RegionalSubbasins
         return GetImpl(dbContext).AsNoTracking().OrderBy(x => x.RegionalSubbasinID).ToList();
     }
 
-    public static RegionalSubbasin GetFirstByContainsGeometry (NeptuneDbContext dbContext, Geometry dBGeometry)
+    public static async Task<List<RegionalSubbasinSimpleDto>> ListAsSimpleDtoAsync(NeptuneDbContext dbContext)
+    {
+        var entities = await GetImpl(dbContext).AsNoTracking().OrderBy(x => x.RegionalSubbasinID).ToListAsync();
+        return entities.Select(x => x.AsSimpleDto()).ToList();
+    }
+
+    public static async Task<List<RegionalSubbasinDto>> ListAsDtoAsync(NeptuneDbContext dbContext)
+    {
+        var entities = await dbContext.RegionalSubbasins.Include(x => x.OCSurveyDownstreamCatchment).AsNoTracking().OrderBy(x => x.RegionalSubbasinID).ToListAsync();
+        return entities.Select(x => x.AsDto()).ToList();
+    }
+
+    public static async Task<RegionalSubbasinDto?> GetByIDAsDtoAsync(NeptuneDbContext dbContext, int regionalSubbasinID)
+    {
+        var entity = await dbContext.RegionalSubbasins.Include(x => x.OCSurveyDownstreamCatchment).AsNoTracking().SingleOrDefaultAsync(x => x.RegionalSubbasinID == regionalSubbasinID);
+        return entity?.AsDto();
+    }
+
+    public static async Task<RegionalSubbasinDto> CreateAsync(NeptuneDbContext dbContext, RegionalSubbasinUpsertDto dto)
+    {
+        var entity = dto.AsEntity();
+        dbContext.RegionalSubbasins.Add(entity);
+        await dbContext.SaveChangesAsync();
+        return await GetByIDAsDtoAsync(dbContext, entity.RegionalSubbasinID);
+    }
+
+    public static async Task<RegionalSubbasinDto?> UpdateAsync(NeptuneDbContext dbContext, int regionalSubbasinID, RegionalSubbasinUpsertDto dto)
+    {
+        var entity = await dbContext.RegionalSubbasins.FirstOrDefaultAsync(x => x.RegionalSubbasinID == regionalSubbasinID);
+        if (entity == null) return null;
+        entity.UpdateFromUpsertDto(dto);
+        await dbContext.SaveChangesAsync();
+        return await GetByIDAsDtoAsync(dbContext, entity.RegionalSubbasinID);
+    }
+
+    public static async Task<bool> DeleteAsync(NeptuneDbContext dbContext, int regionalSubbasinID)
+    {
+        var entity = await dbContext.RegionalSubbasins.FirstOrDefaultAsync(x => x.RegionalSubbasinID == regionalSubbasinID);
+        if (entity == null) return false;
+        // Delete dependent entities
+//        await dbContext.RegionalSubbasinRevisionRequests.Where(x => x.RegionalSubbasinID == regionalSubbasinID).ExecuteDeleteAsync();
+        await dbContext.LoadGeneratingUnits.Where(x => x.RegionalSubbasinID == regionalSubbasinID).ExecuteDeleteAsync();
+        await dbContext.ProjectLoadGeneratingUnits.Where(x => x.RegionalSubbasinID == regionalSubbasinID).ExecuteDeleteAsync();
+        await dbContext.ProjectNereidResults.Where(x => x.RegionalSubbasinID == regionalSubbasinID).ExecuteDeleteAsync();
+        await dbContext.NereidResults.Where(x => x.RegionalSubbasinID == regionalSubbasinID).ExecuteDeleteAsync();
+        await dbContext.DirtyModelNodes.Where(x => x.RegionalSubbasinID == regionalSubbasinID).ExecuteDeleteAsync();
+        await dbContext.TreatmentBMPs.Where(x => x.RegionalSubbasinID == regionalSubbasinID).ExecuteDeleteAsync();
+        await dbContext.RegionalSubbasins.Where(x => x.RegionalSubbasinID == regionalSubbasinID).ExecuteDeleteAsync();
+        return true;
+    }
+
+    public static RegionalSubbasin GetFirstByContainsGeometry(NeptuneDbContext dbContext, Geometry dBGeometry)
     {
         return dbContext.RegionalSubbasins.SingleOrDefault(x => x.CatchmentGeometry.Contains(dBGeometry));
     }
 
-    public static Geometry GetUpstreamCatchmentGeometry4326 (NeptuneDbContext dbContext, int regionalSubbasinID)
+    public static Geometry GetUpstreamCatchmentGeometry4326(NeptuneDbContext dbContext, int regionalSubbasinID)
     {
         return dbContext.vRegionalSubbasinUpstreamCatchmentGeometry4326s.SingleOrDefault(x => x.PrimaryKey == regionalSubbasinID)?.UpstreamCatchmentGeometry4326;
     }

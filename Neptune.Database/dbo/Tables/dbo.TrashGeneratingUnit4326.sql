@@ -6,7 +6,8 @@ CREATE TABLE [dbo].[TrashGeneratingUnit4326](
 	[TrashGeneratingUnit4326Geometry] [geometry] NOT NULL,
 	[LastUpdateDate] [datetime] NULL CONSTRAINT [DF_TrashGeneratingUnit4326_LastUpdateDate]  DEFAULT (getdate()),
 	[DelineationID] [int] NULL,
-	[WaterQualityManagementPlanID] [int] NULL CONSTRAINT [FK_TrashGeneratingUnit4326_WaterQualityManagementPlan_WaterQualityManagementPlanID] FOREIGN KEY REFERENCES [dbo].[WaterQualityManagementPlan] ([WaterQualityManagementPlanID])
+	[WaterQualityManagementPlanID] [int] NULL CONSTRAINT [FK_TrashGeneratingUnit4326_WaterQualityManagementPlan_WaterQualityManagementPlanID] FOREIGN KEY REFERENCES [dbo].[WaterQualityManagementPlan] ([WaterQualityManagementPlanID]),
+	[TrashGeneratingUnitID] [int] NULL CONSTRAINT [FK_TrashGeneratingUnit4326_TrashGeneratingUnit_TrashGeneratingUnitID] FOREIGN KEY REFERENCES [dbo].[TrashGeneratingUnit] ([TrashGeneratingUnitID])
 )
 GO
 

@@ -12,6 +12,7 @@
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class TrashGeneratingUnitGridDto { 
     TrashGeneratingUnitID?: number;
+    LandUseBlockID?: number | null;
     TrashCaptureEffectivenessBMP?: number | null;
     TreatmentBMPID?: number | null;
     TreatmentBMPName?: string | null;
@@ -45,6 +46,7 @@ export class TrashGeneratingUnitGridDto {
 
 export interface TrashGeneratingUnitGridDtoForm { 
     TrashGeneratingUnitID?: FormControl<number>;
+    LandUseBlockID?: FormControl<number>;
     TrashCaptureEffectivenessBMP?: FormControl<number>;
     TreatmentBMPID?: FormControl<number>;
     TreatmentBMPName?: FormControl<string>;
@@ -75,6 +77,16 @@ export interface TrashGeneratingUnitGridDtoForm {
 
 export class TrashGeneratingUnitGridDtoFormControls { 
     public static TrashGeneratingUnitID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static LandUseBlockID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
         {

@@ -31,7 +31,7 @@
         public int? UpdatePersonID { get; set; }
         public DateTime? DateUpdated { get; set; }
         public OrganizationSimpleDto Organization { get; set; }
-        public StormwaterJurisdictionDto StormwaterJurisdiction { get; set; }
+        public StormwaterJurisdictionDisplayDto StormwaterJurisdiction { get; set; }
         public ProjectStatusSimpleDto ProjectStatus { get; set; }
         public PersonSimpleDto PrimaryContactPerson { get; set; }
         public PersonSimpleDto CreatePerson { get; set; }

@@ -69,7 +69,7 @@
                 <div class="col-xs-8" style="padding: 0">
                     <select ng-change="reloadGridsForSelections()"
                             ng-model="SelectedStormwaterJurisdiction"
-                            ng-options="stormwaterJurisdiction as stormwaterJurisdiction.StormwaterJurisdictionDisplayName for stormwaterJurisdiction in AngularViewData.StormwaterJurisdictions track by stormwaterJurisdiction.StormwaterJurisdictionID"
+                            ng-options="stormwaterJurisdiction as stormwaterJurisdiction.StormwaterJurisdictionName for stormwaterJurisdiction in AngularViewData.StormwaterJurisdictions track by stormwaterJurisdiction.StormwaterJurisdictionID"
                             ng-init="SelectedStormwaterJurisdiction = AngularViewData.StormwaterJurisdictions[0]"
                             selectpicker
                             class="selectpicker"

@@ -13,5 +13,9 @@ namespace Neptune.API.Services
         public string GDALAPIBaseUrl { get; set; }
         public string QGISAPIBaseUrl { get; set; }
         public string OCGISBaseUrl { get; set; }
+
+        public string OpenAIApiKey { get; set; }
+        public string OpenAIOrganizationID { get; set; }
+        public string OpenAIProjectID { get; set; }
     }
 }

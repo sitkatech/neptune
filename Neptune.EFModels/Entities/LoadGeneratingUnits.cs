@@ -1,22 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Neptune.Common.DesignByContract;
+using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities;
 
 public static class LoadGeneratingUnits
 {
-    public static List<LoadGeneratingUnit> ListUpdateCandidates(NeptuneDbContext dbContext)
-    {
-        return dbContext.LoadGeneratingUnits
-            .Include(x => x.RegionalSubbasin)
-            .Include(x => x.HRUCharacteristics)
-            .Where(x =>
-                x.RegionalSubbasin != null 
-                && !(x.HRUCharacteristics.Any() || x.IsEmptyResponseFromHRUService == true) 
-                && x.LoadGeneratingUnitGeometry.Area >= 10)
-            .ToList();
-    }
-
     public static LoadGeneratingUnit GetByID(NeptuneDbContext dbContext, LoadGeneratingUnitPrimaryKey loadGeneratingUnitPrimaryKey)
     {
         return GetByID(dbContext, loadGeneratingUnitPrimaryKey.PrimaryKeyValue);
@@ -34,5 +23,18 @@ public static class LoadGeneratingUnits
             .SingleOrDefault(x => x.LoadGeneratingUnitID == loadGeneratingUnitID);
         Check.RequireNotNull(loadGeneratingUnit, $"Load Generating Unit with ID {loadGeneratingUnitID} not found!");
         return loadGeneratingUnit;
+    }
+
+    public static async Task<LoadGeneratingUnitDto?> GetByIDAsDtoAsync(NeptuneDbContext dbContext, int loadGeneratingUnitID)
+    {
+        var entity = await dbContext.LoadGeneratingUnits
+            .Include(x => x.RegionalSubbasin)
+            .Include(x => x.WaterQualityManagementPlan)
+            .Include(x => x.Delineation)
+            .ThenInclude(x => x.TreatmentBMP)
+            .Include(x => x.HRULog)
+            .Include(x => x.ModelBasin)
+            .AsNoTracking().FirstOrDefaultAsync(x => x.LoadGeneratingUnitID == loadGeneratingUnitID);
+        return entity?.AsDto();
     }
 }

@@ -1,13 +1,8 @@
-//  IMPORTANT:
-//  This file is generated. Your changes will be lost.
-//  Use the corresponding partial class for customizations.
-//  Source Table: [dbo].[FundingSource]
-
 using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities
 {
-    public static partial class FundingSourceExtensionMethods
+    public static class FundingSourceExtensionMethods
     {
         public static FundingSourceSimpleDto AsSimpleDto(this FundingSource fundingSource)
         {
@@ -20,6 +15,39 @@ namespace Neptune.EFModels.Entities
                 FundingSourceDescription = fundingSource.FundingSourceDescription
             };
             return dto;
+        }
+
+        public static FundingSourceDto AsDto(this FundingSource entity)
+        {
+            return new FundingSourceDto
+            {
+                FundingSourceID = entity.FundingSourceID,
+                OrganizationID = entity.OrganizationID,
+                FundingSourceName = entity.FundingSourceName,
+                OrganizationName = entity.Organization.OrganizationName,
+                IsActive = entity.IsActive,
+                FundingSourceDescription = entity.FundingSourceDescription,
+                DisplayName = entity.GetDisplayName()
+            };
+        }
+
+        public static void UpdateFromUpsertDto(this FundingSource entity, FundingSourceUpsertDto dto)
+        {
+            entity.OrganizationID = dto.OrganizationID;
+            entity.FundingSourceName = dto.FundingSourceName;
+            entity.IsActive = dto.IsActive;
+            entity.FundingSourceDescription = dto.FundingSourceDescription;
+        }
+
+        public static FundingSource AsEntity(this FundingSourceUpsertDto dto)
+        {
+            return new FundingSource
+            {
+                OrganizationID = dto.OrganizationID,
+                FundingSourceName = dto.FundingSourceName,
+                IsActive = dto.IsActive,
+                FundingSourceDescription = dto.FundingSourceDescription
+            };
         }
     }
 }

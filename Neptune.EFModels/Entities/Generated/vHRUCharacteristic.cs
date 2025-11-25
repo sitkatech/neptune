@@ -60,5 +60,5 @@ public partial class vHRUCharacteristic
 
     [StringLength(100)]
     [Unicode(false)]
-    public string? BaslineHRUCharacteristicLandUseCodeDisplayName { get; set; }
+    public string? BaselineHRUCharacteristicLandUseCodeDisplayName { get; set; }
 }

@@ -40,12 +40,12 @@ export class ProjectDocumentService extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public projectDocumentsProjectDocumentIDDelete(projectDocumentID: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public projectDocumentsProjectDocumentIDDelete(projectDocumentID: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public projectDocumentsProjectDocumentIDDelete(projectDocumentID: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public projectDocumentsProjectDocumentIDDelete(projectDocumentID: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deleteAttachmentProjectDocument(projectDocumentID: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deleteAttachmentProjectDocument(projectDocumentID: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deleteAttachmentProjectDocument(projectDocumentID: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deleteAttachmentProjectDocument(projectDocumentID: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (projectDocumentID === null || projectDocumentID === undefined) {
-            throw new Error('Required parameter projectDocumentID was null or undefined when calling projectDocumentsProjectDocumentIDDelete.');
+            throw new Error('Required parameter projectDocumentID was null or undefined when calling deleteAttachmentProjectDocument.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -92,12 +92,12 @@ export class ProjectDocumentService extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public projectDocumentsProjectDocumentIDGet(projectDocumentID: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectDocumentDto>;
-    public projectDocumentsProjectDocumentIDGet(projectDocumentID: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectDocumentDto>>;
-    public projectDocumentsProjectDocumentIDGet(projectDocumentID: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectDocumentDto>>;
-    public projectDocumentsProjectDocumentIDGet(projectDocumentID: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getAttachmentByIDProjectDocument(projectDocumentID: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectDocumentDto>;
+    public getAttachmentByIDProjectDocument(projectDocumentID: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectDocumentDto>>;
+    public getAttachmentByIDProjectDocument(projectDocumentID: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectDocumentDto>>;
+    public getAttachmentByIDProjectDocument(projectDocumentID: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (projectDocumentID === null || projectDocumentID === undefined) {
-            throw new Error('Required parameter projectDocumentID was null or undefined when calling projectDocumentsProjectDocumentIDGet.');
+            throw new Error('Required parameter projectDocumentID was null or undefined when calling getAttachmentByIDProjectDocument.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -148,12 +148,12 @@ export class ProjectDocumentService extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public projectDocumentsProjectDocumentIDPut(projectDocumentID: number, projectDocumentUpdateDto?: ProjectDocumentUpdateDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectDocumentDto>;
-    public projectDocumentsProjectDocumentIDPut(projectDocumentID: number, projectDocumentUpdateDto?: ProjectDocumentUpdateDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectDocumentDto>>;
-    public projectDocumentsProjectDocumentIDPut(projectDocumentID: number, projectDocumentUpdateDto?: ProjectDocumentUpdateDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectDocumentDto>>;
-    public projectDocumentsProjectDocumentIDPut(projectDocumentID: number, projectDocumentUpdateDto?: ProjectDocumentUpdateDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public updateAttachmentProjectDocument(projectDocumentID: number, projectDocumentUpdateDto?: ProjectDocumentUpdateDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ProjectDocumentDto>;
+    public updateAttachmentProjectDocument(projectDocumentID: number, projectDocumentUpdateDto?: ProjectDocumentUpdateDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectDocumentDto>>;
+    public updateAttachmentProjectDocument(projectDocumentID: number, projectDocumentUpdateDto?: ProjectDocumentUpdateDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectDocumentDto>>;
+    public updateAttachmentProjectDocument(projectDocumentID: number, projectDocumentUpdateDto?: ProjectDocumentUpdateDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (projectDocumentID === null || projectDocumentID === undefined) {
-            throw new Error('Required parameter projectDocumentID was null or undefined when calling projectDocumentsProjectDocumentIDPut.');
+            throw new Error('Required parameter projectDocumentID was null or undefined when calling updateAttachmentProjectDocument.');
         }
 
         let localVarHeaders = this.defaultHeaders;

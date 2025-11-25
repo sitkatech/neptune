@@ -182,7 +182,9 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
             // Check if it's an overlay and added to the map
             if (obj.overlay && this.map.hasLayer(obj.layer)) {
                 const legendItem = new LegendItem();
-                legendItem.Title = obj.group && obj.group.name ? obj.group.name : obj.name;
+                // if the layer uses a legend image, it may have the title text already in the image, so allow an empty title
+                const showEmptyTitle = (obj.layer as any)?.showEmptyTitle ?? false;
+                legendItem.Title = showEmptyTitle ? "" :  obj.group && obj.group.name ? obj.group.name : obj.name;
                 if (LeafletHelperService.hasLegendHtml(obj.layer)) {
                     const legendHtml = obj.layer.legendHtml;
                     legendItem.LegendHtml = this.sanitizer.bypassSecurityTrustHtml(legendHtml);
@@ -193,7 +195,7 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
                     legendItem.WmsLayerStyle = wmsParams ? wmsParams.styles : undefined;
                 }
 
-                if (legendItem.Title && (legendItem.LegendHtml || legendItem.WmsUrl) && !legendItems.some((item) => item.Title === legendItem.Title)) {
+                if ((showEmptyTitle || legendItem.Title) && (legendItem.LegendHtml || legendItem.WmsUrl) && !legendItems.some((item) => item.Title === legendItem.Title)) {
                     legendItems.push(legendItem);
                 }
             }

@@ -69,8 +69,8 @@ public class OnlandVisualTrashAssessmentObservationController(
     {
 
         var fileResource =
-            await HttpUtilities.MakeFileResourceFromFormFile(file.file, DbContext,
-                HttpContext, azureBlobStorageService);
+            await HttpUtilities.MakeFileResourceFromFormFileAsync(DbContext,
+                                                             HttpContext, azureBlobStorageService, file.file);
         var onlandVisualTrashAssessmentObservationPhotoStaging = new OnlandVisualTrashAssessmentObservationPhotoStaging
         {
             FileResource = fileResource,

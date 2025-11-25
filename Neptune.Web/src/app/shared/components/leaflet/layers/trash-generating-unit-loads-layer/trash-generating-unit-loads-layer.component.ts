@@ -16,8 +16,10 @@ export class TrashGeneratingUnitLoadsLayerComponent extends MapLayerBase impleme
     @Input() selectedJurisdictionID: number;
     public wmsOptions: L.WMSOptions;
     public layer;
+    public layerDisplayName: string;
 
     ngAfterViewInit(): void {
+        this.layerDisplayName = this.style == "current_load" ? "Current Net Loading Rate (gal/ac/yr)" : "Net Change in Trash Loading Rate (gal/ac/yr)";
         let cql_filter = `1=1`;
         if (this.selectedJurisdictionID) {
             cql_filter = `StormwaterJurisdictionID=${this.selectedJurisdictionID}`;
@@ -33,6 +35,10 @@ export class TrashGeneratingUnitLoadsLayerComponent extends MapLayerBase impleme
         } as any;
 
         this.layer = L.tileLayer.wms(environment.geoserverMapServiceUrl + "/wms?", this.wmsOptions);
+        if (this.style == "delta_load") {
+            (this.layer as any).showEmptyTitle = true; 
+        }
+
         this.initLayer();
     }
 

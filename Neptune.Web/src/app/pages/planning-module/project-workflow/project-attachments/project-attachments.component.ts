@@ -25,7 +25,7 @@ import { ProjectDocumentService } from "src/app/shared/generated/api/project-doc
     selector: "project-attachments",
     templateUrl: "./project-attachments.component.html",
     styleUrls: ["./project-attachments.component.scss"],
-    imports: [CustomRichTextComponent, FormsModule, NgClass, AttachmentsDisplayComponent, PageHeaderComponent, WorkflowBodyComponent, AlertDisplayComponent]
+    imports: [CustomRichTextComponent, FormsModule, NgClass, AttachmentsDisplayComponent, PageHeaderComponent, WorkflowBodyComponent, AlertDisplayComponent],
 })
 export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
     @ViewChild("fileUpload") fileUpload: any;
@@ -73,7 +73,7 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
         this.authenticationService.getCurrentUser().subscribe((currentUser) => {
             this.currentUser = currentUser;
 
-            this.projectService.projectsProjectIDGet(this.projectID).subscribe((project) => {
+            this.projectService.getProject(this.projectID).subscribe((project) => {
                 // redirect to review step if project is shared with OCTA grant program
                 if (project.ShareOCTAM2Tier2Scores) {
                     this.router.navigateByUrl(`/planning/projects/edit/${this.projectID}/review-and-share`);
@@ -154,7 +154,7 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
                 this.isLoadingDelete = true;
                 this.alertService.clearAlerts();
 
-                this.projectDocumentService.projectDocumentsProjectDocumentIDDelete(this.attachmentIDToRemove).subscribe(
+                this.projectDocumentService.deleteAttachmentProjectDocument(this.attachmentIDToRemove).subscribe(
                     (response) => {
                         this.isLoadingDelete = false;
                         this.alertService.pushAlert(new Alert("Attachment was successfully deleted.", AlertContext.Success, true));
@@ -185,7 +185,7 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
     }
 
     refreshAttachments(): void {
-        this.projectService.projectsProjectIDAttachmentsGet(this.projectID).subscribe((attachments) => {
+        this.projectService.listAttachmentsByProjectIDProject(this.projectID).subscribe((attachments) => {
             this.attachments = attachments;
             this.cdr.detectChanges();
         });
@@ -213,16 +213,14 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
             this.isLoadingSubmit = false;
         }
 
-        this.projectService
-            .projectsProjectIDAttachmentsPost(this.projectID, this.model.ProjectID, this.model.FileResource, this.model.DisplayName, this.model.DocumentDescription)
-            .subscribe(
-                (response) => {
-                    this.onSubmitSuccess(addAttachmentForm, "Project attachment '" + response.DisplayName + "' successfully added.");
-                },
-                (error) => {
-                    this.onSubmitFailure(error);
-                }
-            );
+        this.projectService.addAttachmentProject(this.projectID, this.model.ProjectID, this.model.FileResource, this.model.DisplayName, this.model.DocumentDescription).subscribe(
+            (response) => {
+                this.onSubmitSuccess(addAttachmentForm, "Project attachment '" + response.DisplayName + "' successfully added.");
+            },
+            (error) => {
+                this.onSubmitFailure(error);
+            }
+        );
     }
 
     public onEditSubmit(editAttachmentForm: NgForm): void {
@@ -231,7 +229,7 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
         this.invalidFields = [];
         this.alertService.clearAlerts();
 
-        this.projectDocumentService.projectDocumentsProjectDocumentIDPut(this.editAttachmentID, this.editModel).subscribe(
+        this.projectDocumentService.updateAttachmentProjectDocument(this.editAttachmentID, this.editModel).subscribe(
             (response) => {
                 this.isLoadingUpdate = false;
                 this.closeEditAttachmentModal();

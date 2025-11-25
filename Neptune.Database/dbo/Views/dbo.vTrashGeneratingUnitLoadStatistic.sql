@@ -31,14 +31,13 @@ Select
 	Cast(HasBaselineScore as bit) as HasBaselineScore,
 	Cast(HasProgressScore as bit) as HasProgressScore,
 	Case
-		When IsFullTrashCapture = 1 then 2.5
+		When IsFullTrashCapture = 1 then 0
+		When PartialTrashCaptureEffectivenessPercentage > 0 then BaselineLoadingRate * (1 - PartialTrashCaptureEffectivenessPercentage/100.0)
 		When OnlandVisualTrashAssessmentAreaProgressScore = 'A' then 2.5
 		When OnlandVisualTrashAssessmentAreaBaselineScore = 'A' then 2.5
-		When PartialTrashCaptureEffectivenessPercentage > 0 and BaselineLoadingRate * (1 - PartialTrashCaptureEffectivenessPercentage/100.0) > 2.5 then BaselineLoadingRate * (1 - PartialTrashCaptureEffectivenessPercentage/100.0)
 		When HasProgressScore = 1 then ProgressLoadingRate
 		When HasBaselineScore = 1 then BaselineLoadingRate
-		When BaselineLoadingRate * (1 - PartialTrashCaptureEffectivenessPercentage/100.0) > 2.5 then BaselineLoadingRate * (1 - PartialTrashCaptureEffectivenessPercentage/100.0)
-		Else 2.5
+		Else BaselineLoadingRate
 	end as CurrentLoadingRate,
 	ProgressLoadingRate,
 	DelineationIsVerified,
@@ -64,12 +63,13 @@ Select
 	TrashCaptureStatusSortOrder,
 	AssessmentScore,
 	MostRecentAssessmentDate,
-	CompletedAssessmentCount,
+	CompletedBaselineAssessmentCount,
+	CompletedProgressAssessmentCount,
 	IsPriorityLandUse -- ALUs are not PLUs
 
 From (
 	Select
-		TrashGeneratingUnitID,
+		tgu.TrashGeneratingUnitID,
 		tbmp.TreatmentBMPID,
 		tbmp.TreatmentBMPName,
 		tbmpt.TreatmentBMPTypeID,
@@ -149,17 +149,14 @@ From (
 	    end as TrashCaptureStatusSortOrder,
 	    case when ovtaad.MostRecentAssessmentScore is null then 'NotProvided' else ovtaad.MostRecentAssessmentScore end as AssessmentScore,
 	    ovtaad.MostRecentAssessmentDate,
-		ovtac.CompletedAssessmentCount,
+		ovtacb.CompletedBaselineAssessmentCount,
+		ovtacp.CompletedProgressAssessmentCount,
 	    Case when tgu.LandUseBlockID is null then 0 when plut.PriorityLandUseTypeName = 'ALU' then 0 else 1 end as IsPriorityLandUse -- ALUs are not PLUs
 
 	From
 		dbo.TrashGeneratingUnit tgu
         join dbo.TrashGeneratingUnit4326 tgu4326 on 
-            tgu.StormwaterJurisdictionID = tgu4326.StormwaterJurisdictionID and
-            isnull(tgu.OnlandVisualTrashAssessmentAreaID, 0) = isnull(tgu4326.OnlandVisualTrashAssessmentAreaID, 0) and
-            isnull(tgu.LandUseBlockID, 0) = isnull(tgu4326.LandUseBlockID, 0) and
-            isnull(tgu.DelineationID, 0) = isnull(tgu4326.DelineationID, 0) and
-            isnull(tgu.WaterQualityManagementPlanID, 0) = isnull(tgu4326.WaterQualityManagementPlanID, 0)
+            tgu.TrashGeneratingUnitID = tgu4326.TrashGeneratingUnitID
 		join dbo.StormwaterJurisdiction sj on tgu.StormwaterJurisdictionID = sj.StormwaterJurisdictionID
 		join dbo.Organization o on sj.OrganizationID = o.OrganizationID
 		left join dbo.LandUseBlock lub on tgu.LandUseBlockID = lub.LandUseBlockID
@@ -200,10 +197,20 @@ From (
 		(
 			Select
 				OnlandVisualTrashAssessmentAreaID,
-				count (*) as CompletedAssessmentCount
+				count (*) as CompletedBaselineAssessmentCount
 			from dbo.OnlandVisualTrashAssessment ovta
+			where ovta.IsProgressAssessment = 0
 			group by OnlandVisualTrashAssessmentAreaID
-		) ovtac on tgu.OnlandVisualTrashAssessmentAreaID = ovtac.OnlandVisualTrashAssessmentAreaID
+		) ovtacb on tgu.OnlandVisualTrashAssessmentAreaID = ovtacb.OnlandVisualTrashAssessmentAreaID
+		left join 
+		(
+			Select
+				OnlandVisualTrashAssessmentAreaID,
+				count (*) as CompletedProgressAssessmentCount
+			from dbo.OnlandVisualTrashAssessment ovta
+			where ovta.IsProgressAssessment = 1
+			group by OnlandVisualTrashAssessmentAreaID
+		) ovtacp on tgu.OnlandVisualTrashAssessmentAreaID = ovtacp.OnlandVisualTrashAssessmentAreaID
 	Where 
 		tgu.LandUseBlockID is not null
 		and lub.PermitTypeID = 1

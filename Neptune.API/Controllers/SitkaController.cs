@@ -19,7 +19,7 @@ namespace Neptune.API.Controllers
         protected readonly KeystoneService KeystoneService = keystoneService;
         protected readonly NeptuneConfiguration NeptuneConfiguration = neptuneConfiguration.Value;
 
-        protected PersonDto CallingUser => UserContext.GetUserFromHttpContext(dbContext, HttpContext);
+        protected PersonDto CallingUser => UserContext.GetUserAsDtoFromHttpContext(dbContext, HttpContext);
 
         protected ActionResult RequireNotNullThrowNotFound(object theObject, string objectType, object objectID)
         {

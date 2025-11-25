@@ -2,7 +2,7 @@
 
 namespace Neptune.EFModels.Entities;
 
-public static partial class WaterQualityManagementPlanExtensionMethods
+public static  class WaterQualityManagementPlanExtensionMethods
 {
     public static WaterQualityManagementPlanWithGeometryDto AsGeometryDto(
         this WaterQualityManagementPlan waterQualityManagementPlan)
@@ -43,5 +43,152 @@ public static partial class WaterQualityManagementPlanExtensionMethods
                 waterQualityManagementPlan.WaterQualityManagementPlanBoundary?.Geometry4326
         };
         return dto;
+    }
+
+    public static WaterQualityManagementPlanDto AsDto(this WaterQualityManagementPlan plan)
+    {
+        return new WaterQualityManagementPlanDto
+        {
+            WaterQualityManagementPlanID = plan.WaterQualityManagementPlanID,
+            StormwaterJurisdictionID = plan.StormwaterJurisdictionID,
+            StormwaterJurisdictionOrganizationName = plan.StormwaterJurisdiction?.GetOrganizationDisplayName(),
+            WaterQualityManagementPlanLandUseID = plan.WaterQualityManagementPlanLandUseID,
+            WaterQualityManagementPlanLandUseDisplayName = plan.WaterQualityManagementPlanLandUse?.WaterQualityManagementPlanLandUseDisplayName,
+            WaterQualityManagementPlanPriorityID = plan.WaterQualityManagementPlanPriorityID,
+            WaterQualityManagementPlanPriorityDisplayName = plan.WaterQualityManagementPlanPriority?.WaterQualityManagementPlanPriorityDisplayName,
+            WaterQualityManagementPlanStatusID = plan.WaterQualityManagementPlanStatusID,
+            WaterQualityManagementPlanStatusDisplayName = plan.WaterQualityManagementPlanStatus?.WaterQualityManagementPlanStatusDisplayName,
+            WaterQualityManagementPlanDevelopmentTypeID = plan.WaterQualityManagementPlanDevelopmentTypeID,
+            WaterQualityManagementPlanDevelopmentTypeDisplayName = plan.WaterQualityManagementPlanDevelopmentType?.WaterQualityManagementPlanDevelopmentTypeDisplayName,
+            WaterQualityManagementPlanName = plan.WaterQualityManagementPlanName,
+            ApprovalDate = plan.ApprovalDate,
+            MaintenanceContactName = plan.MaintenanceContactName,
+            MaintenanceContactOrganization = plan.MaintenanceContactOrganization,
+            MaintenanceContactPhone = plan.MaintenanceContactPhone,
+            MaintenanceContactAddress1 = plan.MaintenanceContactAddress1,
+            MaintenanceContactAddress2 = plan.MaintenanceContactAddress2,
+            MaintenanceContactCity = plan.MaintenanceContactCity,
+            MaintenanceContactState = plan.MaintenanceContactState,
+            MaintenanceContactZip = plan.MaintenanceContactZip,
+            WaterQualityManagementPlanPermitTermID = plan.WaterQualityManagementPlanPermitTermID,
+            WaterQualityManagementPlanPermitTermDisplayName = plan.WaterQualityManagementPlanPermitTerm?.WaterQualityManagementPlanPermitTermDisplayName,
+            HydromodificationAppliesTypeID = plan.HydromodificationAppliesTypeID,
+            HydromodificationAppliesTypeDisplayName = plan.HydromodificationAppliesType?.HydromodificationAppliesTypeDisplayName,
+            DateOfConstruction = plan.DateOfConstruction,
+            HydrologicSubareaID = plan.HydrologicSubareaID,
+            HydrologicSubareaName = plan.HydrologicSubarea?.HydrologicSubareaName,
+            RecordNumber = plan.RecordNumber,
+            RecordedWQMPAreaInAcres = plan.RecordedWQMPAreaInAcres,
+            TrashCaptureStatusTypeID = plan.TrashCaptureStatusTypeID,
+            TrashCaptureEffectiveness = plan.TrashCaptureEffectiveness,
+            TrashCaptureStatusTypeDisplayName = plan.TrashCaptureStatusType?.TrashCaptureStatusTypeDisplayName,
+            WaterQualityManagementPlanModelingApproachID = plan.WaterQualityManagementPlanModelingApproachID,
+            LastNereidLogID = plan.LastNereidLogID,
+            WaterQualityManagementPlanBoundaryNotes = plan.WaterQualityManagementPlanBoundaryNotes,
+            //boundary bbox as WMS string
+            WaterQualityManagementPlanBoundaryBBox = plan.WaterQualityManagementPlanBoundary?.Geometry4326 != null 
+                ? $"{plan.WaterQualityManagementPlanBoundary.Geometry4326.EnvelopeInternal.MinX}, {plan.WaterQualityManagementPlanBoundary.Geometry4326.EnvelopeInternal.MinY}, {plan.WaterQualityManagementPlanBoundary.Geometry4326.EnvelopeInternal.MaxX}, {plan.WaterQualityManagementPlanBoundary.Geometry4326.EnvelopeInternal.MaxY}" 
+                : null,
+
+            Parcels = plan.WaterQualityManagementPlanParcels.Select(x => new ParcelDisplayDto()
+            {
+                ParcelID = x.ParcelID,
+                ParcelNumber = x.Parcel.ParcelNumber,
+            }).ToList(),
+
+            TreatmentBMPs = plan.TreatmentBMPs.Select(x => new TreatmentBMPMinimalDto()
+            {
+                TreatmentBMPID = x.TreatmentBMPID,
+                TreatmentBMPName = x.TreatmentBMPName,
+                Area = x.Delineation.GetDelineationArea()
+            }).ToList()
+        };
+    }
+
+    public static WaterQualityManagementPlanSimpleDto AsSimpleDto(this WaterQualityManagementPlan plan)
+    {
+        return new WaterQualityManagementPlanSimpleDto
+        {
+            WaterQualityManagementPlanID = plan.WaterQualityManagementPlanID,
+            StormwaterJurisdictionID = plan.StormwaterJurisdictionID,
+            WaterQualityManagementPlanLandUseID = plan.WaterQualityManagementPlanLandUseID,
+            WaterQualityManagementPlanPriorityID = plan.WaterQualityManagementPlanPriorityID,
+            WaterQualityManagementPlanStatusID = plan.WaterQualityManagementPlanStatusID,
+            WaterQualityManagementPlanDevelopmentTypeID = plan.WaterQualityManagementPlanDevelopmentTypeID,
+            WaterQualityManagementPlanName = plan.WaterQualityManagementPlanName,
+            ApprovalDate = plan.ApprovalDate,
+            WaterQualityManagementPlanPermitTermID = plan.WaterQualityManagementPlanPermitTermID,
+            HydromodificationAppliesTypeID = plan.HydromodificationAppliesTypeID,
+            DateOfConstruction = plan.DateOfConstruction,
+            HydrologicSubareaID = plan.HydrologicSubareaID,
+            RecordNumber = plan.RecordNumber,
+            RecordedWQMPAreaInAcres = plan.RecordedWQMPAreaInAcres,
+            TrashCaptureStatusTypeID = plan.TrashCaptureStatusTypeID,
+            TrashCaptureEffectiveness = plan.TrashCaptureEffectiveness,
+            WaterQualityManagementPlanModelingApproachID = plan.WaterQualityManagementPlanModelingApproachID,
+        };
+    }
+
+    public static void UpdateFromUpsertDto(this WaterQualityManagementPlan entity, WaterQualityManagementPlanUpsertDto dto)
+    {
+        entity.StormwaterJurisdictionID = dto.StormwaterJurisdictionID;
+        entity.WaterQualityManagementPlanLandUseID = dto.WaterQualityManagementPlanLandUseID;
+        entity.WaterQualityManagementPlanPriorityID = dto.WaterQualityManagementPlanPriorityID;
+        entity.WaterQualityManagementPlanStatusID = dto.WaterQualityManagementPlanStatusID;
+        entity.WaterQualityManagementPlanDevelopmentTypeID = dto.WaterQualityManagementPlanDevelopmentTypeID;
+        entity.WaterQualityManagementPlanName = dto.WaterQualityManagementPlanName;
+        entity.ApprovalDate = dto.ApprovalDate;
+        entity.MaintenanceContactName = dto.MaintenanceContactName;
+        entity.MaintenanceContactOrganization = dto.MaintenanceContactOrganization;
+        entity.MaintenanceContactPhone = dto.MaintenanceContactPhone;
+        entity.MaintenanceContactAddress1 = dto.MaintenanceContactAddress1;
+        entity.MaintenanceContactAddress2 = dto.MaintenanceContactAddress2;
+        entity.MaintenanceContactCity = dto.MaintenanceContactCity;
+        entity.MaintenanceContactState = dto.MaintenanceContactState;
+        entity.MaintenanceContactZip = dto.MaintenanceContactZip;
+        entity.WaterQualityManagementPlanPermitTermID = dto.WaterQualityManagementPlanPermitTermID;
+        entity.HydromodificationAppliesTypeID = dto.HydromodificationAppliesTypeID;
+        entity.DateOfConstruction = dto.DateOfConstruction;
+        entity.HydrologicSubareaID = dto.HydrologicSubareaID;
+        entity.RecordNumber = dto.RecordNumber;
+        entity.RecordedWQMPAreaInAcres = dto.RecordedWQMPAreaInAcres;
+        entity.TrashCaptureStatusTypeID = dto.TrashCaptureStatusTypeID;
+        entity.TrashCaptureEffectiveness = dto.TrashCaptureEffectiveness;
+        entity.WaterQualityManagementPlanModelingApproachID = dto.WaterQualityManagementPlanModelingApproachID;
+        entity.LastNereidLogID = dto.LastNereidLogID;
+        entity.WaterQualityManagementPlanBoundaryNotes = dto.WaterQualityManagementPlanBoundaryNotes;
+    }
+
+    public static WaterQualityManagementPlan AsEntity(this WaterQualityManagementPlanUpsertDto dto)
+    {
+        return new WaterQualityManagementPlan
+        {
+            StormwaterJurisdictionID = dto.StormwaterJurisdictionID,
+            WaterQualityManagementPlanLandUseID = dto.WaterQualityManagementPlanLandUseID,
+            WaterQualityManagementPlanPriorityID = dto.WaterQualityManagementPlanPriorityID,
+            WaterQualityManagementPlanStatusID = dto.WaterQualityManagementPlanStatusID,
+            WaterQualityManagementPlanDevelopmentTypeID = dto.WaterQualityManagementPlanDevelopmentTypeID,
+            WaterQualityManagementPlanName = dto.WaterQualityManagementPlanName,
+            ApprovalDate = dto.ApprovalDate,
+            MaintenanceContactName = dto.MaintenanceContactName,
+            MaintenanceContactOrganization = dto.MaintenanceContactOrganization,
+            MaintenanceContactPhone = dto.MaintenanceContactPhone,
+            MaintenanceContactAddress1 = dto.MaintenanceContactAddress1,
+            MaintenanceContactAddress2 = dto.MaintenanceContactAddress2,
+            MaintenanceContactCity = dto.MaintenanceContactCity,
+            MaintenanceContactState = dto.MaintenanceContactState,
+            MaintenanceContactZip = dto.MaintenanceContactZip,
+            WaterQualityManagementPlanPermitTermID = dto.WaterQualityManagementPlanPermitTermID,
+            HydromodificationAppliesTypeID = dto.HydromodificationAppliesTypeID,
+            DateOfConstruction = dto.DateOfConstruction,
+            HydrologicSubareaID = dto.HydrologicSubareaID,
+            RecordNumber = dto.RecordNumber,
+            RecordedWQMPAreaInAcres = dto.RecordedWQMPAreaInAcres,
+            TrashCaptureStatusTypeID = dto.TrashCaptureStatusTypeID,
+            TrashCaptureEffectiveness = dto.TrashCaptureEffectiveness,
+            WaterQualityManagementPlanModelingApproachID = dto.WaterQualityManagementPlanModelingApproachID,
+            LastNereidLogID = dto.LastNereidLogID,
+            WaterQualityManagementPlanBoundaryNotes = dto.WaterQualityManagementPlanBoundaryNotes
+        };
     }
 }

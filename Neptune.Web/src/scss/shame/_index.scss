@@ -1,1 +1,7 @@
 @forward "svg";
+
+// Allow pointer events to pass through the overlay backdrop for dropdowns
+.dropdown-overlay-no-pointer {
+    background: transparent !important;
+    pointer-events: none !important;
+}

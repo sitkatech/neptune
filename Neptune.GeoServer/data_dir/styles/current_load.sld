@@ -6,6 +6,21 @@
       <Title>SLD Cook Book: Load-based polygon</Title>
       <FeatureTypeStyle>
         <Rule>
+          <Name>0</Name>
+          <Title>0 (Full Capture)</Title>
+          <ogc:Filter>
+            <ogc:PropertyIsEqualTo>
+              <ogc:PropertyName>CurrentLoadingRate</ogc:PropertyName>
+              <ogc:Literal>0</ogc:Literal>
+            </ogc:PropertyIsEqualTo>
+          </ogc:Filter>
+          <PolygonSymbolizer>
+            <Fill>
+              <CssParameter name="fill">#fee5d9</CssParameter>
+            </Fill>
+          </PolygonSymbolizer>
+        </Rule>
+        <Rule>
           <Name>2.5</Name>
           <Title>2.5</Title>
           <ogc:Filter>

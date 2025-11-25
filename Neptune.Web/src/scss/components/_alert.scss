@@ -11,7 +11,7 @@
     border-top-style: solid;
     border-radius: 0;
     box-shadow: 0 2px 4px rgba($black, 0.2);
-    padding: 0;
+    padding: $spacing-200 $spacing-400;
     margin-bottom: 2rem;
 
     @include tablet {
@@ -74,6 +74,10 @@
         i {
             color: $primary;
         }
+    }
+
+    &-column {
+        flex-direction: column;
     }
 
     &-light {

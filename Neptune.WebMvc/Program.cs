@@ -63,6 +63,7 @@ var builder = WebApplication.CreateBuilder(args);
         {
             options.JsonSerializerOptions.Converters.Add(new GeoJsonConverterFactory(false));
             options.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
+            options.JsonSerializerOptions.Converters.Add(new NullableDateTimeConverter());
             options.JsonSerializerOptions.Converters.Add(new DoubleConverter(10));
             options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             options.JsonSerializerOptions.ReadCommentHandling = JsonCommentHandling.Skip;

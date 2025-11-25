@@ -14,7 +14,7 @@ import { ProjectService } from "src/app/shared/generated/api/project.service";
 import { ProjectNetworkSolveHistoryStatusTypeEnum } from "src/app/shared/generated/enum/project-network-solve-history-status-type-enum";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
 import { GrantScoresComponent } from "src/app/pages/planning-module/projects/grant-scores/grant-scores.component";
-import { ModelResultsComponent } from "src/app/pages/planning-module/projects/model-results/model-results.component";
+import { ProjectModelResultsComponent } from "src/app/pages/planning-module/projects/project-model-results/project-model-results.component";
 import { FieldDefinitionComponent } from "src/app/shared/components/field-definition/field-definition.component";
 import { AsyncPipe } from "@angular/common";
 import { CustomRichTextComponent } from "src/app/shared/components/custom-rich-text/custom-rich-text.component";
@@ -28,6 +28,7 @@ import { StormwaterNetworkLayerComponent } from "src/app/shared/components/leafl
 import { WqmpsLayerComponent } from "src/app/shared/components/leaflet/layers/wqmps-layer/wqmps-layer.component";
 import { NeptuneMapComponent, NeptuneMapInitEvent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
 import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet/layers/inventoried-bmps-layer/inventoried-bmps-layer.component";
+import { OverlayMode } from "src/app/shared/components/leaflet/layers/generic-wms-wfs-layer/overlay-mode.enum";
 
 @Component({
     selector: "modeled-performance",
@@ -37,7 +38,7 @@ import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet
         CustomRichTextComponent,
         AsyncPipe,
         FieldDefinitionComponent,
-        ModelResultsComponent,
+        ProjectModelResultsComponent,
         GrantScoresComponent,
         PageHeaderComponent,
         WorkflowBodyComponent,
@@ -52,6 +53,7 @@ import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet
     ],
 })
 export class ModeledPerformanceComponent implements OnInit {
+    public OverlayMode = OverlayMode;
     public ProjectNetworkHistoryStatusTypeEnum = ProjectNetworkSolveHistoryStatusTypeEnum;
     public projectNetworkSolveHistories$: Observable<ProjectNetworkSolveHistorySimpleDto[]>;
 
@@ -93,7 +95,7 @@ export class ModeledPerformanceComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.project$ = this.projectService.projectsProjectIDGet(this.projectID).pipe(
+        this.project$ = this.projectService.getProject(this.projectID).pipe(
             tap((project) => {
                 // redirect to review step if project is shared with OCTA grant program
                 if (project.ShareOCTAM2Tier2Scores) {
@@ -104,9 +106,9 @@ export class ModeledPerformanceComponent implements OnInit {
         this.projectNetworkSolveHistories$ = this.project$.pipe(
             switchMap((project) => {
                 return combineLatest({
-                    TreatmentBMPs: this.projectService.projectsProjectIDTreatmentBmpsGet(project.ProjectID),
-                    Delineations: this.projectService.projectsProjectIDDelineationsGet(project.ProjectID),
-                    ProjectNetworkSolveHistories: this.projectService.projectsProjectIDProjectNetworkSolveHistoriesGet(project.ProjectID),
+                    TreatmentBMPs: this.projectService.listTreatmentBMPsByProjectIDProject(project.ProjectID),
+                    Delineations: this.projectService.listDelineationsByProjectIDProject(project.ProjectID),
+                    ProjectNetworkSolveHistories: this.projectService.listProjectNetworkSolveHistoriesForProjectProject(project.ProjectID),
                 });
             }),
             tap((data) => {
@@ -124,7 +126,7 @@ export class ModeledPerformanceComponent implements OnInit {
 
         this.boundingBox$ = this.project$.pipe(
             switchMap((project) => {
-                return this.projectService.projectsProjectIDBoundingBoxGet(project.ProjectID);
+                return this.projectService.getBoundingBoxByProjectIDProject(project.ProjectID);
             })
         );
 
@@ -240,11 +242,11 @@ export class ModeledPerformanceComponent implements OnInit {
     }
 
     triggerModelRunForProject(): void {
-        this.projectService.projectsProjectIDModeledPerformancePost(this.projectID).subscribe(
+        this.projectService.triggerModeledPerformanceForProjectProject(this.projectID).subscribe(
             (results) => {
                 this.alertService.pushAlert(new Alert("Model run was successfully started and will run in the background.", AlertContext.Success, true));
                 window.scroll(0, 0);
-                this.projectNetworkSolveHistories$ = this.projectService.projectsProjectIDProjectNetworkSolveHistoriesGet(this.projectID);
+                this.projectNetworkSolveHistories$ = this.projectService.listProjectNetworkSolveHistoriesForProjectProject(this.projectID);
             },
             (error) => {
                 window.scroll(0, 0);

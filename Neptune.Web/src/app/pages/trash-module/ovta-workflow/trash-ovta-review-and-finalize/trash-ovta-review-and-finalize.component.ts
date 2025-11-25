@@ -44,8 +44,8 @@ export class TrashOvtaReviewAndFinalizeComponent {
     public onlandVisualTrashAssessmentScoreDropdown = OnlandVisualTrashAssessmentScoresAsSelectDropdownOptions;
 
     public ProgressScoreOptions: FormInputOption[] = [
-        { Value: false, Label: "Baseline", Disabled: false },
-        { Value: true, Label: "Progress", Disabled: false },
+        { Value: false, Label: "Baseline", disabled: false },
+        { Value: true, Label: "Progress", disabled: false },
     ];
 
     public formGroup: FormGroup<OnlandVisualTrashAssessmentReviewAndFinalizeDtoCustomForm> = new FormGroup<OnlandVisualTrashAssessmentReviewAndFinalizeDtoCustomForm>({
@@ -75,9 +75,7 @@ export class TrashOvtaReviewAndFinalizeComponent {
     ) {}
 
     ngOnInit(): void {
-        this.onlandVisualTrashAssessment$ = this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDReviewAndFinalizeGet(
-            this.onlandVisualTrashAssessmentID
-        );
+        this.onlandVisualTrashAssessment$ = this.onlandVisualTrashAssessmentService.getByIDForReviewAndFinalizeOnlandVisualTrashAssessment(this.onlandVisualTrashAssessmentID);
 
         this.onlandVisualTrashAssessmentObservations$ = this.onlandVisualTrashAssessment$.pipe(
             tap((ovta) => {
@@ -104,7 +102,7 @@ export class TrashOvtaReviewAndFinalizeComponent {
                 });
             }),
             switchMap((onlandVisualTrashAssessment) => {
-                return this.onlandVisualTrashAssessmentObservationService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsGet(
+                return this.onlandVisualTrashAssessmentObservationService.listByOnlandVisualTrashAssessmentIDOnlandVisualTrashAssessmentObservation(
                     onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID
                 );
             })
@@ -144,7 +142,7 @@ export class TrashOvtaReviewAndFinalizeComponent {
             andContinue ? OnlandVisualTrashAssessmentStatusEnum.Complete : OnlandVisualTrashAssessmentStatusEnum.InProgress
         );
         this.onlandVisualTrashAssessmentService
-            .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDReviewAndFinalizePost(this.onlandVisualTrashAssessmentID, this.formGroup.getRawValue())
+            .updateReviewAndFinalizeOnlandVisualTrashAssessment(this.onlandVisualTrashAssessmentID, this.formGroup.getRawValue())
             .subscribe(() => {
                 this.alertService.clearAlerts();
                 this.alertService.pushAlert(new Alert("Assessment successfully updated.", AlertContext.Success));

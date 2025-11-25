@@ -14,6 +14,7 @@ public static class OnlandVisualTrashAssessmentAreas
         return dbContext.OnlandVisualTrashAssessmentAreas
                 .Include(x => x.StormwaterJurisdiction)
                 .ThenInclude(x => x.Organization)
+                .Include(x => x.OnlandVisualTrashAssessments)
             ;
     }
 

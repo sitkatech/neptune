@@ -21,7 +21,9 @@ export class TrashGeneratingUnitDto {
     StormwaterJurisdictionName?: string | null;
     BaselineLoadingRate?: number | null;
     ProgressLoadingRate?: number | null;
+    LoadingRateDelta?: number | null;
     LandUseType?: string | null;
+    PermitClass?: string | null;
     CurrentLoadingRate?: number | null;
     OnlandVisualTrashAssessmentAreaID?: number | null;
     OnlandVisualTrashAssessmentAreaName?: string | null;
@@ -34,7 +36,8 @@ export class TrashGeneratingUnitDto {
     LastUpdateDate?: string | null;
     Area?: number;
     AssessmentDate?: string | null;
-    CompletedAssessmentCount?: number | null;
+    CompletedBaselineAssessmentCount?: number | null;
+    CompletedProgressAssessmentCount?: number | null;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
@@ -51,7 +54,9 @@ export interface TrashGeneratingUnitDtoForm {
     StormwaterJurisdictionName?: FormControl<string>;
     BaselineLoadingRate?: FormControl<number>;
     ProgressLoadingRate?: FormControl<number>;
+    LoadingRateDelta?: FormControl<number>;
     LandUseType?: FormControl<string>;
+    PermitClass?: FormControl<string>;
     CurrentLoadingRate?: FormControl<number>;
     OnlandVisualTrashAssessmentAreaID?: FormControl<number>;
     OnlandVisualTrashAssessmentAreaName?: FormControl<string>;
@@ -64,7 +69,8 @@ export interface TrashGeneratingUnitDtoForm {
     LastUpdateDate?: FormControl<string>;
     Area?: FormControl<number>;
     AssessmentDate?: FormControl<string>;
-    CompletedAssessmentCount?: FormControl<number>;
+    CompletedBaselineAssessmentCount?: FormControl<number>;
+    CompletedProgressAssessmentCount?: FormControl<number>;
 }
 
 export class TrashGeneratingUnitDtoFormControls { 
@@ -168,7 +174,27 @@ export class TrashGeneratingUnitDtoFormControls {
             ],
         }
     );
+    public static LoadingRateDelta = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
     public static LandUseType = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static PermitClass = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {
@@ -298,7 +324,17 @@ export class TrashGeneratingUnitDtoFormControls {
             ],
         }
     );
-    public static CompletedAssessmentCount = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+    public static CompletedBaselineAssessmentCount = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static CompletedProgressAssessmentCount = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
         value,
         formControlOptions ?? 
         {

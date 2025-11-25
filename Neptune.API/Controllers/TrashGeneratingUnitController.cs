@@ -45,7 +45,9 @@ public class TrashGeneratingUnitController(
                 StormwaterJurisdictionName = x.OrganizationName,
                 BaselineLoadingRate = x.BaselineLoadingRate,
                 ProgressLoadingRate = x.ProgressLoadingRate,
+                LoadingRateDelta = x.LoadingRateDelta,
                 LandUseType = x.LandUseType,
+                PermitClass = x.PermitClass,
                 CurrentLoadingRate = x.CurrentLoadingRate,
                 OnlandVisualTrashAssessmentAreaID = x.OnlandVisualTrashAssessmentAreaID,
                 OnlandVisualTrashAssessmentAreaName = x.OnlandVisualTrashAssessmentAreaName,
@@ -58,7 +60,8 @@ public class TrashGeneratingUnitController(
                 LastUpdateDate = x.LastUpdateDate,
                 Area = x.Area * Constants.SquareMetersToAcres,
                 AssessmentDate = x.MostRecentAssessmentDate,
-                CompletedAssessmentCount = x.CompletedAssessmentCount
+                CompletedBaselineAssessmentCount = x.CompletedBaselineAssessmentCount,
+                CompletedProgressAssessmentCount = x.CompletedProgressAssessmentCount
             }).FirstOrDefault();
         
         return Ok(trashGeneratingUnitDto);

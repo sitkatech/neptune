@@ -16,11 +16,11 @@
     <div class="g-col-9">
         <neptune-map (onMapLoad)="handleMapReady($event)" [mapHeight]="mapHeight" [showLegend]="false" [boundingBox]="boundingBox">
             @if (mapIsReady) {
-            <regional-subbasins-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></regional-subbasins-layer>
+            <regional-subbasins-layer [mode]="OverlayMode.ReferenceOnly" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></regional-subbasins-layer>
             } @if (mapIsReady) {
             <stormwater-network-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="20"></stormwater-network-layer>
             } @if (mapIsReady) {
-            <jurisdictions-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="30"></jurisdictions-layer>
+            <jurisdictions-layer [mode]="OverlayMode.ReferenceOnly" [map]="map" [layerControl]="layerControl" [sortOrder]="30"></jurisdictions-layer>
             } @if (mapIsReady) {
             <wqmps-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="40"></wqmps-layer>
             } @if (mapIsReady) {

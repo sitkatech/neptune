@@ -1,9 +1,10 @@
 MERGE INTO dbo.NeptuneArea AS Target
 USING (VALUES
-(1, 'Trash', 'Trash Module', 30, 1),
+(1, 'Trash', 'Trash Module', 40, 1),
 (2, 'OCStormwaterTools', 'Inventory Module', 10, 1),
 (3, 'Modeling', 'Modeling Module', 20, 1),
-(4, 'Planning', 'Planning Module', 40, 1)
+(4, 'Planning', 'Planning Module', 30, 1),
+(5, 'AI', 'AI Module', 50, 1)
 )
 AS Source (NeptuneAreaID, NeptuneAreaName, NeptuneAreaDisplayName, SortOrder, ShowOnPrimaryNavigation)
 ON Target.NeptuneAreaID = Source.NeptuneAreaID

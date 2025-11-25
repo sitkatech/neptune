@@ -10,9 +10,26 @@ export const routeParams = {
     projectID: "projectID",
     onlandVisualTrashAssessmentID: "onlandVisualTrashAssessmentID",
     onlandVisualTrashAssessmentAreaID: "onlandVisualTrashAssessmentAreaID",
+    treatmentBMPID: "treatmentBMPID",
+    loadGeneratingUnitID: "loadGeneratingUnitID",
+    jurisdictionID: "jurisdictionID",
+    regionalSubbasinID: "regionalSubbasinID",
+    customAttributePurposeID: "customAttributePurposeID",
 };
 
 export const routes: Routes = [
+    {
+        path: "ai",
+        title: "AI Module",
+        loadComponent: () => import("./pages/ai-module/ai-site-layout.component").then((m) => m.AiSiteLayoutComponent),
+        children: [
+            {
+                path: "",
+                title: "AI Home",
+                loadComponent: () => import("./pages/ai-module/ai-home/ai-home.component").then((m) => m.AiHomeComponent),
+            },
+        ],
+    },
     {
         path: `planning`,
         title: "Stormwater Tools",
@@ -318,11 +335,197 @@ export const routes: Routes = [
                 loadComponent: () => import("./pages/field-definition-edit/field-definition-edit.component").then((m) => m.FieldDefinitionEditComponent),
                 canActivate: [UnauthenticatedAccessGuard, ManagerOnlyGuard],
             },
+            { path: "users", title: "Users", loadComponent: () => import("./pages/users/users.component").then((m) => m.UsersComponent) },
+            {
+                path: "organizations",
+                title: "Organizations",
+                loadComponent: () => import("./pages/organizations/organizations.component").then((m) => m.OrganizationsComponent),
+            },
             {
                 path: "labels-and-definitions",
                 title: "Labels and Definitions",
                 loadComponent: () => import("./pages/field-definition-list/field-definition-list.component").then((m) => m.FieldDefinitionListComponent),
                 canActivate: [UnauthenticatedAccessGuard, ManagerOnlyGuard],
+            },
+            {
+                path: "jurisdictions",
+                title: "Jurisdictions",
+                loadComponent: () => import("./pages/jurisdictions/jurisdictions.component").then((m) => m.JurisdictionsComponent),
+            },
+            {
+                path: `jurisdictions/:${routeParams.jurisdictionID}`,
+                title: "Jurisdiction Detail",
+                loadComponent: () => import("./pages/jurisdictions/jurisdiction-detail/jurisdiction-detail.component").then((m) => m.JurisdictionDetailComponent),
+            },
+            {
+                path: "find-bmp",
+                title: "Find a BMP",
+                loadComponent: () => import("./pages/find-bmp/find-bmp.component").then((m) => m.FindBmpComponent),
+            },
+            {
+                path: "modeling-parameters",
+                title: "Modeling Parameters",
+                loadComponent: () => import("./pages/modeling-parameters/modeling-parameters.component").then((m) => m.ModelingParametersComponent),
+            },
+            {
+                path: "treatment-bmps",
+                title: "View All BMPs",
+                loadComponent: () => import("./pages/treatment-bmps/treatment-bmps.component").then((m) => m.TreatmentBmpsComponent),
+            },
+            {
+                path: "treatment-bmps/new",
+                title: "Create New BMP",
+                loadComponent: () => import("./pages/treatment-bmps/create-treatment-bmp/create-treatment-bmp.component").then((m) => m.CreateTreatmentBmpComponent),
+                canDeactivate: [UnsavedChangesGuard],
+            },
+            {
+                path: `treatment-bmps/:${routeParams.treatmentBMPID}`,
+                title: "Treatment BMP Detail",
+                loadComponent: () => import("./pages/treatment-bmps/treatment-bmp-detail/treatment-bmp-detail.component").then((m) => m.TreatmentBmpDetailComponent),
+            },
+            {
+                path: `treatment-bmps/:${routeParams.treatmentBMPID}/edit-basic-info`,
+                title: "Edit BMP Basic Info",
+                loadComponent: () =>
+                    import("./pages/treatment-bmps/treatment-bmp-detail/treatment-bmp-update-basic-info/treatment-bmp-update-basic-info.component").then(
+                        (m) => m.TreatmentBmpUpdateBasicInfoComponent
+                    ),
+                canDeactivate: [UnsavedChangesGuard],
+            },
+            {
+                path: `treatment-bmps/:${routeParams.treatmentBMPID}/edit-images`,
+                title: "Edit BMP Images",
+                loadComponent: () =>
+                    import("./pages/treatment-bmps/treatment-bmp-detail/treatment-bmp-update-images/treatment-bmp-update-images.component").then(
+                        (m) => m.TreatmentBmpUpdateImagesComponent
+                    ),
+                canDeactivate: [UnsavedChangesGuard],
+            },
+            {
+                path: `treatment-bmps/:${routeParams.treatmentBMPID}/edit-location`,
+                title: "Edit BMP Location",
+                loadComponent: () =>
+                    import("./pages/treatment-bmps/treatment-bmp-detail/treatment-bmp-update-location/treatment-bmp-update-location.component").then(
+                        (m) => m.TreatmentBmpUpdateLocationComponent
+                    ),
+                canDeactivate: [UnsavedChangesGuard],
+            },
+            {
+                path: `treatment-bmps/:${routeParams.treatmentBMPID}/edit-custom-attributes/:${routeParams.customAttributePurposeID}`,
+                title: "Edit BMP Custom Attributes",
+                loadComponent: () =>
+                    import("./pages/treatment-bmps/treatment-bmp-detail/treatment-bmp-update-custom-attributes/treatment-bmp-update-custom-attributes.component").then(
+                        (m) => m.TreatmentBmpUpdateCustomAttributesComponent
+                    ),
+                canDeactivate: [UnsavedChangesGuard],
+            },
+            {
+                path: "latest-bmp-assessments",
+                title: "View Latest BMP Assessments",
+                loadComponent: () => import("./pages/latest-bmp-assessments/latest-bmp-assessments.component").then((m) => m.LatestBmpAssessmentsComponent),
+            },
+            {
+                path: "field-records",
+                title: "View All Field Records",
+                loadComponent: () => import("./pages/field-records/field-records.component").then((m) => m.FieldRecordsComponent),
+            },
+            {
+                path: "water-quality-management-plans",
+                title: "Water Quality Management Plans",
+                loadComponent: () => import("./pages/wqmps/wqmps.component").then((m) => m.WqmpsComponent),
+            },
+            {
+                path: "wqmp-annual-report",
+                title: "WQMP Annual Report",
+                loadComponent: () => import("./pages/wqmp-annual-report/wqmp-annual-report.component").then((m) => m.WqmpAnnualReportComponent),
+            },
+            {
+                path: "parcels",
+                title: "Parcels",
+                loadComponent: () => import("./pages/parcels/parcels.component").then((m) => m.ParcelsComponent),
+            },
+            // Program Info
+            {
+                path: "program-info/observation-types",
+                title: "Observation Types",
+                loadComponent: () => import("./pages/program-info/observation-types.component").then((m) => m.ObservationTypesComponent),
+            },
+            {
+                path: "program-info/treatment-bmp-types",
+                title: "Treatment BMP Types",
+                loadComponent: () => import("./pages/program-info/treatment-bmp-types.component").then((m) => m.TreatmentBmpTypesComponent),
+            },
+            {
+                path: "funding-sources",
+                title: "Funding Sources",
+                loadComponent: () => import("./pages/funding-sources/funding-sources.component").then((m) => m.FundingSourcesComponent),
+            },
+            // Dashboard
+            {
+                path: "dashboard",
+                title: "Dashboard",
+                loadComponent: () => import("./pages/dashboard/dashboard.component").then((m) => m.DashboardComponent),
+            },
+            // Delineation
+            {
+                path: "delineation/delineation-map",
+                title: "Delineation Map",
+                loadComponent: () => import("./pages/delineation/delineation-map.component").then((m) => m.DelineationMapComponent),
+            },
+            {
+                path: "delineation/delineation-reconciliation-report",
+                title: "Delineation Reconciliation Report",
+                loadComponent: () => import("./pages/delineation/delineation-reconciliation-report.component").then((m) => m.DelineationReconciliationReportComponent),
+            },
+            // Data Hub
+            { path: "data-hub", title: "Data Hub", loadComponent: () => import("./pages/data-hub/data-hub.component").then((m) => m.DataHubComponent) },
+            // Manage
+            {
+                path: "manage/homepage-configuration",
+                title: "Homepage Configuration",
+                loadComponent: () => import("./pages/manage/homepage-configuration.component").then((m) => m.HomepageConfigurationComponent),
+            },
+            {
+                path: "manage/custom-attributes",
+                title: "Custom Attributes",
+                loadComponent: () => import("./pages/manage/custom-attributes.component").then((m) => m.CustomAttributesComponent),
+            },
+            {
+                path: "load-generating-units",
+                title: "Load Generating Units",
+                loadComponent: () => import("./pages/load-generating-units/load-generating-units.component").then((m) => m.LoadGeneratingUnitsComponent),
+            },
+            {
+                path: `load-generating-units/:${routeParams.loadGeneratingUnitID}`,
+                title: "Load Generating Unit Detail",
+                loadComponent: () =>
+                    import("./pages/load-generating-units/load-generating-unit-detail/load-generating-unit-detail.component").then((m) => m.LoadGeneratingUnitDetailComponent),
+            },
+            {
+                path: "hru-characteristics",
+                title: "HRU Characteristics",
+                loadComponent: () => import("./pages/hru-characteristics/hru-characteristics.component").then((m) => m.HRUCharacteristicsComponent),
+            },
+            {
+                path: "regional-subbasins",
+                title: "Regional Subbasins",
+                loadComponent: () => import("./pages/regional-subbasins/regional-subbasins.component").then((m) => m.RegionalSubbasinsComponent),
+            },
+            {
+                path: `regional-subbasins/:${routeParams.regionalSubbasinID}`,
+                title: "Regional Subbasin Detail",
+                loadComponent: () =>
+                    import("./pages/regional-subbasins/regional-subbasin-detail/regional-subbasin-detail.component").then((m) => m.RegionalSubbasinDetailComponent),
+            },
+            {
+                path: "manage/regional-subbasin-revision-requests",
+                title: "Regional Subbasin Revision Requests",
+                loadComponent: () => import("./pages/manage/regional-subbasin-revision-requests.component").then((m) => m.RegionalSubbasinRevisionRequestsComponent),
+            },
+            {
+                path: "manage/wqmp-lgu-audit",
+                title: "Water Quality Management Plan LGU Audit",
+                loadComponent: () => import("./pages/manage/wqmp-lgu-audit.component").then((m) => m.WqmpLguAuditComponent),
             },
         ],
     },

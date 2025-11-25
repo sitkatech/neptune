@@ -109,7 +109,7 @@ export class RegionalSubbasinTraceFromPointComponent {
                 Latitude: e.latlng.lat,
                 Longitude: e.latlng.lng,
             });
-            this.regionalSubbasinService.graphTraceAsFeatureCollectionFromPointPost(coordDto).subscribe((response: any) => {
+            this.regionalSubbasinService.getRegionalSubbasinGraphTraceAsFeatureCollectionFromPointRegionalSubbasin(coordDto).subscribe((response: any) => {
                 this.rsbTraceLayer = L.geoJson(
                     response.features.sort((a, b) => b.geometry.type.localeCompare(a.geometry.type)),
                     {

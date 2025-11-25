@@ -40,12 +40,10 @@ export class TrashOvtaDetailComponent {
     ) {}
 
     ngOnInit(): void {
-        this.onlandVisualTrashAssessment$ = this.onlandVisualTrashAssessmentService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDGet(
-            this.onlandVisualTrashAssessmentID
-        );
+        this.onlandVisualTrashAssessment$ = this.onlandVisualTrashAssessmentService.getOnlandVisualTrashAssessment(this.onlandVisualTrashAssessmentID);
         this.onlandVisualTrashAssessmentObservations$ = this.onlandVisualTrashAssessment$.pipe(
             switchMap((onlandVisualTrashAssessment) => {
-                return this.onlandVisualTrashAssessmentObservationService.onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDObservationsGet(
+                return this.onlandVisualTrashAssessmentObservationService.listByOnlandVisualTrashAssessmentIDOnlandVisualTrashAssessmentObservation(
                     onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID
                 );
             })
@@ -62,13 +60,11 @@ export class TrashOvtaDetailComponent {
                 .confirm({ buttonClassYes: "btn-primary", buttonTextYes: "Continue", buttonTextNo: "Cancel", title: "Return OVTA to Edit", message: modalContents })
                 .then((confirmed) => {
                     if (confirmed) {
-                        this.onlandVisualTrashAssessmentService
-                            .onlandVisualTrashAssessmentsOnlandVisualTrashAssessmentIDReturnToEditPost(onlandVisualTrashAssessmentID)
-                            .subscribe((response) => {
-                                this.alertService.clearAlerts();
-                                this.alertService.pushAlert(new Alert('The OVTA was successfully returned to the "In Progress" status.', AlertContext.Success));
-                                this.router.navigateByUrl(`/trash/onland-visual-trash-assessments/edit/${onlandVisualTrashAssessmentID}/record-observations`);
-                            });
+                        this.onlandVisualTrashAssessmentService.editStatusToAllowEditOnlandVisualTrashAssessment(onlandVisualTrashAssessmentID).subscribe((response) => {
+                            this.alertService.clearAlerts();
+                            this.alertService.pushAlert(new Alert('The OVTA was successfully returned to the "In Progress" status.', AlertContext.Success));
+                            this.router.navigateByUrl(`/trash/onland-visual-trash-assessments/edit/${onlandVisualTrashAssessmentID}/record-observations`);
+                        });
                     }
                 });
         } else {
