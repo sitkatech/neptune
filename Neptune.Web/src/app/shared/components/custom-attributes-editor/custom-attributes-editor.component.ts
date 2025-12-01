@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
-import { CommonModule } from "@angular/common";
+
 import { CustomAttributeTypePurposeEnum, CustomAttributeTypePurposes } from "src/app/shared/generated/enum/custom-attribute-type-purpose-enum";
 import { CustomAttributeDto, TreatmentBMPTypeCustomAttributeTypeDto } from "../../generated/model/models";
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
@@ -8,7 +8,7 @@ import { FormFieldComponent, FormFieldType, SelectDropdownOption } from "../form
 @Component({
     selector: "custom-attributes-editor",
     standalone: true,
-    imports: [CommonModule, FormFieldComponent, ReactiveFormsModule],
+    imports: [FormFieldComponent, ReactiveFormsModule],
     templateUrl: "./custom-attributes-editor.component.html",
     styleUrls: ["./custom-attributes-editor.component.scss"],
 })

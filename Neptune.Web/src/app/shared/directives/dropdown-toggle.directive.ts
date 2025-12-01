@@ -57,7 +57,7 @@ export class DropdownToggleDirective implements OnDestroy {
         }
     }
 
-    @HostListener("document:keydown.escape", ["$event"]) onKeydownHandler(event: KeyboardEvent) {
+    @HostListener("document:keydown.escape", ["$event"]) onKeydownHandler(event) {
         this.closeMenu();
     }
 
