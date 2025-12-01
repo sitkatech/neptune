@@ -40,7 +40,7 @@ public class TreatmentBMPController(NeptuneDbContext dbContext, ILogger<Treatmen
     [LoggedInUnclassifiedFeature]
     public async Task<ActionResult<List<TreatmentBMPGridDto>>> List()
     {
-        var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonIDForBMPs(DbContext, CallingUser.PersonID);
+        var stormwaterJurisdictionIDsPersonCanView = await StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonIDForBMPsAsync(DbContext, CallingUser.PersonID);
 
         var entities = await DbContext.vTreatmentBMPDetaileds.AsNoTracking()
             .Where(x => stormwaterJurisdictionIDsPersonCanView.Contains(x.StormwaterJurisdictionID))
@@ -53,14 +53,14 @@ public class TreatmentBMPController(NeptuneDbContext dbContext, ILogger<Treatmen
     [HttpGet("verified/feature-collection")]
     public ActionResult<FeatureCollection> ListInventoryVerifiedTreatmentBMPsAsFeatureCollection()
     {
-        var featureCollection = TreatmentBMPs.ListInventoryIsVerifiedByPersonAsFeatureCollection(DbContext, CallingUser);
+        var featureCollection = TreatmentBMPs.ListInventoryIsVerifiedByPersonAsFeatureCollectionAsync(DbContext, CallingUser);
         return Ok(featureCollection);
     }
 
     [HttpGet("jurisdictions/{jurisdictionID}/verified/feature-collection")]
-    public ActionResult<FeatureCollection> ListInventoryVerifiedTreatmentBMPsByJurisdictionIDAsFeatureCollection([FromRoute] int jurisdictionID)
+    public async Task<ActionResult<FeatureCollection>> ListInventoryVerifiedTreatmentBMPsByJurisdictionIDAsFeatureCollection([FromRoute] int jurisdictionID)
     {
-        var featureCollection = TreatmentBMPs.ListInventoryIsVerifiedByPersonAndJurisdictionIDAsFeatureCollection(DbContext, CallingUser, jurisdictionID);
+        var featureCollection = await TreatmentBMPs.ListInventoryIsVerifiedByPersonAndJurisdictionIDAsFeatureCollectionAsync(DbContext, CallingUser, jurisdictionID);
         return Ok(featureCollection);
     }
 
@@ -68,7 +68,7 @@ public class TreatmentBMPController(NeptuneDbContext dbContext, ILogger<Treatmen
     [JurisdictionEditFeature]
     public ActionResult<List<TreatmentBMPDisplayDto>> ListTreatmentBMPsWithProjectIDAsFeatureCollection()
     {
-        var featureCollection = TreatmentBMPs.ListWithProjectByPerson(DbContext, CallingUser);
+        var featureCollection = TreatmentBMPs.ListWithProjectByPersonAsDisplayDtoAsync(DbContext, CallingUser);
         return Ok(featureCollection);
     }
 
@@ -76,7 +76,7 @@ public class TreatmentBMPController(NeptuneDbContext dbContext, ILogger<Treatmen
     [JurisdictionEditFeature]
     public ActionResult<List<TreatmentBMPDisplayDto>> ListOCTAM2Tier2GrantProgramTreatmentBMPs()
     {
-        var featureCollection = TreatmentBMPs.ListWithOCTAM2Tier2GrantProgramByPerson(DbContext, CallingUser);
+        var featureCollection = TreatmentBMPs.ListWithOCTAM2Tier2GrantProgramByPersonAsDisplayDtoAsync(DbContext, CallingUser);
         return Ok(featureCollection);
     }
 
@@ -272,7 +272,7 @@ public class TreatmentBMPController(NeptuneDbContext dbContext, ILogger<Treatmen
     [LoggedInUnclassifiedFeature]
     public async Task<ActionResult<List<TreatmentBMPModelingAttributesDto>>> ListWithModelingAttributes()
     {
-        var stormwaterJurisdictionIDsPersonCanView = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonIDForBMPs(DbContext, CallingUser.PersonID);
+        var stormwaterJurisdictionIDsPersonCanView = await StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonIDForBMPsAsync(DbContext, CallingUser.PersonID);
         var dtos = await TreatmentBMPs.ListWithModelingAttributesAsync(DbContext, stormwaterJurisdictionIDsPersonCanView);
         return Ok(dtos);
     }

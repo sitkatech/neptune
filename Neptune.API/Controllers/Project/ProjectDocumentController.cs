@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Neptune.API.Services;
@@ -31,10 +32,10 @@ public class ProjectDocumentController(
     [HttpPut("{projectDocumentID}")]
     [EntityNotFound(typeof(ProjectDocument), "projectDocumentID")]
     [JurisdictionEditFeature]
-    public ActionResult<ProjectDocumentDto> UpdateAttachment([FromRoute] int projectDocumentID, [FromBody] ProjectDocumentUpdateDto projectDocumentUpdateDto)
+    public async Task<ActionResult<ProjectDocumentDto>> UpdateAttachment([FromRoute] int projectDocumentID, [FromBody] ProjectDocumentUpdateDto projectDocumentUpdateDto)
     {
         var projectDocument = ProjectDocuments.GetByIDWithTracking(DbContext, projectDocumentID);
-        if (!CallingUser.CanEditJurisdiction(projectDocument.Project.StormwaterJurisdiction.StormwaterJurisdictionID, DbContext))
+        if (!(await CallingUser.CanEditJurisdiction(projectDocument.Project.StormwaterJurisdiction.StormwaterJurisdictionID, DbContext)))
         {
             return Forbid();
         }
@@ -46,10 +47,10 @@ public class ProjectDocumentController(
     [HttpDelete("{projectDocumentID}")]
     [EntityNotFound(typeof(ProjectDocument), "projectDocumentID")]
     [JurisdictionEditFeature]
-    public IActionResult DeleteAttachment([FromRoute] int projectDocumentID)
+    public async Task<IActionResult> DeleteAttachment([FromRoute] int projectDocumentID)
     {
         var projectDocument = ProjectDocuments.GetByIDWithTracking(DbContext, projectDocumentID);
-        if (!CallingUser.CanEditJurisdiction(projectDocument.Project.StormwaterJurisdiction.StormwaterJurisdictionID, DbContext))
+        if (!(await CallingUser.CanEditJurisdiction(projectDocument.Project.StormwaterJurisdiction.StormwaterJurisdictionID, DbContext)))
         {
             return Forbid();
         }

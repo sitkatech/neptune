@@ -1,14 +1,15 @@
-﻿using Neptune.Common;
+﻿using Microsoft.EntityFrameworkCore;
+using Neptune.Common;
 using Neptune.Models.DataTransferObjects;
 
 namespace Neptune.EFModels.Entities;
 
 public static class TrashGeneratingUnits
 {
-     public static List<TrashGeneratingUnitGridDto> List(NeptuneDbContext dbContext, PersonDto currentPerson)
+     public static async Task<List<TrashGeneratingUnitGridDto>> ListAsGridDtoAsync(NeptuneDbContext dbContext, PersonDto currentPerson)
     {
-        var jurisdictionIDs = People.ListStormwaterJurisdictionIDsByPersonID(dbContext, currentPerson.PersonID);
-        var trashGeneratingUnitLoadStatistics = dbContext.vTrashGeneratingUnitLoadStatistics
+        var jurisdictionIDs = await StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonIDForBMPsAsync(dbContext, currentPerson.PersonID);
+        var trashGeneratingUnitLoadStatistics = await dbContext.vTrashGeneratingUnitLoadStatistics
             .Where(x => jurisdictionIDs.Contains(x.StormwaterJurisdictionID))
             .OrderByDescending(x => x.LastUpdateDate)
             .Select(x => new TrashGeneratingUnitGridDto()
@@ -41,7 +42,7 @@ public static class TrashGeneratingUnits
                 TrashGenerationRate = x.TrashGenerationRate,
                 Area = x.Area * Constants.SquareMetersToAcres,
                 LoadingRateDelta = x.LoadingRateDelta,
-        }).ToList();
+        }).ToListAsync();
         return trashGeneratingUnitLoadStatistics;
     }
 }

@@ -25,7 +25,6 @@ using Neptune.Common.GeoSpatial;
 using Neptune.Models.DataTransferObjects;
 using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
-using System.ComponentModel.DataAnnotations;
 
 namespace Neptune.EFModels.Entities;
 
@@ -111,7 +110,7 @@ public static class TreatmentBMPs
 
     #endregion
 
-    private static IQueryable<TreatmentBMP> GetTreatmentBMPsDisplayOnlyImpl(NeptuneDbContext dbContext, bool checkIsAnalyzedInModelingModule = true)
+    private static IQueryable<TreatmentBMP> ListTreatmentBMPsDisplayOnlyImpl(NeptuneDbContext dbContext, bool checkIsAnalyzedInModelingModule = true)
     {
         return dbContext.TreatmentBMPs
             .Include(x => x.TreatmentBMPType)
@@ -165,7 +164,7 @@ public static class TreatmentBMPs
     public static List<TreatmentBMPDisplayDto> ListByProjectIDsAsDisplayDto(NeptuneDbContext dbContext,
                                                                             List<int> projectIDs)
     {
-        var treatmentBMPs = GetTreatmentBMPsDisplayOnlyImpl(dbContext)
+        var treatmentBMPs = ListTreatmentBMPsDisplayOnlyImpl(dbContext)
             .Where(x => x.ProjectID.HasValue && projectIDs.Contains(x.ProjectID.Value))
             .ToList();
 
@@ -215,51 +214,51 @@ public static class TreatmentBMPs
         return featureCollection;
     }
 
-    public static FeatureCollection ListInventoryIsVerifiedByPersonAsFeatureCollection(NeptuneDbContext dbContext, PersonDto person)
+    public static async Task<FeatureCollection> ListInventoryIsVerifiedByPersonAsFeatureCollectionAsync(NeptuneDbContext dbContext, PersonDto person)
     {
-        var treatmentBmps = ListByPerson(dbContext, person);
+        var treatmentBmps = await ListByPersonAsync(dbContext, person);
 
         return AsFeatureCollection(treatmentBmps.Where(x => x.ProjectID == null && x.InventoryIsVerified).ToList());
     }
 
-    public static FeatureCollection ListInventoryIsVerifiedByPersonAndJurisdictionIDAsFeatureCollection(
+    public static async Task<FeatureCollection> ListInventoryIsVerifiedByPersonAndJurisdictionIDAsFeatureCollectionAsync(
         NeptuneDbContext dbContext,
         PersonDto person,
         int jurisdictionID)
     {
-        var treatmentBmps = ListByPerson(dbContext, person, false);
+        var treatmentBmps = await ListByPersonAsync(dbContext, person, false);
 
         return AsFeatureCollection(treatmentBmps.Where(x => x.ProjectID == null && x.StormwaterJurisdictionID == jurisdictionID && x.InventoryIsVerified).ToList());
     }
 
-    public static List<TreatmentBMPDisplayDto> ListWithProjectByPerson(NeptuneDbContext dbContext, PersonDto person)
+    public static async Task<List<TreatmentBMPDisplayDto>> ListWithProjectByPersonAsDisplayDtoAsync(NeptuneDbContext dbContext, PersonDto person)
     {
-        var treatmentBmps = ListByPerson(dbContext, person).Where(x => x.ProjectID != null).ToList();
+        var treatmentBmps = (await ListByPersonAsync(dbContext, person)).Where(x => x.ProjectID != null).ToList();
 
         return GetDisplayDtos(dbContext, treatmentBmps);
     }
 
-    public static List<TreatmentBMPDisplayDto> ListWithOCTAM2Tier2GrantProgramByPerson(NeptuneDbContext dbContext,
+    public static async Task<List<TreatmentBMPDisplayDto>> ListWithOCTAM2Tier2GrantProgramByPersonAsDisplayDtoAsync(NeptuneDbContext dbContext,
                                                                                        PersonDto person)
     {
-        var treatmentBmps = ListByPerson(dbContext, person).Where(x => x.Project is { ShareOCTAM2Tier2Scores: true }).ToList();
+        var treatmentBmps = (await ListByPersonAsync(dbContext, person)).Where(x => x.Project is { ShareOCTAM2Tier2Scores: true }).ToList();
 
         return GetDisplayDtos(dbContext, treatmentBmps);
     }
 
-    private static List<TreatmentBMP> ListByPerson(NeptuneDbContext dbContext, PersonDto? person, bool checkIsAnalyzedInModelingModule = true)
+    private static async Task<List<TreatmentBMP>> ListByPersonAsync(NeptuneDbContext dbContext, PersonDto? person, bool checkIsAnalyzedInModelingModule = true)
     {
         List<TreatmentBMP> treatmentBmps;
         if (person == null || !(person.RoleID == (int)RoleEnum.Admin || person.RoleID == (int)RoleEnum.SitkaAdmin))
         {
-            var jurisdictionIDs = StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonIDForBMPs(dbContext, person?.PersonID);
-            treatmentBmps = GetTreatmentBMPsDisplayOnlyImpl(dbContext, checkIsAnalyzedInModelingModule)
+            var jurisdictionIDs = await StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonIDForBMPsAsync(dbContext, person?.PersonID);
+            treatmentBmps = ListTreatmentBMPsDisplayOnlyImpl(dbContext, checkIsAnalyzedInModelingModule)
                 .Where(x => jurisdictionIDs.Contains(x.StormwaterJurisdictionID))
                 .ToList();
         }
         else
         {
-            treatmentBmps = GetTreatmentBMPsDisplayOnlyImpl(dbContext, checkIsAnalyzedInModelingModule).ToList();
+            treatmentBmps = ListTreatmentBMPsDisplayOnlyImpl(dbContext, checkIsAnalyzedInModelingModule).ToList();
         }
 
         return treatmentBmps;
@@ -295,31 +294,6 @@ public static class TreatmentBMPs
             .ToList();
 
         return treatmentBMPUpsertDtos;
-    }
-
-    public static List<TreatmentBMPDisplayDto> ListAsDisplayDto(NeptuneDbContext dbContext)
-    {
-        var treatmentBmps = GetTreatmentBMPsDisplayOnlyImpl(dbContext).ToList();
-
-        return GetDisplayDtos(dbContext, treatmentBmps);
-    }
-
-    public static List<TreatmentBMPDisplayDto> ListByPersonAsDisplayDto(NeptuneDbContext dbContext,
-                                                                        PersonDto person)
-    {
-        var personID = person.PersonID;
-        if (person.RoleID == (int)RoleEnum.Admin || person.RoleID == (int)RoleEnum.SitkaAdmin)
-        {
-            return ListAsDisplayDto(dbContext);
-        }
-
-        var jurisdictionIDs = People.ListStormwaterJurisdictionIDsByPersonID(dbContext, personID);
-
-        var treatmentBMPs = GetTreatmentBMPsDisplayOnlyImpl(dbContext)
-            .Where(x => jurisdictionIDs.Contains(x.StormwaterJurisdictionID))
-            .ToList();
-
-        return GetDisplayDtos(dbContext, treatmentBMPs);
     }
 
     public static List<TreatmentBMPTypeWithModelingAttributesDto> ListWithModelingAttributesAsDto(

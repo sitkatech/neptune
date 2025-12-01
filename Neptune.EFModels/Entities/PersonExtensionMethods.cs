@@ -67,7 +67,7 @@ public static class PersonExtensionMethods
         return personDto;
     }
 
-    public static bool CanEditJurisdiction(this Person person, int stormwaterJurisdictionID, NeptuneDbContext dbContext)
+    public static async Task<bool> CanEditJurisdiction(this Person person, int stormwaterJurisdictionID, NeptuneDbContext dbContext)
     {
         if (person.RoleID == (int) RoleEnum.Admin || person.RoleID == (int) RoleEnum.SitkaAdmin )
         {
@@ -76,14 +76,14 @@ public static class PersonExtensionMethods
 
         if (person.RoleID == (int) RoleEnum.JurisdictionEditor || person.RoleID == (int) RoleEnum.JurisdictionManager)
         {
-            var stormwaterJurisdictionIDs = People.ListStormwaterJurisdictionIDsByPersonID(dbContext, person.PersonID);
+            var stormwaterJurisdictionIDs = await StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonIDForBMPsAsync(dbContext, person.PersonID);
             return stormwaterJurisdictionIDs.Contains(stormwaterJurisdictionID);
         }
 
         return false;
     }
 
-    public static bool CanEditJurisdiction(this PersonDto person, int stormwaterJurisdictionID, NeptuneDbContext dbContext)
+    public static async Task<bool> CanEditJurisdiction(this PersonDto person, int stormwaterJurisdictionID, NeptuneDbContext dbContext)
     {
         if (person.RoleID == (int) RoleEnum.Admin || person.RoleID == (int) RoleEnum.SitkaAdmin )
         {
@@ -92,7 +92,7 @@ public static class PersonExtensionMethods
 
         if (person.RoleID == (int)RoleEnum.JurisdictionEditor || person.RoleID == (int)RoleEnum.JurisdictionManager)
         {
-            var stormwaterJurisdictionIDs = People.ListStormwaterJurisdictionIDsByPersonID(dbContext, person.PersonID);
+            var stormwaterJurisdictionIDs = await StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonIDForBMPsAsync(dbContext, person.PersonID);
             return stormwaterJurisdictionIDs.Contains(stormwaterJurisdictionID);
         }
 

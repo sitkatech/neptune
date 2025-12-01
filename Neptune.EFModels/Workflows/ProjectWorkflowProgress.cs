@@ -48,9 +48,9 @@ public class ProjectWorkflowProgress
         return true;
     }
 
-    public static bool CanDelete(NeptuneDbContext dbContext, Project project, Person currentUser)
+    public static async Task<bool> CanDelete(NeptuneDbContext dbContext, Project project, Person currentUser)
     {
-        return currentUser.CanEditJurisdiction(project.StormwaterJurisdictionID, dbContext);
+        return await currentUser.CanEditJurisdiction(project.StormwaterJurisdictionID, dbContext);
     }
 
     public static bool WorkflowStepComplete(Project project, ProjectWorkflowStep wellRegistryWorkflowStep, Dictionary<int, vTreatmentBMPModelingAttribute> vTreatmentBMPModelingAttributes)

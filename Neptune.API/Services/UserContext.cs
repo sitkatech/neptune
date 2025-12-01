@@ -11,7 +11,20 @@ namespace Neptune.API.Services
         public static PersonDto GetUserAsDtoFromHttpContext(NeptuneDbContext dbContext, HttpContext httpContext)
         {
             var user = GetUserFromHttpContext(dbContext, httpContext);
-            return user.AsDto();
+            return user == null ? new PersonDto { PersonID = Person.AnonymousPersonID,
+                PersonGuid = Guid.Empty,
+                FirstName = "Anonymous",
+                LastName = "User",
+                RoleID = (int) RoleEnum.Unassigned,
+                CreateDate = DateTime.UtcNow,
+                LastActivityDate = DateTime.UtcNow,
+                IsActive = true,
+                OrganizationID = -1,
+                ReceiveSupportEmails = false,
+                ReceiveRSBRevisionRequestEmails = false,
+                WebServiceAccessToken = Guid.Empty,
+                IsOCTAGrantReviewer = false
+            } : user.AsDto();
         }
 
         public static Person GetUserFromHttpContext(NeptuneDbContext dbContext, HttpContext httpContext)

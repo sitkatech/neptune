@@ -120,7 +120,6 @@ model/problem-details.ts
 model/project-document-dto.ts
 model/project-document-update-dto.ts
 model/project-dto.ts
-model/project-load-generating-result-dto.ts
 model/project-load-reducing-result-dto.ts
 model/project-network-solve-history-simple-dto.ts
 model/project-status-simple-dto.ts
@@ -171,5 +170,4 @@ model/water-quality-management-plan-upsert-dto.ts
 model/watershed-dto.ts
 model/workflow-step-status.ts
 param.ts
-provide-api.ts
 variables.ts

@@ -130,15 +130,15 @@ namespace Neptune.EFModels.Entities
                 .OrderBy(x => x.TreatmentBMP.TreatmentBMPName).ToList();
         }
 
-        public static List<DelineationDto> ListByPersonIDAsDto(NeptuneDbContext dbContext, int personID)
+        public static async Task<List<DelineationDto>> ListByPersonIDAsDto(NeptuneDbContext dbContext, int personID)
         {
             var person = People.GetByID(dbContext, personID);
-            if (person.RoleID == (int)RoleEnum.Admin || person.RoleID == (int)RoleEnum.SitkaAdmin)
+            if (person.RoleID is (int)RoleEnum.Admin or (int)RoleEnum.SitkaAdmin)
             {
                 return ListProjectDelineationsAsDto(dbContext);
             }
 
-            var jurisdictionIDs = People.ListStormwaterJurisdictionIDsByPersonID(dbContext, personID);
+            var jurisdictionIDs = await StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonIDForBMPsAsync(dbContext, personID);
 
             var dtos = GetImpl(dbContext)
                 .Where(x => jurisdictionIDs.Contains(x.TreatmentBMP.StormwaterJurisdictionID))

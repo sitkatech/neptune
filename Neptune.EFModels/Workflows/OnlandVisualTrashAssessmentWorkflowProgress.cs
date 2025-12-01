@@ -45,9 +45,9 @@ public class OnlandVisualTrashAssessmentWorkflowProgress
         return true;
     }
 
-    public static bool CanDelete(NeptuneDbContext dbContext, OnlandVisualTrashAssessment onlandVisualTrashAssessment, Person currentUser)
+    public static async Task<bool> CanDelete(NeptuneDbContext dbContext, OnlandVisualTrashAssessment onlandVisualTrashAssessment, Person currentUser)
     {
-        return currentUser.CanEditJurisdiction(onlandVisualTrashAssessment.StormwaterJurisdictionID, dbContext);
+        return await currentUser.CanEditJurisdiction(onlandVisualTrashAssessment.StormwaterJurisdictionID, dbContext);
     }
 
     public static bool WorkflowStepComplete(OnlandVisualTrashAssessment onlandVisualTrashAssessment, OnlandVisualTrashAssessmentWorkflowStep wellRegistryWorkflowStep)

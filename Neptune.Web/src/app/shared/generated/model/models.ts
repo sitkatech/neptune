@@ -80,7 +80,6 @@ export * from './problem-details';
 export * from './project-document-dto';
 export * from './project-document-update-dto';
 export * from './project-dto';
-export * from './project-load-generating-result-dto';
 export * from './project-load-reducing-result-dto';
 export * from './project-network-solve-history-simple-dto';
 export * from './project-status-simple-dto';
