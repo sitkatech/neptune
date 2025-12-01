@@ -51,9 +51,9 @@ public class TreatmentBMPController(NeptuneDbContext dbContext, ILogger<Treatmen
     }
 
     [HttpGet("verified/feature-collection")]
-    public ActionResult<FeatureCollection> ListInventoryVerifiedTreatmentBMPsAsFeatureCollection()
+    public async Task<ActionResult<FeatureCollection>> ListInventoryVerifiedTreatmentBMPsAsFeatureCollection()
     {
-        var featureCollection = TreatmentBMPs.ListInventoryIsVerifiedByPersonAsFeatureCollectionAsync(DbContext, CallingUser);
+        var featureCollection = await TreatmentBMPs.ListInventoryIsVerifiedByPersonAsFeatureCollectionAsync(DbContext, CallingUser);
         return Ok(featureCollection);
     }
 
@@ -66,17 +66,17 @@ public class TreatmentBMPController(NeptuneDbContext dbContext, ILogger<Treatmen
 
     [HttpGet("planned-projects")]
     [JurisdictionEditFeature]
-    public ActionResult<List<TreatmentBMPDisplayDto>> ListTreatmentBMPsWithProjectIDAsFeatureCollection()
+    public async Task<ActionResult<List<TreatmentBMPDisplayDto>>> ListPlannedProjects()
     {
-        var featureCollection = TreatmentBMPs.ListWithProjectByPersonAsDisplayDtoAsync(DbContext, CallingUser);
+        var featureCollection = await TreatmentBMPs.ListWithProjectByPersonAsDisplayDtoAsync(DbContext, CallingUser);
         return Ok(featureCollection);
     }
 
     [HttpGet("octa-m2-tier2-grant-program")]
     [JurisdictionEditFeature]
-    public ActionResult<List<TreatmentBMPDisplayDto>> ListOCTAM2Tier2GrantProgramTreatmentBMPs()
+    public async Task<ActionResult<List<TreatmentBMPDisplayDto>>> ListOCTAM2Tier2GrantProgramTreatmentBMPs()
     {
-        var featureCollection = TreatmentBMPs.ListWithOCTAM2Tier2GrantProgramByPersonAsDisplayDtoAsync(DbContext, CallingUser);
+        var featureCollection = await TreatmentBMPs.ListWithOCTAM2Tier2GrantProgramByPersonAsDisplayDtoAsync(DbContext, CallingUser);
         return Ok(featureCollection);
     }
 

@@ -39,9 +39,9 @@ namespace Neptune.API.Controllers
 
         [HttpGet("bounding-box")]
         [UserViewFeature]
-        public ActionResult<BoundingBoxDto> GetBoundingBox()
+        public async Task<ActionResult<BoundingBoxDto>> GetBoundingBox()
         {
-            var boundingBoxDto = StormwaterJurisdictions.GetBoundingBoxDtoByPersonIDAsync(DbContext, CallingUser.PersonID);
+            var boundingBoxDto = await StormwaterJurisdictions.GetBoundingBoxDtoByPersonIDAsync(DbContext, CallingUser.PersonID);
             return Ok(boundingBoxDto);
         }
 

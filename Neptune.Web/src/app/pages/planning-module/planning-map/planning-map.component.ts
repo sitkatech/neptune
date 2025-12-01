@@ -148,7 +148,7 @@ export class PlanningMapComponent implements OnInit {
 
         this.planningMapInitData$ = combineLatest({
             Projects: this.projectService.listProject(),
-            TreatmentBMPs: this.treatmentBMPService.listTreatmentBMP(),
+            TreatmentBMPs: this.treatmentBMPService.listPlannedProjectsTreatmentBMP(),
             Delineations: this.delineationService.listDelineation(),
         }).pipe(
             tap((data) => {

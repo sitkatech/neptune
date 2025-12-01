@@ -5182,7 +5182,7 @@
         "tags": [
           "TreatmentBMP"
         ],
-        "operationId": "ListTreatmentBMPsWithProjectIDAsFeatureCollection_TreatmentBMP",
+        "operationId": "ListPlannedProjects_TreatmentBMP",
         "responses": {
           "200": {
             "description": "OK",

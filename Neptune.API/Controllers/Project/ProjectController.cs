@@ -35,9 +35,9 @@ namespace Neptune.API.Controllers
     {
         [HttpGet]
         [JurisdictionEditFeature]
-        public ActionResult<List<ProjectDto>> List()
+        public async Task<ActionResult<List<ProjectDto>>> List()
         {
-            var projectDtos = Projects.ListByPersonIDAsDtoAsync(DbContext, CallingUser.PersonID);
+            var projectDtos = await Projects.ListByPersonIDAsDtoAsync(DbContext, CallingUser.PersonID);
             return Ok(projectDtos);
         }
 
@@ -82,7 +82,7 @@ namespace Neptune.API.Controllers
         [UserViewFeature]
         public ActionResult<BoundingBoxDto> GetBoundingBoxByProjectID([FromRoute] int projectID)
         {
-            var stormwaterJurisdictionID = Projects.GetByIDWithChangeTracking(DbContext, projectID).StormwaterJurisdictionID;
+            var stormwaterJurisdictionID = Projects.GetByIDAsDto(DbContext, projectID).StormwaterJurisdictionID;
             var boundingBoxDto = StormwaterJurisdictions.GetBoundingBoxDtoByJurisdictionID(DbContext, stormwaterJurisdictionID);
             return Ok(boundingBoxDto);
         }
