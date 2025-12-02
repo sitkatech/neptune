@@ -165,9 +165,9 @@ namespace Neptune.API.Controllers
         [HttpGet("{projectID}/treatment-bmps")]
         [EntityNotFound(typeof(Project), "projectID")]
         [JurisdictionEditFeature]
-        public ActionResult<List<TreatmentBMPDisplayDto>> ListTreatmentBMPsByProjectID([FromRoute] int projectID)
+        public async Task<ActionResult<List<TreatmentBMPDisplayDto>>> ListTreatmentBMPsByProjectID([FromRoute] int projectID)
         {
-            var treatmentBMPDisplayDtos = TreatmentBMPs.ListByProjectIDsAsDisplayDto(DbContext, [projectID]);
+            var treatmentBMPDisplayDtos = await TreatmentBMPs.ListByProjectIDsAsDisplayDtoAsync(DbContext, [projectID]);
             return Ok(treatmentBMPDisplayDtos);
         }
 

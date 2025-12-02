@@ -161,21 +161,18 @@ public static class TreatmentBMPs
         return treatmentBMP;
     }
 
-    public static List<TreatmentBMPDisplayDto> ListByProjectIDsAsDisplayDto(NeptuneDbContext dbContext,
-                                                                            List<int> projectIDs)
+    public static async Task<List<TreatmentBMPDisplayDto>> ListByProjectIDsAsDisplayDtoAsync(NeptuneDbContext dbContext, List<int> projectIDs)
     {
         var treatmentBMPs = ListTreatmentBMPsDisplayOnlyImpl(dbContext)
             .Where(x => x.ProjectID.HasValue && projectIDs.Contains(x.ProjectID.Value))
             .ToList();
 
-        return GetDisplayDtos(dbContext, treatmentBMPs);
+        return await ListAsDisplayDtosAsync(dbContext, treatmentBMPs);
     }
 
-    private static List<TreatmentBMPDisplayDto> GetDisplayDtos(NeptuneDbContext dbContext, List<TreatmentBMP> treatmentBMPs)
+    private static async Task<List<TreatmentBMPDisplayDto>> ListAsDisplayDtosAsync(NeptuneDbContext dbContext, List<TreatmentBMP> treatmentBMPs)
     {
-        var treatmentBMPIDs = treatmentBMPs.Select(x => x.TreatmentBMPID).ToList();
-
-        var treatmentBMPModelingAttributes = dbContext.vTreatmentBMPModelingAttributes.Where(x => treatmentBMPIDs.Contains(x.TreatmentBMPID)).ToList();
+        var treatmentBMPModelingAttributes = await dbContext.vTreatmentBMPModelingAttributes.ToListAsync();
 
         var treatmentBMPDisplayDtos = treatmentBMPs
             .GroupJoin(treatmentBMPModelingAttributes,
@@ -233,35 +230,42 @@ public static class TreatmentBMPs
 
     public static async Task<List<TreatmentBMPDisplayDto>> ListWithProjectByPersonAsDisplayDtoAsync(NeptuneDbContext dbContext, PersonDto person)
     {
-        var treatmentBmps = (await ListByPersonAsync(dbContext, person)).Where(x => x.ProjectID != null).ToList();
+        // Build a query that filters in the database for project-associated BMPs and for jurisdictions
+        var query = ListTreatmentBMPsDisplayOnlyImpl(dbContext).Where(x => x.ProjectID != null);
 
-        return GetDisplayDtos(dbContext, treatmentBmps);
+        // If not an admin, restrict to jurisdictions the person can view
+        if (person == null || !(person.RoleID == (int)RoleEnum.Admin || person.RoleID == (int)RoleEnum.SitkaAdmin))
+        {
+            var jurisdictionIDs = await StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonIDForBMPsAsync(dbContext, person?.PersonID);
+            query = query.Where(x => jurisdictionIDs.Contains(x.StormwaterJurisdictionID));
+        }
+
+        var treatmentBmps = await query.ToListAsync();
+
+        return await ListAsDisplayDtosAsync(dbContext, treatmentBmps);
     }
 
-    public static async Task<List<TreatmentBMPDisplayDto>> ListWithOCTAM2Tier2GrantProgramByPersonAsDisplayDtoAsync(NeptuneDbContext dbContext,
-                                                                                       PersonDto person)
+    public static async Task<List<TreatmentBMPDisplayDto>> ListWithOCTAM2Tier2GrantProgramByPersonAsDisplayDtoAsync(NeptuneDbContext dbContext, PersonDto person)
     {
         var treatmentBmps = (await ListByPersonAsync(dbContext, person)).Where(x => x.Project is { ShareOCTAM2Tier2Scores: true }).ToList();
-
-        return GetDisplayDtos(dbContext, treatmentBmps);
+        return await ListAsDisplayDtosAsync(dbContext, treatmentBmps);
     }
 
     private static async Task<List<TreatmentBMP>> ListByPersonAsync(NeptuneDbContext dbContext, PersonDto? person, bool checkIsAnalyzedInModelingModule = true)
     {
-        List<TreatmentBMP> treatmentBmps;
         if (person == null || !(person.RoleID == (int)RoleEnum.Admin || person.RoleID == (int)RoleEnum.SitkaAdmin))
         {
             var jurisdictionIDs = await StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonIDForBMPsAsync(dbContext, person?.PersonID);
-            treatmentBmps = ListTreatmentBMPsDisplayOnlyImpl(dbContext, checkIsAnalyzedInModelingModule)
+            var treatmentBmps = await ListTreatmentBMPsDisplayOnlyImpl(dbContext, checkIsAnalyzedInModelingModule)
                 .Where(x => jurisdictionIDs.Contains(x.StormwaterJurisdictionID))
-                .ToList();
+                .ToListAsync();
+
+            return treatmentBmps;
         }
         else
         {
-            treatmentBmps = ListTreatmentBMPsDisplayOnlyImpl(dbContext, checkIsAnalyzedInModelingModule).ToList();
+            return await ListTreatmentBMPsDisplayOnlyImpl(dbContext, checkIsAnalyzedInModelingModule).ToListAsync();
         }
-
-        return treatmentBmps;
     }
 
     public static List<TreatmentBMPUpsertDto> ListByProjectIDAsUpsertDto(NeptuneDbContext dbContext, int projectID)

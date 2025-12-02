@@ -68,8 +68,8 @@ public class TreatmentBMPController(NeptuneDbContext dbContext, ILogger<Treatmen
     [JurisdictionEditFeature]
     public async Task<ActionResult<List<TreatmentBMPDisplayDto>>> ListPlannedProjects()
     {
-        var featureCollection = await TreatmentBMPs.ListWithProjectByPersonAsDisplayDtoAsync(DbContext, CallingUser);
-        return Ok(featureCollection);
+        var treatmentBMPDisplayDtos = await TreatmentBMPs.ListWithProjectByPersonAsDisplayDtoAsync(DbContext, CallingUser);
+        return Ok(treatmentBMPDisplayDtos);
     }
 
     [HttpGet("octa-m2-tier2-grant-program")]
