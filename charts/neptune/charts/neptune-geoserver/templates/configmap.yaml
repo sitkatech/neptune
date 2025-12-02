@@ -5,6 +5,7 @@ metadata:
 data:
   ENABLE_JSONP: "true"
   CATALINA_OPTS: "-DALLOW_ENV_PARAMETRIZATION=true"
+  ENV_PROPERTIES: "/app/config/geoserver-environment.properties"
   STABLE_EXTENSIONS: "sqlserver-plugin"
   TOMCAT_EXTRAS: "false"
   ROOT_WEBAPP_REDIRECT: "true"
@@ -13,6 +14,5 @@ data:
   HTTP_SCHEME: "https"
   GEOSERVER_ADMIN_USER: "geomaster"
   GEOSERVER_ADMIN_PASSWORD_FILE: "/app/secrets/geoserverAdminPassword"
-  GEOSERVER_CONFIG_DIRECTORY: "/app/config"
   INITIAL_MEMORY: "4G"
   MAXIMUM_MEMORY: "8G"
