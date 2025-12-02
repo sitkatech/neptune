@@ -74,7 +74,6 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.map = L.map(this.mapID, mapOptions);
 
-        // Add control to your map
         this.map.addControl(
             new FullScreen({
                 position: "topleft",
