@@ -15,7 +15,7 @@
             },
             "architect": {
                 "build": {
-                    "builder": "@angular-devkit/build-angular:application",
+                    "builder": "@angular/build:application",
                     "options": {
                         "outputPath": {
                             "base": "wwwroot",
@@ -34,7 +34,7 @@
                         ],
                         "styles": [
                             "src/styles.scss",
-                            "node_modules/leaflet.fullscreen/Control.FullScreen.css",
+                            "node_modules/leaflet.fullscreen/dist/Control.FullScreen.css",
                             "node_modules/leaflet-gesture-handling/dist/leaflet-gesture-handling.css",
                             "node_modules/@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css"
                         ],
@@ -89,7 +89,7 @@
                     "defaultConfiguration": ""
                 },
                 "serve": {
-                    "builder": "@angular-devkit/build-angular:dev-server",
+                    "builder": "@angular/build:dev-server",
                     "options": {
                         "host": "neptune.localhost.sitkatech.com",
                         "port": 8213,

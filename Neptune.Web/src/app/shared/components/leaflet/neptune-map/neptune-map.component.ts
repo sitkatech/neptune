@@ -2,8 +2,8 @@ import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Outpu
 import { CommonModule } from "@angular/common";
 import { Control, LeafletEvent, Map, MapOptions, DomUtil, ControlPosition } from "leaflet";
 import "src/scripts/leaflet.groupedlayercontrol.js";
-import "leaflet.fullscreen";
 import * as L from "leaflet";
+import { FullScreen } from "leaflet.fullscreen";
 import GestureHandling from "leaflet-gesture-handling";
 import { LeafletHelperService } from "src/app/shared/services/leaflet-helper.service";
 import { BoundingBoxDto } from "src/app/shared/generated/model/models";
@@ -57,23 +57,28 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public cursorStyle: string = "grab";
 
-    constructor(public nominatimService: NominatimService, public leafletHelperService: LeafletHelperService, private sanitizer: DomSanitizer) {}
+    constructor(
+        public nominatimService: NominatimService,
+        public leafletHelperService: LeafletHelperService,
+        private sanitizer: DomSanitizer
+    ) {}
 
     ngAfterViewInit(): void {
         const mapOptions: MapOptions = {
             minZoom: 6,
             maxZoom: 20,
             layers: [this.tileLayers[this.selectedTileLayer]],
-            fullscreenControl: true,
-            fullscreenControlOptions: {
-                position: "topleft",
-                forceSeparateButton: true,
-            },
             gestureHandling: true,
             //            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         } as MapOptions;
 
         this.map = L.map(this.mapID, mapOptions);
+
+        this.map.addControl(
+            new FullScreen({
+                position: "topleft",
+            })
+        );
         L.Map.addInitHook("addHandler", "gestureHandling", GestureHandling);
 
         this.layerControl = new GroupedLayers(this.tileLayers, LeafletHelperService.GetDefaultOverlayTileLayers(), { collapsed: false }).addTo(this.map);
@@ -184,7 +189,7 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
                 const legendItem = new LegendItem();
                 // if the layer uses a legend image, it may have the title text already in the image, so allow an empty title
                 const showEmptyTitle = (obj.layer as any)?.showEmptyTitle ?? false;
-                legendItem.Title = showEmptyTitle ? "" :  obj.group && obj.group.name ? obj.group.name : obj.name;
+                legendItem.Title = showEmptyTitle ? "" : obj.group && obj.group.name ? obj.group.name : obj.name;
                 if (LeafletHelperService.hasLegendHtml(obj.layer)) {
                     const legendHtml = obj.layer.legendHtml;
                     legendItem.LegendHtml = this.sanitizer.bypassSecurityTrustHtml(legendHtml);

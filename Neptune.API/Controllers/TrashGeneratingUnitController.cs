@@ -8,6 +8,8 @@ using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Neptune.Common;
 
 namespace Neptune.API.Controllers;
@@ -23,16 +25,16 @@ public class TrashGeneratingUnitController(
 {
     [HttpGet]
     [JurisdictionEditFeature]
-    public ActionResult<List<TrashGeneratingUnitGridDto>> ListForCallingUser()
+    public async Task<ActionResult<List<TrashGeneratingUnitGridDto>>> ListForCallingUser()
     {
-        var trashGeneratingUnitGridDtos = TrashGeneratingUnits.List(DbContext, CallingUser);
+        var trashGeneratingUnitGridDtos = await TrashGeneratingUnits.ListAsGridDtoAsync(DbContext, CallingUser);
         return Ok(trashGeneratingUnitGridDtos);
     }
 
     [HttpGet("{trashGeneratingUnitID}")]
-    public ActionResult<TrashGeneratingUnitDto> Get([FromRoute] int trashGeneratingUnitID)
+    public async Task<ActionResult<TrashGeneratingUnitDto>> Get([FromRoute] int trashGeneratingUnitID)
     {
-        var trashGeneratingUnitDto = DbContext.vTrashGeneratingUnitLoadStatistics
+        var trashGeneratingUnitDto = await DbContext.vTrashGeneratingUnitLoadStatistics
             .Where(x => x.TrashGeneratingUnitID == trashGeneratingUnitID).Select(x => new TrashGeneratingUnitDto()
             {
                 TrashGeneratingUnitID = x.TrashGeneratingUnitID,
@@ -62,15 +64,15 @@ public class TrashGeneratingUnitController(
                 AssessmentDate = x.MostRecentAssessmentDate,
                 CompletedBaselineAssessmentCount = x.CompletedBaselineAssessmentCount,
                 CompletedProgressAssessmentCount = x.CompletedProgressAssessmentCount
-            }).FirstOrDefault();
+            }).FirstOrDefaultAsync();
         
         return Ok(trashGeneratingUnitDto);
     }
 
     [HttpGet("last-update-date")]
-    public ActionResult<DateTime> GetLastUpdateDate()
+    public async Task<ActionResult<DateTime>> GetLastUpdateDate()
     {
-        var lastUpdateDate = DbContext.vTrashGeneratingUnitLoadStatistics.FirstOrDefault()?.LastUpdateDate;
+        var lastUpdateDate = (await DbContext.vTrashGeneratingUnitLoadStatistics.FirstOrDefaultAsync())?.LastUpdateDate;
         return Ok(lastUpdateDate);
     }
 }

@@ -32,16 +32,16 @@ namespace Neptune.API.Controllers
         [HttpGet("user-viewable")]
         public async Task<ActionResult<List<StormwaterJurisdictionDisplayDto>>> ListViewable()
         {
-            var stormwaterJurisdictionIDs = People.ListStormwaterJurisdictionIDsByPersonID(DbContext, CallingUser.PersonID);
+            var stormwaterJurisdictionIDs = await StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonIDForBMPsAsync(DbContext, CallingUser.PersonID);
             var stormwaterJurisdictionDisplayDtos = await StormwaterJurisdictions.ListByIDsAsDisplayDtoAsync(DbContext, stormwaterJurisdictionIDs);
             return Ok(stormwaterJurisdictionDisplayDtos);
         }
 
         [HttpGet("bounding-box")]
         [UserViewFeature]
-        public ActionResult<BoundingBoxDto> GetBoundingBox()
+        public async Task<ActionResult<BoundingBoxDto>> GetBoundingBox()
         {
-            var boundingBoxDto = StormwaterJurisdictions.GetBoundingBoxDtoByPersonID(DbContext, CallingUser.PersonID);
+            var boundingBoxDto = await StormwaterJurisdictions.GetBoundingBoxDtoByPersonIDAsync(DbContext, CallingUser.PersonID);
             return Ok(boundingBoxDto);
         }
 

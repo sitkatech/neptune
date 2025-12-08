@@ -37,28 +37,29 @@ public static class StormwaterJurisdictionPeople
         return GetByID(dbContext, stormwaterJurisdictionPersonPrimaryKey.PrimaryKeyValue);
     }
 
-    public static List<int> ListViewableStormwaterJurisdictionIDsByPersonIDForBMPs(NeptuneDbContext dbContext, int? personID)
+    public static async Task<List<int>> ListViewableStormwaterJurisdictionIDsByPersonIDForBMPsAsync(NeptuneDbContext dbContext, int? personID)
     {
-        var personDto = personID.HasValue ? People.GetByIDAsDto(dbContext, personID.Value) : null;
-        return ListViewableStormwaterJurisdictionIDsByPersonDtoForBMPs(dbContext, personDto);
+        var personDto = personID.HasValue ? await People.GetByIDAsDtoAsync(dbContext, personID.Value) : null;
+        return await ListViewableStormwaterJurisdictionIDsByPersonDtoForBMPsAsync(dbContext, personDto);
     }
 
-    public static List<int> ListViewableStormwaterJurisdictionIDsByPersonDtoForBMPs(NeptuneDbContext dbContext, PersonDto? personDto)
+    public static Task<List<int>> ListViewableStormwaterJurisdictionIDsByPersonDtoForBMPsAsync(NeptuneDbContext dbContext, PersonDto? personDto)
     {
         if (personDto == null || personDto.RoleID == (int)RoleEnum.Unassigned)
         {
-            return StormwaterJurisdictions.List(dbContext)
-                .Where(x => x.StormwaterJurisdictionPublicBMPVisibilityTypeID ==
-                            (int)StormwaterJurisdictionPublicBMPVisibilityTypeEnum.VerifiedOnly)
-                .Select(x => x.StormwaterJurisdictionID).ToList();
+            return dbContext.StormwaterJurisdictions.AsNoTracking().Where(x => x.StormwaterJurisdictionPublicBMPVisibilityTypeID ==
+                                                                               (int)StormwaterJurisdictionPublicBMPVisibilityTypeEnum.VerifiedOnly).Select(x => x.StormwaterJurisdictionID).ToListAsync();
         }
 
-        if (personDto.RoleID == (int)RoleEnum.Admin || personDto.RoleID == (int)RoleEnum.SitkaAdmin)
+        if (personDto.RoleID is (int)RoleEnum.Admin or (int)RoleEnum.SitkaAdmin)
         {
-            return dbContext.StormwaterJurisdictions.Select(x => x.StormwaterJurisdictionID).ToList();
+            return dbContext.StormwaterJurisdictions.AsNoTracking().Select(x => x.StormwaterJurisdictionID).ToListAsync();
         }
 
-        return GetImpl(dbContext).AsNoTracking().Where(x => x.PersonID == personDto.PersonID).Select(x => x.StormwaterJurisdictionID).ToList();
+        return dbContext.StormwaterJurisdictionPeople
+            .Where(x => x.PersonID == personDto.PersonID)
+            .Select(x => x.StormwaterJurisdictionID)
+            .ToListAsync();
     }
 
     public static IEnumerable<int> ListViewableStormwaterJurisdictionIDsByPersonForBMPs(NeptuneDbContext dbContext, Person person)

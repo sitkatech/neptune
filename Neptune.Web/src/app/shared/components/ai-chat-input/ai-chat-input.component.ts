@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from "@angular/core";
-import { CommonModule } from "@angular/common";
+
 import { FormsModule } from "@angular/forms";
 import { IconComponent } from "../icon/icon.component";
 
@@ -14,7 +14,7 @@ export interface AiChatInputContext {
     templateUrl: "./ai-chat-input.component.html",
     styleUrls: ["./ai-chat-input.component.scss"],
     standalone: true,
-    imports: [CommonModule, FormsModule, IconComponent],
+    imports: [FormsModule, IconComponent],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AiChatInputComponent implements AfterViewInit {

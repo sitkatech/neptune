@@ -25,9 +25,9 @@ public class OnlandVisualTrashAssessmentAreaController(
 {
     [HttpGet]
     [JurisdictionEditFeature]
-    public ActionResult<List<OnlandVisualTrashAssessmentAreaGridDto>> List()
+    public async Task<ActionResult<List<OnlandVisualTrashAssessmentAreaGridDto>>> List()
     {
-        var stormwaterJurisdictionIDs = People.ListStormwaterJurisdictionIDsByPersonID(DbContext, CallingUser.PersonID);
+        var stormwaterJurisdictionIDs = await StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonIDForBMPsAsync(DbContext, CallingUser.PersonID);
         var onlandVisualTrashAssessmentAreaGridDtos = OnlandVisualTrashAssessmentAreas
             .ListByStormwaterJurisdictionIDList(DbContext, stormwaterJurisdictionIDs).Select(x => x.AsGridDto()).ToList();
         return Ok(onlandVisualTrashAssessmentAreaGridDtos);

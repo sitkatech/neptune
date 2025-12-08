@@ -35,9 +35,9 @@ namespace Neptune.API.Controllers
     {
         [HttpGet]
         [JurisdictionEditFeature]
-        public ActionResult<List<ProjectDto>> List()
+        public async Task<ActionResult<List<ProjectDto>>> List()
         {
-            var projectDtos = Projects.ListByPersonIDAsDto(DbContext, CallingUser.PersonID);
+            var projectDtos = await Projects.ListByPersonIDAsDtoAsync(DbContext, CallingUser.PersonID);
             return Ok(projectDtos);
         }
 
@@ -45,7 +45,7 @@ namespace Neptune.API.Controllers
         [JurisdictionEditFeature]
         public async Task<ActionResult<ProjectDto>> Create([FromBody] ProjectUpsertDto projectCreateDto)
         {
-            if (!CallingUser.CanEditJurisdiction(projectCreateDto.StormwaterJurisdictionID.Value, DbContext))
+            if (!(await CallingUser.CanEditJurisdiction(projectCreateDto.StormwaterJurisdictionID.Value, DbContext)))
             {
                 return Forbid();
             }
@@ -63,7 +63,7 @@ namespace Neptune.API.Controllers
         [HttpGet("{projectID}")]
         [EntityNotFound(typeof(Project), "projectID")]
         [UserViewFeature]
-        public ActionResult<ProjectDto> Get([FromRoute] int projectID)
+        public async Task<ActionResult<ProjectDto>> Get([FromRoute] int projectID)
         {
             var projectDto = Projects.GetByIDAsDto(DbContext, projectID);
 
@@ -71,7 +71,7 @@ namespace Neptune.API.Controllers
             {
                 return Ok(projectDto);
             }
-            if (CallingUser.CanEditJurisdiction(projectDto.StormwaterJurisdictionID, DbContext))
+            if (await CallingUser.CanEditJurisdiction(projectDto.StormwaterJurisdictionID, DbContext))
             {
                 return Ok(projectDto);
             }
@@ -82,7 +82,7 @@ namespace Neptune.API.Controllers
         [UserViewFeature]
         public ActionResult<BoundingBoxDto> GetBoundingBoxByProjectID([FromRoute] int projectID)
         {
-            var stormwaterJurisdictionID = Projects.GetByIDWithChangeTracking(DbContext, projectID).StormwaterJurisdictionID;
+            var stormwaterJurisdictionID = Projects.GetByIDAsDto(DbContext, projectID).StormwaterJurisdictionID;
             var boundingBoxDto = StormwaterJurisdictions.GetBoundingBoxDtoByJurisdictionID(DbContext, stormwaterJurisdictionID);
             return Ok(boundingBoxDto);
         }
@@ -103,7 +103,7 @@ namespace Neptune.API.Controllers
         [JurisdictionEditFeature]
         public async Task<IActionResult> Update([FromRoute] int projectID, [FromBody] ProjectUpsertDto projectCreateDto)
         {
-            if (!CallingUser.CanEditJurisdiction(projectCreateDto.StormwaterJurisdictionID.Value, DbContext))
+            if (!(await CallingUser.CanEditJurisdiction(projectCreateDto.StormwaterJurisdictionID.Value, DbContext)))
             {
                 return Forbid();
             }
@@ -154,7 +154,7 @@ namespace Neptune.API.Controllers
         public async Task<IActionResult> Delete([FromRoute] int projectID)
         {
             var project = Projects.GetByID(DbContext, projectID);
-            if (!CallingUser.CanEditJurisdiction(project.StormwaterJurisdictionID, DbContext))
+            if (!(await CallingUser.CanEditJurisdiction(project.StormwaterJurisdictionID, DbContext)))
             {
                 return Forbid();
             }
@@ -165,9 +165,9 @@ namespace Neptune.API.Controllers
         [HttpGet("{projectID}/treatment-bmps")]
         [EntityNotFound(typeof(Project), "projectID")]
         [JurisdictionEditFeature]
-        public ActionResult<List<TreatmentBMPDisplayDto>> ListTreatmentBMPsByProjectID([FromRoute] int projectID)
+        public async Task<ActionResult<List<TreatmentBMPDisplayDto>>> ListTreatmentBMPsByProjectID([FromRoute] int projectID)
         {
-            var treatmentBMPDisplayDtos = TreatmentBMPs.ListByProjectIDsAsDisplayDto(DbContext, [projectID]);
+            var treatmentBMPDisplayDtos = await TreatmentBMPs.ListByProjectIDsAsDisplayDtoAsync(DbContext, [projectID]);
             return Ok(treatmentBMPDisplayDtos);
         }
 
@@ -403,10 +403,10 @@ namespace Neptune.API.Controllers
         [HttpGet("{projectID}/project-network-solve-histories")]
         [EntityNotFound(typeof(Project), "projectID")]
         [UserViewFeature]
-        public ActionResult<List<ProjectNetworkSolveHistorySimpleDto>> ListProjectNetworkSolveHistoriesForProject([FromRoute] int projectID)
+        public async Task<ActionResult<List<ProjectNetworkSolveHistorySimpleDto>>> ListProjectNetworkSolveHistoriesForProject([FromRoute] int projectID)
         {
             var project = Projects.GetByID(DbContext, projectID);
-            if ((!CallingUser.IsOCTAGrantReviewer || !project.ShareOCTAM2Tier2Scores) && !CallingUser.CanEditJurisdiction(project.StormwaterJurisdictionID, DbContext))
+            if ((!CallingUser.IsOCTAGrantReviewer || !project.ShareOCTAM2Tier2Scores) && !(await CallingUser.CanEditJurisdiction(project.StormwaterJurisdictionID, DbContext)))
             {
                 return Forbid();
             }
@@ -418,10 +418,10 @@ namespace Neptune.API.Controllers
         [HttpGet("{projectID}/treatment-bmp-hru-characteristics")]
         [EntityNotFound(typeof(Project), "projectID")]
         [UserViewFeature]
-        public ActionResult<List<TreatmentBMPHRUCharacteristicsSummarySimpleDto>> ListTreatmentBMPHRUCharacteristicsForProject([FromRoute] int projectID)
+        public async Task<ActionResult<List<TreatmentBMPHRUCharacteristicsSummarySimpleDto>>> ListTreatmentBMPHRUCharacteristicsForProject([FromRoute] int projectID)
         {
             var project = Projects.GetByID(DbContext, projectID);
-            if ((!CallingUser.IsOCTAGrantReviewer || !project.ShareOCTAM2Tier2Scores) && !CallingUser.CanEditJurisdiction(project.StormwaterJurisdictionID, DbContext))
+            if ((!CallingUser.IsOCTAGrantReviewer || !project.ShareOCTAM2Tier2Scores) && !(await CallingUser.CanEditJurisdiction(project.StormwaterJurisdictionID, DbContext)))
             {
                 return Forbid();
             }
@@ -434,31 +434,15 @@ namespace Neptune.API.Controllers
         [HttpGet("{projectID}/load-reducing-results")]
         [EntityNotFound(typeof(Project), "projectID")]
         [UserViewFeature]
-        public ActionResult<List<ProjectLoadReducingResultDto>> ListLoadReducingResultsForProject([FromRoute] int projectID)
+        public async Task<ActionResult<List<ProjectLoadReducingResultDto>>> ListLoadReducingResultsForProject([FromRoute] int projectID)
         {
             var project = Projects.GetByID(DbContext, projectID);
-            if ((!CallingUser.IsOCTAGrantReviewer || !project.ShareOCTAM2Tier2Scores) && !CallingUser.CanEditJurisdiction(project.StormwaterJurisdictionID, DbContext))
+            if ((!CallingUser.IsOCTAGrantReviewer || !project.ShareOCTAM2Tier2Scores) && !(await CallingUser.CanEditJurisdiction(project.StormwaterJurisdictionID, DbContext)))
             {
                 return Forbid();
             }
 
             var modeledResults = ProjectLoadReducingResults.ListByProjectIDAsDto(DbContext, projectID);
-
-            return Ok(modeledResults);
-        }
-
-        [HttpGet("{projectID}/load-generating-results")]
-        [EntityNotFound(typeof(Project), "projectID")]
-        [UserViewFeature]
-        public ActionResult<List<ProjectLoadGeneratingResultDto>> ListtLoadGeneratingResultsForProject([FromRoute] int projectID)
-        {
-            var project = Projects.GetByID(DbContext, projectID);
-            if ((!CallingUser.IsOCTAGrantReviewer || !project.ShareOCTAM2Tier2Scores) && !CallingUser.CanEditJurisdiction(project.StormwaterJurisdictionID, DbContext))
-            {
-                return Forbid();
-            }
-
-            var modeledResults = ProjectLoadGeneratingResults.ListByProjectIDAsDto(DbContext, projectID);
 
             return Ok(modeledResults);
         }
@@ -469,7 +453,7 @@ namespace Neptune.API.Controllers
         public async Task<IActionResult> TriggerModeledPerformanceForProject([FromRoute] int projectID)
         {
             var project = Projects.GetByIDWithChangeTracking(DbContext, projectID);
-            if (!CallingUser.CanEditJurisdiction(project.StormwaterJurisdictionID, DbContext))
+            if (!(await CallingUser.CanEditJurisdiction(project.StormwaterJurisdictionID, DbContext)))
             {
                 return Forbid();
             }
@@ -514,7 +498,7 @@ namespace Neptune.API.Controllers
         public async Task<ActionResult<int>> CreateProjectCopy([FromRoute] int projectID)
         {
             var project = Projects.GetByIDWithChangeTracking(DbContext, projectID);
-            if (!CallingUser.CanEditJurisdiction(project.StormwaterJurisdictionID, DbContext))
+            if (!(await CallingUser.CanEditJurisdiction(project.StormwaterJurisdictionID, DbContext)))
             {
                 return Forbid();
             }

@@ -17,13 +17,6 @@ namespace Neptune.EFModels.Entities
             return persons;
         }
 
-        public static List<PersonSimpleDto> ListAsSimpleDto(NeptuneDbContext dbContext)
-        {
-            return GetImpl(dbContext)
-                .OrderBy(x => x.LastName).ThenBy(x => x.FirstName)
-                .Select(x => x.AsSimpleDto()).ToList();
-        }
-
         public static async Task<List<PersonSimpleDto>> ListAsSimpleDtoAsync(NeptuneDbContext dbContext)
         {
             var people = await GetImpl(dbContext)
@@ -92,24 +85,6 @@ namespace Neptune.EFModels.Entities
             var person = GetByGuid(dbContext, personGuid);
             return person?.AsDto();
         }
-        public static List<int> ListStormwaterJurisdictionIDsByPersonDto(NeptuneDbContext dbContext, PersonDto person)
-        {
-            if (person.RoleID == (int)RoleEnum.Admin || person.RoleID == (int)RoleEnum.SitkaAdmin)
-            {
-                return dbContext.StormwaterJurisdictions.Select(x => x.StormwaterJurisdictionID).ToList();
-            }
-
-            return dbContext.StormwaterJurisdictionPeople
-                .Where(x => x.PersonID == person.PersonID)
-                .Select(x => x.StormwaterJurisdictionID)
-                .ToList();
-        }
-
-        public static List<int> ListStormwaterJurisdictionIDsByPersonID(NeptuneDbContext dbContext, int personID)
-        {
-            var personDto = GetByIDAsDto(dbContext, personID);
-            return ListStormwaterJurisdictionIDsByPersonDto(dbContext, personDto);
-        }
 
         private static IQueryable<Person> GetImpl(NeptuneDbContext dbContext)
         {
@@ -140,6 +115,7 @@ namespace Neptune.EFModels.Entities
             Check.RequireNotNull(person, $"Person with specified service access token not found!");
             return person;
         }
+
         public static PersonDto CreateUnassignedPerson(NeptuneDbContext dbContext, PersonCreateDto userCreateDto)
         {
             var userUpsertDto = new PersonUpsertDto()

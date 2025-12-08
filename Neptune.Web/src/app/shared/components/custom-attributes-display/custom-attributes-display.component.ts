@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, SimpleChanges } from "@angular/core";
-import { CommonModule } from "@angular/common";
+
 import { CustomAttributeTypePurposeEnum, CustomAttributeTypePurposes } from "src/app/shared/generated/enum/custom-attribute-type-purpose-enum";
 import { RouterLink } from "@angular/router";
 import { CustomAttributeDto, TreatmentBMPTypeCustomAttributeTypeDto } from "../../generated/model/models";
@@ -7,7 +7,7 @@ import { CustomAttributeDto, TreatmentBMPTypeCustomAttributeTypeDto } from "../.
 @Component({
     selector: "custom-attributes-display",
     standalone: true,
-    imports: [CommonModule, RouterLink],
+    imports: [RouterLink],
     templateUrl: "./custom-attributes-display.component.html",
     styleUrls: ["./custom-attributes-display.component.scss"],
 })

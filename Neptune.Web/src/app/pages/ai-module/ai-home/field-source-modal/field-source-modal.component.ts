@@ -1,5 +1,5 @@
 import { Component, ComponentRef } from "@angular/core";
-import { CommonModule } from "@angular/common";
+
 import { ModalComponent } from "src/app/shared/components/modal/modal.component";
 import { ModalService } from "src/app/shared/services/modal/modal.service";
 
@@ -8,7 +8,7 @@ import { ModalService } from "src/app/shared/services/modal/modal.service";
     templateUrl: "./field-source-modal.component.html",
     styleUrls: ["./field-source-modal.component.scss"],
     standalone: true,
-    imports: [CommonModule],
+    imports: [],
 })
 export class FieldSourceModalComponent {
     modalComponentRef: ComponentRef<ModalComponent>;

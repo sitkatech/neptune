@@ -16,9 +16,9 @@ namespace Neptune.EFModels.Entities
                 .Include(x => x.PrimaryContactPerson);
         }
 
-        public static List<ProjectDto> ListAsDto(NeptuneDbContext dbContext)
+        public static Task<List<ProjectDto>> ListAsDtoAsync(NeptuneDbContext dbContext)
         {
-            return GetImpl(dbContext).AsNoTracking().OrderByDescending(x => x.ProjectID).Select(x => x.AsDto()).ToList();
+            return GetImpl(dbContext).AsNoTracking().OrderByDescending(x => x.ProjectID).Select(x => x.AsDto()).ToListAsync();
         }
 
         public static Project GetByIDWithChangeTracking(NeptuneDbContext dbContext, int projectID)
@@ -71,15 +71,15 @@ namespace Neptune.EFModels.Entities
             return dbContext.Projects.AsNoTracking().Select(x => x.ProjectID).ToList();
         }
 
-        public static List<ProjectDto> ListByPersonIDAsDto(NeptuneDbContext dbContext, int personID)
+        public static async Task<List<ProjectDto>> ListByPersonIDAsDtoAsync(NeptuneDbContext dbContext, int personID)
         {
             var person = People.GetByID(dbContext, personID);
-            if (person.RoleID == (int)RoleEnum.Admin || person.RoleID == (int)RoleEnum.SitkaAdmin)
+            if (person.RoleID is (int)RoleEnum.Admin or (int)RoleEnum.SitkaAdmin)
             {
-                return ListAsDto(dbContext);
+                return await ListAsDtoAsync(dbContext);
             }
 
-            var jurisdictionIDs = People.ListStormwaterJurisdictionIDsByPersonID(dbContext, personID);
+            var jurisdictionIDs = await StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonIDForBMPsAsync(dbContext, personID);
 
             return GetImpl(dbContext).AsNoTracking()
                 .Where(x => jurisdictionIDs.Contains(x.StormwaterJurisdictionID))

@@ -8,14 +8,13 @@ import { DialogRef } from "@ngneat/dialog";
 import { OrganizationUpsertDto, OrganizationUpsertDtoForm, OrganizationUpsertDtoFormControls } from "src/app/shared/generated/model/organization-upsert-dto";
 import { UserService } from "src/app/shared/generated/api/user.service";
 import { map, Observable, tap } from "rxjs";
-import { ButtonLoadingDirective } from "src/app/shared/directives/button-loading.directive";
 import { AsyncPipe } from "@angular/common";
 import { OrganizationTypeService } from "src/app/shared/generated/api/organization-type.service";
 
 @Component({
     selector: "organization-modal",
     standalone: true,
-    imports: [ReactiveFormsModule, FormFieldComponent, AlertDisplayComponent, ButtonLoadingDirective, AsyncPipe],
+    imports: [ReactiveFormsModule, FormFieldComponent, AlertDisplayComponent, AsyncPipe],
     templateUrl: "./organization-modal.component.html",
     styleUrl: "./organization-modal.component.scss",
 })

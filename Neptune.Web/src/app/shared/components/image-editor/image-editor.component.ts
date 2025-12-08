@@ -1,4 +1,4 @@
-import { CommonModule } from "@angular/common";
+
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, inject } from "@angular/core";
 import { ReactiveFormsModule, FormBuilder, FormGroup, FormArray, FormControl } from "@angular/forms";
 import { FileResourceService } from "src/app/shared/generated/api/file-resource.service";
@@ -10,7 +10,7 @@ import { ConfirmService } from "src/app/shared/services/confirm/confirm.service"
     templateUrl: "./image-editor.component.html",
     styleUrls: ["./image-editor.component.scss"],
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, FormFieldComponent],
+    imports: [ReactiveFormsModule, FormFieldComponent],
 })
 export class ImageEditorComponent implements OnInit, OnChanges, OnDestroy {
     private fileResourceService = inject(FileResourceService);
