@@ -1,5 +1,5 @@
-import { Component, OnInit } from "@angular/core";
-import { filter, map, Observable, of, switchMap, tap, catchError, shareReplay } from "rxjs";
+import { Component, OnInit, OnDestroy } from "@angular/core";
+import { filter, map, Observable, of, switchMap, tap, catchError, shareReplay, BehaviorSubject, interval, takeUntil, Subject, share } from "rxjs";
 import { CommonModule } from "@angular/common";
 import { ReactiveFormsModule, FormControl } from "@angular/forms";
 import { WaterQualityManagementPlanService } from "src/app/shared/generated/api/water-quality-management-plan.service";
@@ -12,7 +12,7 @@ import { IconComponent } from "src/app/shared/components/icon/icon.component";
 import { AIService } from "src/app/shared/generated/api/ai.service";
 import { WaterQualityManagementPlanChatbotComponent } from "./water-quality-management-plan-chatbot/water-quality-management-plan-chatbot.component";
 import { LoadingDirective } from "src/app/shared/directives/loading.directive";
-import { environment } from "src/environments/environment.qa";
+import { environment } from "src/environments/environment";
 import { ModalService, ModalSizeEnum } from "src/app/shared/services/modal/modal.service";
 import { FieldSourceModalComponent } from "./field-source-modal/field-source-modal.component";
 
@@ -32,7 +32,7 @@ import { FieldSourceModalComponent } from "./field-source-modal/field-source-mod
         LoadingDirective,
     ],
 })
-export class AiHomeComponent implements OnInit {
+export class AiHomeComponent implements OnInit, OnDestroy {
     public waterQualityManagementPlans$: Observable<SelectDropdownOption[]>;
     public waterQualityManagementPlans: WaterQualityManagementPlanDto[];
     public selectedPlan$: Observable<WaterQualityManagementPlanDto | null>;
@@ -40,7 +40,7 @@ export class AiHomeComponent implements OnInit {
     public selectedDocument: WaterQualityManagementPlanDocumentDto = null;
     public activeChatbotDocument: WaterQualityManagementPlanDocumentDto = null;
 
-    public extractionResult: WaterQualityManagementPlanDocumentExtractionResultDto = null;
+    public extractionResult$: Observable<WaterQualityManagementPlanDocumentExtractionResultDto>;
     public finalOutputObject: any = null;
 
     public imagePreview$: Observable<string>;
@@ -49,7 +49,12 @@ export class AiHomeComponent implements OnInit {
     public FormFieldType = FormFieldType;
 
     public isExtracting: boolean = false;
+    
+    private currentExtractingTextIndexSubject = new BehaviorSubject<number>(0);
+    public currentExtractingTextIndex$ = this.currentExtractingTextIndexSubject.asObservable();
     public currentExtractingTextIndex: number = 0;
+    private destroy$ = new Subject<void>();
+    
     public extractingTexts: string[] = [
         "Extracting water quality plan data",
         "Parsing report structure and contents",
@@ -92,7 +97,6 @@ export class AiHomeComponent implements OnInit {
         this.selectedPlan$ = this.planControl.valueChanges.pipe(
             tap(() => {
                 this.isExtracting = false;
-                this.extractionResult = null;
                 this.selectedDocument = null;
                 this.activeChatbotDocument = null;
             }),
@@ -115,40 +119,46 @@ export class AiHomeComponent implements OnInit {
         );
     }
 
+    ngOnDestroy(): void {
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
+
     onDocumentSelectedChange(document: WaterQualityManagementPlanDocumentDto) {
         this.selectedDocument = document;
         this.activeChatbotDocument = null;
-        this.extractionResult = null;
         this.isChatbotOpen = false;
     }
 
     onClickExtractData() {
         this.activeChatbotDocument = this.selectedDocument;
         this.isExtracting = true;
-        this.extractionResult = null;
 
         this.currentExtractingTextIndex = 0;
-        let interval = setInterval(() => {
+        this.currentExtractingTextIndexSubject.next(0);
+        
+        const textUpdateSubscription = interval(7500).pipe(
+            takeUntil(this.destroy$)
+        ).subscribe(() => {
             this.currentExtractingTextIndex++;
             if (this.currentExtractingTextIndex >= this.extractingTexts.length) {
                 this.currentExtractingTextIndex = this.extractingTexts.length - 1;
             }
-        }, 7500);
-
-        this.aiService.extractAllAI(this.selectedDocument.WaterQualityManagementPlanDocumentID).subscribe({
-            next: (result) => {
-                this.extractionResult = result;
-
-                this.finalOutputObject = JSON.parse(this.extractionResult.FinalOutput);
-
-                this.isExtracting = false;
-                clearInterval(interval);
-            },
-            error: () => {
-                this.isExtracting = false;
-                clearInterval(interval);
-            },
+            this.currentExtractingTextIndexSubject.next(this.currentExtractingTextIndex);
         });
+
+        this.extractionResult$ = this.aiService.extractAllAI(this.selectedDocument.WaterQualityManagementPlanDocumentID).pipe(
+            share(),
+            tap(result => {
+                this.finalOutputObject = JSON.parse(result.FinalOutput);
+
+                this.isExtracting = false;
+            }),
+            catchError(error => {
+                this.isExtracting = false;
+                return of(null);
+            })
+        );
     }
 
     onExtractingChange(isExtracting: boolean) {
