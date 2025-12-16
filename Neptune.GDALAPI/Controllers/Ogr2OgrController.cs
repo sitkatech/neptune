@@ -117,17 +117,25 @@ namespace Neptune.GDALAPI.Controllers
         [RequestFormLimits(MultipartBodyLengthLimit = 100_000_000_000)]
         public async Task<ActionResult<string>> GdbToGeoJson([FromBody] GdbToGeoJsonRequestDto requestDto)
         {
-            if (requestDto.GdbLayerOutputs.Count != 1)
+            try
             {
-                return BadRequest(
-                    "Expecting to process only one layer for this gdb.  If you need to process more than one please use the ogr2ogr/gdb-geojsons end point!");
-            }
+                if (requestDto.GdbLayerOutputs.Count != 1)
+                {
+                    return BadRequest(
+                        "Expecting to process only one layer for this gdb.  If you need to process more than one please use the ogr2ogr/gdb-geojsons end point!");
+                }
 
-            using var disposableTempGdbZip = DisposableTempFile.MakeDisposableTempFileEndingIn(".gdb.zip");
-            await RetrieveGdbFromFileOrBlobStorage(requestDto, disposableTempGdbZip);
-            var layerOutput = requestDto.GdbLayerOutputs.Single();
-            var geoJson = ExtractGeoJsonFromGdb(disposableTempGdbZip, layerOutput);
-            return Ok(geoJson);
+                using var disposableTempGdbZip = DisposableTempFile.MakeDisposableTempFileEndingIn(".gdb.zip");
+                await RetrieveGdbFromFileOrBlobStorage(requestDto, disposableTempGdbZip);
+                var layerOutput = requestDto.GdbLayerOutputs.Single();
+                var geoJson = ExtractGeoJsonFromGdb(disposableTempGdbZip, layerOutput);
+                return Ok(geoJson);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while processing GDB to GeoJSON request");
+                return StatusCode(500, ex.Message);
+            }
         }
 
         private string ExtractGeoJsonFromGdb(DisposableTempFile disposableTempGdbZip, GdbLayerOutput layerOutput)

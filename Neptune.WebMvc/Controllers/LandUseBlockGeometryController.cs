@@ -138,7 +138,7 @@ namespace Neptune.WebMvc.Controllers
                         StringComparison.InvariantCultureIgnoreCase))
                 {
                     ModelState.AddModelError("",
-                        "The columns in the uploaded file did not match the LandUseBlock schema. The file is invalid and cannot be uploaded.");
+                        "The columns in the uploaded file did not match the LandUseBlock schema. Please ensure that every field in the schema is present and does not rely on an alias to meet the requirements. The file is invalid and cannot be uploaded.");
                 }
                 else
                 {
