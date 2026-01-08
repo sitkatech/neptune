@@ -153,6 +153,13 @@ namespace Neptune.WebMvc.Controllers
                         StringComparison.InvariantCultureIgnoreCase))
                 {
                     ModelState.AddModelError("", e.Message);
+                } else if (e is DbUpdateException && e.InnerException != null && e.InnerException.Message.Contains("Violation of UNIQUE KEY constraint 'AK_DelineationStaging_TreatmentBMPName_StormwaterJurisdictionID'. Cannot insert duplicate key in object 'dbo.DelineationStaging'. The duplicate key value is "))
+                {
+                    var start = e.InnerException.Message.IndexOf('(') + 1;
+                    var end = e.InnerException.Message.IndexOf(',');
+                    var duplicateBMP = e.InnerException.Message.Substring(start, end-start);
+                    ModelState.AddModelError("",
+                        $"The Treatment BMP Name field must contain unique values. There was at least one duplicated Treatment BMP Name: {duplicateBMP}");
                 }
                 else
                 {
