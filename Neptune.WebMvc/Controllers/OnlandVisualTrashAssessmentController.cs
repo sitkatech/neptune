@@ -1,6 +1,5 @@
 ﻿using System.Data;
 using ClosedXML.Excel;
-using IdentityServer4.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -77,7 +76,7 @@ namespace Neptune.WebMvc.Controllers
                 foreach (DataRow row in dataTableFromExcel.Rows)
                 {
                     var rowJurisdiction = row["Jurisdiction Name"].ToString();
-                    if (!rowJurisdiction.IsNullOrEmpty() && !stormwaterJurisdictionsPersonCanView.Select(x => x.Organization.OrganizationName)
+                    if (!string.IsNullOrWhiteSpace(rowJurisdiction) && !stormwaterJurisdictionsPersonCanView.Select(x => x.Organization.OrganizationName)
                             .Contains(rowJurisdiction))
                     {
                         SetErrorForDisplay(
@@ -132,7 +131,7 @@ namespace Neptune.WebMvc.Controllers
                         var assessmentPreliminarySourceIdentificationTypes = new List<OnlandVisualTrashAssessmentPreliminarySourceIdentificationType>();
                         foreach (var category in categories)
                         {
-                            if (!row[category].ToString().IsNullOrEmpty())
+                            if (!string.IsNullOrWhiteSpace(row[category].ToString()))
                             {
                                 var identificationTypes = row[category].ToString().Trim().Split(',');
                                 foreach (var identificationType in identificationTypes)
@@ -230,19 +229,19 @@ namespace Neptune.WebMvc.Controllers
                 errors.Add($"Cannot find Person in row {i + 1}");
             }
 
-            if (row["Is Progress Assessment"].ToString().IsNullOrEmpty() ||
+            if (string.IsNullOrWhiteSpace(row["Is Progress Assessment"].ToString()) ||
                 (row["Is Progress Assessment"].ToString().Trim() != "Yes" && row["Is Progress Assessment"].ToString().Trim() != "No"))
             {
                 errors.Add($"Is Progress Assessment is not a valid value in row {i + 1}. It must be either Yes or No.");
             }
 
-            if (row["Status"].ToString().IsNullOrEmpty() || 
+            if (string.IsNullOrWhiteSpace(row["Status"].ToString()) ||
                 (row["Status"].ToString().Trim() != "Finalized" && row["Status"].ToString().Trim() != "Draft"))
             {
                 errors.Add($"Status is not a valid value in row {i + 1}. It must be either Finalized or Draft.");
             }
 
-            if (row["Score"].ToString().IsNullOrEmpty() ||
+            if (string.IsNullOrWhiteSpace(row["Score"].ToString()) ||
                 !(OnlandVisualTrashAssessmentScore.All
                     .Select(x => x.OnlandVisualTrashAssessmentScoreDisplayName).ToList()
                     .Contains(row["Score"].ToString().Trim())))

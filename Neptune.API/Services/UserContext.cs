@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
@@ -12,7 +13,6 @@ namespace Neptune.API.Services
         {
             var user = GetUserFromHttpContext(dbContext, httpContext);
             return user == null ? new PersonDto { PersonID = Person.AnonymousPersonID,
-                PersonGuid = Guid.Empty,
                 FirstName = "Anonymous",
                 LastName = "User",
                 RoleID = (int) RoleEnum.Unassigned,
@@ -36,8 +36,8 @@ namespace Neptune.API.Services
                 return null;
             }
 
-            var userGuid = Guid.Parse(claimsPrincipal.Claims.Single(c => c.Type == "sub").Value);
-            var keystoneUser = People.GetByGuid(dbContext, userGuid);
+            var userGuid = claimsPrincipal.Claims.Single(c => c.Type == "sub").Value;
+            var keystoneUser = People.GetByAuth0ID(dbContext, userGuid);
 
             return keystoneUser;
         }

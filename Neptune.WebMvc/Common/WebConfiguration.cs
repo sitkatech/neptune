@@ -26,4 +26,6 @@ public class WebConfiguration : NeptuneJobConfiguration
     public string AzureBlobStorageConnectionString { get; set; }
 
     public GoogleRecaptchaV3Config GoogleRecaptchaV3Config { get; set; }
+    public string Auth0Domain { get; set; }
+    public string Auth0ClientID { get; set; }
 }

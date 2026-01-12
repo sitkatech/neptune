@@ -1,6 +1,5 @@
 ﻿using Hangfire;
 using Hangfire.SqlServer;
-using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -8,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
 using Neptune.API.Services;
 using Neptune.API.Services.Filter;
 using Neptune.API.Services.Middleware;
@@ -27,12 +25,11 @@ using SendGrid.Extensions.DependencyInjection;
 using Serilog;
 using System;
 using System.ClientModel;
-using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http;
 using System.Text.Json;
-using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using System.Threading;
+using Auth0.AspNetCore.Authentication;
 using LogHelper = Neptune.API.Services.Logging.LogHelper;
 
 namespace Neptune.API
@@ -77,24 +74,17 @@ namespace Neptune.API
             services.AddSingleton(Configuration);
 
 
-            services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(o =>
-                {
-                    o.SessionStore = new MemoryCacheTicketStore();
-                })
-                .AddJwtBearer(options =>
-                {
-                    options.TokenValidationParameters.ValidateAudience = false;
-                    options.Authority = configuration.KeystoneOpenIDUrl;
-                    options.RequireHttpsMetadata = false;
-                    options.SecurityTokenValidators.Clear();
-                    options.SecurityTokenValidators.Add(new JwtSecurityTokenHandler
-                    {
-                        MapInboundClaims = false
-                    });
-                    options.TokenValidationParameters.NameClaimType = "name";
-                    options.TokenValidationParameters.RoleClaimType = "role";
-                });
+            #region Auth0 authentication
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
+            services.AddAuth0WebAppAuthentication(options =>
+            {
+                options.Domain = configuration.Auth0Domain;
+                options.ClientId = configuration.Auth0ClientID;
+            });
+            #endregion
 
             services.AddDbContext<NeptuneDbContext>(c =>
             {

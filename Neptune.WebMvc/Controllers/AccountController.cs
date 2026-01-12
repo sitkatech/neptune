@@ -19,8 +19,10 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using Auth0.AspNetCore.Authentication;
 using Neptune.WebMvc.Common;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -47,12 +49,13 @@ namespace Neptune.WebMvc.Controllers
             return Content("Not Authorized");
         }
 
-        [Authorize]
-        public ActionResult LogOn()
+        [AllowAnonymous]
+        public ActionResult Login()
         {
             var rawReturnUrl = HttpContext.Request.Cookies["NeptuneReturnURL"];
             var returnUrl = AuthenticationHelper.SanitizeReturnUrlForLogin(rawReturnUrl, HomeUrl);
-            return Redirect(returnUrl);
+            var props = new AuthenticationProperties { RedirectUri = returnUrl };
+            return Challenge(props, "Auth0");
         }
 
         public ActionResult Register()
@@ -60,15 +63,18 @@ namespace Neptune.WebMvc.Controllers
             return RedirectPermanent(HomeUrl);
         }
 
-        public async Task<IActionResult> LogOff()
+        [Authorize]
+        public async Task Logout()
         {
-            await HttpContext.SignOutAsync();
-            return RedirectToAction("Index", "Home");
-        }
+            var authenticationProperties = new LogoutAuthenticationPropertiesBuilder()
+                // Indicate here where Auth0 should redirect the user after a logout.
+                // Note that the resulting absolute Uri must be added to the
+                // **Allowed Logout URLs** settings for the app.
+                .WithRedirectUri(Url.Action("Index", "Home"))
+                .Build();
 
-        public ActionResult SignoutCleanup(string sid)
-        {
-            return Content(string.Empty);
+            await HttpContext.SignOutAsync(Auth0Constants.AuthenticationScheme, authenticationProperties);
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         }
     }
 }

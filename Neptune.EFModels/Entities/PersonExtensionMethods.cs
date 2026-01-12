@@ -21,7 +21,6 @@ public static class PersonExtensionMethods
         var dto = new PersonSimpleDto()
         {
             PersonID = person.PersonID,
-            PersonGuid = person.PersonGuid,
             FirstName = person.FirstName,
             LastName = person.LastName,
             Email = person.Email,
@@ -46,7 +45,6 @@ public static class PersonExtensionMethods
         var personDto = new PersonDto()
         {
             PersonID = person.PersonID,
-            PersonGuid = person.PersonGuid,
             FirstName = person.FirstName,
             LastName = person.LastName,
             Email = person.Email,

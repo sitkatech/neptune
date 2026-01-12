@@ -55,7 +55,7 @@ namespace Neptune.WebMvc.Common
             var returnUrl = httpContext.Request.GetDisplayUrl();
             //var link = new Uri(linkGenerator.GetUriByAction(context, "LogOn", "Account", new { returnUrl }));
             //return link.ToString();
-            var logInUrl = SitkaRoute<AccountController>.BuildUrlFromExpression(linkGenerator, x => x.LogOn());
+            var logInUrl = SitkaRoute<AccountController>.BuildUrlFromExpression(linkGenerator, x => x.Login());
             return OnErrorOrNotFoundPage(httpContext, linkGenerator, canonicalHostName, returnUrl) ? logInUrl : $"{logInUrl}?returnUrl={HttpUtility.UrlEncode(returnUrl)}";
         }
 
@@ -74,7 +74,7 @@ namespace Neptune.WebMvc.Common
         public static string GenerateLogOutUrl()
         {
             // LogOff is an async route so we can't use a Sitka route
-            return "/Account/LogOff";
+            return "/Account/Logout";
         }
 
         private static bool OnErrorOrNotFoundPage(HttpContext httpContext, LinkGenerator linkGenerator, string canonicalHostName, string url)

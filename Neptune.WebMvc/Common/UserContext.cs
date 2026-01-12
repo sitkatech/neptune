@@ -12,8 +12,8 @@ public static class UserContext
         var claimsPrincipal = httpContext.User;
         if (claimsPrincipal.Claims.Any())
         {
-            var userGuid = Guid.Parse(claimsPrincipal.Claims.Single(x => x.Type == "sub").Value);
-            person = People.GetByGuid(dbContext, userGuid);
+            var auth0ID = claimsPrincipal.Claims.Single(x => x.Type == "sub").Value;
+            person = People.GetByAuth0ID(dbContext, auth0ID);
         }
 
         return person ?? PersonModelExtensions.GetAnonymousSitkaUser();

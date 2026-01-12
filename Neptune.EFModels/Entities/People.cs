@@ -75,14 +75,30 @@ namespace Neptune.EFModels.Entities
             return person?.AsDto();
         }
 
-        public static Person? GetByGuid(NeptuneDbContext dbContext, Guid personGuid)
+        public static async Task<Person?> GetByAuth0IDAsync(NeptuneDbContext dbContext, string auth0ID)
         {
-            return GetImpl(dbContext).AsNoTracking().SingleOrDefault(x => x.PersonGuid == personGuid);
+            return await dbContext.People.AsNoTracking().Where(x => x.Auth0ID == auth0ID).SingleOrDefaultAsync();
         }
 
-        public static PersonDto? GetByGuidAsDto(NeptuneDbContext dbContext, Guid personGuid)
+        public static Person? GetByAuth0ID(NeptuneDbContext dbContext, string auth0ID)
         {
-            var person = GetByGuid(dbContext, personGuid);
+            return dbContext.People.AsNoTracking()
+                .Include(x => x.Organization)
+                .Include(x => x.StormwaterJurisdictionPeople)
+                .ThenInclude(x => x.StormwaterJurisdiction)
+                .ThenInclude(x => x.Organization)
+                .SingleOrDefault(x => x.Auth0ID == auth0ID);
+        }
+
+        public static async Task<PersonDto?> GetByAuth0IDAsDtoAsync(NeptuneDbContext dbContext, string auth0ID)
+        {
+            var person = await dbContext.People
+                .Include(x => x.Organization)
+                .ThenInclude(x => x.OrganizationType)
+                .Include(x => x.StormwaterJurisdictionPeople)
+                .ThenInclude(x => x.StormwaterJurisdiction)
+                .ThenInclude(x => x.Organization)
+                .ThenInclude(x => x.OrganizationType).AsNoTracking().Where(x => x.Auth0ID == auth0ID).SingleOrDefaultAsync();
             return person?.AsDto();
         }
 
@@ -133,12 +149,6 @@ namespace Neptune.EFModels.Entities
         {
             var result = new List<ErrorMessage>();
 
-            var userByGuidDto = GetByGuid(dbContext, userCreateDto.UserGuid);  // A duplicate Guid not only leads to 500s, it allows someone to hijack another user's account
-            if (userByGuidDto != null)
-            {
-                result.Add(new ErrorMessage() { Type = "Person Creation", Message = "Invalid user information." });  // purposely vague; we don't want a naughty person realizing they figured out someone else's Guid
-            }
-
             var userByEmailDto = GetByEmailAsDto(dbContext, userCreateDto.Email);  // A duplicate email leads to 500s, so need to prevent duplicates
             if (userByEmailDto != null)
             {
@@ -164,7 +174,6 @@ namespace Neptune.EFModels.Entities
 
             var person = new Person
             {
-                PersonGuid = userGuid,
                 LoginName = loginName,
                 Email = personToCreate.Email,
                 FirstName = personToCreate.FirstName,
@@ -197,7 +206,6 @@ namespace Neptune.EFModels.Entities
             }
             var person = new Person
             {
-                PersonGuid = userGuid,
                 LoginName = loginName,
                 Email = dto.Email,
                 FirstName = dto.FirstName,

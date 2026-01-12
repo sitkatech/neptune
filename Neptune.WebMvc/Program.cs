@@ -1,27 +1,26 @@
+using System.Security.Claims;
+using Auth0.AspNetCore.Authentication;
+using Hangfire;
+using Hangfire.SqlServer;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.EntityFrameworkCore;
 using Neptune.Common.Email;
 using Neptune.Common.JsonConverters;
-using Neptune.Common.Services.GDAL;
 using Neptune.Common.Services;
+using Neptune.Common.Services.GDAL;
 using Neptune.EFModels.Entities;
+using Neptune.Jobs;
+using Neptune.Jobs.Services;
 using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Common.OpenID;
 using Neptune.WebMvc.Services;
 using NetTopologySuite.IO.Converters;
 using SendGrid.Extensions.DependencyInjection;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using Hangfire;
-using Hangfire.SqlServer;
-using Neptune.Jobs;
-using Neptune.Jobs.Services;
 using Serilog;
 using Serilog.Core;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using LogHelper = Neptune.WebMvc.Services.Logging.LogHelper;
-using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 {
@@ -170,73 +169,56 @@ var builder = WebApplication.CreateBuilder(args);
     });
     #endregion
 
-    JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
-    services.AddAuthentication(options =>
+    #region Auth0 authentication
+    services.Configure<CookiePolicyOptions>(options =>
+    {
+        options.MinimumSameSitePolicy = SameSiteMode.None;
+    });
+    services.AddAuth0WebAppAuthentication(options =>
+    {
+        options.Domain = configuration.Auth0Domain;
+        options.ClientId = configuration.Auth0ClientID;
+        options.Scope = "openid profile email";
+        options.OpenIdConnectEvents = new OpenIdConnectEvents
         {
-            options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            options.DefaultChallengeScheme = "Keystone";
-        })
-        .AddCookie(opt =>
-        {
-            opt.Cookie.HttpOnly = true;
-            opt.Cookie.SameSite = SameSiteMode.Lax;
-            opt.SessionStore = new MemoryCacheTicketStore();
-        })
-        .AddOpenIdConnect("Keystone", options =>
-        {
-            options.Authority = configuration.KeystoneOpenIDUrl;
-            options.CallbackPath = "/Account/LogOn";  // This needs to match redirect uri in Keystone but should NOT be a real url
-            options.Scope.Add("openid");
-            options.Scope.Add("keystone");
-            options.Scope.Add("profile");
-            options.Scope.Add("offline_access");
-            options.ClientId = configuration.KeystoneOpenIDClientID;
-            options.ClientSecret = configuration.KeystoneOpenIDClientSecret;
-            //options.ResponseType = "id_token token";
-            options.ResponseType = "code";
-            options.SaveTokens = true;
-            options.TokenValidationParameters.NameClaimType = "name";
-            options.TokenValidationParameters.RoleClaimType = "role";
-            options.SkipUnrecognizedRequests = true;
-            options.Events = new OpenIdConnectEvents()
+            OnRedirectToIdentityProvider = async context =>
             {
-                OnRedirectToIdentityProvider = async context =>
-                {
-                    //save current url to state
-                    context.ProtocolMessage.State = context.HttpContext.Request.QueryString.HasValue
-                        ? context.HttpContext.Request.Query["returnUrl"]
-                        : "/";
-                },
-                OnTokenValidated = context =>
-                {
-                    var dbContext = context.HttpContext.RequestServices.GetRequiredService<NeptuneDbContext>();
-                    var sitkaSmtpClientService = context.HttpContext.RequestServices.GetRequiredService<SitkaSmtpClientService>();
+                //save current url to state
+                context.ProtocolMessage.State = context.HttpContext.Request.QueryString.HasValue
+                    ? context.HttpContext.Request.Query["returnUrl"]
+                    : "/";
+            },
+            OnTokenValidated = context =>
+            {
+                var dbContext = context.HttpContext.RequestServices.GetRequiredService<NeptuneDbContext>();
+                var sitkaSmtpClientService = context.HttpContext.RequestServices.GetRequiredService<SitkaSmtpClientService>();
 
-                    if (context.Principal.Identity?.IsAuthenticated == true) // we have a token and we can determine the person.
-                    {
-                        AuthenticationHelper.ProcessLoginFromKeystone(context, dbContext, configuration, logger, sitkaSmtpClientService);
-                    }
-                    var url = context.ProtocolMessage.State;
-                    var claims = new List<Claim>
-                    {
-                        new("returnUrl", url)
-                    };
-                    var appIdentity = new ClaimsIdentity(claims);
-
-                    //add url to claims
-                    context.Principal.AddIdentity(appIdentity);
-
-                    return Task.CompletedTask;
-                },
-                OnTicketReceived = ctx =>
+                if (context.Principal.Identity?.IsAuthenticated == true) // we have a token and we can determine the person.
                 {
-                    var url = ctx.Principal.FindFirst("returnUrl").Value;
-                    ctx.ReturnUri = url;
-                    return Task.CompletedTask;
+                    AuthenticationHelper.ProcessLoginFromAuth0(context, dbContext, configuration, logger, sitkaSmtpClientService);
                 }
-            };
+                var url = context.ProtocolMessage.State;
+                var claims = new List<Claim>
+                {
+                    new("sub", context.SecurityToken.Subject),
+                    new("returnUrl", url)
+                };
+                var appIdentity = new ClaimsIdentity(claims);
 
-        });
+                //add url to claims
+                context.Principal.AddIdentity(appIdentity);
+
+                return Task.CompletedTask;
+            },
+            OnTicketReceived = ctx =>
+            {
+                var url = ctx.Principal.FindFirst("returnUrl").Value;
+                ctx.ReturnUri = url;
+                return Task.CompletedTask;
+            }
+        };
+    });
+    #endregion
 
     services.AddHttpContextAccessor();
     services.AddScoped<AzureBlobStorageService>();

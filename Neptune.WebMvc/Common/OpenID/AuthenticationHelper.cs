@@ -1,11 +1,12 @@
-﻿using System.Net.Mail;
-using System.Security.Claims;
-using System.Web;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Neptune.Common.Email;
 using Neptune.EFModels.Entities;
 using Serilog.Core;
+using System.Net.Mail;
+using System.Security.Claims;
+using System.Web;
+using Microsoft.EntityFrameworkCore;
 
 namespace Neptune.WebMvc.Common.OpenID;
 
@@ -62,115 +63,58 @@ public static class AuthenticationHelper
         await next();
     }
 
-    public static async Task ProcessLoginFromKeystone(TokenValidatedContext tokenValidatedContext, NeptuneDbContext dbContext, WebConfiguration configuration, Logger _logger, SitkaSmtpClientService sitkaSmtpClientService)
+    public static void ProcessLoginFromAuth0(TokenValidatedContext tokenValidatedContext, NeptuneDbContext dbContext, WebConfiguration configuration, Logger _logger, SitkaSmtpClientService sitkaSmtpClientService)
     {
         var sendNewUserNotification = false;
-        var sendNewOrganizationNotification = false;
-        var claimsIdentity = (ClaimsIdentity)tokenValidatedContext.Principal.Identity;
-        var keystoneGuid = new Guid(claimsIdentity.GetClaimValue("sub"));
-        _logger.Information($"ocstormwatertools.org: In {nameof(ProcessLoginFromKeystone)} - Processing Keystone login for user with Keystone guid {keystoneGuid}".ToString());
-        var person = People.GetByGuid(dbContext, keystoneGuid);
-        var firstName = claimsIdentity.GetClaimValue("given_name");
-        var lastName = claimsIdentity.GetClaimValue("family_name");
-        var email = claimsIdentity.GetClaimValue("email");
-        var loginName = claimsIdentity.GetClaimValue("login_name");
+        var claims = tokenValidatedContext.SecurityToken.Claims;
+        var auth0ID = tokenValidatedContext.SecurityToken.Subject;
+        _logger.Information($"ocstormwatertools.org: In {nameof(ProcessLoginFromAuth0)} - Processing Auth0 login for user with Auth0 guid {auth0ID}".ToString());
+        var person = dbContext.People.FirstOrDefault(x => x.Auth0ID == auth0ID);
+        var principal = tokenValidatedContext.Principal;
+
+        // Retrieve the given_name and family_name claims
+        var firstName = principal.FindFirst(ClaimTypes.GivenName)?.Value;
+        var lastName = principal.FindFirst(ClaimTypes.Surname)?.Value;
+        var email = principal.FindFirst(ClaimTypes.Email)?.Value;
         if (person == null)
         {
-            _logger.Information($"ocstormwatertools.org: In {nameof(ProcessLoginFromKeystone)} - Creating a new user for {firstName} {lastName} from Keystone login".ToString());
+            _logger.Information($"ocstormwatertools.org: In {nameof(ProcessLoginFromAuth0)} - Creating a new user for {firstName} {lastName} from Keystone login".ToString());
             // new user - provision with limited role
-            var unknownOrganization = Organizations.GetUnknownOrganization(dbContext);
             person = new Person()
             {
-                PersonGuid = keystoneGuid,
+                Auth0ID = auth0ID,
                 FirstName = firstName,
                 LastName = lastName,
                 Email = email,
                 RoleID = Role.Unassigned.RoleID,
                 CreateDate = DateTime.UtcNow,
                 IsActive = true,
-                OrganizationID = unknownOrganization.OrganizationID,
-                LoginName = loginName,
+                OrganizationID = Organizations.OrganizationIDUnassigned,
                 WebServiceAccessToken = Guid.NewGuid()
             };
-            await dbContext.People.AddAsync(person);
+            dbContext.People.Add(person);
             sendNewUserNotification = true;
         }
         else
         {
-            _logger.Information($"ocstormwatertools.org: In {nameof(ProcessLoginFromKeystone)} - Signing in user {firstName} {lastName} from Keystone login".ToString());
-            if (person.FirstName != firstName || person.LastName != lastName || person.Email != email || person.LoginName != loginName)
+            _logger.Information($"ocstormwatertools.org: In {nameof(ProcessLoginFromAuth0)} - Signing in user {firstName} {lastName} from Keystone login".ToString());
+            if (person.FirstName != firstName || person.LastName != lastName || person.Email != email)
             {
-                _logger.Information($"ocstormwatertools.org: In {nameof(ProcessLoginFromKeystone)} - Creating a new user for {firstName} {lastName} from Keystone login".ToString());
+                _logger.Information($"ocstormwatertools.org: In {nameof(ProcessLoginFromAuth0)} - Creating a new user for {firstName} {lastName} from Keystone login".ToString());
                 person.FirstName = firstName;
                 person.LastName = lastName;
                 person.Email = email;
                 // person.Phone = primaryPhone?.ToPhoneNumberString();
-                person.LoginName = loginName;
                 person.UpdateDate = DateTime.UtcNow;
             }
         }
 
-        // handle the organization
-        if (claimsIdentity.TryGetClaimValue("organization_identifier", out var keystoneOrganizationGuidString))
-        {
-            if (!string.IsNullOrWhiteSpace(keystoneOrganizationGuidString))
-            {
-                var keystoneOrganizationGuid = new Guid(keystoneOrganizationGuidString);
-                var keystoneOrganizationName = claimsIdentity.GetClaimValue("organization_name");
-                var keystoneOrganizationShortName = claimsIdentity.GetClaimValue("organization_shortname");
-                // first look by guid, then by name; if not available, create it on the fly since it is a person org
-                var organization = Organizations.GetByGuid(dbContext, keystoneOrganizationGuid) ??
-                                   Organizations.GetByName(dbContext, keystoneOrganizationName);
-
-                if (organization == null)
-                {
-                    _logger.Information(
-                        $"ocstormwatertools.org: In {nameof(ProcessLoginFromKeystone)} - Creating a new Organization {keystoneOrganizationName} based on Keystone login by user {firstName} {lastName}"
-                            .ToString());
-                    var defaultOrganizationType = OrganizationTypes.GetDefaultOrganizationType(dbContext);
-                    organization = new Organization()
-                    {
-                        OrganizationName = keystoneOrganizationName,
-                        IsActive = true,
-                        OrganizationTypeID = defaultOrganizationType.OrganizationTypeID,
-                        OrganizationShortName = keystoneOrganizationShortName,
-                        OrganizationGuid = keystoneOrganizationGuid
-                    };
-                    await dbContext.Organizations.AddAsync(organization);
-                    sendNewOrganizationNotification = true;
-                }
-
-                organization.OrganizationName = keystoneOrganizationName;
-
-                if (!organization.OrganizationGuid.HasValue)
-                {
-                    _logger.Information(
-                        $"ocstormwatertools.org: In {nameof(ProcessLoginFromKeystone)} - Setting the KeystoneGuid field for existing Organization {keystoneOrganizationName} based on Keystone login by user {firstName} {lastName}"
-                            .ToString());
-                    organization.OrganizationGuid = keystoneOrganizationGuid;
-                }
-
-                person.Organization = organization;
-                person.OrganizationID = organization.OrganizationID;
-            }
-        }
-        else
-        {
-            var unknownOrganization = Organizations.GetUnknownOrganization(dbContext);
-            person.Organization = unknownOrganization;
-        }
-
         person.LastActivityDate = DateTime.UtcNow;
-        await dbContext.SaveChangesAsync();
+        dbContext.SaveChanges();
 
         if (sendNewUserNotification)
         {
-            await SendNewUserCreatedMessage(dbContext, configuration, person, loginName, sitkaSmtpClientService);
-        }
-
-        if (sendNewOrganizationNotification)
-        {
-            await SendNewOrganizationCreatedMessage(dbContext, configuration, person, loginName, sitkaSmtpClientService);
+            SendNewUserCreatedMessage(dbContext, configuration, person, email, sitkaSmtpClientService);
         }
     }
 
@@ -179,7 +123,7 @@ public static class AuthenticationHelper
 
     public static async Task SendNewUserCreatedMessage(NeptuneDbContext dbContext, WebConfiguration configuration, Person person, string loginName, SitkaSmtpClientService sitkaSmtpClientService)
     {
-        var subject = $"User added: {person.GetFullNameFirstLastAndOrg()}";
+        var subject = $"User added: {person.GetFullNameFirstLast()}";
         var message = $@"
 <div style='font-size: 12px; font-family: Arial'>
     <strong>User added:</strong> {person.GetFullNameFirstLast()}<br />

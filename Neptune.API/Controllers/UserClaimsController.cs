@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -18,18 +19,12 @@ public class UserClaimsController(
     : SitkaController<UserClaimsController>(dbContext, logger, keystoneService, neptuneConfiguration)
 {
     [HttpGet("{globalID}")]
-    public ActionResult<PersonDto> GetByGlobalID([FromRoute] string globalID)
+    public async Task<ActionResult<PersonDto>> GetByGlobalID([FromRoute] string globalID)
     {
-        var isValidGuid = Guid.TryParse(globalID, out var globalIDAsGuid);
-        if (!isValidGuid)
-        {
-            return BadRequest();
-        }
-
-        var userDto = People.GetByGuidAsDto(DbContext, globalIDAsGuid);
+        var userDto = await People.GetByAuth0IDAsDtoAsync(DbContext, globalID);
         if (userDto == null)
         {
-            var notFoundMessage = $"User with GUID {globalIDAsGuid} does not exist!";
+            var notFoundMessage = $"User with Auth0ID {globalID} does not exist!";
             Logger.LogError(notFoundMessage);
             return NotFound(notFoundMessage);
         }
