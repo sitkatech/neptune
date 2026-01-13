@@ -85,7 +85,7 @@ namespace Neptune.Tests
         public void GivenFileNotThereThenThrowException()
         {
             var fileFullNameRelativePath = $"MyNonExistentTestFile{Guid.NewGuid()}.txt";
-            var exception = Assert.ThrowsException<FileNotFoundException>(() => FileUtility.FirstMatchingFileUpDirectoryTree(_tempDir, fileFullNameRelativePath), "Should throw if can't find file");
+            var exception = Assert.Throws<FileNotFoundException>(() => FileUtility.FirstMatchingFileUpDirectoryTree(_tempDir, fileFullNameRelativePath), "Should throw if can't find file");
             Assert.IsTrue(exception.Message.Contains(_tempDir.FullName), "Exception should mention the directory");
             Assert.IsTrue(exception.Message.Contains(fileFullNameRelativePath), "Exception should mention the file name");
         }

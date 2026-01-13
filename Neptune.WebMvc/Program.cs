@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using Auth0.AspNetCore.Authentication;
 using Hangfire;
 using Hangfire.SqlServer;
@@ -15,9 +14,10 @@ using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Common.OpenID;
 using Neptune.WebMvc.Services;
 using NetTopologySuite.IO.Converters;
-using SendGrid.Extensions.DependencyInjection;
+using SendGrid;
 using Serilog;
 using Serilog.Core;
+using System.Security.Claims;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using LogHelper = Neptune.WebMvc.Services.Logging.LogHelper;
@@ -146,7 +146,9 @@ var builder = WebApplication.CreateBuilder(args);
     });
 
     services.AddAuthorizationPolicies();
-    services.AddSendGrid(options => { options.ApiKey = configuration.SendGridApiKey; });
+
+    // Register SendGrid client from official SDK (not the Extensions DI package)
+    services.AddSingleton<ISendGridClient>(_ => new SendGridClient(configuration.SendGridApiKey));
     services.AddSingleton<SitkaSmtpClientService>();
 
     #region Hangfire

@@ -62,7 +62,7 @@ namespace Neptune.Tests
         public void TopLevelMenuItemThatIsALinkCannotAddChildrenTest()
         {
             var menuItem1 = new LtInfoMenuItem("url1", "menu1", true, true, null);
-            Assert.ThrowsException<PreconditionException>(() => menuItem1.AddMenuItem(new LtInfoMenuItem("Some menu item")));
+            Assert.Throws<PreconditionException>(() => menuItem1.AddMenuItem(new LtInfoMenuItem("Some menu item")));
         }
 
         [TestMethod]

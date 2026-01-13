@@ -13927,5 +13927,109 @@
         "additionalProperties": false
       }
     }
-  }
+  },
+  "tags": [
+    {
+      "name": "AI"
+    },
+    {
+      "name": "CustomAttributeType"
+    },
+    {
+      "name": "CustomRichText"
+    },
+    {
+      "name": "Delineation"
+    },
+    {
+      "name": "FieldDefinition"
+    },
+    {
+      "name": "FileResource"
+    },
+    {
+      "name": "FundingEventByTreatmentBMPID"
+    },
+    {
+      "name": "FundingSource"
+    },
+    {
+      "name": "HRUCharacteristic"
+    },
+    {
+      "name": "LandUseBlock"
+    },
+    {
+      "name": "LoadGeneratingUnit"
+    },
+    {
+      "name": "Nereid"
+    },
+    {
+      "name": "OnlandVisualTrashAssessment"
+    },
+    {
+      "name": "OnlandVisualTrashAssessmentArea"
+    },
+    {
+      "name": "OnlandVisualTrashAssessmentObservation"
+    },
+    {
+      "name": "Organization"
+    },
+    {
+      "name": "OrganizationType"
+    },
+    {
+      "name": "Project"
+    },
+    {
+      "name": "ProjectDocument"
+    },
+    {
+      "name": "RegionalSubbasin"
+    },
+    {
+      "name": "StormwaterJurisdiction"
+    },
+    {
+      "name": "SystemInfo"
+    },
+    {
+      "name": "TrashGeneratingUnit"
+    },
+    {
+      "name": "TrashGeneratingUnitByStormwaterJurisdiction"
+    },
+    {
+      "name": "TreatmentBMP"
+    },
+    {
+      "name": "TreatmentBMPBenchmarkAndThreshold"
+    },
+    {
+      "name": "TreatmentBMPDocumentByTreatmentBMP"
+    },
+    {
+      "name": "TreatmentBMPImageByTreatmentBMP"
+    },
+    {
+      "name": "TreatmentBMPType"
+    },
+    {
+      "name": "TreatmentBMPTypeCustomAttributeType"
+    },
+    {
+      "name": "User"
+    },
+    {
+      "name": "UserClaims"
+    },
+    {
+      "name": "WaterQualityManagementPlan"
+    },
+    {
+      "name": "WaterQualityManagementPlanDocument"
+    }
+  ]
 }

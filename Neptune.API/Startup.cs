@@ -21,7 +21,7 @@ using Neptune.Jobs.Services;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.IO.Converters;
 using OpenAI;
-using SendGrid.Extensions.DependencyInjection;
+using SendGrid;
 using Serilog;
 using System;
 using System.ClientModel;
@@ -120,7 +120,9 @@ namespace Neptune.API
             #endregion
 
             #region Sendgrid
-            services.AddSendGrid(options => { options.ApiKey = configuration.SendGridApiKey; });
+
+            // Register SendGrid client from official SDK (not the Extensions DI package)
+            services.AddSingleton<ISendGridClient>(_ => new SendGridClient(configuration.SendGridApiKey));
             services.AddSingleton<SitkaSmtpClientService>();
             #endregion
 

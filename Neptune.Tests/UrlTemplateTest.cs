@@ -81,11 +81,11 @@ namespace Neptune.Tests
         [TestMethod]
         public void CanDetectBadUrlTemplate()
         {
-            Assert.ThrowsException<PreconditionException>(() => new UrlTemplate<string>($"/SampleController/SampleAction/{UrlTemplate.Parameter1Int}"), "Types and parameter order must align");
-            Assert.ThrowsException<PreconditionException>(() => new UrlTemplate<int>($"/SampleController/SampleAction/{UrlTemplate.Parameter1String}"), "Types and parameter order must align");
+            Assert.Throws<PreconditionException>(() => new UrlTemplate<string>($"/SampleController/SampleAction/{UrlTemplate.Parameter1Int}"), "Types and parameter order must align");
+            Assert.Throws<PreconditionException>(() => new UrlTemplate<int>($"/SampleController/SampleAction/{UrlTemplate.Parameter1String}"), "Types and parameter order must align");
 
-            Assert.ThrowsException<PreconditionException>(() => new UrlTemplate<int>($"/SampleController/SampleAction/{UrlTemplate.Parameter2Int}"), "Must do them in order");
-            Assert.ThrowsException<PreconditionException>(() => new UrlTemplate<int, string>($"/SampleController/SampleAction/{UrlTemplate.Parameter1Int}/{UrlTemplate.Parameter1String}"), "Should error if there's two of the same ordinals");
+            Assert.Throws<PreconditionException>(() => new UrlTemplate<int>($"/SampleController/SampleAction/{UrlTemplate.Parameter2Int}"), "Must do them in order");
+            Assert.Throws<PreconditionException>(() => new UrlTemplate<int, string>($"/SampleController/SampleAction/{UrlTemplate.Parameter1Int}/{UrlTemplate.Parameter1String}"), "Should error if there's two of the same ordinals");
         }
 
         //[Test]

@@ -7,8 +7,8 @@
 /Source/NuGetPackages
 /Source/Neptune.sln.DotSettings
 /Source/Neptune.sln.DotSettings.user
-/Source/**/bin/
-/Source/**/obj/
+/**/bin/
+/**/obj/
 
 # /Source/LtInfo.Common/
 /Source/LtInfo.Common/Lorax.Common.csproj.user
@@ -109,3 +109,4 @@ Source/Neptune.GeoServer/data_dir/logs/
 .vs/CopilotSnapshots
 .vs/Neptune/copilot-chat
 .vs/Neptune/v18/
+/Neptune.Common/bin/Debug/net10.0

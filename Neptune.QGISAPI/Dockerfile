@@ -9,7 +9,8 @@ ENV XDG_RUNTIME_DIR=/tmp/runtime-root
 WORKDIR /app
 EXPOSE 80
 
-RUN apt-get install -y wget
+RUN apt-get update && \
+    apt-get install -y wget
 
 # Download Microsoft signing key and repository
 RUN wget https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
@@ -20,12 +21,17 @@ RUN dpkg -i packages-microsoft-prod.deb
 # Clean up
 RUN rm packages-microsoft-prod.deb
 
+RUN apt-get update && \
+    apt-get install software-properties-common -y
+
+RUN add-apt-repository ppa:dotnet/backports
+
 # Install the .NET runtime
 RUN apt-get update && \
-    apt-get install -y aspnetcore-runtime-8.0
+    apt-get install -y aspnetcore-runtime-10.0
 
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 COPY ["Neptune.QGISAPI/Neptune.QGISAPI.csproj", "Neptune.QGISAPI/"]
 RUN dotnet restore "Neptune.QGISAPI/Neptune.QGISAPI.csproj"
