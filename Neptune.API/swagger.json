@@ -7371,6 +7371,36 @@
         }
       }
     },
+    "/user-claims": {
+      "post": {
+        "tags": [
+          "UserClaims"
+        ],
+        "operationId": "PostUserClaims_UserClaims",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/water-quality-management-plans": {
       "get": {
         "tags": [
@@ -10463,8 +10493,7 @@
           "Email",
           "FirstName",
           "LastName",
-          "LoginName",
-          "UserGuid"
+          "LoginName"
         ],
         "type": "object",
         "properties": {
@@ -10487,10 +10516,6 @@
           "LoginName": {
             "minLength": 1,
             "type": "string"
-          },
-          "UserGuid": {
-            "type": "string",
-            "format": "uuid"
           }
         },
         "additionalProperties": false
@@ -10533,9 +10558,9 @@
             "type": "integer",
             "format": "int32"
           },
-          "PersonGuid": {
+          "GlobalID": {
             "type": "string",
-            "format": "uuid"
+            "nullable": true
           },
           "FirstName": {
             "type": "string",

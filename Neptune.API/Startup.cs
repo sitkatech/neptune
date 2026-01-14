@@ -1,5 +1,6 @@
 ﻿using Hangfire;
 using Hangfire.SqlServer;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -29,7 +30,6 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
-using Auth0.AspNetCore.Authentication;
 using LogHelper = Neptune.API.Services.Logging.LogHelper;
 
 namespace Neptune.API
@@ -75,15 +75,16 @@ namespace Neptune.API
 
 
             #region Auth0 authentication
-            services.Configure<CookiePolicyOptions>(options =>
+            services.AddAuthentication(options =>
             {
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
-            services.AddAuth0WebAppAuthentication(options =>
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
             {
-                options.Domain = configuration.Auth0Domain;
-                options.ClientId = configuration.Auth0ClientID;
+                options.Authority = "https://ocstormwatertools.us.auth0.com/";
+                options.Audience = "OCSTApi";
             });
+
             #endregion
 
             services.AddDbContext<NeptuneDbContext>(c =>

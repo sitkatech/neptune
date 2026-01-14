@@ -3,53 +3,36 @@ declare var window: any;
 export class DynamicEnvironment {
     private _production: boolean;
 
-    constructor(_production: boolean){
-        this._production = _production
+    constructor(_production: boolean) {
+        this._production = _production;
     }
 
     public get production() {
-        if (window.config) {
-            return window.config.production;
-        } else return this._production;
+        return (window?.config?.production ?? this._production) as boolean;
     }
 
     public get staging() {
-        return window.config.staging;
+        return window?.config?.staging ?? false;
     }
 
     public get dev() {
-        return window.config.dev;
+        return window?.config?.dev ?? false;
     }
 
     public get mainAppApiUrl() {
-        return window.config.mainAppApiUrl;
-    }
-
-    public get createAccountUrl() {
-        return window.config.createAccountUrl;
-    }
-
-    public get createAccountRedirectUrl() {
-        return window.config.createAccountRedirectUrl;
-    }
-
-    public get keystoneSupportBaseUrl() {
-        return window.config.keystoneSupportBaseUrl;
+        return window?.config?.mainAppApiUrl ?? "";
     }
 
     public get geoserverMapServiceUrl() {
-        return window.config.geoserverMapServiceUrl;
+        return window?.config?.geoserverMapServiceUrl ?? "";
     }
 
-    public get keystoneAuthConfiguration() {
-        return window.config.keystoneAuthConfiguration;
+    public get auth0() {
+        const cfg = window?.config ?? null;
+        return cfg?.auth0 ?? null;
     }
 
-    public get appInsightsInstrumentationKey() {
-        return window.config.appInsightsInstrumentationKey;
-    }
-
-    public get ocStormwaterToolsBaseUrl(){
-        return window.config.ocStormwaterToolsBaseUrl;
+    public get ocStormwaterToolsBaseUrl() {
+        return window?.config?.ocStormwaterToolsBaseUrl ?? "";
     }
 }

@@ -1,9 +1,9 @@
 import { Routes } from "@angular/router";
-import { UnauthenticatedAccessGuard } from "./shared/guards/unauthenticated-access/unauthenticated-access.guard";
 import { ManagerOnlyGuard } from "./shared/guards/unauthenticated-access/manager-only-guard";
 import { JurisdictionManagerOrEditorOnlyGuard } from "./shared/guards/unauthenticated-access/jurisdiction-manager-or-editor-only-guard.guard";
 import { UnsavedChangesGuard } from "./shared/guards/unsaved-changes.guard";
 import { OCTAGrantReviewerOnlyGuard } from "./shared/guards/unauthenticated-access/octa-grant-reviewer-only.guard";
+import { authGuardFn } from "@auth0/auth0-angular";
 
 export const routeParams = {
     definitionID: "definitionID",
@@ -43,12 +43,12 @@ export const routes: Routes = [
             {
                 path: "about",
                 loadComponent: () => import("./pages/planning-module/planning-about/planning-about.component").then((m) => m.PlanningAboutComponent),
-                canActivate: [UnauthenticatedAccessGuard],
+                canActivate: [authGuardFn],
             },
             {
                 path: "grant-programs",
                 title: "Grant Program",
-                canActivate: [UnauthenticatedAccessGuard, OCTAGrantReviewerOnlyGuard],
+                canActivate: [authGuardFn, OCTAGrantReviewerOnlyGuard],
                 children: [
                     {
                         path: "octa-m2-tier-2",
@@ -60,7 +60,7 @@ export const routes: Routes = [
             {
                 path: "projects",
                 title: "Projects",
-                canActivate: [UnauthenticatedAccessGuard],
+                canActivate: [authGuardFn],
                 children: [
                     {
                         path: "",
@@ -162,13 +162,13 @@ export const routes: Routes = [
                 path: "planning-map",
                 title: "Planning Map",
                 loadComponent: () => import("./pages/planning-module/planning-map/planning-map.component").then((m) => m.PlanningMapComponent),
-                canActivate: [UnauthenticatedAccessGuard, JurisdictionManagerOrEditorOnlyGuard],
+                canActivate: [authGuardFn, JurisdictionManagerOrEditorOnlyGuard],
             },
             {
                 path: "training",
                 title: "Training",
                 loadComponent: () => import("./pages/planning-module/training/training.component").then((m) => m.TrainingComponent),
-                canActivate: [UnauthenticatedAccessGuard],
+                canActivate: [authGuardFn],
             },
         ],
     },
@@ -182,7 +182,7 @@ export const routes: Routes = [
                 path: "land-use-blocks",
                 title: "Land Use Blocks",
                 loadComponent: () => import("./pages/trash-module/trash-land-use-block-index/trash-land-use-block-index.component").then((m) => m.TrashLandUseBlockIndexComponent),
-                canActivate: [UnauthenticatedAccessGuard],
+                canActivate: [authGuardFn],
             },
             {
                 path: "onland-visual-trash-assessments",
@@ -191,12 +191,12 @@ export const routes: Routes = [
                     {
                         path: "",
                         loadComponent: () => import("./pages/trash-module/ovtas/trash-ovta-index/trash-ovta-index.component").then((m) => m.TrashOvtaIndexComponent),
-                        canActivate: [UnauthenticatedAccessGuard],
+                        canActivate: [authGuardFn],
                     },
                     {
                         path: `:${routeParams.onlandVisualTrashAssessmentID}`,
                         loadComponent: () => import("./pages/trash-module/ovtas/trash-ovta-detail/trash-ovta-detail.component").then((m) => m.TrashOvtaDetailComponent),
-                        canActivate: [UnauthenticatedAccessGuard],
+                        canActivate: [authGuardFn],
                     },
                 ],
             },
@@ -212,14 +212,14 @@ export const routes: Routes = [
                         title: "Instructions",
                         loadComponent: () =>
                             import("./pages/trash-module/ovta-workflow/trash-ovta-instructions/trash-ovta-instructions.component").then((m) => m.TrashOvtaInstructionsComponent),
-                        canActivate: [UnauthenticatedAccessGuard],
+                        canActivate: [authGuardFn],
                     },
                     {
                         path: "initiate-ovta",
                         title: "Initiate OVTA",
                         loadComponent: () =>
                             import("./pages/trash-module/ovta-workflow/trash-initiate-ovta/trash-initiate-ovta.component").then((m) => m.TrashInitiateOvtaComponent),
-                        canActivate: [UnauthenticatedAccessGuard],
+                        canActivate: [authGuardFn],
                     },
                 ],
             },
@@ -235,14 +235,14 @@ export const routes: Routes = [
                         title: "Instructions",
                         loadComponent: () =>
                             import("./pages/trash-module/ovta-workflow/trash-ovta-instructions/trash-ovta-instructions.component").then((m) => m.TrashOvtaInstructionsComponent),
-                        canActivate: [UnauthenticatedAccessGuard],
+                        canActivate: [authGuardFn],
                     },
                     {
                         path: "initiate-ovta",
                         title: "Initiate OVTA",
                         loadComponent: () =>
                             import("./pages/trash-module/ovta-workflow/trash-initiate-ovta/trash-initiate-ovta.component").then((m) => m.TrashInitiateOvtaComponent),
-                        canActivate: [UnauthenticatedAccessGuard],
+                        canActivate: [authGuardFn],
                     },
                     {
                         path: "record-observations",
@@ -251,7 +251,7 @@ export const routes: Routes = [
                             import("./pages/trash-module/ovta-workflow/trash-ovta-record-observations/trash-ovta-record-observations.component").then(
                                 (m) => m.TrashOvtaRecordObservationsComponent
                             ),
-                        canActivate: [UnauthenticatedAccessGuard],
+                        canActivate: [authGuardFn],
                     },
                     {
                         path: "add-or-remove-parcels",
@@ -260,7 +260,7 @@ export const routes: Routes = [
                             import("./pages/trash-module/ovta-workflow/trash-ovta-add-remove-parcels/trash-ovta-add-remove-parcels.component").then(
                                 (m) => m.TrashOvtaAddRemoveParcelsComponent
                             ),
-                        canActivate: [UnauthenticatedAccessGuard],
+                        canActivate: [authGuardFn],
                     },
                     {
                         path: "refine-assessment-area",
@@ -269,7 +269,7 @@ export const routes: Routes = [
                             import("./pages/trash-module/ovta-workflow/trash-ovta-refine-assessment-area/trash-ovta-refine-assessment-area.component").then(
                                 (m) => m.TrashOvtaRefineAssessmentAreaComponent
                             ),
-                        canActivate: [UnauthenticatedAccessGuard],
+                        canActivate: [authGuardFn],
                     },
                     {
                         path: "review-and-finalize",
@@ -278,7 +278,7 @@ export const routes: Routes = [
                             import("./pages/trash-module/ovta-workflow/trash-ovta-review-and-finalize/trash-ovta-review-and-finalize.component").then(
                                 (m) => m.TrashOvtaReviewAndFinalizeComponent
                             ),
-                        canActivate: [UnauthenticatedAccessGuard],
+                        canActivate: [authGuardFn],
                     },
                 ],
             },
@@ -290,13 +290,13 @@ export const routes: Routes = [
                     {
                         path: "",
                         loadComponent: () => import("./pages/trash-module/ovtas/trash-ovta-area-index/trash-ovta-area-index.component").then((m) => m.TrashOvtaAreaIndexComponent),
-                        canActivate: [UnauthenticatedAccessGuard],
+                        canActivate: [authGuardFn],
                     },
                     {
                         path: `:${routeParams.onlandVisualTrashAssessmentAreaID}`,
                         loadComponent: () =>
                             import("./pages/trash-module/ovtas/trash-ovta-area-detail/trash-ovta-area-detail.component").then((m) => m.TrashOvtaAreaDetailComponent),
-                        canActivate: [UnauthenticatedAccessGuard],
+                        canActivate: [authGuardFn],
                     },
                     {
                         path: `:${routeParams.onlandVisualTrashAssessmentAreaID}/edit-location`,
@@ -304,7 +304,7 @@ export const routes: Routes = [
                             import("./pages/trash-module/ovtas/trash-ovta-area-edit-location/trash-ovta-area-edit-location.component").then(
                                 (m) => m.TrashOvtaAreaEditLocationComponent
                             ),
-                        canActivate: [UnauthenticatedAccessGuard],
+                        canActivate: [authGuardFn],
                     },
                 ],
             },
@@ -315,7 +315,7 @@ export const routes: Routes = [
                     import("./pages/trash-module/trash-trash-generating-unit-index/trash-trash-generating-unit-index.component").then(
                         (m) => m.TrashTrashGeneratingUnitIndexComponent
                     ),
-                canActivate: [UnauthenticatedAccessGuard],
+                canActivate: [authGuardFn],
             },
         ],
     },
@@ -333,7 +333,7 @@ export const routes: Routes = [
             {
                 path: `labels-and-definitions/:${routeParams.definitionID}`,
                 loadComponent: () => import("./pages/field-definition-edit/field-definition-edit.component").then((m) => m.FieldDefinitionEditComponent),
-                canActivate: [UnauthenticatedAccessGuard, ManagerOnlyGuard],
+                canActivate: [authGuardFn, ManagerOnlyGuard],
             },
             { path: "users", title: "Users", loadComponent: () => import("./pages/users/users.component").then((m) => m.UsersComponent) },
             {
@@ -345,7 +345,7 @@ export const routes: Routes = [
                 path: "labels-and-definitions",
                 title: "Labels and Definitions",
                 loadComponent: () => import("./pages/field-definition-list/field-definition-list.component").then((m) => m.FieldDefinitionListComponent),
-                canActivate: [UnauthenticatedAccessGuard, ManagerOnlyGuard],
+                canActivate: [authGuardFn, ManagerOnlyGuard],
             },
             {
                 path: "jurisdictions",

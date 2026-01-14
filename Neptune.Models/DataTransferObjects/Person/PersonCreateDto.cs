@@ -14,7 +14,5 @@ namespace Neptune.Models.DataTransferObjects.Person
         public string Email { get; set; }
         [Required]
         public string LoginName { get; set; }
-        [Required]
-        public Guid UserGuid { get; set; }
     }
 }

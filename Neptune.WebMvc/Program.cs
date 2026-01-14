@@ -145,8 +145,6 @@ var builder = WebApplication.CreateBuilder(args);
         return httpClientHandler;
     });
 
-    services.AddAuthorizationPolicies();
-
     // Register SendGrid client from official SDK (not the Extensions DI package)
     services.AddSingleton<ISendGridClient>(_ => new SendGridClient(configuration.SendGridApiKey));
     services.AddSingleton<SitkaSmtpClientService>();

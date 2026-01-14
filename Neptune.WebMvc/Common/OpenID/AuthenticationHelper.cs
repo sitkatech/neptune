@@ -1,19 +1,15 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+﻿using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Neptune.Common.Email;
 using Neptune.EFModels.Entities;
 using Serilog.Core;
 using System.Net.Mail;
 using System.Security.Claims;
 using System.Web;
-using Microsoft.EntityFrameworkCore;
 
 namespace Neptune.WebMvc.Common.OpenID;
 
 public static class AuthenticationHelper
 {
-    private const string AuthenticationApplicationCookieName = "NeptuneCookieIdentity";
-
     // We don't want to return users to the login page so need to pull out return url parameter from current url
     public static string SanitizeReturnUrlForLogin(string rawReturnUrlString, string homeUrl)
     {
@@ -30,46 +26,13 @@ public static class AuthenticationHelper
         return HttpUtility.UrlDecode(parameterOnly);
     }
 
-    public static IServiceCollection AddAuthorizationPolicies(this IServiceCollection services)
-    {
-        services.AddAuthorization(options =>
-        {
-            options.AddPolicy("Keystone", builder => builder.RequireAuthenticatedUser().AddAuthenticationSchemes("Keystone").Build());
-        });
-
-        return services;
-    }
-
-    public static async Task KeystoneAndAADAuthenticationMiddleware(HttpContext context, Func<Task> next)
-    {
-        var principal = new ClaimsPrincipal();
-
-        // var result1 = await context.AuthenticateAsync("Keystone");
-        var result1 = await context.AuthenticateAsync("Keystone");
-        if (result1?.Principal != null)
-        {
-            // 
-            principal.AddIdentities(result1.Principal.Identities);
-        }
-
-        var result2 = await context.AuthenticateAsync("AAD");
-        if (result2?.Principal != null)
-        {
-            principal.AddIdentities(result2.Principal.Identities);
-        }
-
-        context.User = principal;
-
-        await next();
-    }
-
-    public static void ProcessLoginFromAuth0(TokenValidatedContext tokenValidatedContext, NeptuneDbContext dbContext, WebConfiguration configuration, Logger _logger, SitkaSmtpClientService sitkaSmtpClientService)
+    public static void ProcessLoginFromAuth0(TokenValidatedContext tokenValidatedContext, NeptuneDbContext dbContext, WebConfiguration configuration, Logger logger, SitkaSmtpClientService sitkaSmtpClientService)
     {
         var sendNewUserNotification = false;
         var claims = tokenValidatedContext.SecurityToken.Claims;
-        var auth0ID = tokenValidatedContext.SecurityToken.Subject;
-        _logger.Information($"ocstormwatertools.org: In {nameof(ProcessLoginFromAuth0)} - Processing Auth0 login for user with Auth0 guid {auth0ID}".ToString());
-        var person = dbContext.People.FirstOrDefault(x => x.Auth0ID == auth0ID);
+        var globalID = tokenValidatedContext.SecurityToken.Subject;
+        logger.Information($"ocstormwatertools.org: In {nameof(ProcessLoginFromAuth0)} - Processing Auth0 login for user with Auth0 guid {globalID}".ToString());
+        var person = dbContext.People.FirstOrDefault(x => x.GlobalID == globalID);
         var principal = tokenValidatedContext.Principal;
 
         // Retrieve the given_name and family_name claims
@@ -78,11 +41,11 @@ public static class AuthenticationHelper
         var email = principal.FindFirst(ClaimTypes.Email)?.Value;
         if (person == null)
         {
-            _logger.Information($"ocstormwatertools.org: In {nameof(ProcessLoginFromAuth0)} - Creating a new user for {firstName} {lastName} from Keystone login".ToString());
+            logger.Information($"ocstormwatertools.org: In {nameof(ProcessLoginFromAuth0)} - Creating a new user for {firstName} {lastName} from Keystone login".ToString());
             // new user - provision with limited role
-            person = new Person()
+            person = new Person
             {
-                Auth0ID = auth0ID,
+                GlobalID = globalID,
                 FirstName = firstName,
                 LastName = lastName,
                 Email = email,
@@ -97,10 +60,10 @@ public static class AuthenticationHelper
         }
         else
         {
-            _logger.Information($"ocstormwatertools.org: In {nameof(ProcessLoginFromAuth0)} - Signing in user {firstName} {lastName} from Keystone login".ToString());
+            logger.Information($"ocstormwatertools.org: In {nameof(ProcessLoginFromAuth0)} - Signing in user {firstName} {lastName} from Keystone login".ToString());
             if (person.FirstName != firstName || person.LastName != lastName || person.Email != email)
             {
-                _logger.Information($"ocstormwatertools.org: In {nameof(ProcessLoginFromAuth0)} - Creating a new user for {firstName} {lastName} from Keystone login".ToString());
+                logger.Information($"ocstormwatertools.org: In {nameof(ProcessLoginFromAuth0)} - Creating a new user for {firstName} {lastName} from Keystone login".ToString());
                 person.FirstName = firstName;
                 person.LastName = lastName;
                 person.Email = email;

@@ -16,7 +16,6 @@ export class PersonCreateDto {
     OrganizationName?: string | null;
     Email: string;
     LoginName: string;
-    UserGuid: string;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
@@ -28,7 +27,6 @@ export interface PersonCreateDtoForm {
     OrganizationName?: FormControl<string>;
     Email: FormControl<string>;
     LoginName: FormControl<string>;
-    UserGuid: FormControl<string>;
 }
 
 export class PersonCreateDtoFormControls { 
@@ -87,17 +85,6 @@ export class PersonCreateDtoFormControls {
             [
                 Validators.required,
                 Validators.minLength(1),
-            ],
-        }
-    );
-    public static UserGuid = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: true,
-            validators: 
-            [
-                Validators.required,
             ],
         }
     );

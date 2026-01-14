@@ -57,7 +57,7 @@ public partial class Person
 
     [StringLength(100)]
     [Unicode(false)]
-    public string? Auth0ID { get; set; }
+    public string? GlobalID { get; set; }
 
     [InverseProperty("UploadedByPerson")]
     public virtual ICollection<DelineationStaging> DelineationStagings { get; set; } = new List<DelineationStaging>();

@@ -1,426 +1,475 @@
 <div class="grid-12 page-wrapper">
-  <div class="g-col-8">
-    <app-alert-display></app-alert-display>
-    <h1 class="page-title mt-4 mb-4">Trash Module</h1>
-    <custom-rich-text [customRichTextTypeID]="richTextTypeID"></custom-rich-text>
-  </div>
+    <div class="g-col-8">
+        <app-alert-display></app-alert-display>
+        <h1 class="page-title mt-4 mb-4">Trash Module</h1>
+        <custom-rich-text [customRichTextTypeID]="richTextTypeID"></custom-rich-text>
+    </div>
 
-  <div class="g-col-4">
-    @if (currentUser$ | async; as currentUser) {
-      <div class="card sign-in-card">
-        <div class="card-header">Quick Actions</div>
-        <div class="card-body">
-          <div class="hero__btns">
-            <div class="hero__btns-wrapper">
-              <a class="float-right btn btn-primary" [routerLink]="['onland-visual-trash-assessments/new/instructions']">Add New OVTA</a>
+    <div class="g-col-4">
+        @if (currentUser$ | async; as currentUser) {
+            <div class="card sign-in-card">
+                <div class="card-header">Quick Actions</div>
+                <div class="card-body">
+                    <div class="hero__btns">
+                        <div class="hero__btns-wrapper">
+                            <a class="float-right btn btn-primary" [routerLink]="['onland-visual-trash-assessments/new/instructions']">Add New OVTA</a>
+                        </div>
+                        <div class="hero__btns-wrapper">
+                            <a class="btn btn-primary" [routerLink]="['onland-visual-trash-assessment-areas']">View All OVTA Areas</a>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="hero__btns-wrapper">
-              <a class="btn btn-primary" [routerLink]="['onland-visual-trash-assessment-areas']">View All OVTA Areas</a>
+        } @else {
+            <div class="card sign-in-card">
+                <div class="card-header">Welcome</div>
+                <div class="card-body">
+                    <p class="mb-2">Log in to view your Account. Create an Account if you don't have one yet.</p>
+                    <a (click)="login()" class="btn btn-primary">Login</a>
+                    <a (click)="signUp()" class="btn btn-primary">Create Account</a>
+                </div>
+                <div class="card-footer">
+                    <p>Need help logging in?</p>
+                    <a href="{{ requestSupportUrl() }}">Request Support</a>
+                </div>
             </div>
-          </div>
-        </div>
-      </div>
-    } @else {
-      <div class="card sign-in-card">
-        <div class="card-header">Welcome</div>
-        <div class="card-body">
-          <p class="mb-2">Log in to view your Account. Create an Account if you don't have one yet.</p>
-          <a (click)="login()" class="btn btn-primary">Login</a>
-          <a (click)="createAccount()" class="btn btn-primary">Create Account</a>
-        </div>
-        <div class="card-footer">
-          <p>Need help logging in?</p>
-          <a href="{{ forgotPasswordUrl() }}">Forgot Password</a> | <a href="{{ forgotUsernameUrl() }}">Forgot Username</a> |
-          <a href="{{ keystoneSupportUrl() }}">Request Support</a>
-        </div>
-      </div>
-    }
-  </div>
+        }
+    </div>
 </div>
 
 <div [loadingSpinner]="{ isLoading: !mapIsReady, loadingHeight: 1000 }">
-  @if (stormwaterJurisdictions$ | async; as stormwaterJurisdictions) {
-    <div>
-      <div class="card mt-4">
-        <div class="card-body">
-          <div class="grid-12" style="row-gap: normal">
-            <div class="g-col-6">
-              <div class="grid-12">
-                <div class="g-col-2 content-section">Jurisdiction</div>
-                <div class="g-col-10">
-                  <div class="dropdown-container">
-                    <ng-select
-                      [ngModel]="currentStormwaterJurisdiction.StormwaterJurisdictionID"
-                      (change)="onJurisdictionSelected($event)"
-                      [items]="stormwaterJurisdictions"
-                      bindLabel="StormwaterJurisdictionName"
-                      bindValue="StormwaterJurisdictionID"
-                      [clearable]="false">
-                    </ng-select>
-                  </div>
-                </div>
-                <div class="g-col-2 content-section">Viewing</div>
-                <div class="g-col-10">
-                  <div class="dropdown-container">
-                    <ng-select [(ngModel)]="currentResultType" [items]="resultTypes" [clearable]="false"> </ng-select>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="g-col-6">
-              @if (currentResultType == 'Area-Based Results') {
-                <div
-                  [loadingSpinner]="{ isLoading: isLoading, loadingHeight: 100 }"
-                  id="areaBasedCalculationControlTemplate"
-                  >
-                  @if (areaBasedAcreCalculationsDto$ | async; as areaBasedAcreCalculationsDto) {
-                    <table class="table areaBasedCalculationControlTable">
-                      <tbody>
-                        <tr>
-                          <td class="TGUColumn">
-                            <div class="grid-12">
-                              <div class="g-col-4">
-                                <div id="fullTrashCapturePlu" class="font25 outlined-text" style="color: rgb(76, 146, 76)">
-                                  {{ areaBasedAcreCalculationsDto.FullTrashCaptureAcreagePLU | number : "1.0-0" }}
-                                </div>
-                                <p class="greyLabel">acres Full Capture</p>
-                              </div>
-                              <div class="g-col-4">
-                                <div id="partialTrashCapturePlu" class="font25 outlined-text" style="color: rgb(202, 255, 207)">
-                                  {{ areaBasedAcreCalculationsDto.PartialTrashCaptureAcreagePLU | number : "1.0-0" }}
-                                </div>
-                                <p class="greyLabel">acres Partial Capture</p>
-                              </div>
-                              <div class="g-col-4">
-                                <div id="untreatedPlu" class="font25 outlined-text" style="color: rgb(214, 76, 255)">
-                                  {{ areaBasedAcreCalculationsDto.UntreatedAcreagePLU | number : "1.0-0" }}
-                                </div>
-                                <p class="greyLabel">acres Untreated</p>
-                              </div>
-                            </div>
-                          </td>
-                          <td class="TGUColumn">
-                            <div class="grid-12">
-                              <div class="g-col-4">
-                                <div id="fullTrashCaptureAlu" class="font25 outlined-text" style="color: #B2A38E">
-                                  {{ areaBasedAcreCalculationsDto.FullTrashCaptureAcreageALU | number : "1.0-0" }}
-                                </div>
-                                <p class="greyLabel">acres Full Capture</p>
-                              </div>
-                              <div class="g-col-4">
-                                <div id="partialTrashCaptureAlu" class="font25 outlined-text" style="color: #DFCAAE">
-                                  {{ areaBasedAcreCalculationsDto.PartialTrashCaptureAcreageALU | number : "1.0-0" }}
-                                </div>
-                                <p class="greyLabel">acres Partial Capture</p>
-                              </div>
-                              <div class="g-col-4">
-                                <div id="untreatedAlu" class="font25 outlined-text" style="color: rgb(223, 223, 223)">
-                                  {{ areaBasedAcreCalculationsDto.UntreatedAcreageALU | number : "1.0-0" }}
-                                </div>
-                                <p class="greyLabel">acres Untreated</p>
-                              </div>
-                            </div>
-                          </td>
-                        </tr>
-                      </tbody>
-                      <tfoot>
-                        <tr>
-                          <td class="TGUColumn" >
-                            <strong>Priority Land Use</strong>
-                          </td>
-                          <td class="TGUColumn" style="border-left: none">
-                            <strong>Alternate Land Use</strong>
-                          </td>
-                        </tr>
-                      </tfoot>
-                    </table>
-                  }
-                </div>
-              }
-              @if (currentResultType == 'Current Net Loading Rate With Controls' || currentResultType == 'Net Change In Trash Loading Rate With Controls') {
-                <div
-                  [loadingSpinner]="{ isLoading: isLoading, loadingHeight: 100 }"
-                  id="LoadBasedResultsControlTemplate"
-                  >
-                  @if (loadResultsDto$ | async; as loadResultsDto) {
-                    <table class="table loadBasedCalculationControlTable">
-                      <tbody>
-                        <tr>
-                          <td class="loadBasedResultsColumn" style="width: 18%">
-                            <div id="viaFullTrashCapture" class="font25 loadBased-lightblue bold">{{ loadResultsDto.LoadFullCapture | number : "1.0-0" }}</div>
-                            <p class="text-normal greyLabel" style="font-weight: normal">
-                              <field-definition fieldDefinitionType="ViaFullCapture"> </field-definition>
-                            </p>
-                          </td>
-                          <td class="loadBasedResultsColumn" style="width: 21%">
-                            <div id="viaPartialTrashCapture" class="font25 loadBased-lightblue bold">
-                              {{ loadResultsDto.LoadPartialCapture | number : "1.0-0" }}
-                            </div>
-                            <p class="text-normal greyLabel"><field-definition fieldDefinitionType="ViaPartialCapture"> </field-definition></p>
-                          </td>
-                          <td class="loadBasedResultsColumn" style="width: 21%">
-                            <div id="viaOVTAScore" class="font25 loadBased-lightblue bold">{{ loadResultsDto.LoadOVTA | number : "1.0-0" }}</div>
-                            <p class="text-normal greyLabel">
-                              <field-definition fieldDefinitionType="ViaOVTAScore"> </field-definition>
-                            </p>
-                          </td>
-                          <td class="loadBasedResultsColumn">
-                            <div id="totalAchieved" class="font25 loadBased-blue bold">{{ loadResultsDto.TotalAchieved | number : "1.0-0" }}</div>
-                            <p class="text-normal greyLabel"><field-definition fieldDefinitionType="TotalAchieved"> </field-definition></p>
-                          </td>
-                          <td class="loadBasedResultsColumn" style="border-left: 1px solid rgb(204, 204, 204)">
-                            <div id="targetLoadReduction" class="font25 loadBased-red bold">{{ loadResultsDto.TargetLoadReduction | number : "1.0-0" }}</div>
-                            <p><field-definition fieldDefinitionType="TargetLoadReduction"> </field-definition></p>
-                          </td>
-                        </tr>
-                      </tbody>
-                      <tfoot>
-                        <tr>
-                          <td colspan="5">
-                            <p class="gpy">gallons per year</p>
-                          </td>
-                        </tr>
-                      </tfoot>
-                    </table>
-                  }
-                </div>
-              }
-              @if (currentResultType == 'OVTA-Based Results') {
-                <div [loadingSpinner]="{ isLoading: isLoading, loadingHeight: 100 }" id="OVTABasedResultsControlTemplate">
-                  @if (ovtaResultsDto$ | async; as ovtaResultsDto) {
-                    <table class="table areaBasedCalculationControlTable">
-                      <thead>
-                        <tr>
-                          <td class="font15" style="font-weight: bold; padding-left: 0.75rem">
-                            <div>
-                              Score
-                              <a (click)="showScoreDefinitions()">
-                                <i class="fas fa-question-circle small" style="cursor: help"></i>
-                              </a>
-                            </div>
-                          </td>
-                          <td class="ovtaResults font15" style="width: 10%">A</td>
-                          <td class="ovtaResults font15" style="width: 10%">B</td>
-                          <td class="ovtaResults font15" style="width: 10%">C</td>
-                          <td class="ovtaResults font15" style="width: 10%">D</td>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td class="font15" style="border: none">
-                            <div>Priority Land Use Area (acres)</div>
-                          </td>
-                          <td class="ovtaResults font15">
-                            <div id="PLUIsA" style="color: rgb(74, 222, 0)">{{ ovtaResultsDto.PLUSumAcresWhereOVTAIsA | number : "1.0-0" }}</div>
-                          </td>
-                          <td class="ovtaResults font15">
-                            <div id="PLUIsB" style="color: rgb(255, 216, 0)">{{ ovtaResultsDto.PLUSumAcresWhereOVTAIsB | number : "1.0-0" }}</div>
-                          </td>
-                          <td class="ovtaResults font15">
-                            <div id="PLUIsC" style="color: rgb(255, 127, 127)">{{ ovtaResultsDto.PLUSumAcresWhereOVTAIsC | number : "1.0-0" }}</div>
-                          </td>
-                          <td class="ovtaResults font15">
-                            <div id="PLUIsD" style="color: rgb(197, 0, 255)">{{ ovtaResultsDto.PLUSumAcresWhereOVTAIsD | number : "1.0-0" }}</div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td class="font15" style="border: none">
-                            <div>Alternate Land Use Area (acres)</div>
-                          </td>
-                          <td class="ovtaResults font15">
-                            <div id="ALUIsA" style="color: rgb(74, 222, 0)">{{ ovtaResultsDto.ALUSumAcresWhereOVTAIsA | number : "1.0-0" }}</div>
-                          </td>
-                          <td class="ovtaResults font15">
-                            <div id="ALUIsB" style="color: rgb(255, 216, 0)">{{ ovtaResultsDto.ALUSumAcresWhereOVTAIsB | number : "1.0-0" }}</div>
-                          </td>
-                          <td class="ovtaResults font15">
-                            <div id="ALUIsC" style="color: rgb(255, 127, 127)">{{ ovtaResultsDto.ALUSumAcresWhereOVTAIsC | number : "1.0-0" }}</div>
-                          </td>
-                          <td class="ovtaResults font15">
-                            <div id="ALUIsD" style="color: rgb(197, 0, 255)">{{ ovtaResultsDto.ALUSumAcresWhereOVTAIsD | number : "1.0-0" }}</div>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  }
-                </div>
-              }
-            </div>
-            @if (lastUpdateDate$ | async; as lastUpdateDate) {
-              <div class="g-col-12 font-italic">Last Calculated Date: {{ lastUpdateDate | date : "shortDate" }}</div>
-            }
-          </div>
-        </div>
-      </div>
-      <div class="tgu-feature mt-4">
-        <div class="card">
-          <div class="card-header">
-            <h3 class="card-title">Selected Feature</h3>
-          </div>
-          @if (selectedFeature$ | async; as selected) {
-            <div class="card-body tgu-grid-data-container">
-              <dl>
-                <div class="tgu-grid-data-column">
-                  <dt>Analysis Area ID</dt>
-                  <dd>{{ selected.tgu?.TrashGeneratingUnitID != null ? selected.tgu?.TrashGeneratingUnitID : '-' }}</dd>
-                  <dt><field-definition fieldDefinitionType="LandUseType"></field-definition></dt>
-                  <dd>{{ selected.tgu?.LandUseType ? selected.tgu?.LandUseType : '-' }}</dd>
-                  <dt><field-definition fieldDefinitionType="CurrentLoadingRate"></field-definition></dt>
-                  <dd>{{ selected.tgu?.CurrentLoadingRate != null ? (selected.tgu?.CurrentLoadingRate + ' gal/ac/yr') : '-' }}</dd>
-                  <dt><field-definition fieldDefinitionType="BaselineLoadingRate"></field-definition></dt>
-                  <dd>{{ selected.tgu?.BaselineLoadingRate != null ? (selected.tgu?.BaselineLoadingRate + ' gal/ac/yr') : '-' }}</dd>
-                  <dt>Progress Trash Generation Rate</dt>
-                  <dd>{{ selected.tgu?.ProgressLoadingRate != null ? (selected.tgu?.ProgressLoadingRate + ' gal/ac/yr') : '-' }}</dd>
-                  <dt>Net Change in Loading Rate with Controls</dt>
-                  <dd>{{ selected.tgu?.LoadingRateDelta != null ? (selected.tgu?.LoadingRateDelta + ' gal/ac/yr') : '-' }}</dd>
-                  <dt>Permit Type</dt>
-                  <dd>{{ selected.tgu?.PermitClass ? selected.tgu?.PermitClass : '-' }}</dd>
-                  <dt>Jurisdiction</dt>
-                  <dd>{{ selected.tgu?.StormwaterJurisdictionName ? selected.tgu?.StormwaterJurisdictionName : '-' }}</dd>
-                </div>
-                <div class="tgu-grid-data-column">
-                  <dt>BMP</dt>
-                  <dd>
-                    @if (selected.tgu?.TreatmentBMPID && selected.tgu?.TreatmentBMPName) {
-                      <a href="{{ ocstBaseUrl() }}/TreatmentBMP/Detail/{{ selected.tgu?.TreatmentBMPID }}">{{ selected.tgu?.TreatmentBMPName }}</a>
-                    } @else {
-                      -
-                    }
-                  </dd>
-                  <dt>BMP Type</dt>
-                  <dd>{{ selected.tgu?.TreatmentBMPTypeName ? selected.tgu?.TreatmentBMPTypeName : '-' }}</dd>
-                  <dt><field-definition fieldDefinitionType="BMPTrashTreatmentStatus" labelOverride="BMP Status"></field-definition></dt>
-                  <dd>{{ selected.tgu?.TrashCaptureStatusBMP ? selected.tgu?.TrashCaptureStatusBMP : '-' }}</dd>
-                  <dt>WQMP</dt>
-                  <dd>
-                    @if (selected.tgu?.WaterQualityManagementPlanID && selected.tgu?.WaterQualityManagementPlanName) {
-                      <a href="{{ ocstBaseUrl() }}/WaterQualityManagementPlan/Detail/{{ selected.tgu?.WaterQualityManagementPlanID }}">{{ selected.tgu?.WaterQualityManagementPlanName }}</a>
-                    } @else {
-                      -
-                    }
-                  </dd>
-                  <dt><field-definition fieldDefinitionType="WQMPTrashTreatmentStatus" labelOverride="WQMP Status"></field-definition></dt>
-                  <dd>{{ selected.tgu?.TrashCaptureStatusWQMP ? selected.tgu?.TrashCaptureStatusWQMP : '-' }}</dd>
-                  <dt>OVTA Area</dt>
-                  <dd>
-                    @if (selected.ovta) {
-                      <a [routerLink]="['/trash/onland-visual-trash-assessment-areas', selected.ovta?.OnlandVisualTrashAssessmentAreaID]">{{ selected.ovta?.OnlandVisualTrashAssessmentAreaName }}</a>
-                    } @else {
-                      @if (selected.tgu?.OnlandVisualTrashAssessmentAreaID && selected.tgu?.OnlandVisualTrashAssessmentAreaName) {
-                        <a [routerLink]="['/trash/onland-visual-trash-assessment-areas', selected.tgu?.OnlandVisualTrashAssessmentAreaID]">{{ selected.tgu?.OnlandVisualTrashAssessmentAreaName }}</a>
-                      } @else {
-                        -
-                      }
-                    }
-                  </dd>
-                  <dt><field-definition fieldDefinitionType="BaselineScore" labelOverride="OVTA Baseline Score"></field-definition></dt>
-                  <dd>
-                    @if(selected.tgu?.OnlandVisualTrashAssessmentAreaBaselineScore != null ){
-                      {{ selected.tgu?.OnlandVisualTrashAssessmentAreaBaselineScore + ' (' + selected.tgu.CompletedBaselineAssessmentCount + ' Assessment' + (selected.tgu.CompletedBaselineAssessmentCount === 1 ? '' : 's') + ')' }}
-                    } @else if(selected.ovta?.OnlandVisualTrashAssessmentBaselineScoreName != null ){
-                      {{ selected.ovta?.OnlandVisualTrashAssessmentBaselineScoreName + ' (' + selected.ovta?.CompletedBaselineAssessmentCount + ' Assessment' + (selected.ovta?.CompletedBaselineAssessmentCount === 1 ? '' : 's') + ')' }}
-                    } @else{
-                      {{ selected.ovta?.CompletedBaselineAssessmentCount != null ? ( '- (' + selected.ovta?.CompletedBaselineAssessmentCount + ' Assessment' + (selected.ovta?.CompletedBaselineAssessmentCount === 1 ? '' : 's') + ')') : '-' }}
-                    }
-                  <dt><field-definition fieldDefinitionType="ProgressScore" labelOverride="OVTA Progress Score"></field-definition></dt>
-                  <dd>
-                    @if(selected.tgu?.OnlandVisualTrashAssessmentAreaProgressScore != null ){
-                      {{ selected.tgu?.OnlandVisualTrashAssessmentAreaProgressScore + ' (' + selected.tgu.CompletedProgressAssessmentCount + ' Assessment' + (selected.tgu.CompletedProgressAssessmentCount === 1 ? '' : 's') + ')' }}
-                    } @else if(selected.ovta?.OnlandVisualTrashAssessmentProgressScoreName != null ){
-                      {{ selected.ovta?.OnlandVisualTrashAssessmentProgressScoreName + ' (' + selected.ovta?.CompletedProgressAssessmentCount + ' Assessment' + (selected.ovta?.CompletedProgressAssessmentCount === 1 ? '' : 's') + ')' }}
-                    } @else {
-                      {{ selected.ovta?.CompletedProgressAssessmentCount != null ? ( '- (' + selected.ovta?.CompletedProgressAssessmentCount + ' Assessment' + (selected.ovta?.CompletedProgressAssessmentCount === 1 ? '' : 's') + ')') : '-' }}
-                    }
-                  </dd>
-                  <dt>Last Assessed Date</dt>
-                  <dd>
-                    @if(selected.tgu?.AssessmentDate){
-                      {{selected.tgu?.AssessmentDate | date : "shortDate"}}
-                    } @else if(selected.ovta?.LastAssessmentDate){
-                      {{selected.ovta?.LastAssessmentDate | date : "shortDate"}}
-                    } @else {
-                      -
-                    }
-                  </dd>
-                </div>
-              </dl>
-            </div>
-          } @else {
-            <div class="card-body">
-              <span>
-                Select a Trash Analysis Area on the map to see land use block details, loading rates, and links to assets in the Inventory that are providing treatment
-                (WQMP, BMP, or OVTA equivalency)
-              </span>
-            </div>
-          }
-        </div>
+    @if (stormwaterJurisdictions$ | async; as stormwaterJurisdictions) {
         <div>
-          @if (boundingBox$ | async; as boundingBox) {
-            <neptune-map (onMapLoad)="handleMapReady($event)" mapHeight="1000px" [showLegend]="true" [boundingBox]="boundingBox">
-              @if (mapIsReady) {
-                <land-use-block-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></land-use-block-layer>
-              }
-              @if (mapIsReady) {
-                <delineations-layer
-                  [displayOnLoad]="false"
-                  [map]="map"
-                  [layerControl]="layerControl"
-                  [sortOrder]="20"
-                [isAnalyzedInModelingModule]="false"></delineations-layer>
-              }
-              @if (mapIsReady) {
-                <wqmps-trash-capture-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="40"></wqmps-trash-capture-layer>
-              }
-              @if (mapIsReady) {
-                <jurisdictions-layer [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="50"></jurisdictions-layer>
-              }
-              @if (mapIsReady) {
-                <regional-subbasins-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="60"></regional-subbasins-layer>
-              }
-              @if (mapIsReady) {
-                <permit-type-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="70"></permit-type-layer>
-              }
-              @if (mapIsReady && currentResultType == 'Area-Based Results') {
-                <trash-generating-unit-layer
-                  [displayOnLoad]="true"
-                  [map]="map"
-                  [layerControl]="layerControl"
-                  [sortOrder]="1"
-                [selectedJurisdictionID]="this.currentStormwaterJurisdiction.StormwaterJurisdictionID"></trash-generating-unit-layer>
-              }
-              @if (mapIsReady && currentResultType == 'Current Net Loading Rate With Controls') {
-                <trash-generating-unit-loads-layer
-                  [displayOnLoad]="true"
-                  [map]="map"
-                  [layerControl]="layerControl"
-                  [sortOrder]="1"
-                  [style]="'current_load'"
-                [selectedJurisdictionID]="this.currentStormwaterJurisdiction.StormwaterJurisdictionID"></trash-generating-unit-loads-layer>
-              }
-              @if (mapIsReady && currentResultType == 'Net Change In Trash Loading Rate With Controls') {
-                <trash-generating-unit-loads-layer
-                  [displayOnLoad]="true"
-                  [map]="map"
-                  [layerControl]="layerControl"
-                  [sortOrder]="1"
-                  [style]="'delta_load'"
-                [selectedJurisdictionID]="this.currentStormwaterJurisdiction.StormwaterJurisdictionID"></trash-generating-unit-loads-layer>
-              }
-              @if (mapIsReady && currentResultType == 'OVTA-Based Results') {
-                <ovta-areas-layer
-                  [displayOnLoad]="true"
-                  [map]="map"
-                  [layerControl]="layerControl"
-                  [sortOrder]="1"
-                [selectedJurisdictionID]="this.currentStormwaterJurisdiction.StormwaterJurisdictionID"></ovta-areas-layer>
-              }
-              @if (treatmentBMPs$ | async) {
-                <span></span>
-              }
-            </neptune-map>
-          }
+            <div class="card mt-4">
+                <div class="card-body">
+                    <div class="grid-12" style="row-gap: normal">
+                        <div class="g-col-6">
+                            <div class="grid-12">
+                                <div class="g-col-2 content-section">Jurisdiction</div>
+                                <div class="g-col-10">
+                                    <div class="dropdown-container">
+                                        <ng-select
+                                            [ngModel]="currentStormwaterJurisdiction.StormwaterJurisdictionID"
+                                            (change)="onJurisdictionSelected($event)"
+                                            [items]="stormwaterJurisdictions"
+                                            bindLabel="StormwaterJurisdictionName"
+                                            bindValue="StormwaterJurisdictionID"
+                                            [clearable]="false">
+                                        </ng-select>
+                                    </div>
+                                </div>
+                                <div class="g-col-2 content-section">Viewing</div>
+                                <div class="g-col-10">
+                                    <div class="dropdown-container">
+                                        <ng-select [(ngModel)]="currentResultType" [items]="resultTypes" [clearable]="false"> </ng-select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="g-col-6">
+                            @if (currentResultType == "Area-Based Results") {
+                                <div [loadingSpinner]="{ isLoading: isLoading, loadingHeight: 100 }" id="areaBasedCalculationControlTemplate">
+                                    @if (areaBasedAcreCalculationsDto$ | async; as areaBasedAcreCalculationsDto) {
+                                        <table class="table areaBasedCalculationControlTable">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="TGUColumn">
+                                                        <div class="grid-12">
+                                                            <div class="g-col-4">
+                                                                <div id="fullTrashCapturePlu" class="font25 outlined-text" style="color: rgb(76, 146, 76)">
+                                                                    {{ areaBasedAcreCalculationsDto.FullTrashCaptureAcreagePLU | number: "1.0-0" }}
+                                                                </div>
+                                                                <p class="greyLabel">acres Full Capture</p>
+                                                            </div>
+                                                            <div class="g-col-4">
+                                                                <div id="partialTrashCapturePlu" class="font25 outlined-text" style="color: rgb(202, 255, 207)">
+                                                                    {{ areaBasedAcreCalculationsDto.PartialTrashCaptureAcreagePLU | number: "1.0-0" }}
+                                                                </div>
+                                                                <p class="greyLabel">acres Partial Capture</p>
+                                                            </div>
+                                                            <div class="g-col-4">
+                                                                <div id="untreatedPlu" class="font25 outlined-text" style="color: rgb(214, 76, 255)">
+                                                                    {{ areaBasedAcreCalculationsDto.UntreatedAcreagePLU | number: "1.0-0" }}
+                                                                </div>
+                                                                <p class="greyLabel">acres Untreated</p>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td class="TGUColumn">
+                                                        <div class="grid-12">
+                                                            <div class="g-col-4">
+                                                                <div id="fullTrashCaptureAlu" class="font25 outlined-text" style="color: #b2a38e">
+                                                                    {{ areaBasedAcreCalculationsDto.FullTrashCaptureAcreageALU | number: "1.0-0" }}
+                                                                </div>
+                                                                <p class="greyLabel">acres Full Capture</p>
+                                                            </div>
+                                                            <div class="g-col-4">
+                                                                <div id="partialTrashCaptureAlu" class="font25 outlined-text" style="color: #dfcaae">
+                                                                    {{ areaBasedAcreCalculationsDto.PartialTrashCaptureAcreageALU | number: "1.0-0" }}
+                                                                </div>
+                                                                <p class="greyLabel">acres Partial Capture</p>
+                                                            </div>
+                                                            <div class="g-col-4">
+                                                                <div id="untreatedAlu" class="font25 outlined-text" style="color: rgb(223, 223, 223)">
+                                                                    {{ areaBasedAcreCalculationsDto.UntreatedAcreageALU | number: "1.0-0" }}
+                                                                </div>
+                                                                <p class="greyLabel">acres Untreated</p>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td class="TGUColumn">
+                                                        <strong>Priority Land Use</strong>
+                                                    </td>
+                                                    <td class="TGUColumn" style="border-left: none">
+                                                        <strong>Alternate Land Use</strong>
+                                                    </td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    }
+                                </div>
+                            }
+                            @if (currentResultType == "Current Net Loading Rate With Controls" || currentResultType == "Net Change In Trash Loading Rate With Controls") {
+                                <div [loadingSpinner]="{ isLoading: isLoading, loadingHeight: 100 }" id="LoadBasedResultsControlTemplate">
+                                    @if (loadResultsDto$ | async; as loadResultsDto) {
+                                        <table class="table loadBasedCalculationControlTable">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="loadBasedResultsColumn" style="width: 18%">
+                                                        <div id="viaFullTrashCapture" class="font25 loadBased-lightblue bold">
+                                                            {{ loadResultsDto.LoadFullCapture | number: "1.0-0" }}
+                                                        </div>
+                                                        <p class="text-normal greyLabel" style="font-weight: normal">
+                                                            <field-definition fieldDefinitionType="ViaFullCapture"> </field-definition>
+                                                        </p>
+                                                    </td>
+                                                    <td class="loadBasedResultsColumn" style="width: 21%">
+                                                        <div id="viaPartialTrashCapture" class="font25 loadBased-lightblue bold">
+                                                            {{ loadResultsDto.LoadPartialCapture | number: "1.0-0" }}
+                                                        </div>
+                                                        <p class="text-normal greyLabel"><field-definition fieldDefinitionType="ViaPartialCapture"> </field-definition></p>
+                                                    </td>
+                                                    <td class="loadBasedResultsColumn" style="width: 21%">
+                                                        <div id="viaOVTAScore" class="font25 loadBased-lightblue bold">{{ loadResultsDto.LoadOVTA | number: "1.0-0" }}</div>
+                                                        <p class="text-normal greyLabel">
+                                                            <field-definition fieldDefinitionType="ViaOVTAScore"> </field-definition>
+                                                        </p>
+                                                    </td>
+                                                    <td class="loadBasedResultsColumn">
+                                                        <div id="totalAchieved" class="font25 loadBased-blue bold">{{ loadResultsDto.TotalAchieved | number: "1.0-0" }}</div>
+                                                        <p class="text-normal greyLabel"><field-definition fieldDefinitionType="TotalAchieved"> </field-definition></p>
+                                                    </td>
+                                                    <td class="loadBasedResultsColumn" style="border-left: 1px solid rgb(204, 204, 204)">
+                                                        <div id="targetLoadReduction" class="font25 loadBased-red bold">
+                                                            {{ loadResultsDto.TargetLoadReduction | number: "1.0-0" }}
+                                                        </div>
+                                                        <p><field-definition fieldDefinitionType="TargetLoadReduction"> </field-definition></p>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colspan="5">
+                                                        <p class="gpy">gallons per year</p>
+                                                    </td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    }
+                                </div>
+                            }
+                            @if (currentResultType == "OVTA-Based Results") {
+                                <div [loadingSpinner]="{ isLoading: isLoading, loadingHeight: 100 }" id="OVTABasedResultsControlTemplate">
+                                    @if (ovtaResultsDto$ | async; as ovtaResultsDto) {
+                                        <table class="table areaBasedCalculationControlTable">
+                                            <thead>
+                                                <tr>
+                                                    <td class="font15" style="font-weight: bold; padding-left: 0.75rem">
+                                                        <div>
+                                                            Score
+                                                            <a (click)="showScoreDefinitions()">
+                                                                <i class="fas fa-question-circle small" style="cursor: help"></i>
+                                                            </a>
+                                                        </div>
+                                                    </td>
+                                                    <td class="ovtaResults font15" style="width: 10%">A</td>
+                                                    <td class="ovtaResults font15" style="width: 10%">B</td>
+                                                    <td class="ovtaResults font15" style="width: 10%">C</td>
+                                                    <td class="ovtaResults font15" style="width: 10%">D</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="font15" style="border: none">
+                                                        <div>Priority Land Use Area (acres)</div>
+                                                    </td>
+                                                    <td class="ovtaResults font15">
+                                                        <div id="PLUIsA" style="color: rgb(74, 222, 0)">{{ ovtaResultsDto.PLUSumAcresWhereOVTAIsA | number: "1.0-0" }}</div>
+                                                    </td>
+                                                    <td class="ovtaResults font15">
+                                                        <div id="PLUIsB" style="color: rgb(255, 216, 0)">{{ ovtaResultsDto.PLUSumAcresWhereOVTAIsB | number: "1.0-0" }}</div>
+                                                    </td>
+                                                    <td class="ovtaResults font15">
+                                                        <div id="PLUIsC" style="color: rgb(255, 127, 127)">{{ ovtaResultsDto.PLUSumAcresWhereOVTAIsC | number: "1.0-0" }}</div>
+                                                    </td>
+                                                    <td class="ovtaResults font15">
+                                                        <div id="PLUIsD" style="color: rgb(197, 0, 255)">{{ ovtaResultsDto.PLUSumAcresWhereOVTAIsD | number: "1.0-0" }}</div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="font15" style="border: none">
+                                                        <div>Alternate Land Use Area (acres)</div>
+                                                    </td>
+                                                    <td class="ovtaResults font15">
+                                                        <div id="ALUIsA" style="color: rgb(74, 222, 0)">{{ ovtaResultsDto.ALUSumAcresWhereOVTAIsA | number: "1.0-0" }}</div>
+                                                    </td>
+                                                    <td class="ovtaResults font15">
+                                                        <div id="ALUIsB" style="color: rgb(255, 216, 0)">{{ ovtaResultsDto.ALUSumAcresWhereOVTAIsB | number: "1.0-0" }}</div>
+                                                    </td>
+                                                    <td class="ovtaResults font15">
+                                                        <div id="ALUIsC" style="color: rgb(255, 127, 127)">{{ ovtaResultsDto.ALUSumAcresWhereOVTAIsC | number: "1.0-0" }}</div>
+                                                    </td>
+                                                    <td class="ovtaResults font15">
+                                                        <div id="ALUIsD" style="color: rgb(197, 0, 255)">{{ ovtaResultsDto.ALUSumAcresWhereOVTAIsD | number: "1.0-0" }}</div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    }
+                                </div>
+                            }
+                        </div>
+                        @if (lastUpdateDate$ | async; as lastUpdateDate) {
+                            <div class="g-col-12 font-italic">Last Calculated Date: {{ lastUpdateDate | date: "shortDate" }}</div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="tgu-feature mt-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Selected Feature</h3>
+                    </div>
+                    @if (selectedFeature$ | async; as selected) {
+                        <div class="card-body tgu-grid-data-container">
+                            <dl>
+                                <div class="tgu-grid-data-column">
+                                    <dt>Analysis Area ID</dt>
+                                    <dd>{{ selected.tgu?.TrashGeneratingUnitID != null ? selected.tgu?.TrashGeneratingUnitID : "-" }}</dd>
+                                    <dt><field-definition fieldDefinitionType="LandUseType"></field-definition></dt>
+                                    <dd>{{ selected.tgu?.LandUseType ? selected.tgu?.LandUseType : "-" }}</dd>
+                                    <dt><field-definition fieldDefinitionType="CurrentLoadingRate"></field-definition></dt>
+                                    <dd>{{ selected.tgu?.CurrentLoadingRate != null ? selected.tgu?.CurrentLoadingRate + " gal/ac/yr" : "-" }}</dd>
+                                    <dt><field-definition fieldDefinitionType="BaselineLoadingRate"></field-definition></dt>
+                                    <dd>{{ selected.tgu?.BaselineLoadingRate != null ? selected.tgu?.BaselineLoadingRate + " gal/ac/yr" : "-" }}</dd>
+                                    <dt>Progress Trash Generation Rate</dt>
+                                    <dd>{{ selected.tgu?.ProgressLoadingRate != null ? selected.tgu?.ProgressLoadingRate + " gal/ac/yr" : "-" }}</dd>
+                                    <dt>Net Change in Loading Rate with Controls</dt>
+                                    <dd>{{ selected.tgu?.LoadingRateDelta != null ? selected.tgu?.LoadingRateDelta + " gal/ac/yr" : "-" }}</dd>
+                                    <dt>Permit Type</dt>
+                                    <dd>{{ selected.tgu?.PermitClass ? selected.tgu?.PermitClass : "-" }}</dd>
+                                    <dt>Jurisdiction</dt>
+                                    <dd>{{ selected.tgu?.StormwaterJurisdictionName ? selected.tgu?.StormwaterJurisdictionName : "-" }}</dd>
+                                </div>
+                                <div class="tgu-grid-data-column">
+                                    <dt>BMP</dt>
+                                    <dd>
+                                        @if (selected.tgu?.TreatmentBMPID && selected.tgu?.TreatmentBMPName) {
+                                            <a href="{{ ocstBaseUrl() }}/TreatmentBMP/Detail/{{ selected.tgu?.TreatmentBMPID }}">{{ selected.tgu?.TreatmentBMPName }}</a>
+                                        } @else {
+                                            -
+                                        }
+                                    </dd>
+                                    <dt>BMP Type</dt>
+                                    <dd>{{ selected.tgu?.TreatmentBMPTypeName ? selected.tgu?.TreatmentBMPTypeName : "-" }}</dd>
+                                    <dt><field-definition fieldDefinitionType="BMPTrashTreatmentStatus" labelOverride="BMP Status"></field-definition></dt>
+                                    <dd>{{ selected.tgu?.TrashCaptureStatusBMP ? selected.tgu?.TrashCaptureStatusBMP : "-" }}</dd>
+                                    <dt>WQMP</dt>
+                                    <dd>
+                                        @if (selected.tgu?.WaterQualityManagementPlanID && selected.tgu?.WaterQualityManagementPlanName) {
+                                            <a href="{{ ocstBaseUrl() }}/WaterQualityManagementPlan/Detail/{{ selected.tgu?.WaterQualityManagementPlanID }}">{{
+                                                selected.tgu?.WaterQualityManagementPlanName
+                                            }}</a>
+                                        } @else {
+                                            -
+                                        }
+                                    </dd>
+                                    <dt><field-definition fieldDefinitionType="WQMPTrashTreatmentStatus" labelOverride="WQMP Status"></field-definition></dt>
+                                    <dd>{{ selected.tgu?.TrashCaptureStatusWQMP ? selected.tgu?.TrashCaptureStatusWQMP : "-" }}</dd>
+                                    <dt>OVTA Area</dt>
+                                    <dd>
+                                        @if (selected.ovta) {
+                                            <a [routerLink]="['/trash/onland-visual-trash-assessment-areas', selected.ovta?.OnlandVisualTrashAssessmentAreaID]">{{
+                                                selected.ovta?.OnlandVisualTrashAssessmentAreaName
+                                            }}</a>
+                                        } @else {
+                                            @if (selected.tgu?.OnlandVisualTrashAssessmentAreaID && selected.tgu?.OnlandVisualTrashAssessmentAreaName) {
+                                                <a [routerLink]="['/trash/onland-visual-trash-assessment-areas', selected.tgu?.OnlandVisualTrashAssessmentAreaID]">{{
+                                                    selected.tgu?.OnlandVisualTrashAssessmentAreaName
+                                                }}</a>
+                                            } @else {
+                                                -
+                                            }
+                                        }
+                                    </dd>
+                                    <dt><field-definition fieldDefinitionType="BaselineScore" labelOverride="OVTA Baseline Score"></field-definition></dt>
+                                    <dd>
+                                        @if (selected.tgu?.OnlandVisualTrashAssessmentAreaBaselineScore != null) {
+                                            {{
+                                                selected.tgu?.OnlandVisualTrashAssessmentAreaBaselineScore +
+                                                    " (" +
+                                                    selected.tgu.CompletedBaselineAssessmentCount +
+                                                    " Assessment" +
+                                                    (selected.tgu.CompletedBaselineAssessmentCount === 1 ? "" : "s") +
+                                                    ")"
+                                            }}
+                                        } @else if (selected.ovta?.OnlandVisualTrashAssessmentBaselineScoreName != null) {
+                                            {{
+                                                selected.ovta?.OnlandVisualTrashAssessmentBaselineScoreName +
+                                                    " (" +
+                                                    selected.ovta?.CompletedBaselineAssessmentCount +
+                                                    " Assessment" +
+                                                    (selected.ovta?.CompletedBaselineAssessmentCount === 1 ? "" : "s") +
+                                                    ")"
+                                            }}
+                                        } @else {
+                                            {{
+                                                selected.ovta?.CompletedBaselineAssessmentCount != null
+                                                    ? "- (" +
+                                                      selected.ovta?.CompletedBaselineAssessmentCount +
+                                                      " Assessment" +
+                                                      (selected.ovta?.CompletedBaselineAssessmentCount === 1 ? "" : "s") +
+                                                      ")"
+                                                    : "-"
+                                            }}
+                                        }
+                                    </dd>
+
+                                    <dt><field-definition fieldDefinitionType="ProgressScore" labelOverride="OVTA Progress Score"></field-definition></dt>
+                                    <dd>
+                                        @if (selected.tgu?.OnlandVisualTrashAssessmentAreaProgressScore != null) {
+                                            {{
+                                                selected.tgu?.OnlandVisualTrashAssessmentAreaProgressScore +
+                                                    " (" +
+                                                    selected.tgu.CompletedProgressAssessmentCount +
+                                                    " Assessment" +
+                                                    (selected.tgu.CompletedProgressAssessmentCount === 1 ? "" : "s") +
+                                                    ")"
+                                            }}
+                                        } @else if (selected.ovta?.OnlandVisualTrashAssessmentProgressScoreName != null) {
+                                            {{
+                                                selected.ovta?.OnlandVisualTrashAssessmentProgressScoreName +
+                                                    " (" +
+                                                    selected.ovta?.CompletedProgressAssessmentCount +
+                                                    " Assessment" +
+                                                    (selected.ovta?.CompletedProgressAssessmentCount === 1 ? "" : "s") +
+                                                    ")"
+                                            }}
+                                        } @else {
+                                            {{
+                                                selected.ovta?.CompletedProgressAssessmentCount != null
+                                                    ? "- (" +
+                                                      selected.ovta?.CompletedProgressAssessmentCount +
+                                                      " Assessment" +
+                                                      (selected.ovta?.CompletedProgressAssessmentCount === 1 ? "" : "s") +
+                                                      ")"
+                                                    : "-"
+                                            }}
+                                        }
+                                    </dd>
+                                    <dt>Last Assessed Date</dt>
+                                    <dd>
+                                        @if (selected.tgu?.AssessmentDate) {
+                                            {{ selected.tgu?.AssessmentDate | date: "shortDate" }}
+                                        } @else if (selected.ovta?.LastAssessmentDate) {
+                                            {{ selected.ovta?.LastAssessmentDate | date: "shortDate" }}
+                                        } @else {
+                                            -
+                                        }
+                                    </dd>
+                                </div>
+                            </dl>
+                        </div>
+                    } @else {
+                        <div class="card-body">
+                            <span>
+                                Select a Trash Analysis Area on the map to see land use block details, loading rates, and links to assets in the Inventory that are providing
+                                treatment (WQMP, BMP, or OVTA equivalency)
+                            </span>
+                        </div>
+                    }
+                </div>
+                <div>
+                    @if (boundingBox$ | async; as boundingBox) {
+                        <neptune-map (onMapLoad)="handleMapReady($event)" mapHeight="1000px" [showLegend]="true" [boundingBox]="boundingBox">
+                            @if (mapIsReady) {
+                                <land-use-block-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></land-use-block-layer>
+                            }
+                            @if (mapIsReady) {
+                                <delineations-layer
+                                    [displayOnLoad]="false"
+                                    [map]="map"
+                                    [layerControl]="layerControl"
+                                    [sortOrder]="20"
+                                    [isAnalyzedInModelingModule]="false"></delineations-layer>
+                            }
+                            @if (mapIsReady) {
+                                <wqmps-trash-capture-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="40"></wqmps-trash-capture-layer>
+                            }
+                            @if (mapIsReady) {
+                                <jurisdictions-layer [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="50"></jurisdictions-layer>
+                            }
+                            @if (mapIsReady) {
+                                <regional-subbasins-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="60"></regional-subbasins-layer>
+                            }
+                            @if (mapIsReady) {
+                                <permit-type-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="70"></permit-type-layer>
+                            }
+                            @if (mapIsReady && currentResultType == "Area-Based Results") {
+                                <trash-generating-unit-layer
+                                    [displayOnLoad]="true"
+                                    [map]="map"
+                                    [layerControl]="layerControl"
+                                    [sortOrder]="1"
+                                    [selectedJurisdictionID]="this.currentStormwaterJurisdiction.StormwaterJurisdictionID"></trash-generating-unit-layer>
+                            }
+                            @if (mapIsReady && currentResultType == "Current Net Loading Rate With Controls") {
+                                <trash-generating-unit-loads-layer
+                                    [displayOnLoad]="true"
+                                    [map]="map"
+                                    [layerControl]="layerControl"
+                                    [sortOrder]="1"
+                                    [style]="'current_load'"
+                                    [selectedJurisdictionID]="this.currentStormwaterJurisdiction.StormwaterJurisdictionID"></trash-generating-unit-loads-layer>
+                            }
+                            @if (mapIsReady && currentResultType == "Net Change In Trash Loading Rate With Controls") {
+                                <trash-generating-unit-loads-layer
+                                    [displayOnLoad]="true"
+                                    [map]="map"
+                                    [layerControl]="layerControl"
+                                    [sortOrder]="1"
+                                    [style]="'delta_load'"
+                                    [selectedJurisdictionID]="this.currentStormwaterJurisdiction.StormwaterJurisdictionID"></trash-generating-unit-loads-layer>
+                            }
+                            @if (mapIsReady && currentResultType == "OVTA-Based Results") {
+                                <ovta-areas-layer
+                                    [displayOnLoad]="true"
+                                    [map]="map"
+                                    [layerControl]="layerControl"
+                                    [sortOrder]="1"
+                                    [selectedJurisdictionID]="this.currentStormwaterJurisdiction.StormwaterJurisdictionID"></ovta-areas-layer>
+                            }
+                            @if (treatmentBMPs$ | async) {
+                                <span></span>
+                            }
+                        </neptune-map>
+                    }
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  }
+    }
 </div>

@@ -3,7 +3,7 @@
 public class PersonDto
 {
     public int PersonID { get; set; }
-    public Guid PersonGuid { get; set; }
+    public string GlobalID { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string Email { get; set; }

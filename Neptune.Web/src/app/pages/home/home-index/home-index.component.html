@@ -5,41 +5,40 @@
         </div>
         <div class="hero__actions card">
             @if (currentUser$ | async; as currentUser) {
-            <div class="card-body">
-                <h3 class="card-title">Quick Actions</h3>
-                <div class="hero__btns">
-                    <div class="hero__btns-wrapper">
-                        <a class="btn btn-primary" [routerLink]="['/planning']">Planning Module</a>
-                    </div>
-                    <div class="hero__btns-wrapper">
-                        <a class="btn btn-primary" [routerLink]="['/trash']">Trash Module</a>
-                    </div>
-                    <div class="hero__btns-wrapper">
-                        <a class="btn btn-primary" href="{{ ocstBaseUrl() }}">OCST Home</a>
-                    </div>
-                    <div class="hero__btns-wrapper">
-                        <a class="btn btn-primary" href="{{ requestSupportUrl() }}">Request Support</a>
+                <div class="card-body">
+                    <h3 class="card-title">Quick Actions</h3>
+                    <div class="hero__btns">
+                        <div class="hero__btns-wrapper">
+                            <a class="btn btn-primary" [routerLink]="['/planning']">Planning Module</a>
+                        </div>
+                        <div class="hero__btns-wrapper">
+                            <a class="btn btn-primary" [routerLink]="['/trash']">Trash Module</a>
+                        </div>
+                        <div class="hero__btns-wrapper">
+                            <a class="btn btn-primary" href="{{ ocstBaseUrl() }}">OCST Home</a>
+                        </div>
+                        <div class="hero__btns-wrapper">
+                            <a class="btn btn-primary" href="{{ requestSupportUrl() }}">Request Support</a>
+                        </div>
                     </div>
                 </div>
-            </div>
             } @else {
-            <div class="card-body">
-                <h3 class="card-title">Welcome</h3>
-                <p class="card-subtitle">Sign in to access the OC Stormwater Tools.<br />Create an account if you don't have one yet.</p>
-                <div class="hero__btns">
-                    <div class="hero__btns-wrapper">
-                        <a (click)="login()" class="btn btn-primary">Sign In</a>
-                    </div>
-                    <div class="hero__btns-wrapper">
-                        <a (click)="createAccount()" class="btn btn-primary">Create Account</a>
+                <div class="card-body">
+                    <h3 class="card-title">Welcome</h3>
+                    <p class="card-subtitle">Sign in to access the OC Stormwater Tools.<br />Create an account if you don't have one yet.</p>
+                    <div class="hero__btns">
+                        <div class="hero__btns-wrapper">
+                            <a (click)="login()" class="btn btn-primary">Sign In</a>
+                        </div>
+                        <div class="hero__btns-wrapper">
+                            <a (click)="signUp()" class="btn btn-primary">Create Account</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="card-footer">
-                <p>Need help logging in?</p>
-                <a href="{{ forgotPasswordUrl() }}">Forgot Password</a> | <a href="{{ forgotUsernameUrl() }}">Forgot Username</a> |
-                <a href="{{ keystoneSupportUrl() }}">Request Support</a>
-            </div>
+                <div class="card-footer">
+                    <p>Need help logging in?</p>
+                    <a href="{{ requestSupportUrl() }}">Request Support</a>
+                </div>
             }
         </div>
     </section>

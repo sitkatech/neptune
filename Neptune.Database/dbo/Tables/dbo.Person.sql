@@ -15,5 +15,5 @@ CREATE TABLE [dbo].[Person](
 	[ReceiveRSBRevisionRequestEmails] [bit] NOT NULL,
 	[WebServiceAccessToken] [uniqueidentifier] NOT NULL,
 	[IsOCTAGrantReviewer] [bit] NOT NULL, 
-    [Auth0ID] VARCHAR(100) NULL,
+    [GlobalID] VARCHAR(100) NULL,
 )

@@ -21,7 +21,11 @@ export class HomeIndexComponent implements OnInit {
 
     public customRichTextTypeID: number = NeptunePageTypeEnum.SPAHomePage;
 
-    constructor(private authenticationService: AuthenticationService, private router: Router, private route: ActivatedRoute) {}
+    constructor(
+        private authenticationService: AuthenticationService,
+        private router: Router,
+        private route: ActivatedRoute
+    ) {}
 
     public ngOnInit(): void {
         this.currentUser$ = this.authenticationService.getCurrentUser();
@@ -51,23 +55,11 @@ export class HomeIndexComponent implements OnInit {
     }
 
     public login(): void {
-        this.authenticationService.login(true);
+        this.authenticationService.login();
     }
 
-    public createAccount(): void {
-        this.authenticationService.createAccount();
-    }
-
-    public forgotPasswordUrl(): string {
-        return `${environment.keystoneAuthConfiguration.issuer}/Account/ForgotPassword?${this.authenticationService.getClientIDAndRedirectUrlForKeystone()}`;
-    }
-
-    public forgotUsernameUrl(): string {
-        return `${environment.keystoneAuthConfiguration.issuer}/Account/ForgotUsername?${this.authenticationService.getClientIDAndRedirectUrlForKeystone()}`;
-    }
-
-    public keystoneSupportUrl(): string {
-        return `${environment.keystoneAuthConfiguration.issuer}/Account/Support/20?${this.authenticationService.getClientIDAndRedirectUrlForKeystone()}`;
+    public signUp(): void {
+        this.authenticationService.signUp();
     }
 
     public requestSupportUrl(): string {

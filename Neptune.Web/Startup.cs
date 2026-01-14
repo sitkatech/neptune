@@ -76,9 +76,8 @@ namespace Neptune.Web
             Staging = bool.Parse(configuration["Staging"]);
             Dev = bool.Parse(configuration["Dev"]);
             MainAppApiUrl = configuration["MainAppApiUrl"];
-            CreateAccountRedirectUrl = configuration["CreateAccountRedirectUrl"];
             GeoserverMapServiceUrl = configuration["GeoserverMapServiceUrl"];
-            KeystoneAuthConfiguration = new KeystoneAuthConfigurationDto(configuration);
+            Auth0 = new Auth0Dto(configuration);
             OcStormwaterToolsBaseUrl = configuration["OcStormwaterToolsBaseUrl"];
         }
 
@@ -90,51 +89,31 @@ namespace Neptune.Web
         public bool Dev { get; set; }
         [JsonPropertyName("mainAppApiUrl")]
         public string MainAppApiUrl { get; set; }
-        [JsonPropertyName("createAccountRedirectUrl")]
-        public string CreateAccountRedirectUrl { get; set; }
         [JsonPropertyName("geoserverMapServiceUrl")]
         public string GeoserverMapServiceUrl { get; set; }
-        [JsonPropertyName("keystoneAuthConfiguration")]
-        public KeystoneAuthConfigurationDto KeystoneAuthConfiguration { get; set; }
+        [JsonPropertyName("auth0")]
+        public Auth0Dto Auth0 { get; set; }
         [JsonPropertyName("ocStormwaterToolsBaseUrl")]
         public string OcStormwaterToolsBaseUrl { get; set;}
     }
 
-    public class KeystoneAuthConfigurationDto
+    public class Auth0Dto
     {
-        public KeystoneAuthConfigurationDto(IConfiguration configuration)
+        public Auth0Dto(IConfiguration configuration)
         {
-            ClientID = configuration["Keystone_ClientID"];
-            Issuer = configuration["Keystone_Issuer"];
-            RedirectUriRelative = configuration["Keystone_RedirectUriRelative"];
-            Scope = configuration["Keystone_Scope"];
-            SessionChecksEnabled = bool.Parse(configuration["Keystone_SessionCheckEnabled"]);
-            LogoutUrl = configuration["Keystone_LogoutUrl"];
-            PostLogoutRedirectUri = configuration["Keystone_PostLogoutRedirectUri"];
-            WaitForTokenInMsec = int.Parse(configuration["Keystone_WaitForTokenInMsec"]);
-            ResponseType = configuration["Keystone_ResponseType"];
-            DisablePKCE = bool.Parse(configuration["Keystone_DisablePKCE"]);
+            ClientID = configuration["auth0_clientId"];
+            Domain = configuration["auth0_domain"];
+            RedirectUri = configuration["auth0_redirectUri"];
+            Audience = configuration["auth0_audience"];
         }
 
         [JsonPropertyName("clientId")]
         public string ClientID { get; set; }
-        [JsonPropertyName("issuer")]
-        public string Issuer { get; set; }
-        [JsonPropertyName("redirectUriRelative")]
-        public string RedirectUriRelative { get; set; }
-        [JsonPropertyName("scope")]
-        public string Scope { get; set; }
-        [JsonPropertyName("sessionChecksEnabled")]
-        public bool SessionChecksEnabled { get; set; }
-        [JsonPropertyName("logoutUrl")]
-        public string LogoutUrl { get; set; }
-        [JsonPropertyName("postLogoutRedirectUri")]
-        public string PostLogoutRedirectUri { get; set; }
-        [JsonPropertyName("waitForTokenInMsec")]
-        public int WaitForTokenInMsec { get; set; }
-        [JsonPropertyName("responseType")]
-        public string ResponseType {get; set;}
-        [JsonPropertyName("disablePKCE")]
-        public bool DisablePKCE {get; set;}
+        [JsonPropertyName("domain")]
+        public string Domain { get; set; }
+        [JsonPropertyName("redirectUri")]
+        public string RedirectUri { get; set; }
+        [JsonPropertyName("audience")]
+        public string Audience { get; set; }
     }
 }

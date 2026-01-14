@@ -1,5 +1,4 @@
 ﻿using Neptune.EFModels.Entities;
-using Neptune.Models.DataTransferObjects;
 using Neptune.WebMvc.Models;
 
 namespace Neptune.WebMvc.Common;
@@ -12,8 +11,8 @@ public static class UserContext
         var claimsPrincipal = httpContext.User;
         if (claimsPrincipal.Claims.Any())
         {
-            var auth0ID = claimsPrincipal.Claims.Single(x => x.Type == "sub").Value;
-            person = People.GetByAuth0ID(dbContext, auth0ID);
+            var globalID = claimsPrincipal.Claims.Single(x => x.Type == "sub").Value;
+            person = People.GetByGlobalID(dbContext, globalID);
         }
 
         return person ?? PersonModelExtensions.GetAnonymousSitkaUser();
