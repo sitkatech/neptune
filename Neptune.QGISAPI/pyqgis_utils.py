@@ -206,11 +206,37 @@ def multipartToSinglePart(inputLayer, memoryOutputName, filesystemOutputPath, co
     result = runNativeAlgorithm("native:multiparttosingleparts", params, memoryOutputName, filesystemOutputPath, context)
     return result
 
+def removeDuplicateVerticesWithinLayer(inputLayer, memoryOutputName=None, filesystemOutputPath=None, context=None):
+    params = {
+        'INPUT': inputLayer,
+        'TOLERANCE': 0
+    }    
+    result = runNativeAlgorithm("native:removeduplicatevertices", params, memoryOutputName, filesystemOutputPath, context)
+    return result
+
 def bufferSnapFix(inputLayer, filesystemOutputPath, context=None):
     #inputLayer = removeNullGeometries(inputLayer, 'nonnull', None, context)
     #inputLayer = removeSlivers(inputLayer, 'noslivers', None, context)
     inputLayer = bufferZero(inputLayer, 'buffer', None, context)
     inputLayer = snapGeometriesWithinLayer(inputLayer, 'snapped', None, context)
+    inputLayer = bufferZero(inputLayer, 'buffer', None, context)
+    inputLayer = multipartToSinglePart(inputLayer, 'multiparttosingleparts', None, context)
+    
+    print(filesystemOutputPath + " Starting removing line strings and bad geometries.")
+    print("Starting with {count} features".format(count = str(inputLayer.featureCount())))
+    inputLayer.startEditing()
+    for feat in inputLayer.getFeatures():
+        if feat.geometry().type() == 1: # line strings
+            print("Deleting " + str(feat.id()) + " with geometry type " + QgsWkbTypes.geometryDisplayString(feat.geometry().type()))
+            inputLayer.deleteFeature(feat.id())
+        elif feat.geometry().area() < 1:
+            print("Deleting " + str(feat.id()) + " since it has area < 1")
+            inputLayer.deleteFeature(feat.id())
+    inputLayer.commitChanges()
+    print("Ending with {count} features".format(count = str(inputLayer.featureCount())))
+    print(filesystemOutputPath + " Ending removing line strings and bad geometries.")
+    
+    inputLayer = removeDuplicateVerticesWithinLayer(inputLayer, 'deduped', None, context)
     inputLayer = fixGeometriesWithinLayer(inputLayer, None, filesystemOutputPath, context)
     print('Buffer snap fix succeeded')
     return inputLayer
