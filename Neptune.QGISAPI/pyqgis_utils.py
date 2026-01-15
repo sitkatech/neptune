@@ -206,20 +206,29 @@ def multipartToSinglePart(inputLayer, memoryOutputName, filesystemOutputPath, co
     result = runNativeAlgorithm("native:multiparttosingleparts", params, memoryOutputName, filesystemOutputPath, context)
     return result
 
-def removeDuplicateVerticesWithinLayer(inputLayer, memoryOutputName=None, filesystemOutputPath=None, context=None):
-    params = {
-        'INPUT': inputLayer,
-        'TOLERANCE': 0
-    }    
-    result = runNativeAlgorithm("native:removeduplicatevertices", params, memoryOutputName, filesystemOutputPath, context)
-    return result
-
 def bufferSnapFix(inputLayer, filesystemOutputPath, context=None):
     #inputLayer = removeNullGeometries(inputLayer, 'nonnull', None, context)
     #inputLayer = removeSlivers(inputLayer, 'noslivers', None, context)
-    inputLayer = bufferZero(inputLayer, 'buffer', None, context)
+
+    # bufferZero, snap, fix was resulting in some invalid geometries. The issue was snap was taking miniscule polygons and snapping them to a line/point, thus turning the feature into a GeometryCollection instead of a Multipolygon.
+    # When we attempt to union layers, the GeometryCollection cannot be unioned with a Multipolygon layer, so the geometry is dropped.
+    #
+    # From ChatGPT: Practical "robust clean" you can drop in
+    # If fixgeometries still leaves invalid polygons, the most reliable next step is buffer(0) after snapping, because buffer(0) often resolves self-crossing "bow-tie" boundaries by splitting them into valid polygon parts.
+    # So for both layers, try this order:
+    #
+    # snap (small tolerance)
+    # buffer(0)
+    # fix geometries
+    # check validity
+    #
+    # And reduce snap tolerance if possible (1 is pretty aggressive in projected units).
+    #
+    # Moving buffer(0) after snap was resulting in errors, but doing buffer -> snap -> buffer seems to resolve the problems we were having
+
+    inputLayer = bufferZero(inputLayer, 'buffer_pre_snap', None, context)
     inputLayer = snapGeometriesWithinLayer(inputLayer, 'snapped', None, context)
-    inputLayer = bufferZero(inputLayer, 'buffer', None, context)
+    inputLayer = bufferZero(inputLayer, 'buffer_post_snap', None, context)
     
     inputLayer = fixGeometriesWithinLayer(inputLayer, None, filesystemOutputPath, context)
     print('Buffer snap fix succeeded')
