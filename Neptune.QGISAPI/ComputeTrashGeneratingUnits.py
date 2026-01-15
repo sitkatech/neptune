@@ -302,7 +302,6 @@ class Flatten:
         print("Ending with {count} features".format(count = str(self.working_layer.featureCount())))
 
     # utility methods
-    
     def lessThanIDFilterString(self):
         # eg Table < Joined_TableID; prevents duplicate/permute records
         return "{identifier} < {join_prefix}{identifier}".format(identifier = self.layer_identifier, join_prefix = JOIN_PREFIX)
@@ -332,7 +331,7 @@ class Flatten:
     def addFeatureToIntersectLayer(self, feature_id):
         ## todo: I think this method is unused?
         for featToAppend in self.working_layer.getFeatures("{identifier} = {id}".format(identifier = self.layer_identifier, id=feature_id)):
-            self.intersect_layer.addFeature(featToAppend)    
+            self.intersect_layer.addFeature(featToAppend)
 
 if __name__ == '__main__':
     parseArguments()
