@@ -20,8 +20,7 @@ from qgis.core import (
      QgsFeature,
      QgsCoordinateReferenceSystem,
      QgsProject,
-     QgsWkbTypes,
-     QgsGeometry
+     QgsWkbTypes
 )
 from qgis.analysis import QgsNativeAlgorithms
 
