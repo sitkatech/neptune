@@ -74,6 +74,8 @@ namespace Neptune.EFModels.Entities
                 .ExecuteDeleteAsync();
             await dbContext.SourceControlBMPs.Where(x => x.WaterQualityManagementPlanID == WaterQualityManagementPlanID)
                 .ExecuteDeleteAsync();
+            await dbContext.TrashGeneratingUnits
+                .Where(x => x.WaterQualityManagementPlanID == WaterQualityManagementPlanID).ExecuteDeleteAsync();
             await dbContext.TrashGeneratingUnit4326s
                 .Where(x => x.WaterQualityManagementPlanID == WaterQualityManagementPlanID).ExecuteDeleteAsync();
             foreach (var treatmentBMP in dbContext.TreatmentBMPs.Where(x => x.WaterQualityManagementPlanID == WaterQualityManagementPlanID).ToList())
