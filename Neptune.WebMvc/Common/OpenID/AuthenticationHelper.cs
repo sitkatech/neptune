@@ -29,7 +29,6 @@ public static class AuthenticationHelper
     public static void ProcessLoginFromAuth0(TokenValidatedContext tokenValidatedContext, NeptuneDbContext dbContext, WebConfiguration configuration, Logger logger, SitkaSmtpClientService sitkaSmtpClientService)
     {
         var sendNewUserNotification = false;
-        var claims = tokenValidatedContext.SecurityToken.Claims;
         var globalID = tokenValidatedContext.SecurityToken.Subject;
         logger.Information($"ocstormwatertools.org: In {nameof(ProcessLoginFromAuth0)} - Processing Auth0 login for user with Auth0 guid {globalID}".ToString());
         var person = dbContext.People.FirstOrDefault(x => x.GlobalID == globalID);
@@ -46,14 +45,15 @@ public static class AuthenticationHelper
             person = new Person
             {
                 GlobalID = globalID,
-                FirstName = firstName,
-                LastName = lastName,
-                Email = email,
                 RoleID = Role.Unassigned.RoleID,
                 CreateDate = DateTime.UtcNow,
                 IsActive = true,
                 OrganizationID = Organizations.OrganizationIDUnassigned,
-                WebServiceAccessToken = Guid.NewGuid()
+                WebServiceAccessToken = Guid.NewGuid(),
+                ReceiveSupportEmails = false,
+                FirstName = firstName,
+                LastName = lastName,
+                Email = email,
             };
             dbContext.People.Add(person);
             sendNewUserNotification = true;

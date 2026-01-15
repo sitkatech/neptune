@@ -86,9 +86,6 @@ export class AuthenticationService {
     }
 
     public forcedLogout() {
-        if (!this.isCurrentUserBeingImpersonated(this.currentUser)) {
-            sessionStorage.authRedirectUrl = window.location.href;
-        }
         this.logout();
     }
 
@@ -126,26 +123,6 @@ export class AuthenticationService {
         const baseRedirect = environment.auth0?.redirectUri ?? window.location.origin;
         const target = baseRedirect.replace(/\/$/, "") + "/create-user-callback";
         this.auth0.loginWithRedirect({ authorizationParams: { screen_hint: "signup", redirect_uri: target } } as any);
-    }
-
-    public isCurrentUserBeingImpersonated(user: PersonDto): boolean {
-        if (user) {
-            const globalID = this.claimsUser.sub;
-            return globalID != user.GlobalID;
-        }
-        return false;
-    }
-
-    public getAuthRedirectUrl() {
-        return sessionStorage.authRedirectUrl;
-    }
-
-    public setAuthRedirectUrl(url: string) {
-        sessionStorage.authRedirectUrl = url;
-    }
-
-    public clearAuthRedirectUrl() {
-        this.setAuthRedirectUrl("");
     }
 
     public isCurrentUserNullOrUndefined(): boolean {

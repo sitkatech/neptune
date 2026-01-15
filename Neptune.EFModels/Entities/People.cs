@@ -104,6 +104,12 @@ public static class People
         return person?.AsDto();
     }
 
+    public static async Task<int?> GetPersonIDByGlobalIDAsync(NeptuneDbContext dbContext, string globalID)
+    {
+        var personID = await dbContext.People.AsNoTracking().Where(x => x.GlobalID == globalID).Select(x => x.PersonID).SingleOrDefaultAsync();
+        return personID;
+    }
+
     private static IQueryable<Person> GetImpl(NeptuneDbContext dbContext)
     {
         return dbContext.People
@@ -248,12 +254,17 @@ public static class People
         return true;
     }
 
-    public static async Task<PersonDto?> UpdateClaims(NeptuneDbContext dbContext, int? personID, ClaimsPrincipal claims)
+    public static async Task<PersonDto?> UpdateClaims(NeptuneDbContext dbContext, ClaimsPrincipal claimsPrincipal)
     {
-        Person person;
-        var email = claims?.Claims.SingleOrDefault(c => c.Type == ClaimsConstants.Emails)?.Value;
-        var sub = claims?.Claims.SingleOrDefault(c => c.Type == ClaimsConstants.Sub)?.Value;
+        int? personID = null;
+        var globalID = claimsPrincipal?.Claims.SingleOrDefault(c => c.Type == ClaimsConstants.Sub)?.Value;
+        if (!string.IsNullOrEmpty(globalID))
+        {
+            personID = await dbContext.People.AsNoTracking().Where(x => x.GlobalID == globalID).Select(x => x.PersonID).SingleOrDefaultAsync();
+        }
 
+        Person person;
+        var email = claimsPrincipal?.Claims.SingleOrDefault(c => c.Type == ClaimsConstants.Emails)?.Value;
         if (personID.HasValue)
         {
             person = await dbContext.People.FirstOrDefaultAsync(x => x.PersonID == personID);
@@ -267,23 +278,24 @@ public static class People
         {
             person = new Person
             {
-                GlobalID = sub,
-                OrganizationID = Organizations.OrganizationIDUnassigned,
-                IsActive = true,
-                RoleID = (int) RoleEnum.Unassigned,
+                GlobalID = globalID,
+                RoleID = Role.Unassigned.RoleID,
                 CreateDate = DateTime.UtcNow,
+                IsActive = true,
+                OrganizationID = Organizations.OrganizationIDUnassigned,
+                WebServiceAccessToken = Guid.NewGuid(),
                 ReceiveSupportEmails = false
             };
 
             dbContext.People.Add(person);
         }
 
-        var firstName = claims?.Claims.SingleOrDefault(c => c.Type == ClaimsConstants.GivenName)?.Value;
-        var lastName = claims?.Claims.SingleOrDefault(c => c.Type == ClaimsConstants.FamilyName)?.Value;
+        var firstName = claimsPrincipal?.Claims.SingleOrDefault(c => c.Type == ClaimsConstants.GivenName)?.Value;
+        var lastName = claimsPrincipal?.Claims.SingleOrDefault(c => c.Type == ClaimsConstants.FamilyName)?.Value;
 
-        if (!string.IsNullOrEmpty(sub))
+        if (!string.IsNullOrEmpty(globalID))
         {
-            person.GlobalID = sub;
+            person.GlobalID = globalID;
         }
 
         if (!string.IsNullOrEmpty(firstName))

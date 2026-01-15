@@ -45,27 +45,7 @@ public class UserClaimsController(
             return BadRequest();
         }
 
-        PersonDto claimsUserDto = null;
-        var isClient = claimsPrincipal.Claims.Any(c => c.Type == ClaimsConstants.IsClient);
-        if (isClient)  // Not appropriate to actually update client user based on claims
-        {
-            var clientID = claimsPrincipal.Claims.SingleOrDefault(c => c.Type == ClaimsConstants.ClientID)?.Value;
-            if (!string.IsNullOrEmpty(clientID))
-            {
-                claimsUserDto = await People.GetByGlobalIDAsDtoAsync(dbContext, clientID);
-            }
-            return Ok(claimsUserDto);
-        }
-
-        var subClaim = claimsPrincipal.Claims.SingleOrDefault(c => c.Type == ClaimsConstants.Sub)?.Value;
-        if (!string.IsNullOrEmpty(subClaim))
-        {
-            claimsUserDto = await People.GetByGlobalIDAsDtoAsync(dbContext, subClaim);
-        }
-
-        var updatedUserDto = await People.UpdateClaims(dbContext, claimsUserDto?.PersonID, claimsPrincipal);
-
+        var updatedUserDto = await People.UpdateClaims(dbContext, claimsPrincipal);
         return Ok(updatedUserDto);
     }
-
 }
