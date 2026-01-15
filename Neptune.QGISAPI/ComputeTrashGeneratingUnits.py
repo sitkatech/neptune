@@ -278,19 +278,7 @@ class Flatten:
 #                        print("Left won: " + str(left_feat[self.layer_identifier]) + " - " + QgsWkbTypes.geometryDisplayString(new_feat.geometry().type()) + str(new_feat.geometry().type()))
                     # delete the old feature and add the new
                     self.working_layer.deleteFeature(left_feat.id())
-                    print("new wkb:", QgsWkbTypes.displayString(new_feat.geometry().wkbType()),
-                          "new geomType:", QgsWkbTypes.geometryDisplayString(new_feat.geometry().type()),
-                          "empty:", new_feat.geometry().isEmpty())
-                    print("Layer type:", QgsWkbTypes.displayString(self.working_layer.wkbType()))
                     self.working_layer.addFeature(new_feat)
-
-                    #diff = left_feat.geometry().difference(right_feat.geometry())
-                    #diff = self.polygons_from_geom(diff, context=PROCESSING_CONTEXT)
-
-                    #if diff.isEmpty():
-                    #    self.working_layer.deleteFeature(left_feat.id())
-                    #else:
-                    #    self.working_layer.changeGeometry(left_feat.id(), diff)
                 else:                                             # Right side loses. Assign Right = Right - Left
                     # create the new geometry from the difference
                     new_right_feat_geom = right_feat.geometry().difference(left_feat.geometry())
@@ -303,22 +291,7 @@ class Flatten:
 #                        print("Right won: " + str(right_feat[self.layer_identifier]) + " - " + QgsWkbTypes.geometryDisplayString(new_feat.geometry().type()) + str(new_feat.geometry().type()))
                     # delete the old feature and add the new
                     self.working_layer.deleteFeature(right_feat.id())
-                    print("new wkb:", QgsWkbTypes.displayString(new_feat.geometry().wkbType()),
-                          "new geomType:", QgsWkbTypes.geometryDisplayString(new_feat.geometry().type()),
-                          "empty:", new_feat.geometry().isEmpty())
-                    print("Layer type:", QgsWkbTypes.displayString(self.working_layer.wkbType()))
-
-
-                    #self.working_layer.addFeature(new_feat)
-
-                    #diff = right_feat.geometry().difference(left_feat.geometry())
-                    #diff = self.polygons_from_geom(diff, context=PROCESSING_CONTEXT)
-
-                    #if diff.isEmpty():
-                    #    self.working_layer.deleteFeature(right_feat.id())
-                    #else:
-                    #    self.working_layer.changeGeometry(right_feat.id(), diff)
-
+                    self.working_layer.addFeature(new_feat)
             else:
                 print("Skipping " + str(left_feat[self.layer_identifier]) + ", " + str(right_feat[self.layer_identifier]))
             saved = self.working_layer.commitChanges()
@@ -330,56 +303,6 @@ class Flatten:
         print("Ending with {count} features".format(count = str(self.working_layer.featureCount())))
 
     # utility methods
-    def is_geom_collection(self, geom: QgsGeometry) -> bool:
-        if geom is None or geom.isEmpty():
-            return False
-        return QgsWkbTypes.flatType(geom.wkbType()) == QgsWkbTypes.GeometryCollection
-
-    def polygons_from_geom(self, geom: QgsGeometry, crs_authid="EPSG:2771", context=None) -> QgsGeometry:
-        """
-        Return a polygon/multipolygon QgsGeometry suitable for a MultiPolygon layer.
-        - If GeometryCollection: extract polygon parts only.
-        - If non-polygon: return empty geometry.
-        - If polygon: return as-is.
-        """
-        if geom is None or geom.isEmpty():
-            return QgsGeometry()
-
-        # GeometryCollection -> extract polygons (TYPE=2)
-        if self.is_geom_collection(geom):
-            tmp = QgsVectorLayer(f"GeometryCollection?crs={crs_authid}", "tmp", "memory")
-            pr = tmp.dataProvider()
-            f = QgsFeature()
-            f.setGeometry(geom)
-            pr.addFeatures([f])
-
-            extracted = processing.run(
-                "native:collectionextract",
-                {"INPUT": tmp, "TYPE": 2, "OUTPUT": "memory:"},
-                context=context
-            )["OUTPUT"]
-
-            polys = [ff.geometry() for ff in extracted.getFeatures()
-                     if ff.geometry() and not ff.geometry().isEmpty()
-                     and ff.geometry().type() == QgsWkbTypes.PolygonGeometry]
-
-            if not polys:
-                return QgsGeometry()
-
-            # Combine polygon parts
-            out = polys[0]
-            for g in polys[1:]:
-                out = out.combine(g)
-
-            return out
-
-        # Not a collection: keep only polygons
-        if geom.type() != QgsWkbTypes.PolygonGeometry:
-            return QgsGeometry()
-
-        return geom
-
-
     def lessThanIDFilterString(self):
         # eg Table < Joined_TableID; prevents duplicate/permute records
         return "{identifier} < {join_prefix}{identifier}".format(identifier = self.layer_identifier, join_prefix = JOIN_PREFIX)
