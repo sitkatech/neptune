@@ -1,16 +1,17 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Neptune.API.Services;
 using Neptune.API.Services.Authorization;
+using Neptune.Common;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Neptune.Common;
 
 namespace Neptune.API.Controllers;
 
@@ -32,6 +33,7 @@ public class TrashGeneratingUnitController(
     }
 
     [HttpGet("{trashGeneratingUnitID}")]
+    [AllowAnonymous]
     public async Task<ActionResult<TrashGeneratingUnitDto>> Get([FromRoute] int trashGeneratingUnitID)
     {
         var trashGeneratingUnitDto = await DbContext.vTrashGeneratingUnitLoadStatistics
@@ -70,6 +72,7 @@ public class TrashGeneratingUnitController(
     }
 
     [HttpGet("last-update-date")]
+    [AllowAnonymous]
     public async Task<ActionResult<DateTime>> GetLastUpdateDate()
     {
         var lastUpdateDate = (await DbContext.vTrashGeneratingUnitLoadStatistics.FirstOrDefaultAsync())?.LastUpdateDate;

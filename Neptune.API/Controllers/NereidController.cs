@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Hangfire;
+﻿using Hangfire;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -14,6 +10,11 @@ using Neptune.EFModels.Entities;
 using Neptune.EFModels.Nereid;
 using Neptune.Jobs.Hangfire;
 using Neptune.Jobs.Services;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Neptune.API.Controllers
 {
@@ -36,6 +37,7 @@ namespace Neptune.API.Controllers
         }
 
         [HttpGet("health")]
+        [SitkaAdminFeature]
         public async Task<IActionResult> HealthCheck()
         {
             var healthCheck = await nereidService.HealthCheck();
@@ -43,6 +45,7 @@ namespace Neptune.API.Controllers
         }
 
         [HttpGet("config")]
+        [SitkaAdminFeature]
         public async Task<IActionResult> ConfigCheck()
         {
             var configCheck = await nereidService.ConfigCheck();

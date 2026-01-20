@@ -35,7 +35,7 @@
       used by the web project to generate typescript models using `npm run gen-model`
     -->
     <Exec Command="dotnet new tool-manifest --force" />
-    <Exec Command="dotnet tool install --version 10.0.1 Swashbuckle.AspNetCore.Cli" />
+    <Exec Command="dotnet tool install --version 10.1.0 Swashbuckle.AspNetCore.Cli" />
     <Exec Command="dotnet swagger tofile --output swagger.json $(OutputPath)\$(AssemblyName).dll v1 " />
     
     <!--

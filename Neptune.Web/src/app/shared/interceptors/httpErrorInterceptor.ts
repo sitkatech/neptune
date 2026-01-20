@@ -25,6 +25,19 @@ export class HttpErrorInterceptor implements HttpInterceptor {
                     // The response body may contain clues as to what went wrong,
                     console.error(`Backend returned code ${error.status}, body was: ${error.error}`);
 
+                    // If the backend indicates a missing refresh token, log which request triggered it.
+                    try {
+                        if (typeof error.error === "string" && error.error.indexOf("missing_refresh_token") !== -1) {
+                            // eslint-disable-next-line no-console
+                            console.error("[HttpErrorInterceptor] Request triggered missing_refresh_token", {
+                                method: request.method,
+                                url: request.urlWithParams,
+                            });
+                            // eslint-disable-next-line no-console
+                            console.error("[HttpErrorInterceptor] Full HttpErrorResponse:", error);
+                        }
+                    } catch (e) {}
+
                     if (error instanceof HttpErrorResponse) {
                         if (error.status == 400) {
                             if (!error.error) {

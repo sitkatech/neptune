@@ -6,9 +6,7 @@ import { AlertService } from "../shared/services/alert.service";
 import { Alert } from "../shared/models/alert";
 import { AlertContext } from "../shared/models/enums/alert-context.enum";
 import { environment } from "src/environments/environment";
-import { PersonCreateDto } from "../shared/generated/model/person-create-dto";
 import { PersonDto } from "../shared/generated/model/person-dto";
-import { UserService } from "../shared/generated/api/user.service";
 import { RoleEnum } from "../shared/generated/enum/role-enum";
 import { UserClaimsService } from "../shared/generated/api/user-claims.service";
 import { AuthService as Auth0Service } from "@auth0/auth0-angular";
@@ -209,5 +207,10 @@ export class AuthenticationService {
         }
         const roleID = this.currentUser ? this.currentUser.RoleID : null;
         return roleIDs.includes(roleID);
+    }
+
+    ngOnDestroy(): void {
+        this._destroying$.next(undefined);
+        this._destroying$.complete();
     }
 }

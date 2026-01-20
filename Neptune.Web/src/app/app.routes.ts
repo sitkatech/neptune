@@ -319,9 +319,6 @@ export const routes: Routes = [
             },
         ],
     },
-
-    { path: "create-user-callback", loadComponent: () => import("./pages/create-user-callback/create-user-callback.component").then((m) => m.CreateUserCallbackComponent) },
-    { path: "signin-oidc", loadComponent: () => import("./pages/login-callback/login-callback.component").then((m) => m.LoginCallbackComponent) },
     {
         path: ``,
         title: "Stormwater Tools",
@@ -529,8 +526,6 @@ export const routes: Routes = [
             },
         ],
     },
-    { path: "not-found", loadComponent: () => import("./shared/pages").then((m) => m.NotFoundComponent) },
-    { path: "subscription-insufficient", loadComponent: () => import("./shared/pages").then((m) => m.SubscriptionInsufficientComponent) },
-    { path: "unauthenticated", loadComponent: () => import("./shared/pages").then((m) => m.UnauthenticatedComponent) },
     { path: "**", loadComponent: () => import("./shared/pages").then((m) => m.NotFoundComponent) },
+    { path: "not-found", loadComponent: () => import("./shared/pages").then((m) => m.NotFoundComponent) },
 ];

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Neptune.API.Services;
@@ -18,6 +19,7 @@ public class CustomAttributeTypeController(
     : SitkaController<CustomAttributeTypeController>(dbContext, logger, keystoneService, neptuneConfiguration)
 {
     [HttpGet]
+    [AllowAnonymous]
     public ActionResult<List<CustomAttributeTypeDto>> List()
     {
         var customAttributeTypeDtos = CustomAttributeTypes.ListAsDto(DbContext);
@@ -26,6 +28,7 @@ public class CustomAttributeTypeController(
 
 
     [HttpGet("{customAttributeTypeID}")]
+    [AllowAnonymous]
     public ActionResult<CustomAttributeTypeDto> Get([FromRoute] int customAttributeTypeID)
     {
         var customAttributeTypeDto = CustomAttributeTypes.GetByIDAsDto(DbContext, customAttributeTypeID);
@@ -33,6 +36,7 @@ public class CustomAttributeTypeController(
     }
 
     [HttpGet("/purpose/{customAttributeTypePurposeID}")]
+    [AllowAnonymous]
     public ActionResult<List<CustomAttributeTypeWithTreatmentBMPTypeIDsDto>> GetByCustomAttributeTypePurposeID(
         [FromRoute] int customAttributeTypePurposeID)
     {

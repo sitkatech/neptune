@@ -152,6 +152,7 @@ namespace Neptune.API
             services.AddSwaggerGen(options =>
             {
                 options.DocumentFilter<UseMethodNameAsOperationIdFilter>();
+                options.OperationFilter<AnonymousOperationFilter>();
             });
             #endregion
 

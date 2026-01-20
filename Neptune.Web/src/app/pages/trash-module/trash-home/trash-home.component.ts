@@ -161,26 +161,6 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.currentUser$ = this.authenticationService.getCurrentUser();
 
-        this.route.queryParams.subscribe((params) => {
-            //We're logging in
-            if (params.hasOwnProperty("code")) {
-                this.router.navigate(["/signin-oidc"], { queryParams: params });
-                return;
-            }
-
-            if (localStorage.getItem("loginOnReturn")) {
-                localStorage.removeItem("loginOnReturn");
-                this.authenticationService.login();
-            }
-
-            //We were forced to logout or were sent a link and just finished logging in
-            if (sessionStorage.getItem("authRedirectUrl")) {
-                this.router.navigateByUrl(sessionStorage.getItem("authRedirectUrl")).then(() => {
-                    sessionStorage.removeItem("authRedirectUrl");
-                });
-            }
-        });
-
         this.stormwaterJurisdictions$ = this.stormwaterJurisdictionService.listViewableStormwaterJurisdiction().pipe(
             tap((x) => {
                 this.stormwaterJurisdictionSubject.next(x[0]);

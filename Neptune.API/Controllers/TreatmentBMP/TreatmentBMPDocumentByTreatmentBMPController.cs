@@ -1,8 +1,10 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Neptune.API.Services;
 using Neptune.API.Services.Attributes;
+using Neptune.API.Services.Authorization;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
 using System.Collections.Generic;
@@ -17,6 +19,7 @@ public class TreatmentBMPDocumentByTreatmentBMPController(NeptuneDbContext dbCon
     : SitkaController<TreatmentBMPDocumentByTreatmentBMPController>(dbContext, logger, keystoneService, neptuneConfiguration)
 {
     [HttpPost]
+    [JurisdictionEditFeature]
     [EntityNotFound(typeof(TreatmentBMP), "treatmentBMPID")]
     public async Task<ActionResult<TreatmentBMPDocumentDto>> Create([FromRoute] int treatmentBMPID, [FromForm] TreatmentBMPDocumentCreateDto documentCreateDto)
     {
@@ -34,6 +37,7 @@ public class TreatmentBMPDocumentByTreatmentBMPController(NeptuneDbContext dbCon
     }
 
     [HttpGet]
+    [AllowAnonymous]
     [EntityNotFound(typeof(TreatmentBMP), "treatmentBMPID")]
     public async Task<ActionResult<IEnumerable<TreatmentBMPDocumentDto>>> List([FromRoute] int treatmentBMPID)
     {
@@ -42,6 +46,7 @@ public class TreatmentBMPDocumentByTreatmentBMPController(NeptuneDbContext dbCon
     }
 
     [HttpGet("{treatmentBMPDocumentID}")]
+    [AllowAnonymous]
     [EntityNotFound(typeof(TreatmentBMP), "treatmentBMPID")]
     [EntityNotFound(typeof(TreatmentBMPDocument), "treatmentBMPDocumentID")]
     public async Task<ActionResult<TreatmentBMPDocumentDto>> Get([FromRoute] int treatmentBMPID, [FromRoute] int treatmentBMPDocumentID)
@@ -51,6 +56,7 @@ public class TreatmentBMPDocumentByTreatmentBMPController(NeptuneDbContext dbCon
     }
 
     [HttpPut("{treatmentBMPDocumentID}")]
+    [JurisdictionEditFeature]
     [EntityNotFound(typeof(TreatmentBMP), "treatmentBMPID")]
     [EntityNotFound(typeof(TreatmentBMPDocument), "treatmentBMPDocumentID")]
     public async Task<IActionResult> Update([FromRoute] int treatmentBMPID, [FromRoute] int treatmentBMPDocumentID, [FromBody] TreatmentBMPDocumentUpdateDto updateDto)
@@ -60,6 +66,7 @@ public class TreatmentBMPDocumentByTreatmentBMPController(NeptuneDbContext dbCon
     }
 
     [HttpDelete("{treatmentBMPDocumentID}")]
+    [JurisdictionEditFeature]
     [EntityNotFound(typeof(TreatmentBMP), "treatmentBMPID")]
     [EntityNotFound(typeof(TreatmentBMPDocument), "treatmentBMPDocumentID")]
     public async Task<IActionResult> Delete([FromRoute] int treatmentBMPID, [FromRoute] int treatmentBMPDocumentID)

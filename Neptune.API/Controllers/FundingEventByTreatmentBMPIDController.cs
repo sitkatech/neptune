@@ -1,5 +1,4 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -7,6 +6,9 @@ using Neptune.API.Services;
 using Neptune.API.Services.Attributes;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Neptune.API.Services.Authorization;
 
 namespace Neptune.API.Controllers
 {
@@ -24,6 +26,7 @@ namespace Neptune.API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         [EntityNotFoundAttribute(typeof(TreatmentBMP), "treatmentBMPID")]
         public async Task<ActionResult<IEnumerable<FundingEventDto>>> List([FromRoute] int treatmentBMPID)
         {
@@ -32,6 +35,7 @@ namespace Neptune.API.Controllers
         }
 
         [HttpPost]
+        [JurisdictionEditFeature]
         [EntityNotFoundAttribute(typeof(TreatmentBMP), "treatmentBMPID")]
         public async Task<ActionResult<FundingEventDto>> Create([FromRoute] int treatmentBMPID,
             [FromBody] FundingEventUpsertDto dto)
@@ -47,6 +51,7 @@ namespace Neptune.API.Controllers
         }
 
         [HttpGet("{fundingEventID}")]
+        [AllowAnonymous]
         [EntityNotFoundAttribute(typeof(TreatmentBMP), "treatmentBMPID")]
         [EntityNotFoundAttribute(typeof(FundingEvent), "fundingEventID")]
         public async Task<ActionResult<FundingEventDto>> Get([FromRoute] int treatmentBMPID, [FromRoute] int fundingEventID)
@@ -56,6 +61,7 @@ namespace Neptune.API.Controllers
         }
 
         [HttpPut("{fundingEventID}")]
+        [JurisdictionEditFeature]
         [EntityNotFoundAttribute(typeof(TreatmentBMP), "treatmentBMPID")]
         [EntityNotFoundAttribute(typeof(FundingEvent), "fundingEventID")]
         public async Task<ActionResult<FundingEventDto>> Update([FromRoute] int treatmentBMPID,
@@ -71,6 +77,7 @@ namespace Neptune.API.Controllers
         }
 
         [HttpDelete("{fundingEventID}")]
+        [JurisdictionEditFeature]
         [EntityNotFoundAttribute(typeof(TreatmentBMP), "treatmentBMPID")]
         [EntityNotFoundAttribute(typeof(FundingEvent), "fundingEventID")]
         public async Task<IActionResult> Delete([FromRoute] int treatmentBMPID, [FromRoute] int fundingEventID)

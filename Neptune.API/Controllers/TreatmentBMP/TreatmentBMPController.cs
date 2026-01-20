@@ -12,6 +12,7 @@ using NetTopologySuite.Features;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Neptune.API.Controllers;
 
@@ -37,7 +38,7 @@ public class TreatmentBMPController(NeptuneDbContext dbContext, ILogger<Treatmen
     }
 
     [HttpGet]
-    [LoggedInUnclassifiedFeature]
+    [AllowAnonymous]
     public async Task<ActionResult<List<TreatmentBMPGridDto>>> List()
     {
         var stormwaterJurisdictionIDsPersonCanView = await StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonIDForBMPsAsync(DbContext, CallingUser.PersonID);
@@ -51,6 +52,7 @@ public class TreatmentBMPController(NeptuneDbContext dbContext, ILogger<Treatmen
     }
 
     [HttpGet("verified/feature-collection")]
+    [AllowAnonymous]
     public async Task<ActionResult<FeatureCollection>> ListInventoryVerifiedTreatmentBMPsAsFeatureCollection()
     {
         var featureCollection = await TreatmentBMPs.ListInventoryIsVerifiedByPersonAsFeatureCollectionAsync(DbContext, CallingUser);
@@ -58,6 +60,7 @@ public class TreatmentBMPController(NeptuneDbContext dbContext, ILogger<Treatmen
     }
 
     [HttpGet("jurisdictions/{jurisdictionID}/verified/feature-collection")]
+    [AllowAnonymous]
     public async Task<ActionResult<FeatureCollection>> ListInventoryVerifiedTreatmentBMPsByJurisdictionIDAsFeatureCollection([FromRoute] int jurisdictionID)
     {
         var featureCollection = await TreatmentBMPs.ListInventoryIsVerifiedByPersonAndJurisdictionIDAsFeatureCollectionAsync(DbContext, CallingUser, jurisdictionID);
@@ -108,7 +111,7 @@ public class TreatmentBMPController(NeptuneDbContext dbContext, ILogger<Treatmen
     }
 
     [HttpGet("{treatmentBMPID}")]
-    [UserViewFeature]
+    [AllowAnonymous]
     [EntityNotFound(typeof(TreatmentBMP), "treatmentBMPID")]
     public async Task<ActionResult<TreatmentBMPDto>> GetByID([FromRoute] int treatmentBMPID)
     {
@@ -117,7 +120,7 @@ public class TreatmentBMPController(NeptuneDbContext dbContext, ILogger<Treatmen
     }
 
     [HttpPut("{treatmentBMPID}/basic-info")]
-    [UserViewFeature]
+    [AllowAnonymous]
     [EntityNotFound(typeof(TreatmentBMP), "treatmentBMPID")]
     public async Task<ActionResult<TreatmentBMPDto>> UpdateBasicInfo([FromRoute] int treatmentBMPID, [FromBody] TreatmentBMPBasicInfoUpdateDto updateDto)
     {
@@ -251,7 +254,7 @@ public class TreatmentBMPController(NeptuneDbContext dbContext, ILogger<Treatmen
     }
 
     [HttpGet("{treatmentBMPID}/custom-attributes")]
-    [SitkaAdminFeature]
+    [AllowAnonymous]
     [EntityNotFound(typeof(TreatmentBMP), "treatmentBMPID")]
     public ActionResult<List<CustomAttributeDto>> ListCustomAttributes([FromRoute] int treatmentBMPID)
     {
@@ -260,7 +263,7 @@ public class TreatmentBMPController(NeptuneDbContext dbContext, ILogger<Treatmen
     }
 
     [HttpGet("{treatmentBMPID}/field-visits")]
-    [TreatmentBMPViewFeature]
+    [AllowAnonymous]
     [EntityNotFound(typeof(TreatmentBMP), "treatmentBMPID")]
     public ActionResult<List<FieldVisitDto>> FieldVisitGridJsonData([FromRoute] int treatmentBMPID)
     {
@@ -269,7 +272,7 @@ public class TreatmentBMPController(NeptuneDbContext dbContext, ILogger<Treatmen
     }
 
     [HttpGet("modeling-attributes")]
-    [LoggedInUnclassifiedFeature]
+    [AllowAnonymous]
     public async Task<ActionResult<List<TreatmentBMPModelingAttributesDto>>> ListWithModelingAttributes()
     {
         var stormwaterJurisdictionIDsPersonCanView = await StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonIDForBMPsAsync(DbContext, CallingUser.PersonID);

@@ -5,7 +5,6 @@ import { appConfig } from "./app/app.config";
 (async () => {
     const app = createApplication(appConfig);
     (await app).bootstrap(AppComponent);
-    //  (await app).bootstrap(MsalRedirectComponent);
 
     // todo: example of creating a custom popup in leaflet
     // const wriaPopupComponent = createCustomElement(WaterResourceInventoryAreaPopupComponent, {

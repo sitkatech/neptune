@@ -171,7 +171,8 @@
               }
             }
           }
-        }
+        },
+        "x-anonymous": true
       }
     },
     "/custom-attribute-types/{customAttributeTypeID}": {
@@ -212,7 +213,8 @@
               }
             }
           }
-        }
+        },
+        "x-anonymous": true
       }
     },
     "/purpose/{customAttributeTypePurposeID}": {
@@ -262,7 +264,8 @@
               }
             }
           }
-        }
+        },
+        "x-anonymous": true
       }
     },
     "/custom-rich-texts/{customRichTextTypeID}": {
@@ -303,7 +306,8 @@
               }
             }
           }
-        }
+        },
+        "x-anonymous": true
       },
       "put": {
         "tags": [
@@ -439,7 +443,8 @@
               }
             }
           }
-        }
+        },
+        "x-anonymous": true
       }
     },
     "/field-definitions/{fieldDefinitionTypeID}": {
@@ -480,7 +485,8 @@
               }
             }
           }
-        }
+        },
+        "x-anonymous": true
       },
       "put": {
         "tags": [
@@ -581,7 +587,8 @@
               }
             }
           }
-        }
+        },
+        "x-anonymous": true
       }
     },
     "/treatment-bmps/{treatmentBMPID}/funding-events": {
@@ -631,7 +638,8 @@
               }
             }
           }
-        }
+        },
+        "x-anonymous": true
       },
       "post": {
         "tags": [
@@ -739,7 +747,8 @@
               }
             }
           }
-        }
+        },
+        "x-anonymous": true
       },
       "put": {
         "tags": [
@@ -1122,7 +1131,8 @@
               }
             }
           }
-        }
+        },
+        "x-anonymous": true
       },
       "put": {
         "tags": [
@@ -2510,7 +2520,8 @@
               }
             }
           }
-        }
+        },
+        "x-anonymous": true
       }
     },
     "/onland-visual-trash-assessments/{onlandVisualTrashAssessmentID}/observations": {
@@ -4521,7 +4532,8 @@
               }
             }
           }
-        }
+        },
+        "x-anonymous": true
       }
     },
     "/jurisdictions/bounding-box": {
@@ -4551,7 +4563,8 @@
               }
             }
           }
-        }
+        },
+        "x-anonymous": true
       }
     },
     "/jurisdictions/{jurisdictionID}": {
@@ -4633,7 +4646,8 @@
               }
             }
           }
-        }
+        },
+        "x-anonymous": true
       }
     },
     "/jurisdictions/{jurisdictionID}/treatment-bmps": {
@@ -4763,7 +4777,8 @@
               }
             }
           }
-        }
+        },
+        "x-anonymous": true
       }
     },
     "/trash-generating-units": {
@@ -4843,7 +4858,8 @@
               }
             }
           }
-        }
+        },
+        "x-anonymous": true
       }
     },
     "/trash-generating-units/last-update-date": {
@@ -4876,7 +4892,8 @@
               }
             }
           }
-        }
+        },
+        "x-anonymous": true
       }
     },
     "/trash-results-by-jurisdiction/{jurisdictionID}/area-based-results-calculations": {
@@ -4917,7 +4934,8 @@
               }
             }
           }
-        }
+        },
+        "x-anonymous": true
       }
     },
     "/trash-results-by-jurisdiction/{jurisdictionID}/ovta-based-results-calculations": {
@@ -4958,7 +4976,8 @@
               }
             }
           }
-        }
+        },
+        "x-anonymous": true
       }
     },
     "/trash-results-by-jurisdiction/{jurisdictionID}/load-based-results-calculations": {
@@ -4999,7 +5018,8 @@
               }
             }
           }
-        }
+        },
+        "x-anonymous": true
       }
     },
     "/treatment-bmps": {
@@ -5085,7 +5105,8 @@
               }
             }
           }
-        }
+        },
+        "x-anonymous": true
       }
     },
     "/treatment-bmps/verified/feature-collection": {
@@ -5124,7 +5145,8 @@
               }
             }
           }
-        }
+        },
+        "x-anonymous": true
       }
     },
     "/treatment-bmps/jurisdictions/{jurisdictionID}/verified/feature-collection": {
@@ -5174,7 +5196,8 @@
               }
             }
           }
-        }
+        },
+        "x-anonymous": true
       }
     },
     "/treatment-bmps/planned-projects": {
@@ -5387,7 +5410,8 @@
               }
             }
           }
-        }
+        },
+        "x-anonymous": true
       },
       "delete": {
         "tags": [
@@ -5469,7 +5493,8 @@
               }
             }
           }
-        }
+        },
+        "x-anonymous": true
       }
     },
     "/treatment-bmps/{treatmentBMPID}/type": {
@@ -5836,7 +5861,8 @@
               }
             }
           }
-        }
+        },
+        "x-anonymous": true
       }
     },
     "/treatment-bmps/{treatmentBMPID}/field-visits": {
@@ -5886,7 +5912,8 @@
               }
             }
           }
-        }
+        },
+        "x-anonymous": true
       }
     },
     "/treatment-bmps/modeling-attributes": {
@@ -5925,7 +5952,8 @@
               }
             }
           }
-        }
+        },
+        "x-anonymous": true
       }
     },
     "/treatment-bmps/{treatmentBMPID}/delineation-errors": {
@@ -6198,7 +6226,8 @@
               }
             }
           }
-        }
+        },
+        "x-anonymous": true
       },
       "post": {
         "tags": [
@@ -6306,7 +6335,8 @@
               }
             }
           }
-        }
+        },
+        "x-anonymous": true
       },
       "put": {
         "tags": [
@@ -6522,7 +6552,8 @@
               }
             }
           }
-        }
+        },
+        "x-anonymous": true
       }
     },
     "/treatment-bmps/{treatmentBMPID}/treatment-bmp-documents/{treatmentBMPDocumentID}": {
@@ -6572,7 +6603,8 @@
               }
             }
           }
-        }
+        },
+        "x-anonymous": true
       },
       "put": {
         "tags": [
@@ -6771,7 +6803,8 @@
               }
             }
           }
-        }
+        },
+        "x-anonymous": true
       },
       "put": {
         "tags": [
@@ -6871,7 +6904,8 @@
               }
             }
           }
-        }
+        },
+        "x-anonymous": true
       },
       "delete": {
         "tags": [
@@ -6941,7 +6975,8 @@
               }
             }
           }
-        }
+        },
+        "x-anonymous": true
       }
     },
     "/treatment-bmp-types/{treatmentBMPTypeID}/custom-attribute-types": {
@@ -6991,7 +7026,8 @@
               }
             }
           }
-        }
+        },
+        "x-anonymous": true
       }
     },
     "/treatment-bmp-type-custom-attribute-types": {
@@ -7030,7 +7066,8 @@
               }
             }
           }
-        }
+        },
+        "x-anonymous": true
       }
     },
     "/treatment-bmp-type-custom-attribute-types/{treatmentBMPTypeCustomAttributeTypeID}": {
@@ -7071,7 +7108,8 @@
               }
             }
           }
-        }
+        },
+        "x-anonymous": true
       }
     },
     "/treatment-bmp-type-custom-attribute-types/purpose/{customAttributeTypePurposeID}": {
@@ -7121,7 +7159,8 @@
               }
             }
           }
-        }
+        },
+        "x-anonymous": true
       }
     },
     "/users": {

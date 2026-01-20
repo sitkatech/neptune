@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using Neptune.API.Services;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
+using System;
 
 namespace Neptune.API.Controllers
 {
@@ -18,6 +19,7 @@ namespace Neptune.API.Controllers
         : SitkaController<SystemInfoController>(dbContext, logger, keystoneService, neptuneConfiguration)
     {
         [Route("/")] // Default Route
+        [AllowAnonymous]
         [HttpGet]
         public ActionResult<SystemInfoDto> GetSystemInfo([FromServices] IWebHostEnvironment environment)
         {

@@ -9,12 +9,11 @@ import { PersonDto } from "./shared/generated/model/person-dto";
     selector: "app-root",
     templateUrl: "./app.component.html",
     styleUrls: ["./app.component.scss"],
-
     imports: [RouterOutlet],
 })
 export class AppComponent {
-    public isIframe = false;
     userClaimsUpsertStarted = false;
+    isIframe = false;
     ignoreSessionTerminated = false;
 
     private currentUser: PersonDto;
@@ -23,14 +22,13 @@ export class AppComponent {
 
     constructor(
         @Inject(DOCUMENT) private _document: Document,
-        private authenticationService: AuthenticationService,
         private titleService: Title,
         private renderer: Renderer2,
+        private authenticationService: AuthenticationService,
         public viewRef: ViewContainerRef
     ) {}
 
     ngOnInit() {
-        console.log("Environment:", environment);
         this.isIframe = window !== window.parent && !window.opener;
         const environmentClassName = environment.production ? "env-prod" : environment.staging ? "env-qa" : "env-dev";
         this.renderer.addClass(this._document.body, environmentClassName);
