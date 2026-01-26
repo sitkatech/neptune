@@ -22,6 +22,7 @@ public class UserClaimsController(
     : SitkaController<UserClaimsController>(dbContext, logger, keystoneService, neptuneConfiguration)
 {
     [HttpGet("{globalID}")]
+    [Authorize]
     public async Task<ActionResult<PersonDto>> GetByGlobalID([FromRoute] string globalID)
     {
         var userDto = await People.GetByGlobalIDAsDtoAsync(DbContext, globalID);

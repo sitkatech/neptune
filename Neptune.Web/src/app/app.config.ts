@@ -30,6 +30,7 @@ export const appConfig: ApplicationConfig = {
                 scope: "openid profile email offline_access",
             },
             useRefreshTokens: true,
+            cacheLocation: "localstorage",
             httpInterceptor: {
                 allowedList: buildAuth0AllowedList(environment.mainAppApiUrl),
             },

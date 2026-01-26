@@ -526,6 +526,8 @@ export const routes: Routes = [
             },
         ],
     },
-    { path: "**", loadComponent: () => import("./shared/pages").then((m) => m.NotFoundComponent) },
     { path: "not-found", loadComponent: () => import("./shared/pages").then((m) => m.NotFoundComponent) },
+    { path: "subscription-insufficient", loadComponent: () => import("./shared/pages/").then((m) => m.SubscriptionInsufficientComponent) },
+    { path: "unauthenticated", loadComponent: () => import("./shared/pages").then((m) => m.UnauthenticatedComponent) },
+    { path: "**", loadComponent: () => import("./shared/pages").then((m) => m.NotFoundComponent) },
 ];

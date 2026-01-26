@@ -87,6 +87,12 @@ namespace Neptune.API
 
             #endregion
 
+            // Require authentication by default - endpoints must explicitly use [AllowAnonymous] for public access
+            services.AddAuthorizationBuilder()
+                .SetFallbackPolicy(new Microsoft.AspNetCore.Authorization.AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build());
+
             services.AddDbContext<NeptuneDbContext>(c =>
             {
                 c.UseSqlServer(configuration.DatabaseConnectionString, x =>
@@ -278,7 +284,7 @@ namespace Neptune.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapHealthChecks("/healthz");
+                endpoints.MapHealthChecks("/healthz").AllowAnonymous();
             });
 
             applicationLifetime.ApplicationStopping.Register(OnShutdown);
