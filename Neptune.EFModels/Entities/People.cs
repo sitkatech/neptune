@@ -265,7 +265,7 @@ public static class People
 
         Person person;
         var email = claimsPrincipal?.Claims.SingleOrDefault(c => c.Type == ClaimsConstants.Emails)?.Value;
-        if (personID.HasValue)
+        if (personID is > 0)
         {
             person = await dbContext.People.FirstOrDefaultAsync(x => x.PersonID == personID);
         }
