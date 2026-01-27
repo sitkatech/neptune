@@ -64,7 +64,7 @@ namespace Neptune.WebMvc.Controllers
         }
 
         [Authorize]
-        public async Task Logout()
+        public async Task<IActionResult> Logout()
         {
             var authenticationProperties = new LogoutAuthenticationPropertiesBuilder()
                 // Indicate here where Auth0 should redirect the user after a logout.
@@ -75,6 +75,8 @@ namespace Neptune.WebMvc.Controllers
 
             await HttpContext.SignOutAsync(Auth0Constants.AuthenticationScheme, authenticationProperties);
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            
+            return RedirectToAction("Index", "Home");
         }
     }
 }
