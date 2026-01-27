@@ -12,7 +12,7 @@
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class PersonDto { 
     PersonID?: number;
-    PersonGuid?: string;
+    GlobalID?: string | null;
     FirstName?: string | null;
     LastName?: string | null;
     Email?: string | null;
@@ -36,7 +36,7 @@ export class PersonDto {
 
 export interface PersonDtoForm { 
     PersonID?: FormControl<number>;
-    PersonGuid?: FormControl<string>;
+    GlobalID?: FormControl<string>;
     FirstName?: FormControl<string>;
     LastName?: FormControl<string>;
     Email?: FormControl<string>;
@@ -66,7 +66,7 @@ export class PersonDtoFormControls {
             ],
         }
     );
-    public static PersonGuid = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+    public static GlobalID = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {

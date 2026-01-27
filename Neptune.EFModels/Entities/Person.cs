@@ -38,16 +38,6 @@ namespace Neptune.EFModels.Entities
             return $"{FirstName} {LastName}";
         }
 
-        public string GetFullNameFirstLastAndOrg()
-        {
-            return $"{FirstName} {LastName} - {Organization.GetDisplayName()}";
-        }
-
-        public string GetFullNameFirstLastAndOrgShortName()
-        {
-            return $"{FirstName} {LastName} ({Organization.GetOrganizationShortNameIfAvailable()})";
-        }
-
         public string GetFullNameLastFirst()
         {
             return $"{LastName}, {FirstName}";
@@ -92,12 +82,6 @@ namespace Neptune.EFModels.Entities
             return IsAnonymousUser() || Role == Role.Unassigned;
         }
 
-
-        public string GetFullNameFirstLastAndOrgAbbreviation()
-        {
-            var abbreviationIfAvailable = Organization.GetAbbreviationIfAvailable();
-            return $"{FirstName} {LastName} ({abbreviationIfAvailable})";
-        }
 
         public async Task DeleteFull(NeptuneDbContext dbContext)
         {

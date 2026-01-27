@@ -1,9 +1,15 @@
-import { DynamicEnvironment } from './dynamic-environment';
-class Environment extends DynamicEnvironment {
-
-  constructor() {
-    super(false);
-  }
-}
-
-export const environment = new Environment();
+export const environment = {
+    production: false,
+    staging: false,
+    dev: true,
+    mainAppApiUrl: "https://host.docker.internal:8212",
+    geoserverMapServiceUrl: "http://localhost:8780/geoserver/OCStormwater",
+    ocStormwaterToolsBaseUrl: "https://localhost:6212",
+    datadogClientToken: "pub6bc5bcb39be6b4c926271a35cb8cb46a",
+    auth0: {
+        domain: "ocstormwatertools.us.auth0.com",
+        clientId: "ifBEaIsDKHXBQoIyDVl1CB21avZh1xEx",
+        redirectUri: "https://neptune.localhost.sitkatech.com:8213",
+        audience: "OCSTApi",
+    },
+};

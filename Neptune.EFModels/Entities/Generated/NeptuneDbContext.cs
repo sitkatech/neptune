@@ -863,7 +863,7 @@ public partial class NeptuneDbContext : DbContext
         {
             entity.HasKey(e => e.TrashGeneratingUnitID).HasName("PK_TrashGeneratingUnit_TrashGeneratingUnitID");
 
-            entity.Property(e => e.LastUpdateDate).HasDefaultValueSql("(getdate())");
+            entity.Property(e => e.LastUpdateDate).HasDefaultValueSql("(getdate())", "DF_TrashGeneratingUnit_LastUpdateDate");
 
             entity.HasOne(d => d.StormwaterJurisdiction).WithMany(p => p.TrashGeneratingUnits).OnDelete(DeleteBehavior.ClientSetNull);
         });
@@ -872,7 +872,7 @@ public partial class NeptuneDbContext : DbContext
         {
             entity.HasKey(e => e.TrashGeneratingUnit4326ID).HasName("PK_TrashGeneratingUnit4326_TrashGeneratingUnit4326ID");
 
-            entity.Property(e => e.LastUpdateDate).HasDefaultValueSql("(getdate())");
+            entity.Property(e => e.LastUpdateDate).HasDefaultValueSql("(getdate())", "DF_TrashGeneratingUnit4326_LastUpdateDate");
 
             entity.HasOne(d => d.StormwaterJurisdiction).WithMany(p => p.TrashGeneratingUnit4326s).OnDelete(DeleteBehavior.ClientSetNull);
         });

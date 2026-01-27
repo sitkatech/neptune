@@ -3,6 +3,7 @@ using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace Neptune.Web
 {
@@ -16,6 +17,7 @@ namespace Neptune.Web
         public static IWebHost BuildWebHost(string[] args)
         {
             var host = WebHost.CreateDefaultBuilder(args)
+                .ConfigureLogging(logging => { logging.ClearProviders(); })
                 .UseStartup<Startup>()
                 .UseKestrel(options =>
                 {
@@ -33,4 +35,3 @@ namespace Neptune.Web
         }
     }
 }
- 

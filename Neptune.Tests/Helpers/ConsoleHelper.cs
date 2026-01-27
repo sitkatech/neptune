@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Humanizer.Bytes;
+using Humanizer;
 using Neptune.Tests.Models;
 
 namespace Neptune.Tests.Helpers

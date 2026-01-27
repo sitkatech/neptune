@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Neptune.API.Services;
-using Neptune.API.Services.Authorization;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
+using System.Collections.Generic;
 
 namespace Neptune.API.Controllers;
 
@@ -19,7 +19,7 @@ public class TreatmentBMPTypeController(
     : SitkaController<TreatmentBMPTypeController>(dbContext, logger, keystoneService, neptuneConfiguration)
 {
     [HttpGet]
-    [UserViewFeature]
+    [AllowAnonymous]
     public ActionResult<List<TreatmentBMPTypeWithModelingAttributesDto>> List()
     {
         var treatmentBMPTypeWithModelingAttributesDtos = TreatmentBMPs.ListWithModelingAttributesAsDto(DbContext);
@@ -27,6 +27,7 @@ public class TreatmentBMPTypeController(
     }
 
     [HttpGet("{treatmentBMPTypeID}/custom-attribute-types")]
+    [AllowAnonymous]
     public ActionResult<List<TreatmentBMPTypeCustomAttributeTypeDto>> ListCustomAttributeTypes([FromRoute] int treatmentBMPTypeID)
     {
         var treatmentBMPTypeCustomAttributeTypeDtos = TreatmentBMPTypeCustomAttributeTypes.ListByTreatmentBMPTypeAsDto(DbContext, treatmentBMPTypeID);

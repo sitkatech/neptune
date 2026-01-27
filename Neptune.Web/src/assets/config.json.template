@@ -5,21 +5,14 @@
     "mainAppApiUrl": [TODO],
     "createAccountRedirectUrl": [TODO],
   
-    "keystoneSupportBaseUrl": [TODO],
     "geoserverMapServiceUrl": [TODO],
     
     "ocStormwaterToolsBaseUrl": [TODO],
   
-    "keystoneAuthConfiguration": {
+    "auth0": {
+      "domain": [TODO],
       "clientId": [TODO],
-      "issuer": [TODO],
-      "responseType": "code",
-      "disablePKCE": false,
-      "redirectUriRelative": [TODO],
-      "scope": [TODO],
-      "sessionChecksEnabled": [TODO],
-      "logoutUrl": [TODO],
-      "postLogoutRedirectUri": [TODO],
-      "waitForTokenInMsec": [TODO]
+      "redirectUri": [TODO],
+      "audience": [TODO]
     }
   }

@@ -1,6 +1,5 @@
 CREATE TABLE [dbo].[Person](
 	[PersonID] [int] IDENTITY(1,1) NOT NULL CONSTRAINT [PK_Person_PersonID] PRIMARY KEY,
-	[PersonGuid] [uniqueidentifier] NOT NULL,
 	[FirstName] [varchar](100),
 	[LastName] [varchar](100),
 	[Email] [varchar](255),
@@ -15,5 +14,6 @@ CREATE TABLE [dbo].[Person](
 	[LoginName] [varchar](128),
 	[ReceiveRSBRevisionRequestEmails] [bit] NOT NULL,
 	[WebServiceAccessToken] [uniqueidentifier] NOT NULL,
-	[IsOCTAGrantReviewer] [bit] NOT NULL,
+	[IsOCTAGrantReviewer] [bit] NOT NULL, 
+    [GlobalID] VARCHAR(100) NULL,
 )

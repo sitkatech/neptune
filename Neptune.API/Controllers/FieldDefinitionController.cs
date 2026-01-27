@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -7,6 +6,8 @@ using Neptune.API.Services;
 using Neptune.API.Services.Authorization;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Neptune.API.Controllers
 {
@@ -20,6 +21,7 @@ namespace Neptune.API.Controllers
         : SitkaController<FieldDefinitionController>(dbContext, logger, keystoneService, neptuneConfiguration)
     {
         [HttpGet]
+        [AllowAnonymous]
         public ActionResult<List<FieldDefinitionDto>> List()
         {
             var fieldDefinitionDtos = FieldDefinitions.List(DbContext);
@@ -28,6 +30,7 @@ namespace Neptune.API.Controllers
 
 
         [HttpGet("{fieldDefinitionTypeID}")]
+        [AllowAnonymous]
         public ActionResult<FieldDefinitionDto> Get([FromRoute] int fieldDefinitionTypeID)
         {
             var fieldDefinitionDto = FieldDefinitions.GetByFieldDefinitionTypeID(DbContext, fieldDefinitionTypeID);

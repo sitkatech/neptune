@@ -48,7 +48,7 @@ namespace Neptune.WebMvc.Controllers
         [UserEditFeature]
         public ViewResult Index()
         {
-            var keystoneRegisterUserUrl = $"{_webConfiguration.KeystoneRegisterUrl}?ClientID={_webConfiguration.KeystoneOpenIDClientID}&RedirectUrl={HttpUtility.UrlEncode(SitkaRoute<AccountController>.BuildUrlFromExpression(_linkGenerator, x => x.LogOn()))}";
+            var keystoneRegisterUserUrl = $"{_webConfiguration.KeystoneRegisterUrl}?ClientID={_webConfiguration.KeystoneOpenIDClientID}&RedirectUrl={HttpUtility.UrlEncode(SitkaRoute<AccountController>.BuildUrlFromExpression(_linkGenerator, x => x.Login()))}";
             var viewData = new IndexViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, keystoneRegisterUserUrl);
             return RazorView<Views.User.Index, IndexViewData>(viewData);
         }
@@ -130,7 +130,7 @@ namespace Neptune.WebMvc.Controllers
         {
             var canDelete = person.PersonID != CurrentPerson.PersonID;
             var confirmMessage = canDelete
-                ? $"Are you sure you want to delete {person.GetFullNameFirstLastAndOrg()}?"
+                ? $"Are you sure you want to delete {person.GetFullNameFirstLast()}?"
                 : ConfirmDialogFormViewData.GetStandardCannotDeleteMessage("Person",
                     UrlTemplate.MakeHrefString(
                         SitkaRoute<UserController>.BuildUrlFromExpression(_linkGenerator, x => x.Detail(person.PersonID)),

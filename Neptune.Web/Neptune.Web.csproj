@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <DockerComposeProjectPath>docker-compose\docker-compose.dcproj</DockerComposeProjectPath>
     </PropertyGroup>
 
@@ -35,7 +35,7 @@
         <None Remove=".gitignore" />
         <None Remove="angular.json" />
         <None Remove="package-lock.json" />
-        <None Remove="Neptune.Web.sln.DotSettings" />
+        <None Remove="Noria.Web.sln.DotSettings" />
         <None Remove="tsconfig.json" />
         <None Remove="tslint.json" />
         <None Remove="workspace.code-workspace" />
@@ -49,5 +49,9 @@
 
     <ItemGroup>
       <Folder Include="wwwroot\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
     </ItemGroup>
 </Project>

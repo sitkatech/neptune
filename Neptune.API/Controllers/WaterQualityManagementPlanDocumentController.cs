@@ -13,17 +13,14 @@ namespace Neptune.API.Controllers
 {
     [ApiController]
     [Route("water-quality-management-plan-documents")]
-    public class WaterQualityManagementPlanDocumentController : SitkaController<WaterQualityManagementPlanDocumentController>
+    public class WaterQualityManagementPlanDocumentController(
+        NeptuneDbContext dbContext,
+        ILogger<WaterQualityManagementPlanDocumentController> logger,
+        KeystoneService keystoneService,
+        IOptions<NeptuneConfiguration> neptuneConfiguration)
+        : SitkaController<WaterQualityManagementPlanDocumentController>(dbContext, logger, keystoneService,
+            neptuneConfiguration)
     {
-        public WaterQualityManagementPlanDocumentController(
-            NeptuneDbContext dbContext,
-            ILogger<WaterQualityManagementPlanDocumentController> logger,
-            KeystoneService keystoneService,
-            IOptions<NeptuneConfiguration> neptuneConfiguration)
-            : base(dbContext, logger, keystoneService, neptuneConfiguration)
-        {
-        }
-
         [HttpGet]
         [AdminFeature]
         public async Task<ActionResult<IEnumerable<WaterQualityManagementPlanDocumentDto>>> List()

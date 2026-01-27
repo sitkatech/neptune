@@ -1,5 +1,5 @@
 ﻿using System;
-using Humanizer.Bytes;
+using Humanizer;
 
 namespace Neptune.Tests.Interfaces
 {

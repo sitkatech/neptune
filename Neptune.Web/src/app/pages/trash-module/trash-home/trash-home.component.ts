@@ -96,7 +96,13 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
     };
 
     public currentResultType: string = "Area-Based Results";
-    public resultTypes = ["Area-Based Results", "Current Net Loading Rate With Controls", "Net Change In Trash Loading Rate With Controls", "OVTA-Based Results", "No Metric, Map Overlay"];
+    public resultTypes = [
+        "Area-Based Results",
+        "Current Net Loading Rate With Controls",
+        "Net Change In Trash Loading Rate With Controls",
+        "OVTA-Based Results",
+        "No Metric, Map Overlay",
+    ];
 
     public areaBasedAcreCalculationsDto$: Observable<AreaBasedAcreCalculationsDto>;
     public loadResultsDto$: Observable<LoadResultsDto>;
@@ -154,26 +160,6 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.currentUser$ = this.authenticationService.getCurrentUser();
-
-        this.route.queryParams.subscribe((params) => {
-            //We're logging in
-            if (params.hasOwnProperty("code")) {
-                this.router.navigate(["/signin-oidc"], { queryParams: params });
-                return;
-            }
-
-            if (localStorage.getItem("loginOnReturn")) {
-                localStorage.removeItem("loginOnReturn");
-                this.authenticationService.login();
-            }
-
-            //We were forced to logout or were sent a link and just finished logging in
-            if (sessionStorage.getItem("authRedirectUrl")) {
-                this.router.navigateByUrl(sessionStorage.getItem("authRedirectUrl")).then(() => {
-                    sessionStorage.removeItem("authRedirectUrl");
-                });
-            }
-        });
 
         this.stormwaterJurisdictions$ = this.stormwaterJurisdictionService.listViewableStormwaterJurisdiction().pipe(
             tap((x) => {
@@ -287,9 +273,7 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
         );
 
         // combined selected feature stream (tgu + ovta)
-        this.selectedFeature$ = combineLatest([this.tguDto$, this.ovtaAreaDto$]).pipe(
-            map(([tgu, ovta]) => ({ tgu, ovta }))
-        );
+        this.selectedFeature$ = combineLatest([this.tguDto$, this.ovtaAreaDto$]).pipe(map(([tgu, ovta]) => ({ tgu, ovta })));
     }
 
     public handleMapReady(event: NeptuneMapInitEvent): void {
@@ -421,23 +405,11 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
     }
 
     public login(): void {
-        this.authenticationService.login(true);
+        this.authenticationService.login();
     }
 
-    public createAccount(): void {
-        this.authenticationService.createAccount();
-    }
-
-    public forgotPasswordUrl(): string {
-        return `${environment.keystoneAuthConfiguration.issuer}/Account/ForgotPassword?${this.authenticationService.getClientIDAndRedirectUrlForKeystone()}`;
-    }
-
-    public forgotUsernameUrl(): string {
-        return `${environment.keystoneAuthConfiguration.issuer}/Account/ForgotUsername?${this.authenticationService.getClientIDAndRedirectUrlForKeystone()}`;
-    }
-
-    public keystoneSupportUrl(): string {
-        return `${environment.keystoneAuthConfiguration.issuer}/Account/Support/20?${this.authenticationService.getClientIDAndRedirectUrlForKeystone()}`;
+    public signUp(): void {
+        this.authenticationService.signUp();
     }
 
     public requestSupportUrl(): string {

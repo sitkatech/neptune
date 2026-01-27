@@ -1,6 +1,6 @@
 ﻿using Hangfire;
 using Hangfire.SqlServer;
-using IdentityServer4.AccessTokenValidation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
 using Neptune.API.Services;
 using Neptune.API.Services.Filter;
 using Neptune.API.Services.Middleware;
@@ -23,14 +22,12 @@ using Neptune.Jobs.Services;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.IO.Converters;
 using OpenAI;
-using SendGrid.Extensions.DependencyInjection;
+using SendGrid;
 using Serilog;
 using System;
 using System.ClientModel;
-using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http;
 using System.Text.Json;
-using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using System.Threading;
 using LogHelper = Neptune.API.Services.Logging.LogHelper;
@@ -77,24 +74,24 @@ namespace Neptune.API
             services.AddSingleton(Configuration);
 
 
-            services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(o =>
-                {
-                    o.SessionStore = new MemoryCacheTicketStore();
-                })
-                .AddJwtBearer(options =>
-                {
-                    options.TokenValidationParameters.ValidateAudience = false;
-                    options.Authority = configuration.KeystoneOpenIDUrl;
-                    options.RequireHttpsMetadata = false;
-                    options.SecurityTokenValidators.Clear();
-                    options.SecurityTokenValidators.Add(new JwtSecurityTokenHandler
-                    {
-                        MapInboundClaims = false
-                    });
-                    options.TokenValidationParameters.NameClaimType = "name";
-                    options.TokenValidationParameters.RoleClaimType = "role";
-                });
+            #region Auth0 authentication
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.Authority = "https://ocstormwatertools.us.auth0.com/";
+                options.Audience = "OCSTApi";
+            });
+
+            #endregion
+
+            // Require authentication by default - endpoints must explicitly use [AllowAnonymous] for public access
+            services.AddAuthorizationBuilder()
+                .SetFallbackPolicy(new Microsoft.AspNetCore.Authorization.AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build());
 
             services.AddDbContext<NeptuneDbContext>(c =>
             {
@@ -130,7 +127,9 @@ namespace Neptune.API
             #endregion
 
             #region Sendgrid
-            services.AddSendGrid(options => { options.ApiKey = configuration.SendGridApiKey; });
+
+            // Register SendGrid client from official SDK (not the Extensions DI package)
+            services.AddSingleton<ISendGridClient>(_ => new SendGridClient(configuration.SendGridApiKey));
             services.AddSingleton<SitkaSmtpClientService>();
             #endregion
 
@@ -159,6 +158,7 @@ namespace Neptune.API
             services.AddSwaggerGen(options =>
             {
                 options.DocumentFilter<UseMethodNameAsOperationIdFilter>();
+                options.OperationFilter<AnonymousOperationFilter>();
             });
             #endregion
 
@@ -284,7 +284,7 @@ namespace Neptune.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapHealthChecks("/healthz");
+                endpoints.MapHealthChecks("/healthz").AllowAnonymous();
             });
 
             applicationLifetime.ApplicationStopping.Register(OnShutdown);

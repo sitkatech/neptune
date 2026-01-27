@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -25,6 +26,7 @@ public class TrashGeneratingUnitByStormwaterJurisdictionController(
 {
 
     [HttpGet("area-based-results-calculations")]
+    [AllowAnonymous]
     [EntityNotFound(typeof(StormwaterJurisdiction), "jurisdictionID")]
     public ActionResult<AreaBasedAcreCalculationsDto> GetAreaBasedResultsCalculations([FromRoute] int jurisdictionID)
     {
@@ -81,6 +83,7 @@ public class TrashGeneratingUnitByStormwaterJurisdictionController(
 
 
     [HttpGet("ovta-based-results-calculations")]
+    [AllowAnonymous]
     [EntityNotFound(typeof(StormwaterJurisdiction), "jurisdictionID")]
     public ActionResult<OVTAResultsDto> GetOVTABasedResultsCalculations([FromRoute] int jurisdictionID)
     {
@@ -119,6 +122,7 @@ public class TrashGeneratingUnitByStormwaterJurisdictionController(
 
 
     [HttpGet("load-based-results-calculations")]
+    [AllowAnonymous]
     [EntityNotFound(typeof(StormwaterJurisdiction), "jurisdictionID")]
     public async Task<ActionResult<LoadResultsDto>> GetLoadBasedResultsCalculations([FromRoute] int jurisdictionID)
     {

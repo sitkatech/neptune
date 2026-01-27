@@ -41,7 +41,6 @@ namespace Neptune.WebMvc.Models
             var anonymousSitkaUser = new Person()
             {
                 PersonID = Person.AnonymousPersonID,
-                PersonGuid = new Guid(),
                 FirstName = "Anonymous",
                 LastName = "User",
                 RoleID = Role.Unassigned.RoleID,

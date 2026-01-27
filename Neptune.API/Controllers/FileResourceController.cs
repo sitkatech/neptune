@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -18,6 +19,7 @@ public class FileResourceController(NeptuneDbContext dbContext, ILogger<FileReso
 {
     [HttpGet("{fileResourceGuidAsString}")]
     [ProducesResponseType(typeof(FileStreamResult), (int)HttpStatusCode.OK)]
+    [AllowAnonymous]
     public async Task<IActionResult> DisplayResource(string fileResourceGuidAsString)
     {
         var isStringAGuid = Guid.TryParse(fileResourceGuidAsString, out var fileResourceGuid);

@@ -1,241 +1,327 @@
-﻿using Neptune.Models.DataTransferObjects;
+﻿using System.Security.Claims;
+using Neptune.Models.DataTransferObjects;
 using Microsoft.EntityFrameworkCore;
 using Neptune.Common.DesignByContract;
 using Neptune.Models.DataTransferObjects.Person;
+using Neptune.Models.Helpers;
 
-namespace Neptune.EFModels.Entities
+namespace Neptune.EFModels.Entities;
+
+public static class People
 {
-    public static class People
+    public static IEnumerable<string> GetEmailAddressesForAdminsThatReceiveSupportEmails(NeptuneDbContext dbContext)
     {
-        public static IEnumerable<string> GetEmailAddressesForAdminsThatReceiveSupportEmails(NeptuneDbContext dbContext)
-        {
-            var persons = GetImpl(dbContext).AsNoTracking()
-                .Where(x => x.IsActive && (x.RoleID == (int)RoleEnum.Admin || x.RoleID == (int)RoleEnum.SitkaAdmin) && x.ReceiveSupportEmails)
-                .Select(x => x.Email)
-                .AsEnumerable();
+        var persons = GetImpl(dbContext).AsNoTracking()
+            .Where(x => x.IsActive && (x.RoleID == (int)RoleEnum.Admin || x.RoleID == (int)RoleEnum.SitkaAdmin) && x.ReceiveSupportEmails)
+            .Select(x => x.Email)
+            .AsEnumerable();
 
-            return persons;
-        }
+        return persons;
+    }
 
-        public static async Task<List<PersonSimpleDto>> ListAsSimpleDtoAsync(NeptuneDbContext dbContext)
-        {
-            var people = await GetImpl(dbContext)
-                .OrderBy(x => x.LastName).ThenBy(x => x.FirstName)
-                .ToListAsync();
-            return people.Select(x => x.AsSimpleDto()).ToList();
-        }
+    public static async Task<List<PersonSimpleDto>> ListAsSimpleDtoAsync(NeptuneDbContext dbContext)
+    {
+        var people = await GetImpl(dbContext)
+            .OrderBy(x => x.LastName).ThenBy(x => x.FirstName)
+            .ToListAsync();
+        return people.Select(x => x.AsSimpleDto()).ToList();
+    }
 
-        public static IQueryable<Person> ListActive(NeptuneDbContext dbContext)
-        {
-            return GetImpl(dbContext).AsNoTracking().Where(x => x.IsActive)
-                .OrderBy(x => x.LastName).ThenBy(x => x.FirstName);
-        }
+    public static IQueryable<Person> ListActive(NeptuneDbContext dbContext)
+    {
+        return GetImpl(dbContext).AsNoTracking().Where(x => x.IsActive)
+            .OrderBy(x => x.LastName).ThenBy(x => x.FirstName);
+    }
 
-        public static Person GetByIDWithChangeTracking(NeptuneDbContext dbContext, int personID)
-        {
-            var person = GetImpl(dbContext)
-                .SingleOrDefault(x => x.PersonID == personID);
-            Check.RequireNotNull(person, $"Person with ID {personID} not found!");
-            return person;
-        }
+    public static Person GetByIDWithChangeTracking(NeptuneDbContext dbContext, int personID)
+    {
+        var person = GetImpl(dbContext)
+            .SingleOrDefault(x => x.PersonID == personID);
+        Check.RequireNotNull(person, $"Person with ID {personID} not found!");
+        return person;
+    }
 
-        public static Person GetByIDWithChangeTracking(NeptuneDbContext dbContext, PersonPrimaryKey personPrimaryKey)
-        {
-            return GetByIDWithChangeTracking(dbContext, personPrimaryKey.PrimaryKeyValue);
-        }
+    public static Person GetByIDWithChangeTracking(NeptuneDbContext dbContext, PersonPrimaryKey personPrimaryKey)
+    {
+        return GetByIDWithChangeTracking(dbContext, personPrimaryKey.PrimaryKeyValue);
+    }
 
-        public static Person GetByID(NeptuneDbContext dbContext, int personID)
-        {
-            var person = GetImpl(dbContext).AsNoTracking()
-                .SingleOrDefault(x => x.PersonID == personID);
-            Check.RequireNotNull(person, $"Person with ID {personID} not found!");
-            return person;
-        }
+    public static Person GetByID(NeptuneDbContext dbContext, int personID)
+    {
+        var person = GetImpl(dbContext).AsNoTracking()
+            .SingleOrDefault(x => x.PersonID == personID);
+        Check.RequireNotNull(person, $"Person with ID {personID} not found!");
+        return person;
+    }
 
-        public static Person GetByID(NeptuneDbContext dbContext, PersonPrimaryKey personPrimaryKey)
-        {
-            return GetByID(dbContext, personPrimaryKey.PrimaryKeyValue);
-        }
+    public static Person GetByID(NeptuneDbContext dbContext, PersonPrimaryKey personPrimaryKey)
+    {
+        return GetByID(dbContext, personPrimaryKey.PrimaryKeyValue);
+    }
 
-        public static PersonDto GetByIDAsDto(NeptuneDbContext dbContext, int personID)
-        {
-            var person = GetByID(dbContext, personID);
-            return person.AsDto();
-        }
+    public static PersonDto GetByIDAsDto(NeptuneDbContext dbContext, int personID)
+    {
+        var person = GetByID(dbContext, personID);
+        return person.AsDto();
+    }
 
-        public static async Task<PersonDto?> GetByIDAsDtoAsync(NeptuneDbContext dbContext, int personID)
-        {
-            var person = await GetImpl(dbContext).AsNoTracking().SingleOrDefaultAsync(x => x.PersonID == personID);
-            return person?.AsDto();
-        }
+    public static async Task<PersonDto?> GetByIDAsDtoAsync(NeptuneDbContext dbContext, int personID)
+    {
+        var person = await GetImpl(dbContext).AsNoTracking().SingleOrDefaultAsync(x => x.PersonID == personID);
+        return person?.AsDto();
+    }
 
-        public static PersonDto? GetByEmailAsDto(NeptuneDbContext dbContext, string email)
-        {
-            var person = GetImpl(dbContext).AsNoTracking().SingleOrDefault(x => x.Email == email);
-            return person?.AsDto();
-        }
+    public static PersonDto? GetByEmailAsDto(NeptuneDbContext dbContext, string email)
+    {
+        var person = GetImpl(dbContext).AsNoTracking().SingleOrDefault(x => x.Email == email);
+        return person?.AsDto();
+    }
 
-        public static Person? GetByGuid(NeptuneDbContext dbContext, Guid personGuid)
-        {
-            return GetImpl(dbContext).AsNoTracking().SingleOrDefault(x => x.PersonGuid == personGuid);
-        }
+    public static async Task<Person?> GetByGlobalIDAsync(NeptuneDbContext dbContext, string globalID)
+    {
+        return await dbContext.People.AsNoTracking().Where(x => x.GlobalID == globalID).SingleOrDefaultAsync();
+    }
 
-        public static PersonDto? GetByGuidAsDto(NeptuneDbContext dbContext, Guid personGuid)
-        {
-            var person = GetByGuid(dbContext, personGuid);
-            return person?.AsDto();
-        }
+    public static Person? GetByGlobalID(NeptuneDbContext dbContext, string globalID)
+    {
+        return dbContext.People.AsNoTracking()
+            .Include(x => x.Organization)
+            .Include(x => x.StormwaterJurisdictionPeople)
+            .ThenInclude(x => x.StormwaterJurisdiction)
+            .ThenInclude(x => x.Organization)
+            .SingleOrDefault(x => x.GlobalID == globalID);
+    }
 
-        private static IQueryable<Person> GetImpl(NeptuneDbContext dbContext)
-        {
-            return dbContext.People
+    public static async Task<PersonDto?> GetByGlobalIDAsDtoAsync(NeptuneDbContext dbContext, string globalID)
+    {
+        var person = await dbContext.People
+            .Include(x => x.Organization)
+            .ThenInclude(x => x.OrganizationType)
+            .Include(x => x.StormwaterJurisdictionPeople)
+            .ThenInclude(x => x.StormwaterJurisdiction)
+            .ThenInclude(x => x.Organization)
+            .ThenInclude(x => x.OrganizationType).AsNoTracking().Where(x => x.GlobalID == globalID).SingleOrDefaultAsync();
+        return person?.AsDto();
+    }
+
+    public static async Task<int?> GetPersonIDByGlobalIDAsync(NeptuneDbContext dbContext, string globalID)
+    {
+        var personID = await dbContext.People.AsNoTracking().Where(x => x.GlobalID == globalID).Select(x => x.PersonID).SingleOrDefaultAsync();
+        return personID;
+    }
+
+    private static IQueryable<Person> GetImpl(NeptuneDbContext dbContext)
+    {
+        return dbContext.People
                 .Include(x => x.Organization)
                 .ThenInclude(x => x.OrganizationType)
                 .Include(x => x.StormwaterJurisdictionPeople)
                 .ThenInclude(x => x.StormwaterJurisdiction)
                 .ThenInclude(x => x.Organization)
                 .ThenInclude(x => x.OrganizationType)
-                ;
-        }
-
-        public static List<Person> ListByRoleID(NeptuneDbContext dbContext, int roleID)
-        {
-            return ListActive(dbContext).Where(x => x.RoleID == roleID).ToList();
-        }
-
-        public static List<Person> List(NeptuneDbContext dbContext)
-        {
-            return GetImpl(dbContext).AsNoTracking()
-                .OrderBy(x => x.LastName).ThenBy(x => x.FirstName).ToList();
-        }
-
-        public static Person GetByWebServiceAccessToken(NeptuneDbContext dbContext, Guid webServiceAccessToken)
-        {
-            var person = GetImpl(dbContext).AsNoTracking().SingleOrDefault(x => x.WebServiceAccessToken == webServiceAccessToken);
-            Check.RequireNotNull(person, $"Person with specified service access token not found!");
-            return person;
-        }
-
-        public static PersonDto CreateUnassignedPerson(NeptuneDbContext dbContext, PersonCreateDto userCreateDto)
-        {
-            var userUpsertDto = new PersonUpsertDto()
-            {
-                FirstName = userCreateDto.FirstName,
-                LastName = userCreateDto.LastName,
-                OrganizationName = userCreateDto.OrganizationName,
-                Email = userCreateDto.Email,
-                RoleID = (int)RoleEnum.Unassigned,  // don't allow non-admin user to set their role to something other than Unassigned
-            };
-            return CreateNewPerson(dbContext, userUpsertDto, userCreateDto.LoginName, userCreateDto.UserGuid);
-        }
-
-        public static List<ErrorMessage> ValidateCreateUnassignedPerson(NeptuneDbContext dbContext, PersonCreateDto userCreateDto)
-        {
-            var result = new List<ErrorMessage>();
-
-            var userByGuidDto = GetByGuid(dbContext, userCreateDto.UserGuid);  // A duplicate Guid not only leads to 500s, it allows someone to hijack another user's account
-            if (userByGuidDto != null)
-            {
-                result.Add(new ErrorMessage() { Type = "Person Creation", Message = "Invalid user information." });  // purposely vague; we don't want a naughty person realizing they figured out someone else's Guid
-            }
-
-            var userByEmailDto = GetByEmailAsDto(dbContext, userCreateDto.Email);  // A duplicate email leads to 500s, so need to prevent duplicates
-            if (userByEmailDto != null)
-            {
-                result.Add(new ErrorMessage() { Type = "Person Creation", Message = "There is already a user account with this email address." });
-            }
-
-            return result;
-        }
-
-        public static PersonDto CreateNewPerson(NeptuneDbContext dbContext, PersonUpsertDto personToCreate, string loginName, Guid userGuid)
-        {
-            if (!personToCreate.RoleID.HasValue)
-            {
-                return null;
-            }
-
-            var organizationID = Organizations.OrganizationIDUnassigned;
-            var organization = Organizations.GetByName(dbContext, personToCreate.OrganizationName);
-            if (organization != null)
-            {
-                organizationID = organization.OrganizationID;
-            }
-
-            var person = new Person
-            {
-                PersonGuid = userGuid,
-                LoginName = loginName,
-                Email = personToCreate.Email,
-                FirstName = personToCreate.FirstName,
-                LastName = personToCreate.LastName,
-                IsActive = true,
-                RoleID = personToCreate.RoleID.Value,
-                CreateDate = DateTime.UtcNow,
-                OrganizationID = organizationID,
-                WebServiceAccessToken = Guid.NewGuid()
-            };
-
-            dbContext.People.Add(person);
-            dbContext.SaveChanges();
-            dbContext.Entry(person).Reload();
-
-            return GetByIDAsDto(dbContext, person.PersonID);
-        }
-
-        public static async Task<PersonDto> CreateAsync(NeptuneDbContext dbContext, PersonUpsertDto dto, string loginName, Guid userGuid)
-        {
-            if (!dto.RoleID.HasValue)
-            {
-                return null;
-            }
-            var organizationID = Organizations.OrganizationIDUnassigned;
-            var organization = Organizations.GetByName(dbContext, dto.OrganizationName);
-            if (organization != null)
-            {
-                organizationID = organization.OrganizationID;
-            }
-            var person = new Person
-            {
-                PersonGuid = userGuid,
-                LoginName = loginName,
-                Email = dto.Email,
-                FirstName = dto.FirstName,
-                LastName = dto.LastName,
-                IsActive = true,
-                RoleID = dto.RoleID.Value,
-                CreateDate = DateTime.UtcNow,
-                OrganizationID = organizationID,
-                WebServiceAccessToken = Guid.NewGuid()
-            };
-            dbContext.People.Add(person);
-            await dbContext.SaveChangesAsync();
-            return await GetByIDAsDtoAsync(dbContext, person.PersonID);
-        }
-
-        public static async Task<PersonDto?> UpdateAsync(NeptuneDbContext dbContext, int personID, PersonUpsertDto dto)
-        {
-            var person = await dbContext.People.FirstOrDefaultAsync(x => x.PersonID == personID);
-            if (person == null) return null;
-            person.FirstName = dto.FirstName;
-            person.LastName = dto.LastName;
-            person.Email = dto.Email;
-            person.RoleID = dto.RoleID ?? person.RoleID;
-            var organization = Organizations.GetByName(dbContext, dto.OrganizationName);
-            if (organization != null)
-            {
-                person.OrganizationID = organization.OrganizationID;
-            }
-            await dbContext.SaveChangesAsync();
-            return await GetByIDAsDtoAsync(dbContext, person.PersonID);
-        }
-
-        public static async Task<bool> DeleteAsync(NeptuneDbContext dbContext, int personID)
-        {
-            var person = await dbContext.People.FirstOrDefaultAsync(x => x.PersonID == personID);
-            if (person == null) return false;
-            await person.DeleteFull(dbContext);
-            return true;
-        }
+            ;
     }
+
+    public static List<Person> ListByRoleID(NeptuneDbContext dbContext, int roleID)
+    {
+        return ListActive(dbContext).Where(x => x.RoleID == roleID).ToList();
+    }
+
+    public static List<Person> List(NeptuneDbContext dbContext)
+    {
+        return GetImpl(dbContext).AsNoTracking()
+            .OrderBy(x => x.LastName).ThenBy(x => x.FirstName).ToList();
+    }
+
+    public static Person GetByWebServiceAccessToken(NeptuneDbContext dbContext, Guid webServiceAccessToken)
+    {
+        var person = GetImpl(dbContext).AsNoTracking().SingleOrDefault(x => x.WebServiceAccessToken == webServiceAccessToken);
+        Check.RequireNotNull(person, $"Person with specified service access token not found!");
+        return person;
+    }
+
+    public static PersonDto CreateUnassignedPerson(NeptuneDbContext dbContext, PersonCreateDto userCreateDto)
+    {
+        var userUpsertDto = new PersonUpsertDto()
+        {
+            FirstName = userCreateDto.FirstName,
+            LastName = userCreateDto.LastName,
+            OrganizationName = userCreateDto.OrganizationName,
+            Email = userCreateDto.Email,
+            RoleID = (int)RoleEnum.Unassigned,  // don't allow non-admin user to set their role to something other than Unassigned
+        };
+        return CreateNewPerson(dbContext, userUpsertDto, userCreateDto.LoginName);
+    }
+
+    public static List<ErrorMessage> ValidateCreateUnassignedPerson(NeptuneDbContext dbContext, PersonCreateDto userCreateDto)
+    {
+        var result = new List<ErrorMessage>();
+
+        var userByEmailDto = GetByEmailAsDto(dbContext, userCreateDto.Email);  // A duplicate email leads to 500s, so need to prevent duplicates
+        if (userByEmailDto != null)
+        {
+            result.Add(new ErrorMessage() { Type = "Person Creation", Message = "There is already a user account with this email address." });
+        }
+
+        return result;
+    }
+
+    public static PersonDto CreateNewPerson(NeptuneDbContext dbContext, PersonUpsertDto personToCreate, string loginName)
+    {
+        if (!personToCreate.RoleID.HasValue)
+        {
+            return null;
+        }
+
+        var organizationID = Organizations.OrganizationIDUnassigned;
+        var organization = Organizations.GetByName(dbContext, personToCreate.OrganizationName);
+        if (organization != null)
+        {
+            organizationID = organization.OrganizationID;
+        }
+
+        var person = new Person
+        {
+            LoginName = loginName,
+            Email = personToCreate.Email,
+            FirstName = personToCreate.FirstName,
+            LastName = personToCreate.LastName,
+            IsActive = true,
+            RoleID = personToCreate.RoleID.Value,
+            CreateDate = DateTime.UtcNow,
+            OrganizationID = organizationID,
+            WebServiceAccessToken = Guid.NewGuid()
+        };
+
+        dbContext.People.Add(person);
+        dbContext.SaveChanges();
+        dbContext.Entry(person).Reload();
+
+        return GetByIDAsDto(dbContext, person.PersonID);
+    }
+
+    public static async Task<PersonDto> CreateAsync(NeptuneDbContext dbContext, PersonUpsertDto dto, string loginName)
+    {
+        if (!dto.RoleID.HasValue)
+        {
+            return null;
+        }
+        var organizationID = Organizations.OrganizationIDUnassigned;
+        var organization = Organizations.GetByName(dbContext, dto.OrganizationName);
+        if (organization != null)
+        {
+            organizationID = organization.OrganizationID;
+        }
+        var person = new Person
+        {
+            LoginName = loginName,
+            Email = dto.Email,
+            FirstName = dto.FirstName,
+            LastName = dto.LastName,
+            IsActive = true,
+            RoleID = dto.RoleID.Value,
+            CreateDate = DateTime.UtcNow,
+            OrganizationID = organizationID,
+            WebServiceAccessToken = Guid.NewGuid()
+        };
+        dbContext.People.Add(person);
+        await dbContext.SaveChangesAsync();
+        return await GetByIDAsDtoAsync(dbContext, person.PersonID);
+    }
+
+    public static async Task<PersonDto?> UpdateAsync(NeptuneDbContext dbContext, int personID, PersonUpsertDto dto)
+    {
+        var person = await dbContext.People.FirstOrDefaultAsync(x => x.PersonID == personID);
+        if (person == null) return null;
+        person.FirstName = dto.FirstName;
+        person.LastName = dto.LastName;
+        person.Email = dto.Email;
+        person.RoleID = dto.RoleID ?? person.RoleID;
+        var organization = Organizations.GetByName(dbContext, dto.OrganizationName);
+        if (organization != null)
+        {
+            person.OrganizationID = organization.OrganizationID;
+        }
+        await dbContext.SaveChangesAsync();
+        return await GetByIDAsDtoAsync(dbContext, person.PersonID);
+    }
+
+    public static async Task<bool> DeleteAsync(NeptuneDbContext dbContext, int personID)
+    {
+        var person = await dbContext.People.FirstOrDefaultAsync(x => x.PersonID == personID);
+        if (person == null) return false;
+        await person.DeleteFull(dbContext);
+        return true;
+    }
+
+    public static async Task<PersonDto?> UpdateClaims(NeptuneDbContext dbContext, ClaimsPrincipal claimsPrincipal)
+    {
+        int? personID = null;
+        var globalID = claimsPrincipal?.Claims.SingleOrDefault(c => c.Type == ClaimsConstants.Sub)?.Value;
+        if (!string.IsNullOrEmpty(globalID))
+        {
+            personID = await dbContext.People.AsNoTracking().Where(x => x.GlobalID == globalID).Select(x => x.PersonID).SingleOrDefaultAsync();
+        }
+
+        Person person;
+        var email = claimsPrincipal?.Claims.SingleOrDefault(c => c.Type == ClaimsConstants.Emails)?.Value;
+        if (personID is > 0)
+        {
+            person = await dbContext.People.FirstOrDefaultAsync(x => x.PersonID == personID);
+        }
+        else
+        {
+            person = await dbContext.People.FirstOrDefaultAsync(x => x.Email == email);
+        }
+
+        if (person == null)
+        {
+            person = new Person
+            {
+                GlobalID = globalID,
+                RoleID = Role.Unassigned.RoleID,
+                CreateDate = DateTime.UtcNow,
+                IsActive = true,
+                OrganizationID = Organizations.OrganizationIDUnassigned,
+                WebServiceAccessToken = Guid.NewGuid(),
+                ReceiveSupportEmails = false
+            };
+
+            dbContext.People.Add(person);
+        }
+
+        var firstName = claimsPrincipal?.Claims.SingleOrDefault(c => c.Type == ClaimsConstants.GivenName)?.Value;
+        var lastName = claimsPrincipal?.Claims.SingleOrDefault(c => c.Type == ClaimsConstants.FamilyName)?.Value;
+
+        if (!string.IsNullOrEmpty(globalID))
+        {
+            person.GlobalID = globalID;
+        }
+
+        if (!string.IsNullOrEmpty(firstName))
+        {
+            person.FirstName = firstName;
+        }
+
+        if (!string.IsNullOrEmpty(lastName))
+        {
+            person.LastName = lastName;
+        }
+
+        if (!string.IsNullOrEmpty(email))
+        {
+            person.Email = email;
+        }
+
+        //if (person.RoleID == (int)RoleEnum.PendingLogin)
+        //{
+        //    person.RoleID = (int) RoleEnum.JurisdictionEditor;
+        //}
+
+        await dbContext.SaveChangesAsync();
+        await dbContext.Entry(person).ReloadAsync();
+
+        return await GetByIDAsDtoAsync(dbContext, person.PersonID);
+    }
+
 }

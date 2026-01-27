@@ -33,7 +33,7 @@ export class HeaderNavComponent implements OnInit {
     }
 
     public login(): void {
-        this.authenticationService.login(true);
+        this.authenticationService.login();
     }
 
     public logout(): void {
