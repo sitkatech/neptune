@@ -188,14 +188,14 @@ var builder = WebApplication.CreateBuilder(args);
                     ? context.HttpContext.Request.Query["returnUrl"]
                     : "/";
             },
-            OnTokenValidated = context =>
+            OnTokenValidated = async context =>
             {
                 var dbContext = context.HttpContext.RequestServices.GetRequiredService<NeptuneDbContext>();
                 var sitkaSmtpClientService = context.HttpContext.RequestServices.GetRequiredService<SitkaSmtpClientService>();
 
                 if (context.Principal.Identity?.IsAuthenticated == true) // we have a token and we can determine the person.
                 {
-                    AuthenticationHelper.ProcessLoginFromAuth0(context, dbContext, configuration, logger, sitkaSmtpClientService);
+                    await AuthenticationHelper.ProcessLoginFromAuth0(context, dbContext, configuration, logger, sitkaSmtpClientService);
                 }
                 var url = context.ProtocolMessage.State;
                 var claims = new List<Claim>

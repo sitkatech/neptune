@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.EntityFrameworkCore;
 using Neptune.Common.Email;
 using Neptune.EFModels.Entities;
 using Serilog.Core;
@@ -26,12 +27,12 @@ public static class AuthenticationHelper
         return HttpUtility.UrlDecode(parameterOnly);
     }
 
-    public static void ProcessLoginFromAuth0(TokenValidatedContext tokenValidatedContext, NeptuneDbContext dbContext, WebConfiguration configuration, Logger logger, SitkaSmtpClientService sitkaSmtpClientService)
+    public static async Task ProcessLoginFromAuth0(TokenValidatedContext tokenValidatedContext, NeptuneDbContext dbContext, WebConfiguration configuration, Logger logger, SitkaSmtpClientService sitkaSmtpClientService)
     {
         var sendNewUserNotification = false;
         var globalID = tokenValidatedContext.SecurityToken.Subject;
         logger.Information($"ocstormwatertools.org: In {nameof(ProcessLoginFromAuth0)} - Processing Auth0 login for user with Auth0 guid {globalID}".ToString());
-        var person = dbContext.People.FirstOrDefault(x => x.GlobalID == globalID);
+        var person = await dbContext.People.FirstOrDefaultAsync(x => x.GlobalID == globalID);
         var principal = tokenValidatedContext.Principal;
 
         // Retrieve the given_name and family_name claims
@@ -73,11 +74,11 @@ public static class AuthenticationHelper
         }
 
         person.LastActivityDate = DateTime.UtcNow;
-        dbContext.SaveChanges();
+        await dbContext.SaveChangesAsync();
 
         if (sendNewUserNotification)
         {
-            SendNewUserCreatedMessage(dbContext, configuration, person, email, sitkaSmtpClientService);
+            await SendNewUserCreatedMessage(dbContext, configuration, person, email, sitkaSmtpClientService);
         }
     }
 
