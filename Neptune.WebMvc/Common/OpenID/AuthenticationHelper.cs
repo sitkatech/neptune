@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.EntityFrameworkCore;
 using Neptune.Common.Email;
 using Neptune.EFModels.Entities;
 using Serilog.Core;
@@ -38,6 +39,12 @@ public static class AuthenticationHelper
         var firstName = principal.FindFirst(ClaimTypes.GivenName)?.Value;
         var lastName = principal.FindFirst(ClaimTypes.Surname)?.Value;
         var email = principal.FindFirst(ClaimTypes.Email)?.Value;
+
+        if (person == null)
+        {
+            person = dbContext.People.FirstOrDefault(x => x.Email == email);
+        }
+
         if (person == null)
         {
             logger.Information($"ocstormwatertools.org: In {nameof(ProcessLoginFromAuth0)} - Creating a new user for {firstName} {lastName} from Auth0 login".ToString());
