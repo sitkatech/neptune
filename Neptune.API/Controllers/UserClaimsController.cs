@@ -8,7 +8,6 @@ using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
 using System.Linq;
 using System.Threading.Tasks;
-using Neptune.Models.Helpers;
 
 namespace Neptune.API.Controllers;
 
@@ -17,9 +16,8 @@ namespace Neptune.API.Controllers;
 public class UserClaimsController(
     NeptuneDbContext dbContext,
     ILogger<UserClaimsController> logger,
-    KeystoneService keystoneService,
     IOptions<NeptuneConfiguration> neptuneConfiguration)
-    : SitkaController<UserClaimsController>(dbContext, logger, keystoneService, neptuneConfiguration)
+    : SitkaController<UserClaimsController>(dbContext, logger, neptuneConfiguration)
 {
     [HttpGet("{globalID}")]
     [Authorize]
@@ -46,7 +44,7 @@ public class UserClaimsController(
             return BadRequest();
         }
 
-        var updatedUserDto = await People.UpdateClaims(dbContext, claimsPrincipal);
+        var updatedUserDto = await People.UpdateClaims(DbContext, claimsPrincipal);
         return Ok(updatedUserDto);
     }
 }

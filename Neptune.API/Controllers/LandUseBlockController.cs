@@ -16,9 +16,8 @@ namespace Neptune.API.Controllers;
 public class LandUseBlockController(
     NeptuneDbContext dbContext,
     ILogger<LandUseBlockController> logger,
-    KeystoneService keystoneService,
     IOptions<NeptuneConfiguration> neptuneConfiguration)
-    : SitkaController<LandUseBlockController>(dbContext, logger, keystoneService, neptuneConfiguration)
+    : SitkaController<LandUseBlockController>(dbContext, logger, neptuneConfiguration)
 {
     [HttpGet]
     [AllowAnonymous]

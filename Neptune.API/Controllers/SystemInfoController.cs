@@ -14,9 +14,8 @@ namespace Neptune.API.Controllers
     public class SystemInfoController(
         NeptuneDbContext dbContext,
         ILogger<SystemInfoController> logger,
-        KeystoneService keystoneService,
         IOptions<NeptuneConfiguration> neptuneConfiguration)
-        : SitkaController<SystemInfoController>(dbContext, logger, keystoneService, neptuneConfiguration)
+        : SitkaController<SystemInfoController>(dbContext, logger, neptuneConfiguration)
     {
         [Route("/")] // Default Route
         [AllowAnonymous]

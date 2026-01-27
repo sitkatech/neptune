@@ -14,9 +14,8 @@ namespace Neptune.API.Controllers;
 public class CustomAttributeTypeController(
     NeptuneDbContext dbContext,
     ILogger<CustomAttributeTypeController> logger,
-    KeystoneService keystoneService,
     IOptions<NeptuneConfiguration> neptuneConfiguration)
-    : SitkaController<CustomAttributeTypeController>(dbContext, logger, keystoneService, neptuneConfiguration)
+    : SitkaController<CustomAttributeTypeController>(dbContext, logger, neptuneConfiguration)
 {
     [HttpGet]
     [AllowAnonymous]

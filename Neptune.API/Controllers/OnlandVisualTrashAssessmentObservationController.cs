@@ -19,10 +19,9 @@ namespace Neptune.API.Controllers;
 public class OnlandVisualTrashAssessmentObservationController(
     NeptuneDbContext dbContext,
     ILogger<OnlandVisualTrashAssessmentObservationController> logger,
-    KeystoneService keystoneService,
     IOptions<NeptuneConfiguration> neptuneConfiguration,
     AzureBlobStorageService azureBlobStorageService)
-    : SitkaController<OnlandVisualTrashAssessmentObservationController>(dbContext, logger, keystoneService, neptuneConfiguration)
+    : SitkaController<OnlandVisualTrashAssessmentObservationController>(dbContext, logger, neptuneConfiguration)
 {
     [HttpGet]
     [JurisdictionEditFeature]

@@ -23,7 +23,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Neptune.EFModels.Entities
 {
-    public partial class Person //, IKeystoneUser
+    public partial class Person
     {
         public const int AnonymousPersonID = -999;
         public const int SystemPersonID = 1122;

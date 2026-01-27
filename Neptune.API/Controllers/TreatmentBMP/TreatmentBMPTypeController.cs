@@ -14,9 +14,8 @@ namespace Neptune.API.Controllers;
 public class TreatmentBMPTypeController(
     NeptuneDbContext dbContext,
     ILogger<TreatmentBMPTypeController> logger,
-    KeystoneService keystoneService,
     IOptions<NeptuneConfiguration> neptuneConfiguration)
-    : SitkaController<TreatmentBMPTypeController>(dbContext, logger, keystoneService, neptuneConfiguration)
+    : SitkaController<TreatmentBMPTypeController>(dbContext, logger, neptuneConfiguration)
 {
     [HttpGet]
     [AllowAnonymous]

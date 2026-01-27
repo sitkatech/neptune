@@ -17,9 +17,8 @@ namespace Neptune.API.Controllers
     public class TreatmentBMPBenchmarkAndThresholdController(
         NeptuneDbContext dbContext,
         ILogger<TreatmentBMPBenchmarkAndThresholdController> logger,
-        KeystoneService keystoneService,
         IOptions<NeptuneConfiguration> neptuneConfiguration)
-        : SitkaController<TreatmentBMPBenchmarkAndThresholdController>(dbContext, logger, keystoneService,
+        : SitkaController<TreatmentBMPBenchmarkAndThresholdController>(dbContext, logger,
             neptuneConfiguration)
     {
         [HttpGet]

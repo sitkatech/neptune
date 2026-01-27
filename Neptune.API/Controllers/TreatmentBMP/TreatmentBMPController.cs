@@ -18,8 +18,8 @@ namespace Neptune.API.Controllers;
 
 [ApiController]
 [Route("treatment-bmps")]
-public class TreatmentBMPController(NeptuneDbContext dbContext, ILogger<TreatmentBMPController> logger, KeystoneService keystoneService, IOptions<NeptuneConfiguration> neptuneConfiguration)
-    : SitkaController<TreatmentBMPController>(dbContext, logger, keystoneService, neptuneConfiguration)
+public class TreatmentBMPController(NeptuneDbContext dbContext, ILogger<TreatmentBMPController> logger, IOptions<NeptuneConfiguration> neptuneConfiguration)
+    : SitkaController<TreatmentBMPController>(dbContext, logger, neptuneConfiguration)
 {
     [HttpPost]
     [UserViewFeature]
@@ -115,7 +115,7 @@ public class TreatmentBMPController(NeptuneDbContext dbContext, ILogger<Treatmen
     [EntityNotFound(typeof(TreatmentBMP), "treatmentBMPID")]
     public async Task<ActionResult<TreatmentBMPDto>> GetByID([FromRoute] int treatmentBMPID)
     {
-        var treatmentBMPDto = await TreatmentBMPs.GetByIDAsDtoAsync(dbContext, treatmentBMPID);
+        var treatmentBMPDto = await TreatmentBMPs.GetByIDAsDtoAsync(DbContext, treatmentBMPID);
         return Ok(treatmentBMPDto);
     }
 
@@ -355,10 +355,10 @@ public class TreatmentBMPController(NeptuneDbContext dbContext, ILogger<Treatmen
     [EntityNotFound(typeof(TreatmentBMP), "treatmentBMPID")]
     public ActionResult<TreatmentBMPUpstreamestErrorsDto> GetUpstreamestErrors([FromRoute] int treatmentBMPID)
     {
-        var treatmentBMPTree = dbContext.vTreatmentBMPUpstreams.AsNoTracking()
+        var treatmentBMPTree = DbContext.vTreatmentBMPUpstreams.AsNoTracking()
             .Single(x => x.TreatmentBMPID == treatmentBMPID);
 
-        var upstreamestBMP = treatmentBMPTree.UpstreamBMPID.HasValue ? TreatmentBMPs.GetByID(dbContext, treatmentBMPTree.UpstreamBMPID) : null;
+        var upstreamestBMP = treatmentBMPTree.UpstreamBMPID.HasValue ? TreatmentBMPs.GetByID(DbContext, treatmentBMPTree.UpstreamBMPID) : null;
         var isUpstreamestBMPAnalyzedInModelingModule = upstreamestBMP != null && upstreamestBMP.TreatmentBMPType.IsAnalyzedInModelingModule;
         
         var dto = new TreatmentBMPUpstreamestErrorsDto
@@ -375,11 +375,11 @@ public class TreatmentBMPController(NeptuneDbContext dbContext, ILogger<Treatmen
     [EntityNotFound(typeof(TreatmentBMP), "treatmentBMPID")]
     public ActionResult<List<TreatmentBMPDisplayDto>> ListOtherTreatmentBMPsInRegionalSubbasin([FromRoute] int treatmentBMPID)
     {
-        var treatmentBMP = TreatmentBMPs.GetByID(dbContext, treatmentBMPID);
-        var subbasin = treatmentBMP.GetRegionalSubbasin(dbContext);
+        var treatmentBMP = TreatmentBMPs.GetByID(DbContext, treatmentBMPID);
+        var subbasin = treatmentBMP.GetRegionalSubbasin(DbContext);
         if (subbasin != null)
         {
-            var otherTreatmentBMPs = subbasin.GetTreatmentBMPs(dbContext)
+            var otherTreatmentBMPs = subbasin.GetTreatmentBMPs(DbContext)
                 .Where(x => x.TreatmentBMPID != treatmentBMP.TreatmentBMPID)
                 .Select(x => x.AsDisplayDto(null))
                 .OrderBy(x => x.DisplayName)
@@ -396,7 +396,7 @@ public class TreatmentBMPController(NeptuneDbContext dbContext, ILogger<Treatmen
     [EntityNotFound(typeof(TreatmentBMP), "treatmentBMPID")]
     public async Task<ActionResult<List<TreatmentBMPDisplayDto>>> QueueRefreshLandUse([FromRoute] int treatmentBMPID)
     {
-        var delineation = Delineations.GetByTreatmentBMPID(dbContext, treatmentBMPID);
+        var delineation = Delineations.GetByTreatmentBMPID(DbContext, treatmentBMPID);
         if (delineation == null)
         {
             ModelState.AddModelError("Delineation Required", "Treatment BMPs require a delineation in order to refresh their Land Use.");

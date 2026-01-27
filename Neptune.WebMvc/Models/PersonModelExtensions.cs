@@ -30,9 +30,7 @@ namespace Neptune.WebMvc.Models
     public static class PersonModelExtensions
     {
         /// <summary>
-        /// Needed for Keystone; basically <see cref="Person" /> is set to this fake
-        /// "Anonymous" person when we are not authenticated to not have to handle the null Person case.
-        /// Seems like MR and all the other RPs do this so following the pattern
+        /// Is set to this fake"Anonymous" person when we are not authenticated to not have to handle the null Person case.
         /// </summary>
         /// <returns></returns>
         public static Person GetAnonymousSitkaUser()

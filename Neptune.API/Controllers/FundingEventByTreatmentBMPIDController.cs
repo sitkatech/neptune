@@ -14,17 +14,12 @@ namespace Neptune.API.Controllers
 {
     [ApiController]
     [Route("treatment-bmps/{treatmentBMPID}/funding-events")]
-    public class FundingEventByTreatmentBMPIDController : SitkaController<FundingEventByTreatmentBMPIDController>
+    public class FundingEventByTreatmentBMPIDController(
+        NeptuneDbContext dbContext,
+        ILogger<FundingEventByTreatmentBMPIDController> logger,
+        IOptions<NeptuneConfiguration> neptuneConfiguration)
+        : SitkaController<FundingEventByTreatmentBMPIDController>(dbContext, logger, neptuneConfiguration)
     {
-        public FundingEventByTreatmentBMPIDController(
-            NeptuneDbContext dbContext,
-            ILogger<FundingEventByTreatmentBMPIDController> logger,
-            KeystoneService keystoneService,
-            IOptions<NeptuneConfiguration> neptuneConfiguration)
-            : base(dbContext, logger, keystoneService, neptuneConfiguration)
-        {
-        }
-
         [HttpGet]
         [AllowAnonymous]
         [EntityNotFoundAttribute(typeof(TreatmentBMP), "treatmentBMPID")]

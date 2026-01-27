@@ -20,9 +20,8 @@ namespace Neptune.API.Controllers;
 public class OnlandVisualTrashAssessmentAreaController(
     NeptuneDbContext dbContext,
     ILogger<OnlandVisualTrashAssessmentAreaController> logger,
-    KeystoneService keystoneService,
     IOptions<NeptuneConfiguration> neptuneConfiguration)
-    : SitkaController<OnlandVisualTrashAssessmentAreaController>(dbContext, logger, keystoneService, neptuneConfiguration)
+    : SitkaController<OnlandVisualTrashAssessmentAreaController>(dbContext, logger, neptuneConfiguration)
 {
     [HttpGet]
     [JurisdictionEditFeature]

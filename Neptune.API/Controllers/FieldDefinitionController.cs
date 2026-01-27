@@ -16,9 +16,8 @@ namespace Neptune.API.Controllers
     public class FieldDefinitionController(
         NeptuneDbContext dbContext,
         ILogger<FieldDefinitionController> logger,
-        KeystoneService keystoneService,
         IOptions<NeptuneConfiguration> neptuneConfiguration)
-        : SitkaController<FieldDefinitionController>(dbContext, logger, keystoneService, neptuneConfiguration)
+        : SitkaController<FieldDefinitionController>(dbContext, logger, neptuneConfiguration)
     {
         [HttpGet]
         [AllowAnonymous]

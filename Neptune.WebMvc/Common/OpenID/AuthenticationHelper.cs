@@ -40,7 +40,7 @@ public static class AuthenticationHelper
         var email = principal.FindFirst(ClaimTypes.Email)?.Value;
         if (person == null)
         {
-            logger.Information($"ocstormwatertools.org: In {nameof(ProcessLoginFromAuth0)} - Creating a new user for {firstName} {lastName} from Keystone login".ToString());
+            logger.Information($"ocstormwatertools.org: In {nameof(ProcessLoginFromAuth0)} - Creating a new user for {firstName} {lastName} from Auth0 login".ToString());
             // new user - provision with limited role
             person = new Person
             {
@@ -60,10 +60,10 @@ public static class AuthenticationHelper
         }
         else
         {
-            logger.Information($"ocstormwatertools.org: In {nameof(ProcessLoginFromAuth0)} - Signing in user {firstName} {lastName} from Keystone login".ToString());
+            logger.Information($"ocstormwatertools.org: In {nameof(ProcessLoginFromAuth0)} - Signing in user {firstName} {lastName} from Auth0 login".ToString());
             if (person.FirstName != firstName || person.LastName != lastName || person.Email != email)
             {
-                logger.Information($"ocstormwatertools.org: In {nameof(ProcessLoginFromAuth0)} - Creating a new user for {firstName} {lastName} from Keystone login".ToString());
+                logger.Information($"ocstormwatertools.org: In {nameof(ProcessLoginFromAuth0)} - Creating a new user for {firstName} {lastName} from Auth0 login".ToString());
                 person.FirstName = firstName;
                 person.LastName = lastName;
                 person.Email = email;

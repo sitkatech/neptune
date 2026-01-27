@@ -16,9 +16,8 @@ namespace Neptune.API.Controllers
     public class WaterQualityManagementPlanDocumentController(
         NeptuneDbContext dbContext,
         ILogger<WaterQualityManagementPlanDocumentController> logger,
-        KeystoneService keystoneService,
         IOptions<NeptuneConfiguration> neptuneConfiguration)
-        : SitkaController<WaterQualityManagementPlanDocumentController>(dbContext, logger, keystoneService,
+        : SitkaController<WaterQualityManagementPlanDocumentController>(dbContext, logger,
             neptuneConfiguration)
     {
         [HttpGet]

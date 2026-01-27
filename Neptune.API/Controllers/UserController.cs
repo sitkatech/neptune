@@ -20,10 +20,9 @@ namespace Neptune.API.Controllers
     public class UserController(
         NeptuneDbContext dbContext,
         ILogger<UserController> logger,
-        KeystoneService keystoneService,
         IOptions<NeptuneConfiguration> neptuneConfiguration,
         SitkaSmtpClientService sitkaSmtpClientService)
-        : SitkaController<UserController>(dbContext, logger, keystoneService, neptuneConfiguration)
+        : SitkaController<UserController>(dbContext, logger, neptuneConfiguration)
     {
         [HttpPost]
         [LoggedInUnclassifiedFeature]

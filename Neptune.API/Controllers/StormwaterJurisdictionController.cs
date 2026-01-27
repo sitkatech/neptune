@@ -18,9 +18,8 @@ namespace Neptune.API.Controllers
     public class StormwaterJurisdictionController(
         NeptuneDbContext dbContext,
         ILogger<StormwaterJurisdictionController> logger,
-        KeystoneService keystoneService,
         IOptions<NeptuneConfiguration> neptuneConfiguration)
-        : SitkaController<StormwaterJurisdictionController>(dbContext, logger, keystoneService, neptuneConfiguration)
+        : SitkaController<StormwaterJurisdictionController>(dbContext, logger, neptuneConfiguration)
     {
         [HttpGet]
         [JurisdictionEditFeature]
@@ -67,7 +66,7 @@ namespace Neptune.API.Controllers
         [JurisdictionEditFeature]
         public async Task<ActionResult<List<TreatmentBMPGridDto>>> ListTreatmentBMPs([FromRoute] int jurisdictionID)
         {
-            var entities = await dbContext.vTreatmentBMPDetaileds
+            var entities = await DbContext.vTreatmentBMPDetaileds
                 .Where(x => x.StormwaterJurisdictionID == jurisdictionID)
                 .ToListAsync();
             var treatmentBMPGridDtos = entities.Select(x => x.AsGridDto())
@@ -79,7 +78,7 @@ namespace Neptune.API.Controllers
         [JurisdictionEditFeature]
         public async Task<ActionResult<List<PersonDisplayDto>>> ListUsers([FromRoute] int jurisdictionID)
         {
-            var entities = await StormwaterJurisdictionPeople.ListByStormwaterJurisdictionIDAsPersonDto(dbContext, jurisdictionID);
+            var entities = await StormwaterJurisdictionPeople.ListByStormwaterJurisdictionIDAsPersonDto(DbContext, jurisdictionID);
             return Ok(entities);
         }
     }

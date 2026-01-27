@@ -15,8 +15,8 @@ namespace Neptune.API.Controllers;
 
 [ApiController]
 [Route("treatment-bmps/{treatmentBMPID}/treatment-bmp-documents")]
-public class TreatmentBMPDocumentByTreatmentBMPController(NeptuneDbContext dbContext, ILogger<TreatmentBMPDocumentByTreatmentBMPController> logger, KeystoneService keystoneService, IOptions<NeptuneConfiguration> neptuneConfiguration, AzureBlobStorageService blobStorageService, PersonDto callingPerson)
-    : SitkaController<TreatmentBMPDocumentByTreatmentBMPController>(dbContext, logger, keystoneService, neptuneConfiguration)
+public class TreatmentBMPDocumentByTreatmentBMPController(NeptuneDbContext dbContext, ILogger<TreatmentBMPDocumentByTreatmentBMPController> logger, IOptions<NeptuneConfiguration> neptuneConfiguration, AzureBlobStorageService blobStorageService, PersonDto callingPerson)
+    : SitkaController<TreatmentBMPDocumentByTreatmentBMPController>(dbContext, logger, neptuneConfiguration)
 {
     [HttpPost]
     [JurisdictionEditFeature]

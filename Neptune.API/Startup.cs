@@ -101,7 +101,6 @@ namespace Neptune.API
                     x.UseNetTopologySuite();
                 });
             });
-            services.AddTransient(s => new KeystoneService(s.GetService<IHttpContextAccessor>(), configuration.KeystoneOpenIDUrl));
 
             AddExternalHttpClientServices(services, configuration);
 

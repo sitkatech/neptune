@@ -18,7 +18,6 @@
     Source code is available upon request via <support@sitkatech.com>.
     </license>
     -----------------------------------------------------------------------*@
-@using Neptune.EFModels.Entities
 @using Neptune.WebMvc.Common.BootstrapWrappers
 @using Neptune.WebMvc.Common.DhtmlWrappers
 @using Neptune.WebMvc.Common.ModalDialog
@@ -30,7 +29,6 @@
 }
 @section RightOfPageTitle
 {
-    @ModalDialogFormHelper.ModalDialogFormLink($"Pull {FieldDefinitionType.Organization.GetFieldDefinitionLabel()} from Keystone", ViewDataTyped.PullOrganizationFromKeystoneUrl, $"Pull {FieldDefinitionType.Organization.GetFieldDefinitionLabel()} from Keystone", new List<string> { "btn", "btn-neptune", "btn-sm" }, ViewDataTyped.UserIsSitkaAdmin)
     @ModalDialogFormHelper.ModalDialogFormLink($"{BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus")} Add Organization", ViewDataTyped.NewOrganizationUrl, "Add Organization", new List<string> { "btn", "btn-neptune" }, ViewDataTyped.UserCanAddOrganization)
 }
 

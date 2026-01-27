@@ -51,11 +51,6 @@ namespace Neptune.EFModels.Entities
             return existingOrganization == null;
         }
 
-        public bool IsInKeystone()
-        {
-            return OrganizationGuid.HasValue;
-        }
-
         public bool IsUnknown()
         {
             return !String.IsNullOrWhiteSpace(OrganizationName) &&

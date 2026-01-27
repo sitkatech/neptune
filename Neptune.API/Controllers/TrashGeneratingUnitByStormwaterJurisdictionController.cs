@@ -20,9 +20,8 @@ namespace Neptune.API.Controllers;
 public class TrashGeneratingUnitByStormwaterJurisdictionController(
     NeptuneDbContext dbContext,
     ILogger<TrashGeneratingUnitController> logger,
-    KeystoneService keystoneService,
     IOptions<NeptuneConfiguration> neptuneConfiguration)
-    : SitkaController<TrashGeneratingUnitController>(dbContext, logger, keystoneService, neptuneConfiguration)
+    : SitkaController<TrashGeneratingUnitController>(dbContext, logger, neptuneConfiguration)
 {
 
     [HttpGet("area-based-results-calculations")]

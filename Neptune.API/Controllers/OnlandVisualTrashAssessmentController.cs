@@ -10,8 +10,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Neptune.EFModels.Workflows;
 using NetTopologySuite.Features;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.EntityFrameworkCore;
 using Neptune.Common.GeoSpatial;
 
 namespace Neptune.API.Controllers;
@@ -21,9 +19,8 @@ namespace Neptune.API.Controllers;
 public class OnlandVisualTrashAssessmentController(
     NeptuneDbContext dbContext,
     ILogger<OnlandVisualTrashAssessmentController> logger,
-    KeystoneService keystoneService,
     IOptions<NeptuneConfiguration> neptuneConfiguration)
-    : SitkaController<OnlandVisualTrashAssessmentController>(dbContext, logger, keystoneService, neptuneConfiguration)
+    : SitkaController<OnlandVisualTrashAssessmentController>(dbContext, logger, neptuneConfiguration)
 {
     [HttpGet]
     [JurisdictionEditFeature]
@@ -112,7 +109,7 @@ public class OnlandVisualTrashAssessmentController(
     [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
     public async Task<ActionResult> UpdateOnlandVisualTrashAssessmentWithParcels([FromRoute] int onlandVisualTrashAssessmentID, [FromBody] List<int> parcelIDs)
     {
-        await OnlandVisualTrashAssessments.UpdateGeometry(dbContext, onlandVisualTrashAssessmentID, parcelIDs);
+        await OnlandVisualTrashAssessments.UpdateGeometry(DbContext, onlandVisualTrashAssessmentID, parcelIDs);
         return Ok();
     }
 
@@ -130,7 +127,7 @@ public class OnlandVisualTrashAssessmentController(
     [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
     public async Task<ActionResult> UpdateReviewAndFinalize([FromRoute] int onlandVisualTrashAssessmentID, [FromBody] OnlandVisualTrashAssessmentReviewAndFinalizeDto dto)
     {
-        await OnlandVisualTrashAssessments.Update(dbContext, onlandVisualTrashAssessmentID, dto);
+        await OnlandVisualTrashAssessments.Update(DbContext, onlandVisualTrashAssessmentID, dto);
         return Ok();
     }
 
@@ -149,7 +146,7 @@ public class OnlandVisualTrashAssessmentController(
     [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
     public async Task<ActionResult> UpdateOnlandVisualTrashAssessmentWithRefinedArea([FromRoute] int onlandVisualTrashAssessmentID, OnlandVisualTrashAssessmentRefineAreaDto dto)
     {
-        await OnlandVisualTrashAssessments.UpdateGeometry(dbContext, onlandVisualTrashAssessmentID, dto.GeometryAsGeoJson);
+        await OnlandVisualTrashAssessments.UpdateGeometry(DbContext, onlandVisualTrashAssessmentID, dto.GeometryAsGeoJson);
         return Ok();
     }
 
@@ -158,8 +155,8 @@ public class OnlandVisualTrashAssessmentController(
     [EntityNotFound(typeof(OnlandVisualTrashAssessment), "onlandVisualTrashAssessmentID")]
     public async Task<ActionResult<OnlandVisualTrashAssessmentAddRemoveParcelsDto>> RefreshOnlandVisualTrashAssessmentParcels([FromRoute] int onlandVisualTrashAssessmentID)
     {
-        await OnlandVisualTrashAssessments.RefreshParcels(dbContext, onlandVisualTrashAssessmentID);
-        var onlandVisualTrashAssessmentAddRemoveParcelsDto = OnlandVisualTrashAssessments.GetByID(DbContext, onlandVisualTrashAssessmentID).AsAddRemoveParcelDto(dbContext);
+        await OnlandVisualTrashAssessments.RefreshParcels(DbContext, onlandVisualTrashAssessmentID);
+        var onlandVisualTrashAssessmentAddRemoveParcelsDto = OnlandVisualTrashAssessments.GetByID(DbContext, onlandVisualTrashAssessmentID).AsAddRemoveParcelDto(DbContext);
         return Ok(onlandVisualTrashAssessmentAddRemoveParcelsDto);
     }
 

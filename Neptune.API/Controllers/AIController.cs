@@ -5,7 +5,6 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Diagnostics.CodeAnalysis; // Added for Experimental attribute
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -26,11 +25,10 @@ namespace Neptune.API.Controllers;
 public class AIController(
     NeptuneDbContext dbContext,
     ILogger<AIController> logger,
-    KeystoneService keystoneService,
     IOptions<NeptuneConfiguration> appConfiguration,
     AzureBlobStorageService azureBlobStorageService,
     OpenAIClient openAIClient)
-    : SitkaController<AIController>(dbContext, logger, keystoneService, appConfiguration)
+    : SitkaController<AIController>(dbContext, logger, appConfiguration)
 {
 #pragma warning disable OPENAI001 // Suppress experimental OpenAI SDK warnings for evaluation usage
 

@@ -13,17 +13,12 @@ namespace Neptune.API.Controllers;
 
 [ApiController]
 [Route("load-generating-units")]
-public class LoadGeneratingUnitController : SitkaController<LoadGeneratingUnitController>
+public class LoadGeneratingUnitController(
+    NeptuneDbContext dbContext,
+    ILogger<LoadGeneratingUnitController> logger,
+    IOptions<NeptuneConfiguration> neptuneConfiguration)
+    : SitkaController<LoadGeneratingUnitController>(dbContext, logger, neptuneConfiguration)
 {
-    public LoadGeneratingUnitController(
-        NeptuneDbContext dbContext,
-        ILogger<LoadGeneratingUnitController> logger,
-        KeystoneService keystoneService,
-        IOptions<NeptuneConfiguration> neptuneConfiguration)
-        : base(dbContext, logger, keystoneService, neptuneConfiguration)
-    {
-    }
-
     [HttpGet]
     [AdminFeature]
     public async Task<ActionResult<List<LoadGeneratingUnitGridDto>>> List()

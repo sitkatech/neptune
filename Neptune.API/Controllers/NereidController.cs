@@ -1,5 +1,4 @@
 ﻿using Hangfire;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -23,10 +22,9 @@ namespace Neptune.API.Controllers
     public class NereidController(
         NeptuneDbContext dbContext,
         ILogger<NereidController> logger,
-        KeystoneService keystoneService,
         IOptions<NeptuneConfiguration> neptuneConfiguration,
         NereidService nereidService)
-        : SitkaController<NereidController>(dbContext, logger, keystoneService, neptuneConfiguration)
+        : SitkaController<NereidController>(dbContext, logger, neptuneConfiguration)
     {
         [HttpGet("delta-solve")]
         [SitkaAdminFeature]
@@ -246,7 +244,7 @@ namespace Neptune.API.Controllers
 
             var modelBasins = DbContext.ModelBasins.AsNoTracking().ToDictionary(x => x.ModelBasinID, x => x.ModelBasinKey);
             var precipitationZones = DbContext.PrecipitationZones.AsNoTracking().ToDictionary(x => x.PrecipitationZoneID, x => x.DesignStormwaterDepthInInches);
-            var treatmentBMPModelingAttributes = vTreatmentBMPModelingAttributes.ListAsDictionary(dbContext);
+            var treatmentBMPModelingAttributes = vTreatmentBMPModelingAttributes.ListAsDictionary(DbContext);
             var treatmentFacilities = modelingTreatmentBMPs
                 .Where(x => x.IsFullyParameterized(delineations[x.TreatmentBMPID], treatmentBMPModelingAttributes.TryGetValue(x.TreatmentBMPID, out var attribute) ? attribute : null))
                 .Select(x => x.ToTreatmentFacility(delineations, false, modelBasins, precipitationZones, treatmentBMPModelingAttributes.TryGetValue(x.TreatmentBMPID, out var attribute) ? attribute : null)).ToList();
@@ -281,7 +279,7 @@ namespace Neptune.API.Controllers
             var modelBasins = DbContext.ModelBasins.AsNoTracking().ToDictionary(x => x.ModelBasinID, x => x.ModelBasinKey);
             var precipitationZones = DbContext.PrecipitationZones.AsNoTracking().ToDictionary(x => x.PrecipitationZoneID, x => x.DesignStormwaterDepthInInches);
             var delineations = vTreatmentBMPUpstreams.ListWithDelineationAsDictionary(DbContext);
-            var treatmentBMPModelingAttribute = vTreatmentBMPModelingAttributes.GetByTreatmentBMPID(dbContext, treatmentBMPID);
+            var treatmentBMPModelingAttribute = vTreatmentBMPModelingAttributes.GetByTreatmentBMPID(DbContext, treatmentBMPID);
 
             var treatmentFacility = TreatmentBMPs.GetByID(DbContext, treatmentBMPID).ToTreatmentFacility(delineations, true, modelBasins, precipitationZones, treatmentBMPModelingAttribute);
 
@@ -316,7 +314,7 @@ namespace Neptune.API.Controllers
             var modelBasins = DbContext.ModelBasins.AsNoTracking().ToDictionary(x => x.ModelBasinID, x => x.ModelBasinKey);
             var precipitationZones = DbContext.PrecipitationZones.AsNoTracking().ToDictionary(x => x.PrecipitationZoneID, x => x.DesignStormwaterDepthInInches);
             var delineations = vTreatmentBMPUpstreams.ListWithDelineationAsDictionary(DbContext);
-            var treatmentBMPModelingAttributes = vTreatmentBMPModelingAttributes.ListAsDictionary(dbContext);
+            var treatmentBMPModelingAttributes = vTreatmentBMPModelingAttributes.ListAsDictionary(DbContext);
             var treatmentFacilities = DbContext.TreatmentBMPs
                 .Where(x => x.TreatmentBMPID == 9974).ToList().Select(x => x.ToTreatmentFacility(delineations, true, modelBasins, precipitationZones, treatmentBMPModelingAttributes.TryGetValue(x.TreatmentBMPID, out var attribute) ? attribute : null)).ToList();
 
@@ -385,7 +383,7 @@ namespace Neptune.API.Controllers
             var modelBasins = DbContext.ModelBasins.AsNoTracking().ToDictionary(x => x.ModelBasinID, x => x.ModelBasinKey);
             var precipitationZones = DbContext.PrecipitationZones.AsNoTracking().ToDictionary(x => x.PrecipitationZoneID, x => x.DesignStormwaterDepthInInches);
             var delineations = vTreatmentBMPUpstreams.ListWithDelineationAsDictionary(DbContext);
-            var treatmentBMPModelingAttributes = vTreatmentBMPModelingAttributes.ListAsDictionary(dbContext);
+            var treatmentBMPModelingAttributes = vTreatmentBMPModelingAttributes.ListAsDictionary(DbContext);
             var treatmentFacilities = TreatmentBMPs.ListModelingTreatmentBMPs(DbContext)
                 .ToList()
                 .Select(x => x.ToTreatmentFacility(delineations, false, modelBasins, precipitationZones, treatmentBMPModelingAttributes.TryGetValue(x.TreatmentBMPID, out var attribute) ? attribute : null)).ToList();
@@ -443,7 +441,7 @@ namespace Neptune.API.Controllers
             var precipitationZones = DbContext.PrecipitationZones.AsNoTracking().ToDictionary(x => x.PrecipitationZoneID, x => x.DesignStormwaterDepthInInches);
 
             var delineations = vTreatmentBMPUpstreams.ListWithDelineationAsDictionary(DbContext);
-            var treatmentBMPModelingAttributes = vTreatmentBMPModelingAttributes.ListAsDictionary(dbContext);
+            var treatmentBMPModelingAttributes = vTreatmentBMPModelingAttributes.ListAsDictionary(DbContext);
             var responseContent = await nereidService.SolveSubgraph(subgraph, allLoadingInputs, allModelingBMPs, allWQMPNodes, allModelingQuickBMPs, true, modelBasins, precipitationZones, delineations, treatmentBMPModelingAttributes, null, null);
 
             var stopwatchElapsedMilliseconds = stopwatch.ElapsedMilliseconds;

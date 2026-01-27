@@ -26,7 +26,6 @@ using Neptune.EFModels.Entities;
 using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Common.Models;
 using Neptune.WebMvc.Common.Mvc;
-using Neptune.WebMvc.Security;
 using Neptune.WebMvc.Services;
 
 namespace Neptune.WebMvc.Views.Organization
@@ -63,9 +62,6 @@ namespace Neptune.WebMvc.Views.Organization
         [SitkaFileExtensions("jpg|jpeg|gif|png")]
         public IFormFile? LogoFileResourceData { get; set; }
 
-        [DisplayName("Keystone Organization Guid")]
-        public Guid? OrganizationGuid { get; set; }
-
         /// <summary>
         /// Needed by the ModelBinder
         /// </summary>
@@ -83,7 +79,6 @@ namespace Neptune.WebMvc.Views.Organization
             OrganizationUrl = organization.OrganizationUrl;
 
             IsActive = organization.IsActive;
-            OrganizationGuid = organization.OrganizationGuid;
         }
 
         public async Task UpdateModel(EFModels.Entities.Organization organization, Person currentPerson, FileResourceService fileResourceService)
@@ -104,12 +99,6 @@ namespace Neptune.WebMvc.Views.Organization
 
                 organization.LogoFileResource = await fileResourceService.CreateNewFromIFormFile(LogoFileResourceData, currentPerson);
             }
-
-            var isSitkaAdmin = new SitkaAdminFeature().HasPermissionByPerson(currentPerson);
-            if (isSitkaAdmin)
-            {
-                organization.OrganizationGuid = OrganizationGuid;
-            }
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
@@ -121,31 +110,6 @@ namespace Neptune.WebMvc.Views.Organization
                 var errorMessage = $"Logo is too large - must be less than {FileUtility.FormatBytes(MaxLogoSizeInBytes)}. Your logo was {FileUtility.FormatBytes(LogoFileResourceData.Length)}.";
                 validationResults.Add(new SitkaValidationResult<EditViewModel, IFormFile>(errorMessage, x => x.LogoFileResourceData));
             }
-
-            //todo: organization keystone validation
-            //var isSitkaAdmin = new SitkaAdminFeature().HasPermissionByPerson(HttpRequestStorage.Person);
-            //if (OrganizationGuid.HasValue && isSitkaAdmin)
-            //{
-            //    var organization = _dbContext.Organizations.SingleOrDefault(x => x.OrganizationGuid == OrganizationGuid);
-            //    if (organization != null && organization.OrganizationID != OrganizationID)
-            //    {
-            //        validationResults.Add(new SitkaValidationResult<EditViewModel, Guid?>("This Guid is already associated with an Organization", x => x.OrganizationGuid));
-            //    }
-            //    else
-            //    {
-            //        try
-            //        {
-            //            var keystoneClient = new KeystoneDataClient();
-            //            var keystoneOrganization = keystoneClient.GetOrganization(OrganizationGuid.Value);
-            //        }
-            //        catch (Exception)
-            //        {
-            //            validationResults.Add(new SitkaValidationResult<EditViewModel, Guid?>("Organization Guid not found in Keystone", x => x.OrganizationGuid));
-            //        }
-
-            //    }
-            //}
-
             return validationResults;
         }
 

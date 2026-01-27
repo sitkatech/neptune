@@ -28,10 +28,9 @@ namespace Neptune.API.Controllers
     public class ProjectController(
         NeptuneDbContext dbContext,
         ILogger<ProjectController> logger,
-        KeystoneService keystoneService,
         IOptions<NeptuneConfiguration> neptuneConfiguration,
         AzureBlobStorageService azureBlobStorageService)
-        : SitkaController<ProjectController>(dbContext, logger, keystoneService, neptuneConfiguration)
+        : SitkaController<ProjectController>(dbContext, logger, neptuneConfiguration)
     {
         [HttpGet]
         [JurisdictionEditFeature]
@@ -93,7 +92,7 @@ namespace Neptune.API.Controllers
         public ActionResult<ProjectWorkflowProgress.ProjectWorkflowProgressDto> GetProjectProgress([FromRoute] int projectID)
         {
             var project = Projects.GetByIDWithTrackingForWorkflow(DbContext, projectID);
-            var treatmentBMPModelingAttributes = vTreatmentBMPModelingAttributes.ListAsDictionary(dbContext);
+            var treatmentBMPModelingAttributes = vTreatmentBMPModelingAttributes.ListAsDictionary(DbContext);
             var projectWorkflowProgressDto = ProjectWorkflowProgress.GetProgress(project, treatmentBMPModelingAttributes);
             return projectWorkflowProgressDto;
         }
@@ -310,7 +309,7 @@ namespace Neptune.API.Controllers
         private async Task MergeCustomAttributes(int projectID, List<TreatmentBMPUpsertDto> treatmentBMPUpsertDtos)
         {
             //Purge all Custom Attribute values that pertain to modeling attributes for this project
-            await dbContext.CustomAttributeValues.Include(x => x.CustomAttribute).ThenInclude(x => x.TreatmentBMP)
+            await DbContext.CustomAttributeValues.Include(x => x.CustomAttribute).ThenInclude(x => x.TreatmentBMP)
                 .Include(x => x.CustomAttribute)
                 .ThenInclude(x => x.CustomAttributeType)
                 .Where(x => x.CustomAttribute.TreatmentBMP.ProjectID == projectID &&
@@ -318,12 +317,12 @@ namespace Neptune.API.Controllers
                             (int)CustomAttributeTypePurposeEnum.Modeling).ExecuteDeleteAsync();
 
 
-            var existingProjectTreatmentBMPModelingAttributes = dbContext.CustomAttributes
+            var existingProjectTreatmentBMPModelingAttributes = DbContext.CustomAttributes
                 .Include(x => x.TreatmentBMP)
                 .Where(x => x.TreatmentBMP.ProjectID == projectID).ToList();
 
             //Get all Custom Attribute Types so we can validate values against their data types
-            var allCustomAttributeTypes = CustomAttributeTypes.List(dbContext);
+            var allCustomAttributeTypes = CustomAttributeTypes.List(DbContext);
             var customAttributeUpsertDtos = treatmentBMPUpsertDtos.SelectMany(x => x.ModelingAttributes).Where(x => x.CustomAttributeValues != null && x.CustomAttributeValues.Count > 0).ToList();
             var customAttributeValuesToUpdate = new List<CustomAttributeValue>();
             foreach (var customAttributeUpsertDto in customAttributeUpsertDtos)
@@ -339,7 +338,7 @@ namespace Neptune.API.Controllers
                         TreatmentBMPTypeID = customAttributeUpsertDto.TreatmentBMPTypeID.Value,
                         CustomAttributeTypeID = customAttributeUpsertDto.CustomAttributeTypeID
                     };
-                    dbContext.CustomAttributes.Add(customAttribute);
+                    DbContext.CustomAttributes.Add(customAttribute);
                 }
 
                 foreach (var value in customAttributeUpsertDto.CustomAttributeValues)
@@ -358,13 +357,13 @@ namespace Neptune.API.Controllers
             var bmpIds = customAttributeUpsertDtos.Select(y => y.TreatmentBMPID).ToHashSet();
             var typeIds = customAttributeUpsertDtos.Select(y => y.TreatmentBMPTypeCustomAttributeTypeID).ToHashSet();
 
-            await dbContext.CustomAttributes
+            await DbContext.CustomAttributes
                 .Where(x => x.TreatmentBMP.ProjectID == projectID &&
                             (!bmpIds.Contains(x.TreatmentBMPID) ||
                              !typeIds.Contains(x.TreatmentBMPTypeCustomAttributeTypeID)))
                 .ExecuteDeleteAsync();
             
-            dbContext.AddRange(customAttributeValuesToUpdate);
+            DbContext.AddRange(customAttributeValuesToUpdate);
             await DbContext.SaveChangesAsync();
         }
 

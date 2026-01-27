@@ -16,9 +16,8 @@ namespace Neptune.API.Controllers
     public class FundingSourceController(
         NeptuneDbContext dbContext,
         ILogger<FundingSourceController> logger,
-        KeystoneService keystoneService,
         IOptions<NeptuneConfiguration> neptuneConfiguration)
-        : SitkaController<FundingSourceController>(dbContext, logger, keystoneService, neptuneConfiguration)
+        : SitkaController<FundingSourceController>(dbContext, logger, neptuneConfiguration)
     {
         [HttpGet]
         [AdminFeature]
