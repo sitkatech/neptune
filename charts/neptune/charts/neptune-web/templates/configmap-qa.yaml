@@ -12,8 +12,4 @@ data:
   createAccountRedirectUrl: "https://{{ .Values.global.domains.web }}/create-user-callback"
   geoserverMapServiceUrl: "https://{{ .Values.global.domains.geoserver }}/geoserver/OCStormwater"
   ocStormwaterToolsBaseUrl: "https://{{ .Values.global.domains.webmvc }}"
-  auth0_domain: "ocstormwatertools.us.auth0.com"
-  auth0_clientId: "ifBEaIsDKHXBQoIyDVl1CB21avZh1xEx"
-  auth0_redirectUri: "https://qa-web.ocstormwatertools.org"
-  auth0_audience: "OCSTApi"
 {{ end }}
