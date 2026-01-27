@@ -150,7 +150,7 @@ public static class People
             Email = userCreateDto.Email,
             RoleID = (int)RoleEnum.Unassigned,  // don't allow non-admin user to set their role to something other than Unassigned
         };
-        return CreateNewPerson(dbContext, userUpsertDto, userCreateDto.LoginName);
+        return CreateNewPerson(dbContext, userUpsertDto);
     }
 
     public static List<ErrorMessage> ValidateCreateUnassignedPerson(NeptuneDbContext dbContext, PersonCreateDto userCreateDto)
@@ -166,7 +166,7 @@ public static class People
         return result;
     }
 
-    public static PersonDto CreateNewPerson(NeptuneDbContext dbContext, PersonUpsertDto personToCreate, string loginName)
+    public static PersonDto CreateNewPerson(NeptuneDbContext dbContext, PersonUpsertDto personToCreate)
     {
         if (!personToCreate.RoleID.HasValue)
         {
@@ -182,7 +182,6 @@ public static class People
 
         var person = new Person
         {
-            LoginName = loginName,
             Email = personToCreate.Email,
             FirstName = personToCreate.FirstName,
             LastName = personToCreate.LastName,
@@ -200,7 +199,7 @@ public static class People
         return GetByIDAsDto(dbContext, person.PersonID);
     }
 
-    public static async Task<PersonDto> CreateAsync(NeptuneDbContext dbContext, PersonUpsertDto dto, string loginName)
+    public static async Task<PersonDto> CreateAsync(NeptuneDbContext dbContext, PersonUpsertDto dto)
     {
         if (!dto.RoleID.HasValue)
         {
@@ -214,7 +213,6 @@ public static class People
         }
         var person = new Person
         {
-            LoginName = loginName,
             Email = dto.Email,
             FirstName = dto.FirstName,
             LastName = dto.LastName,

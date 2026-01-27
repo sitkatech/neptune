@@ -15,7 +15,6 @@ export class PersonCreateDto {
     LastName: string;
     OrganizationName?: string | null;
     Email: string;
-    LoginName: string;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
@@ -26,7 +25,6 @@ export interface PersonCreateDtoForm {
     LastName: FormControl<string>;
     OrganizationName?: FormControl<string>;
     Email: FormControl<string>;
-    LoginName: FormControl<string>;
 }
 
 export class PersonCreateDtoFormControls { 
@@ -65,18 +63,6 @@ export class PersonCreateDtoFormControls {
         }
     );
     public static Email = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: true,
-            validators: 
-            [
-                Validators.required,
-                Validators.minLength(1),
-            ],
-        }
-    );
-    public static LoginName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {

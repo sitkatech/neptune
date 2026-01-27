@@ -32,7 +32,6 @@ public static class PersonExtensionMethods
             IsActive = person.IsActive,
             OrganizationID = person.OrganizationID,
             ReceiveSupportEmails = person.ReceiveSupportEmails,
-            LoginName = person.LoginName,
             ReceiveRSBRevisionRequestEmails = person.ReceiveRSBRevisionRequestEmails,
             WebServiceAccessToken = person.WebServiceAccessToken,
             IsOCTAGrantReviewer = person.IsOCTAGrantReviewer
@@ -56,7 +55,6 @@ public static class PersonExtensionMethods
             IsActive = person.IsActive,
             OrganizationID = person.OrganizationID,
             ReceiveSupportEmails = person.ReceiveSupportEmails,
-            LoginName = person.LoginName,
             ReceiveRSBRevisionRequestEmails = person.ReceiveRSBRevisionRequestEmails,
             WebServiceAccessToken = person.WebServiceAccessToken,
             IsOCTAGrantReviewer = person.IsOCTAGrantReviewer,

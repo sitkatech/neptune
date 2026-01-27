@@ -11,7 +11,6 @@ CREATE TABLE [dbo].[Person](
 	[IsActive] [bit] NOT NULL,
 	[OrganizationID] [int] NOT NULL CONSTRAINT [FK_Person_Organization_OrganizationID] FOREIGN KEY REFERENCES [dbo].[Organization] ([OrganizationID]),
 	[ReceiveSupportEmails] [bit] NOT NULL,
-	[LoginName] [varchar](128),
 	[ReceiveRSBRevisionRequestEmails] [bit] NOT NULL,
 	[WebServiceAccessToken] [uniqueidentifier] NOT NULL,
 	[IsOCTAGrantReviewer] [bit] NOT NULL, 

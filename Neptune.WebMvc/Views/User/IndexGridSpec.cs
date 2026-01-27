@@ -49,7 +49,6 @@ namespace Neptune.WebMvc.Views.User
             Add($"{FieldDefinitionType.Organization.GetFieldDefinitionLabel()}", x =>
                 UrlTemplate.MakeHrefString(organizationDetailUrlTemplate.ParameterReplace(x.OrganizationID), x.Organization.GetOrganizationShortNameIfAvailable()), 200);
             Add("Phone", x => x.Phone.ToPhoneNumberString(), 100);
-            Add("Username", x => x.LoginName.ToString(), 200);
             Add("Last Activity", x => x.LastActivityDate, 120);
             Add("Role", x => UrlTemplate.MakeHrefString(roleDetailUrlTemplate.ParameterReplace(x.RoleID), x.Role.RoleDisplayName), 100, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add("Active?", x => x.IsActive.ToYesNo(), 75, DhtmlxGridColumnFilterType.SelectFilterStrict);

@@ -24,7 +24,6 @@ export class PersonDto {
     IsActive?: boolean;
     OrganizationID?: number;
     ReceiveSupportEmails?: boolean;
-    LoginName?: string | null;
     ReceiveRSBRevisionRequestEmails?: boolean;
     WebServiceAccessToken?: string;
     IsOCTAGrantReviewer?: boolean;
@@ -48,7 +47,6 @@ export interface PersonDtoForm {
     IsActive?: FormControl<boolean>;
     OrganizationID?: FormControl<number>;
     ReceiveSupportEmails?: FormControl<boolean>;
-    LoginName?: FormControl<string>;
     ReceiveRSBRevisionRequestEmails?: FormControl<boolean>;
     WebServiceAccessToken?: FormControl<string>;
     IsOCTAGrantReviewer?: FormControl<boolean>;
@@ -177,16 +175,6 @@ export class PersonDtoFormControls {
         }
     );
     public static ReceiveSupportEmails = (value: FormControlState<boolean> | boolean = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<boolean>(
-        value,
-        formControlOptions ?? 
-        {
-            nonNullable: false,
-            validators: 
-            [
-            ],
-        }
-    );
-    public static LoginName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {

@@ -45,10 +45,6 @@ public partial class Person
 
     public bool ReceiveSupportEmails { get; set; }
 
-    [StringLength(128)]
-    [Unicode(false)]
-    public string? LoginName { get; set; }
-
     public bool ReceiveRSBRevisionRequestEmails { get; set; }
 
     public Guid WebServiceAccessToken { get; set; }

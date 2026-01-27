@@ -15,7 +15,6 @@ public class PersonDto
     public bool IsActive { get; set; }
     public int OrganizationID { get; set; }
     public bool ReceiveSupportEmails { get; set; }
-    public string LoginName { get; set; }
     public bool ReceiveRSBRevisionRequestEmails { get; set; }
     public Guid WebServiceAccessToken { get; set; }
     public bool IsOCTAGrantReviewer { get; set; }

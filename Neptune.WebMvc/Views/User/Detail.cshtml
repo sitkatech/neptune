@@ -71,10 +71,6 @@
                     <div class="col-xs-8">@ViewDataTyped.Person.Phone.ToPhoneNumberString()</div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-4 fieldLabel text-right">@FieldDefinitionType.Username.GetFieldDefinitionLabel()</div>
-                    <div class="col-xs-8">@ViewDataTyped.Person.LoginName</div>
-                </div>
-                <div class="row">
                     <div class="col-xs-4 fieldLabel text-right">@FieldDefinitionType.Organization.GetFieldDefinitionLabel()</div>
                     <div class="col-xs-8">
                         <a href="@ViewDataTyped.OrganizationDetailUrlTemplate.ParameterReplace(ViewDataTyped.Person.OrganizationID)">@ViewDataTyped.Person.Organization.GetDisplayName()</a>

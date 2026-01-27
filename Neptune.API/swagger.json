@@ -10531,8 +10531,7 @@
         "required": [
           "Email",
           "FirstName",
-          "LastName",
-          "LoginName"
+          "LastName"
         ],
         "type": "object",
         "properties": {
@@ -10549,10 +10548,6 @@
             "nullable": true
           },
           "Email": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "LoginName": {
             "minLength": 1,
             "type": "string"
           }
@@ -10645,10 +10640,6 @@
           "ReceiveSupportEmails": {
             "type": "boolean"
           },
-          "LoginName": {
-            "type": "string",
-            "nullable": true
-          },
           "ReceiveRSBRevisionRequestEmails": {
             "type": "boolean"
           },
@@ -10719,10 +10710,6 @@
           },
           "ReceiveSupportEmails": {
             "type": "boolean"
-          },
-          "LoginName": {
-            "type": "string",
-            "nullable": true
           },
           "ReceiveRSBRevisionRequestEmails": {
             "type": "boolean"
