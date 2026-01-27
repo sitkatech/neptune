@@ -46,6 +46,9 @@ namespace Neptune.WebMvc.Views.User
         [DisplayName("OCTA Grant Reviewer")]
         public bool IsOCTAGrantReviewer { get; set; }
 
+        [DisplayName("Organization")]
+        public int? OrganizationID { get; set; }
+
         /// <summary>
         /// Needed by the ModelBinder
         /// </summary>
@@ -60,6 +63,7 @@ namespace Neptune.WebMvc.Views.User
             ShouldReceiveSystemCommunications = person.ReceiveSupportEmails;
             ShouldReceiveRSBRevisionRequests = person.ReceiveRSBRevisionRequestEmails;
             IsOCTAGrantReviewer = person.IsOCTAGrantReviewer;
+            OrganizationID = person.OrganizationID;
         }
 
         public void UpdateModel(Person person, Person currentPerson, NeptuneDbContext dbContext)
@@ -68,6 +72,7 @@ namespace Neptune.WebMvc.Views.User
             person.ReceiveSupportEmails = ShouldReceiveSystemCommunications;
             person.ReceiveRSBRevisionRequestEmails = ShouldReceiveRSBRevisionRequests;
             person.IsOCTAGrantReviewer = IsOCTAGrantReviewer;
+            person.OrganizationID = OrganizationID ?? Organizations.OrganizationIDUnassigned;
 
             var assignedRole = EFModels.Entities.Role.AllLookupDictionary[RoleID.GetValueOrDefault()];
             if (assignedRole == EFModels.Entities.Role.Admin || assignedRole == EFModels.Entities.Role.SitkaAdmin)

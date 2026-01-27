@@ -70,12 +70,6 @@
                     <div class="col-xs-4 fieldLabel text-right">Phone</div>
                     <div class="col-xs-8">@ViewDataTyped.Person.Phone.ToPhoneNumberString()</div>
                 </div>
-                <div class="row">
-                    <div class="col-xs-4 fieldLabel text-right">@FieldDefinitionType.Organization.GetFieldDefinitionLabel()</div>
-                    <div class="col-xs-8">
-                        <a href="@ViewDataTyped.OrganizationDetailUrlTemplate.ParameterReplace(ViewDataTyped.Person.OrganizationID)">@ViewDataTyped.Person.Organization.GetDisplayName()</a>
-                    </div>
-                </div>
                 @if (ViewDataTyped.UserCanManageThisPersonPermissions)
                 {
                     <div class="row">
@@ -94,15 +88,21 @@
     <div class="col-md-6">
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
-                Role
+                Organization / Role
                 @if (ViewDataTyped.UserCanManageThisPersonPermissions)
                 {
                     <span class="pull-right">
-                        @ViewDataTyped.EditRolesLink
+                        @ViewDataTyped.EditOrganizationAndRolesLink
                     </span>
                 }
             </div>
             <div class="panel-body">
+                <div class="row">
+                    <div class="col-xs-6 fieldLabel text-right">@FieldDefinitionType.Organization.GetFieldDefinitionLabel()</div>
+                    <div class="col-xs-6">
+                        <a href="@ViewDataTyped.OrganizationDetailUrlTemplate.ParameterReplace(ViewDataTyped.Person.OrganizationID)">@ViewDataTyped.Person.Organization.GetDisplayName()</a>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-xs-6 fieldLabel text-right">Role</div>
                     <div class="col-xs-6">

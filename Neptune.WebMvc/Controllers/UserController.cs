@@ -110,7 +110,8 @@ namespace Neptune.WebMvc.Controllers
             }
 
             var rolesAsSelectListItems = roles.ToSelectListWithEmptyFirstRow(x => x.RoleID.ToString(CultureInfo.InvariantCulture), x => x.RoleDisplayName);
-            var viewData = new EditRolesViewData(rolesAsSelectListItems, CurrentPerson.IsAdministrator());
+            var organizationsAsSelectListItems = Organizations.ListActive(_dbContext).ToSelectListWithEmptyFirstRow(x => x.OrganizationID.ToString(CultureInfo.InvariantCulture), x => x.GetDisplayName());
+            var viewData = new EditRolesViewData(rolesAsSelectListItems,  organizationsAsSelectListItems, CurrentPerson.IsAdministrator());
             return RazorPartialView<EditRoles, EditRolesViewData, EditRolesViewModel>(viewData, viewModel);
         }
 

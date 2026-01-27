@@ -45,7 +45,7 @@ namespace Neptune.WebMvc.Views.User
         public string UserNotificationGridName { get; }
         public string UserNotificationGridDataUrl { get; }
         public string ActivateInactivateUrl { get; }
-        public IHtmlContent EditRolesLink { get; }
+        public IHtmlContent EditOrganizationAndRolesLink { get; }
         public IHtmlContent EditJurisdictionsLink { get; }
         public UrlTemplate<int> OrganizationDetailUrlTemplate { get; }
         public UrlTemplate<int> JurisdictionDetailUrlTemplate { get; }
@@ -81,7 +81,7 @@ namespace Neptune.WebMvc.Views.User
             }
 
             IsViewingSelf = currentPerson != null && currentPerson.PersonID == personToView.PersonID;
-            EditRolesLink = UserCanManageThisPersonPermissions
+            EditOrganizationAndRolesLink = UserCanManageThisPersonPermissions
                 ? ModalDialogFormHelper.MakeEditIconLink(SitkaRoute<UserController>.BuildUrlFromExpression(LinkGenerator, x => x.EditRoles(personToView)),
                     $"Edit Roles for User - {personToView.GetFullNameFirstLast()}",
                     true)
