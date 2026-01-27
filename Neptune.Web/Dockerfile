@@ -28,7 +28,7 @@ WORKDIR /src/Neptune.Web/
 
 RUN npm cache clean --force
 RUN npm uninstall   -g angular-cli
-RUN npm install     -g @angular/cli@21.0.1
+RUN npm install     -g @angular/cli@21.1.1
 RUN npm install
 
 ARG env
