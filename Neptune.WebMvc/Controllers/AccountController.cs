@@ -64,17 +64,19 @@ namespace Neptune.WebMvc.Controllers
         }
 
         [Authorize]
-        public async Task Logout()
+        public async Task<IActionResult> Logout()
         {
-            var authenticationProperties = new LogoutAuthenticationPropertiesBuilder()
-                // Indicate here where Auth0 should redirect the user after a logout.
-                // Note that the resulting absolute Uri must be added to the
-                // **Allowed Logout URLs** settings for the app.
-                .WithRedirectUri(Url.Action("Index", "Home"))
+            // 1) Clear the local app session
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            // 2) Send the user to Auth0 to clear the Auth0 session (SSO cookie)
+            var returnTo = Url.Action("Index", "Home", values: null, protocol: Request.Scheme);
+
+            var properties = new LogoutAuthenticationPropertiesBuilder()
+                .WithRedirectUri(returnTo) // MUST be absolute and whitelisted in Auth0 Allowed Logout URLs
                 .Build();
 
-            await HttpContext.SignOutAsync(Auth0Constants.AuthenticationScheme, authenticationProperties);
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return SignOut(properties, Auth0Constants.AuthenticationScheme);
         }
     }
 }
