@@ -4533,7 +4533,8 @@
             }
           }
         },
-        "x-anonymous": true
+        "x-anonymous": true,
+        "x-optional-auth": true
       }
     },
     "/jurisdictions/bounding-box": {
@@ -4564,7 +4565,8 @@
             }
           }
         },
-        "x-anonymous": true
+        "x-anonymous": true,
+        "x-optional-auth": true
       }
     },
     "/jurisdictions/{jurisdictionID}": {
@@ -5106,7 +5108,8 @@
             }
           }
         },
-        "x-anonymous": true
+        "x-anonymous": true,
+        "x-optional-auth": true
       }
     },
     "/treatment-bmps/verified/feature-collection": {
@@ -5146,7 +5149,8 @@
             }
           }
         },
-        "x-anonymous": true
+        "x-anonymous": true,
+        "x-optional-auth": true
       }
     },
     "/treatment-bmps/jurisdictions/{jurisdictionID}/verified/feature-collection": {
@@ -5197,7 +5201,8 @@
             }
           }
         },
-        "x-anonymous": true
+        "x-anonymous": true,
+        "x-optional-auth": true
       }
     },
     "/treatment-bmps/planned-projects": {
@@ -5494,7 +5499,8 @@
             }
           }
         },
-        "x-anonymous": true
+        "x-anonymous": true,
+        "x-optional-auth": true
       }
     },
     "/treatment-bmps/{treatmentBMPID}/type": {
@@ -5953,7 +5959,8 @@
             }
           }
         },
-        "x-anonymous": true
+        "x-anonymous": true,
+        "x-optional-auth": true
       }
     },
     "/treatment-bmps/{treatmentBMPID}/delineation-errors": {

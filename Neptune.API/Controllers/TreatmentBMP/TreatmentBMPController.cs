@@ -39,6 +39,7 @@ public class TreatmentBMPController(NeptuneDbContext dbContext, ILogger<Treatmen
 
     [HttpGet]
     [AllowAnonymous]
+    [OptionalAuth]
     public async Task<ActionResult<List<TreatmentBMPGridDto>>> List()
     {
         var stormwaterJurisdictionIDsPersonCanView = await StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonIDForBMPsAsync(DbContext, CallingUser.PersonID);
@@ -53,6 +54,7 @@ public class TreatmentBMPController(NeptuneDbContext dbContext, ILogger<Treatmen
 
     [HttpGet("verified/feature-collection")]
     [AllowAnonymous]
+    [OptionalAuth]
     public async Task<ActionResult<FeatureCollection>> ListInventoryVerifiedTreatmentBMPsAsFeatureCollection()
     {
         var featureCollection = await TreatmentBMPs.ListInventoryIsVerifiedByPersonAsFeatureCollectionAsync(DbContext, CallingUser);
@@ -61,6 +63,7 @@ public class TreatmentBMPController(NeptuneDbContext dbContext, ILogger<Treatmen
 
     [HttpGet("jurisdictions/{jurisdictionID}/verified/feature-collection")]
     [AllowAnonymous]
+    [OptionalAuth]
     public async Task<ActionResult<FeatureCollection>> ListInventoryVerifiedTreatmentBMPsByJurisdictionIDAsFeatureCollection([FromRoute] int jurisdictionID)
     {
         var featureCollection = await TreatmentBMPs.ListInventoryIsVerifiedByPersonAndJurisdictionIDAsFeatureCollectionAsync(DbContext, CallingUser, jurisdictionID);
@@ -121,6 +124,7 @@ public class TreatmentBMPController(NeptuneDbContext dbContext, ILogger<Treatmen
 
     [HttpPut("{treatmentBMPID}/basic-info")]
     [AllowAnonymous]
+    [OptionalAuth]
     [EntityNotFound(typeof(TreatmentBMP), "treatmentBMPID")]
     public async Task<ActionResult<TreatmentBMPDto>> UpdateBasicInfo([FromRoute] int treatmentBMPID, [FromBody] TreatmentBMPBasicInfoUpdateDto updateDto)
     {
@@ -273,6 +277,7 @@ public class TreatmentBMPController(NeptuneDbContext dbContext, ILogger<Treatmen
 
     [HttpGet("modeling-attributes")]
     [AllowAnonymous]
+    [OptionalAuth]
     public async Task<ActionResult<List<TreatmentBMPModelingAttributesDto>>> ListWithModelingAttributes()
     {
         var stormwaterJurisdictionIDsPersonCanView = await StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonIDForBMPsAsync(DbContext, CallingUser.PersonID);

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Neptune.API.Services;
+using Neptune.API.Services.Attributes;
 using Neptune.API.Services.Authorization;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
@@ -31,6 +32,7 @@ namespace Neptune.API.Controllers
 
         [HttpGet("user-viewable")]
         [AllowAnonymous]
+        [OptionalAuth]
         public async Task<ActionResult<List<StormwaterJurisdictionDisplayDto>>> ListViewable()
         {
             var stormwaterJurisdictionIDs = await StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonIDForBMPsAsync(DbContext, CallingUser.PersonID);
@@ -40,6 +42,7 @@ namespace Neptune.API.Controllers
 
         [HttpGet("bounding-box")]
         [AllowAnonymous]
+        [OptionalAuth]
         public async Task<ActionResult<BoundingBoxDto>> GetBoundingBox()
         {
             var boundingBoxDto = await StormwaterJurisdictions.GetBoundingBoxDtoByPersonAsync(DbContext, CallingUser);

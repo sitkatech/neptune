@@ -7,11 +7,8 @@ type RegexMap = Partial<Record<AllowedHttpMethod, ReadonlyArray<RegExp>>>;
 
 function stripBase(apiBaseUrl: string, uri: string): string | null {
   const base = apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl;
-
-  // Only match our API base
   if (!uri.startsWith(base)) return null;
 
-  // Remove the base. Ensure leading "/" for comparison with OpenAPI paths.
   const rest = uri.substring(base.length);
   if (rest === '') return '/';
   return rest.startsWith('/') ? rest : '/' + rest;
@@ -19,12 +16,19 @@ function stripBase(apiBaseUrl: string, uri: string): string | null {
 
 const ANON_EXACT: ExactMap = {
   'DELETE': new Set([]),
-  'GET': new Set(["/","/custom-attribute-types","/field-definitions","/jurisdictions/bounding-box","/jurisdictions/user-viewable","/land-use-blocks","/trash-generating-units/last-update-date","/treatment-bmp-type-custom-attribute-types","/treatment-bmp-types","/treatment-bmps","/treatment-bmps/modeling-attributes","/treatment-bmps/verified/feature-collection"]),
+  'GET': new Set(["/","/custom-attribute-types","/field-definitions","/land-use-blocks","/trash-generating-units/last-update-date","/treatment-bmp-type-custom-attribute-types","/treatment-bmp-types"]),
   'POST': new Set([]),
   'PUT': new Set([]),
 };
 
-const SECURED_EXACT: ExactMap = {
+const OPT_EXACT: ExactMap = {
+  'DELETE': new Set([]),
+  'GET': new Set(["/jurisdictions/bounding-box","/jurisdictions/user-viewable","/treatment-bmps","/treatment-bmps/modeling-attributes","/treatment-bmps/verified/feature-collection"]),
+  'POST': new Set([]),
+  'PUT': new Set([]),
+};
+
+const SEC_EXACT: ExactMap = {
   'DELETE': new Set([]),
   'GET': new Set(["/ai/vector-stores","/delineations","/funding-sources","/hru-characteristics","/jurisdictions","/load-generating-units","/nereid/config","/nereid/delta-solve","/nereid/delta-solve-test","/nereid/health","/nereid/land-surface-loading","/nereid/land-surface-loading-baseline","/nereid/land-surface-table","/nereid/no-treatment-facility-validate","/nereid/solution-sequence","/nereid/solution-test-case","/nereid/subgraph","/nereid/total-network-graph","/nereid/treatment-facilities","/nereid/treatment-facility-validate","/nereid/treatment-sites","/nereid/validate","/onland-visual-trash-assessment-areas","/onland-visual-trash-assessments","/organization-types","/organizations","/projects","/projects/OCTAM2Tier2GrantProgram","/projects/OCTAM2Tier2GrantProgram/download","/projects/OCTAM2Tier2GrantProgram/treatmentBMPs/download","/projects/delineations","/projects/download","/projects/treatmentBMPs/download","/regional-subbasins","/trash-generating-units","/treatment-bmps/octa-m2-tier2-grant-program","/treatment-bmps/planned-projects","/users","/water-quality-management-plan-documents","/water-quality-management-plans","/water-quality-management-plans/display-dtos","/water-quality-management-plans/with-final-document"]),
   'POST': new Set(["/ai/clean-up","/funding-sources","/graph-trace-as-feature-collection-from-point","/onland-visual-trash-assessments","/organizations","/projects","/treatment-bmps","/user-claims","/users","/water-quality-management-plan-documents","/water-quality-management-plans"]),
@@ -61,6 +65,20 @@ const ANON_REGEX: RegexMap = {
     new RegExp("^/treatment-bmps/[^/]+/treatment-bmp-documents/[^/]+$"),
     new RegExp("^/treatment-bmps/[^/]+/treatment-bmp-images$"),
     new RegExp("^/treatment-bmps/[^/]+/treatment-bmp-images/[^/]+$"),
+  ],
+  'POST': [
+
+  ],
+  'PUT': [
+
+  ],
+};
+
+const OPT_REGEX: RegexMap = {
+  'DELETE': [
+
+  ],
+  'GET': [
     new RegExp("^/treatment-bmps/jurisdictions/[^/]+/verified/feature-collection$"),
   ],
   'POST': [
@@ -71,7 +89,7 @@ const ANON_REGEX: RegexMap = {
   ],
 };
 
-const SECURED_REGEX: RegexMap = {
+const SEC_REGEX: RegexMap = {
   'DELETE': [
     new RegExp("^/funding-sources/[^/]+$"),
     new RegExp("^/onland-visual-trash-assessments/[^/]+$"),
@@ -182,46 +200,54 @@ const SECURED_REGEX: RegexMap = {
   ],
 };
 
-function matchesAnon(method: AllowedHttpMethod, p: string): boolean {
-  const exact = ANON_EXACT[method];
-  if (exact?.has(p)) return true;
-
-  const regexes = ANON_REGEX[method] ?? [];
-  return regexes.some(rx => rx.test(p));
+function matches(exact: ExactMap, regex: RegexMap, method: AllowedHttpMethod, p: string): boolean {
+  const e = exact[method];
+  if (e?.has(p)) return true;
+  const rs = regex[method] ?? [];
+  return rs.some(rx => rx.test(p));
 }
 
-function matchesSecured(method: AllowedHttpMethod, p: string): boolean {
-  const exact = SECURED_EXACT[method];
-  if (exact?.has(p)) return true;
-
-  const regexes = SECURED_REGEX[method] ?? [];
-  return regexes.some(rx => rx.test(p));
+function isAnon(method: AllowedHttpMethod, p: string) {
+  return matches(ANON_EXACT, ANON_REGEX, method, p);
+}
+function isOptional(method: AllowedHttpMethod, p: string) {
+  return matches(OPT_EXACT, OPT_REGEX, method, p);
+}
+function isSecured(method: AllowedHttpMethod, p: string) {
+  return matches(SEC_EXACT, SEC_REGEX, method, p);
 }
 
 /**
- * Auth0 httpInterceptor.allowedList generator.
- *
- * Rule:
- * - If request matches an anonymous route for that method => DO NOT attach token.
- * - Else if it matches a secured route for that method => attach token.
- * - Else => do nothing.
- *
- * This prevents overlap issues like:
- *   secured template:  /jurisdictions/{id}  (regex ^/jurisdictions/[^/]+$)
- *   anonymous literal: /jurisdictions/user-viewable
- * by always checking anonymous first.
+ * Builds Auth0 interceptor rules:
+ * - Optional auth: attach token if available (allowAnonymous: true)
+ * - Secured: attach token (required)
+ * - Anonymous: never attach token
  */
 export function buildAuth0AllowedList(apiBaseUrl: string) {
   const methods: AllowedHttpMethod[] = ['GET','POST','PUT','PATCH','DELETE','OPTIONS','HEAD'];
 
-  return methods.map(httpMethod => ({
+  const optional = methods.map(httpMethod => ({
+    httpMethod,
+    allowAnonymous: true,
+    uriMatcher: (uri: string) => {
+      const p = stripBase(apiBaseUrl, uri);
+      if (p === null) return false;
+      return isOptional(httpMethod, p);
+    }
+  }));
+
+  const required = methods.map(httpMethod => ({
     httpMethod,
     uriMatcher: (uri: string) => {
       const p = stripBase(apiBaseUrl, uri);
       if (p === null) return false;
 
-      if (matchesAnon(httpMethod, p)) return false;
-      return matchesSecured(httpMethod, p);
+      // Optional wins (handled above), anon blocks, secured allows
+      if (isOptional(httpMethod, p)) return false;
+      if (isAnon(httpMethod, p)) return false;
+      return isSecured(httpMethod, p);
     }
   }));
+
+  return [...optional, ...required];
 }

@@ -158,6 +158,7 @@ namespace Neptune.API
             {
                 options.DocumentFilter<UseMethodNameAsOperationIdFilter>();
                 options.OperationFilter<AnonymousOperationFilter>();
+                options.OperationFilter<OptionalAuthOperationFilter>();
             });
             #endregion
 
