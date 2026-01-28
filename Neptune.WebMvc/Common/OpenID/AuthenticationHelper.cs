@@ -68,10 +68,10 @@ public static class AuthenticationHelper
         else
         {
             logger.Information($"ocstormwatertools.org: In {nameof(ProcessLoginFromAuth0)} - Signing in user {firstName} {lastName} from Auth0 login".ToString());
-            if (person.FirstName != firstName || person.LastName != lastName || person.Email != email)
+            if (person.FirstName != firstName || person.LastName != lastName || person.Email != email || person.GlobalID != globalID)
             {
-                logger.Information($"ocstormwatertools.org: In {nameof(ProcessLoginFromAuth0)} - Creating a new user for {firstName} {lastName} from Auth0 login".ToString());
                 person.FirstName = firstName;
+                person.GlobalID = globalID;
                 person.LastName = lastName;
                 person.Email = email;
                 // person.Phone = primaryPhone?.ToPhoneNumberString();
