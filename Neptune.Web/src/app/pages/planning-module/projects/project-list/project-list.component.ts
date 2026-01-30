@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { AgGridModule } from "ag-grid-angular";
 import { ColDef, GridApi, ValueGetterParams } from "ag-grid-community";
 import { UtilityFunctionsService } from "src/app/services/utility-functions.service";
@@ -17,15 +17,19 @@ import { ProjectDto } from "src/app/shared/generated/model/project-dto";
 import { ConfirmService } from "src/app/shared/services/confirm/confirm.service";
 import { PageHeaderComponent } from "src/app/shared/components/page-header/page-header.component";
 import { DropdownToggleDirective } from "src/app/shared/directives/dropdown-toggle.directive";
+import { CommonModule } from "@angular/common";
+import { Observable, Subject, catchError, finalize, of, shareReplay, startWith, switchMap, take } from "rxjs";
 
 @Component({
     selector: "project-list",
     templateUrl: "./project-list.component.html",
     styleUrls: ["./project-list.component.scss"],
-    imports: [DropdownToggleDirective, AgGridModule, NeptuneGridComponent, PageHeaderComponent, RouterLink],
+    imports: [CommonModule, DropdownToggleDirective, AgGridModule, NeptuneGridComponent, PageHeaderComponent, RouterLink],
 })
 export class ProjectListComponent implements OnInit {
     private currentUser: PersonDto;
+    private refreshProjectsSubject = new Subject<void>();
+    public projects$!: Observable<ProjectDto[]>;
 
     private gridApi: GridApi;
     public richTextTypeID = NeptunePageTypeEnum.HippocampProjectsList;
@@ -33,12 +37,10 @@ export class ProjectListComponent implements OnInit {
     public defaultColDef: ColDef;
     public projectNameToDelete: string;
     public isLoadingDelete = false;
-    public projects: ProjectDto[];
 
     constructor(
         private router: Router,
         private authenticationService: AuthenticationService,
-        private cdr: ChangeDetectorRef,
         private alertService: AlertService,
         private projectService: ProjectService,
         private utilityFunctionsService: UtilityFunctionsService,
@@ -46,18 +48,27 @@ export class ProjectListComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.authenticationService.getCurrentUser().subscribe((currentUser) => {
-            this.currentUser = currentUser;
+        this.authenticationService
+            .getCurrentUser()
+            .pipe(take(1))
+            .subscribe((currentUser) => {
+                this.currentUser = currentUser;
 
-            this.createProjectGridColDefs();
-            this.updateGridData();
+                this.createProjectGridColDefs();
 
-            this.cdr.detectChanges();
-        });
-    }
-
-    ngOnDestroy() {
-        this.cdr.detach();
+                this.projects$ = this.refreshProjectsSubject.pipe(
+                    startWith(void 0),
+                    switchMap(() =>
+                        this.projectService.listProject().pipe(
+                            catchError(() => {
+                                this.alertService.pushAlert(new Alert(`There was an error while loading projects. Please refresh the page and try again.`, AlertContext.Danger));
+                                return of([] as ProjectDto[]);
+                            })
+                        )
+                    ),
+                    shareReplay(1)
+                );
+            });
     }
 
     public onGridReady(params) {
@@ -104,12 +115,6 @@ export class ProjectListComponent implements OnInit {
         };
     }
 
-    private updateGridData() {
-        this.projectService.listProject().subscribe((projects) => {
-            this.projects = projects;
-        });
-    }
-
     private deleteModal(params: ValueGetterParams<ProjectDto, any>) {
         const confirmOptions = {
             title: "Delete Project",
@@ -120,10 +125,18 @@ export class ProjectListComponent implements OnInit {
         };
         this.confirmService.confirm(confirmOptions).then((confirmed) => {
             if (confirmed) {
-                this.projectService.deleteProject(params.data.ProjectID).subscribe(() => {
-                    this.alertService.pushAlert(new Alert("Successfully deleted project", AlertContext.Success));
-                    params.api.applyTransaction({ remove: [params.data] });
-                });
+                this.isLoadingDelete = true;
+                this.projectService
+                    .deleteProject(params.data.ProjectID)
+                    .pipe(
+                        finalize(() => {
+                            this.isLoadingDelete = false;
+                        })
+                    )
+                    .subscribe(() => {
+                        this.alertService.pushAlert(new Alert("Successfully deleted project", AlertContext.Success));
+                        this.refreshProjectsSubject.next();
+                    });
             }
         });
     }
