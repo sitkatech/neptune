@@ -1,10 +1,10 @@
-import { ApplicationRef, ChangeDetectorRef, Component, ComponentRef, OnInit, ViewChild } from "@angular/core";
+import { ApplicationRef, Component, ComponentRef, OnInit, ViewChild } from "@angular/core";
 import * as L from "leaflet";
 import { Router } from "@angular/router";
 import { Input } from "@angular/core";
 import { ProjectService } from "src/app/shared/generated/api/project.service";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
-import { forkJoin, Observable } from "rxjs";
+import { BehaviorSubject, distinctUntilChanged, forkJoin, map, Observable } from "rxjs";
 import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.service";
 import { FieldDefinitionTypeEnum } from "src/app/shared/generated/enum/field-definition-type-enum";
 import { TreatmentBMPModelingTypeEnum } from "src/app/shared/generated/enum/treatment-b-m-p-modeling-type-enum";
@@ -85,7 +85,9 @@ export class TreatmentBmpsComponent implements OnInit {
 
     public mapID: string = "treatmentBMPMap";
     public visibleTreatmentBMPStyle: string = "treatmentBMP_purple_outline_only";
-    public projectTreatmentBMPs: Array<TreatmentBMPUpsertDto>;
+    public projectTreatmentBMPs: Array<TreatmentBMPUpsertDto> = [];
+    private readonly projectTreatmentBMPsSubject = new BehaviorSubject<Array<TreatmentBMPUpsertDto>>([]);
+    public readonly projectTreatmentBMPs$ = this.projectTreatmentBMPsSubject.asObservable();
     public project: ProjectUpsertDto = new ProjectUpsertDto();
     private originalTreatmentBMPs: string;
     private originalDoesNotIncludeTreatmentBMPs: boolean;
@@ -104,6 +106,12 @@ export class TreatmentBmpsComponent implements OnInit {
     public selectedListItemDetails: { [key: string]: any } = {};
     public selectedObjectMarker: L.Layer;
     public selectedTreatmentBMP: TreatmentBMPUpsertDto;
+    private readonly selectedTreatmentBMPSubject = new BehaviorSubject<TreatmentBMPUpsertDto | null>(null);
+    public readonly selectedTreatmentBMP$ = this.selectedTreatmentBMPSubject.asObservable();
+    public readonly selectedTreatmentBMPID$ = this.selectedTreatmentBMP$.pipe(
+        map((bmp) => bmp?.TreatmentBMPID ?? null),
+        distinctUntilChanged()
+    );
     public selectedTreatmentBMPType: number;
     public treatmentBMPsLayer: L.GeoJSON<any>;
     public newTreatmentBMPType: TreatmentBMPTypeWithModelingAttributesDto;
@@ -112,14 +120,14 @@ export class TreatmentBmpsComponent implements OnInit {
     public fieldDefinitionTypeEnum = FieldDefinitionTypeEnum;
     public treatmentBMPTypes: Array<TreatmentBMPTypeWithModelingAttributesDto>;
     public newTreatmentBMPIndex = -1;
-    public isLoadingSubmit = false;
+    private readonly isLoadingSubmitSubject = new BehaviorSubject<boolean>(false);
+    public readonly isLoadingSubmit$ = this.isLoadingSubmitSubject.asObservable();
     public isEditingLocation = false;
 
     public delineations: DelineationUpsertDto[];
     public treatmentBMPTypeCustomAttributeTypes: TreatmentBMPTypeCustomAttributeTypeDto[];
 
     constructor(
-        private cdr: ChangeDetectorRef,
         private projectService: ProjectService,
         private treatmentBMPService: TreatmentBMPService,
         private treatmentBMPTypeService: TreatmentBMPTypeService,
@@ -145,10 +153,6 @@ export class TreatmentBmpsComponent implements OnInit {
         this.compileService.configure(this.appRef);
     }
 
-    ngOnDestroy() {
-        this.cdr.detach();
-    }
-
     public handleMapReady(event: NeptuneMapInitEvent): void {
         this.map = event.map;
         this.layerControl = event.layerControl;
@@ -171,8 +175,9 @@ export class TreatmentBmpsComponent implements OnInit {
                             ),
                     }).subscribe(({ projectTreatmentBMPs, delineations, treatmentBMPTypes, treatmentBMPTypeCustomAttributeTypes: treatmentBMPTypeCustomAttributeTypes }) => {
                         this.originalDoesNotIncludeTreatmentBMPs = project.DoesNotIncludeTreatmentBMPs;
-                        this.projectTreatmentBMPs = projectTreatmentBMPs;
-                        this.originalTreatmentBMPs = JSON.stringify(projectTreatmentBMPs);
+                        this.projectTreatmentBMPs = projectTreatmentBMPs ?? [];
+                        this.projectTreatmentBMPsSubject.next(this.projectTreatmentBMPs);
+                        this.originalTreatmentBMPs = JSON.stringify(this.projectTreatmentBMPs);
                         this.delineations = delineations;
                         this.treatmentBMPTypes = treatmentBMPTypes;
                         this.treatmentBMPTypeCustomAttributeTypes = treatmentBMPTypeCustomAttributeTypes;
@@ -277,6 +282,7 @@ export class TreatmentBmpsComponent implements OnInit {
 
             this.selectedTreatmentBMP.Latitude = event.latlng.lat;
             this.selectedTreatmentBMP.Longitude = event.latlng.lng;
+            this.selectedTreatmentBMPSubject.next(this.selectedTreatmentBMP);
             this.updateTreatmentBMPsLayer();
         });
     }
@@ -294,6 +300,11 @@ export class TreatmentBmpsComponent implements OnInit {
         let selectedNumber = null;
         let selectedAttributes = null;
         this.selectedTreatmentBMP = this.projectTreatmentBMPs.find((x) => x.TreatmentBMPID == treatmentBMPID);
+        this.selectedTreatmentBMPSubject.next(this.selectedTreatmentBMP ?? null);
+
+        if (!this.selectedTreatmentBMP) {
+            return;
+        }
         selectedAttributes = [
             `<strong>Type:</strong> ${this.selectedTreatmentBMP.TreatmentBMPTypeName}`,
             `<strong>Latitude:</strong> ${this.selectedTreatmentBMP.Latitude}`,
@@ -419,6 +430,7 @@ export class TreatmentBmpsComponent implements OnInit {
             if (confirmed) {
                 const index = this.projectTreatmentBMPs.indexOf(this.selectedTreatmentBMP);
                 this.projectTreatmentBMPs.splice(index, 1);
+                this.projectTreatmentBMPsSubject.next(this.projectTreatmentBMPs);
                 this.selectedTreatmentBMP = null;
                 this.clearSelectedItem();
                 if (this.projectTreatmentBMPs.length > 0) {
@@ -447,6 +459,8 @@ export class TreatmentBmpsComponent implements OnInit {
             }
             this.selectedObjectMarker = null;
         }
+
+        this.selectedTreatmentBMPSubject.next(null);
     }
 
     public addTreatmentBMP() {
@@ -455,6 +469,7 @@ export class TreatmentBmpsComponent implements OnInit {
         this.newTreatmentBMPIndex--;
 
         this.projectTreatmentBMPs.push(newTreatmentBMP);
+        this.projectTreatmentBMPsSubject.next(this.projectTreatmentBMPs);
         this.selectTreatmentBMP(newTreatmentBMP.TreatmentBMPID);
 
         this.isEditingLocation = true;
@@ -484,7 +499,7 @@ export class TreatmentBmpsComponent implements OnInit {
     }
 
     public save(continueToNextStep?: boolean) {
-        this.isLoadingSubmit = true;
+        this.isLoadingSubmitSubject.next(true);
         this.alertService.clearAlerts();
 
         this.project.DoesNotIncludeTreatmentBMPs = this.project.DoesNotIncludeTreatmentBMPs && (this.projectTreatmentBMPs == null || this.projectTreatmentBMPs.length == 0);
@@ -493,11 +508,12 @@ export class TreatmentBmpsComponent implements OnInit {
             () => {
                 this.projectService.mergeTreatmentBMPsProject(this.projectID, this.projectTreatmentBMPs).subscribe(
                     () => {
-                        this.isLoadingSubmit = false;
+                        this.isLoadingSubmitSubject.next(false);
                         this.projectWorkflowProgressService.updateProgress(this.projectID);
                         this.projectService.listTreatmentBMPsAsUpsertDtosByProjectIDProject(this.projectID).subscribe(
                             (treatmentBMPs) => {
                                 this.projectTreatmentBMPs = treatmentBMPs;
+                                this.projectTreatmentBMPsSubject.next(this.projectTreatmentBMPs);
                                 this.originalTreatmentBMPs = JSON.stringify(treatmentBMPs);
                                 this.originalDoesNotIncludeTreatmentBMPs = this.project.DoesNotIncludeTreatmentBMPs;
                                 if (this.projectTreatmentBMPs.length > 0) {
@@ -518,23 +534,20 @@ export class TreatmentBmpsComponent implements OnInit {
                                 window.scroll(0, 0);
                             },
                             (error) => {
-                                this.isLoadingSubmit = false;
+                                this.isLoadingSubmitSubject.next(false);
                                 window.scroll(0, 0);
-                                this.cdr.detectChanges();
                             }
                         );
                     },
                     (error) => {
-                        this.isLoadingSubmit = false;
+                        this.isLoadingSubmitSubject.next(false);
                         window.scroll(0, 0);
-                        this.cdr.detectChanges();
                     }
                 );
             },
             (error) => {
-                this.isLoadingSubmit = false;
+                this.isLoadingSubmitSubject.next(false);
                 window.scroll(0, 0);
-                this.cdr.detectChanges();
             }
         );
     }
