@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
+import { AfterViewInit, Component, DestroyRef, EventEmitter, Injector, Input, OnDestroy, OnInit, Output, afterNextRender, inject, runInInjectionContext } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { Control, LeafletEvent, Map, MapOptions, DomUtil, ControlPosition } from "leaflet";
 import "src/scripts/leaflet.groupedlayercontrol.js";
@@ -57,6 +57,11 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public cursorStyle: string = "grab";
 
+    private hasEmittedMapLoad: boolean = false;
+
+    private readonly destroyRef = inject(DestroyRef);
+    private readonly injector = inject(Injector);
+
     constructor(
         public nominatimService: NominatimService,
         public leafletHelperService: LeafletHelperService,
@@ -84,7 +89,7 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
         this.layerControl = new GroupedLayers(this.tileLayers, LeafletHelperService.GetDefaultOverlayTileLayers(), { collapsed: false }).addTo(this.map);
 
         this.map.on("load", (event: LeafletEvent) => {
-            this.onMapLoad.emit(new NeptuneMapInitEvent(this.map, this.layerControl));
+            this.scheduleEmitMapLoadOnceAfterNextRender();
         });
 
         this.map.on("overlayadd", (event: L.LayersControlEvent) => {
@@ -108,6 +113,12 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
             ],
             null
         );
+
+        // Leaflet's 'load' can be delayed or not fire depending on tile timing.
+        // Also, in zoneless mode, Output emissions can fail to schedule a render pass.
+        // Emit once after the next Angular render so parents gating map children
+        // reliably instantiate overlay components without requiring user interaction.
+        this.scheduleEmitMapLoadOnceAfterNextRender();
 
         if (this.showLegend) {
             const legendControl = Control.extend({
@@ -234,6 +245,40 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     ngOnInit(): void {}
+
+    private scheduleEmitMapLoadOnceAfterNextRender(): void {
+        if (this.hasEmittedMapLoad) {
+            return;
+        }
+
+        // afterNextRender must run within an injection context.
+        // Use DestroyRef to avoid emitting after the component is destroyed.
+        let destroyed = false;
+        this.destroyRef.onDestroy(() => {
+            destroyed = true;
+        });
+
+        runInInjectionContext(this.injector, () => {
+            afterNextRender(() => {
+                if (!destroyed) {
+                    this.emitMapLoadOnce();
+                }
+            });
+        });
+    }
+
+    private emitMapLoadOnce(): void {
+        if (this.hasEmittedMapLoad) {
+            return;
+        }
+
+        if (!this.map || !this.layerControl) {
+            return;
+        }
+
+        this.hasEmittedMapLoad = true;
+        this.onMapLoad.emit(new NeptuneMapInitEvent(this.map, this.layerControl));
+    }
 }
 
 export class NeptuneMapInitEvent {
