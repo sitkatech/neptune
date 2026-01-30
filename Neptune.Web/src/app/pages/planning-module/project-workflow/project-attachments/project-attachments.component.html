@@ -1,140 +1,144 @@
 <page-header pageTitle="Project Attachments"> </page-header>
 <workflow-body>
-  <app-alert-display></app-alert-display>
-  <custom-rich-text [customRichTextTypeID]="customRichTextTypeID"></custom-rich-text>
+    <app-alert-display></app-alert-display>
+    <custom-rich-text [customRichTextTypeID]="customRichTextTypeID"></custom-rich-text>
 
-  @if (model) {
-    <div class="card">
-      <div class="card-header">Add Attachment</div>
-      <div class="card-body">
-        <form (ngSubmit)="onSubmit(addAttachmentForm)" #addAttachmentForm="ngForm">
-          <div class="grid-12 mt-4">
-            <div class="field g-col-6">
-              <label class="required field-label">File</label>
-              <div class="file-upload-wrapper pb-2">
-                <label for="file-upload" class="custom-file-upload">
-                  <input
-                    type="file"
-                    class="form-control"
-                    id="fileResource"
-                    #fileUpload
-                    (change)="fileEvent()"
-                    accept=".pdf, .zip, .doc, .docx, .xls, .xlsx, .jpg, .png" />
-                    {{ getFileName() }}
-                    <!-- <input type="file" class="form-control" name="file-upload" [id]="fileUploadElementID" (change)="onFileUploadChange($event)" accept=".tif, .tiff" required />
+    @let isLoadingSubmit = (isLoadingSubmit$ | async) ?? false;
+
+    @if (model$ | async) {
+        <div class="card">
+            <div class="card-header">Add Attachment</div>
+            <div class="card-body">
+                <form (ngSubmit)="onSubmit(addAttachmentForm)" #addAttachmentForm="ngForm">
+                    <div class="grid-12 mt-4">
+                        <div class="field g-col-6">
+                            <label class="required field-label">File</label>
+                            <div class="file-upload-wrapper pb-2">
+                                <label for="file-upload" class="custom-file-upload">
+                                    <input
+                                        type="file"
+                                        class="form-control"
+                                        id="fileResource"
+                                        #fileUpload
+                                        (change)="fileEvent()"
+                                        accept=".pdf, .zip, .doc, .docx, .xls, .xlsx, .jpg, .png" />
+                                    {{ getFileName() }}
+                                    <!-- <input type="file" class="form-control" name="file-upload" [id]="fileUploadElementID" (change)="onFileUploadChange($event)" accept=".tif, .tiff" required />
                     {{ fileUpload?.name ?? "No file chosen..." }}
                     -->
-                    <button class="btn btn-primary" type="button" (click)="openFileUpload()">
-                      Browse
-                      <i class="fas fa-folder-open"></i>
-                    </button>
-                  </label>
-                </div>
-                <em>Allowed extensions: pdf, zip, doc, docx, xls, xlsx, jpg, png. Max file size: 30 MB.</em>
-                <i class="fas fa-file-open"></i>
-              </div>
-              <div class="field mt-3">
-                <div class="field-label required">Display Name</div>
-                <div class="units-wrapper">
-                  <input
-                    type="text"
-                    class="form-control"
-                    name="display-name"
-                    [(ngModel)]="model.DisplayName"
-                    required
-                    [ngClass]="{ 'field-invalid': isFieldInvalid('DisplayName') }" />
-                  </div>
-                </div>
-                <div class="field mt-3">
-                  <div class="field-label">Description</div>
-                  <div class="units-wrapper">
-                    <textarea
-                      class="form-control"
-                      name="description"
-                      style="height: 100px"
-                      placeholder=""
-                      [(ngModel)]="model.DocumentDescription"
-                      [ngClass]="{ 'field-invalid': isFieldInvalid('DocumentDescription') }">
-                    </textarea>
-                  </div>
-                </div>
-              </div>
-              <div class="flex-between no-wrap mt-2">
-                <i></i>
-                <div>
-                  <button type="submit" class="btn btn-primary mr-2" [disabled]="isLoadingSubmit">
-                    @if (isLoadingSubmit) {
-                      <span class="fa fa-spinner loading-spinner"></span>
-                    }
-                    Save
-                  </button>
-                  <button type="reset" class="btn btn-secondary" [disabled]="isLoadingSubmit" (click)="resetAttachmentForm(addAttachmentForm)">
-                    @if (isLoadingSubmit) {
-                      <span class="fa fa-spinner loading-spinner"></span>
-                    }
-                    Clear
-                  </button>
-                </div>
-              </div>
-            </form>
-          </div>
+                                    <button class="btn btn-primary" type="button" (click)="openFileUpload()">
+                                        Browse
+                                        <i class="fas fa-folder-open"></i>
+                                    </button>
+                                </label>
+                            </div>
+                            <em>Allowed extensions: pdf, zip, doc, docx, xls, xlsx, jpg, png. Max file size: 30 MB.</em>
+                            <i class="fas fa-file-open"></i>
+                        </div>
+                        <div class="field mt-3">
+                            <div class="field-label required">Display Name</div>
+                            <div class="units-wrapper">
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    name="display-name"
+                                    [(ngModel)]="model.DisplayName"
+                                    required
+                                    [ngClass]="{ 'field-invalid': isFieldInvalid('DisplayName') }" />
+                            </div>
+                        </div>
+                        <div class="field mt-3">
+                            <div class="field-label">Description</div>
+                            <div class="units-wrapper">
+                                <textarea
+                                    class="form-control"
+                                    name="description"
+                                    style="height: 100px"
+                                    placeholder=""
+                                    [(ngModel)]="model.DocumentDescription"
+                                    [ngClass]="{ 'field-invalid': isFieldInvalid('DocumentDescription') }">
+                                </textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex-between no-wrap mt-2">
+                        <i></i>
+                        <div>
+                            <button type="submit" class="btn btn-primary mr-2" [disabled]="isLoadingSubmit">
+                                @if (isLoadingSubmit) {
+                                    <span class="fa fa-spinner loading-spinner"></span>
+                                }
+                                Save
+                            </button>
+                            <button type="reset" class="btn btn-secondary" [disabled]="isLoadingSubmit" (click)="resetAttachmentForm(addAttachmentForm)">
+                                @if (isLoadingSubmit) {
+                                    <span class="fa fa-spinner loading-spinner"></span>
+                                }
+                                Clear
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
-        @if (attachments && attachments.length > 0) {
-          <h3 class="mt-5">Attachments Added</h3>
-          <attachments-display
-            [attachments]="attachments"
-            [readOnly]="false"
-            (onDeleteTriggered)="launchDeleteModal($event)"
-          (onEditTriggered)="openEditAttachmentModal($event)"></attachments-display>
+        @if (attachments$ | async; as attachments) {
+            @if (attachments && attachments.length > 0) {
+                <h3 class="mt-5">Attachments Added</h3>
+                <attachments-display
+                    [attachments]="attachments"
+                    [readOnly]="false"
+                    (onDeleteTriggered)="launchDeleteModal($event)"
+                    (onEditTriggered)="openEditAttachmentModal($event)"></attachments-display>
+            }
         }
-      }
+    }
 
-      <ng-template #editAttachmentModal let-modal>
+    <ng-template #editAttachmentModal let-modal>
         <div class="modal-header">
-          <h2 class="section-title">Edit Attachment</h2>
-          <button type="button" class="close" (click)="closeEditAttachmentModal()"><i class="fa fa-times-circle"></i></button>
+            <h2 class="section-title">Edit Attachment</h2>
+            <button type="button" class="close" (click)="closeEditAttachmentModal()"><i class="fa fa-times-circle"></i></button>
         </div>
         <div class="modal-body">
-          <form (ngSubmit)="onEditSubmit(editAttachmentForm)" #editAttachmentForm="ngForm">
-            <div class="mt-4 field">
-              <div class="field-label required">Display Name</div>
-              <div class="units-wrapper">
-                <input
-                  type="text"
-                  class="form-control"
-                  name="display-name"
-                  [(ngModel)]="editModel.DisplayName"
-                  required
-                  [ngClass]="{ 'field-invalid': isFieldInvalid('DisplayName') }" />
+            <form (ngSubmit)="onEditSubmit(editAttachmentForm)" #editAttachmentForm="ngForm">
+                <div class="mt-4 field">
+                    <div class="field-label required">Display Name</div>
+                    <div class="units-wrapper">
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="display-name"
+                            [(ngModel)]="editModel.DisplayName"
+                            required
+                            [ngClass]="{ 'field-invalid': isFieldInvalid('DisplayName') }" />
+                    </div>
                 </div>
-              </div>
-              <div class="field mt-3">
-                <div class="field-label">Description</div>
-                <div class="units-wrapper">
-                  <textarea
-                    class="form-control"
-                    name="description"
-                    style="height: 100px"
-                    placeholder=""
-                    [(ngModel)]="editModel.DocumentDescription"
-                    [ngClass]="{ 'field-invalid': isFieldInvalid('DocumentDescription') }">
-                  </textarea>
+                <div class="field mt-3">
+                    <div class="field-label">Description</div>
+                    <div class="units-wrapper">
+                        <textarea
+                            class="form-control"
+                            name="description"
+                            style="height: 100px"
+                            placeholder=""
+                            [(ngModel)]="editModel.DocumentDescription"
+                            [ngClass]="{ 'field-invalid': isFieldInvalid('DocumentDescription') }">
+                        </textarea>
+                    </div>
                 </div>
-              </div>
-              <div class="modal-footer">
-                <button type="submit" class="btn btn-primary" [disabled]="isLoadingSubmit">
-                  @if (isLoadingSubmit) {
-                    <span class="fa fa-spinner loading-spinner"></span>
-                  }
-                  Save
-                </button>
-                <button type="button" class="btn btn-secondary" (click)="closeEditAttachmentModal()">Cancel</button>
-              </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" [disabled]="isLoadingSubmit">
+                        @if (isLoadingSubmit) {
+                            <span class="fa fa-spinner loading-spinner"></span>
+                        }
+                        Save
+                    </button>
+                    <button type="button" class="btn btn-secondary" (click)="closeEditAttachmentModal()">Cancel</button>
+                </div>
             </form>
-          </div>
-        </ng-template>
-      </workflow-body>
+        </div>
+    </ng-template>
+</workflow-body>
 
-      <div class="page-footer">
-        <button class="btn btn-primary ml-auto" (click)="continueToNextStep()">Continue</button>
-      </div>
+<div class="page-footer">
+    <button class="btn btn-primary ml-auto" (click)="continueToNextStep()">Continue</button>
+</div>

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ComponentRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { Component, ComponentRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AuthenticationService } from "src/app/services/authentication.service";
 import { ProjectDocumentUpsertDto } from "src/app/shared/models/project-document-upsert-dto";
@@ -11,7 +11,7 @@ import { PersonDto, ProjectDocumentDto, ProjectDocumentUpdateDto } from "src/app
 import { AttachmentsDisplayComponent } from "src/app/pages/planning-module/projects/attachments-display/attachments-display.component";
 import { FormsModule, NgForm } from "@angular/forms";
 import { CustomRichTextComponent } from "src/app/shared/components/custom-rich-text/custom-rich-text.component";
-import { NgClass } from "@angular/common";
+import { AsyncPipe, NgClass } from "@angular/common";
 import { PageHeaderComponent } from "src/app/shared/components/page-header/page-header.component";
 import { WorkflowBodyComponent } from "src/app/shared/components/workflow-body/workflow-body.component";
 import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
@@ -20,12 +20,13 @@ import { ConfirmService } from "src/app/shared/services/confirm/confirm.service"
 import { ModalComponent } from "src/app/shared/components/modal/modal.component";
 import { ConfirmOptions } from "src/app/shared/services/confirm/confirm-options";
 import { ProjectDocumentService } from "src/app/shared/generated/api/project-document.service";
+import { BehaviorSubject } from "rxjs";
 
 @Component({
     selector: "project-attachments",
     templateUrl: "./project-attachments.component.html",
     styleUrls: ["./project-attachments.component.scss"],
-    imports: [CustomRichTextComponent, FormsModule, NgClass, AttachmentsDisplayComponent, PageHeaderComponent, WorkflowBodyComponent, AlertDisplayComponent],
+    imports: [AsyncPipe, CustomRichTextComponent, FormsModule, NgClass, AttachmentsDisplayComponent, PageHeaderComponent, WorkflowBodyComponent, AlertDisplayComponent],
 })
 export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
     @ViewChild("fileUpload") fileUpload: any;
@@ -37,9 +38,14 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
 
     public projectID: number;
     public model: ProjectDocumentUpsertDto;
+    private readonly modelSubject = new BehaviorSubject<ProjectDocumentUpsertDto | null>(null);
+    public readonly model$ = this.modelSubject.asObservable();
     public attachments: Array<ProjectDocumentDto>;
+    private readonly attachmentsSubject = new BehaviorSubject<ProjectDocumentDto[]>([]);
+    public readonly attachments$ = this.attachmentsSubject.asObservable();
 
-    public isLoadingSubmit: boolean = false;
+    private readonly isLoadingSubmitSubject = new BehaviorSubject<boolean>(false);
+    public readonly isLoadingSubmit$ = this.isLoadingSubmitSubject.asObservable();
     public requiredFileIsUploaded: boolean = false;
 
     public displayErrors: any = {};
@@ -62,7 +68,6 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
         private authenticationService: AuthenticationService,
         private projectService: ProjectService,
         private projectDocumentService: ProjectDocumentService,
-        private cdr: ChangeDetectorRef,
         private alertService: AlertService,
         private modalService: ModalService,
         private confirmService: ConfirmService
@@ -81,15 +86,13 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
 
                 this.model = new ProjectDocumentUpsertDto();
                 this.model.ProjectID = this.projectID;
+                this.modelSubject.next(this.model);
             });
-            this.cdr.detectChanges();
         });
         this.refreshAttachments();
     }
 
-    ngOnDestroy() {
-        this.cdr.detach();
-    }
+    ngOnDestroy() {}
 
     fileEvent() {
         let file = this.getFile();
@@ -104,7 +107,7 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
             this.displayFileErrors = false;
         }
 
-        this.cdr.detectChanges();
+        this.modelSubject.next(this.model);
     }
 
     public getFile(): File {
@@ -163,7 +166,6 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
                     (error) => {
                         this.isLoadingDelete = false;
                         window.scroll(0, 0);
-                        this.cdr.detectChanges();
                     }
                 );
             }
@@ -187,7 +189,7 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
     refreshAttachments(): void {
         this.projectService.listAttachmentsByProjectIDProject(this.projectID).subscribe((attachments) => {
             this.attachments = attachments;
-            this.cdr.detectChanges();
+            this.attachmentsSubject.next(this.attachments ?? []);
         });
     }
 
@@ -200,17 +202,17 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
     }
 
     public onSubmit(addAttachmentForm: NgForm): void {
-        this.isLoadingSubmit = true;
+        this.isLoadingSubmitSubject.next(true);
         this.invalidFields = [];
         this.alertService.clearAlerts();
 
         if (!this.model.FileResource) {
             this.alertService.pushAlert(new Alert("No File found. Please upload a file.", AlertContext.Danger, true));
-            this.isLoadingSubmit = false;
+            this.isLoadingSubmitSubject.next(false);
         }
         if (!this.model.DisplayName) {
             this.alertService.pushAlert(new Alert("Please include a display name.", AlertContext.Danger, true));
-            this.isLoadingSubmit = false;
+            this.isLoadingSubmitSubject.next(false);
         }
 
         this.projectService.addAttachmentProject(this.projectID, this.model.ProjectID, this.model.FileResource, this.model.DisplayName, this.model.DocumentDescription).subscribe(
@@ -224,7 +226,7 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
     }
 
     public onEditSubmit(editAttachmentForm: NgForm): void {
-        this.isLoadingSubmit = true;
+        this.isLoadingSubmitSubject.next(true);
         this.isLoadingUpdate = true;
         this.invalidFields = [];
         this.alertService.clearAlerts();
@@ -237,17 +239,16 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
             },
             (error) => {
                 this.onSubmitFailure(error);
-                this.isLoadingSubmit = false;
+                this.isLoadingSubmitSubject.next(false);
             }
         );
     }
 
     private onSubmitSuccess(addAttachmentForm: NgForm, successMessage: string) {
         this.resetAttachmentForm(addAttachmentForm);
-        this.isLoadingSubmit = false;
+        this.isLoadingSubmitSubject.next(false);
         this.alertService.pushAlert(new Alert(successMessage, AlertContext.Success));
         window.scroll(0, 0);
-        this.cdr.detectChanges();
     }
 
     private onSubmitFailure(error) {
@@ -256,9 +257,9 @@ export class ProjectAttachmentsComponent implements OnInit, OnDestroy {
                 this.invalidFields.push(key);
             }
         }
-        this.isLoadingSubmit = false;
+        this.isLoadingSubmitSubject.next(false);
         window.scroll(0, 0);
-        this.cdr.detectChanges();
+        this.modelSubject.next(this.model);
     }
 
     continueToNextStep() {
