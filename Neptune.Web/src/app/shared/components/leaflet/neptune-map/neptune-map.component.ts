@@ -110,7 +110,7 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
             this.attachLayerLoadingEvents(e?.layer);
         });
         this.map.on("layerremove", (e: any) => {
-            this.markLayerLoading(e?.layer, false);
+            this.detachLayerLoadingEvents(e?.layer);
         });
 
         // Attach to whatever layers were added as part of initial map creation (base tile layer, etc).
@@ -309,7 +309,10 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
         }
 
         const onLoading = () => this.markLayerLoading(layer, true);
-        const onLoad = () => this.markLayerLoading(layer, false);
+
+        // We only want to show the Leaflet spinner for the initial load of a layer.
+        // Tile layers reload on zoom/pan; detaching after the first load avoids spinner flicker during navigation.
+        const onLoad = () => this.detachLayerLoadingEvents(layer);
 
         // Common Leaflet loading events:
         // - Tile layers: 'loading' then 'load' (or 'tileerror')
@@ -321,6 +324,32 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.trackedLayerListeners.set(layer, { onLoading, onLoad });
         this.trackedLayerLoadingState.set(layer, false);
+    }
+
+    private detachLayerLoadingEvents(layer: any): void {
+        if (!layer) {
+            return;
+        }
+
+        // If this layer was contributing to the spinner count, remove it.
+        this.markLayerLoading(layer, false);
+
+        const handlers = this.trackedLayerListeners.get(layer);
+        if (!handlers) {
+            return;
+        }
+
+        try {
+            if (typeof layer.off === "function") {
+                layer.off("loading", handlers.onLoading);
+                layer.off("load", handlers.onLoad);
+                layer.off("tileerror", handlers.onLoad);
+                layer.off("error", handlers.onLoad);
+            }
+        } catch (e) {}
+
+        this.trackedLayerListeners.delete(layer);
+        this.trackedLayerLoadingState.delete(layer);
     }
 
     private markLayerLoading(layer: any, isLoading: boolean): void {

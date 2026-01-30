@@ -48,14 +48,16 @@
                                 <div class="g-col-2 content-section">Jurisdiction</div>
                                 <div class="g-col-10">
                                     <div class="dropdown-container">
-                                        <ng-select
-                                            [ngModel]="currentStormwaterJurisdiction.StormwaterJurisdictionID"
-                                            (change)="onJurisdictionSelected($event)"
-                                            [items]="stormwaterJurisdictions"
-                                            bindLabel="StormwaterJurisdictionName"
-                                            bindValue="StormwaterJurisdictionID"
-                                            [clearable]="false">
-                                        </ng-select>
+                                        @if (selectedStormwaterJurisdictionId$ | async; as selectedJurisdictionId) {
+                                            <ng-select
+                                                [ngModel]="selectedJurisdictionId"
+                                                (change)="onJurisdictionSelected($event)"
+                                                [items]="stormwaterJurisdictions"
+                                                bindLabel="StormwaterJurisdictionName"
+                                                bindValue="StormwaterJurisdictionID"
+                                                [clearable]="false">
+                                            </ng-select>
+                                        }
                                     </div>
                                 </div>
                                 <div class="g-col-2 content-section">Viewing</div>
@@ -68,7 +70,7 @@
                         </div>
                         <div class="g-col-6">
                             @if (currentResultType == "Area-Based Results") {
-                                <div [loadingSpinner]="{ isLoading: isLoading, loadingHeight: 100 }" id="areaBasedCalculationControlTemplate">
+                                <div [loadingSpinner]="{ isLoading: (isLoading$ | async) ?? false, loadingHeight: 100 }" id="areaBasedCalculationControlTemplate">
                                     @if (areaBasedAcreCalculationsDto$ | async; as areaBasedAcreCalculationsDto) {
                                         <table class="table areaBasedCalculationControlTable">
                                             <tbody>
@@ -134,7 +136,7 @@
                                 </div>
                             }
                             @if (currentResultType == "Current Net Loading Rate With Controls" || currentResultType == "Net Change In Trash Loading Rate With Controls") {
-                                <div [loadingSpinner]="{ isLoading: isLoading, loadingHeight: 100 }" id="LoadBasedResultsControlTemplate">
+                                <div [loadingSpinner]="{ isLoading: (isLoading$ | async) ?? false, loadingHeight: 100 }" id="LoadBasedResultsControlTemplate">
                                     @if (loadResultsDto$ | async; as loadResultsDto) {
                                         <table class="table loadBasedCalculationControlTable">
                                             <tbody>
@@ -183,7 +185,7 @@
                                 </div>
                             }
                             @if (currentResultType == "OVTA-Based Results") {
-                                <div [loadingSpinner]="{ isLoading: isLoading, loadingHeight: 100 }" id="OVTABasedResultsControlTemplate">
+                                <div [loadingSpinner]="{ isLoading: (isLoading$ | async) ?? false, loadingHeight: 100 }" id="OVTABasedResultsControlTemplate">
                                     @if (ovtaResultsDto$ | async; as ovtaResultsDto) {
                                         <table class="table areaBasedCalculationControlTable">
                                             <thead>
@@ -406,65 +408,64 @@
                 <div>
                     @if (boundingBox$ | async; as boundingBox) {
                         <neptune-map (onMapLoad)="handleMapReady($event)" mapHeight="1000px" [showLegend]="true" [boundingBox]="boundingBox">
-                            @if (mapIsReady) {
-                                <land-use-block-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></land-use-block-layer>
-                            }
-                            @if (mapIsReady) {
-                                <delineations-layer
-                                    [displayOnLoad]="false"
-                                    [map]="map"
-                                    [layerControl]="layerControl"
-                                    [sortOrder]="20"
-                                    [isAnalyzedInModelingModule]="false"></delineations-layer>
-                            }
-                            @if (mapIsReady) {
-                                <wqmps-trash-capture-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="40"></wqmps-trash-capture-layer>
-                            }
-                            @if (mapIsReady) {
-                                <jurisdictions-layer [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="50"></jurisdictions-layer>
-                            }
-                            @if (mapIsReady) {
-                                <regional-subbasins-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="60"></regional-subbasins-layer>
-                            }
-                            @if (mapIsReady) {
-                                <permit-type-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="70"></permit-type-layer>
-                            }
-                            @if (mapIsReady && currentResultType == "Area-Based Results") {
-                                <trash-generating-unit-layer
-                                    [displayOnLoad]="true"
-                                    [map]="map"
-                                    [layerControl]="layerControl"
-                                    [sortOrder]="1"
-                                    [selectedJurisdictionID]="this.currentStormwaterJurisdiction.StormwaterJurisdictionID"></trash-generating-unit-layer>
-                            }
-                            @if (mapIsReady && currentResultType == "Current Net Loading Rate With Controls") {
-                                <trash-generating-unit-loads-layer
-                                    [displayOnLoad]="true"
-                                    [map]="map"
-                                    [layerControl]="layerControl"
-                                    [sortOrder]="1"
-                                    [style]="'current_load'"
-                                    [selectedJurisdictionID]="this.currentStormwaterJurisdiction.StormwaterJurisdictionID"></trash-generating-unit-loads-layer>
-                            }
-                            @if (mapIsReady && currentResultType == "Net Change In Trash Loading Rate With Controls") {
-                                <trash-generating-unit-loads-layer
-                                    [displayOnLoad]="true"
-                                    [map]="map"
-                                    [layerControl]="layerControl"
-                                    [sortOrder]="1"
-                                    [style]="'delta_load'"
-                                    [selectedJurisdictionID]="this.currentStormwaterJurisdiction.StormwaterJurisdictionID"></trash-generating-unit-loads-layer>
-                            }
-                            @if (mapIsReady && currentResultType == "OVTA-Based Results") {
-                                <ovta-areas-layer
-                                    [displayOnLoad]="true"
-                                    [map]="map"
-                                    [layerControl]="layerControl"
-                                    [sortOrder]="1"
-                                    [selectedJurisdictionID]="this.currentStormwaterJurisdiction.StormwaterJurisdictionID"></ovta-areas-layer>
-                            }
-                            @if (treatmentBMPs$ | async) {
-                                <span></span>
+                            @if (selectedStormwaterJurisdictionId$ | async; as selectedJurisdictionId) {
+                                @if (mapIsReady) {
+                                    <land-use-block-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="10"></land-use-block-layer>
+                                }
+                                @if (mapIsReady) {
+                                    <delineations-layer
+                                        [displayOnLoad]="false"
+                                        [map]="map"
+                                        [layerControl]="layerControl"
+                                        [sortOrder]="20"
+                                        [isAnalyzedInModelingModule]="false"></delineations-layer>
+                                }
+                                @if (mapIsReady) {
+                                    <wqmps-trash-capture-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="40"></wqmps-trash-capture-layer>
+                                }
+                                @if (mapIsReady) {
+                                    <jurisdictions-layer [displayOnLoad]="true" [map]="map" [layerControl]="layerControl" [sortOrder]="50"></jurisdictions-layer>
+                                }
+                                @if (mapIsReady) {
+                                    <regional-subbasins-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="60"></regional-subbasins-layer>
+                                }
+                                @if (mapIsReady) {
+                                    <permit-type-layer [displayOnLoad]="false" [map]="map" [layerControl]="layerControl" [sortOrder]="70"></permit-type-layer>
+                                }
+                                @if (mapIsReady && currentResultType == "Area-Based Results") {
+                                    <trash-generating-unit-layer
+                                        [displayOnLoad]="true"
+                                        [map]="map"
+                                        [layerControl]="layerControl"
+                                        [sortOrder]="1"
+                                        [selectedJurisdictionID]="selectedJurisdictionId"></trash-generating-unit-layer>
+                                }
+                                @if (mapIsReady && currentResultType == "Current Net Loading Rate With Controls") {
+                                    <trash-generating-unit-loads-layer
+                                        [displayOnLoad]="true"
+                                        [map]="map"
+                                        [layerControl]="layerControl"
+                                        [sortOrder]="1"
+                                        [style]="'current_load'"
+                                        [selectedJurisdictionID]="selectedJurisdictionId"></trash-generating-unit-loads-layer>
+                                }
+                                @if (mapIsReady && currentResultType == "Net Change In Trash Loading Rate With Controls") {
+                                    <trash-generating-unit-loads-layer
+                                        [displayOnLoad]="true"
+                                        [map]="map"
+                                        [layerControl]="layerControl"
+                                        [sortOrder]="1"
+                                        [style]="'delta_load'"
+                                        [selectedJurisdictionID]="selectedJurisdictionId"></trash-generating-unit-loads-layer>
+                                }
+                                @if (mapIsReady && currentResultType == "OVTA-Based Results") {
+                                    <ovta-areas-layer
+                                        [displayOnLoad]="true"
+                                        [map]="map"
+                                        [layerControl]="layerControl"
+                                        [sortOrder]="1"
+                                        [selectedJurisdictionID]="selectedJurisdictionId"></ovta-areas-layer>
+                                }
                             }
                         </neptune-map>
                     }
