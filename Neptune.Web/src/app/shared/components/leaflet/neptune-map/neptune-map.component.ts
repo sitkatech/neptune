@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, DestroyRef, EventEmitter, Injector, Input, OnDestroy, OnInit, Output, afterNextRender, inject, runInInjectionContext } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { Control, LeafletEvent, Map, MapOptions, DomUtil, ControlPosition } from "leaflet";
+import { Control, LeafletEvent, Map as LeafletMap, MapOptions, DomUtil, ControlPosition } from "leaflet";
 import "src/scripts/leaflet.groupedlayercontrol.js";
 import * as L from "leaflet";
 import { FullScreen } from "leaflet.fullscreen";
@@ -9,7 +9,7 @@ import { LeafletHelperService } from "src/app/shared/services/leaflet-helper.ser
 import { BoundingBoxDto } from "src/app/shared/generated/model/models";
 import { IconComponent } from "../../icon/icon.component";
 import { NominatimService } from "src/app/shared/services/nominatim.service";
-import { Observable, debounce, of, switchMap, tap, timer } from "rxjs";
+import { BehaviorSubject, Observable, combineLatest, debounce, distinctUntilChanged, map, of, shareReplay, switchMap, tap, timer } from "rxjs";
 import { NgSelectModule } from "@ng-select/ng-select";
 import { FormControl, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule } from "@angular/forms";
 import { LegendItem } from "src/app/shared/models/legend-item";
@@ -17,10 +17,12 @@ import { Feature, FeatureCollection } from "geojson";
 import { DomSanitizer } from "@angular/platform-browser";
 import { RegionalSubbasinTraceFromPointComponent } from "../features/regional-subbasin-trace-from-point/regional-subbasin-trace-from-point.component";
 import { GroupedLayers } from "src/scripts/leaflet.groupedlayercontrol";
+import { LoadingDirective } from "src/app/shared/directives/loading.directive";
+import { MapLayerLoadingService } from "src/app/shared/components/leaflet/map-layer-loading.service";
 
 @Component({
     selector: "neptune-map",
-    imports: [CommonModule, IconComponent, NgSelectModule, FormsModule, ReactiveFormsModule, RegionalSubbasinTraceFromPointComponent],
+    imports: [CommonModule, IconComponent, NgSelectModule, FormsModule, ReactiveFormsModule, RegionalSubbasinTraceFromPointComponent, LoadingDirective],
     templateUrl: "./neptune-map.component.html",
     styleUrls: ["./neptune-map.component.scss"],
     providers: [
@@ -29,12 +31,13 @@ import { GroupedLayers } from "src/scripts/leaflet.groupedlayercontrol";
             multi: true,
             useExisting: NeptuneMapComponent,
         },
+        MapLayerLoadingService,
     ],
 })
 export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
     public mapID: string = "map_" + Date.now().toString(36) + Math.random().toString(36).substring(13);
     public legendID: string = this.mapID + "Legend";
-    public map: Map;
+    public map: LeafletMap;
     public tileLayers: { [key: string]: any } = LeafletHelperService.GetDefaultTileLayers();
     public layerControl: GroupedLayers;
     @Input() boundingBox: BoundingBoxDto;
@@ -57,6 +60,28 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public cursorStyle: string = "grab";
 
+    private readonly leafletLoadingLayerCountSubject = new BehaviorSubject<number>(0);
+    public readonly isAnyLeafletLayerLoading$ = this.leafletLoadingLayerCountSubject.pipe(
+        map((count) => count > 0),
+        distinctUntilChanged(),
+        shareReplay({ bufferSize: 1, refCount: true })
+    );
+
+    public readonly isAnyLayerLoading$ = combineLatest([this.isAnyLeafletLayerLoading$, inject(MapLayerLoadingService).isLoading$]).pipe(
+        map(([isLeafletLoading, isApiLoading]) => isLeafletLoading || isApiLoading),
+        distinctUntilChanged(),
+        shareReplay({ bufferSize: 1, refCount: true })
+    );
+
+    private readonly trackedLayerLoadingState = new Map<any, boolean>();
+    private readonly trackedLayerListeners = new Map<
+        any,
+        {
+            onLoading: () => void;
+            onLoad: () => void;
+        }
+    >();
+
     private hasEmittedMapLoad: boolean = false;
 
     private readonly destroyRef = inject(DestroyRef);
@@ -78,6 +103,18 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
         } as MapOptions;
 
         this.map = L.map(this.mapID, mapOptions);
+
+        // Track loading state for any Leaflet layer that emits 'loading'/'load' events (TileLayer/WMS overlays, etc).
+        // This lets us show a spinner over the map whenever any visible layer is still fetching.
+        this.map.on("layeradd", (e: any) => {
+            this.attachLayerLoadingEvents(e?.layer);
+        });
+        this.map.on("layerremove", (e: any) => {
+            this.markLayerLoading(e?.layer, false);
+        });
+
+        // Attach to whatever layers were added as part of initial map creation (base tile layer, etc).
+        this.map.eachLayer((layer: any) => this.attachLayerLoadingEvents(layer));
 
         this.map.addControl(
             new FullScreen({
@@ -122,7 +159,7 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
 
         if (this.showLegend) {
             const legendControl = Control.extend({
-                onAdd: (map: Map) => {
+                onAdd: (map: LeafletMap) => {
                     const domElement = DomUtil.get(this.mapID + "Legend");
                     if (domElement != null) {
                         L.DomEvent.disableClickPropagation(domElement);
@@ -138,7 +175,7 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
                         container.appendChild(legendElement); // Moves legend to the bottom
                     }
                 },
-                onRemove: (map: Map) => {},
+                onRemove: (map: LeafletMap) => {},
             });
             this.legendControl = new legendControl({
                 position: this.legendPosition,
@@ -237,6 +274,21 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
 
     ngOnDestroy(): void {
         console.warn("destroying map");
+
+        for (const [layer, handlers] of this.trackedLayerListeners) {
+            try {
+                if (layer && typeof layer.off === "function") {
+                    layer.off("loading", handlers.onLoading);
+                    layer.off("load", handlers.onLoad);
+                    layer.off("tileerror", handlers.onLoad);
+                    layer.off("error", handlers.onLoad);
+                }
+            } catch (e) {}
+        }
+        this.trackedLayerListeners.clear();
+        this.trackedLayerLoadingState.clear();
+        this.leafletLoadingLayerCountSubject.next(0);
+
         if (this.map) {
             this.map.off();
             this.map.remove();
@@ -245,6 +297,48 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     ngOnInit(): void {}
+
+    private attachLayerLoadingEvents(layer: any): void {
+        if (!layer || typeof layer.on !== "function" || typeof layer.off !== "function") {
+            return;
+        }
+
+        // Avoid duplicate handlers on the same layer instance.
+        if (this.trackedLayerListeners.has(layer)) {
+            return;
+        }
+
+        const onLoading = () => this.markLayerLoading(layer, true);
+        const onLoad = () => this.markLayerLoading(layer, false);
+
+        // Common Leaflet loading events:
+        // - Tile layers: 'loading' then 'load' (or 'tileerror')
+        // - Some plugin layers emit 'error'
+        layer.on("loading", onLoading);
+        layer.on("load", onLoad);
+        layer.on("tileerror", onLoad);
+        layer.on("error", onLoad);
+
+        this.trackedLayerListeners.set(layer, { onLoading, onLoad });
+        this.trackedLayerLoadingState.set(layer, false);
+    }
+
+    private markLayerLoading(layer: any, isLoading: boolean): void {
+        if (!layer) {
+            return;
+        }
+
+        const wasLoading = this.trackedLayerLoadingState.get(layer) ?? false;
+        if (wasLoading === isLoading) {
+            return;
+        }
+
+        this.trackedLayerLoadingState.set(layer, isLoading);
+
+        const delta = isLoading ? 1 : -1;
+        const nextCount = Math.max(0, (this.leafletLoadingLayerCountSubject.value ?? 0) + delta);
+        this.leafletLoadingLayerCountSubject.next(nextCount);
+    }
 
     private scheduleEmitMapLoadOnceAfterNextRender(): void {
         if (this.hasEmittedMapLoad) {
@@ -282,9 +376,9 @@ export class NeptuneMapComponent implements OnInit, AfterViewInit, OnDestroy {
 }
 
 export class NeptuneMapInitEvent {
-    public map: Map;
+    public map: LeafletMap;
     public layerControl: any;
-    constructor(map: Map, layerControl: any) {
+    constructor(map: LeafletMap, layerControl: any) {
         this.map = map;
         this.layerControl = layerControl;
     }

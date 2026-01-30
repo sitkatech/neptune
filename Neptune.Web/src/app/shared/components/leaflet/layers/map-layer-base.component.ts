@@ -1,4 +1,6 @@
-import { Component, Input, OnDestroy, TemplateRef, ViewChild } from "@angular/core";
+import { Component, Input, OnDestroy, TemplateRef, ViewChild, inject } from "@angular/core";
+import { Observable } from "rxjs";
+import { MapLayerLoadingService } from "src/app/shared/components/leaflet/map-layer-loading.service";
 
 @Component({
     template: "",
@@ -13,7 +15,13 @@ export class MapLayerBase implements IMapLayer, OnDestroy {
     @ViewChild("legend") legendTemplate!: TemplateRef<any>;
     layer: any;
 
+    protected readonly mapLayerLoadingService = inject(MapLayerLoadingService, { optional: true });
+
     constructor() {}
+
+    protected trackLayerRequest$<T>(source$: Observable<T>): Observable<T> {
+        return this.mapLayerLoadingService ? this.mapLayerLoadingService.track$(source$) : source$;
+    }
 
     ngOnDestroy(): void {
         if (this.layer && this.layerControl) {

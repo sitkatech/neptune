@@ -24,21 +24,20 @@ export class OvtaObservationLayerComponent extends MapLayerBase implements OnCha
     public layer;
 
     ngOnInit() {
-        this.onlandVisualTrashAssessmentObservations$ = this.onlandVisualTrashAssessmentObservationService
-            .getAsFeatureCollectionOnlandVisualTrashAssessmentObservation(this.ovtaID)
-            .pipe(
-                tap((locations) => {
-                    const ovtaObservationGeoJSON = this.mapObservationsToGeoJson(locations);
-                    this.layer = new L.GeoJSON(ovtaObservationGeoJSON as any, {
-                        pointToLayer: (feature, latlng) => {
-                            return L.marker(latlng, { icon: MarkerHelper.treatmentBMPMarker });
-                        },
-                    });
-                    this.layer.sortOrder = 100;
-                    this.initLayer();
-                    this.map.fitBounds(this.layer.getBounds());
-                })
-            );
+        const request$ = this.onlandVisualTrashAssessmentObservationService.getAsFeatureCollectionOnlandVisualTrashAssessmentObservation(this.ovtaID);
+        this.onlandVisualTrashAssessmentObservations$ = this.trackLayerRequest$(request$).pipe(
+            tap((locations) => {
+                const ovtaObservationGeoJSON = this.mapObservationsToGeoJson(locations);
+                this.layer = new L.GeoJSON(ovtaObservationGeoJSON as any, {
+                    pointToLayer: (feature, latlng) => {
+                        return L.marker(latlng, { icon: MarkerHelper.treatmentBMPMarker });
+                    },
+                });
+                this.layer.sortOrder = 100;
+                this.initLayer();
+                this.map.fitBounds(this.layer.getBounds());
+            })
+        );
     }
 
     private mapObservationsToGeoJson(locations) {

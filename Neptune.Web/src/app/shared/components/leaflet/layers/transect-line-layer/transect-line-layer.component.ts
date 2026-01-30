@@ -34,7 +34,8 @@ export class TransectLineLayerComponent extends MapLayerBase implements OnChange
 
     ngAfterViewInit(): void {
         if (this.ovtaID) {
-            this.featureCollection$ = this.onlandVisualTrashAssessmentService.getTransectLineAsFeatureCollectionOnlandVisualTrashAssessment(this.ovtaID).pipe(
+            const request$ = this.onlandVisualTrashAssessmentService.getTransectLineAsFeatureCollectionOnlandVisualTrashAssessment(this.ovtaID);
+            this.featureCollection$ = this.trackLayerRequest$(request$).pipe(
                 tap((transectLineFeatureCollection) => {
                     this.layer = new L.GeoJSON(transectLineFeatureCollection as any, {
                         style: this.transectLineStyle,
@@ -43,9 +44,9 @@ export class TransectLineLayerComponent extends MapLayerBase implements OnChange
                 })
             );
         } else if (this.ovtaAreaID) {
-            this.featureCollection$ = this.onlandVisualTrashAssessmentAreaService.getTransectLineAsFeatureCollectionOnlandVisualTrashAssessmentArea(this.ovtaAreaID).pipe(
+            const request$ = this.onlandVisualTrashAssessmentAreaService.getTransectLineAsFeatureCollectionOnlandVisualTrashAssessmentArea(this.ovtaAreaID);
+            this.featureCollection$ = this.trackLayerRequest$(request$).pipe(
                 tap((transectLineFeatureCollection) => {
-                    console.log(transectLineFeatureCollection);
                     this.layer = new L.GeoJSON(transectLineFeatureCollection as any, {
                         style: this.transectLineStyle,
                     });
