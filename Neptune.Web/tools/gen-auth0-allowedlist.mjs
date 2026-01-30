@@ -15,10 +15,93 @@ const VALID_METHODS = new Set(["get", "post", "put", "patch", "delete", "options
 function escapeRegex(s) {
     return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
-function openApiTemplateToRegex(templatePath) {
-    // "/jurisdictions/{id}/users" -> "^/jurisdictions/[^/]+/users$"
+
+/**
+ * NOTE: Why this generator does path-parameter type narrowing
+ *
+ * Auth0's Angular interceptor uses an "allowedList" to decide whether to attach an access token.
+ * Our generated list also supports "anonymous" routes (x-anonymous) that MUST NOT receive a token.
+ *
+ * Previously, templated OpenAPI paths like `/treatment-bmps/{treatmentBMPID}` were converted into the
+ * regex `^/treatment-bmps/[^/]+$`. That is too broad: it also matches non-ID subpaths like
+ * `/treatment-bmps/planned-projects`.
+ *
+ * Because anonymous routes explicitly block token attachment in `auth0-allowedlist.ts`, the overly-broad
+ * anonymous regex caused the interceptor to skip adding `Authorization` on `/treatment-bmps/planned-projects`.
+ * The API then correctly returned 401 even though the user was authenticated.
+ *
+ * Fix: when we can infer that a path param is numeric (int32/int64/etc), we emit `\\d+` instead of `[^/]+`.
+ * That keeps `/treatment-bmps/{treatmentBMPID}` matching only numeric IDs and prevents collisions with
+ * literal routes under the same prefix.
+ */
+
+function getRef(root, ref) {
+    // Supports local refs like "#/components/parameters/Foo"
+    if (typeof ref !== "string" || !ref.startsWith("#/")) return null;
+    const parts = ref
+        .slice(2)
+        .split("/")
+        .map((p) => p.replace(/~1/g, "/").replace(/~0/g, "~"));
+
+    let cur = root;
+    for (const key of parts) {
+        if (!cur || typeof cur !== "object") return null;
+        cur = cur[key];
+    }
+    return cur ?? null;
+}
+
+function resolveMaybeRef(root, obj) {
+    if (!obj || typeof obj !== "object") return obj;
+    if (typeof obj.$ref === "string") {
+        return getRef(root, obj.$ref) ?? obj;
+    }
+    return obj;
+}
+
+function getParamMatcherFromSchema(schema) {
+    // Prefer a type-specific matcher when swagger declares a numeric/uuid path param.
+    // This prevents templated paths from accidentally matching literal subroutes.
+    const resolved = resolveMaybeRef(doc, schema);
+    const type = resolved?.type;
+    const format = resolved?.format;
+
+    if (type === "integer" || type === "number") {
+        return "\\d+";
+    }
+    if (format === "uuid") {
+        return "[0-9a-fA-F-]{36}";
+    }
+
+    return "[^/]+";
+}
+
+function buildPathParamMatchers(pathItem, operation) {
+    // Path params can be declared at either the path-item level or the operation level.
+    // Combine both, resolve any $refs, then pick a safe regex matcher per param name.
+    const matchers = new Map();
+    const combined = [...(pathItem?.parameters ?? []), ...(operation?.parameters ?? [])];
+
+    for (const raw of combined) {
+        const param = resolveMaybeRef(doc, raw);
+        if (!param || typeof param !== "object") continue;
+        if (param.in !== "path") continue;
+        if (typeof param.name !== "string" || param.name.length === 0) continue;
+
+        const matcher = getParamMatcherFromSchema(param.schema);
+        matchers.set(param.name, matcher);
+    }
+
+    return matchers;
+}
+
+function openApiTemplateToRegex(templatePath, paramMatchers) {
+    // Example:
+    //   "/jurisdictions/{id}/users" -> "^/jurisdictions/\\d+/users$" (when id is integer)
+    // Fallback:
+    //   unknown param type -> "[^/]+"
     const escaped = escapeRegex(templatePath);
-    return `^${escaped.replace(/\\\{[^}]+\\\}/g, "[^/]+")}$`;
+    return `^${escaped.replace(/\\\{([^}]+)\\\}/g, (_, name) => paramMatchers?.get(name) ?? "[^/]+")}$`;
 }
 function isTemplatedPath(p) {
     return p.includes("{") && p.includes("}");
@@ -58,7 +141,8 @@ for (const [p, operations] of Object.entries(doc.paths ?? {})) {
         const regexMap = isOptional ? optRegex : isAnonOnly ? anonRegex : secRegex;
 
         if (isTemplatedPath(p)) {
-            add(regexMap, method, openApiTemplateToRegex(p));
+            const paramMatchers = buildPathParamMatchers(operations, op);
+            add(regexMap, method, openApiTemplateToRegex(p, paramMatchers));
         } else {
             add(exactMap, method, p);
         }
