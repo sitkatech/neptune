@@ -17,7 +17,6 @@ using NetTopologySuite.IO.Converters;
 using SendGrid;
 using Serilog;
 using Serilog.Core;
-using System.Security.Claims;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using LogHelper = Neptune.WebMvc.Services.Logging.LogHelper;
@@ -173,52 +172,40 @@ var builder = WebApplication.CreateBuilder(args);
     services.Configure<CookiePolicyOptions>(options =>
     {
         options.MinimumSameSitePolicy = SameSiteMode.None;
+        options.Secure = CookieSecurePolicy.Always;
     });
+    
     services.AddAuth0WebAppAuthentication(options =>
     {
         options.Domain = configuration.Auth0Domain;
         options.ClientId = configuration.Auth0ClientID;
         options.Scope = "openid profile email";
+
         options.OpenIdConnectEvents = new OpenIdConnectEvents
         {
-            OnRedirectToIdentityProvider = async context =>
-            {
-                //save current url to state
-                context.ProtocolMessage.State = context.HttpContext.Request.QueryString.HasValue
-                    ? context.HttpContext.Request.Query["returnUrl"]
-                    : "/";
-            },
             OnTokenValidated = context =>
             {
                 var dbContext = context.HttpContext.RequestServices.GetRequiredService<NeptuneDbContext>();
                 var sitkaSmtpClientService = context.HttpContext.RequestServices.GetRequiredService<SitkaSmtpClientService>();
 
-                if (context.Principal.Identity?.IsAuthenticated == true) // we have a token and we can determine the person.
+                if (context.Principal?.Identity?.IsAuthenticated == true)
                 {
                     AuthenticationHelper.ProcessLoginFromAuth0(context, dbContext, configuration, logger, sitkaSmtpClientService);
                 }
-                var url = context.ProtocolMessage.State;
-                var claims = new List<Claim>
-                {
-                    new("sub", context.SecurityToken.Subject),
-                    new("returnUrl", url)
-                };
-                var appIdentity = new ClaimsIdentity(claims);
 
-                //add url to claims
-                context.Principal.AddIdentity(appIdentity);
-
-                return Task.CompletedTask;
-            },
-            OnTicketReceived = ctx =>
-            {
-                var url = ctx.Principal.FindFirst("returnUrl").Value;
-                ctx.ReturnUri = url;
                 return Task.CompletedTask;
             }
         };
     });
+
+    services.ConfigureApplicationCookie(options =>
+    {
+        options.LoginPath = "/Account/Login";
+        options.ReturnUrlParameter = "returnUrl";
+        options.AccessDeniedPath = "/Account/NotAuthorized"; // or whatever you prefer
+    });
     #endregion
+
 
     services.AddHttpContextAccessor();
     services.AddScoped<AzureBlobStorageService>();
@@ -239,47 +226,6 @@ var app = builder.Build();
     if (!app.Environment.IsDevelopment())
     {
         app.UseExceptionHandler("/Home/Error");
-        //todo: explore this more on error handling but for now we are doing the handling on the Home/Error route
-        //app.UseExceptionHandler(exceptionHandlerApp =>
-        //{
-        //    exceptionHandlerApp.Run(async context =>
-        //    {
-        //        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-
-        //        // using static System.Net.Mime.MediaTypeNames;
-        //        context.Response.ContentType = MediaTypeNames.Text.Html;
-
-        //        await context.Response.WriteAsync("An exception was thrown.");
-
-        //        var exceptionHandlerPathFeature =
-        //            context.Features.Get<IExceptionHandlerPathFeature>();
-
-        //        var lastError = exceptionHandlerPathFeature?.Error;
-        //        switch (lastError)
-        //        {
-        //            //case SitkaRecordNotFoundException:
-        //            //    SitkaHttpRequestStorage.NotFoundStoredError = lastError as SitkaRecordNotFoundException;
-        //            //    break;
-
-        //            case FileNotFoundException:
-        //                await context.Response.WriteAsync(" The file was not found.");
-        //                break;
-        //            case NotImplementedException:
-        //                await context.Response.WriteAsync(exceptionHandlerPathFeature.Error.Message);
-        //                break;
-        //        }
-
-        //        if (exceptionHandlerPathFeature?.Path == "/")
-        //        {
-        //            await context.Response.WriteAsync(" Page: Home.");
-        //        }
-        //        else
-        //        {
-        //            context.Response.Redirect("/Home/Error");
-        //        }
-        //    });
-        //});
-
         // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
         app.UseHsts();
     }
@@ -291,6 +237,7 @@ var app = builder.Build();
 
     app.UseRouting();
 
+    app.UseCookiePolicy();
     app.UseAuthentication();
     app.UseAuthorization();
 

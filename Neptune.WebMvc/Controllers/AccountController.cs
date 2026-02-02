@@ -50,12 +50,26 @@ namespace Neptune.WebMvc.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult Login()
+        public IActionResult Login(string? returnUrl = null)
         {
-            var rawReturnUrl = HttpContext.Request.Cookies["NeptuneReturnURL"];
-            var returnUrl = AuthenticationHelper.SanitizeReturnUrlForLogin(rawReturnUrl, HomeUrl);
-            var props = new AuthenticationProperties { RedirectUri = returnUrl };
-            return Challenge(props, "Auth0");
+            returnUrl ??= "/";
+
+            // Security: block open redirects and avoid redirect loops
+            if (!Url.IsLocalUrl(returnUrl) ||
+                returnUrl.StartsWith("//", StringComparison.Ordinal) ||
+                returnUrl.StartsWith("/callback", StringComparison.OrdinalIgnoreCase) ||
+                returnUrl.StartsWith("/Account/Login", StringComparison.OrdinalIgnoreCase) ||
+                returnUrl.StartsWith("/Account/Logout", StringComparison.OrdinalIgnoreCase))
+            {
+                returnUrl = "/";
+            }
+
+            var props = new LoginAuthenticationPropertiesBuilder()
+                // This is the final landing page AFTER Auth0 returns to /callback and the middleware completes auth
+                .WithRedirectUri(returnUrl)
+                .Build();
+
+            return Challenge(props, Auth0Constants.AuthenticationScheme);
         }
 
         public ActionResult Register()

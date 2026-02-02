@@ -1,31 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.EntityFrameworkCore;
 using Neptune.Common.Email;
 using Neptune.EFModels.Entities;
 using Serilog.Core;
 using System.Net.Mail;
 using System.Security.Claims;
-using System.Web;
 
 namespace Neptune.WebMvc.Common.OpenID;
 
 public static class AuthenticationHelper
 {
     // We don't want to return users to the login page so need to pull out return url parameter from current url
-    public static string SanitizeReturnUrlForLogin(string rawReturnUrlString, string homeUrl)
-    {
-        // Decode url encoded string
-        string decodedUrlString = HttpUtility.UrlDecode(rawReturnUrlString);
-        if (string.IsNullOrWhiteSpace(rawReturnUrlString) || rawReturnUrlString == "/")
-        {
-            return homeUrl;
-        }
-        // Strip the main url to get only the value of the returnUrl parameter
-        var loginUrlToStrip = "/Account/LogOn?returnUrl=";
-        var parameterOnly = decodedUrlString.Replace(loginUrlToStrip, "");
-        // Now decode content of returnUrl argument
-        return HttpUtility.UrlDecode(parameterOnly);
-    }
 
     public static void ProcessLoginFromAuth0(TokenValidatedContext tokenValidatedContext, NeptuneDbContext dbContext, WebConfiguration configuration, Logger logger, SitkaSmtpClientService sitkaSmtpClientService)
     {
