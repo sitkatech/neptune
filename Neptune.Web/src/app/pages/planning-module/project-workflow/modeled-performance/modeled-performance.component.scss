@@ -20,3 +20,11 @@ tr.selectable.selected {
 #landUseTable tr th {
     border-top: none;
 }
+
+.modeled-performance-layout {
+    @include desktop-medium-max {
+        > .g-col-6 {
+            grid-column: 1 / -1;
+        }
+    }
+}

@@ -1,6 +1,7 @@
-import { ApplicationRef, Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { ApplicationRef, Component, DestroyRef, EventEmitter, Input, OnInit, Output, inject } from "@angular/core";
 import * as L from "leaflet";
-import { forkJoin } from "rxjs";
+import { BehaviorSubject, combineLatest, distinctUntilChanged, filter, forkJoin, map, shareReplay, switchMap } from "rxjs";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto";
 import { DelineationUpsertDto } from "src/app/shared/generated/model/delineation-upsert-dto";
 import { CustomCompileService } from "src/app/shared/services/custom-compile.service";
@@ -10,7 +11,7 @@ import { FieldDefinitionTypeEnum } from "src/app/shared/generated/enum/field-def
 import { TreatmentBMPTypeWithModelingAttributesDto } from "src/app/shared/generated/model/treatment-bmp-type-with-modeling-attributes-dto";
 import { TreatmentBMPDisplayDto } from "src/app/shared/generated/model/treatment-bmp-display-dto";
 import { FieldDefinitionComponent } from "src/app/shared/components/field-definition/field-definition.component";
-import { DecimalPipe } from "@angular/common";
+import { CommonModule, DecimalPipe } from "@angular/common";
 import { DelineationsLayerComponent } from "src/app/shared/components/leaflet/layers/delineations-layer/delineations-layer.component";
 import { JurisdictionsLayerComponent } from "src/app/shared/components/leaflet/layers/jurisdictions-layer/jurisdictions-layer.component";
 import { RegionalSubbasinsLayerComponent } from "src/app/shared/components/leaflet/layers/regional-subbasins-layer/regional-subbasins-layer.component";
@@ -33,6 +34,7 @@ import { OverlayMode } from "src/app/shared/components/leaflet/layers/generic-wm
     templateUrl: "./project-map.component.html",
     styleUrls: ["./project-map.component.scss"],
     imports: [
+        CommonModule,
         FieldDefinitionComponent,
         DecimalPipe,
         NeptuneMapComponent,
@@ -48,7 +50,23 @@ import { OverlayMode } from "src/app/shared/components/leaflet/layers/generic-wm
 export class ProjectMapComponent implements OnInit {
     public OverlayMode = OverlayMode;
 
-    @Input("projectID") projectID: number;
+    private readonly destroyRef = inject(DestroyRef);
+
+    private readonly projectIDSubject = new BehaviorSubject<number | null>(null);
+    public readonly projectID$ = this.projectIDSubject.asObservable().pipe(
+        filter((id): id is number => id != null && Number.isFinite(id)),
+        distinctUntilChanged()
+    );
+
+    private _projectID: number;
+    @Input("projectID")
+    set projectID(value: number) {
+        this._projectID = value;
+        this.projectIDSubject.next(value);
+    }
+    get projectID(): number {
+        return this._projectID;
+    }
 
     public mapIsReady: boolean = false;
     public visibleTreatmentBMPStyle: string = "treatmentBMP_purple_outline_only";
@@ -93,6 +111,41 @@ export class ProjectMapComponent implements OnInit {
     public projectTreatmentBMPs: Array<TreatmentBMPDisplayDto>;
     public treatmentBMPTypeCustomAttributeTypes: TreatmentBMPTypeCustomAttributeTypeDto[];
 
+    private readonly selectedTreatmentBMPSubject = new BehaviorSubject<TreatmentBMPDisplayDto | null>(null);
+    public readonly selectedTreatmentBMP$ = this.selectedTreatmentBMPSubject.asObservable();
+    public readonly selectedTreatmentBMPID$ = this.selectedTreatmentBMP$.pipe(
+        map((bmp) => bmp?.TreatmentBMPID ?? null),
+        distinctUntilChanged()
+    );
+
+    private readonly mapReadySubject = new BehaviorSubject<NeptuneMapInitEvent | null>(null);
+    public readonly mapReady$ = this.mapReadySubject.asObservable().pipe(filter((x): x is NeptuneMapInitEvent => x != null));
+
+    private readonly data$ = this.projectID$.pipe(
+        switchMap((projectID) =>
+            forkJoin({
+                treatmentBMPs: this.projectService.listTreatmentBMPsByProjectIDProject(projectID),
+                delineations: this.projectService.listDelineationsByProjectIDProject(projectID),
+                boundingBox: this.projectService.getBoundingBoxByProjectIDProject(projectID),
+                treatmentBMPTypes: this.treatmentBMPTypeService.listTreatmentBMPType(),
+                treatmentBMPTypeCustomAttributeTypes:
+                    this.treatmentBMPTypeCustomAttributeTypeService.getTreatmentBMPTypeCustomAttributeTypeByCustomAttributePurposeIDTreatmentBMPTypeCustomAttributeType(
+                        CustomAttributeTypePurposeEnum.Modeling
+                    ),
+            })
+        ),
+        shareReplay(1)
+    );
+
+    public readonly projectTreatmentBMPs$ = this.data$.pipe(
+        map((x) => x.treatmentBMPs ?? []),
+        shareReplay(1)
+    );
+    public readonly boundingBox$ = this.data$.pipe(
+        map((x) => x.boundingBox),
+        shareReplay(1)
+    );
+
     constructor(
         private projectService: ProjectService,
         private treatmentBMPTypeService: TreatmentBMPTypeService,
@@ -102,37 +155,51 @@ export class ProjectMapComponent implements OnInit {
     ) {}
 
     public ngOnInit(): void {
-        if (this.projectID) {
-            forkJoin({
-                treatmentBMPs: this.projectService.listTreatmentBMPsByProjectIDProject(this.projectID),
-                delineations: this.projectService.listDelineationsByProjectIDProject(this.projectID),
-                boundingBox: this.projectService.getBoundingBoxByProjectIDProject(this.projectID),
-                treatmentBMPTypes: this.treatmentBMPTypeService.listTreatmentBMPType(),
-                treatmentBMPTypeCustomAttributeTypes:
-                    this.treatmentBMPTypeCustomAttributeTypeService.getTreatmentBMPTypeCustomAttributeTypeByCustomAttributePurposeIDTreatmentBMPTypeCustomAttributeType(
-                        CustomAttributeTypePurposeEnum.Modeling
-                    ),
-            }).subscribe(({ treatmentBMPs, delineations, boundingBox, treatmentBMPTypes, treatmentBMPTypeCustomAttributeTypes }) => {
-                this.projectTreatmentBMPs = treatmentBMPs;
-                this.delineations = delineations;
-                this.boundingBox = boundingBox;
-                this.treatmentBMPTypes = treatmentBMPTypes;
-                this.treatmentBMPTypeCustomAttributeTypes = treatmentBMPTypeCustomAttributeTypes;
+        // Single subscription for Leaflet side-effects + backing field updates.
+        // This keeps imperative work contained and ensures we clean up on destroy.
+        combineLatest([this.mapReady$, this.data$])
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe(([mapReady, data]) => {
+                // Keep existing fields in sync for helper methods / imperative map code.
+                this.map = mapReady.map;
+                this.layerControl = mapReady.layerControl;
+                this.mapIsReady = true;
+
+                this.projectTreatmentBMPs = data.treatmentBMPs ?? [];
+                this.delineations = data.delineations ?? [];
+                this.boundingBox = data.boundingBox;
+                this.treatmentBMPTypes = data.treatmentBMPTypes ?? [];
+                this.treatmentBMPTypeCustomAttributeTypes = data.treatmentBMPTypeCustomAttributeTypes ?? [];
+
+                this.updateMapLayers();
             });
-        }
 
         this.compileService.configure(this.appRef);
     }
 
     public handleMapReady(event: NeptuneMapInitEvent): void {
+        // Keep a synchronous flag/fields for templates that should render immediately on map init.
+        // In zoneless mode, relying on async-pipe emissions that happen during child lifecycle can be flaky.
         this.map = event.map;
         this.layerControl = event.layerControl;
         this.mapIsReady = true;
 
-        this.updateMapLayers();
+        this.mapReadySubject.next(event);
+
+        // Ensure the view updates immediately in zoneless mode.
+        // (Output emissions and Leaflet callbacks don't always schedule a render on their own.)
+        Promise.resolve().then(() => this.appRef.tick());
     }
 
     public updateMapLayers(): void {
+        if (!this.mapIsReady || !this.map) {
+            return;
+        }
+
+        if (!Array.isArray(this.projectTreatmentBMPs) || !Array.isArray(this.delineations)) {
+            return;
+        }
+
         this.updateTreatmentBMPsLayer();
 
         if (this.projectTreatmentBMPs.length > 0) {
@@ -141,6 +208,13 @@ export class ProjectMapComponent implements OnInit {
     }
 
     public updateTreatmentBMPsLayer() {
+        if (!this.mapIsReady || !this.map) {
+            return;
+        }
+
+        const delineations = this.delineations ?? [];
+        const projectTreatmentBMPs = this.projectTreatmentBMPs ?? [];
+
         if (this.treatmentBMPsLayer) {
             this.map.removeLayer(this.treatmentBMPsLayer);
             this.treatmentBMPsLayer = null;
@@ -152,7 +226,7 @@ export class ProjectMapComponent implements OnInit {
         }
         let hasFlownToSelectedObject = false;
 
-        const delineationGeoJson = this.mapDelineationsToGeoJson(this.delineations);
+        const delineationGeoJson = this.mapDelineationsToGeoJson(delineations);
         this.delineationsLayer = new L.GeoJSON(delineationGeoJson as any, {
             onEachFeature: (feature, layer: L.Polygon) => {
                 if (this.selectedTreatmentBMP != null) {
@@ -172,7 +246,7 @@ export class ProjectMapComponent implements OnInit {
             this.selectTreatmentBMP(event.propagatedFrom.feature.properties.TreatmentBMPID);
         });
 
-        const treatmentBMPsGeoJson = this.mapTreatmentBMPsToGeoJson(this.projectTreatmentBMPs);
+        const treatmentBMPsGeoJson = this.mapTreatmentBMPsToGeoJson(projectTreatmentBMPs);
         this.treatmentBMPsLayer = new L.GeoJSON(treatmentBMPsGeoJson as any, {
             pointToLayer: (feature, latlng) => {
                 return L.marker(latlng, { icon: MarkerHelper.treatmentBMPMarker });
@@ -235,6 +309,11 @@ export class ProjectMapComponent implements OnInit {
         let selectedNumber = null;
         let selectedAttributes = null;
         this.selectedTreatmentBMP = this.projectTreatmentBMPs.find((x) => x.TreatmentBMPID == treatmentBMPID);
+        this.selectedTreatmentBMPSubject.next(this.selectedTreatmentBMP ?? null);
+
+        if (!this.selectedTreatmentBMP) {
+            return;
+        }
         selectedAttributes = [
             `<strong>Type:</strong> ${this.selectedTreatmentBMP.TreatmentBMPTypeName}`,
             `<strong>Latitude:</strong> ${this.selectedTreatmentBMP.Latitude}`,

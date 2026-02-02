@@ -4,6 +4,7 @@ import { MapLayerBase } from "../map-layer-base.component";
 
 import { WfsService } from "src/app/shared/services/wfs.service";
 import { GroupByPipe } from "src/app/shared/pipes/group-by.pipe";
+import { finalize } from "rxjs";
 
 @Component({
     selector: "selected-ovta-area-layer",
@@ -68,7 +69,10 @@ export class SelectedOvtaAreaLayerComponent extends MapLayerBase implements OnCh
         fillOpacity: 0.1,
     };
 
-    constructor(private wfsService: WfsService, private groupByPipe: GroupByPipe) {
+    constructor(
+        private wfsService: WfsService,
+        private groupByPipe: GroupByPipe
+    ) {
         super();
     }
 
@@ -88,43 +92,41 @@ export class SelectedOvtaAreaLayerComponent extends MapLayerBase implements OnCh
     }
 
     private updateLayer() {
-        this.isLoading = true;
         this.layer.clearLayers();
-
         this.addOVTAAreasToLayer();
-
         this.layer.addTo(this.map);
-        this.isLoading = false;
     }
 
     private addOVTAAreasToLayer() {
         let cql_filter = ``;
 
-        this.wfsService
-            .getGeoserverWFSLayerWithCQLFilter("OCStormwater:OnlandVisualTrashAssessmentAreas", cql_filter, "OnlandVisualTrashAssessmentAreaID")
-            .subscribe((response) => {
-                if (response.length == 0) return;
+        const request$ = this.wfsService.getGeoserverWFSLayerWithCQLFilter("OCStormwater:OnlandVisualTrashAssessmentAreas", cql_filter, "OnlandVisualTrashAssessmentAreaID");
+        const tracked$ = this.trackLayerRequest$(request$);
 
-                const featuresGroupedByOVTAAreaID = this.groupByPipe.transform(response, "properties.OnlandVisualTrashAssessmentAreaID");
+        this.isLoading = true;
+        tracked$.pipe(finalize(() => (this.isLoading = false))).subscribe((response) => {
+            if (response.length == 0) return;
 
-                Object.keys(featuresGroupedByOVTAAreaID).forEach((ovtaAreaID) => {
-                    const geoJson = L.geoJSON(featuresGroupedByOVTAAreaID[ovtaAreaID], {
-                        style: this.styleDictionary[featuresGroupedByOVTAAreaID[ovtaAreaID][0].properties.Score],
-                    });
-                    geoJson.on("mouseover", (e) => {
-                        geoJson.setStyle({ fillOpacity: 0.5 });
-                    });
-                    geoJson.on("mouseout", (e) => {
-                        geoJson.setStyle({ fillOpacity: 0.1 });
-                    });
+            const featuresGroupedByOVTAAreaID = this.groupByPipe.transform(response, "properties.OnlandVisualTrashAssessmentAreaID");
 
-                    geoJson.on("click", (e) => {
-                        this.onOVTAAreaSelected(Number(ovtaAreaID));
-                    });
-
-                    geoJson.addTo(this.layer);
+            Object.keys(featuresGroupedByOVTAAreaID).forEach((ovtaAreaID) => {
+                const geoJson = L.geoJSON(featuresGroupedByOVTAAreaID[ovtaAreaID], {
+                    style: this.styleDictionary[featuresGroupedByOVTAAreaID[ovtaAreaID][0].properties.Score],
                 });
+                geoJson.on("mouseover", (e) => {
+                    geoJson.setStyle({ fillOpacity: 0.5 });
+                });
+                geoJson.on("mouseout", (e) => {
+                    geoJson.setStyle({ fillOpacity: 0.1 });
+                });
+
+                geoJson.on("click", (e) => {
+                    this.onOVTAAreaSelected(Number(ovtaAreaID));
+                });
+
+                geoJson.addTo(this.layer);
             });
+        });
     }
 
     private onOVTAAreaSelected(ovtaAreaID: number) {

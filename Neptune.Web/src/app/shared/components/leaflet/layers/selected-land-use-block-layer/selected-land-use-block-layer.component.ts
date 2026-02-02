@@ -5,6 +5,7 @@ import { MapLayerBase } from "../map-layer-base.component";
 import { WfsService } from "src/app/shared/services/wfs.service";
 import { GroupByPipe } from "src/app/shared/pipes/group-by.pipe";
 import { PriorityLandUseTypeEnum, PriorityLandUseTypes } from "src/app/shared/generated/enum/priority-land-use-type-enum";
+import { finalize } from "rxjs";
 
 @Component({
     selector: "selected-land-use-block-layer",
@@ -74,7 +75,10 @@ export class SelectedLandUseBlockLayerComponent extends MapLayerBase implements 
         fillOpacity: 0.5,
     };
 
-    constructor(private wfsService: WfsService, private groupByPipe: GroupByPipe) {
+    constructor(
+        private wfsService: WfsService,
+        private groupByPipe: GroupByPipe
+    ) {
         super();
     }
 
@@ -98,19 +102,19 @@ export class SelectedLandUseBlockLayerComponent extends MapLayerBase implements 
     }
 
     private updateLayer() {
-        this.isLoading = true;
         this.layer.clearLayers();
-
         this.addLandUseBlocksToLayer();
-
         this.layer.addTo(this.map);
-        this.isLoading = false;
     }
 
     private addLandUseBlocksToLayer() {
         let cql_filter = ``;
 
-        this.wfsService.getGeoserverWFSLayerWithCQLFilter("OCStormwater:LandUseBlocks", cql_filter, "LandUseBlockID").subscribe((response) => {
+        const request$ = this.wfsService.getGeoserverWFSLayerWithCQLFilter("OCStormwater:LandUseBlocks", cql_filter, "LandUseBlockID");
+        const tracked$ = this.trackLayerRequest$(request$);
+
+        this.isLoading = true;
+        tracked$.pipe(finalize(() => (this.isLoading = false))).subscribe((response) => {
             if (response.length == 0) return;
 
             const featuresGroupedByLandUseBlockID = this.groupByPipe.transform(response, "properties.LandUseBlockID");
