@@ -95,32 +95,47 @@ export class AuthenticationService {
         );
     }
 
-    public login() {
-        this.auth0.loginWithRedirect();
+    public login(target?: string) {
+        const safeTarget = target ?? this.router.url ?? "/";
+        this.auth0.loginWithRedirect({ appState: { target: safeTarget } } as any);
     }
 
-    public logout() {
-        this.auth0.logout({ logoutParams: { returnTo: window.location.origin } } as any);
+    public logout(): void {
+        const areaRoot = this.getAreaRootFromUrl(this.router.url);
+        const returnTo = window.location.origin + areaRoot;
+
+        this.auth0.logout({ logoutParams: { returnTo } } as any);
+    }
+
+    private getAreaRootFromUrl(url: string): string {
+        // url like "/admin/projects/123?x=1"
+        const path = url.split("?")[0].split("#")[0];
+
+        // pick your “areas” here:
+        const firstSeg = "/" + (path.split("/").filter(Boolean)[0] ?? "");
+
+        // Example mapping — adjust to your app:
+        switch (firstSeg.toLowerCase()) {
+            case "/trash":
+            case "/planning":
+                return firstSeg; // area homepage route
+            default:
+                return "/"; // main homepage
+        }
     }
 
     resetPassword() {
-        // Password reset flow should be handled via Auth0 hosted page or Management API. Triggering a redirect to a password reset can be done via Universal Login with proper configurations.
-        this.auth0.loginWithRedirect({ authorizationParams: { screen_hint: "reset-password" } } as any);
+        const target = this.router.url ?? "/";
+        this.auth0.loginWithRedirect({
+            authorizationParams: { screen_hint: "reset-password" },
+            appState: { target },
+        } as any);
     }
 
-    editProfile() {
-        this.auth0.loginWithRedirect({ appState: { target: "/profile" } } as any);
-    }
-
-    updateEmail() {
-        // Use the edit profile flow or a dedicated Auth0 action to change login/email
-        this.auth0.loginWithRedirect({ appState: { target: "/profile" } } as any);
-    }
-
-    signUp() {
-        const baseRedirect = environment.auth0?.redirectUri ?? window.location.origin;
-        const target = baseRedirect.replace(/\/$/, "") + "/create-user-callback";
-        this.auth0.loginWithRedirect({ authorizationParams: { screen_hint: "signup", redirect_uri: target } } as any);
+    signUp(target?: string) {
+        const safeTarget = target ?? this.router.url ?? "/";
+        const baseRedirect = environment.auth0?.redirectUri ?? window.location.origin + "/callback";
+        this.auth0.loginWithRedirect({ authorizationParams: { screen_hint: "signup", redirect_uri: baseRedirect }, appState: { target: safeTarget } } as any);
     }
 
     public isCurrentUserNullOrUndefined(): boolean {

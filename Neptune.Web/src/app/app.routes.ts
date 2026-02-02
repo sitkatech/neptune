@@ -4,6 +4,7 @@ import { JurisdictionManagerOrEditorOnlyGuard } from "./shared/guards/unauthenti
 import { UnsavedChangesGuard } from "./shared/guards/unsaved-changes.guard";
 import { OCTAGrantReviewerOnlyGuard } from "./shared/guards/unauthenticated-access/octa-grant-reviewer-only.guard";
 import { authGuardFn } from "@auth0/auth0-angular";
+import { AuthCallbackComponent } from "./auth-callback.component";
 
 export const routeParams = {
     definitionID: "definitionID",
@@ -529,5 +530,6 @@ export const routes: Routes = [
     { path: "not-found", loadComponent: () => import("./shared/pages").then((m) => m.NotFoundComponent) },
     { path: "subscription-insufficient", loadComponent: () => import("./shared/pages/").then((m) => m.SubscriptionInsufficientComponent) },
     { path: "unauthenticated", loadComponent: () => import("./shared/pages").then((m) => m.UnauthenticatedComponent) },
+    { path: "callback", component: AuthCallbackComponent },
     { path: "**", loadComponent: () => import("./shared/pages").then((m) => m.NotFoundComponent) },
 ];
