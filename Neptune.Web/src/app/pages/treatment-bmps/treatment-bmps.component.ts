@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, DestroyRef, inject } from "@angular/core";
 import { Router, RouterModule } from "@angular/router";
 import { ConfirmService } from "src/app/shared/services/confirm/confirm.service";
 import { AlertService } from "src/app/shared/services/alert.service";
@@ -10,7 +10,7 @@ import { HybridMapGridComponent } from "src/app/shared/components/hybrid-map-gri
 import "leaflet.markercluster";
 import * as L from "leaflet";
 import { ColDef } from "ag-grid-community";
-import { Observable, tap } from "rxjs";
+import { Observable, shareReplay, tap } from "rxjs";
 import { TreatmentBMPService } from "src/app/shared/generated/api/treatment-bmp.service";
 import { UtilityFunctionsService } from "src/app/services/utility-functions.service";
 import { AsyncPipe } from "@angular/common";
@@ -20,6 +20,7 @@ import { StormwaterJurisdictionService } from "src/app/shared/generated/api/stor
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
 import { TreatmentBMPGridDto } from "src/app/shared/generated/model/treatment-bmp-grid-dto";
 import { IconComponent } from "src/app/shared/components/icon/icon.component";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 @Component({
     selector: "treatment-bmps",
@@ -28,6 +29,8 @@ import { IconComponent } from "src/app/shared/components/icon/icon.component";
     templateUrl: "./treatment-bmps.component.html",
 })
 export class TreatmentBmpsComponent {
+    private readonly destroyRef = inject(DestroyRef);
+
     public map: any;
     public layerControl: any;
     private markerClusterLayer: any;
@@ -93,7 +96,12 @@ export class TreatmentBmpsComponent {
             this.utilityFunctionsService.createBasicColumnDef("Trash Capture Effectiveness (%)", "TrashCaptureEffectiveness"),
             this.utilityFunctionsService.createBasicColumnDef("Delineation Type", "DelineationTypeDisplayName"),
         ];
-        this.treatmentBmps$ = this.treatmentBMPService.listTreatmentBMP().pipe(tap(() => (this.isLoading = false)));
+        this.treatmentBmps$ = this.treatmentBMPService
+            .listTreatmentBMP()
+            .pipe(
+                tap(() => (this.isLoading = false)),
+                shareReplay({ bufferSize: 1, refCount: true })
+            );
         this.boundingBox$ = this.stormwaterJurisdictionService.getBoundingBoxStormwaterJurisdiction();
     }
 
@@ -105,7 +113,7 @@ export class TreatmentBmpsComponent {
 
     private addOrUpdateClusterLayer() {
         if (!this.map || !this.treatmentBmps$) return;
-        this.treatmentBmps$.subscribe((bmps) => {
+        this.treatmentBmps$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((bmps) => {
             if (this.markerClusterLayer) {
                 this.map.removeLayer(this.markerClusterLayer);
                 this.layerControl.removeLayer(this.markerClusterLayer);

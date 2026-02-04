@@ -70,7 +70,9 @@ function getParamMatcherFromSchema(schema) {
         return "\\d+";
     }
     if (format === "uuid") {
-        return "[0-9a-fA-F-]{36}";
+        // UUIDs are hex with hyphens in fixed positions (8-4-4-4-12).
+        // This avoids matching strings like "------------------------------------".
+        return "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}";
     }
 
     return "[^/]+";

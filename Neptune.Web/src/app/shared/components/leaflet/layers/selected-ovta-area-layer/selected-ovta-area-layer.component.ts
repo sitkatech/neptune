@@ -4,7 +4,6 @@ import { MapLayerBase } from "../map-layer-base.component";
 
 import { WfsService } from "src/app/shared/services/wfs.service";
 import { GroupByPipe } from "src/app/shared/pipes/group-by.pipe";
-import { finalize } from "rxjs";
 
 @Component({
     selector: "selected-ovta-area-layer",
@@ -17,8 +16,6 @@ export class SelectedOvtaAreaLayerComponent extends MapLayerBase implements OnCh
 
     @Output() layerBoundsCalculated = new EventEmitter();
     @Output() ovtaAreaSelected = new EventEmitter<number>();
-
-    public isLoading: boolean = false;
 
     public layer: L.FeatureGroup;
 
@@ -98,13 +95,11 @@ export class SelectedOvtaAreaLayerComponent extends MapLayerBase implements OnCh
     }
 
     private addOVTAAreasToLayer() {
-        let cql_filter = ``;
+        const cql_filter = ``;
 
-        const request$ = this.wfsService.getGeoserverWFSLayerWithCQLFilter("OCStormwater:OnlandVisualTrashAssessmentAreas", cql_filter, "OnlandVisualTrashAssessmentAreaID");
-        const tracked$ = this.trackLayerRequest$(request$);
-
-        this.isLoading = true;
-        tracked$.pipe(finalize(() => (this.isLoading = false))).subscribe((response) => {
+        this.trackLayerRequest$(
+            this.wfsService.getGeoserverWFSLayerWithCQLFilter("OCStormwater:OnlandVisualTrashAssessmentAreas", cql_filter, "OnlandVisualTrashAssessmentAreaID")
+        ).subscribe((response) => {
             if (response.length == 0) return;
 
             const featuresGroupedByOVTAAreaID = this.groupByPipe.transform(response, "properties.OnlandVisualTrashAssessmentAreaID");
