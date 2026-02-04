@@ -1,4 +1,4 @@
-import { Component, DestroyRef, OnDestroy, OnInit, inject } from "@angular/core";
+import { Component, DestroyRef, OnInit, inject } from "@angular/core";
 import { AuthenticationService } from "src/app/services/authentication.service";
 import { environment } from "src/environments/environment";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
@@ -87,12 +87,10 @@ import { OnlandVisualTrashAssessmentAreaService } from "src/app/shared/generated
         LoadingDirective,
     ],
 })
-export class TrashHomeComponent implements OnInit, OnDestroy {
+export class TrashHomeComponent implements OnInit {
     public OverlayMode = OverlayMode;
 
     private readonly destroyRef = inject(DestroyRef);
-
-    public watchUserChangeSubscription: any;
     public currentUser$: Observable<PersonDto>;
 
     public richTextTypeID: number = NeptunePageTypeEnum.TrashHomePage;
@@ -439,10 +437,6 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
                     this.selectedStormwaterJurisdictionLayer.addTo(this.map);
                 }
             });
-    }
-
-    ngOnDestroy(): void {
-        this.watchUserChangeSubscription?.unsubscribe();
     }
 
     public userIsUnassigned(currentUser: PersonDto) {
