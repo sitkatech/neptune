@@ -110,18 +110,6 @@ public static class TreatmentBMPs
 
     #endregion
 
-    private static IQueryable<TreatmentBMP> ListTreatmentBMPsDisplayOnlyImpl(NeptuneDbContext dbContext, bool checkIsAnalyzedInModelingModule = true)
-    {
-        return dbContext.TreatmentBMPs
-            .Include(x => x.TreatmentBMPType)
-            .Where(x => !checkIsAnalyzedInModelingModule || x.TreatmentBMPType.IsAnalyzedInModelingModule)
-            .Include(x => x.CustomAttributes)
-            .ThenInclude(x => x.CustomAttributeValues)
-            .Include(x => x.Delineation)
-            .Include(x => x.Project)
-            .AsNoTracking();
-    }
-
     private static async Task<List<TreatmentBMP>> ListTreatmentBMPsDisplayOnlyAsync(
         NeptuneDbContext dbContext,
         Func<IQueryable<TreatmentBMP>, IQueryable<TreatmentBMP>>? applyFilters = null,
@@ -150,11 +138,20 @@ public static class TreatmentBMPs
             return treatmentBMPs;
         }
 
-        await dbContext.CustomAttributes
+        var customAttributes = await dbContext.CustomAttributes
             .Where(x => treatmentBMPIDs.Contains(x.TreatmentBMPID))
             .Include(x => x.CustomAttributeValues)
-            .AsNoTrackingWithIdentityResolution()
-            .LoadAsync();
+            .AsNoTracking()
+            .ToListAsync();
+
+        var customAttributesByTreatmentBMPID = customAttributes
+            .GroupBy(x => x.TreatmentBMPID)
+            .ToDictionary(x => x.Key, x => (ICollection<CustomAttribute>)x.ToList());
+
+        foreach (var treatmentBMP in treatmentBMPs)
+        {
+            treatmentBMP.CustomAttributes = customAttributesByTreatmentBMPID.GetValueOrDefault(treatmentBMP.TreatmentBMPID) ?? new List<CustomAttribute>();
+        }
 
         return treatmentBMPs;
     }
