@@ -350,7 +350,7 @@ namespace Neptune.WebMvc.Controllers
             var stormwaterJurisdictions = StormwaterJurisdictions.ListViewableByPersonForBMPs(_dbContext, CurrentPerson);
             var treatmentBMPTypes = TreatmentBMPTypes.List(_dbContext);
             var organizations = Organizations.List(_dbContext);
-            var waterQualityManagementPlans = WaterQualityManagementPlans.ListByStormwaterJurisdictionID(_dbContext, treatmentBMP.StormwaterJurisdictionID);
+            var waterQualityManagementPlans = WaterQualityManagementPlans.ListBaseEntityByStormwaterJurisdictionID(_dbContext, treatmentBMP.StormwaterJurisdictionID);
             var viewData = new EditViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, treatmentBMP, stormwaterJurisdictions, treatmentBMPTypes, organizations, waterQualityManagementPlans, TreatmentBMPLifespanType.All, TrashCaptureStatusType.All, SizingBasisType.All);
             return RazorView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
