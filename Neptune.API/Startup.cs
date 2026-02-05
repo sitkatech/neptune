@@ -259,16 +259,9 @@ namespace Neptune.API
             app.UseMiddleware<EntityNotFoundMiddleware>();
             app.UseMiddleware<LogHelper>();
 
-            #region Hangfire
-            app.UseHangfireDashboard("/hangfire", new DashboardOptions()
-            {
-                Authorization = new[] { new HangfireAuthorizationFilter(Configuration) }
-            });
-
             GlobalJobFilters.Filters.Add(new AutomaticRetryAttribute { Attempts = 0 });
 
             HangfireJobScheduler.ScheduleRecurringJobs();
-            #endregion
 
             #region Swagger
             // Register swagger middleware and enable the swagger UI which will be 
@@ -285,6 +278,12 @@ namespace Neptune.API
             {
                 endpoints.MapControllers();
                 endpoints.MapHealthChecks("/healthz").AllowAnonymous();
+                // Hangfire dashboard uses its own Basic Auth via HangfireAuthorizationFilter,
+                // so we allow anonymous at the ASP.NET Core level to bypass the global JWT policy
+                endpoints.MapHangfireDashboard("/hangfire", new DashboardOptions()
+                {
+                    Authorization = new[] { new HangfireAuthorizationFilter(Configuration) }
+                }).AllowAnonymous();
             });
 
             applicationLifetime.ApplicationStopping.Register(OnShutdown);
