@@ -18,11 +18,13 @@ export class PersonDto {
     Email?: string | null;
     Phone?: string | null;
     RoleID?: number;
+    RoleName?: string | null;
     CreateDate?: string;
     UpdateDate?: string | null;
     LastActivityDate?: string | null;
     IsActive?: boolean;
     OrganizationID?: number;
+    OrganizationName?: string | null;
     ReceiveSupportEmails?: boolean;
     ReceiveRSBRevisionRequestEmails?: boolean;
     WebServiceAccessToken?: string;
@@ -41,11 +43,13 @@ export interface PersonDtoForm {
     Email?: FormControl<string>;
     Phone?: FormControl<string>;
     RoleID?: FormControl<number>;
+    RoleName?: FormControl<string>;
     CreateDate?: FormControl<string>;
     UpdateDate?: FormControl<string>;
     LastActivityDate?: FormControl<string>;
     IsActive?: FormControl<boolean>;
     OrganizationID?: FormControl<number>;
+    OrganizationName?: FormControl<string>;
     ReceiveSupportEmails?: FormControl<boolean>;
     ReceiveRSBRevisionRequestEmails?: FormControl<boolean>;
     WebServiceAccessToken?: FormControl<string>;
@@ -124,6 +128,16 @@ export class PersonDtoFormControls {
             ],
         }
     );
+    public static RoleName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
     public static CreateDate = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
@@ -165,6 +179,16 @@ export class PersonDtoFormControls {
         }
     );
     public static OrganizationID = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static OrganizationName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {

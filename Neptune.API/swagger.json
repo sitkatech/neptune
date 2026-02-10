@@ -10623,6 +10623,10 @@
             "type": "integer",
             "format": "int32"
           },
+          "RoleName": {
+            "type": "string",
+            "nullable": true
+          },
           "CreateDate": {
             "type": "string",
             "format": "date-time"
@@ -10643,6 +10647,10 @@
           "OrganizationID": {
             "type": "integer",
             "format": "int32"
+          },
+          "OrganizationName": {
+            "type": "string",
+            "nullable": true
           },
           "ReceiveSupportEmails": {
             "type": "boolean"
@@ -10694,6 +10702,10 @@
             "type": "integer",
             "format": "int32"
           },
+          "RoleName": {
+            "type": "string",
+            "nullable": true
+          },
           "CreateDate": {
             "type": "string",
             "format": "date-time"
@@ -10715,6 +10727,10 @@
             "type": "integer",
             "format": "int32"
           },
+          "OrganizationName": {
+            "type": "string",
+            "nullable": true
+          },
           "ReceiveSupportEmails": {
             "type": "boolean"
           },
@@ -10732,6 +10748,9 @@
             "type": "string",
             "nullable": true,
             "readOnly": true
+          },
+          "HasAssignedStormwaterJurisdiction": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
