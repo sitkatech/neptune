@@ -276,6 +276,8 @@
                                     <dd>{{ selected.tgu?.PermitClass ? selected.tgu?.PermitClass : "-" }}</dd>
                                     <dt>Jurisdiction</dt>
                                     <dd>{{ selected.tgu?.StormwaterJurisdictionName ? selected.tgu?.StormwaterJurisdictionName : "-" }}</dd>
+                                    <dt>Area</dt>
+                                    <dd>{{ selected.tgu?.Area != null ? (selected.tgu?.Area | number: '1.2-2') + ' acres' : '-' }}</dd>
                                 </div>
                                 <div class="tgu-grid-data-column">
                                     <dt>BMP</dt>
