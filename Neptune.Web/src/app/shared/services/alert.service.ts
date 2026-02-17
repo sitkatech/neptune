@@ -1,24 +1,20 @@
-import {Injectable} from '@angular/core';
-import {Alert} from '../models/alert';
-import { AlertContext } from '../models/enums/alert-context.enum';
-import { BehaviorSubject } from 'rxjs';
+import { Injectable } from "@angular/core";
+import { Alert } from "../models/alert";
+import { AlertContext } from "../models/enums/alert-context.enum";
+import { BehaviorSubject } from "rxjs";
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: "root",
 })
 export class AlertService {
-
-    constructor() {
-
-    }
+    constructor() {}
 
     public alerts: Alert[] = [];
     public alertSubject: BehaviorSubject<Alert[]> = new BehaviorSubject([]);
 
-
     pushAlert(alert: Alert): void {
-        if (alert.uniqueCode ){
-            if (this.alerts.some(x=>x.uniqueCode === alert.uniqueCode)){
+        if (alert.uniqueCode) {
+            if (this.alerts.some((x) => x.uniqueCode === alert.uniqueCode)) {
                 return; // don't push a duplicate alert if it has a unique token.
             }
         }
@@ -42,11 +38,20 @@ export class AlertService {
         this.alertSubject.next(this.alerts);
     }
 
-    pushNotFoundUnauthorizedAlert(){
-        this.pushAlert(new Alert("The page you are trying to access was not found, or you do not have permission to view it.", AlertContext.Info, true, AlertService.NOT_FOUND_UNAUTHORIZED));
+    pushNotFoundUnauthorizedAlert() {
+        this.pushAlert(
+            new Alert("The page you are trying to access was not found, or you do not have permission to view it.", AlertContext.Info, true, AlertService.NOT_FOUND_UNAUTHORIZED)
+        );
         this.alertSubject.next(this.alerts);
     }
 
+    removeAlertByUniqueCode(uniqueCode: string): void {
+        const index = this.alerts.findIndex((a) => a.uniqueCode === uniqueCode);
+        if (index >= 0) {
+            this.alerts.splice(index, 1);
+            this.alertSubject.next(this.alerts);
+        }
+    }
 
     public static NOT_FOUND_UNAUTHORIZED = "NotFoundUnauthorized";
     public static USERS_AWAITING_CONFIGURATION = "UsersAwaitingConfiguration";
