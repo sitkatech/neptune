@@ -28,6 +28,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Neptune.EFModels.Entities;
 using Neptune.WebMvc.Common.OpenID;
+using Neptune.WebMvc.Views.Account;
 
 namespace Neptune.WebMvc.Controllers
 {
@@ -91,6 +92,15 @@ namespace Neptune.WebMvc.Controllers
                 .Build();
 
             return SignOut(properties, Auth0Constants.AuthenticationScheme);
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult VerifyEmailRequired()
+        {
+            var viewData = new VerifyEmailRequiredViewData(HttpContext, _linkGenerator, _webConfiguration,
+                CurrentPerson);
+            return RazorView<Views.Account.VerifyEmailRequired, VerifyEmailRequiredViewData>(viewData);
         }
     }
 }

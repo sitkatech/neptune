@@ -31,8 +31,16 @@ export class AuthenticationService {
         // Subscribe to Auth0 user stream to update claims and current user
         this.auth0.user$.pipe(takeUntil(this._destroying$)).subscribe((user) => {
             if (user) {
+                this.alertService.removeAlertByUniqueCode("EmailVerificationRequired");
+
                 this.claimsUser = user as any;
                 this.postUser();
+
+                const target = sessionStorage.getItem("postAuthTarget");
+                if (target) {
+                    sessionStorage.removeItem("postAuthTarget");
+                    this.router.navigateByUrl(target);
+                }
             } else {
                 this.claimsUser = null;
                 this.currentUser = null;
@@ -95,9 +103,33 @@ export class AuthenticationService {
         );
     }
 
-    public login(target?: string) {
+    private storePostAuthTarget(target?: string) {
         const safeTarget = target ?? this.router.url ?? "/";
+        sessionStorage.setItem("postAuthTarget", safeTarget);
+        return safeTarget;
+    }
+
+    public login(target?: string) {
+        const safeTarget = this.storePostAuthTarget(target);
         this.auth0.loginWithRedirect({ appState: { target: safeTarget } } as any);
+    }
+
+    signUp(target?: string) {
+        const safeTarget = this.storePostAuthTarget(target);
+        const baseRedirect = environment.auth0?.redirectUri ?? window.location.origin + "/callback";
+
+        this.auth0.loginWithRedirect({
+            authorizationParams: { screen_hint: "signup", redirect_uri: baseRedirect },
+            appState: { target: safeTarget },
+        } as any);
+    }
+
+    resetPassword() {
+        const safeTarget = this.storePostAuthTarget();
+        this.auth0.loginWithRedirect({
+            authorizationParams: { screen_hint: "reset-password" },
+            appState: { target: safeTarget },
+        } as any);
     }
 
     public logout(): void {
@@ -122,20 +154,6 @@ export class AuthenticationService {
             default:
                 return "/"; // main homepage
         }
-    }
-
-    resetPassword() {
-        const target = this.router.url ?? "/";
-        this.auth0.loginWithRedirect({
-            authorizationParams: { screen_hint: "reset-password" },
-            appState: { target },
-        } as any);
-    }
-
-    signUp(target?: string) {
-        const safeTarget = target ?? this.router.url ?? "/";
-        const baseRedirect = environment.auth0?.redirectUri ?? window.location.origin + "/callback";
-        this.auth0.loginWithRedirect({ authorizationParams: { screen_hint: "signup", redirect_uri: baseRedirect }, appState: { target: safeTarget } } as any);
     }
 
     public isCurrentUserNullOrUndefined(): boolean {
