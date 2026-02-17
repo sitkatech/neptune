@@ -357,29 +357,92 @@ public static class TreatmentBMPs
 
     public static async Task<TreatmentBMPDto> GetByIDAsDtoAsync(NeptuneDbContext dbContext, int treatmentBMPID)
     {
-        var treatmentBMP = await dbContext.TreatmentBMPs.AsNoTracking()
-            .Include(x => x.TreatmentBMPType)
-            .Include(x => x.StormwaterJurisdiction).ThenInclude(x => x.Organization)
-            .Include(x => x.OwnerOrganization)
-            .Include(x => x.WaterQualityManagementPlan)
-            .Include(x => x.Delineation)
-            .Include(x => x.RegionalSubbasinRevisionRequests)
-            .SingleAsync(x => x.TreatmentBMPID == treatmentBMPID);
+        var dto = await dbContext.TreatmentBMPs.AsNoTracking()
+            .Where(x => x.TreatmentBMPID == treatmentBMPID)
+            .Select(TreatmentBMPDtoProjections.AsDto)
+            .SingleAsync();
 
-        var dto = treatmentBMP.AsDto();
+        ResolveClientSideLookups(dto);
 
-        var subregion = treatmentBMP.GetRegionalSubbasin(dbContext);
-        var otherBMPsInSubregion = subregion?.GetTreatmentBMPs(dbContext);
+        // Fetch supplemental data for Delineation GeoJSON and OtherTreatmentBMPsExistInSubbasin
+        var supplemental = await dbContext.TreatmentBMPs.AsNoTracking()
+            .Where(x => x.TreatmentBMPID == treatmentBMPID)
+            .Select(x => new
+            {
+                x.LocationPoint,
+                DelineationID = x.Delineation != null ? (int?)x.Delineation.DelineationID : null,
+                DelineationTreatmentBMPID = x.Delineation != null ? (int?)x.Delineation.TreatmentBMPID : null,
+                DelineationGeometry4326 = x.Delineation != null ? x.Delineation.DelineationGeometry4326 : null
+            })
+            .SingleAsync();
 
-        dto.OtherTreatmentBMPsExistInSubbasin = otherBMPsInSubregion?.Where(x => x.TreatmentBMPID != treatmentBMPID).Any() ?? false;
-
-        if (treatmentBMP.UpstreamBMPID.HasValue)
+        // Resolve Delineation GeoJSON and DelineationTypeName
+        if (dto.Delineation != null && supplemental.DelineationGeometry4326 != null)
         {
-            var upstreamBMPDto = await GetByIDAsDtoAsync(dbContext, treatmentBMP.UpstreamBMPID.Value);
-            dto.UpstreamBMP = upstreamBMPDto;
+            var attributesTable = new AttributesTable
+            {
+                { "DelineationID", supplemental.DelineationID },
+                { "TreatmentBMPID", supplemental.DelineationTreatmentBMPID }
+            };
+            var feature = new Feature(supplemental.DelineationGeometry4326, attributesTable);
+            dto.Delineation.Geometry = GeoJsonSerializer.Serialize(feature);
+        }
+
+        // OtherTreatmentBMPsExistInSubbasin requires a spatial query with LocationPoint (EPSG 2771)
+        if (supplemental.LocationPoint != null)
+        {
+            var subregion = dbContext.RegionalSubbasins.AsNoTracking()
+                .SingleOrDefault(x => x.CatchmentGeometry.Contains(supplemental.LocationPoint));
+            var otherBMPsInSubregion = subregion?.GetTreatmentBMPs(dbContext);
+            dto.OtherTreatmentBMPsExistInSubbasin = otherBMPsInSubregion?.Where(x => x.TreatmentBMPID != treatmentBMPID).Any() ?? false;
+        }
+
+        // Compute HasSettableBenchmarkAndThresholdValues using static ObservationTypeSpecification lookup
+        var specIdsWithBenchmarks = ObservationTypeSpecification.All
+            .Where(s => s.ObservationThresholdTypeID != (int)ObservationThresholdTypeEnum.None)
+            .Select(s => s.ObservationTypeSpecificationID)
+            .ToList();
+
+        dto.HasSettableBenchmarkAndThresholdValues = await dbContext.TreatmentBMPTypeAssessmentObservationTypes
+            .AnyAsync(x => x.TreatmentBMPTypeID == dto.TreatmentBMPTypeID
+                && specIdsWithBenchmarks.Contains(x.TreatmentBMPAssessmentObservationType.ObservationTypeSpecificationID));
+
+        if (dto.UpstreamBMPID.HasValue)
+        {
+            dto.UpstreamBMP = await GetByIDAsDtoAsync(dbContext, dto.UpstreamBMPID.Value);
         }
 
         return dto;
+    }
+
+    private static void ResolveClientSideLookups(TreatmentBMPDto dto)
+    {
+        // Resolve SizingBasisType names
+        if (dto.SizingBasisType != null && SizingBasisType.AllLookupDictionary.TryGetValue(dto.SizingBasisType.SizingBasisTypeID, out var sizingBasisType))
+        {
+            dto.SizingBasisType.SizingBasisTypeName = sizingBasisType.SizingBasisTypeName;
+            dto.SizingBasisType.SizingBasisTypeDisplayName = sizingBasisType.SizingBasisTypeDisplayName;
+        }
+
+        // Resolve TrashCaptureStatusType names
+        if (dto.TrashCaptureStatusType != null && TrashCaptureStatusType.AllLookupDictionary.TryGetValue(dto.TrashCaptureStatusType.TrashCaptureStatusTypeID, out var trashCaptureStatusType))
+        {
+            dto.TrashCaptureStatusType.TrashCaptureStatusTypeName = trashCaptureStatusType.TrashCaptureStatusTypeName;
+            dto.TrashCaptureStatusType.TrashCaptureStatusTypeDisplayName = trashCaptureStatusType.TrashCaptureStatusTypeDisplayName;
+        }
+
+        // Resolve TreatmentBMPLifespanType names
+        if (dto.TreatmentBMPLifespanType != null && TreatmentBMPLifespanType.AllLookupDictionary.TryGetValue(dto.TreatmentBMPLifespanType.TreatmentBMPLifeSpanTypeID, out var lifespanType))
+        {
+            dto.TreatmentBMPLifespanType.TreatmentBMPLifeSpanTypeName = lifespanType.TreatmentBMPLifespanTypeName;
+            dto.TreatmentBMPLifespanType.TreatmentBMPLifeSpanTypeDisplayName = lifespanType.TreatmentBMPLifespanTypeDisplayName;
+        }
+
+        // Resolve DelineationType name
+        if (dto.Delineation != null && DelineationType.AllLookupDictionary.TryGetValue(dto.Delineation.DelineationTypeID, out var delineationType))
+        {
+            dto.Delineation.DelineationTypeName = delineationType.DelineationTypeDisplayName;
+        }
     }
 
     public static TreatmentBMP GetByIDWithChangeTracking(NeptuneDbContext dbContext,

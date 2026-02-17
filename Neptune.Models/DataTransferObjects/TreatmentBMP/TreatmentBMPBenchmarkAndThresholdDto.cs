@@ -9,4 +9,5 @@ public class TreatmentBMPBenchmarkAndThresholdDto
     public int TreatmentBMPAssessmentObservationTypeID { get; set; }
     public double BenchmarkValue { get; set; }
     public double ThresholdValue { get; set; }
+    public string ObservationTypeName { get; set; }
 }

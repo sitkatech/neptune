@@ -66,6 +66,7 @@ export class TreatmentBMPDto {
     Project?: ProjectDto;
     OwnerOrganization?: OrganizationDisplayDto;
     StormwaterJurisdiction?: StormwaterJurisdictionDisplayDto;
+    HasSettableBenchmarkAndThresholdValues?: boolean;
     SizingBasisType?: SizingBasisTypeDto;
     TrashCaptureStatusType?: TrashCaptureStatusTypeDto;
     TreatmentBMPLifespanType?: TreatmentBMPLifeSpanTypeDto;
@@ -119,6 +120,7 @@ export interface TreatmentBMPDtoForm {
     Project?: FormControl<ProjectDto>;
     OwnerOrganization?: FormControl<OrganizationDisplayDto>;
     StormwaterJurisdiction?: FormControl<StormwaterJurisdictionDisplayDto>;
+    HasSettableBenchmarkAndThresholdValues?: FormControl<boolean>;
     SizingBasisType?: FormControl<SizingBasisTypeDto>;
     TrashCaptureStatusType?: FormControl<TrashCaptureStatusTypeDto>;
     TreatmentBMPLifespanType?: FormControl<TreatmentBMPLifeSpanTypeDto>;
@@ -556,6 +558,16 @@ export class TreatmentBMPDtoFormControls {
         }
     );
     public static StormwaterJurisdiction = (value: FormControlState<StormwaterJurisdictionDisplayDto> | StormwaterJurisdictionDisplayDto = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<StormwaterJurisdictionDisplayDto>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static HasSettableBenchmarkAndThresholdValues = (value: FormControlState<boolean> | boolean = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<boolean>(
         value,
         formControlOptions ?? 
         {

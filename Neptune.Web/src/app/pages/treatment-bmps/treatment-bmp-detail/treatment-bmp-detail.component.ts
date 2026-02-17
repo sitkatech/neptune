@@ -74,6 +74,8 @@ import {
 import { RegionalSubbasinRevisionRequestStatusEnum } from "src/app/shared/generated/enum/regional-subbasin-revision-request-status-enum";
 import { AuthenticationService } from "src/app/services/authentication.service";
 import { RoleEnum } from "src/app/shared/generated/enum/role-enum";
+import { TreatmentBMPBenchmarkAndThresholdService } from "src/app/shared/generated/api/treatment-bmp-benchmark-and-threshold.service";
+import { TreatmentBMPBenchmarkAndThresholdDto } from "src/app/shared/generated/model/treatment-bmp-benchmark-and-threshold-dto";
 
 @Component({
     selector: "treatment-bmp-detail",
@@ -150,6 +152,7 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
     refreshTreatmentBMPDocumentsTrigger$: BehaviorSubject<void> = new BehaviorSubject<void>(undefined);
     hruCharacteristics$: Observable<HRUCharacteristicDto[]>;
     fieldVisits$: Observable<FieldVisitDto[]>;
+    benchmarkAndThresholds$: Observable<TreatmentBMPBenchmarkAndThresholdDto[]>;
     fieldVisitColumnDefs: Array<ColDef>;
 
     imagesLoading = true;
@@ -184,7 +187,8 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
         private dialogService: DialogService,
         private confirmService: ConfirmService,
         private alertService: AlertService,
-        private authenticationService: AuthenticationService
+        private authenticationService: AuthenticationService,
+        private benchmarkAndThresholdService: TreatmentBMPBenchmarkAndThresholdService
     ) {}
 
     ngOnInit(): void {
@@ -240,6 +244,8 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
         );
         // Wire up field visits grid as observable
         this.fieldVisits$ = this.treatmentBMPService.fieldVisitGridJsonDataTreatmentBMP(this.treatmentBMPID);
+        this.benchmarkAndThresholds$ = this.benchmarkAndThresholdService.listTreatmentBMPBenchmarkAndThreshold(this.treatmentBMPID);
+
         this.treatmentBMP$ = this.treatmentBMPService.getByIDTreatmentBMP(this.treatmentBMPID).pipe(
             tap((bmp) => {
                 if (bmp && bmp.Latitude && bmp.Longitude) {
@@ -256,6 +262,9 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
                         (r) => r.RegionalSubbasinRevisionRequestStatusID == RegionalSubbasinRevisionRequestStatusEnum.Open
                     );
                 }
+
+                this.hasSettableBenchmarkAndThresholdValues = bmp?.HasSettableBenchmarkAndThresholdValues ?? false;
+                this.canEditBenchmarkAndThresholds = this.currentPersonCanManage && this.hasSettableBenchmarkAndThresholdValues;
             }),
             shareReplay(1)
         );
@@ -388,19 +397,7 @@ export class TreatmentBmpDetailComponent implements OnInit, OnChanges {
             });
     }
 
-    /**
-     * Stub: Whether the current user can edit benchmark and thresholds
-     */
     canEditBenchmarkAndThresholds = false;
-
-    /**
-     * Stub: URL for adding benchmark and threshold values
-     */
-    addBenchmarkAndThresholdUrl = "";
-
-    /**
-     * Stub: Whether this BMP type has settable benchmark and threshold values
-     */
     hasSettableBenchmarkAndThresholdValues = false;
 
     // NOTE: TreatmentBMPTypeIsAnalyzedInModelingModule is expected on treatmentBMP DTO. If missing, add to DTO or adjust template logic.

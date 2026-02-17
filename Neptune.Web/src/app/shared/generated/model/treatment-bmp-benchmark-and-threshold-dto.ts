@@ -18,6 +18,7 @@ export class TreatmentBMPBenchmarkAndThresholdDto {
     TreatmentBMPAssessmentObservationTypeID?: number;
     BenchmarkValue?: number;
     ThresholdValue?: number;
+    ObservationTypeName?: string | null;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
@@ -31,6 +32,7 @@ export interface TreatmentBMPBenchmarkAndThresholdDtoForm {
     TreatmentBMPAssessmentObservationTypeID?: FormControl<number>;
     BenchmarkValue?: FormControl<number>;
     ThresholdValue?: FormControl<number>;
+    ObservationTypeName?: FormControl<string>;
 }
 
 export class TreatmentBMPBenchmarkAndThresholdDtoFormControls { 
@@ -95,6 +97,16 @@ export class TreatmentBMPBenchmarkAndThresholdDtoFormControls {
         }
     );
     public static ThresholdValue = (value: FormControlState<number> | number = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<number>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static ObservationTypeName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {

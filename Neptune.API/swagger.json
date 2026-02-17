@@ -12252,6 +12252,10 @@
           "ThresholdValue": {
             "type": "number",
             "format": "double"
+          },
+          "ObservationTypeName": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -12704,6 +12708,9 @@
           },
           "StormwaterJurisdiction": {
             "$ref": "#/components/schemas/StormwaterJurisdictionDisplayDto"
+          },
+          "HasSettableBenchmarkAndThresholdValues": {
+            "type": "boolean"
           },
           "SizingBasisType": {
             "$ref": "#/components/schemas/SizingBasisTypeDto"
