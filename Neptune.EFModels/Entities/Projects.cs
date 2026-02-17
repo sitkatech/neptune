@@ -13,7 +13,9 @@ namespace Neptune.EFModels.Entities
                 .Include(x => x.StormwaterJurisdiction)
                 .ThenInclude(x => x.Organization)
                 .Include(x => x.CreatePerson)
-                .Include(x => x.PrimaryContactPerson);
+                .ThenInclude(x => x.Organization)
+                .Include(x => x.PrimaryContactPerson)
+                .ThenInclude(x => x.Organization);
         }
 
         public static Task<List<ProjectDto>> ListAsDtoAsync(NeptuneDbContext dbContext)
