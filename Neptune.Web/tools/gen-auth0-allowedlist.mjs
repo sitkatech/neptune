@@ -16,115 +16,29 @@ function escapeRegex(s) {
     return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
-/**
- * NOTE: Why this generator does path-parameter type narrowing
- *
- * Auth0's Angular interceptor uses an "allowedList" to decide whether to attach an access token.
- * Our generated list also supports "anonymous" routes (x-anonymous) that MUST NOT receive a token.
- *
- * Previously, templated OpenAPI paths like `/treatment-bmps/{treatmentBMPID}` were converted into the
- * regex `^/treatment-bmps/[^/]+$`. That is too broad: it also matches non-ID subpaths like
- * `/treatment-bmps/planned-projects`.
- *
- * Because anonymous routes explicitly block token attachment in `auth0-allowedlist.ts`, the overly-broad
- * anonymous regex caused the interceptor to skip adding `Authorization` on `/treatment-bmps/planned-projects`.
- * The API then correctly returned 401 even though the user was authenticated.
- *
- * Fix: when we can infer that a path param is numeric (int32/int64/etc), we emit `\\d+` instead of `[^/]+`.
- * That keeps `/treatment-bmps/{treatmentBMPID}` matching only numeric IDs and prevents collisions with
- * literal routes under the same prefix.
- */
-
-function getRef(root, ref) {
-    // Supports local refs like "#/components/parameters/Foo"
-    if (typeof ref !== "string" || !ref.startsWith("#/")) return null;
-    const parts = ref
-        .slice(2)
-        .split("/")
-        .map((p) => p.replace(/~1/g, "/").replace(/~0/g, "~"));
-
-    let cur = root;
-    for (const key of parts) {
-        if (!cur || typeof cur !== "object") return null;
-        cur = cur[key];
-    }
-    return cur ?? null;
-}
-
-function resolveMaybeRef(root, obj) {
-    if (!obj || typeof obj !== "object") return obj;
-    if (typeof obj.$ref === "string") {
-        return getRef(root, obj.$ref) ?? obj;
-    }
-    return obj;
-}
-
-function getParamMatcherFromSchema(schema) {
-    // Prefer a type-specific matcher when swagger declares a numeric/uuid path param.
-    // This prevents templated paths from accidentally matching literal subroutes.
-    const resolved = resolveMaybeRef(doc, schema);
-    const type = resolved?.type;
-    const format = resolved?.format;
-
-    if (type === "integer" || type === "number") {
-        return "\\d+";
-    }
-    if (format === "uuid") {
-        // UUIDs are hex with hyphens in fixed positions (8-4-4-4-12).
-        // This avoids matching strings like "------------------------------------".
-        return "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}";
-    }
-
-    return "[^/]+";
-}
-
-function buildPathParamMatchers(pathItem, operation) {
-    // Path params can be declared at either the path-item level or the operation level.
-    // Combine both, resolve any $refs, then pick a safe regex matcher per param name.
-    const matchers = new Map();
-    const combined = [...(pathItem?.parameters ?? []), ...(operation?.parameters ?? [])];
-
-    for (const raw of combined) {
-        const param = resolveMaybeRef(doc, raw);
-        if (!param || typeof param !== "object") continue;
-        if (param.in !== "path") continue;
-        if (typeof param.name !== "string" || param.name.length === 0) continue;
-
-        const matcher = getParamMatcherFromSchema(param.schema);
-        matchers.set(param.name, matcher);
-    }
-
-    return matchers;
-}
-
-function openApiTemplateToRegex(templatePath, paramMatchers) {
-    // Example:
-    //   "/jurisdictions/{id}/users" -> "^/jurisdictions/\\d+/users$" (when id is integer)
-    // Fallback:
-    //   unknown param type -> "[^/]+"
+function openApiTemplateToRegex(templatePath) {
+    // "/jurisdictions/{id}/users" -> "^/jurisdictions/[^/]+/users$"
     const escaped = escapeRegex(templatePath);
-    return `^${escaped.replace(/\\\{([^}]+)\\\}/g, (_, name) => paramMatchers?.get(name) ?? "[^/]+")}$`;
+    const withParams = escaped.replace(/\\\{[^}]+\\\}/g, "[^/]+");
+    return `^${withParams}$`;
 }
+
 function isTemplatedPath(p) {
     return p.includes("{") && p.includes("}");
 }
+
+// Collect per-method exact paths and regexes, split by anonymous/secured
+// method -> Set<string>
+const anonExact = new Map();
+const securedExact = new Map();
+// method -> Set<regexString>
+const anonRegex = new Map();
+const securedRegex = new Map();
+
 function add(map, method, value) {
     if (!map.has(method)) map.set(method, new Set());
     map.get(method).add(value);
 }
-function sorted(set) {
-    return [...(set ?? new Set())].sort();
-}
-
-// method -> Set<string>
-const anonExact = new Map();
-const optExact = new Map();
-const secExact = new Map();
-
-// method -> Set<regexString>
-const anonRegex = new Map();
-const optRegex = new Map();
-const secRegex = new Map();
 
 for (const [p, operations] of Object.entries(doc.paths ?? {})) {
     for (const [m, op] of Object.entries(operations ?? {})) {
@@ -132,40 +46,45 @@ for (const [p, operations] of Object.entries(doc.paths ?? {})) {
         if (!VALID_METHODS.has(method)) continue;
         if (!op || typeof op !== "object") continue;
 
-        // Classification rules:
-        // - x-optional-auth wins (even if x-anonymous is also present)
-        // - else x-anonymous => anonymous
-        // - else => secured
-        const isOptional = op["x-optional-auth"] === true;
-        const isAnonOnly = !isOptional && op["x-anonymous"] === true;
-
-        const exactMap = isOptional ? optExact : isAnonOnly ? anonExact : secExact;
-        const regexMap = isOptional ? optRegex : isAnonOnly ? anonRegex : secRegex;
+        const isAnon = op["x-anonymous"] === true;
 
         if (isTemplatedPath(p)) {
-            const paramMatchers = buildPathParamMatchers(operations, op);
-            add(regexMap, method, openApiTemplateToRegex(p, paramMatchers));
+            const rx = openApiTemplateToRegex(p);
+            add(isAnon ? anonRegex : securedRegex, method, rx);
         } else {
-            add(exactMap, method, p);
+            add(isAnon ? anonExact : securedExact, method, p);
         }
     }
 }
 
-const methodKeys = new Set([...anonExact.keys(), ...optExact.keys(), ...secExact.keys(), ...anonRegex.keys(), ...optRegex.keys(), ...secRegex.keys()]);
+function sorted(set) {
+    return [...(set ?? new Set())].sort();
+}
+
+// Build stable list of methods that exist in swagger
+const methodKeys = new Set([...anonExact.keys(), ...securedExact.keys(), ...anonRegex.keys(), ...securedRegex.keys()]);
 
 const methodsUpper = [...methodKeys].map((m) => m.toUpperCase()).sort();
 
+/**
+ * Output TS
+ */
 const ts = `/* AUTO-GENERATED from swagger.json. DO NOT EDIT BY HAND. */
+
+import { HttpInterceptorRouteConfig } from '@auth0/auth0-angular';
 
 export type AllowedHttpMethod = 'GET'|'POST'|'PUT'|'PATCH'|'DELETE'|'OPTIONS'|'HEAD';
 
-type ExactMap = Partial<Record<AllowedHttpMethod, ReadonlySet<string>>>;
+type ExactMap = Partial<Record<AllowedHttpMethod, ReadonlyArray<string>>>;
 type RegexMap = Partial<Record<AllowedHttpMethod, ReadonlyArray<RegExp>>>;
 
 function stripBase(apiBaseUrl: string, uri: string): string | null {
   const base = apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl;
+
+  // Only match our API base
   if (!uri.startsWith(base)) return null;
 
+  // Remove the base. Ensure leading "/" for comparison with OpenAPI paths.
   const rest = uri.substring(base.length);
   if (rest === '') return '/';
   return rest.startsWith('/') ? rest : '/' + rest;
@@ -175,25 +94,18 @@ const ANON_EXACT: ExactMap = {
 ${methodsUpper
     .map((M) => {
         const m = M.toLowerCase();
-        return `  '${M}': new Set(${JSON.stringify(sorted(anonExact.get(m)))}),`;
+        const arr = sorted(anonExact.get(m));
+        return `  '${M}': ${JSON.stringify(arr)},`;
     })
     .join("\n")}
 };
 
-const OPT_EXACT: ExactMap = {
+const SECURED_EXACT: ExactMap = {
 ${methodsUpper
     .map((M) => {
         const m = M.toLowerCase();
-        return `  '${M}': new Set(${JSON.stringify(sorted(optExact.get(m)))}),`;
-    })
-    .join("\n")}
-};
-
-const SEC_EXACT: ExactMap = {
-${methodsUpper
-    .map((M) => {
-        const m = M.toLowerCase();
-        return `  '${M}': new Set(${JSON.stringify(sorted(secExact.get(m)))}),`;
+        const arr = sorted(securedExact.get(m));
+        return `  '${M}': ${JSON.stringify(arr)},`;
     })
     .join("\n")}
 };
@@ -208,79 +120,94 @@ ${methodsUpper
     .join("\n")}
 };
 
-const OPT_REGEX: RegexMap = {
+const SECURED_REGEX: RegexMap = {
 ${methodsUpper
     .map((M) => {
         const m = M.toLowerCase();
-        const arr = sorted(optRegex.get(m));
+        const arr = sorted(securedRegex.get(m));
         return `  '${M}': [\n${arr.map((r) => `    new RegExp(${JSON.stringify(r)}),`).join("\n")}\n  ],`;
     })
     .join("\n")}
 };
-
-const SEC_REGEX: RegexMap = {
-${methodsUpper
-    .map((M) => {
-        const m = M.toLowerCase();
-        const arr = sorted(secRegex.get(m));
-        return `  '${M}': [\n${arr.map((r) => `    new RegExp(${JSON.stringify(r)}),`).join("\n")}\n  ],`;
-    })
-    .join("\n")}
-};
-
-function matches(exact: ExactMap, regex: RegexMap, method: AllowedHttpMethod, p: string): boolean {
-  const e = exact[method];
-  if (e?.has(p)) return true;
-  const rs = regex[method] ?? [];
-  return rs.some(rx => rx.test(p));
-}
-
-function isAnon(method: AllowedHttpMethod, p: string) {
-  return matches(ANON_EXACT, ANON_REGEX, method, p);
-}
-function isOptional(method: AllowedHttpMethod, p: string) {
-  return matches(OPT_EXACT, OPT_REGEX, method, p);
-}
-function isSecured(method: AllowedHttpMethod, p: string) {
-  return matches(SEC_EXACT, SEC_REGEX, method, p);
-}
 
 /**
- * Builds Auth0 interceptor rules:
- * - Optional auth: attach token if available (allowAnonymous: true)
- * - Secured: attach token (required)
- * - Anonymous: never attach token
+ * Auth0 httpInterceptor.allowedList generator.
+ *
+ * This generates route configs that:
+ * - For anonymous routes: attach token if user is logged in, allow request if not (allowAnonymous: true)
+ * - For secured routes: require token (no allowAnonymous flag)
+ *
+ * This allows endpoints like /projects to work for both anonymous users (showing public data)
+ * and authenticated users (showing additional data based on their identity).
  */
-export function buildAuth0AllowedList(apiBaseUrl: string) {
+export function buildAuth0AllowedList(apiBaseUrl: string): HttpInterceptorRouteConfig[] {
   const methods: AllowedHttpMethod[] = ['GET','POST','PUT','PATCH','DELETE','OPTIONS','HEAD'];
+  const entries: HttpInterceptorRouteConfig[] = [];
+  const base = apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl;
 
-  const optional = methods.map(httpMethod => ({
-    httpMethod,
-    allowAnonymous: true,
-    uriMatcher: (uri: string) => {
-      const p = stripBase(apiBaseUrl, uri);
-      if (p === null) return false;
-      return isOptional(httpMethod, p);
+  // Anonymous routes: attach token if available, allow anonymous access
+  for (const method of methods) {
+    const exactPaths = ANON_EXACT[method];
+    if (exactPaths) {
+      for (const path of exactPaths) {
+        entries.push({
+          uri: base + path,
+          httpMethod: method,
+          allowAnonymous: true
+        });
+      }
     }
-  }));
-
-  const required = methods.map(httpMethod => ({
-    httpMethod,
-    uriMatcher: (uri: string) => {
-      const p = stripBase(apiBaseUrl, uri);
-      if (p === null) return false;
-
-      // Optional wins (handled above), anon blocks, secured allows
-      if (isOptional(httpMethod, p)) return false;
-      if (isAnon(httpMethod, p)) return false;
-      return isSecured(httpMethod, p);
+    const regexPatterns = ANON_REGEX[method];
+    if (regexPatterns) {
+      for (const rx of regexPatterns) {
+        entries.push({
+          uriMatcher: (uri: string) => {
+            const p = stripBase(apiBaseUrl, uri);
+            return p !== null && rx.test(p);
+          },
+          httpMethod: method,
+          allowAnonymous: true
+        });
+      }
     }
-  }));
+  }
 
-  return [...optional, ...required];
+  // Secured routes: require token
+  for (const method of methods) {
+    const exactPaths = SECURED_EXACT[method];
+    if (exactPaths) {
+      for (const path of exactPaths) {
+        entries.push({
+          uri: base + path,
+          httpMethod: method
+        });
+      }
+    }
+    const regexPatterns = SECURED_REGEX[method];
+    if (regexPatterns) {
+      for (const rx of regexPatterns) {
+        entries.push({
+          uriMatcher: (uri: string) => {
+            const p = stripBase(apiBaseUrl, uri);
+            return p !== null && rx.test(p);
+          },
+          httpMethod: method
+        });
+      }
+    }
+  }
+
+  return entries;
 }
 `;
 
 fs.mkdirSync(outDir, { recursive: true });
 fs.writeFileSync(outFile, ts, "utf8");
-console.log(`Generated ${outFile}`);
+
+const count = (m) => [...m.values()].reduce((a, s) => a + s.size, 0);
+console.log(
+    `Generated ${outFile}
+  anonExact=${count(anonExact)} anonRegex=${count(anonRegex)}
+  securedExact=${count(securedExact)} securedRegex=${count(securedRegex)}
+  swagger=${swaggerPath}`
+);
