@@ -180,6 +180,7 @@ var builder = WebApplication.CreateBuilder(args);
         options.Domain = configuration.Auth0Domain;
         options.ClientId = configuration.Auth0ClientID;
         options.Scope = "openid profile email";
+        options.CallbackPath = "/callback";
 
         options.OpenIdConnectEvents = new OpenIdConnectEvents
         {
@@ -193,6 +194,33 @@ var builder = WebApplication.CreateBuilder(args);
                     AuthenticationHelper.ProcessLoginFromAuth0(context, dbContext, configuration, logger, sitkaSmtpClientService);
                 }
 
+                return Task.CompletedTask;
+            },
+
+            OnRemoteFailure = context =>
+            {
+                context.HandleResponse();
+
+                // The useful info is on context.Failure (often an AuthenticationFailureException
+                // wrapping an OpenIdConnectProtocolException)
+                var ex = context.Failure;
+                var msg = ex?.ToString() ?? "";
+
+                // Common patterns depending on stack version:
+                // - "access_denied"
+                // - "Please verify your email before continuing."
+                // - inner OpenIdConnectProtocolException
+                if (msg.Contains("access_denied", StringComparison.OrdinalIgnoreCase) &&
+                    msg.Contains("verify your email", StringComparison.OrdinalIgnoreCase))
+                {
+                    context.Response.Redirect("/Account/VerifyEmailRequired");
+                    return Task.CompletedTask;
+                }
+
+                // Optional: log the full failure for diagnostics
+                // logger.LogError(ex, "Auth0 remote failure");
+
+                context.Response.Redirect("/Home/Error");
                 return Task.CompletedTask;
             }
         };
