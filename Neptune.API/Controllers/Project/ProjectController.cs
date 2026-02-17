@@ -64,7 +64,7 @@ namespace Neptune.API.Controllers
         [UserViewFeature]
         public async Task<ActionResult<ProjectDto>> Get([FromRoute] int projectID)
         {
-            var projectDto = Projects.GetByIDAsDto(DbContext, projectID);
+            var projectDto = await Projects.GetByIDAsDtoAsync(DbContext, projectID);
 
             if (CallingUser.IsOCTAGrantReviewer && projectDto.ShareOCTAM2Tier2Scores)
             {
@@ -79,10 +79,10 @@ namespace Neptune.API.Controllers
 
         [HttpGet("{projectID}/bounding-box")]
         [UserViewFeature]
-        public ActionResult<BoundingBoxDto> GetBoundingBoxByProjectID([FromRoute] int projectID)
+        public async Task<ActionResult<BoundingBoxDto>> GetBoundingBoxByProjectID([FromRoute] int projectID)
         {
-            var stormwaterJurisdictionID = Projects.GetByIDAsDto(DbContext, projectID).StormwaterJurisdictionID;
-            var boundingBoxDto = StormwaterJurisdictions.GetBoundingBoxDtoByJurisdictionID(DbContext, stormwaterJurisdictionID);
+            var projectDto = await Projects.GetByIDAsDtoAsync(DbContext, projectID);
+            var boundingBoxDto = StormwaterJurisdictions.GetBoundingBoxDtoByJurisdictionID(DbContext, projectDto.StormwaterJurisdictionID);
             return Ok(boundingBoxDto);
         }
 
@@ -550,16 +550,15 @@ namespace Neptune.API.Controllers
 
         [HttpGet("OCTAM2Tier2GrantProgram")]
         [UserViewFeature]
-        public ActionResult<List<ProjectDto>> ListProjectsSharedWithOCTAM2Tier2GrantProgram()
+        public async Task<ActionResult<List<ProjectDto>>> ListProjectsSharedWithOCTAM2Tier2GrantProgram()
         {
             if (!CallingUser.IsOCTAGrantReviewer)
             {
                 return Forbid();
             }
 
-            var projectHruCharacteristicsSummaryDtos = Projects.ListOCTAM2Tier2Projects(DbContext)
-                .Select(x => x.AsDto()).ToList();
-            return Ok(projectHruCharacteristicsSummaryDtos);
+            var projectDtos = await Projects.ListOCTAM2Tier2AsDtoAsync(DbContext);
+            return Ok(projectDtos);
         }
 
         [HttpGet("OCTAM2Tier2GrantProgram/download")]
