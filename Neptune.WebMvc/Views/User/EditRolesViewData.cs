@@ -26,11 +26,14 @@ namespace Neptune.WebMvc.Views.User
     public class EditRolesViewData : NeptuneUserControlViewData
     {
         public IEnumerable<SelectListItem> Roles { get; }
+        public IEnumerable<SelectListItem> Organizations { get; }
         public bool IsAdmin { get; }
 
-        public EditRolesViewData(IEnumerable<SelectListItem> roles, bool isAdmin)
+        public EditRolesViewData(IEnumerable<SelectListItem> roles,
+            IEnumerable<SelectListItem> organizationsAsSelectListItems, bool isAdmin)
         {
             Roles = roles;
+            Organizations = organizationsAsSelectListItems;
             IsAdmin = isAdmin;
         }
     }

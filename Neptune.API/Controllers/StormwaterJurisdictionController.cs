@@ -1,14 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Neptune.API.Services;
+using Neptune.API.Services.Attributes;
 using Neptune.API.Services.Authorization;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 
 namespace Neptune.API.Controllers
 {
@@ -17,9 +19,8 @@ namespace Neptune.API.Controllers
     public class StormwaterJurisdictionController(
         NeptuneDbContext dbContext,
         ILogger<StormwaterJurisdictionController> logger,
-        KeystoneService keystoneService,
         IOptions<NeptuneConfiguration> neptuneConfiguration)
-        : SitkaController<StormwaterJurisdictionController>(dbContext, logger, keystoneService, neptuneConfiguration)
+        : SitkaController<StormwaterJurisdictionController>(dbContext, logger, neptuneConfiguration)
     {
         [HttpGet]
         [JurisdictionEditFeature]
@@ -30,6 +31,8 @@ namespace Neptune.API.Controllers
         }
 
         [HttpGet("user-viewable")]
+        [AllowAnonymous]
+        [OptionalAuth]
         public async Task<ActionResult<List<StormwaterJurisdictionDisplayDto>>> ListViewable()
         {
             var stormwaterJurisdictionIDs = await StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonIDForBMPsAsync(DbContext, CallingUser.PersonID);
@@ -38,10 +41,11 @@ namespace Neptune.API.Controllers
         }
 
         [HttpGet("bounding-box")]
-        [UserViewFeature]
+        [AllowAnonymous]
+        [OptionalAuth]
         public async Task<ActionResult<BoundingBoxDto>> GetBoundingBox()
         {
-            var boundingBoxDto = await StormwaterJurisdictions.GetBoundingBoxDtoByPersonIDAsync(DbContext, CallingUser.PersonID);
+            var boundingBoxDto = await StormwaterJurisdictions.GetBoundingBoxDtoByPersonAsync(DbContext, CallingUser);
             return Ok(boundingBoxDto);
         }
 
@@ -54,6 +58,7 @@ namespace Neptune.API.Controllers
         }
 
         [HttpGet("{jurisdictionID}/bounding-box")]
+        [AllowAnonymous]
         public ActionResult<BoundingBoxDto> GetBoundingBoxByJurisdictionID([FromRoute] int jurisdictionID)
         {
             var boundingBoxDto = StormwaterJurisdictions.GetBoundingBoxDtoByJurisdictionID(DbContext, jurisdictionID);
@@ -64,7 +69,7 @@ namespace Neptune.API.Controllers
         [JurisdictionEditFeature]
         public async Task<ActionResult<List<TreatmentBMPGridDto>>> ListTreatmentBMPs([FromRoute] int jurisdictionID)
         {
-            var entities = await dbContext.vTreatmentBMPDetaileds
+            var entities = await DbContext.vTreatmentBMPDetaileds
                 .Where(x => x.StormwaterJurisdictionID == jurisdictionID)
                 .ToListAsync();
             var treatmentBMPGridDtos = entities.Select(x => x.AsGridDto())
@@ -76,7 +81,7 @@ namespace Neptune.API.Controllers
         [JurisdictionEditFeature]
         public async Task<ActionResult<List<PersonDisplayDto>>> ListUsers([FromRoute] int jurisdictionID)
         {
-            var entities = await StormwaterJurisdictionPeople.ListByStormwaterJurisdictionIDAsPersonDto(dbContext, jurisdictionID);
+            var entities = await StormwaterJurisdictionPeople.ListByStormwaterJurisdictionIDAsPersonDto(DbContext, jurisdictionID);
             return Ok(entities);
         }
     }

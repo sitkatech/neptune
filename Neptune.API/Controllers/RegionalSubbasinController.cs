@@ -19,9 +19,8 @@ public class RegionalSubbasinController : SitkaController<RegionalSubbasinContro
     public RegionalSubbasinController(
         NeptuneDbContext dbContext,
         ILogger<RegionalSubbasinController> logger,
-        KeystoneService keystoneService,
         IOptions<NeptuneConfiguration> neptuneConfiguration)
-        : base(dbContext, logger, keystoneService, neptuneConfiguration)
+        : base(dbContext, logger, neptuneConfiguration)
     {
     }
 
@@ -62,6 +61,7 @@ public class RegionalSubbasinController : SitkaController<RegionalSubbasinContro
     }
 
     [HttpPost("/graph-trace-as-feature-collection-from-point")]
+    [AdminFeature]
     public ActionResult<FeatureCollection> GetRegionalSubbasinGraphTraceAsFeatureCollectionFromPoint([FromBody] CoordinateDto coordinateDto)
     {
         var featureCollection = RegionalSubbasins.GetRegionalSubbasinGraphTraceAsFeatureCollection(DbContext, coordinateDto);

@@ -1,10 +1,10 @@
 import * as turf from "@turf/turf";
-import { ChangeDetectorRef, Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from "@angular/core";
+import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 import { Input } from "@angular/core";
 import L, { PM } from "leaflet";
 import "@geoman-io/leaflet-geoman-free";
-import { forkJoin, Observable } from "rxjs";
+import { BehaviorSubject, distinctUntilChanged, forkJoin, map, Observable } from "rxjs";
 import { BoundingBoxDto } from "src/app/shared/generated/model/bounding-box-dto";
 import { DelineationUpsertDto } from "src/app/shared/generated/model/delineation-upsert-dto";
 import { environment } from "src/environments/environment";
@@ -61,6 +61,8 @@ export class DelineationsComponent implements OnInit {
 
     public drawMapClicked: boolean = false;
     public delineations: DelineationUpsertDto[];
+    private readonly delineationsSubject = new BehaviorSubject<DelineationUpsertDto[]>([]);
+    public readonly delineations$ = this.delineationsSubject.asObservable();
     private originalDelineations: string;
     public zoomMapToDefaultExtent: boolean = true;
     public mapHeight: string = "750px";
@@ -86,6 +88,12 @@ export class DelineationsComponent implements OnInit {
     public selectedObjectMarker: L.Layer;
     public selectedDelineation: DelineationUpsertDto;
     public selectedTreatmentBMP: TreatmentBMPDisplayDto;
+    private readonly selectedTreatmentBMPSubject = new BehaviorSubject<TreatmentBMPDisplayDto | null>(null);
+    public readonly selectedTreatmentBMP$ = this.selectedTreatmentBMPSubject.asObservable();
+    public readonly selectedTreatmentBMPID$ = this.selectedTreatmentBMP$.pipe(
+        map((bmp) => bmp?.TreatmentBMPID ?? null),
+        distinctUntilChanged()
+    );
     public treatmentBMPsLayer: L.GeoJSON<any>;
     public selectedListItemDetails: { [key: string]: any } = {};
     private delineationDefaultStyle = {
@@ -103,10 +111,13 @@ export class DelineationsComponent implements OnInit {
 
     public isPerformingDrawAction: boolean = false;
     private newDelineationID: number = -1;
-    public isLoadingSubmit: boolean = false;
+    private readonly isLoadingSubmitSubject = new BehaviorSubject<boolean>(false);
+    public readonly isLoadingSubmit$ = this.isLoadingSubmitSubject.asObservable();
     public isEditingLocation = false;
 
     public projectTreatmentBMPs: Array<TreatmentBMPDisplayDto>;
+    private readonly projectTreatmentBMPsSubject = new BehaviorSubject<TreatmentBMPDisplayDto[]>([]);
+    public readonly projectTreatmentBMPs$ = this.projectTreatmentBMPsSubject.asObservable();
 
     // 1. Initialization & Lifecycle
 
@@ -114,7 +125,6 @@ export class DelineationsComponent implements OnInit {
         private treatmentBMPService: TreatmentBMPService,
         private router: Router,
         private alertService: AlertService,
-        private cdr: ChangeDetectorRef,
         private projectWorkflowProgressService: ProjectWorkflowProgressService,
         private projectService: ProjectService,
         private leafletHelperService: LeafletHelperService
@@ -122,10 +132,6 @@ export class DelineationsComponent implements OnInit {
 
     public ngOnInit(): void {
         this.boundingBox$ = this.projectService.getBoundingBoxByProjectIDProject(this.projectID);
-    }
-
-    ngOnDestroy() {
-        this.cdr.detach();
     }
 
     canExit() {
@@ -154,16 +160,16 @@ export class DelineationsComponent implements OnInit {
                 }
 
                 this.projectTreatmentBMPs = treatmentBMPs;
+                this.projectTreatmentBMPsSubject.next(this.projectTreatmentBMPs);
                 this.delineations = delineations;
+                this.delineationsSubject.next(this.delineations ?? []);
                 this.originalDelineations = JSON.stringify(this.mapDelineationsToGeoJson(this.delineations));
 
                 this.initializeMap();
-                this.cdr.detectChanges();
             });
         }
 
         this.registerClickEvents();
-        this.cdr.detectChanges();
     }
 
     public initializeMap(): void {
@@ -195,6 +201,7 @@ export class DelineationsComponent implements OnInit {
                         TreatmentBMPID: this.selectedTreatmentBMP.TreatmentBMPID,
                     });
                     this.delineations = this.delineations.concat(delineationUpsertDto);
+                    this.delineationsSubject.next(this.delineations);
                     this.newDelineationID--;
                 }
                 delineationUpsertDto.DelineationTypeID = DelineationTypeEnum.Distributed;
@@ -210,6 +217,7 @@ export class DelineationsComponent implements OnInit {
                     layer.remove();
                 }
                 this.resetDelineationFeatureGroups();
+                this.delineationsSubject.next(this.delineations);
 
                 this.selectFeatureImpl(this.selectedTreatmentBMP.TreatmentBMPID, true);
             })
@@ -359,6 +367,7 @@ export class DelineationsComponent implements OnInit {
 
         this.selectedListItem = treatmentBMPID;
         this.selectedTreatmentBMP = this.projectTreatmentBMPs.find((x) => x.TreatmentBMPID == treatmentBMPID);
+        this.selectedTreatmentBMPSubject.next(this.selectedTreatmentBMP ?? null);
         this.treatmentBMPsLayer?.eachLayer((layer: L.Marker) => {
             if (this.selectedTreatmentBMP == null || this.selectedTreatmentBMP.TreatmentBMPID != layer.feature.properties.TreatmentBMPID) {
                 layer.setIcon(MarkerHelper.treatmentBMPMarker).setZIndexOffset(1000);
@@ -400,6 +409,8 @@ export class DelineationsComponent implements OnInit {
 
             this.selectedTreatmentBMP.Latitude = event.latlng.lat;
             this.selectedTreatmentBMP.Longitude = event.latlng.lng;
+            this.selectedTreatmentBMPSubject.next(this.selectedTreatmentBMP);
+            this.projectTreatmentBMPsSubject.next(this.projectTreatmentBMPs);
             this.updateTreatmentBMPsLayer();
         });
     }
@@ -417,6 +428,7 @@ export class DelineationsComponent implements OnInit {
         let selectedNumber = null;
         let selectedAttributes = null;
         this.selectedTreatmentBMP = this.projectTreatmentBMPs.find((x) => x.TreatmentBMPID == treatmentBMPID);
+        this.selectedTreatmentBMPSubject.next(this.selectedTreatmentBMP ?? null);
         selectedAttributes = [
             `<strong>Type:</strong> ${this.selectedTreatmentBMP.TreatmentBMPTypeName}`,
             `<strong>Latitude:</strong> ${this.selectedTreatmentBMP.Latitude}`,
@@ -452,6 +464,7 @@ export class DelineationsComponent implements OnInit {
         });
 
         this.delineations = this.delineations.concat(newDelineation);
+        this.delineationsSubject.next(this.delineations);
         this.selectFeatureImpl(treatmentBMPID);
     }
 
@@ -472,17 +485,19 @@ export class DelineationsComponent implements OnInit {
                     TreatmentBMPID: treatmentBMPID,
                 });
                 this.delineations = this.delineations.concat(currentDelineationForTreatmentBMP);
+                this.delineationsSubject.next(this.delineations);
             }
             currentDelineationForTreatmentBMP.DelineationTypeID = DelineationTypeEnum.Centralized;
             currentDelineationForTreatmentBMP.Geometry = result.GeometryGeoJSON;
             currentDelineationForTreatmentBMP.DelineationArea = result.Area;
             this.resetDelineationFeatureGroups();
+            this.delineationsSubject.next(this.delineations);
             this.selectFeatureImpl(this.selectedTreatmentBMP.TreatmentBMPID);
         });
     }
 
     public save(continueToNextStep?: boolean) {
-        this.isLoadingSubmit = true;
+        this.isLoadingSubmitSubject.next(true);
         this.alertService.clearAlerts();
         this.getFullyQualifiedJSONGeometryForDelineations(this.delineations);
         var updatedDelineations = this.delineations.filter((x) => x.Geometry != null);
@@ -492,10 +507,11 @@ export class DelineationsComponent implements OnInit {
         }).subscribe({
             next: ({ delineations, treatmentBMPs }) => {
                 window.scroll(0, 0);
-                this.isLoadingSubmit = false;
+                this.isLoadingSubmitSubject.next(false);
                 this.projectWorkflowProgressService.updateProgress(this.projectID);
                 this.projectService.listDelineationsByProjectIDProject(this.projectID).subscribe((delineations) => {
                     this.delineations = delineations;
+                    this.delineationsSubject.next(this.delineations ?? []);
                     this.originalDelineations = JSON.stringify(this.mapDelineationsToGeoJson(this.delineations));
                     this.resetDelineationFeatureGroups();
                     this.selectFeatureImpl(this.selectedTreatmentBMP.TreatmentBMPID);
@@ -511,9 +527,8 @@ export class DelineationsComponent implements OnInit {
                 });
             },
             error: (error) => {
-                this.isLoadingSubmit = false;
+                this.isLoadingSubmitSubject.next(false);
                 window.scroll(0, 0);
-                this.cdr.detectChanges();
             },
         });
     }

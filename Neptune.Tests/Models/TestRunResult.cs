@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Text;
-using Humanizer.Bytes;
+using Humanizer;
 using Neptune.Tests.Interfaces;
 using Newtonsoft.Json;
 

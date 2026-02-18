@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Neptune.API.Services;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
+using System.Collections.Generic;
 
 namespace Neptune.API.Controllers;
 
@@ -13,11 +14,11 @@ namespace Neptune.API.Controllers;
 public class TreatmentBMPTypeCustomAttributeTypeController(
     NeptuneDbContext dbContext,
     ILogger<TreatmentBMPTypeCustomAttributeTypeController> logger,
-    KeystoneService keystoneService,
     IOptions<NeptuneConfiguration> neptuneConfiguration)
-    : SitkaController<TreatmentBMPTypeCustomAttributeTypeController>(dbContext, logger, keystoneService, neptuneConfiguration)
+    : SitkaController<TreatmentBMPTypeCustomAttributeTypeController>(dbContext, logger, neptuneConfiguration)
 {
     [HttpGet]
+    [AllowAnonymous]
     public ActionResult<List<TreatmentBMPTypeCustomAttributeTypeDto>> List()
     {
         var treatmentBMPTypeCustomAttributeTypeDtos = TreatmentBMPTypeCustomAttributeTypes.ListAsDto(DbContext);
@@ -26,6 +27,7 @@ public class TreatmentBMPTypeCustomAttributeTypeController(
 
 
     [HttpGet("{treatmentBMPTypeCustomAttributeTypeID}")]
+    [AllowAnonymous]
     public ActionResult<TreatmentBMPTypeCustomAttributeTypeDto> Get([FromRoute] int treatmentBMPTypeCustomAttributeTypeID)
     {
         var treatmentBMPTypeCustomAttributeTypeDto = TreatmentBMPTypeCustomAttributeTypes.GetByIDAsDto(DbContext, treatmentBMPTypeCustomAttributeTypeID);
@@ -33,6 +35,7 @@ public class TreatmentBMPTypeCustomAttributeTypeController(
     }
 
     [HttpGet("purpose/{customAttributeTypePurposeID}")]
+    [AllowAnonymous]
     public ActionResult<List<TreatmentBMPTypeCustomAttributeTypeDto>> GetTreatmentBMPTypeCustomAttributeTypeByCustomAttributePurposeID(
         [FromRoute] int customAttributeTypePurposeID)
     {

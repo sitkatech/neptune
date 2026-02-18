@@ -20,6 +20,7 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System.Drawing;
+using System.Text;
 using System.Web;
 using Microsoft.AspNetCore.Http.Extensions;
 using Neptune.WebMvc.Controllers;
@@ -50,13 +51,20 @@ namespace Neptune.WebMvc.Common
             "#070a41"
         };
 
-        public static string GenerateLogInUrlWithReturnUrl(HttpContext httpContext, LinkGenerator linkGenerator, string canonicalHostName)
+        public static string GenerateLogInUrlWithReturnUrl(
+            HttpContext httpContext,
+            LinkGenerator linkGenerator,
+            string canonicalHostName)
         {
-            var returnUrl = httpContext.Request.GetDisplayUrl();
-            //var link = new Uri(linkGenerator.GetUriByAction(context, "LogOn", "Account", new { returnUrl }));
-            //return link.ToString();
-            var logInUrl = SitkaRoute<AccountController>.BuildUrlFromExpression(linkGenerator, x => x.LogOn());
-            return OnErrorOrNotFoundPage(httpContext, linkGenerator, canonicalHostName, returnUrl) ? logInUrl : $"{logInUrl}?returnUrl={HttpUtility.UrlEncode(returnUrl)}";
+            var returnUrl = httpContext.Request.PathBase
+                            + httpContext.Request.Path
+                            + httpContext.Request.QueryString;
+
+            var logInUrl = SitkaRoute<AccountController>.BuildUrlFromExpression(linkGenerator, x => x.Login());
+
+            return OnErrorOrNotFoundPage(httpContext, linkGenerator, canonicalHostName, returnUrl)
+                ? logInUrl
+                : $"{logInUrl}?returnUrl={HttpUtility.UrlEncode(returnUrl, Encoding.UTF8)}";
         }
 
         public static string GenerateLogInUrlWithReturnUrl(HttpContext httpContext)
@@ -74,17 +82,38 @@ namespace Neptune.WebMvc.Common
         public static string GenerateLogOutUrl()
         {
             // LogOff is an async route so we can't use a Sitka route
-            return "/Account/LogOff";
+            return "/Account/Logout";
         }
 
-        private static bool OnErrorOrNotFoundPage(HttpContext httpContext, LinkGenerator linkGenerator, string canonicalHostName, string url)
+        private static bool OnErrorOrNotFoundPage(
+            HttpContext httpContext,
+            LinkGenerator linkGenerator,
+            string canonicalHostName,
+            string url)
         {
-            var returnUrlPathAndQuery = new Uri(url).PathAndQuery;
-            var notFoundUrlPathAndQuery = new Uri(SitkaRoute<HomeController>.BuildAbsoluteUrlHttpsFromExpression(linkGenerator, "https://" + canonicalHostName, x => x.NotFound())).PathAndQuery;
-            var errorUrlPathAndQuery = new Uri(SitkaRoute<HomeController>.BuildAbsoluteUrlHttpsFromExpression(linkGenerator, "https://" + canonicalHostName, x => x.Error())).PathAndQuery;
-            var onErrorOrNotFoundPage = returnUrlPathAndQuery.StartsWith(notFoundUrlPathAndQuery, StringComparison.InvariantCultureIgnoreCase) ||
-                                        returnUrlPathAndQuery.StartsWith(errorUrlPathAndQuery, StringComparison.InvariantCultureIgnoreCase);
-            return onErrorOrNotFoundPage;
+            // url might be relative ("/foo?bar=1") or absolute ("https://host/foo?bar=1")
+            var candidatePathAndQuery = Uri.TryCreate(url, UriKind.Absolute, out var abs)
+                ? abs.PathAndQuery
+                : Uri.TryCreate(url, UriKind.Relative, out var rel)
+                    ? rel.OriginalString
+                    : "/";
+
+            // Ensure we only compare path+query (and it starts with "/")
+            if (string.IsNullOrWhiteSpace(candidatePathAndQuery) || !candidatePathAndQuery.StartsWith("/"))
+                candidatePathAndQuery = "/";
+
+            var notFoundPathAndQuery = new Uri(
+                SitkaRoute<HomeController>.BuildAbsoluteUrlHttpsFromExpression(
+                    linkGenerator, "https://" + canonicalHostName, x => x.NotFound())
+            ).PathAndQuery;
+
+            var errorPathAndQuery = new Uri(
+                SitkaRoute<HomeController>.BuildAbsoluteUrlHttpsFromExpression(
+                    linkGenerator, "https://" + canonicalHostName, x => x.Error())
+            ).PathAndQuery;
+
+            return candidatePathAndQuery.StartsWith(notFoundPathAndQuery, StringComparison.InvariantCultureIgnoreCase) ||
+                   candidatePathAndQuery.StartsWith(errorPathAndQuery, StringComparison.InvariantCultureIgnoreCase);
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Neptune.API.Services;
@@ -13,11 +14,11 @@ namespace Neptune.API.Controllers
     public class CustomRichTextController(
         NeptuneDbContext dbContext,
         ILogger<CustomRichTextController> logger,
-        KeystoneService keystoneService,
         IOptions<NeptuneConfiguration> neptuneConfiguration)
-        : SitkaController<CustomRichTextController>(dbContext, logger, keystoneService, neptuneConfiguration)
+        : SitkaController<CustomRichTextController>(dbContext, logger, neptuneConfiguration)
     {
         [HttpGet("{customRichTextTypeID}")]
+        [AllowAnonymous]
         public ActionResult<NeptunePageDto> GetCustomRichText([FromRoute] int customRichTextTypeID)
         {
             var customRichTextDto = NeptunePages.GetByNeptunePageTypeID(DbContext, customRichTextTypeID);

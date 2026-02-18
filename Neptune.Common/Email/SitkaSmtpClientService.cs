@@ -13,7 +13,7 @@ namespace Neptune.Common.Email
 
         public SitkaSmtpClientService(ISendGridClient sendGridClient, IOptions<SendGridConfiguration> configuration)
         {
-            _sendGridClient = sendGridClient;
+            _sendGridClient = sendGridClient ?? throw new ArgumentNullException(nameof(sendGridClient));
             _configuration = configuration.Value;
         }
 
@@ -61,31 +61,33 @@ namespace Neptune.Common.Email
         /// <param name="mailMessage"></param>
         public async Task SendDirectly(MailMessage mailMessage)
         {
-            //if (!string.IsNullOrWhiteSpace(RioConfiguration.MailLogBcc))
-            //{
-            //    sendGridMessage.Bcc.Add(SitkaWebConfiguration.MailLogBcc);
-            //}
             var defaultEmailFrom = GetDefaultEmailFrom();
+
             var sendGridMessage = new SendGridMessage()
             {
                 From = new EmailAddress(defaultEmailFrom.Address, defaultEmailFrom.DisplayName),
                 Subject = mailMessage.Subject,
-                PlainTextContent = mailMessage.Body,
+                PlainTextContent = mailMessage.IsBodyHtml ? null : mailMessage.Body,
                 HtmlContent = mailMessage.IsBodyHtml ? mailMessage.Body : null
             };
-            sendGridMessage.AddTos(mailMessage.To.Select(x => new EmailAddress(x.Address, x.DisplayName)).ToList());
-            if (mailMessage.CC.Any())
+
+            if (mailMessage.To != null && mailMessage.To.Any())
+            {
+                sendGridMessage.AddTos(mailMessage.To.Select(x => new EmailAddress(x.Address, x.DisplayName)).ToList());
+            }
+
+            if (mailMessage.CC != null && mailMessage.CC.Any())
             {
                 sendGridMessage.AddCcs(mailMessage.CC.Select(x => new EmailAddress(x.Address, x.DisplayName)).ToList());
             }
 
-            if (mailMessage.Bcc.Any())
+            if (mailMessage.Bcc != null && mailMessage.Bcc.Any())
             {
                 sendGridMessage.AddBccs(mailMessage.Bcc.Select(x => new EmailAddress(x.Address, x.DisplayName)).ToList());
             }
 
-            var response = await _sendGridClient.SendEmailAsync(sendGridMessage);
-            //_logger.Info($"Email sent to SMTP server \"{smtpClient.Host}\", Details:\r\n{humanReadableDisplayOfMessage}");
+            var response = await _sendGridClient.SendEmailAsync(sendGridMessage).ConfigureAwait(false);
+            // Optionally, handle non-success status or logging
         }
 
         /// <summary>

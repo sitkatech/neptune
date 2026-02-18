@@ -18,17 +18,19 @@ export class PersonSimpleDto {
     Email?: string | null;
     Phone?: string | null;
     RoleID?: number;
+    RoleName?: string | null;
     CreateDate?: string;
     UpdateDate?: string | null;
     LastActivityDate?: string | null;
     IsActive?: boolean;
     OrganizationID?: number;
+    OrganizationName?: string | null;
     ReceiveSupportEmails?: boolean;
-    LoginName?: string | null;
     ReceiveRSBRevisionRequestEmails?: boolean;
     WebServiceAccessToken?: string;
     IsOCTAGrantReviewer?: boolean;
     readonly FullName?: string | null;
+    HasAssignedStormwaterJurisdiction?: boolean;
     constructor(obj?: any) {
         Object.assign(this, obj);
     }
@@ -42,17 +44,19 @@ export interface PersonSimpleDtoForm {
     Email?: FormControl<string>;
     Phone?: FormControl<string>;
     RoleID?: FormControl<number>;
+    RoleName?: FormControl<string>;
     CreateDate?: FormControl<string>;
     UpdateDate?: FormControl<string>;
     LastActivityDate?: FormControl<string>;
     IsActive?: FormControl<boolean>;
     OrganizationID?: FormControl<number>;
+    OrganizationName?: FormControl<string>;
     ReceiveSupportEmails?: FormControl<boolean>;
-    LoginName?: FormControl<string>;
     ReceiveRSBRevisionRequestEmails?: FormControl<boolean>;
     WebServiceAccessToken?: FormControl<string>;
     IsOCTAGrantReviewer?: FormControl<boolean>;
     FullName?: FormControl<string>;
+    HasAssignedStormwaterJurisdiction?: FormControl<boolean>;
 }
 
 export class PersonSimpleDtoFormControls { 
@@ -126,6 +130,16 @@ export class PersonSimpleDtoFormControls {
             ],
         }
     );
+    public static RoleName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
     public static CreateDate = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
@@ -176,7 +190,7 @@ export class PersonSimpleDtoFormControls {
             ],
         }
     );
-    public static ReceiveSupportEmails = (value: FormControlState<boolean> | boolean = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<boolean>(
+    public static OrganizationName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {
@@ -186,7 +200,7 @@ export class PersonSimpleDtoFormControls {
             ],
         }
     );
-    public static LoginName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+    public static ReceiveSupportEmails = (value: FormControlState<boolean> | boolean = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<boolean>(
         value,
         formControlOptions ?? 
         {
@@ -227,6 +241,16 @@ export class PersonSimpleDtoFormControls {
         }
     );
     public static FullName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
+    public static HasAssignedStormwaterJurisdiction = (value: FormControlState<boolean> | boolean = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<boolean>(
         value,
         formControlOptions ?? 
         {

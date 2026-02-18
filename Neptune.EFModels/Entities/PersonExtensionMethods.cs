@@ -21,22 +21,23 @@ public static class PersonExtensionMethods
         var dto = new PersonSimpleDto()
         {
             PersonID = person.PersonID,
-            PersonGuid = person.PersonGuid,
             FirstName = person.FirstName,
             LastName = person.LastName,
             Email = person.Email,
             Phone = person.Phone,
             RoleID = person.RoleID,
+            RoleName = person.Role.RoleDisplayName,
             CreateDate = person.CreateDate,
             UpdateDate = person.UpdateDate,
             LastActivityDate = person.LastActivityDate,
             IsActive = person.IsActive,
             OrganizationID = person.OrganizationID,
+            OrganizationName = person.Organization.OrganizationName,
             ReceiveSupportEmails = person.ReceiveSupportEmails,
-            LoginName = person.LoginName,
             ReceiveRSBRevisionRequestEmails = person.ReceiveRSBRevisionRequestEmails,
             WebServiceAccessToken = person.WebServiceAccessToken,
-            IsOCTAGrantReviewer = person.IsOCTAGrantReviewer
+            IsOCTAGrantReviewer = person.IsOCTAGrantReviewer,
+            HasAssignedStormwaterJurisdiction = person.StormwaterJurisdictionPeople.Any()
         };
         return dto;
     }
@@ -46,19 +47,19 @@ public static class PersonExtensionMethods
         var personDto = new PersonDto()
         {
             PersonID = person.PersonID,
-            PersonGuid = person.PersonGuid,
             FirstName = person.FirstName,
             LastName = person.LastName,
             Email = person.Email,
             Phone = person.Phone,
             RoleID = person.RoleID,
+            RoleName = person.Role.RoleDisplayName,
             CreateDate = person.CreateDate,
             UpdateDate = person.UpdateDate,
             LastActivityDate = person.LastActivityDate,
             IsActive = person.IsActive,
             OrganizationID = person.OrganizationID,
+            OrganizationName = person.Organization.OrganizationName,
             ReceiveSupportEmails = person.ReceiveSupportEmails,
-            LoginName = person.LoginName,
             ReceiveRSBRevisionRequestEmails = person.ReceiveRSBRevisionRequestEmails,
             WebServiceAccessToken = person.WebServiceAccessToken,
             IsOCTAGrantReviewer = person.IsOCTAGrantReviewer,

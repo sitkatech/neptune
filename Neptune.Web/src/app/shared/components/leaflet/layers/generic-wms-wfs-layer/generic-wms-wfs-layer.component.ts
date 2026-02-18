@@ -36,7 +36,10 @@ export class GenericWmsWfsLayerComponent extends MapLayerBase implements OnChang
     public wfsLayer: L.FeatureGroup;
     public layer: L.Layer;
 
-    constructor(private wfsService: WfsService, private groupByPipe: GroupByPipe) {
+    constructor(
+        private wfsService: WfsService,
+        private groupByPipe: GroupByPipe
+    ) {
         super();
     }
 
@@ -112,7 +115,8 @@ export class GenericWmsWfsLayerComponent extends MapLayerBase implements OnChang
         }
         this.wfsLayer = L.featureGroup();
         const cql_filter = `${this.identifierProperty} = ${id}`;
-        this.wfsService.getGeoserverWFSLayerWithCQLFilter(this.wfsFeatureType, cql_filter, this.identifierProperty).subscribe((response) => {
+        const request$ = this.wfsService.getGeoserverWFSLayerWithCQLFilter(this.wfsFeatureType, cql_filter, this.identifierProperty);
+        this.trackLayerRequest$(request$).subscribe((response) => {
             if (response.length == 0) return;
             const featuresGrouped = this.groupByPipe.transform(response, `properties.${this.identifierProperty}`);
             Object.keys(featuresGrouped).forEach((groupId) => {

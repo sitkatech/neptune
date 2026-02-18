@@ -15,9 +15,8 @@ namespace Neptune.API.Controllers;
 public class HRUCharacteristicController(
     NeptuneDbContext dbContext,
     ILogger<HRUCharacteristicController> logger,
-    KeystoneService keystoneService,
     IOptions<NeptuneConfiguration> neptuneConfiguration)
-    : SitkaController<HRUCharacteristicController>(dbContext, logger, keystoneService, neptuneConfiguration)
+    : SitkaController<HRUCharacteristicController>(dbContext, logger, neptuneConfiguration)
 {
     [HttpGet]
     [SitkaAdminFeature]

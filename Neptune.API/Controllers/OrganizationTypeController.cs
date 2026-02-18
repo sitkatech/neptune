@@ -12,8 +12,8 @@ namespace Neptune.API.Controllers;
 
 [ApiController]
 [Route("organization-types")]
-public class OrganizationTypeController(NeptuneDbContext dbContext, ILogger<OrganizationTypeController> logger, KeystoneService keystoneService, IOptions<NeptuneConfiguration> neptuneConfiguration)
-    : SitkaController<OrganizationTypeController>(dbContext, logger, keystoneService, neptuneConfiguration)
+public class OrganizationTypeController(NeptuneDbContext dbContext, ILogger<OrganizationTypeController> logger, IOptions<NeptuneConfiguration> neptuneConfiguration)
+    : SitkaController<OrganizationTypeController>(dbContext, logger, neptuneConfiguration)
 {
     [HttpGet]
     [AdminFeature]

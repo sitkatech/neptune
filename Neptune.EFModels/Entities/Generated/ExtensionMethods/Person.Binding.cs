@@ -15,7 +15,7 @@ namespace Neptune.EFModels.Entities
             public const int LastName = 100;
             public const int Email = 255;
             public const int Phone = 30;
-            public const int LoginName = 128;
+            public const int GlobalID = 100;
         }
     }
 }

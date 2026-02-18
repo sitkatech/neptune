@@ -1,27 +1,25 @@
+using Auth0.AspNetCore.Authentication;
+using Hangfire;
+using Hangfire.SqlServer;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.EntityFrameworkCore;
 using Neptune.Common.Email;
 using Neptune.Common.JsonConverters;
-using Neptune.Common.Services.GDAL;
 using Neptune.Common.Services;
+using Neptune.Common.Services.GDAL;
 using Neptune.EFModels.Entities;
+using Neptune.Jobs;
+using Neptune.Jobs.Services;
 using Neptune.WebMvc.Common;
 using Neptune.WebMvc.Common.OpenID;
 using Neptune.WebMvc.Services;
 using NetTopologySuite.IO.Converters;
-using SendGrid.Extensions.DependencyInjection;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using Hangfire;
-using Hangfire.SqlServer;
-using Neptune.Jobs;
-using Neptune.Jobs.Services;
+using SendGrid;
 using Serilog;
 using Serilog.Core;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using LogHelper = Neptune.WebMvc.Services.Logging.LogHelper;
-using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 {
@@ -146,8 +144,8 @@ var builder = WebApplication.CreateBuilder(args);
         return httpClientHandler;
     });
 
-    services.AddAuthorizationPolicies();
-    services.AddSendGrid(options => { options.ApiKey = configuration.SendGridApiKey; });
+    // Register SendGrid client from official SDK (not the Extensions DI package)
+    services.AddSingleton<ISendGridClient>(_ => new SendGridClient(configuration.SendGridApiKey));
     services.AddSingleton<SitkaSmtpClientService>();
 
     #region Hangfire
@@ -170,73 +168,72 @@ var builder = WebApplication.CreateBuilder(args);
     });
     #endregion
 
-    JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
-    services.AddAuthentication(options =>
+    #region Auth0 authentication
+    services.Configure<CookiePolicyOptions>(options =>
+    {
+        options.MinimumSameSitePolicy = SameSiteMode.None;
+        options.Secure = CookieSecurePolicy.Always;
+    });
+    
+    services.AddAuth0WebAppAuthentication(options =>
+    {
+        options.Domain = configuration.Auth0Domain;
+        options.ClientId = configuration.Auth0ClientID;
+        options.Scope = "openid profile email";
+        options.CallbackPath = "/callback";
+
+        options.OpenIdConnectEvents = new OpenIdConnectEvents
         {
-            options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            options.DefaultChallengeScheme = "Keystone";
-        })
-        .AddCookie(opt =>
-        {
-            opt.Cookie.HttpOnly = true;
-            opt.Cookie.SameSite = SameSiteMode.Lax;
-            opt.SessionStore = new MemoryCacheTicketStore();
-        })
-        .AddOpenIdConnect("Keystone", options =>
-        {
-            options.Authority = configuration.KeystoneOpenIDUrl;
-            options.CallbackPath = "/Account/LogOn";  // This needs to match redirect uri in Keystone but should NOT be a real url
-            options.Scope.Add("openid");
-            options.Scope.Add("keystone");
-            options.Scope.Add("profile");
-            options.Scope.Add("offline_access");
-            options.ClientId = configuration.KeystoneOpenIDClientID;
-            options.ClientSecret = configuration.KeystoneOpenIDClientSecret;
-            //options.ResponseType = "id_token token";
-            options.ResponseType = "code";
-            options.SaveTokens = true;
-            options.TokenValidationParameters.NameClaimType = "name";
-            options.TokenValidationParameters.RoleClaimType = "role";
-            options.SkipUnrecognizedRequests = true;
-            options.Events = new OpenIdConnectEvents()
+            OnTokenValidated = context =>
             {
-                OnRedirectToIdentityProvider = async context =>
-                {
-                    //save current url to state
-                    context.ProtocolMessage.State = context.HttpContext.Request.QueryString.HasValue
-                        ? context.HttpContext.Request.Query["returnUrl"]
-                        : "/";
-                },
-                OnTokenValidated = context =>
-                {
-                    var dbContext = context.HttpContext.RequestServices.GetRequiredService<NeptuneDbContext>();
-                    var sitkaSmtpClientService = context.HttpContext.RequestServices.GetRequiredService<SitkaSmtpClientService>();
+                var dbContext = context.HttpContext.RequestServices.GetRequiredService<NeptuneDbContext>();
+                var sitkaSmtpClientService = context.HttpContext.RequestServices.GetRequiredService<SitkaSmtpClientService>();
 
-                    if (context.Principal.Identity?.IsAuthenticated == true) // we have a token and we can determine the person.
-                    {
-                        AuthenticationHelper.ProcessLoginFromKeystone(context, dbContext, configuration, logger, sitkaSmtpClientService);
-                    }
-                    var url = context.ProtocolMessage.State;
-                    var claims = new List<Claim>
-                    {
-                        new("returnUrl", url)
-                    };
-                    var appIdentity = new ClaimsIdentity(claims);
-
-                    //add url to claims
-                    context.Principal.AddIdentity(appIdentity);
-
-                    return Task.CompletedTask;
-                },
-                OnTicketReceived = ctx =>
+                if (context.Principal?.Identity?.IsAuthenticated == true)
                 {
-                    var url = ctx.Principal.FindFirst("returnUrl").Value;
-                    ctx.ReturnUri = url;
+                    AuthenticationHelper.ProcessLoginFromAuth0(context, dbContext, configuration, logger, sitkaSmtpClientService);
+                }
+
+                return Task.CompletedTask;
+            },
+
+            OnRemoteFailure = context =>
+            {
+                context.HandleResponse();
+
+                // The useful info is on context.Failure (often an AuthenticationFailureException
+                // wrapping an OpenIdConnectProtocolException)
+                var ex = context.Failure;
+                var msg = ex?.ToString() ?? "";
+
+                // Common patterns depending on stack version:
+                // - "access_denied"
+                // - "Please verify your email before continuing."
+                // - inner OpenIdConnectProtocolException
+                if (msg.Contains("access_denied", StringComparison.OrdinalIgnoreCase) &&
+                    msg.Contains("verify your email", StringComparison.OrdinalIgnoreCase))
+                {
+                    context.Response.Redirect("/Account/VerifyEmailRequired");
                     return Task.CompletedTask;
                 }
-            };
 
-        });
+                // Optional: log the full failure for diagnostics
+                // logger.LogError(ex, "Auth0 remote failure");
+
+                context.Response.Redirect("/Home/Error");
+                return Task.CompletedTask;
+            }
+        };
+    });
+
+    services.ConfigureApplicationCookie(options =>
+    {
+        options.LoginPath = "/Account/Login";
+        options.ReturnUrlParameter = "returnUrl";
+        options.AccessDeniedPath = "/Account/NotAuthorized"; // or whatever you prefer
+    });
+    #endregion
+
 
     services.AddHttpContextAccessor();
     services.AddScoped<AzureBlobStorageService>();
@@ -257,47 +254,6 @@ var app = builder.Build();
     if (!app.Environment.IsDevelopment())
     {
         app.UseExceptionHandler("/Home/Error");
-        //todo: explore this more on error handling but for now we are doing the handling on the Home/Error route
-        //app.UseExceptionHandler(exceptionHandlerApp =>
-        //{
-        //    exceptionHandlerApp.Run(async context =>
-        //    {
-        //        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-
-        //        // using static System.Net.Mime.MediaTypeNames;
-        //        context.Response.ContentType = MediaTypeNames.Text.Html;
-
-        //        await context.Response.WriteAsync("An exception was thrown.");
-
-        //        var exceptionHandlerPathFeature =
-        //            context.Features.Get<IExceptionHandlerPathFeature>();
-
-        //        var lastError = exceptionHandlerPathFeature?.Error;
-        //        switch (lastError)
-        //        {
-        //            //case SitkaRecordNotFoundException:
-        //            //    SitkaHttpRequestStorage.NotFoundStoredError = lastError as SitkaRecordNotFoundException;
-        //            //    break;
-
-        //            case FileNotFoundException:
-        //                await context.Response.WriteAsync(" The file was not found.");
-        //                break;
-        //            case NotImplementedException:
-        //                await context.Response.WriteAsync(exceptionHandlerPathFeature.Error.Message);
-        //                break;
-        //        }
-
-        //        if (exceptionHandlerPathFeature?.Path == "/")
-        //        {
-        //            await context.Response.WriteAsync(" Page: Home.");
-        //        }
-        //        else
-        //        {
-        //            context.Response.Redirect("/Home/Error");
-        //        }
-        //    });
-        //});
-
         // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
         app.UseHsts();
     }
@@ -309,6 +265,7 @@ var app = builder.Build();
 
     app.UseRouting();
 
+    app.UseCookiePolicy();
     app.UseAuthentication();
     app.UseAuthorization();
 

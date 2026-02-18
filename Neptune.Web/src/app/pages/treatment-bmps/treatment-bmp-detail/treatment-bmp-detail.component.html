@@ -478,18 +478,33 @@
         <div class="card g-col-6 mt-3">
             <div class="card-header">
                 <span class="card-title">Benchmark &amp; Threshold Values</span>
-                <span class="card-actions">
-                    @if (canEditBenchmarkAndThresholds) {
-                        <a [routerLink]="addBenchmarkAndThresholdUrl"><span class="icon-edit"></span></a>
-                    }
-                </span>
             </div>
             <div class="card-body">
                 @if (!hasSettableBenchmarkAndThresholdValues) {
                     <p class="system-text">This type of Treatment BMP does not have settable benchmark and threshold values</p>
-                } @else {
-                    <!-- TODO: Replace with actual table for benchmark and threshold values -->
-                    <p class="system-text">[Benchmark & Threshold Table goes here]</p>
+                } @else if (benchmarkAndThresholds$ | async; as benchmarks) {
+                    @if (benchmarks.length > 0) {
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <th>Observation Type</th>
+                                    <th>Benchmark</th>
+                                    <th>Threshold</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (bt of benchmarks; track bt.TreatmentBMPBenchmarkAndThresholdID) {
+                                    <tr>
+                                        <td>{{ bt.ObservationTypeName }}</td>
+                                        <td>{{ bt.BenchmarkValue }}</td>
+                                        <td>{{ bt.ThresholdValue }}</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    } @else {
+                        <p class="system-text">No benchmark and threshold values have been set</p>
+                    }
                 }
             </div>
         </div>

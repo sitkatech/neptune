@@ -35,13 +35,12 @@ public static class StormwaterJurisdictions
         return new BoundingBoxDto(stormwaterJurisdictionGeometry);
     }
 
-    public static async Task<BoundingBoxDto> GetBoundingBoxDtoByPersonIDAsync(NeptuneDbContext dbContext, int personID)
+    public static async Task<BoundingBoxDto> GetBoundingBoxDtoByPersonAsync(NeptuneDbContext dbContext, PersonDto personDto)
     {
-        var person = People.GetByID(dbContext, personID);
         var jurisdictions = dbContext.StormwaterJurisdictionGeometries;
-        if (person.RoleID != (int)RoleEnum.Admin || person.RoleID != (int)RoleEnum.SitkaAdmin)
+        if (personDto.RoleID != (int)RoleEnum.Admin || personDto.RoleID != (int)RoleEnum.SitkaAdmin)
         {
-            var jurisdictionIDs = await StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonIDForBMPsAsync(dbContext, personID);
+            var jurisdictionIDs = await StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonIDForBMPsAsync(dbContext, personDto.PersonID);
             return new BoundingBoxDto(jurisdictions.Where(x => jurisdictionIDs.Contains(x.StormwaterJurisdictionID))
                 .Select(x => x.Geometry4326).ToList());
         }

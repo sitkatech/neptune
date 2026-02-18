@@ -12,8 +12,6 @@ services:
       - SitkaSupportEmail=${SitkaSupportEmail}
       - DoNotReplyEmail=${DoNotReplyEmail}
       - MailLogBcc=${MailLogBcc}
-      - KeystoneOpenIDUrl=${KeystoneOpenIDUrl}
-      - KeystoneOpenIDClientID=${KeystoneOpenIDClientID}
       - MapServiceUrl=${MapServiceUrl}
       - NereidUrl=${NereidUrl}
       - GDALAPIBaseUrl=${GDALAPIBaseUrl}
@@ -52,8 +50,6 @@ services:
       - SitkaSupportEmail=${SitkaSupportEmail}
       - DoNotReplyEmail=${DoNotReplyEmail}
       - MailLogBcc=${MailLogBcc}
-      - KeystoneOpenIDUrl=${KeystoneOpenIDUrl}
-      - KeystoneRedirectUrl=${KeystoneRedirectUrl}
       - OcStormwaterToolsBaseUrl=${OcStormwaterToolsBaseUrl}
       - NereidUrl=${NereidUrl}
       - GDALAPIBaseUrl=${GDALAPIBaseUrl}

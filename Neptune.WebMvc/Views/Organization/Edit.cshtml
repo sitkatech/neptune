@@ -26,26 +26,14 @@ Source code is available upon request via <support@sitkatech.com>.
 
 @using (Html.BeginForm())
 {
-    if (ViewDataTyped.IsInKeystone)
-    {
-        <p class="systemText">This @FieldDefinitionType.Organization.GetFieldDefinitionLabel() is managed in Keystone. To change this @FieldDefinitionType.Organization.GetFieldDefinitionLabel()'s name, please send an <a href="@ViewDataTyped.RequestOrganizationChangeUrl">email to support</a></p>
-    }
     <div class="form-horizontal">
         <div class="form-group">
             <div class="col-sm-3 control-label">
                 @Html.LabelWithSugarFor(m => m.OrganizationName)
             </div>
             <div class="col-sm-9">
-                @if (ViewDataTyped.IsInKeystone)
-                {
-                <p class="form-control-static">@Model.OrganizationName</p>
-                    @Html.HiddenFor(x => x.OrganizationName)
-                }
-                else
-                {
-                    @Html.TextBoxFor(m => m.OrganizationName, new { @class = "form-control", style = "width:100%" })
-                    @Html.ValidationMessageFor(m => m.OrganizationName)
-                }
+                @Html.TextBoxFor(m => m.OrganizationName, new { @class = "form-control", style = "width:100%" })
+                @Html.ValidationMessageFor(m => m.OrganizationName)
             </div>
         </div>
         <div class="form-group">
@@ -105,22 +93,6 @@ Source code is available upon request via <support@sitkatech.com>.
                 @Html.ValidationMessageFor(m => m.IsActive)
             </div>
         </div>
-        @if (ViewDataTyped.IsSitkaAdmin)
-        {
-            <hr/>
-            <h3>Sitka Admin Only</h3>
-            <div class="form-group">
-                <div class="col-sm-3 control-label">
-                    @Html.LabelWithSugarFor(m => m.OrganizationGuid)
-                </div>
-                <div class="col-sm-9">
-                    @Html.TextBoxFor(m => m.OrganizationGuid, new { @class = "form-control", style = "width:100%" })
-                    @Html.ValidationMessageFor(m => m.OrganizationGuid)
-                </div>
-            </div>
-
-        }
-        
     </div>
     @Html.HiddenFor(m => m.OrganizationID)
 }

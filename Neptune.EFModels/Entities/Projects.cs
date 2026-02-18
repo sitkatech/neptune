@@ -6,24 +6,46 @@ namespace Neptune.EFModels.Entities
 {
     public static class Projects
     {
-        private static IQueryable<Project> GetImpl(NeptuneDbContext dbContext)
+        private static void ResolveClientSideLookups(ProjectDto dto)
         {
-            return dbContext.Projects
-                .Include(x => x.Organization)
-                .Include(x => x.StormwaterJurisdiction)
-                .ThenInclude(x => x.Organization)
-                .Include(x => x.CreatePerson)
-                .Include(x => x.PrimaryContactPerson);
+            if (ProjectStatus.AllLookupDictionary.TryGetValue(dto.ProjectStatusID, out var projectStatus))
+            {
+                dto.ProjectStatus = projectStatus.AsSimpleDto();
+            }
+            ResolvePersonRoleName(dto.PrimaryContactPerson);
+            ResolvePersonRoleName(dto.CreatePerson);
         }
 
-        public static Task<List<ProjectDto>> ListAsDtoAsync(NeptuneDbContext dbContext)
+        private static void ResolveClientSideLookups(List<ProjectDto> dtos)
         {
-            return GetImpl(dbContext).AsNoTracking().OrderByDescending(x => x.ProjectID).Select(x => x.AsDto()).ToListAsync();
+            foreach (var dto in dtos)
+            {
+                ResolveClientSideLookups(dto);
+            }
+        }
+
+        private static void ResolvePersonRoleName(PersonSimpleDto personDto)
+        {
+            if (personDto != null && Role.AllLookupDictionary.TryGetValue(personDto.RoleID, out var role))
+            {
+                personDto.RoleName = role.RoleDisplayName;
+            }
+        }
+
+        public static async Task<List<ProjectDto>> ListAsDtoAsync(NeptuneDbContext dbContext)
+        {
+            var dtos = await dbContext.Projects
+                .AsNoTracking()
+                .OrderByDescending(x => x.ProjectID)
+                .Select(ProjectDtoProjections.AsDto)
+                .ToListAsync();
+            ResolveClientSideLookups(dtos);
+            return dtos;
         }
 
         public static Project GetByIDWithChangeTracking(NeptuneDbContext dbContext, int projectID)
         {
-            var project = GetImpl(dbContext)
+            var project = dbContext.Projects
                 .SingleOrDefault(x => x.ProjectID == projectID);
             Check.RequireNotNull(project, $"Project with ID {projectID} not found!");
             return project;
@@ -50,7 +72,7 @@ namespace Neptune.EFModels.Entities
 
         public static Project GetByID(NeptuneDbContext dbContext, int projectID)
         {
-            var project = GetImpl(dbContext).AsNoTracking()
+            var project = dbContext.Projects.AsNoTracking()
                 .SingleOrDefault(x => x.ProjectID == projectID);
             Check.RequireNotNull(project, $"Project with ID {projectID} not found!");
             return project;
@@ -61,9 +83,16 @@ namespace Neptune.EFModels.Entities
             return GetByID(dbContext, projectPrimaryKey.PrimaryKeyValue);
         }
 
-        public static ProjectDto GetByIDAsDto(NeptuneDbContext dbContext, int projectID)
+        public static async Task<ProjectDto> GetByIDAsDtoAsync(NeptuneDbContext dbContext, int projectID)
         {
-            return GetByID(dbContext, projectID).AsDto();
+            var dto = await dbContext.Projects
+                .AsNoTracking()
+                .Where(x => x.ProjectID == projectID)
+                .Select(ProjectDtoProjections.AsDto)
+                .SingleOrDefaultAsync();
+            Check.RequireNotNull(dto, $"Project with ID {projectID} not found!");
+            ResolveClientSideLookups(dto);
+            return dto;
         }
 
         public static List<int> ListProjectIDs(NeptuneDbContext dbContext)
@@ -81,11 +110,14 @@ namespace Neptune.EFModels.Entities
 
             var jurisdictionIDs = await StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonIDForBMPsAsync(dbContext, personID);
 
-            return GetImpl(dbContext).AsNoTracking()
+            var dtos = await dbContext.Projects
+                .AsNoTracking()
                 .Where(x => jurisdictionIDs.Contains(x.StormwaterJurisdictionID))
                 .OrderByDescending(x => x.ProjectID)
-                .Select(x => x.AsDto())
-                .ToList();
+                .Select(ProjectDtoProjections.AsDto)
+                .ToListAsync();
+            ResolveClientSideLookups(dtos);
+            return dtos;
         }
 
         public static async Task<ProjectDto> CreateNew(NeptuneDbContext dbContext, ProjectUpsertDto projectUpsertDto, int personID)
@@ -108,7 +140,7 @@ namespace Neptune.EFModels.Entities
             await dbContext.Projects.AddAsync(project);
             await dbContext.SaveChangesAsync();
             await dbContext.Entry(project).ReloadAsync();
-            return GetByIDAsDto(dbContext, project.ProjectID);
+            return await GetByIDAsDtoAsync(dbContext, project.ProjectID);
         }
 
         public static async Task Update(NeptuneDbContext dbContext, Project project, ProjectUpsertDto projectUpsertDto, int personID)
@@ -129,7 +161,7 @@ namespace Neptune.EFModels.Entities
                 project.OCTAM2Tier2ScoresLastSharedDate = DateTime.UtcNow;
             }
             project.ShareOCTAM2Tier2Scores = (projectUpsertDto.ShareOCTAM2Tier2Scores ?? false);
-            
+
             //If we opt to not include treatmentBMPs, ensure we get rid of our pre-existing treatment bmps
             if (project.DoesNotIncludeTreatmentBMPs)
             {
@@ -178,7 +210,7 @@ namespace Neptune.EFModels.Entities
         public static async Task<Project> CreateCopy(NeptuneDbContext dbContext, Project projectToCopy, int createPersonID)
         {
             var dateCreated = DateTime.UtcNow;
-            
+
             var newProject = new Project()
             {
                 ProjectName = $"{projectToCopy.ProjectName} - Copy {dateCreated}",
@@ -228,7 +260,7 @@ namespace Neptune.EFModels.Entities
             await dbContext.SaveChangesAsync();
 
             var newTreatmentBMPIDsByCopiedTreatmentBMPIDs = treatmentBMPsToCopy
-                .Select(x => new 
+                .Select(x => new
                 {
                     copiedTreatmentBMPID = x.TreatmentBMPID,
                     newTreatmentBMpID = newTreatmentBMPs.Single(y => y.TreatmentBMPName.StartsWith(x.TreatmentBMPName)).TreatmentBMPID
@@ -284,7 +316,7 @@ namespace Neptune.EFModels.Entities
                     DateLastModified = DateTime.UtcNow,
                     HasDiscrepancies = x.HasDiscrepancies
                 }).ToList();
-                
+
             await dbContext.Delineations.AddRangeAsync(newDelineations);
             await dbContext.SaveChangesAsync();
 
@@ -322,9 +354,15 @@ namespace Neptune.EFModels.Entities
 
         }
 
-        public static IEnumerable<Project> ListOCTAM2Tier2Projects(NeptuneDbContext dbContext)
+        public static async Task<List<ProjectDto>> ListOCTAM2Tier2AsDtoAsync(NeptuneDbContext dbContext)
         {
-            return GetImpl(dbContext).AsNoTracking().Where(x => x.ShareOCTAM2Tier2Scores).ToList();
+            var dtos = await dbContext.Projects
+                .AsNoTracking()
+                .Where(x => x.ShareOCTAM2Tier2Scores)
+                .Select(ProjectDtoProjections.AsDto)
+                .ToListAsync();
+            ResolveClientSideLookups(dtos);
+            return dtos;
         }
 
         public static List<int> ListOCTAM2Tier2ProjectIDs(NeptuneDbContext dbContext)

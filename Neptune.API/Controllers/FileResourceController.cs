@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -13,11 +14,12 @@ namespace Neptune.API.Controllers;
 
 [ApiController]
 [Route("file-resources")]
-public class FileResourceController(NeptuneDbContext dbContext, ILogger<FileResourceController> logger, KeystoneService keystoneService, IOptions<NeptuneConfiguration> neptuneConfiguration, AzureBlobStorageService azureBlobStorageService)
-    : SitkaController<FileResourceController>(dbContext, logger, keystoneService, neptuneConfiguration)
+public class FileResourceController(NeptuneDbContext dbContext, ILogger<FileResourceController> logger, IOptions<NeptuneConfiguration> neptuneConfiguration, AzureBlobStorageService azureBlobStorageService)
+    : SitkaController<FileResourceController>(dbContext, logger, neptuneConfiguration)
 {
     [HttpGet("{fileResourceGuidAsString}")]
     [ProducesResponseType(typeof(FileStreamResult), (int)HttpStatusCode.OK)]
+    [AllowAnonymous]
     public async Task<IActionResult> DisplayResource(string fileResourceGuidAsString)
     {
         var isStringAGuid = Guid.TryParse(fileResourceGuidAsString, out var fileResourceGuid);

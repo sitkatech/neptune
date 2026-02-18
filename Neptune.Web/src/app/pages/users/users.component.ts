@@ -11,7 +11,7 @@ import { AlertService } from "src/app/shared/services/alert.service";
 import { ConfirmService } from "src/app/shared/services/confirm/confirm.service";
 import { Alert } from "src/app/shared/models/alert";
 import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
-import { PersonDto } from "src/app/shared/generated/model/person-dto";
+import { PersonSimpleDto } from "src/app/shared/generated/model/person-simple-dto";
 
 @Component({
     selector: "users",
@@ -21,10 +21,15 @@ import { PersonDto } from "src/app/shared/generated/model/person-dto";
     styleUrl: "./users.component.scss",
 })
 export class UsersComponent implements OnInit {
-    public users$: Observable<PersonDto[]>;
+    public users$: Observable<PersonSimpleDto[]>;
     public columnDefs: ColDef[];
 
-    constructor(private utilityFunctions: UtilityFunctionsService, private alertService: AlertService, private confirmService: ConfirmService, private userService: UserService) {}
+    constructor(
+        private utilityFunctions: UtilityFunctionsService,
+        private alertService: AlertService,
+        private confirmService: ConfirmService,
+        private userService: UserService
+    ) {}
 
     ngOnInit(): void {
         this.columnDefs = [
@@ -39,22 +44,35 @@ export class UsersComponent implements OnInit {
             this.utilityFunctions.createBasicColumnDef("Last Name", "LastName"),
             this.utilityFunctions.createBasicColumnDef("Email", "Email"),
             this.utilityFunctions.createBasicColumnDef("Phone", "Phone"),
-            this.utilityFunctions.createBasicColumnDef("Role", "RoleID"),
-            this.utilityFunctions.createBasicColumnDef("Organization", "OrganizationID"),
-            this.utilityFunctions.createBooleanColumnDef("Active?", "IsActive"),
-            this.utilityFunctions.createBasicColumnDef("Login Name", "LoginName"),
-            this.utilityFunctions.createBooleanColumnDef("Support Emails?", "ReceiveSupportEmails"),
-            this.utilityFunctions.createBooleanColumnDef("RSB Revision Emails?", "ReceiveRSBRevisionRequestEmails"),
-            this.utilityFunctions.createBooleanColumnDef("OCTA Grant Reviewer?", "IsOCTAGrantReviewer"),
-            this.utilityFunctions.createBooleanColumnDef("Assigned Stormwater Jurisdiction?", "HasAssignedStormwaterJurisdiction"),
-            this.utilityFunctions.createBasicColumnDef("Created", "CreateDate"),
-            this.utilityFunctions.createBasicColumnDef("Updated", "UpdateDate"),
-            this.utilityFunctions.createBasicColumnDef("Last Activity", "LastActivityDate"),
+            this.utilityFunctions.createBasicColumnDef("Role", "RoleName", {
+                UseCustomDropdownFilter: true,
+            }),
+            this.utilityFunctions.createBasicColumnDef("Organization", "OrganizationName", {
+                UseCustomDropdownFilter: true,
+            }),
+            this.utilityFunctions.createBooleanColumnDef("Active?", "IsActive", {
+                UseCustomDropdownFilter: true,
+            }),
+            this.utilityFunctions.createBooleanColumnDef("Support Emails?", "ReceiveSupportEmails", {
+                UseCustomDropdownFilter: true,
+            }),
+            this.utilityFunctions.createBooleanColumnDef("RSB Revision Emails?", "ReceiveRSBRevisionRequestEmails", {
+                UseCustomDropdownFilter: true,
+            }),
+            this.utilityFunctions.createBooleanColumnDef("OCTA Grant Reviewer?", "IsOCTAGrantReviewer", {
+                UseCustomDropdownFilter: true,
+            }),
+            this.utilityFunctions.createBooleanColumnDef("Assigned Stormwater Jurisdiction?", "HasAssignedStormwaterJurisdiction", {
+                UseCustomDropdownFilter: true,
+            }),
+            this.utilityFunctions.createDateColumnDef("Created", "CreateDate", "short"),
+            this.utilityFunctions.createDateColumnDef("Updated", "UpdateDate", "short"),
+            this.utilityFunctions.createDateColumnDef("Last Activity", "LastActivityDate", "short"),
         ];
         this.users$ = this.userService.listUser();
     }
 
-    deleteUser(user: PersonDto) {
+    deleteUser(user: PersonSimpleDto) {
         this.confirmService
             .confirm({
                 title: "Delete User",

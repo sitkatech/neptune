@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -11,6 +9,9 @@ using Neptune.API.Services.Authorization;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
 using NetTopologySuite.Features;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Neptune.API.Controllers;
 
@@ -19,9 +20,8 @@ namespace Neptune.API.Controllers;
 public class OnlandVisualTrashAssessmentAreaController(
     NeptuneDbContext dbContext,
     ILogger<OnlandVisualTrashAssessmentAreaController> logger,
-    KeystoneService keystoneService,
     IOptions<NeptuneConfiguration> neptuneConfiguration)
-    : SitkaController<OnlandVisualTrashAssessmentAreaController>(dbContext, logger, keystoneService, neptuneConfiguration)
+    : SitkaController<OnlandVisualTrashAssessmentAreaController>(dbContext, logger, neptuneConfiguration)
 {
     [HttpGet]
     [JurisdictionEditFeature]
@@ -100,6 +100,7 @@ public class OnlandVisualTrashAssessmentAreaController(
     }
 
     [HttpGet("jurisdictions/{jurisdictionID}")]
+    [AllowAnonymous]
     public ActionResult<List<OnlandVisualTrashAssessmentAreaSimpleDto>> ListByJurisdictionID([FromRoute] int jurisdictionID)
     {
         var onlandVisualTrashAssessmentAreaSimpleDtos =

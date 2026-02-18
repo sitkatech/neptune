@@ -52,6 +52,8 @@ public class TreatmentBMPDto
     public OrganizationDisplayDto? OwnerOrganization { get; set; }
     public StormwaterJurisdictionDisplayDto? StormwaterJurisdiction { get; set; }
 
+    public bool HasSettableBenchmarkAndThresholdValues { get; set; }
+
     // Display Names
     public SizingBasisTypeDto? SizingBasisType { get; set; }
     public TrashCaptureStatusTypeDto? TrashCaptureStatusType { get; set; }

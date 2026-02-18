@@ -56,14 +56,14 @@ export class TrashTrashGeneratingUnitIndexComponent {
             this.utilityFunctionsService.createDecimalColumnDef("Current Net Loading Rate", "CurrentLoadingRate", {
                 CustomDropdownFilterField: "CurrentLoadingRate",
             }),
-            this.utilityFunctionsService.createBasicColumnDef("Trash Capture Status via BMP", "TrashCaptureStatusBMP"),
-            this.utilityFunctionsService.createBasicColumnDef("Trash Capture Status via WQMP", "TrashCaptureStatusWQMP"),
-            this.utilityFunctionsService.createBasicColumnDef("Trash Capture Effectiveness via BMP", "TrashCaptureStatusBMP", {
+            this.utilityFunctionsService.createBasicColumnDef("Trash Capture Status via BMP", "TrashCaptureStatusBMP", {
                 CustomDropdownFilterField: "TrashCaptureStatusBMP",
             }),
-            this.utilityFunctionsService.createBasicColumnDef("Trash Capture Effectiveness via WQMP", "TrashCaptureStatusWQMP", {
+            this.utilityFunctionsService.createBasicColumnDef("Trash Capture Status via WQMP", "TrashCaptureStatusWQMP", {
                 CustomDropdownFilterField: "TrashCaptureStatusWQMP",
             }),
+            this.utilityFunctionsService.createBasicColumnDef("Trash Capture Effectiveness (%) via BMP", "TrashCaptureEffectivenessBMP"),
+            this.utilityFunctionsService.createBasicColumnDef("Trash Capture Effectiveness (%) via WQMP", "TrashCaptureEffectivenessWQMP"),
             this.utilityFunctionsService.createDecimalColumnDef("Median Household Income (Residential)", "MedianHouseholdIncomeResidential"),
             this.utilityFunctionsService.createDecimalColumnDef("Median Household Income (Retail)", "MedianHouseholdIncomeRetail"),
             this.utilityFunctionsService.createBasicColumnDef("Permit Class", "PermitClass", {

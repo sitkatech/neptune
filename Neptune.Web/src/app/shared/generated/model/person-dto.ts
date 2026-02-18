@@ -12,19 +12,20 @@
 import { FormControl, FormControlOptions, FormControlState, Validators } from "@angular/forms";
 export class PersonDto { 
     PersonID?: number;
-    PersonGuid?: string;
+    GlobalID?: string | null;
     FirstName?: string | null;
     LastName?: string | null;
     Email?: string | null;
     Phone?: string | null;
     RoleID?: number;
+    RoleName?: string | null;
     CreateDate?: string;
     UpdateDate?: string | null;
     LastActivityDate?: string | null;
     IsActive?: boolean;
     OrganizationID?: number;
+    OrganizationName?: string | null;
     ReceiveSupportEmails?: boolean;
-    LoginName?: string | null;
     ReceiveRSBRevisionRequestEmails?: boolean;
     WebServiceAccessToken?: string;
     IsOCTAGrantReviewer?: boolean;
@@ -36,19 +37,20 @@ export class PersonDto {
 
 export interface PersonDtoForm { 
     PersonID?: FormControl<number>;
-    PersonGuid?: FormControl<string>;
+    GlobalID?: FormControl<string>;
     FirstName?: FormControl<string>;
     LastName?: FormControl<string>;
     Email?: FormControl<string>;
     Phone?: FormControl<string>;
     RoleID?: FormControl<number>;
+    RoleName?: FormControl<string>;
     CreateDate?: FormControl<string>;
     UpdateDate?: FormControl<string>;
     LastActivityDate?: FormControl<string>;
     IsActive?: FormControl<boolean>;
     OrganizationID?: FormControl<number>;
+    OrganizationName?: FormControl<string>;
     ReceiveSupportEmails?: FormControl<boolean>;
-    LoginName?: FormControl<string>;
     ReceiveRSBRevisionRequestEmails?: FormControl<boolean>;
     WebServiceAccessToken?: FormControl<string>;
     IsOCTAGrantReviewer?: FormControl<boolean>;
@@ -66,7 +68,7 @@ export class PersonDtoFormControls {
             ],
         }
     );
-    public static PersonGuid = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+    public static GlobalID = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {
@@ -126,6 +128,16 @@ export class PersonDtoFormControls {
             ],
         }
     );
+    public static RoleName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+        value,
+        formControlOptions ?? 
+        {
+            nonNullable: false,
+            validators: 
+            [
+            ],
+        }
+    );
     public static CreateDate = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
@@ -176,7 +188,7 @@ export class PersonDtoFormControls {
             ],
         }
     );
-    public static ReceiveSupportEmails = (value: FormControlState<boolean> | boolean = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<boolean>(
+    public static OrganizationName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
         value,
         formControlOptions ?? 
         {
@@ -186,7 +198,7 @@ export class PersonDtoFormControls {
             ],
         }
     );
-    public static LoginName = (value: FormControlState<string> | string = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<string>(
+    public static ReceiveSupportEmails = (value: FormControlState<boolean> | boolean = undefined, formControlOptions?: FormControlOptions | null) => new FormControl<boolean>(
         value,
         formControlOptions ?? 
         {

@@ -10,16 +10,14 @@ namespace Neptune.API.Controllers
     public abstract class SitkaController<T>(
         NeptuneDbContext dbContext,
         ILogger<T> logger,
-        KeystoneService keystoneService,
         IOptions<NeptuneConfiguration> neptuneConfiguration)
         : ControllerBase
     {
         protected readonly NeptuneDbContext DbContext = dbContext;
         protected readonly ILogger<T> Logger = logger;
-        protected readonly KeystoneService KeystoneService = keystoneService;
         protected readonly NeptuneConfiguration NeptuneConfiguration = neptuneConfiguration.Value;
 
-        protected PersonDto CallingUser => UserContext.GetUserAsDtoFromHttpContext(dbContext, HttpContext);
+        protected PersonDto CallingUser => UserContext.GetUserAsDtoFromHttpContext(DbContext, HttpContext);
 
         protected ActionResult RequireNotNullThrowNotFound(object theObject, string objectType, object objectID)
         {

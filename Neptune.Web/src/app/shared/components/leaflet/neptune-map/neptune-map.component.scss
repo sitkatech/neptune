@@ -90,6 +90,12 @@
     }
 }
 
+// Loading spinner overlay for the Leaflet map: keep the map's explicit height intact
+// (do not use LoadingDirective's `opacity` option, which manipulates host height).
+.map-container.has-spinner > .spinner-container {
+    background: rgba(0, 0, 0, 0.35);
+}
+
 .attribution {
     font-size: $type-size-050;
     opacity: 0.5;

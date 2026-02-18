@@ -70,7 +70,7 @@ namespace Neptune.WebMvc.Controllers
         public PartialViewResult New()
         {
             var viewModel = new EditViewModel { IsActive = true };
-            return ViewEdit(viewModel, false, null);
+            return ViewEdit(viewModel, null);
         }
 
         [HttpPost]
@@ -79,7 +79,7 @@ namespace Neptune.WebMvc.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return ViewEdit(viewModel, true, null);
+                return ViewEdit(viewModel, null);
             }
 
             var organization = new Organization()
@@ -101,7 +101,7 @@ namespace Neptune.WebMvc.Controllers
         {
             var organization = Organizations.GetByID(_dbContext, organizationPrimaryKey);
             var viewModel = new EditViewModel(organization);
-            return ViewEdit(viewModel, organization.IsInKeystone(), organization.PrimaryContactPerson);
+            return ViewEdit(viewModel, organization.PrimaryContactPerson);
         }
 
         [HttpPost("{organizationPrimaryKey}")]
@@ -112,14 +112,14 @@ namespace Neptune.WebMvc.Controllers
             var organization = Organizations.GetByIDWithChangeTracking(_dbContext, organizationPrimaryKey);
             if (!ModelState.IsValid)
             {
-                return ViewEdit(viewModel, organization.IsInKeystone(), organization.PrimaryContactPerson);
+                return ViewEdit(viewModel, organization.PrimaryContactPerson);
             }
             await viewModel.UpdateModel(organization, CurrentPerson, fileResourceService);
             await _dbContext.SaveChangesAsync();
             return new ModalDialogFormJsonResult();
         }
 
-        private PartialViewResult ViewEdit(EditViewModel viewModel, bool isInKeystone, Person currentPrimaryContactPerson)
+        private PartialViewResult ViewEdit(EditViewModel viewModel, Person currentPrimaryContactPerson)
         {
             var organizationTypesAsSelectListItems = OrganizationTypes.List(_dbContext)
                 .ToSelectListWithEmptyFirstRow(x => x.OrganizationTypeID.ToString(CultureInfo.InvariantCulture),
@@ -130,10 +130,10 @@ namespace Neptune.WebMvc.Controllers
                 activePeople.Add(currentPrimaryContactPerson);
             }
             var people = activePeople.OrderBy(x => x.GetFullNameLastFirst()).ToSelectListWithEmptyFirstRow(x => x.PersonID.ToString(CultureInfo.InvariantCulture),
-                x => x.GetFullNameFirstLastAndOrg());
+                x => x.GetFullNameFirstLast());
             var isSitkaAdmin = new SitkaAdminFeature().HasPermissionByPerson(CurrentPerson);
             var requestOrganizationChangeUrl = SitkaRoute<HelpController>.BuildUrlFromExpression(_linkGenerator, x => x.RequestOrganizationNameChange());
-            var viewData = new EditViewData(organizationTypesAsSelectListItems, people, isInKeystone, requestOrganizationChangeUrl, isSitkaAdmin);
+            var viewData = new EditViewData(organizationTypesAsSelectListItems, people, requestOrganizationChangeUrl, isSitkaAdmin);
             return RazorPartialView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 
@@ -183,67 +183,5 @@ namespace Neptune.WebMvc.Controllers
             await organization.DeleteFull(_dbContext);
             return new ModalDialogFormJsonResult();
         }
-
-        //[HttpGet]
-        //[SitkaAdminFeature]
-        //public PartialViewResult PullOrganizationFromKeystone()
-        //{
-        //    var viewModel = new PullOrganizationFromKeystoneViewModel();
-
-        //    return ViewPullOrganizationFromKeystone(viewModel);
-        //}
-
-        //[HttpPost]
-        //[SitkaAdminFeature]
-        //[AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        //public ActionResult PullOrganizationFromKeystone(PullOrganizationFromKeystoneViewModel viewModel)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return ViewPullOrganizationFromKeystone(viewModel);
-        //    }
-
-        //    var keystoneClient = new KeystoneDataClient();
-
-        //    var organizationGuid = viewModel.OrganizationGuid.GetValueOrDefault(); // never null due to RequiredAttribute
-        //    KeystoneDataService.Organization keystoneOrganization;
-        //    try
-        //    {
-        //        keystoneOrganization = keystoneClient.GetOrganization(organizationGuid);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        SetErrorForDisplay("Organization not added. Guid not found in Keystone or unable to connect to Keystone");
-        //        return new ModalDialogFormJsonResult();
-        //    }
-
-        //    var neptuneOrganization = _dbContext.Organizations.SingleOrDefault(x => x.OrganizationGuid == organizationGuid);
-        //    if (neptuneOrganization != null)
-        //    {
-        //        SetErrorForDisplay("Organization not added - it already exists in Neptune");
-        //        return new ModalDialogFormJsonResult();
-        //    }
-
-        //    var defaultOrganizationType = _dbContext.OrganizationTypes.GetDefaultOrganizationType();
-        //    neptuneOrganization = new Organization(keystoneOrganization.FullName, true, defaultOrganizationType)
-        //    {
-        //        OrganizationGuid = keystoneOrganization.OrganizationGuid,
-        //        OrganizationShortName = keystoneOrganization.ShortName,
-        //        OrganizationUrl = keystoneOrganization.URL
-        //    };
-        //    _dbContext.Organizations.Add(neptuneOrganization);
-
-        //    _dbContext.SaveChanges();
-
-        //    SetMessageForDisplay($"Organization {neptuneOrganization.GetDisplayNameAsUrl()} successfully added.");
-
-        //    return new ModalDialogFormJsonResult();
-        //}
-
-        //private PartialViewResult ViewPullOrganizationFromKeystone(PullOrganizationFromKeystoneViewModel viewModel)
-        //{
-        //    var viewData = new PullOrganizationFromKeystoneViewData();
-        //    return RazorPartialView<PullOrganizationFromKeystone, PullOrganizationFromKeystoneViewData, PullOrganizationFromKeystoneViewModel>(viewData, viewModel);
-        //}
     }
 }

@@ -287,8 +287,8 @@ namespace Neptune.Tests
             Assert.IsTrue(result);
             Assert.AreEqual(actual, new Percentage(.00368M));
 
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() => Percentage.TryParse("101%", out actual), "We only do 0 to 100%");
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() => Percentage.TryParse("-1%", out actual), "We only do 0 to 100%");
+            Assert.Throws<ArgumentOutOfRangeException>(() => Percentage.TryParse("101%", out actual), "We only do 0 to 100%");
+            Assert.Throws<ArgumentOutOfRangeException>(() => Percentage.TryParse("-1%", out actual), "We only do 0 to 100%");
         }
 
         //[Test]

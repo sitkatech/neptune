@@ -5,7 +5,7 @@
     gap: 1rem;
     align-items: start;
 
-    @include desktop-medium {
+    @include desktop-small {
         grid-template-columns: repeat(12, minmax(0, 1fr));
     }
 
@@ -16,7 +16,7 @@
 
     @for $i from 1 through 12 {
         & > .g-col-#{$i} {
-            @include desktop-medium {
+            @include desktop-small {
                 grid-column: span $i;
             }
         }

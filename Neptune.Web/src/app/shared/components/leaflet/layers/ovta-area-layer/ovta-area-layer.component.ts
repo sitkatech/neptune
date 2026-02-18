@@ -35,7 +35,8 @@ export class OvtaAreaLayerComponent extends MapLayerBase implements OnChanges {
 
     ngAfterViewInit(): void {
         if (this.ovtaID) {
-            this.featureCollection$ = this.onlandVisualTrashAssessmentService.getAreaAsFeatureCollectionOnlandVisualTrashAssessment(this.ovtaID).pipe(
+            const request$ = this.onlandVisualTrashAssessmentService.getAreaAsFeatureCollectionOnlandVisualTrashAssessment(this.ovtaID);
+            this.featureCollection$ = this.trackLayerRequest$(request$).pipe(
                 tap((transectLineFeatureCollection) => {
                     this.layer = new L.GeoJSON(transectLineFeatureCollection as any, {
                         style: this.ovtaAreaStyle,
@@ -44,7 +45,8 @@ export class OvtaAreaLayerComponent extends MapLayerBase implements OnChanges {
                 })
             );
         } else if (this.ovtaAreaID) {
-            this.featureCollection$ = this.onlandVisualTrashAssessmentAreaService.getAreaAsFeatureCollectionOnlandVisualTrashAssessmentArea(this.ovtaAreaID).pipe(
+            const request$ = this.onlandVisualTrashAssessmentAreaService.getAreaAsFeatureCollectionOnlandVisualTrashAssessmentArea(this.ovtaAreaID);
+            this.featureCollection$ = this.trackLayerRequest$(request$).pipe(
                 tap((transectLineFeatureCollection) => {
                     this.layer = new L.GeoJSON(transectLineFeatureCollection as any, {
                         style: this.ovtaAreaStyle,

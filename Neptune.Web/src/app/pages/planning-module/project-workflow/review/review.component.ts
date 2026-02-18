@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { forkJoin } from "rxjs";
+import { CommonModule } from "@angular/common";
+import { BehaviorSubject, combineLatest, filter, map, Observable, of, shareReplay, switchMap } from "rxjs";
 import { ProjectService } from "src/app/shared/generated/api/project.service";
 import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-type-enum";
 import { DelineationUpsertDto } from "src/app/shared/generated/model/delineation-upsert-dto";
@@ -15,7 +16,6 @@ import { GrantScoresComponent } from "src/app/pages/planning-module/projects/gra
 import { AttachmentsDisplayComponent } from "src/app/pages/planning-module/projects/attachments-display/attachments-display.component";
 import { ProjectModelResultsComponent } from "src/app/pages/planning-module/projects/project-model-results/project-model-results.component";
 import { ProjectMapComponent } from "src/app/pages/planning-module/projects/project-map/project-map.component";
-import { NgClass, DatePipe } from "@angular/common";
 import { CustomRichTextComponent } from "src/app/shared/components/custom-rich-text/custom-rich-text.component";
 import { PageHeaderComponent } from "src/app/shared/components/page-header/page-header.component";
 import { WorkflowBodyComponent } from "src/app/shared/components/workflow-body/workflow-body.component";
@@ -27,28 +27,31 @@ import { ProjectWorkflowProgressService } from "src/app/shared/services/project-
     templateUrl: "./review.component.html",
     styleUrls: ["./review.component.scss"],
     imports: [
+        CommonModule,
         CustomRichTextComponent,
-        NgClass,
         ProjectMapComponent,
         ProjectModelResultsComponent,
         AttachmentsDisplayComponent,
         GrantScoresComponent,
-        DatePipe,
         PageHeaderComponent,
         WorkflowBodyComponent,
         AlertDisplayComponent,
     ],
 })
-export class ReviewComponent implements OnInit {
-    public projectID: number;
-    public project: ProjectDto;
-    public treatmentBMPs: Array<TreatmentBMPUpsertDto>;
-    public delineations: Array<DelineationUpsertDto>;
-    public projectNetworkSolveHistories: Array<ProjectNetworkSolveHistorySimpleDto>;
-    public attachments: Array<ProjectDocumentDto>;
-    public customRichTextTypeID = NeptunePageTypeEnum.HippocampReview;
+export class ReviewComponent {
+    private readonly reloadSubject = new BehaviorSubject<void>(undefined);
+    private readonly isLoadingSubmitSubject = new BehaviorSubject<boolean>(false);
 
-    public isLoadingSubmit = false;
+    public readonly isLoadingSubmit$ = this.isLoadingSubmitSubject.asObservable();
+
+    public projectID$: Observable<number | null> = of(null);
+    public project$: Observable<ProjectDto | null> = of(null);
+    public treatmentBMPs$: Observable<TreatmentBMPUpsertDto[]> = of([]);
+    public delineations$: Observable<DelineationUpsertDto[]> = of([]);
+    public projectNetworkSolveHistories$: Observable<ProjectNetworkSolveHistorySimpleDto[]> = of([]);
+    public attachments$: Observable<ProjectDocumentDto[]> = of([]);
+
+    public customRichTextTypeID = NeptunePageTypeEnum.HippocampReview;
 
     constructor(
         private projectService: ProjectService,
@@ -58,56 +61,79 @@ export class ReviewComponent implements OnInit {
         private projectWorkflowProgressService: ProjectWorkflowProgressService
     ) {}
 
-    ngOnInit(): void {
-        const projectID = this.route.snapshot.paramMap.get("projectID");
-        if (projectID) {
-            this.projectID = parseInt(projectID);
-            forkJoin({
-                project: this.projectService.getProject(this.projectID),
-                treatmentBMPs: this.projectService.listTreatmentBMPsAsUpsertDtosByProjectIDProject(this.projectID),
-                delineations: this.projectService.listDelineationsByProjectIDProject(this.projectID),
-                projectNetworkSolveHistories: this.projectService.listProjectNetworkSolveHistoriesForProjectProject(this.projectID),
-                attachments: this.projectService.listAttachmentsByProjectIDProject(this.projectID),
-            }).subscribe(({ project, treatmentBMPs, delineations, projectNetworkSolveHistories, attachments }) => {
-                this.treatmentBMPs = treatmentBMPs;
-                this.delineations = delineations;
-                this.projectNetworkSolveHistories = projectNetworkSolveHistories;
-                this.project = project;
-                this.attachments = attachments;
-            });
-        }
+    public ngOnInit(): void {
+        this.projectID$ = this.route.paramMap.pipe(
+            map((params) => parseInt(params.get("projectID") ?? "", 10)),
+            filter((projectID) => Number.isFinite(projectID)),
+            shareReplay({ bufferSize: 1, refCount: true })
+        );
+
+        const refreshTrigger$ = this.reloadSubject.asObservable();
+
+        this.project$ = combineLatest([this.projectID$, refreshTrigger$]).pipe(
+            map(([projectID]) => projectID),
+            switchMap((projectID) => this.projectService.getProject(projectID)),
+            shareReplay({ bufferSize: 1, refCount: true })
+        );
+
+        this.treatmentBMPs$ = combineLatest([this.projectID$, refreshTrigger$]).pipe(
+            map(([projectID]) => projectID),
+            switchMap((projectID) => this.projectService.listTreatmentBMPsAsUpsertDtosByProjectIDProject(projectID)),
+            shareReplay({ bufferSize: 1, refCount: true })
+        );
+
+        this.delineations$ = combineLatest([this.projectID$, refreshTrigger$]).pipe(
+            map(([projectID]) => projectID),
+            switchMap((projectID) => this.projectService.listDelineationsByProjectIDProject(projectID)),
+            shareReplay({ bufferSize: 1, refCount: true })
+        );
+
+        this.projectNetworkSolveHistories$ = combineLatest([this.projectID$, refreshTrigger$]).pipe(
+            map(([projectID]) => projectID),
+            switchMap((projectID) => this.projectService.listProjectNetworkSolveHistoriesForProjectProject(projectID)),
+            shareReplay({ bufferSize: 1, refCount: true })
+        );
+
+        this.attachments$ = combineLatest([this.projectID$, refreshTrigger$]).pipe(
+            map(([projectID]) => projectID),
+            switchMap((projectID) => this.projectService.listAttachmentsByProjectIDProject(projectID)),
+            shareReplay({ bufferSize: 1, refCount: true })
+        );
     }
 
-    showModelResultsPanel(): boolean {
-        return !this.project?.DoesNotIncludeTreatmentBMPs && this.project.HasModeledResults;
+    public showModelResultsPanel(project: ProjectDto | null): boolean {
+        return !project?.DoesNotIncludeTreatmentBMPs && project.HasModeledResults;
     }
 
-    private mapProjectToUpsertDto(): ProjectUpsertDto {
+    private mapProjectToUpsertDto(project: ProjectDto): ProjectUpsertDto {
         return new ProjectUpsertDto({
-            ProjectName: this.project.ProjectName,
-            OrganizationID: this.project.OrganizationID,
-            StormwaterJurisdictionID: this.project.StormwaterJurisdictionID,
-            PrimaryContactPersonID: this.project.PrimaryContactPersonID,
-            ProjectDescription: this.project.ProjectDescription,
-            AdditionalContactInformation: this.project.AdditionalContactInformation,
-            DoesNotIncludeTreatmentBMPs: this.project.DoesNotIncludeTreatmentBMPs,
-            CalculateOCTAM2Tier2Scores: this.project.CalculateOCTAM2Tier2Scores,
+            ProjectName: project.ProjectName,
+            OrganizationID: project.OrganizationID,
+            StormwaterJurisdictionID: project.StormwaterJurisdictionID,
+            PrimaryContactPersonID: project.PrimaryContactPersonID,
+            ProjectDescription: project.ProjectDescription,
+            AdditionalContactInformation: project.AdditionalContactInformation,
+            DoesNotIncludeTreatmentBMPs: project.DoesNotIncludeTreatmentBMPs,
+            CalculateOCTAM2Tier2Scores: project.CalculateOCTAM2Tier2Scores,
         });
     }
 
-    shareOrRevokeOCTAScores() {
+    public shareOrRevokeOCTAScores(
+        projectID: number,
+        project: ProjectDto,
+        treatmentBMPs: TreatmentBMPUpsertDto[],
+        projectNetworkSolveHistories: ProjectNetworkSolveHistorySimpleDto[]
+    ) {
         var modalContents =
             "<p>You are about to revoke sharing of this project with the OCTA M2 Tier 2 grant program. This will allow you to edit this project." +
             "<p>Are you sure you wish to proceed?</p>";
         var buttonTextYes = "Revoke";
         var canSubmit = true;
 
-        if (!this.project.ShareOCTAM2Tier2Scores) {
+        if (!project.ShareOCTAM2Tier2Scores) {
             buttonTextYes = "Share";
 
-            canSubmit =
-                this.project.CalculateOCTAM2Tier2Scores &&
-                (this.treatmentBMPs.length > 0 ? this.projectNetworkSolveHistories.length > 0 : this.project.DoesNotIncludeTreatmentBMPs);
+            canSubmit = project.CalculateOCTAM2Tier2Scores && (treatmentBMPs.length > 0 ? projectNetworkSolveHistories.length > 0 : project.DoesNotIncludeTreatmentBMPs);
 
             modalContents = canSubmit
                 ? "<p>I certify that I have inventoried all upstream BMPs of my project within the OC Stormwater Tools Inventory Module and made them ready for modeling.</p>"
@@ -125,21 +151,21 @@ export class ReviewComponent implements OnInit {
             })
             .then((confirmed) => {
                 if (confirmed) {
-                    this.isLoadingSubmit = true;
+                    this.isLoadingSubmitSubject.next(true);
 
-                    var model = this.mapProjectToUpsertDto();
-                    model.ShareOCTAM2Tier2Scores = !this.project.ShareOCTAM2Tier2Scores;
+                    var model = this.mapProjectToUpsertDto(project);
+                    model.ShareOCTAM2Tier2Scores = !project.ShareOCTAM2Tier2Scores;
 
-                    this.projectService.updateProject(this.projectID, model).subscribe(
+                    this.projectService.updateProject(projectID, model).subscribe(
                         () => {
-                            this.isLoadingSubmit = false;
-                            this.projectWorkflowProgressService.updateProgress(this.projectID);
-                            this.project.ShareOCTAM2Tier2Scores = !this.project.ShareOCTAM2Tier2Scores;
+                            this.isLoadingSubmitSubject.next(false);
+                            this.projectWorkflowProgressService.updateProgress(projectID);
+                            this.reloadSubject.next();
                             this.alertService.pushAlert(new Alert(`Your project was successfully ${buttonTextYes == "Share" ? "shared" : "revoked"}.`, AlertContext.Success));
                             window.scroll(0, 0);
                         },
                         (error) => {
-                            this.isLoadingSubmit = false;
+                            this.isLoadingSubmitSubject.next(false);
                             window.scroll(0, 0);
                         }
                     );

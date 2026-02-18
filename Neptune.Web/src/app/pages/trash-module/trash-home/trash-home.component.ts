@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from "@angular/core";
+import { Component, DestroyRef, OnInit, inject } from "@angular/core";
 import { AuthenticationService } from "src/app/services/authentication.service";
 import { environment } from "src/environments/environment";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
@@ -8,7 +8,23 @@ import { NeptunePageTypeEnum } from "src/app/shared/generated/enum/neptune-page-
 import { CustomRichTextComponent } from "src/app/shared/components/custom-rich-text/custom-rich-text.component";
 import { AlertDisplayComponent } from "src/app/shared/components/alert-display/alert-display.component";
 import { AsyncPipe, DatePipe, DecimalPipe } from "@angular/common";
-import { BehaviorSubject, Observable, switchMap, tap, combineLatest, map } from "rxjs";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import {
+    BehaviorSubject,
+    Observable,
+    Subject,
+    combineLatest,
+    defer,
+    distinctUntilChanged,
+    filter,
+    finalize,
+    map,
+    scan,
+    shareReplay,
+    startWith,
+    switchMap,
+    withLatestFrom,
+} from "rxjs";
 import { NeptuneMapComponent, NeptuneMapInitEvent } from "../../../shared/components/leaflet/neptune-map/neptune-map.component";
 import "leaflet.markercluster";
 import * as L from "leaflet";
@@ -71,10 +87,10 @@ import { OnlandVisualTrashAssessmentAreaService } from "src/app/shared/generated
         LoadingDirective,
     ],
 })
-export class TrashHomeComponent implements OnInit, OnDestroy {
+export class TrashHomeComponent implements OnInit {
     public OverlayMode = OverlayMode;
 
-    public watchUserChangeSubscription: any;
+    private readonly destroyRef = inject(DestroyRef);
     public currentUser$: Observable<PersonDto>;
 
     public richTextTypeID: number = NeptunePageTypeEnum.TrashHomePage;
@@ -84,9 +100,10 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
     public layerControl: L.Control.Layers;
 
     public stormwaterJurisdictions$: Observable<Array<StormwaterJurisdictionDisplayDto>>;
-    public currentStormwaterJurisdiction: StormwaterJurisdictionDisplayDto;
-    private stormwaterJurisdictionSubject = new BehaviorSubject<StormwaterJurisdictionDisplayDto | null>(null);
-    public stormwaterJurisdiction$ = this.stormwaterJurisdictionSubject.asObservable();
+    private readonly selectedStormwaterJurisdictionIdSubject = new BehaviorSubject<number | null>(null);
+
+    public currentStormwaterJurisdiction$!: Observable<StormwaterJurisdictionDisplayDto>;
+    public selectedStormwaterJurisdictionId$!: Observable<number>;
 
     public selectedStormwaterJurisdictionLayer: L.GeoJSON<any>;
     private selectedJurisdictionStyle = {
@@ -96,14 +113,27 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
     };
 
     public currentResultType: string = "Area-Based Results";
-    public resultTypes = ["Area-Based Results", "Current Net Loading Rate With Controls", "Net Change In Trash Loading Rate With Controls", "OVTA-Based Results", "No Metric, Map Overlay"];
+    public resultTypes = [
+        "Area-Based Results",
+        "Current Net Loading Rate With Controls",
+        "Net Change In Trash Loading Rate With Controls",
+        "OVTA-Based Results",
+        "No Metric, Map Overlay",
+    ];
 
     public areaBasedAcreCalculationsDto$: Observable<AreaBasedAcreCalculationsDto>;
     public loadResultsDto$: Observable<LoadResultsDto>;
     public ovtaResultsDto$: Observable<OVTAResultsDto>;
     public boundingBox$: Observable<BoundingBoxDto>;
 
-    public isLoading: boolean;
+    private readonly loadingDeltaSubject = new Subject<number>();
+    public readonly isLoading$ = this.loadingDeltaSubject.pipe(
+        startWith(0),
+        scan((count, delta) => Math.max(0, count + delta), 0),
+        map((count) => count > 0),
+        distinctUntilChanged(),
+        shareReplay({ bufferSize: 1, refCount: true })
+    );
 
     // Subjects and observables for the selected feature (TGU and OVTA)
     private tguSubject = new BehaviorSubject<TrashGeneratingUnitDto | null>(null);
@@ -137,6 +167,12 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
 
     public treatmentBMPs$: Observable<IFeature[]>;
 
+    private readonly mapReadySubject = new BehaviorSubject<NeptuneMapInitEvent | null>(null);
+    private readonly mapReady$ = this.mapReadySubject.pipe(
+        filter((x): x is NeptuneMapInitEvent => x != null),
+        shareReplay({ bufferSize: 1, refCount: true })
+    );
+
     constructor(
         private authenticationService: AuthenticationService,
         private router: Router,
@@ -148,148 +184,144 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
         private trashGeneratingUnitService: TrashGeneratingUnitService,
         private treatmentBMPService: TreatmentBMPService,
         private onlandVisualTrashAssessmentAreaService: OnlandVisualTrashAssessmentAreaService,
-        private modalService: ModalService,
-        private cdr: ChangeDetectorRef
+        private modalService: ModalService
     ) {}
+
+    private trackRequest$<T>(source$: Observable<T>): Observable<T> {
+        return defer(() => {
+            this.loadingDeltaSubject.next(1);
+            return source$.pipe(finalize(() => this.loadingDeltaSubject.next(-1)));
+        });
+    }
 
     public ngOnInit(): void {
         this.currentUser$ = this.authenticationService.getCurrentUser();
 
-        this.route.queryParams.subscribe((params) => {
-            //We're logging in
-            if (params.hasOwnProperty("code")) {
-                this.router.navigate(["/signin-oidc"], { queryParams: params });
-                return;
-            }
+        this.stormwaterJurisdictions$ = this.stormwaterJurisdictionService.listViewableStormwaterJurisdiction().pipe(shareReplay({ bufferSize: 1, refCount: true }));
 
-            if (localStorage.getItem("loginOnReturn")) {
-                localStorage.removeItem("loginOnReturn");
-                this.authenticationService.login();
-            }
+        this.currentStormwaterJurisdiction$ = combineLatest([this.stormwaterJurisdictions$, this.selectedStormwaterJurisdictionIdSubject]).pipe(
+            map(([jurisdictions, selectedId]) => {
+                const selected = jurisdictions.find((x) => x.StormwaterJurisdictionID === selectedId);
+                return selected ?? jurisdictions[0] ?? null;
+            }),
+            filter((x): x is StormwaterJurisdictionDisplayDto => x != null),
+            shareReplay({ bufferSize: 1, refCount: true })
+        );
 
-            //We were forced to logout or were sent a link and just finished logging in
-            if (sessionStorage.getItem("authRedirectUrl")) {
-                this.router.navigateByUrl(sessionStorage.getItem("authRedirectUrl")).then(() => {
-                    sessionStorage.removeItem("authRedirectUrl");
-                });
-            }
-        });
-
-        this.stormwaterJurisdictions$ = this.stormwaterJurisdictionService.listViewableStormwaterJurisdiction().pipe(
-            tap((x) => {
-                this.stormwaterJurisdictionSubject.next(x[0]);
-                this.currentStormwaterJurisdiction = x[0];
-            })
+        this.selectedStormwaterJurisdictionId$ = this.currentStormwaterJurisdiction$.pipe(
+            map((x) => x.StormwaterJurisdictionID),
+            distinctUntilChanged(),
+            shareReplay({ bufferSize: 1, refCount: true })
         );
 
         this.lastUpdateDate$ = this.trashGeneratingUnitService.getLastUpdateDateTrashGeneratingUnit();
 
-        this.areaBasedAcreCalculationsDto$ = this.stormwaterJurisdiction$.pipe(
-            tap(() => {
-                this.isLoading = true;
-            }),
-            switchMap((x) => {
-                return this.trashResultsByJurisdictionService.getAreaBasedResultsCalculationsTrashGeneratingUnitByStormwaterJurisdiction(x.StormwaterJurisdictionID);
-            }),
-            tap(() => {
-                this.isLoading = false;
-            })
+        this.areaBasedAcreCalculationsDto$ = this.currentStormwaterJurisdiction$.pipe(
+            switchMap((x) =>
+                this.trackRequest$(this.trashResultsByJurisdictionService.getAreaBasedResultsCalculationsTrashGeneratingUnitByStormwaterJurisdiction(x.StormwaterJurisdictionID))
+            ),
+            shareReplay({ bufferSize: 1, refCount: true })
         );
 
-        this.loadResultsDto$ = this.stormwaterJurisdiction$.pipe(
-            tap(() => {
-                this.isLoading = true;
-            }),
-            switchMap((x) => {
-                return this.trashResultsByJurisdictionService.getLoadBasedResultsCalculationsTrashGeneratingUnitByStormwaterJurisdiction(x.StormwaterJurisdictionID);
-            }),
-            tap(() => {
-                this.isLoading = false;
-            })
+        this.loadResultsDto$ = this.currentStormwaterJurisdiction$.pipe(
+            switchMap((x) =>
+                this.trackRequest$(this.trashResultsByJurisdictionService.getLoadBasedResultsCalculationsTrashGeneratingUnitByStormwaterJurisdiction(x.StormwaterJurisdictionID))
+            ),
+            shareReplay({ bufferSize: 1, refCount: true })
         );
 
-        this.ovtaResultsDto$ = this.stormwaterJurisdiction$.pipe(
-            tap(() => {
-                this.isLoading = true;
-            }),
-            switchMap((x) => {
-                return this.trashResultsByJurisdictionService.getOVTABasedResultsCalculationsTrashGeneratingUnitByStormwaterJurisdiction(x.StormwaterJurisdictionID);
-            }),
-            tap(() => {
-                this.isLoading = false;
-            })
+        this.ovtaResultsDto$ = this.currentStormwaterJurisdiction$.pipe(
+            switchMap((x) =>
+                this.trackRequest$(this.trashResultsByJurisdictionService.getOVTABasedResultsCalculationsTrashGeneratingUnitByStormwaterJurisdiction(x.StormwaterJurisdictionID))
+            ),
+            shareReplay({ bufferSize: 1, refCount: true })
         );
 
-        this.boundingBox$ = this.stormwaterJurisdiction$.pipe(
-            tap((x) => {
-                this.addSelectedJurisdictionLayer(x.StormwaterJurisdictionID);
-            }),
-            switchMap((x) => {
-                return this.stormwaterJurisdictionService.getBoundingBoxByJurisdictionIDStormwaterJurisdiction(x.StormwaterJurisdictionID);
-            }),
-            tap((boundingBox) => {
-                if (this.mapIsReady) {
-                    this.leafletHelperService.fitMapToBoundingBox(this.map, boundingBox);
-                }
-            })
+        this.boundingBox$ = this.currentStormwaterJurisdiction$.pipe(
+            switchMap((x) => this.trackRequest$(this.stormwaterJurisdictionService.getBoundingBoxByJurisdictionIDStormwaterJurisdiction(x.StormwaterJurisdictionID))),
+            shareReplay({ bufferSize: 1, refCount: true })
         );
 
-        this.treatmentBMPs$ = this.stormwaterJurisdiction$.pipe(
-            switchMap((x) => {
-                return this.treatmentBMPService.listInventoryVerifiedTreatmentBMPsByJurisdictionIDAsFeatureCollectionTreatmentBMP(x.StormwaterJurisdictionID);
-            }),
-            tap((treatmentBMPs) => {
-                var isCurrentlyOn = this.map.hasLayer(this.treatmentBMPClusterLayer);
-
-                if (this.treatmentBMPClusterLayer) {
-                    this.treatmentBMPClusterLayer.clearLayers();
-                    this.map.removeLayer(this.treatmentBMPClusterLayer);
-                    this.layerControl.removeLayer(this.treatmentBMPClusterLayer);
-                }
-
-                const inventoriedTreatmentBMPsLayer = new L.GeoJSON(treatmentBMPs as any, {
-                    pointToLayer: (feature, latlng) => {
-                        var iconSrc = "./assets/main/map-icons/marker-icon-orange.png";
-                        switch (feature.properties["TrashCaptureStatusTypeID"]) {
-                            case TrashCaptureStatusTypeEnum.Full:
-                                iconSrc = "./assets/main/map-icons/marker-icon-red.png";
-                                break;
-                            case TrashCaptureStatusTypeEnum.Partial:
-                                iconSrc = "./assets/main/map-icons/marker-icon-blue.png";
-                                break;
-                            case TrashCaptureStatusTypeEnum.None:
-                                iconSrc = "./assets/main/map-icons/marker-icon-black.png";
-                                break;
-                            case TrashCaptureStatusTypeEnum.NotProvided:
-                                iconSrc = "./assets/main/map-icons/marker-icon-gray.png";
-                                break;
-                            default:
-                                iconSrc = "./assets/main/map-icons/marker-icon-orange.png";
-                                break;
-                        }
-                        return L.marker(latlng, { icon: MarkerHelper.buildDefaultLeafletMarkerFromMarkerPath(iconSrc) });
-                    },
-                    onEachFeature: (feature, layer) => {
-                        layer.bindPopup(
-                            `<b>Name:</b> <a target="_blank" href="${this.ocstBaseUrl()}/TreatmentBMP/Detail/${feature.properties.TreatmentBMPID}">${
-                                feature.properties.TreatmentBMPName
-                            }</a><br>` + `<b>Type:</b> ${feature.properties.TreatmentBMPTypeName}`
-                        );
-                    },
-                });
-                this.treatmentBMPClusterLayer.addLayer(inventoriedTreatmentBMPsLayer);
-                this.treatmentBMPClusterLayer["legendHtml"] = "<img src='/assets/main/map-legend-images/bmpTrashCaptureLegend.png' />";
-                this.layerControl.addOverlay(this.treatmentBMPClusterLayer, "BMPs");
-                if (isCurrentlyOn) {
-                    this.map.addLayer(this.treatmentBMPClusterLayer);
-                }
-            })
+        this.treatmentBMPs$ = this.currentStormwaterJurisdiction$.pipe(
+            switchMap((x) =>
+                this.trackRequest$(this.treatmentBMPService.listInventoryVerifiedTreatmentBMPsByJurisdictionIDAsFeatureCollectionTreatmentBMP(x.StormwaterJurisdictionID))
+            ),
+            shareReplay({ bufferSize: 1, refCount: true })
         );
 
         // combined selected feature stream (tgu + ovta)
-        this.selectedFeature$ = combineLatest([this.tguDto$, this.ovtaAreaDto$]).pipe(
-            map(([tgu, ovta]) => ({ tgu, ovta }))
-        );
+        this.selectedFeature$ = combineLatest([this.tguDto$, this.ovtaAreaDto$]).pipe(map(([tgu, ovta]) => ({ tgu, ovta })));
+
+        // Map side effects that depend on both the map instance and selected jurisdiction/bounding box.
+        combineLatest([this.mapReady$, this.currentStormwaterJurisdiction$])
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe(([, jurisdiction]) => {
+                this.addSelectedJurisdictionLayer(jurisdiction.StormwaterJurisdictionID);
+            });
+
+        combineLatest([this.mapReady$, this.boundingBox$])
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe(([, boundingBox]) => {
+                this.leafletHelperService.fitMapToBoundingBox(this.map, boundingBox);
+            });
+
+        combineLatest([this.mapReady$, this.treatmentBMPs$])
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe(([, treatmentBMPs]) => {
+                this.updateTreatmentBMPClusterLayer(treatmentBMPs);
+            });
+    }
+
+    private updateTreatmentBMPClusterLayer(treatmentBMPs: any): void {
+        if (!this.map || !this.layerControl) {
+            return;
+        }
+
+        const isCurrentlyOn = this.map.hasLayer(this.treatmentBMPClusterLayer);
+
+        if (this.treatmentBMPClusterLayer) {
+            this.treatmentBMPClusterLayer.clearLayers();
+            this.map.removeLayer(this.treatmentBMPClusterLayer);
+            this.layerControl.removeLayer(this.treatmentBMPClusterLayer);
+        }
+
+        const inventoriedTreatmentBMPsLayer = new L.GeoJSON(treatmentBMPs as any, {
+            pointToLayer: (feature, latlng) => {
+                let iconSrc = "./assets/main/map-icons/marker-icon-orange.png";
+                switch (feature.properties["TrashCaptureStatusTypeID"]) {
+                    case TrashCaptureStatusTypeEnum.Full:
+                        iconSrc = "./assets/main/map-icons/marker-icon-red.png";
+                        break;
+                    case TrashCaptureStatusTypeEnum.Partial:
+                        iconSrc = "./assets/main/map-icons/marker-icon-blue.png";
+                        break;
+                    case TrashCaptureStatusTypeEnum.None:
+                        iconSrc = "./assets/main/map-icons/marker-icon-black.png";
+                        break;
+                    case TrashCaptureStatusTypeEnum.NotProvided:
+                        iconSrc = "./assets/main/map-icons/marker-icon-gray.png";
+                        break;
+                    default:
+                        iconSrc = "./assets/main/map-icons/marker-icon-orange.png";
+                        break;
+                }
+                return L.marker(latlng, { icon: MarkerHelper.buildDefaultLeafletMarkerFromMarkerPath(iconSrc) });
+            },
+            onEachFeature: (feature, layer) => {
+                layer.bindPopup(
+                    `<b>Name:</b> <a target="_blank" href="${this.ocstBaseUrl()}/TreatmentBMP/Detail/${feature.properties.TreatmentBMPID}">${
+                        feature.properties.TreatmentBMPName
+                    }</a><br>` + `<b>Type:</b> ${feature.properties.TreatmentBMPTypeName}`
+                );
+            },
+        });
+
+        this.treatmentBMPClusterLayer.addLayer(inventoriedTreatmentBMPsLayer);
+        this.treatmentBMPClusterLayer["legendHtml"] = "<img src='/assets/main/map-legend-images/bmpTrashCaptureLegend.png' />";
+        this.layerControl.addOverlay(this.treatmentBMPClusterLayer, "BMPs");
+        if (isCurrentlyOn) {
+            this.map.addLayer(this.treatmentBMPClusterLayer);
+        }
     }
 
     public handleMapReady(event: NeptuneMapInitEvent): void {
@@ -297,14 +329,25 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
         this.layerControl = event.layerControl;
         this.mapIsReady = true;
 
+        this.mapReadySubject.next(event);
+
         this.registerClickEvents();
-        this.addSelectedJurisdictionLayer(this.currentStormwaterJurisdiction.StormwaterJurisdictionID);
     }
 
-    public onJurisdictionSelected(selectedJurisdiction: StormwaterJurisdictionDisplayDto) {
-        this.stormwaterJurisdictionSubject.next(selectedJurisdiction);
-        this.currentStormwaterJurisdiction = selectedJurisdiction;
-        this.cdr.detectChanges();
+    public onJurisdictionSelected(selectedJurisdiction: number | StormwaterJurisdictionDisplayDto | null) {
+        const selectedId = typeof selectedJurisdiction === "number" ? selectedJurisdiction : selectedJurisdiction?.StormwaterJurisdictionID;
+        if (selectedId == null) {
+            return;
+        }
+
+        this.selectedStormwaterJurisdictionIdSubject.next(selectedId);
+
+        // Clear selected feature state on jurisdiction change.
+        this.tguSubject.next(null);
+        this.ovtaSubject.next(null);
+        if (this.tguLayer && this.map) {
+            this.map.removeLayer(this.tguLayer);
+        }
     }
 
     public registerClickEvents(): void {
@@ -386,7 +429,7 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
         this.wfsService
             .getGeoserverWFSLayerWithCQLFilter("OCStormwater:Jurisdictions", `StormwaterJurisdictionID = ${stormwaterJurisdictionID}`, "StormwaterJurisdictionID")
             .subscribe((response) => {
-                if (this.mapIsReady) {
+                if (this.map) {
                     if (this.selectedStormwaterJurisdictionLayer) {
                         this.map.removeLayer(this.selectedStormwaterJurisdictionLayer);
                     }
@@ -394,10 +437,6 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
                     this.selectedStormwaterJurisdictionLayer.addTo(this.map);
                 }
             });
-    }
-
-    ngOnDestroy(): void {
-        this.watchUserChangeSubscription?.unsubscribe();
     }
 
     public userIsUnassigned(currentUser: PersonDto) {
@@ -421,23 +460,11 @@ export class TrashHomeComponent implements OnInit, OnDestroy {
     }
 
     public login(): void {
-        this.authenticationService.login(true);
+        this.authenticationService.login();
     }
 
-    public createAccount(): void {
-        this.authenticationService.createAccount();
-    }
-
-    public forgotPasswordUrl(): string {
-        return `${environment.keystoneAuthConfiguration.issuer}/Account/ForgotPassword?${this.authenticationService.getClientIDAndRedirectUrlForKeystone()}`;
-    }
-
-    public forgotUsernameUrl(): string {
-        return `${environment.keystoneAuthConfiguration.issuer}/Account/ForgotUsername?${this.authenticationService.getClientIDAndRedirectUrlForKeystone()}`;
-    }
-
-    public keystoneSupportUrl(): string {
-        return `${environment.keystoneAuthConfiguration.issuer}/Account/Support/20?${this.authenticationService.getClientIDAndRedirectUrlForKeystone()}`;
+    public signUp(): void {
+        this.authenticationService.signUp();
     }
 
     public requestSupportUrl(): string {

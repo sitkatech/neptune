@@ -13,17 +13,12 @@ namespace Neptune.API.Controllers
 {
     [ApiController]
     [Route("funding-sources")]
-    public class FundingSourceController : SitkaController<FundingSourceController>
+    public class FundingSourceController(
+        NeptuneDbContext dbContext,
+        ILogger<FundingSourceController> logger,
+        IOptions<NeptuneConfiguration> neptuneConfiguration)
+        : SitkaController<FundingSourceController>(dbContext, logger, neptuneConfiguration)
     {
-        public FundingSourceController(
-            NeptuneDbContext dbContext,
-            ILogger<FundingSourceController> logger,
-            KeystoneService keystoneService,
-            IOptions<NeptuneConfiguration> neptuneConfiguration)
-            : base(dbContext, logger, keystoneService, neptuneConfiguration)
-        {
-        }
-
         [HttpGet]
         [AdminFeature]
         public async Task<ActionResult<IEnumerable<FundingSourceDto>>> List()

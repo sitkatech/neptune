@@ -54,18 +54,19 @@ public static class TreatmentBMPBenchmarkAndThresholds
 
     public static async Task<List<TreatmentBMPBenchmarkAndThresholdDto>> ListByTreatmentBMPIDAsDtoAsync(NeptuneDbContext dbContext, int treatmentBMPID)
     {
-        var entities = await dbContext.TreatmentBMPBenchmarkAndThresholds
+        return await dbContext.TreatmentBMPBenchmarkAndThresholds
             .Where(x => x.TreatmentBMPID == treatmentBMPID)
+            .Select(TreatmentBMPBenchmarkAndThresholdDtoProjections.AsDto)
             .ToListAsync();
-        return entities.Select(x => x.AsDto()).ToList();
     }
 
     public static async Task<TreatmentBMPBenchmarkAndThresholdDto?> GetByIDAsync(NeptuneDbContext dbContext, int treatmentBMPBenchmarkAndThresholdID)
     {
-        var entity = await dbContext.TreatmentBMPBenchmarkAndThresholds
+        return await dbContext.TreatmentBMPBenchmarkAndThresholds
             .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.TreatmentBMPBenchmarkAndThresholdID == treatmentBMPBenchmarkAndThresholdID);
-        return entity?.AsDto();
+            .Where(x => x.TreatmentBMPBenchmarkAndThresholdID == treatmentBMPBenchmarkAndThresholdID)
+            .Select(TreatmentBMPBenchmarkAndThresholdDtoProjections.AsDto)
+            .FirstOrDefaultAsync();
     }
 
     public static async Task<TreatmentBMPBenchmarkAndThresholdDto> CreateAsync(NeptuneDbContext dbContext, int treatmentBMPID, TreatmentBMPBenchmarkAndThresholdUpsertDto dto)
@@ -73,7 +74,10 @@ public static class TreatmentBMPBenchmarkAndThresholds
         var entity = dto.AsEntity(treatmentBMPID);
         dbContext.TreatmentBMPBenchmarkAndThresholds.Add(entity);
         await dbContext.SaveChangesAsync();
-        return entity.AsDto();
+        return await dbContext.TreatmentBMPBenchmarkAndThresholds.AsNoTracking()
+            .Where(x => x.TreatmentBMPBenchmarkAndThresholdID == entity.TreatmentBMPBenchmarkAndThresholdID)
+            .Select(TreatmentBMPBenchmarkAndThresholdDtoProjections.AsDto)
+            .SingleAsync();
     }
 
     public static async Task<TreatmentBMPBenchmarkAndThresholdDto?> UpdateAsync(NeptuneDbContext dbContext, int id, TreatmentBMPBenchmarkAndThresholdUpsertDto dto)
@@ -85,7 +89,10 @@ public static class TreatmentBMPBenchmarkAndThresholds
         }
         entity.UpdateFromUpsertDto(dto);
         await dbContext.SaveChangesAsync();
-        return entity.AsDto();
+        return await dbContext.TreatmentBMPBenchmarkAndThresholds.AsNoTracking()
+            .Where(x => x.TreatmentBMPBenchmarkAndThresholdID == entity.TreatmentBMPBenchmarkAndThresholdID)
+            .Select(TreatmentBMPBenchmarkAndThresholdDtoProjections.AsDto)
+            .SingleAsync();
     }
 
     public static async Task<bool> DeleteAsync(NeptuneDbContext dbContext, int id)

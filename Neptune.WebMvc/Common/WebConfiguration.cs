@@ -5,12 +5,6 @@ namespace Neptune.WebMvc.Common;
 public class WebConfiguration : NeptuneJobConfiguration
 {
     public string DatabaseConnectionString { get; set; }
-
-    public string KeystoneRegisterUrl => $"{KeystoneOpenIDUrl}/Account/Register";
-    public string KeystoneInviteUserUrl { get; set; }
-    public string KeystoneOpenIDClientID { get; set; }
-    public string KeystoneOpenIDUrl { get; set; }
-    public string KeystoneOpenIDClientSecret { get; set; }
     public string MapServiceUrl { get; set; }
 
     public string NereidUrl { get; set; }
@@ -26,4 +20,6 @@ public class WebConfiguration : NeptuneJobConfiguration
     public string AzureBlobStorageConnectionString { get; set; }
 
     public GoogleRecaptchaV3Config GoogleRecaptchaV3Config { get; set; }
+    public string Auth0Domain { get; set; }
+    public string Auth0ClientID { get; set; }
 }

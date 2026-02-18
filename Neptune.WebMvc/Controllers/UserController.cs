@@ -32,7 +32,6 @@ using Neptune.WebMvc.Models;
 using Neptune.WebMvc.Services.Filters;
 using Neptune.WebMvc.Views.Shared;
 using Neptune.WebMvc.Views.Shared.UserJurisdictions;
-using System.Web;
 using Neptune.WebMvc.Common.Mvc;
 
 namespace Neptune.WebMvc.Controllers
@@ -48,8 +47,7 @@ namespace Neptune.WebMvc.Controllers
         [UserEditFeature]
         public ViewResult Index()
         {
-            var keystoneRegisterUserUrl = $"{_webConfiguration.KeystoneRegisterUrl}?ClientID={_webConfiguration.KeystoneOpenIDClientID}&RedirectUrl={HttpUtility.UrlEncode(SitkaRoute<AccountController>.BuildUrlFromExpression(_linkGenerator, x => x.LogOn()))}";
-            var viewData = new IndexViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, keystoneRegisterUserUrl);
+            var viewData = new IndexViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson);
             return RazorView<Views.User.Index, IndexViewData>(viewData);
         }
 
@@ -112,7 +110,8 @@ namespace Neptune.WebMvc.Controllers
             }
 
             var rolesAsSelectListItems = roles.ToSelectListWithEmptyFirstRow(x => x.RoleID.ToString(CultureInfo.InvariantCulture), x => x.RoleDisplayName);
-            var viewData = new EditRolesViewData(rolesAsSelectListItems, CurrentPerson.IsAdministrator());
+            var organizationsAsSelectListItems = Organizations.ListActive(_dbContext).ToSelectListWithEmptyFirstRow(x => x.OrganizationID.ToString(CultureInfo.InvariantCulture), x => x.GetDisplayName());
+            var viewData = new EditRolesViewData(rolesAsSelectListItems,  organizationsAsSelectListItems, CurrentPerson.IsAdministrator());
             return RazorPartialView<EditRoles, EditRolesViewData, EditRolesViewModel>(viewData, viewModel);
         }
 
@@ -130,7 +129,7 @@ namespace Neptune.WebMvc.Controllers
         {
             var canDelete = person.PersonID != CurrentPerson.PersonID;
             var confirmMessage = canDelete
-                ? $"Are you sure you want to delete {person.GetFullNameFirstLastAndOrg()}?"
+                ? $"Are you sure you want to delete {person.GetFullNameFirstLast()}?"
                 : ConfirmDialogFormViewData.GetStandardCannotDeleteMessage("Person",
                     UrlTemplate.MakeHrefString(
                         SitkaRoute<UserController>.BuildUrlFromExpression(_linkGenerator, x => x.Detail(person.PersonID)),
@@ -271,146 +270,5 @@ namespace Neptune.WebMvc.Controllers
             var viewData = new EditUserJurisdictionsViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, allStormwaterJurisdictions, stormwaterJurisdictionsCurrentPersonCanManage, true);
             return RazorPartialView<EditUserJurisdictions, EditUserJurisdictionsViewData, EditUserJurisdictionsViewModel>(viewData, viewModel);
         }
-
-        //[JurisdictionManageFeature]
-        //[HttpGet]
-        //public ActionResult Invite()
-        //{
-        //    var viewModel = new InviteViewModel();
-        //    return ViewInvite(viewModel);
-        //}
-
-        //private ActionResult ViewInvite(InviteViewModel viewModel)
-        //{
-        //    var neptunePage = NeptunePages.GetNeptunePageByPageType(_dbContext, NeptunePageType.InviteUser);
-        //    var organizations = _dbContext.Organizations.OrderBy(x => x.OrganizationName).ToList();
-        //    var cancelUrl = Request.UrlReferrer != null ? Request.UrlReferrer.ToString() : SitkaRoute<HomeController>.BuildUrlFromExpression(_linkGenerator, x => x.Index());
-        //    var viewData = new InviteViewData(HttpContext, _linkGenerator, _webConfiguration, CurrentPerson, organizations, neptunePage, cancelUrl);
-        //    return RazorView<Invite, InviteViewData, InviteViewModel>(viewData, viewModel);
-        //}
-
-        //[JurisdictionManageFeature]
-        //[HttpPost]
-        //public ActionResult Invite(InviteViewModel viewModel)
-        //{
-        //    var toolDisplayName = "Orange County Stormwater Tools";
-        //    var homeUrl = SitkaRoute<HomeController>.BuildAbsoluteUrlHttpsFromExpression(x => x.Index(), NeptuneWebConfiguration.CanonicalHostNameRoot);
-        //    var loginUrl =
-        //        SitkaRoute<AccountController>.BuildAbsoluteUrlHttpsFromExpression(x => x.LogOn(),
-        //            NeptuneWebConfiguration.CanonicalHostName);
-        //    var supportUrl = SitkaRoute<HelpController>.BuildAbsoluteUrlHttpsFromExpression(x => x.Support(), NeptuneWebConfiguration.CanonicalHostNameRoot);
-        //    var inviteModel = new KeystoneService.KeystoneInviteModel
-        //    {
-        //        FirstName = viewModel.FirstName,
-        //        LastName = viewModel.LastName,
-        //        Email = viewModel.Email,
-        //        SiteName = toolDisplayName,
-        //        Subject = $"Invitation to the {toolDisplayName}",
-        //        WelcomeText = $"You have been invited by a colleague to create an account in the <a href=\"{homeUrl}\">{toolDisplayName}</a>. The {toolDisplayName} application is a collaborative effort of Orange County Public Works, MS4 Permittees, and other organizations.",
-        //        RedirectURL = loginUrl,
-        //        SupportBlock = $"If you have any questions, please visit our <a href=\"{supportUrl}\">support page</a>",
-        //        OrganizationGuid = viewModel.OrganizationGuid,
-        //        SignatureBlock = $"The {toolDisplayName} team"
-        //    };
-
-        //    var keystoneService = new KeystoneService(HttpRequestStorage.GetHttpContextUserThroughOwin());
-        //    var response = keystoneService.Invite(inviteModel);
-        //    if (response.StatusCode != HttpStatusCode.OK || response.Error != null)
-        //    {
-        //        ModelState.AddModelError("Email", $"There was a problem inviting the user to Keystone: {response.Error.Message}.");
-        //        if (response.Error.ModelState != null)
-        //        {
-        //            foreach (var modelStateKey in response.Error.ModelState.Keys)
-        //            {
-        //                foreach (var err in response.Error.ModelState[modelStateKey])
-        //                {
-        //                    ModelState.AddModelError(modelStateKey, err);
-        //                }
-        //            }
-        //        }
-        //    }
-
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return ViewInvite(viewModel);
-        //    }
-
-        //    var keystoneUser = response.Payload.Claims;
-        //    var existingUser = _dbContext.People.GetPersonByPersonGuid(keystoneUser.UserGuid);
-        //    if (existingUser != null)
-        //    {
-        //        SetMessageForDisplay($"{existingUser.GetFullNameFirstLastAndOrgAsUrl()} already has an account.</a>.");
-        //        return RedirectToAction(new SitkaRoute<UserController>(x => x.Detail(existingUser)));
-        //    }
-
-        //    var setJurisdictions = !CurrentPerson.IsAdministrator();
-        //    var newUser = CreateNewFirmaPerson(keystoneUser, keystoneUser.OrganizationGuid);
-
-        //    _dbContext.SaveChanges();
-
-        //    if (setJurisdictions)
-        //    {
-        //        foreach (var stormwaterJurisdictionPerson in CurrentPerson.StormwaterJurisdictionPeople)
-        //        {
-        //            newUser.StormwaterJurisdictionPeople.Add(new StormwaterJurisdictionPerson(stormwaterJurisdictionPerson.StormwaterJurisdictionID, newUser.PersonID));
-        //        }
-        //    }
-
-        //    newUser.RoleID = Role.JurisdictionEditor.RoleID;
-
-        //    _dbContext.SaveChanges();
-
-        //    SetMessageForDisplay(
-        //        $"{newUser.GetFullNameFirstLastAndOrgAsUrl()} successfully added. You may want to assign them a role</a>.");
-        //    return RedirectToAction(new SitkaRoute<UserController>(x => x.Detail(newUser)));
-        //}
-
-        //private static Person CreateNewFirmaPerson(KeystoneService.KeystoneUserClaims keystoneUser,
-        //    Guid? organizationGuid)
-        //{
-        //    Organization organization;
-        //    if (organizationGuid.HasValue)
-        //    {
-        //        organization =
-        //            _dbContext.Organizations.GetOrganizationByOrganizationGuid(organizationGuid
-        //                .Value);
-
-        //        if (organization == null)
-        //        {
-        //            var keystoneClient = new KeystoneDataClient();
-
-
-        //            var keystoneOrganization = keystoneClient.GetOrganization(organizationGuid.Value);
-
-
-        //            var defaultOrganizationType =
-        //                _dbContext.OrganizationTypes.GetDefaultOrganizationType();
-        //            var neptuneOrganization =
-        //                new Organization(keystoneOrganization.FullName, true, defaultOrganizationType)
-        //                {
-        //                    OrganizationGuid = keystoneOrganization.OrganizationGuid,
-        //                    OrganizationShortName = keystoneOrganization.ShortName,
-        //                    OrganizationUrl = keystoneOrganization.URL
-        //                };
-        //            _dbContext.Organizations.Add(neptuneOrganization);
-
-        //            _dbContext.SaveChanges();
-
-        //            organization = neptuneOrganization;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        organization = _dbContext.Organizations.GetUnknownOrganization();
-        //    }
-
-
-        //    var firmaPerson = new Person(keystoneUser.UserGuid, keystoneUser.FirstName, keystoneUser.LastName,
-        //        keystoneUser.Email, Role.Unassigned, DateTime.UtcNow, true, organization, false,
-        //        keystoneUser.LoginName, false, Guid.NewGuid(), false);
-        //    _dbContext.People.Add(firmaPerson);
-        //    return firmaPerson;
-        //}
-
     }
 }

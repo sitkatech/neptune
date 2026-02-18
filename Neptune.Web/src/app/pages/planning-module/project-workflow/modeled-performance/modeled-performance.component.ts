@@ -1,5 +1,5 @@
-import { ApplicationRef, ChangeDetectorRef, Component, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
+import { ApplicationRef, Component, OnDestroy, OnInit } from "@angular/core";
+import { ActivatedRoute, Router } from "@angular/router";
 import { Input } from "@angular/core";
 import { BoundingBoxDto, DelineationUpsertDto, ProjectNetworkSolveHistorySimpleDto, ProjectDto, TreatmentBMPDisplayDto } from "src/app/shared/generated/model/models";
 import { Alert } from "src/app/shared/models/alert";
@@ -7,7 +7,7 @@ import { AlertContext } from "src/app/shared/models/enums/alert-context.enum";
 import { AlertService } from "src/app/shared/services/alert.service";
 import { CustomCompileService } from "src/app/shared/services/custom-compile.service";
 import * as L from "leaflet";
-import { combineLatest, map, Observable, switchMap, tap } from "rxjs";
+import { BehaviorSubject, Observable, Subject, combineLatest, distinctUntilChanged, filter, map, merge, shareReplay, switchMap, takeUntil, tap, withLatestFrom } from "rxjs";
 import { environment } from "src/environments/environment";
 import { MarkerHelper } from "src/app/shared/helpers/marker-helper";
 import { ProjectService } from "src/app/shared/generated/api/project.service";
@@ -29,6 +29,7 @@ import { WqmpsLayerComponent } from "src/app/shared/components/leaflet/layers/wq
 import { NeptuneMapComponent, NeptuneMapInitEvent } from "src/app/shared/components/leaflet/neptune-map/neptune-map.component";
 import { InventoriedBMPsLayerComponent } from "src/app/shared/components/leaflet/layers/inventoried-bmps-layer/inventoried-bmps-layer.component";
 import { OverlayMode } from "src/app/shared/components/leaflet/layers/generic-wms-wfs-layer/overlay-mode.enum";
+import { routeParams } from "src/app/app.routes";
 
 @Component({
     selector: "modeled-performance",
@@ -52,20 +53,35 @@ import { OverlayMode } from "src/app/shared/components/leaflet/layers/generic-wm
         InventoriedBMPsLayerComponent,
     ],
 })
-export class ModeledPerformanceComponent implements OnInit {
+export class ModeledPerformanceComponent implements OnInit, OnDestroy {
     public OverlayMode = OverlayMode;
     public ProjectNetworkHistoryStatusTypeEnum = ProjectNetworkSolveHistoryStatusTypeEnum;
-    public projectNetworkSolveHistories$: Observable<ProjectNetworkSolveHistorySimpleDto[]>;
 
-    public mapIsReady: boolean = false;
+    private readonly destroyed$ = new Subject<void>();
 
-    public delineations: DelineationUpsertDto[];
+    private readonly mapReadySubject = new BehaviorSubject<NeptuneMapInitEvent | null>(null);
+    public readonly mapReady$ = this.mapReadySubject.pipe(
+        filter((x): x is NeptuneMapInitEvent => x != null),
+        shareReplay({ bufferSize: 1, refCount: true })
+    );
+    public readonly mapIsReady$ = this.mapReady$.pipe(
+        map(() => true),
+        distinctUntilChanged(),
+        shareReplay({ bufferSize: 1, refCount: true })
+    );
+
+    private readonly refreshSolveHistoriesSubject = new BehaviorSubject<void>(undefined);
+
+    private readonly selectedTreatmentBMPIdSubject = new BehaviorSubject<number | null>(null);
+    public readonly selectedTreatmentBMPId$ = this.selectedTreatmentBMPIdSubject.pipe(distinctUntilChanged(), shareReplay({ bufferSize: 1, refCount: true }));
+
+    private readonly mapDataInitializedSubject = new BehaviorSubject<boolean>(false);
+    private readonly mapDataInitialized$ = this.mapDataInitializedSubject.pipe(distinctUntilChanged(), shareReplay({ bufferSize: 1, refCount: true }));
+
     public mapHeight: string = "750px";
     public onEachFeatureCallback?: (feature, layer) => void;
     public map: L.Map;
     public layerControl: L.Control.Layers;
-    public boundingBox$: Observable<BoundingBoxDto>;
-    public selectedTreatmentBMP: TreatmentBMPDisplayDto;
     public treatmentBMPsLayer: L.GeoJSON<any>;
     public delineationsLayer: L.GeoJSON<any>;
     private delineationDefaultStyle = {
@@ -80,91 +96,189 @@ export class ModeledPerformanceComponent implements OnInit {
     };
 
     public project$: Observable<ProjectDto>;
-    public customRichTextTypeID = NeptunePageTypeEnum.HippocampModeledPerformance;
+    public projectTreatmentBMPs$: Observable<TreatmentBMPDisplayDto[]>;
+    public delineations$: Observable<DelineationUpsertDto[]>;
+    public delineationAcreageByTreatmentBMPId$: Observable<Map<number, string>>;
+    public projectNetworkSolveHistories$: Observable<ProjectNetworkSolveHistorySimpleDto[]>;
+    public boundingBox$: Observable<BoundingBoxDto>;
+    public selectedTreatmentBMP$: Observable<TreatmentBMPDisplayDto | null>;
 
-    public projectTreatmentBMPs: Array<TreatmentBMPDisplayDto>;
+    private data$: Observable<{
+        treatmentBMPs: TreatmentBMPDisplayDto[];
+        delineations: DelineationUpsertDto[];
+        projectNetworkSolveHistories: ProjectNetworkSolveHistorySimpleDto[];
+    }>;
+    public customRichTextTypeID = NeptunePageTypeEnum.HippocampModeledPerformance;
 
     @Input() projectID!: number;
     constructor(
-        private cdr: ChangeDetectorRef,
         private projectService: ProjectService,
         private appRef: ApplicationRef,
         private compileService: CustomCompileService,
+        private route: ActivatedRoute,
         private router: Router,
         private alertService: AlertService
     ) {}
 
+    private getProjectIdFromRouteSnapshot(): number | null {
+        let current: ActivatedRoute | null = this.route;
+        while (current) {
+            const raw = current.snapshot?.paramMap?.get(routeParams.projectID);
+            if (raw != null) {
+                const parsed = Number(raw);
+                return Number.isFinite(parsed) ? parsed : null;
+            }
+            current = current.parent;
+        }
+        return null;
+    }
+
     ngOnInit(): void {
+        // This component is routed under `edit/:projectID/...`, so projectID is usually a route param.
+        // Keep @Input() support (e.g. if embedded), but fall back to the route when it's not provided.
+        if (this.projectID == null) {
+            const routeProjectId = this.getProjectIdFromRouteSnapshot();
+            if (routeProjectId != null) {
+                this.projectID = routeProjectId;
+            }
+        }
+
         this.project$ = this.projectService.getProject(this.projectID).pipe(
             tap((project) => {
                 // redirect to review step if project is shared with OCTA grant program
                 if (project.ShareOCTAM2Tier2Scores) {
                     this.router.navigateByUrl(`/planning/projects/edit/${project.ProjectID}/review-and-share`);
                 }
-            })
-        );
-        this.projectNetworkSolveHistories$ = this.project$.pipe(
-            switchMap((project) => {
-                return combineLatest({
-                    TreatmentBMPs: this.projectService.listTreatmentBMPsByProjectIDProject(project.ProjectID),
-                    Delineations: this.projectService.listDelineationsByProjectIDProject(project.ProjectID),
-                    ProjectNetworkSolveHistories: this.projectService.listProjectNetworkSolveHistoriesForProjectProject(project.ProjectID),
-                });
             }),
+            shareReplay({ bufferSize: 1, refCount: true })
+        );
+
+        this.data$ = this.project$.pipe(
+            switchMap((project) =>
+                combineLatest({
+                    treatmentBMPs: this.projectService.listTreatmentBMPsByProjectIDProject(project.ProjectID),
+                    delineations: this.projectService.listDelineationsByProjectIDProject(project.ProjectID),
+                    projectNetworkSolveHistories: this.projectService.listProjectNetworkSolveHistoriesForProjectProject(project.ProjectID),
+                })
+            ),
             tap((data) => {
-                if (data.TreatmentBMPs.length == 0) {
+                if ((data.treatmentBMPs ?? []).length === 0) {
                     this.router.navigateByUrl(`/planning/projects/edit/${this.projectID}`);
                 }
-
-                this.projectTreatmentBMPs = data.TreatmentBMPs;
-                this.delineations = data.Delineations;
             }),
-            map((data) => {
-                return data.ProjectNetworkSolveHistories;
-            })
+            shareReplay({ bufferSize: 1, refCount: true })
         );
+
+        this.projectTreatmentBMPs$ = this.data$.pipe(
+            map((x) => x.treatmentBMPs ?? []),
+            shareReplay({ bufferSize: 1, refCount: true })
+        );
+        this.delineations$ = this.data$.pipe(
+            map((x) => x.delineations ?? []),
+            shareReplay({ bufferSize: 1, refCount: true })
+        );
+        this.delineationAcreageByTreatmentBMPId$ = this.delineations$.pipe(
+            map((delineations) => {
+                const result = new Map<number, string>();
+                for (const delineation of delineations ?? []) {
+                    if (delineation?.TreatmentBMPID != null) {
+                        result.set(delineation.TreatmentBMPID, delineation.DelineationArea != null ? `${delineation.DelineationArea} ac` : "Not provided");
+                    }
+                }
+                return result;
+            }),
+            shareReplay({ bufferSize: 1, refCount: true })
+        );
+
+        this.projectNetworkSolveHistories$ = merge(
+            this.data$.pipe(map((x) => x.projectNetworkSolveHistories ?? [])),
+            this.refreshSolveHistoriesSubject.pipe(
+                withLatestFrom(this.project$),
+                switchMap(([_, project]) => this.projectService.listProjectNetworkSolveHistoriesForProjectProject(project.ProjectID))
+            )
+        ).pipe(shareReplay({ bufferSize: 1, refCount: true }));
 
         this.boundingBox$ = this.project$.pipe(
             switchMap((project) => {
                 return this.projectService.getBoundingBoxByProjectIDProject(project.ProjectID);
-            })
+            }),
+            shareReplay({ bufferSize: 1, refCount: true })
         );
+
+        this.selectedTreatmentBMP$ = combineLatest([this.projectTreatmentBMPs$, this.selectedTreatmentBMPId$]).pipe(
+            map(([bmps, selectedId]) => {
+                if (selectedId == null) {
+                    return null;
+                }
+                return bmps.find((x) => x.TreatmentBMPID === selectedId) ?? null;
+            }),
+            shareReplay({ bufferSize: 1, refCount: true })
+        );
+
+        // Leaflet side effects: initialize layers after we have both the map and the data.
+        combineLatest([this.mapReady$, this.projectTreatmentBMPs$, this.delineations$])
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe(([mapReady, treatmentBMPs, delineations]) => {
+                if (!this.treatmentBMPsLayer && !this.delineationsLayer) {
+                    this.initializeMap(treatmentBMPs, delineations);
+                    this.mapDataInitializedSubject.next(true);
+                }
+            });
+
+        // Keep the map selection styling in sync with the selected BMP.
+        combineLatest([this.mapDataInitialized$, this.selectedTreatmentBMPId$])
+            .pipe(
+                takeUntil(this.destroyed$),
+                filter(([isInitialized, id]) => isInitialized && id != null)
+            )
+            .subscribe(([_, id]) => {
+                this.applySelectionToMap(id as number);
+            });
 
         this.compileService.configure(this.appRef);
     }
 
     public handleMapReady(event: NeptuneMapInitEvent): void {
+        // Ensure these imperative fields are set before emitting mapReady$.
+        // The template gates child layers on mapIsReady$, and those children need map + layerControl.
         this.map = event.map;
         this.layerControl = event.layerControl;
-        this.mapIsReady = true;
-        this.initializeMap();
-        this.registerClickEvents();
+        this.mapReadySubject.next(event);
+    }
+
+    ngOnDestroy(): void {
+        this.destroyed$.next();
+        this.destroyed$.complete();
     }
 
     public getAboutModelingPerformanceURL(): string {
         return `${environment.ocStormwaterToolsBaseUrl}/Home/AboutModelingBMPPerformance`;
     }
 
-    public initializeMap(): void {
-        const delineationGeoJson = this.mapDelineationsToGeoJson(this.delineations);
+    public onSelectTreatmentBMP(treatmentBMPID: number): void {
+        this.selectedTreatmentBMPIdSubject.next(treatmentBMPID);
+    }
+
+    private initializeMap(treatmentBMPs: TreatmentBMPDisplayDto[], delineations: DelineationUpsertDto[]): void {
+        const delineationGeoJson = this.mapDelineationsToGeoJson(delineations);
         this.delineationsLayer = new L.GeoJSON(delineationGeoJson as any, {
             onEachFeature: (feature, layer: L.Path & { feature?: GeoJSON.Feature }) => {
                 layer.setStyle(this.delineationDefaultStyle);
                 layer.on("click", (e) => {
-                    this.selectFeatureImpl(feature.properties.TreatmentBMPID);
+                    this.onSelectTreatmentBMP(feature.properties.TreatmentBMPID);
                 });
             },
         });
         this.delineationsLayer.addTo(this.map);
 
-        const treatmentBMPsGeoJson = this.mapTreatmentBMPsToGeoJson(this.projectTreatmentBMPs);
+        const treatmentBMPsGeoJson = this.mapTreatmentBMPsToGeoJson(treatmentBMPs);
         this.treatmentBMPsLayer = new L.GeoJSON(treatmentBMPsGeoJson as any, {
             pointToLayer: (feature, latlng) => {
                 return L.marker(latlng, { icon: MarkerHelper.treatmentBMPMarker });
             },
             onEachFeature: (feature, layer) => {
                 layer.on("click", (e) => {
-                    this.selectFeatureImpl(feature.properties.TreatmentBMPID);
+                    this.onSelectTreatmentBMP(feature.properties.TreatmentBMPID);
                 });
             },
         });
@@ -172,12 +286,6 @@ export class ModeledPerformanceComponent implements OnInit {
 
         let tempFeatureGroup = new L.FeatureGroup([this.treatmentBMPsLayer, this.delineationsLayer]);
         this.map.fitBounds(tempFeatureGroup.getBounds(), { padding: new L.Point(50, 50) });
-    }
-
-    public registerClickEvents(): void {
-        this.treatmentBMPsLayer.on("click", (event: L.LeafletEvent) => {
-            this.selectFeatureImpl(event.propagatedFrom.feature.properties.TreatmentBMPID);
-        });
     }
 
     private mapTreatmentBMPsToGeoJson(treatmentBMPs: TreatmentBMPDisplayDto[]) {
@@ -207,11 +315,14 @@ export class ModeledPerformanceComponent implements OnInit {
         return delineations.map((x) => JSON.parse(x.Geometry));
     }
 
-    public selectFeatureImpl(treatmentBMPID: number) {
-        this.selectedTreatmentBMP = this.projectTreatmentBMPs.find((x) => x.TreatmentBMPID == treatmentBMPID);
+    private applySelectionToMap(treatmentBMPID: number): void {
+        if (!this.map || !this.treatmentBMPsLayer || !this.delineationsLayer) {
+            return;
+        }
+
         let hasFlownToSelectedObject = false;
         this.delineationsLayer?.eachLayer((layer: L.Polygon) => {
-            if (this.selectedTreatmentBMP == null || this.selectedTreatmentBMP.TreatmentBMPID != layer.feature.properties.TreatmentBMPID) {
+            if (treatmentBMPID == null || treatmentBMPID != layer.feature.properties.TreatmentBMPID) {
                 layer.setStyle(this.delineationDefaultStyle);
                 return;
             }
@@ -220,7 +331,7 @@ export class ModeledPerformanceComponent implements OnInit {
             hasFlownToSelectedObject = true;
         });
         this.treatmentBMPsLayer.eachLayer((layer: L.Marker) => {
-            if (this.selectedTreatmentBMP == null || this.selectedTreatmentBMP.TreatmentBMPID != layer.feature.properties.TreatmentBMPID) {
+            if (treatmentBMPID == null || treatmentBMPID != layer.feature.properties.TreatmentBMPID) {
                 layer.setIcon(MarkerHelper.treatmentBMPMarker).setZIndexOffset(1000);
                 return;
             }
@@ -232,27 +343,18 @@ export class ModeledPerformanceComponent implements OnInit {
         });
     }
 
-    getDelineationAcreageForTreatmentBMP(treatmentBMPID: number): string {
-        let delineation = this.delineations?.find((x) => x.TreatmentBMPID == treatmentBMPID);
-        if (delineation == null) {
-            return "Not provided";
-        }
-
-        return `${delineation.DelineationArea} ac`;
-    }
-
     triggerModelRunForProject(): void {
-        this.projectService.triggerModeledPerformanceForProjectProject(this.projectID).subscribe(
-            (results) => {
+        this.projectService.triggerModeledPerformanceForProjectProject(this.projectID).subscribe({
+            next: () => {
                 this.alertService.pushAlert(new Alert("Model run was successfully started and will run in the background.", AlertContext.Success, true));
                 window.scroll(0, 0);
-                this.projectNetworkSolveHistories$ = this.projectService.listProjectNetworkSolveHistoriesForProjectProject(this.projectID);
+                this.refreshSolveHistoriesSubject.next();
             },
-            (error) => {
+            error: () => {
+                this.alertService.pushAlert(new Alert("Unable to start model run. Please try again.", AlertContext.Danger, true));
                 window.scroll(0, 0);
-                this.cdr.detectChanges();
-            }
-        );
+            },
+        });
     }
 
     getModelResultsLastCalculatedText(projectNetworkSolveHistories: ProjectNetworkSolveHistorySimpleDto[]): string {

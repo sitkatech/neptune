@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -14,17 +13,13 @@ namespace Neptune.API.Controllers
 {
     [ApiController]
     [Route("water-quality-management-plans")]
-    public class WaterQualityManagementPlanController : SitkaController<WaterQualityManagementPlanController>
+    public class WaterQualityManagementPlanController(
+        NeptuneDbContext dbContext,
+        ILogger<WaterQualityManagementPlanController> logger,
+        IOptions<NeptuneConfiguration> neptuneConfiguration)
+        : SitkaController<WaterQualityManagementPlanController>(dbContext, logger,
+            neptuneConfiguration)
     {
-        public WaterQualityManagementPlanController(
-            NeptuneDbContext dbContext,
-            ILogger<WaterQualityManagementPlanController> logger,
-            KeystoneService keystoneService,
-            IOptions<NeptuneConfiguration> neptuneConfiguration)
-            : base(dbContext, logger, keystoneService, neptuneConfiguration)
-        {
-        }
-
         [HttpGet]
         [AdminFeature]
         public async Task<ActionResult<IEnumerable<WaterQualityManagementPlanDto>>> List()

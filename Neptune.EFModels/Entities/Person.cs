@@ -23,7 +23,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Neptune.EFModels.Entities
 {
-    public partial class Person //, IKeystoneUser
+    public partial class Person
     {
         public const int AnonymousPersonID = -999;
         public const int SystemPersonID = 1122;
@@ -36,16 +36,6 @@ namespace Neptune.EFModels.Entities
         public string GetFullNameFirstLast()
         {
             return $"{FirstName} {LastName}";
-        }
-
-        public string GetFullNameFirstLastAndOrg()
-        {
-            return $"{FirstName} {LastName} - {Organization.GetDisplayName()}";
-        }
-
-        public string GetFullNameFirstLastAndOrgShortName()
-        {
-            return $"{FirstName} {LastName} ({Organization.GetOrganizationShortNameIfAvailable()})";
         }
 
         public string GetFullNameLastFirst()
@@ -92,12 +82,6 @@ namespace Neptune.EFModels.Entities
             return IsAnonymousUser() || Role == Role.Unassigned;
         }
 
-
-        public string GetFullNameFirstLastAndOrgAbbreviation()
-        {
-            var abbreviationIfAvailable = Organization.GetAbbreviationIfAvailable();
-            return $"{FirstName} {LastName} ({abbreviationIfAvailable})";
-        }
 
         public async Task DeleteFull(NeptuneDbContext dbContext)
         {

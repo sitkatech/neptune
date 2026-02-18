@@ -20,10 +20,9 @@ namespace Neptune.API.Controllers
     public class UserController(
         NeptuneDbContext dbContext,
         ILogger<UserController> logger,
-        KeystoneService keystoneService,
         IOptions<NeptuneConfiguration> neptuneConfiguration,
         SitkaSmtpClientService sitkaSmtpClientService)
-        : SitkaController<UserController>(dbContext, logger, keystoneService, neptuneConfiguration)
+        : SitkaController<UserController>(dbContext, logger, neptuneConfiguration)
     {
         [HttpPost]
         [LoggedInUnclassifiedFeature]
@@ -110,12 +109,6 @@ namespace Neptune.API.Controllers
     <p>
         You may want to <a href=""{NeptuneConfiguration.OcStormwaterToolsBaseUrl}/Detail/{person.PersonID}"">assign this user a role</a> and associate them with a jurisdiction to allow them to use the site. Or you can leave the user with Unassigned roles if they don't need special privileges.
     </p>
-    <br />
-    <br />
-    <div style='font-size: 10px; color: gray'>
-    OTHER DETAILS:<br />
-    LOGIN: {person.LoginName}<br />
-    <br />
     </div>
     {sitkaSmtpClientService.GetSupportNotificationEmailSignature()}
 </div>

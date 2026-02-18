@@ -1,0 +1,27 @@
+{
+  "include": [".claude/docs/*.md"],
+  "permissions": {
+    "allow": [
+      "Bash(find:*)",
+      "Bash(ls:*)",
+      "Bash(xargs:*)",
+      "Bash(wc:*)",
+      "Bash(git add:*)",
+      "Bash(git push:*)",
+      "Bash(dotnet build:*)",
+      "Bash(dotnet test:*)",
+      "Bash(npm run gen-model:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm run lint:*)",
+      "Bash(npm test:*)",
+      "Bash(npx ng build:*)",
+      "Skill(crud-modal)",
+      "Skill(add-scrollspy-toc)",
+      "Skill(check-migration-status)",
+      "Skill(migrate-page)",
+      "Skill(migrate-grid)",
+      "Skill(migrate-map)",
+      "Skill(migrate-workflow)"
+    ]
+  }
+}

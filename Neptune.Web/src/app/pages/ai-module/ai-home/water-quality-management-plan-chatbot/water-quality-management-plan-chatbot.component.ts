@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit, AfterViewInit } from "@angular/core";
 import { ElementRef, ViewChild } from "@angular/core";
-import { Observable, Subscription, SubscriptionLike, BehaviorSubject } from "rxjs";
+import { Observable, Subscription, SubscriptionLike, BehaviorSubject, firstValueFrom } from "rxjs";
 import { map } from "rxjs/operators";
 import { AuthenticationService } from "src/app/services/authentication.service";
 import { EventSourceService } from "src/app/services/event-source.service";
@@ -117,7 +117,9 @@ export class WaterQualityManagementPlanChatbotComponent implements OnDestroy, On
         this.isReceivingSubject.next(true);
         console.log("[SSE] isReceiving set to true, starting stream");
         try {
-            const accessToken = this.authenticationService.getAccessToken();
+            // getAccessToken() returns Observable<string> - await the first value
+            const accessToken = await firstValueFrom(this.authenticationService.getAccessToken());
+
             const options = {
                 headers: {
                     "Content-Type": "application/json",

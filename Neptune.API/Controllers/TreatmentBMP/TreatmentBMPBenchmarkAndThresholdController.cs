@@ -1,5 +1,4 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -7,23 +6,23 @@ using Neptune.API.Services;
 using Neptune.API.Services.Attributes;
 using Neptune.EFModels.Entities;
 using Neptune.Models.DataTransferObjects;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Neptune.API.Services.Authorization;
 
 namespace Neptune.API.Controllers
 {
     [ApiController]
     [Route("treatment-bmps/{treatmentBMPID}/benchmarks-and-thresholds")]
-    public class TreatmentBMPBenchmarkAndThresholdController : SitkaController<TreatmentBMPBenchmarkAndThresholdController>
+    public class TreatmentBMPBenchmarkAndThresholdController(
+        NeptuneDbContext dbContext,
+        ILogger<TreatmentBMPBenchmarkAndThresholdController> logger,
+        IOptions<NeptuneConfiguration> neptuneConfiguration)
+        : SitkaController<TreatmentBMPBenchmarkAndThresholdController>(dbContext, logger,
+            neptuneConfiguration)
     {
-        public TreatmentBMPBenchmarkAndThresholdController(
-            NeptuneDbContext dbContext,
-            ILogger<TreatmentBMPBenchmarkAndThresholdController> logger,
-            KeystoneService keystoneService,
-            IOptions<NeptuneConfiguration> neptuneConfiguration)
-            : base(dbContext, logger, keystoneService, neptuneConfiguration)
-        {
-        }
-
         [HttpGet]
+        [AllowAnonymous]
         [EntityNotFoundAttribute(typeof(TreatmentBMP), "treatmentBMPID")]
         public async Task<ActionResult<IEnumerable<TreatmentBMPBenchmarkAndThresholdDto>>> List([FromRoute] int treatmentBMPID)
         {
@@ -32,6 +31,7 @@ namespace Neptune.API.Controllers
         }
 
         [HttpPost]
+        [JurisdictionEditFeature]
         [EntityNotFoundAttribute(typeof(TreatmentBMP), "treatmentBMPID")]
         public async Task<ActionResult<TreatmentBMPBenchmarkAndThresholdDto>> Create([FromRoute] int treatmentBMPID, [FromBody] TreatmentBMPBenchmarkAndThresholdUpsertDto dto)
         {
@@ -40,6 +40,7 @@ namespace Neptune.API.Controllers
         }
 
         [HttpGet("{treatmentBMPBenchmarkAndThresholdID}")]
+        [AllowAnonymous]
         [EntityNotFoundAttribute(typeof(TreatmentBMP), "treatmentBMPID")]
         [EntityNotFoundAttribute(typeof(TreatmentBMPBenchmarkAndThreshold), "treatmentBMPBenchmarkAndThresholdID")]
         public async Task<ActionResult<TreatmentBMPBenchmarkAndThresholdDto>> Get([FromRoute] int treatmentBMPID, [FromRoute] int treatmentBMPBenchmarkAndThresholdID)
@@ -49,6 +50,7 @@ namespace Neptune.API.Controllers
         }
 
         [HttpPut("{treatmentBMPBenchmarkAndThresholdID}")]
+        [JurisdictionEditFeature]
         [EntityNotFoundAttribute(typeof(TreatmentBMP), "treatmentBMPID")]
         [EntityNotFoundAttribute(typeof(TreatmentBMPBenchmarkAndThreshold), "treatmentBMPBenchmarkAndThresholdID")]
         public async Task<ActionResult<TreatmentBMPBenchmarkAndThresholdDto>> Update([FromRoute] int treatmentBMPID, [FromRoute] int treatmentBMPBenchmarkAndThresholdID, [FromBody] TreatmentBMPBenchmarkAndThresholdUpsertDto dto)
@@ -58,6 +60,7 @@ namespace Neptune.API.Controllers
         }
 
         [HttpDelete("{treatmentBMPBenchmarkAndThresholdID}")]
+        [JurisdictionEditFeature]
         [EntityNotFoundAttribute(typeof(TreatmentBMP), "treatmentBMPID")]
         [EntityNotFoundAttribute(typeof(TreatmentBMPBenchmarkAndThreshold), "treatmentBMPBenchmarkAndThresholdID")]
         public async Task<IActionResult> Delete([FromRoute] int treatmentBMPID, [FromRoute] int treatmentBMPBenchmarkAndThresholdID)

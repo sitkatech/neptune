@@ -33,7 +33,6 @@ namespace Neptune.WebMvc.Views.Organization
         public readonly string GridName;
         public readonly string GridDataUrl;
 
-        public readonly string PullOrganizationFromKeystoneUrl;
         public readonly string NewOrganizationUrl;
         public readonly bool UserIsSitkaAdmin;
         public readonly bool UserCanAddOrganization;
@@ -55,7 +54,6 @@ namespace Neptune.WebMvc.Views.Organization
             GridName = "organizationsGrid";
             GridDataUrl = LinkGenerator.GetPathByAction("IndexGridJsonData", "Organization");
 
-            PullOrganizationFromKeystoneUrl = ""; //todo: SitkaRoute<OrganizationController>.BuildUrlFromExpression(_linkGenerator, x => x.PullOrganizationFromKeystone());
             UserIsSitkaAdmin = new SitkaAdminFeature().HasPermissionByPerson(currentPerson);
             UserCanAddOrganization = new OrganizationManageFeature().HasPermissionByPerson(currentPerson);
 

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -19,12 +21,12 @@ namespace Neptune.API.Controllers;
 public class TrashGeneratingUnitByStormwaterJurisdictionController(
     NeptuneDbContext dbContext,
     ILogger<TrashGeneratingUnitController> logger,
-    KeystoneService keystoneService,
     IOptions<NeptuneConfiguration> neptuneConfiguration)
-    : SitkaController<TrashGeneratingUnitController>(dbContext, logger, keystoneService, neptuneConfiguration)
+    : SitkaController<TrashGeneratingUnitController>(dbContext, logger, neptuneConfiguration)
 {
 
     [HttpGet("area-based-results-calculations")]
+    [AllowAnonymous]
     [EntityNotFound(typeof(StormwaterJurisdiction), "jurisdictionID")]
     public ActionResult<AreaBasedAcreCalculationsDto> GetAreaBasedResultsCalculations([FromRoute] int jurisdictionID)
     {
@@ -40,6 +42,9 @@ public class TrashGeneratingUnitByStormwaterJurisdictionController(
                 x.LandUseBlockGeometry.Area * Constants.SquareMetersToAcres);
 
         var untreatedPLU = totalPLUAcres != 0 ?  totalPLUAcres - totalAcresCapturedPLU : 0;
+        // Round after used in calculation
+        fullTrashCapturePLU = Math.Round(fullTrashCapturePLU, 0);
+        partialTrashCapturePLU = Math.Round(partialTrashCapturePLU, 0);
 
 
 
@@ -52,6 +57,9 @@ public class TrashGeneratingUnitByStormwaterJurisdictionController(
             .Where(x => x.StormwaterJurisdictionID == jurisdictionID && x.PriorityLandUseTypeID == (int)PriorityLandUseTypeEnum.ALU && x.PermitTypeID == (int)PermitTypeEnum.PhaseIMS4).Sum(x =>
                 x.LandUseBlockGeometry.Area * Constants.SquareMetersToAcres);
         var untreatedALU = totalALUAcres != 0 ? totalALUAcres - totalAcresCapturedALU : 0;
+        // Round after used in calculation
+        fullTrashCaptureALU = Math.Round(fullTrashCaptureALU, 0);
+        partialTrashCaptureALU = Math.Round(partialTrashCaptureALU, 0);
 
         var areaBasedAcreCalculationsDto = new AreaBasedAcreCalculationsDto
         {
@@ -74,13 +82,14 @@ public class TrashGeneratingUnitByStormwaterJurisdictionController(
             .ThenInclude(x => x.TreatmentBMP)
             .Include(x => x.WaterQualityManagementPlan)
             .AsNoTracking()
-            .Where(x => x.StormwaterJurisdictionID == stormwaterJurisdictionID && x.LandUseBlock != null)
+            .Where(x => x.StormwaterJurisdictionID == stormwaterJurisdictionID && x.LandUseBlock != null && x.LandUseBlock.PermitTypeID == (int)PermitTypeEnum.PhaseIMS4)
             .ToList();
         return trashGeneratingUnits;
     }
 
 
     [HttpGet("ovta-based-results-calculations")]
+    [AllowAnonymous]
     [EntityNotFound(typeof(StormwaterJurisdiction), "jurisdictionID")]
     public ActionResult<OVTAResultsDto> GetOVTABasedResultsCalculations([FromRoute] int jurisdictionID)
     {
@@ -119,6 +128,7 @@ public class TrashGeneratingUnitByStormwaterJurisdictionController(
 
 
     [HttpGet("load-based-results-calculations")]
+    [AllowAnonymous]
     [EntityNotFound(typeof(StormwaterJurisdiction), "jurisdictionID")]
     public async Task<ActionResult<LoadResultsDto>> GetLoadBasedResultsCalculations([FromRoute] int jurisdictionID)
     {

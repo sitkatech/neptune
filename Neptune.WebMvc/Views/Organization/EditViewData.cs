@@ -27,15 +27,13 @@ namespace Neptune.WebMvc.Views.Organization
     {
         public IEnumerable<SelectListItem> OrganizationTypes{ get; }
         public IEnumerable<SelectListItem> People{ get; }
-        public bool IsInKeystone{ get; }
         public string RequestOrganizationChangeUrl{ get; }
         public bool IsSitkaAdmin{ get; }
 
-        public EditViewData(IEnumerable<SelectListItem> organizationTypes, IEnumerable<SelectListItem> people, bool isInKeystone, string requestOrganizationChangeUrl, bool isSitkaAdmin)
+        public EditViewData(IEnumerable<SelectListItem> organizationTypes, IEnumerable<SelectListItem> people, string requestOrganizationChangeUrl, bool isSitkaAdmin)
         {
             OrganizationTypes = organizationTypes;
             People = people;
-            IsInKeystone = isInKeystone;
             RequestOrganizationChangeUrl = requestOrganizationChangeUrl;
             IsSitkaAdmin = isSitkaAdmin;
         }

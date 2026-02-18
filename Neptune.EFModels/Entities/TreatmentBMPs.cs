@@ -110,16 +110,50 @@ public static class TreatmentBMPs
 
     #endregion
 
-    private static IQueryable<TreatmentBMP> ListTreatmentBMPsDisplayOnlyImpl(NeptuneDbContext dbContext, bool checkIsAnalyzedInModelingModule = true)
+    private static async Task<List<TreatmentBMP>> ListTreatmentBMPsDisplayOnlyAsync(
+        NeptuneDbContext dbContext,
+        Func<IQueryable<TreatmentBMP>, IQueryable<TreatmentBMP>>? applyFilters = null,
+        bool checkIsAnalyzedInModelingModule = true)
     {
-        return dbContext.TreatmentBMPs
+        var query = dbContext.TreatmentBMPs
+            .Where(x => !checkIsAnalyzedInModelingModule || x.TreatmentBMPType.IsAnalyzedInModelingModule);
+
+        query = applyFilters?.Invoke(query) ?? query;
+
+        return await ListTreatmentBMPsDisplayOnlyMaterializedAsync(dbContext, query);
+    }
+
+    private static async Task<List<TreatmentBMP>> ListTreatmentBMPsDisplayOnlyMaterializedAsync(NeptuneDbContext dbContext, IQueryable<TreatmentBMP> treatmentBmpsQuery)
+    {
+        var treatmentBMPs = await treatmentBmpsQuery
             .Include(x => x.TreatmentBMPType)
-            .Where(x => !checkIsAnalyzedInModelingModule || x.TreatmentBMPType.IsAnalyzedInModelingModule)
-            .Include(x => x.CustomAttributes)
-            .ThenInclude(x => x.CustomAttributeValues)
             .Include(x => x.Delineation)
             .Include(x => x.Project)
-            .AsNoTracking();
+            .AsNoTrackingWithIdentityResolution()
+            .ToListAsync();
+
+        var treatmentBMPIDs = treatmentBMPs.Select(x => x.TreatmentBMPID).ToList();
+        if (treatmentBMPIDs.Count == 0)
+        {
+            return treatmentBMPs;
+        }
+
+        var customAttributes = await dbContext.CustomAttributes
+            .Where(x => treatmentBMPIDs.Contains(x.TreatmentBMPID))
+            .Include(x => x.CustomAttributeValues)
+            .AsNoTracking()
+            .ToListAsync();
+
+        var customAttributesByTreatmentBMPID = customAttributes
+            .GroupBy(x => x.TreatmentBMPID)
+            .ToDictionary(x => x.Key, x => (ICollection<CustomAttribute>)x.ToList());
+
+        foreach (var treatmentBMP in treatmentBMPs)
+        {
+            treatmentBMP.CustomAttributes = customAttributesByTreatmentBMPID.GetValueOrDefault(treatmentBMP.TreatmentBMPID) ?? new List<CustomAttribute>();
+        }
+
+        return treatmentBMPs;
     }
 
     public static List<TreatmentBMP> GetProvisionalTreatmentBMPs(NeptuneDbContext dbContext, Person currentPerson)
@@ -163,9 +197,8 @@ public static class TreatmentBMPs
 
     public static async Task<List<TreatmentBMPDisplayDto>> ListByProjectIDsAsDisplayDtoAsync(NeptuneDbContext dbContext, List<int> projectIDs)
     {
-        var treatmentBMPs = ListTreatmentBMPsDisplayOnlyImpl(dbContext)
-            .Where(x => x.ProjectID.HasValue && projectIDs.Contains(x.ProjectID.Value))
-            .ToList();
+        var treatmentBMPs = await ListTreatmentBMPsDisplayOnlyAsync(dbContext,
+            q => q.Where(x => x.ProjectID.HasValue && projectIDs.Contains(x.ProjectID.Value)));
 
         return await ListAsDisplayDtosAsync(dbContext, treatmentBMPs);
     }
@@ -230,17 +263,21 @@ public static class TreatmentBMPs
 
     public static async Task<List<TreatmentBMPDisplayDto>> ListWithProjectByPersonAsDisplayDtoAsync(NeptuneDbContext dbContext, PersonDto person)
     {
-        // Build a query that filters in the database for project-associated BMPs and for jurisdictions
-        var query = ListTreatmentBMPsDisplayOnlyImpl(dbContext).Where(x => x.ProjectID != null);
+        var jurisdictionIDs = (person == null || !(person.RoleID == (int)RoleEnum.Admin || person.RoleID == (int)RoleEnum.SitkaAdmin))
+            ? await StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonIDForBMPsAsync(dbContext, person?.PersonID)
+            : null;
 
-        // If not an admin, restrict to jurisdictions the person can view
-        if (person == null || !(person.RoleID == (int)RoleEnum.Admin || person.RoleID == (int)RoleEnum.SitkaAdmin))
-        {
-            var jurisdictionIDs = await StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonIDForBMPsAsync(dbContext, person?.PersonID);
-            query = query.Where(x => jurisdictionIDs.Contains(x.StormwaterJurisdictionID));
-        }
+        var treatmentBmps = await ListTreatmentBMPsDisplayOnlyAsync(dbContext,
+            q =>
+            {
+                q = q.Where(x => x.ProjectID != null);
+                if (jurisdictionIDs != null)
+                {
+                    q = q.Where(x => jurisdictionIDs.Contains(x.StormwaterJurisdictionID));
+                }
 
-        var treatmentBmps = await query.ToListAsync();
+                return q;
+            });
 
         return await ListAsDisplayDtosAsync(dbContext, treatmentBmps);
     }
@@ -253,19 +290,15 @@ public static class TreatmentBMPs
 
     private static async Task<List<TreatmentBMP>> ListByPersonAsync(NeptuneDbContext dbContext, PersonDto? person, bool checkIsAnalyzedInModelingModule = true)
     {
-        if (person == null || !(person.RoleID == (int)RoleEnum.Admin || person.RoleID == (int)RoleEnum.SitkaAdmin))
-        {
-            var jurisdictionIDs = await StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonIDForBMPsAsync(dbContext, person?.PersonID);
-            var treatmentBmps = await ListTreatmentBMPsDisplayOnlyImpl(dbContext, checkIsAnalyzedInModelingModule)
-                .Where(x => jurisdictionIDs.Contains(x.StormwaterJurisdictionID))
-                .ToListAsync();
+        var jurisdictionIDs = (person == null || !(person.RoleID == (int)RoleEnum.Admin || person.RoleID == (int)RoleEnum.SitkaAdmin))
+            ? await StormwaterJurisdictionPeople.ListViewableStormwaterJurisdictionIDsByPersonIDForBMPsAsync(dbContext, person?.PersonID)
+            : null;
 
-            return treatmentBmps;
-        }
-        else
-        {
-            return await ListTreatmentBMPsDisplayOnlyImpl(dbContext, checkIsAnalyzedInModelingModule).ToListAsync();
-        }
+        return await ListTreatmentBMPsDisplayOnlyAsync(dbContext,
+            q => jurisdictionIDs != null
+                ? q.Where(x => jurisdictionIDs.Contains(x.StormwaterJurisdictionID))
+                : q,
+            checkIsAnalyzedInModelingModule);
     }
 
     public static List<TreatmentBMPUpsertDto> ListByProjectIDAsUpsertDto(NeptuneDbContext dbContext, int projectID)
@@ -324,29 +357,92 @@ public static class TreatmentBMPs
 
     public static async Task<TreatmentBMPDto> GetByIDAsDtoAsync(NeptuneDbContext dbContext, int treatmentBMPID)
     {
-        var treatmentBMP = await dbContext.TreatmentBMPs.AsNoTracking()
-            .Include(x => x.TreatmentBMPType)
-            .Include(x => x.StormwaterJurisdiction).ThenInclude(x => x.Organization)
-            .Include(x => x.OwnerOrganization)
-            .Include(x => x.WaterQualityManagementPlan)
-            .Include(x => x.Delineation)
-            .Include(x => x.RegionalSubbasinRevisionRequests)
-            .SingleAsync(x => x.TreatmentBMPID == treatmentBMPID);
+        var dto = await dbContext.TreatmentBMPs.AsNoTracking()
+            .Where(x => x.TreatmentBMPID == treatmentBMPID)
+            .Select(TreatmentBMPDtoProjections.AsDto)
+            .SingleAsync();
 
-        var dto = treatmentBMP.AsDto();
+        ResolveClientSideLookups(dto);
 
-        var subregion = treatmentBMP.GetRegionalSubbasin(dbContext);
-        var otherBMPsInSubregion = subregion?.GetTreatmentBMPs(dbContext);
+        // Fetch supplemental data for Delineation GeoJSON and OtherTreatmentBMPsExistInSubbasin
+        var supplemental = await dbContext.TreatmentBMPs.AsNoTracking()
+            .Where(x => x.TreatmentBMPID == treatmentBMPID)
+            .Select(x => new
+            {
+                x.LocationPoint,
+                DelineationID = x.Delineation != null ? (int?)x.Delineation.DelineationID : null,
+                DelineationTreatmentBMPID = x.Delineation != null ? (int?)x.Delineation.TreatmentBMPID : null,
+                DelineationGeometry4326 = x.Delineation != null ? x.Delineation.DelineationGeometry4326 : null
+            })
+            .SingleAsync();
 
-        dto.OtherTreatmentBMPsExistInSubbasin = otherBMPsInSubregion?.Where(x => x.TreatmentBMPID != treatmentBMPID).Any() ?? false;
-
-        if (treatmentBMP.UpstreamBMPID.HasValue)
+        // Resolve Delineation GeoJSON and DelineationTypeName
+        if (dto.Delineation != null && supplemental.DelineationGeometry4326 != null)
         {
-            var upstreamBMPDto = await GetByIDAsDtoAsync(dbContext, treatmentBMP.UpstreamBMPID.Value);
-            dto.UpstreamBMP = upstreamBMPDto;
+            var attributesTable = new AttributesTable
+            {
+                { "DelineationID", supplemental.DelineationID },
+                { "TreatmentBMPID", supplemental.DelineationTreatmentBMPID }
+            };
+            var feature = new Feature(supplemental.DelineationGeometry4326, attributesTable);
+            dto.Delineation.Geometry = GeoJsonSerializer.Serialize(feature);
+        }
+
+        // OtherTreatmentBMPsExistInSubbasin requires a spatial query with LocationPoint (EPSG 2771)
+        if (supplemental.LocationPoint != null)
+        {
+            var subregion = dbContext.RegionalSubbasins.AsNoTracking()
+                .SingleOrDefault(x => x.CatchmentGeometry.Contains(supplemental.LocationPoint));
+            var otherBMPsInSubregion = subregion?.GetTreatmentBMPs(dbContext);
+            dto.OtherTreatmentBMPsExistInSubbasin = otherBMPsInSubregion?.Where(x => x.TreatmentBMPID != treatmentBMPID).Any() ?? false;
+        }
+
+        // Compute HasSettableBenchmarkAndThresholdValues using static ObservationTypeSpecification lookup
+        var specIdsWithBenchmarks = ObservationTypeSpecification.All
+            .Where(s => s.ObservationThresholdTypeID != (int)ObservationThresholdTypeEnum.None)
+            .Select(s => s.ObservationTypeSpecificationID)
+            .ToList();
+
+        dto.HasSettableBenchmarkAndThresholdValues = await dbContext.TreatmentBMPTypeAssessmentObservationTypes
+            .AnyAsync(x => x.TreatmentBMPTypeID == dto.TreatmentBMPTypeID
+                && specIdsWithBenchmarks.Contains(x.TreatmentBMPAssessmentObservationType.ObservationTypeSpecificationID));
+
+        if (dto.UpstreamBMPID.HasValue)
+        {
+            dto.UpstreamBMP = await GetByIDAsDtoAsync(dbContext, dto.UpstreamBMPID.Value);
         }
 
         return dto;
+    }
+
+    private static void ResolveClientSideLookups(TreatmentBMPDto dto)
+    {
+        // Resolve SizingBasisType names
+        if (dto.SizingBasisType != null && SizingBasisType.AllLookupDictionary.TryGetValue(dto.SizingBasisType.SizingBasisTypeID, out var sizingBasisType))
+        {
+            dto.SizingBasisType.SizingBasisTypeName = sizingBasisType.SizingBasisTypeName;
+            dto.SizingBasisType.SizingBasisTypeDisplayName = sizingBasisType.SizingBasisTypeDisplayName;
+        }
+
+        // Resolve TrashCaptureStatusType names
+        if (dto.TrashCaptureStatusType != null && TrashCaptureStatusType.AllLookupDictionary.TryGetValue(dto.TrashCaptureStatusType.TrashCaptureStatusTypeID, out var trashCaptureStatusType))
+        {
+            dto.TrashCaptureStatusType.TrashCaptureStatusTypeName = trashCaptureStatusType.TrashCaptureStatusTypeName;
+            dto.TrashCaptureStatusType.TrashCaptureStatusTypeDisplayName = trashCaptureStatusType.TrashCaptureStatusTypeDisplayName;
+        }
+
+        // Resolve TreatmentBMPLifespanType names
+        if (dto.TreatmentBMPLifespanType != null && TreatmentBMPLifespanType.AllLookupDictionary.TryGetValue(dto.TreatmentBMPLifespanType.TreatmentBMPLifeSpanTypeID, out var lifespanType))
+        {
+            dto.TreatmentBMPLifespanType.TreatmentBMPLifeSpanTypeName = lifespanType.TreatmentBMPLifespanTypeName;
+            dto.TreatmentBMPLifespanType.TreatmentBMPLifeSpanTypeDisplayName = lifespanType.TreatmentBMPLifespanTypeDisplayName;
+        }
+
+        // Resolve DelineationType name
+        if (dto.Delineation != null && DelineationType.AllLookupDictionary.TryGetValue(dto.Delineation.DelineationTypeID, out var delineationType))
+        {
+            dto.Delineation.DelineationTypeName = delineationType.DelineationTypeDisplayName;
+        }
     }
 
     public static TreatmentBMP GetByIDWithChangeTracking(NeptuneDbContext dbContext,

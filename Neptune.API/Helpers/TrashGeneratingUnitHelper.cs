@@ -92,8 +92,8 @@ public static class TrashGeneratingUnitHelper
 
     public static double GetArea(this IEnumerable<TrashGeneratingUnit> trashGeneratingUnits)
     {
-        return Math.Round(trashGeneratingUnits
-            .Select(x => x.TrashGeneratingUnitGeometry.Area * Constants.SquareMetersToAcres).Sum(), 0); // will never be null
+        return trashGeneratingUnits
+            .Select(x => x.TrashGeneratingUnitGeometry.Area * Constants.SquareMetersToAcres).Sum(); // will never be null
     }
 
     public static bool IsFullTrashCapture(this TrashGeneratingUnit trashGeneratingUnit)
@@ -109,7 +109,7 @@ public static class TrashGeneratingUnitHelper
         return (trashGeneratingUnit.Delineation?.TreatmentBMP.TrashCaptureStatusTypeID ==
                 (int)TrashCaptureStatusTypeEnum.Partial ||
                 trashGeneratingUnit.WaterQualityManagementPlan?.TrashCaptureStatusTypeID ==
-                (int)TrashCaptureStatusTypeEnum.Partial);
+                (int)TrashCaptureStatusTypeEnum.Partial) && !trashGeneratingUnit.IsFullTrashCapture();
     }
 
     public static bool IsPLU(this TrashGeneratingUnit trashGeneratingUnit)
@@ -163,18 +163,18 @@ public static class TrashGeneratingUnitHelper
     private static double GetAlternativeOVTAScoreAcreageImpl(List<TrashGeneratingUnit> trashGeneratingUnits,
         OnlandVisualTrashAssessmentScore onlandVisualTrashAssessmentScore)
     {
-        return trashGeneratingUnits.Where(x =>
+        return Math.Round(trashGeneratingUnits.Where(x =>
             x.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentBaselineScoreID ==
             onlandVisualTrashAssessmentScore.OnlandVisualTrashAssessmentScoreID &&
-            x.IsPLU()).GetArea();
+            x.IsPLU()).GetArea(), 0);
     }
 
     private static double GetPriorityOVTAScoreAcreageImpl(List<TrashGeneratingUnit> trashGeneratingUnits,
         OnlandVisualTrashAssessmentScore onlandVisualTrashAssessmentScore)
     {
-        return trashGeneratingUnits.Where(x =>
+        return Math.Round(trashGeneratingUnits.Where(x =>
             x.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentBaselineScoreID ==
             onlandVisualTrashAssessmentScore.OnlandVisualTrashAssessmentScoreID &&
-            x.IsPLU()).GetArea();
+            x.IsPLU()).GetArea(), 0);
     }
 }

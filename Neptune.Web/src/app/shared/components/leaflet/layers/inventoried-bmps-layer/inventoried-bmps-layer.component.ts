@@ -35,7 +35,8 @@ export class InventoriedBMPsLayerComponent extends MapLayerBase implements OnCha
     }
 
     ngAfterViewInit(): void {
-        this.treatmentBMPs$ = this.treatmentBMPService.listInventoryVerifiedTreatmentBMPsAsFeatureCollectionTreatmentBMP().pipe(
+        const request$ = this.treatmentBMPService.listInventoryVerifiedTreatmentBMPsAsFeatureCollectionTreatmentBMP();
+        this.treatmentBMPs$ = this.trackLayerRequest$(request$).pipe(
             tap((treatmentBMPs) => {
                 const inventoriedTreatmentBMPsLayer = new L.GeoJSON(treatmentBMPs as any, {
                     pointToLayer: (feature, latlng) => {

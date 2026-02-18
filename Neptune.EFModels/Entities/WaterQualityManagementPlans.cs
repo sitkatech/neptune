@@ -86,9 +86,9 @@ public static class WaterQualityManagementPlans
     }
 
 
-    public static IEnumerable<WaterQualityManagementPlan> ListByStormwaterJurisdictionID(NeptuneDbContext dbContext, int stormwaterJurisdictionID)
+    public static IEnumerable<WaterQualityManagementPlan> ListBaseEntityByStormwaterJurisdictionID(NeptuneDbContext dbContext, int stormwaterJurisdictionID)
     {
-        return GetImpl(dbContext)
+        return dbContext.WaterQualityManagementPlans
             .AsNoTracking()
             .Where(x => x.StormwaterJurisdictionID == stormwaterJurisdictionID).ToList();
     }
