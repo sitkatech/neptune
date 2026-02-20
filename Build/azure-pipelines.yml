@@ -672,7 +672,6 @@ stages:
                 global.env.sqlUsername=$(sqlApiUsername)
                 global.env.sqlGeoserverUsername=$(sqlGeoserverUsername)
                 global.secrets.hangfirePassword="$(HANGFIRE_PASSWORD)"
-                global.secrets.keystoneOpenIDClientSecret="$(keystoneOpenIDClientSecret)"
                 global.secrets.recaptchaV3SiteKey="$(recaptchaV3SiteKey)"
                 global.secrets.recaptchaV3SecretKey="$(recaptchaV3SecretKey)"
                 global.secrets.apiSqlPassword=$(SQL_API_PASSWORD)

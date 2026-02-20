@@ -14,8 +14,6 @@ data:
   MailLogBcc: ""
   Auth0Domain: "ocstormwatertools.us.auth0.com"
   Auth0ClientId: "99ikLp0ELxYqpJxeAGzzHbaHOI7dmNa7"
-  KeystoneOpenIDUrl: "https://identity-qa.sitkatech.com"
-  KeystoneOpenIDClientID: "Neptune"
   MapServiceUrl: "https://{{ .Values.global.domains.geoserver }}/geoserver/OCStormwater/ows"
   AutoDelineateServiceUrl: "https://www.ocgis.com/arcpub/rest/services/Flood/GlobalStormwaterDelineation/GPServer/Global%20Stormwater%20Delineation/"
   NereidUrl: "http://{{ .Values.global.domains.nereid }}"

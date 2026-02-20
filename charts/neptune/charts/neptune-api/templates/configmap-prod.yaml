@@ -12,8 +12,6 @@ data:
   SitkaSupportEmail: "h2o.team@esassoc.com"
   DoNotReplyEmail: "donotreply@ocstormwatertools.org"
   MailLogBcc: ""
-  KeystoneOpenIDUrl: "https://identity.sitkatech.com"
-  KeystoneRedirectUrl: "https://{{ .Values.global.domains.web }}/create-user-callback"
   OcStormwaterToolsBaseUrl: "https://{{ .Values.global.domains.webmvc }}"
   NereidUrl: "http://{{ .Values.global.domains.nereid }}"
   GDALAPIBaseUrl: "http://{{ .Values.global.domains.gdalApi }}"
