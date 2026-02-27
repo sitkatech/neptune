@@ -70,7 +70,7 @@
                         </div>
                         <div class="g-col-6">
                             @if (currentResultType == "Area-Based Results") {
-                                <div [loadingSpinner]="{ isLoading: (isLoading$ | async) ?? false, loadingHeight: 100 }" id="areaBasedCalculationControlTemplate">
+                                <div [loadingSpinner]="{ isLoading: (isLoadingAreaBased$ | async) ?? false, loadingHeight: 100 }" id="areaBasedCalculationControlTemplate">
                                     @if (areaBasedAcreCalculationsDto$ | async; as areaBasedAcreCalculationsDto) {
                                         <table class="table areaBasedCalculationControlTable">
                                             <tbody>
@@ -136,11 +136,21 @@
                                 </div>
                             }
                             @if (currentResultType == "Current Net Loading Rate With Controls" || currentResultType == "Net Change In Trash Loading Rate With Controls") {
-                                <div [loadingSpinner]="{ isLoading: (isLoading$ | async) ?? false, loadingHeight: 100 }" id="LoadBasedResultsControlTemplate">
+                                <div [loadingSpinner]="{ isLoading: (isLoadingLoadResults$ | async) ?? false, loadingHeight: 100 }" id="LoadBasedResultsControlTemplate">
                                     @if (loadResultsDto$ | async; as loadResultsDto) {
                                         <table class="table loadBasedCalculationControlTable">
                                             <tbody>
                                                 <tr>
+                                                     <td class="loadBasedResultsColumn" style="border-right: 1px solid rgb(204, 204, 204)">
+                                                        <div id="targetLoadReduction" class="font25 loadBased-green bold">
+                                                            {{ loadResultsDto.TargetLoadReduction | number: "1.0-0" }}
+                                                        </div>
+                                                        <p><field-definition fieldDefinitionType="TargetLoadReduction"> </field-definition></p>
+                                                    </td>
+                                                    <td class="loadBasedResultsColumn">
+                                                        <div id="totalAchieved" class="font25 loadBased-blue bold">{{ loadResultsDto.TotalAchieved | number: "1.0-0" }}</div>
+                                                        <p class="text-normal greyLabel"><field-definition fieldDefinitionType="TotalAchieved"> </field-definition></p>
+                                                    </td>
                                                     <td class="loadBasedResultsColumn" style="width: 18%">
                                                         <div id="viaFullTrashCapture" class="font25 loadBased-lightblue bold">
                                                             {{ loadResultsDto.LoadFullCapture | number: "1.0-0" }}
@@ -161,16 +171,6 @@
                                                             <field-definition fieldDefinitionType="ViaOVTAScore"> </field-definition>
                                                         </p>
                                                     </td>
-                                                    <td class="loadBasedResultsColumn">
-                                                        <div id="totalAchieved" class="font25 loadBased-blue bold">{{ loadResultsDto.TotalAchieved | number: "1.0-0" }}</div>
-                                                        <p class="text-normal greyLabel"><field-definition fieldDefinitionType="TotalAchieved"> </field-definition></p>
-                                                    </td>
-                                                    <td class="loadBasedResultsColumn" style="border-left: 1px solid rgb(204, 204, 204)">
-                                                        <div id="targetLoadReduction" class="font25 loadBased-green bold">
-                                                            {{ loadResultsDto.TargetLoadReduction | number: "1.0-0" }}
-                                                        </div>
-                                                        <p><field-definition fieldDefinitionType="TargetLoadReduction"> </field-definition></p>
-                                                    </td>
                                                 </tr>
                                             </tbody>
                                             <tfoot>
@@ -185,7 +185,7 @@
                                 </div>
                             }
                             @if (currentResultType == "OVTA-Based Results") {
-                                <div [loadingSpinner]="{ isLoading: (isLoading$ | async) ?? false, loadingHeight: 100 }" id="OVTABasedResultsControlTemplate">
+                                <div [loadingSpinner]="{ isLoading: (isLoadingOvtaResults$ | async) ?? false, loadingHeight: 100 }" id="OVTABasedResultsControlTemplate">
                                     @if (ovtaResultsDto$ | async; as ovtaResultsDto) {
                                         <table class="table areaBasedCalculationControlTable">
                                             <thead>
