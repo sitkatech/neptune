@@ -224,7 +224,7 @@ geoserver:
   image:
     repository: kartoza/geoserver
     pullPolicy: Always
-    tag: "2.27.1"
+    tag: "3.0.1"
     # Overrides the image tag whose default is the chart appVersion.
   nameOverride: ""
   fullnameOverride: ""
@@ -233,7 +233,7 @@ geoserver:
     requests:
       memory: "4G"
     limits:
-      memory: "8G"
+      memory: "8Gi"
   serviceAccount:
     # Specifies whether a service account should be created
     create: true
