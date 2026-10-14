@@ -76,7 +76,7 @@ services:
 
   geoserver:
     container_name: neptune_geoserver
-    image: kartoza/geoserver:2.27.1
+    image: kartoza/geoserver:3.0.1
     environment:
       - ENABLE_JSONP=true
       - CATALINA_OPTS=-DALLOW_ENV_PARAMETRIZATION=true
