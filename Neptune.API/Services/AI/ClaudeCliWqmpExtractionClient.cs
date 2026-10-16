@@ -323,6 +323,12 @@ public class ClaudeCliWqmpExtractionClient : IWqmpExtractionClient
                 "--disable-slash-commands",
                 "--no-session-persistence",
             };
+            // Same effort as the API path, so a CLI run approximates the production setting.
+            if (AnthropicApiWqmpExtractionClient.NormalizeEffort(client._configuration.ClaudeEffort) is { } effort)
+            {
+                arguments.Add("--effort");
+                arguments.Add(effort);
+            }
             // The prompt goes through stdin: DomainContext alone is too long for a Windows command line.
             var prompt = $"DomainContext:\n{call.DomainContext}\n\n{call.Prompt}\n\nReturn your extraction as the structured output.";
 

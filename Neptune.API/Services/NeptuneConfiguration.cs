@@ -20,7 +20,13 @@ public class NeptuneConfiguration : NeptuneJobConfiguration
     public string OCGISBaseUrl { get; set; }
 
     public string AnthropicApiKey { get; set; }
-    public string ClaudeModelId { get; set; } = "claude-sonnet-4-6";
+    public string ClaudeModelId { get; set; } = "claude-sonnet-5-5";
+    /// <summary>
+    /// NPT-1132: extraction effort (low, medium, high, xhigh, max), sent as output_config.effort
+    /// on every category call and as --effort on the CLI path. Unset means the model's default,
+    /// which is high; Sonnet 5.x thinks by default, so set this when moving to it.
+    /// </summary>
+    public string ClaudeEffort { get; set; }
 
     /// <summary>
     /// NPT-1133: send WQMP AI extraction through the developer's own Claude Code CLI login

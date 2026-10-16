@@ -10,7 +10,10 @@ global:
     sqlGeoserverUsername: "NeptuneGeo"
     # NPT-1112: non-secret app config, moved out of the deleted API k8s secret
     # into the ConfigMap.
-    claudeModelId: "claude-sonnet-4-6"
+    claudeModelId: "claude-sonnet-5-5"
+    # NPT-1132: output_config.effort for AI extraction (low/medium/high/xhigh/max);
+    # empty = the model's default.
+    claudeEffort: "low"
     appInsightsInstrumentationKey: "00000000-0000-0000-0000-000000000000"
   domains:
     api: "api-neptune.aks-qa.sitkatech.com"
