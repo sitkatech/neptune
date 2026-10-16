@@ -133,7 +133,11 @@ public class AnthropicApiWqmpExtractionClient : IWqmpExtractionClient
             // output budget. On the SourceControlBMPs call with a longer prompt + a
             // 65-page PDF, Claude consumed all 8192 tokens on thinking and never reached
             // the tool call (stop_reason=max_tokens, no text or input_json captured).
-            MaxTokens = 16384,
+            // NPT-1132: 32768 for Sonnet 5.x, which thinks by default (adaptive) and whose
+            // tokenizer counts the same text as ~30% more tokens. Only tokens produced are
+            // billed, so the headroom costs nothing on calls that don't use it.
+            MaxTokens = 32768,
+            OutputConfig = BuildOutputConfig(_configuration.ClaudeEffort),
             // The Files-API source variant (BetaFileDocumentSource) is gated behind
             // this beta header on the Messages endpoint. Without it the request gets
             // routed to the standard validator and rejected with
@@ -205,7 +209,13 @@ public class AnthropicApiWqmpExtractionClient : IWqmpExtractionClient
             }
         }
 
-        if (toolInputJson.Length == 0)
+        if (stopReason != null && stopReason.Contains("refusal", StringComparison.OrdinalIgnoreCase))
+        {
+            // NPT-1132: Sonnet 5.x can decline (stop_reason "refusal"); a WQMP shouldn't trigger
+            // it, so surface it rather than let it look like an ordinary empty category.
+            hiccups.Enqueue($"{key}: model declined (stop_reason=refusal), empty fallback used");
+        }
+        else if (toolInputJson.Length == 0)
         {
             hiccups.Enqueue(otherToolCalled != null
                 ? $"{key}: called {otherToolCalled} instead of {toolName}"
@@ -216,9 +226,10 @@ public class AnthropicApiWqmpExtractionClient : IWqmpExtractionClient
             hiccups.Enqueue($"{key}: hit max_tokens");
         }
 
+        var refused = stopReason != null && stopReason.Contains("refusal", StringComparison.OrdinalIgnoreCase);
         return new WqmpCategoryCallResult
         {
-            OutputJson = toolInputJson.Length > 0 ? toolInputJson.ToString() : null,
+            OutputJson = toolInputJson.Length > 0 && !refused ? toolInputJson.ToString() : null,
             Usage = new WqmpExtractionCallUsageDto
             {
                 Category = key,
@@ -230,6 +241,27 @@ public class AnthropicApiWqmpExtractionClient : IWqmpExtractionClient
                 ElapsedMs = sw.ElapsedMilliseconds,
             },
         };
+    }
+
+    /// <summary>NPT-1132: <see cref="NeptuneConfiguration.ClaudeEffort"/> as an output config; null when unset.</summary>
+    public static BetaOutputConfig BuildOutputConfig(string effort) => NormalizeEffort(effort) switch
+    {
+        null => null,
+        "low" => new BetaOutputConfig { Effort = Effort.Low },
+        "medium" => new BetaOutputConfig { Effort = Effort.Medium },
+        "high" => new BetaOutputConfig { Effort = Effort.High },
+        "xhigh" => new BetaOutputConfig { Effort = Effort.Xhigh },
+        _ => new BetaOutputConfig { Effort = Effort.Max },
+    };
+
+    /// <summary>The effort level, normalized to lower case, or null when unset. Throws on anything else.</summary>
+    public static string NormalizeEffort(string effort)
+    {
+        if (string.IsNullOrWhiteSpace(effort)) return null;
+        var normalized = effort.Trim().ToLowerInvariant();
+        return normalized is "low" or "medium" or "high" or "xhigh" or "max"
+            ? normalized
+            : throw new InvalidOperationException($"ClaudeEffort '{effort}' isn't one of low, medium, high, xhigh, max.");
     }
 
     private static BetaTool BuildToolForCategory(WqmpExtractionCategory category)

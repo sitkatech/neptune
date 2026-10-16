@@ -74,7 +74,7 @@ public static class Program
                           $"{documents.Sum(d => d.Pages)} pages total, model {model}, {extractionPath} path.");
         if (options.Api && string.IsNullOrWhiteSpace(configuration.AnthropicApiKey))
         {
-            Console.WriteLine("--api needs EvalAnthropicApiKey: the eval workspace key (see README), never the shared key.");
+            Console.WriteLine("--api needs EvalAnthropicApiKey. It spends real credits; agree a budget first (see README).");
             return 1;
         }
         if (!options.Yes)
@@ -122,6 +122,10 @@ public static class Program
                 if (!string.IsNullOrWhiteSpace(options.Model))
                 {
                     config.AddInMemoryCollection(new Dictionary<string, string?> { ["ClaudeModelId"] = options.Model });
+                }
+                if (!string.IsNullOrWhiteSpace(options.Effort))
+                {
+                    config.AddInMemoryCollection(new Dictionary<string, string?> { ["ClaudeEffort"] = options.Effort });
                 }
                 // NPT-1133: the CLI unless --api asked for the paid path. Set last so a
                 // ClaudeCliEnabled in the secrets file can't override the command line.
@@ -194,14 +198,15 @@ public sealed class EvalOptions
     public const string Usage = """
         Usage:
           dotnet run --project Neptune.Eval -- run [--split dev|test|all] [--ids 123,456] [--limit N]
-                                                   [--label name] [--model claude-...] [--concurrency N]
+                                                   [--label name] [--model claude-...] [--effort low|medium|high|xhigh|max]
+                                                   [--concurrency N]
                                                    [--person-id N] [--api] [--verbose] --yes
           dotnet run --project Neptune.Eval -- score <run directory>
           dotnet run --project Neptune.Eval -- select [--seed N]
 
         run     Extract each selected document with the production WqmpExtractionService, save the
                 raw output under Neptune.Eval/runs/, then score it. Runs through your Claude CLI login
-                by default; --api uses the Anthropic API with EvalAnthropicApiKey (the eval workspace key)
+                by default; --api uses the Anthropic API with the key passed in EvalAnthropicApiKey
                 and spends credits. --yes required either way.
         score   Re-score a saved run against the current ground truth (no API calls).
         select  Rebuild eval-set.json: classify candidate PDFs (downloads them from blob storage;
@@ -214,6 +219,8 @@ public sealed class EvalOptions
     public int? Limit { get; private set; }
     public string Label { get; private set; } = "run";
     public string? Model { get; private set; }
+    /// <summary>NPT-1132: overrides ClaudeEffort for the run.</summary>
+    public string? Effort { get; private set; }
     public int Concurrency { get; private set; } = 2;
     public int PersonID { get; private set; } = 1;
     public bool Yes { get; private set; }
@@ -251,6 +258,7 @@ public sealed class EvalOptions
                 case "--limit": o.Limit = int.Parse(Next()); break;
                 case "--label": o.Label = Next(); break;
                 case "--model": o.Model = Next(); break;
+                case "--effort": o.Effort = Next(); break;
                 case "--concurrency": o.Concurrency = Math.Max(1, int.Parse(Next())); break;
                 case "--person-id": o.PersonID = int.Parse(Next()); break;
                 case "--yes": o.Yes = true; break;

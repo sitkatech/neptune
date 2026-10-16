@@ -13,7 +13,7 @@ public static class ReportWriter
         var md = new StringBuilder();
         md.AppendLine($"# Extraction eval: {run.Label}");
         md.AppendLine();
-        md.AppendLine($"Model `{run.Model}` · {run.ExtractionPath} path · started {run.StartedAt:yyyy-MM-dd HH:mm} UTC · {scores.Count} documents · scored {DateTime.Now:yyyy-MM-dd HH:mm}");
+        md.AppendLine($"Model `{run.Model}` · effort {run.Effort ?? "default"} · {run.ExtractionPath} path · started {run.StartedAt:yyyy-MM-dd HH:mm} UTC · {scores.Count} documents · scored {DateTime.Now:yyyy-MM-dd HH:mm}");
         if (run.ExtractionPath == "CLI")
         {
             md.AppendLine();

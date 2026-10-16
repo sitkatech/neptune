@@ -23,6 +23,7 @@ public sealed class EvalRunner(IServiceProvider services, string runDirectory, s
             Label = options.Label,
             Model = model,
             ExtractionPath = extractionPath,
+            Effort = options.Effort,
             StartedAt = DateTime.UtcNow,
         };
         await File.WriteAllTextAsync(Path.Combine(runDirectory, "run.json"), JsonSerializer.Serialize(run, EvalSet.JsonOptions));
@@ -53,7 +54,7 @@ public sealed class EvalRunner(IServiceProvider services, string runDirectory, s
         await File.WriteAllTextAsync(Path.Combine(runDirectory, "run.json"),
             JsonSerializer.Serialize(new EvalRun
             {
-                Directory = run.Directory, Label = run.Label, Model = run.Model, ExtractionPath = run.ExtractionPath,
+                Directory = run.Directory, Label = run.Label, Model = run.Model, ExtractionPath = run.ExtractionPath, Effort = run.Effort,
                 StartedAt = run.StartedAt, FinishedAt = run.FinishedAt,
             }, EvalSet.JsonOptions));
         return run;
@@ -100,6 +101,8 @@ public sealed class EvalRun
     public string Model { get; set; } = "";
     /// <summary>NPT-1133: "API" or "CLI". Runs saved before the CLI path existed were all API.</summary>
     public string ExtractionPath { get; set; } = "API";
+    /// <summary>NPT-1132: the --effort override; null means ClaudeEffort from configuration, or the model default.</summary>
+    public string? Effort { get; set; }
     public DateTime StartedAt { get; set; }
     public DateTime? FinishedAt { get; set; }
     [System.Text.Json.Serialization.JsonIgnore]

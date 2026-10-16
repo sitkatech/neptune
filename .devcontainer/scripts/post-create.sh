@@ -31,7 +31,8 @@ cat > "$WORKSPACE/Neptune.API/appsecrets.json" <<SECRETS
   "SendGridApiKey": "${SENDGRID_API_KEY:-not-a-real-key}",
   "AzureBlobStorageConnectionString": "${AZURE_BLOB_STORAGE_CONNECTION_STRING:-}",
   "AnthropicApiKey": "",
-  "ClaudeModelId": "claude-sonnet-4-6"
+  "ClaudeModelId": "claude-sonnet-5-5",
+  "ClaudeEffort": "low"
 }
 SECRETS
 echo "    Generated appsecrets.json with devcontainer defaults."
