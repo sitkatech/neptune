@@ -257,7 +257,7 @@ resource "azurerm_key_vault_secret" "sendGridApiKey" {
 
 # NPT-1133: no AnthropicApiKey in the dev vault. Local WQMP extraction runs through each
 # developer's own Claude CLI login; the shared key is for QA and Prod only. Neptune.Eval's
-# paid --api runs take the eval workspace key from a developer's local secrets instead.
+# paid --api runs take the eval workspace key from EvalAnthropicApiKey instead.
 
 output "key_vault_name" {
   value = azurerm_key_vault.dev.name

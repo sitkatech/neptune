@@ -29,8 +29,8 @@ namespace Neptune.API.Services.AI;
 /// a page range sends the whole PDF as one document block, the same input the API path sends,
 /// but only up to 20 MB; larger PDFs are split into page-range parts here so every part is
 /// still read whole. Page-range reads are avoided: they need poppler's pdftoppm and, without
-/// it, the CLI reports success with an empty answer. Every part must come back as a document
-/// block or the call fails with a clear error.
+/// it, the CLI reports success with an empty answer. Every part must come back from the Read
+/// tool or the call fails with a clear error.
 /// </summary>
 public class ClaudeCliWqmpExtractionClient : IWqmpExtractionClient
 {
@@ -85,9 +85,8 @@ public class ClaudeCliWqmpExtractionClient : IWqmpExtractionClient
             }
 
             var (parts, pageCount) = WritePdfParts(sourcePath, folder, MaxPdfPartBytes);
-            File.Delete(sourcePath);
             _logger.LogInformation("Claude CLI: documentID={DocumentID} ({Pages} pages) written to {Folder} as {Parts} part(s)",
-                waterQualityManagementPlanDocumentID, pageCount, folder, parts.Count);
+                waterQualityManagementPlanDocumentID, pageCount?.ToString() ?? "unknown", folder, parts.Count);
 
             return new Session(this, folder, parts, pageCount, hiccups);
         }
@@ -102,21 +101,50 @@ public class ClaudeCliWqmpExtractionClient : IWqmpExtractionClient
     public sealed record PdfPart(string FileName, int FirstPage, int LastPage);
 
     /// <summary>
-    /// Writes the PDF as <c>document.pdf</c> when it's within <paramref name="maxPartBytes"/>,
-    /// otherwise as consecutive page-range parts that each are. Returns the parts in page order.
+    /// Moves the PDF to <c>document.pdf</c> when it's within <paramref name="maxPartBytes"/>,
+    /// otherwise writes consecutive page-range parts that each are. Returns the parts in page
+    /// order and the page count, which is null when a PDF that needs no split couldn't be parsed.
     /// </summary>
-    public static (List<PdfPart> parts, int pageCount) WritePdfParts(string sourcePath, string folder, long maxPartBytes)
+    public static (List<PdfPart> parts, int? pageCount) WritePdfParts(string sourcePath, string folder, long maxPartBytes)
     {
         var totalBytes = new FileInfo(sourcePath).Length;
-        // PDFsharp copies only the objects each page references. PdfPig's page copy pulled the
-        // whole file's shared images into every part (one page of a 47 MB scan came out at 47 MB).
-        using var source = PdfReader.Open(sourcePath, PdfDocumentOpenMode.Import);
-        var pageCount = source.PageCount;
 
         if (totalBytes <= maxPartBytes)
         {
-            File.Copy(sourcePath, Path.Combine(folder, "document.pdf"));
-            return ([new PdfPart("document.pdf", 1, pageCount)], pageCount);
+            // The count only picks the context size. A PDF PDFsharp can't parse (encrypted,
+            // slightly malformed) may still be one Claude reads fine, as the API path does, so
+            // don't fail the extraction over it.
+            int? count;
+            try
+            {
+                using var reader = PdfReader.Open(sourcePath, PdfDocumentOpenMode.Import);
+                count = reader.PageCount;
+            }
+            catch (Exception)
+            {
+                count = null;
+            }
+            File.Move(sourcePath, Path.Combine(folder, "document.pdf"));
+            return ([new PdfPart("document.pdf", 1, count ?? 0)], count);
+        }
+
+        // PDFsharp copies only the objects each page references. PdfPig's page copy pulled the
+        // whole file's shared images into every part (one page of a 47 MB scan came out at 47 MB).
+        PdfDocument source;
+        try
+        {
+            source = PdfReader.Open(sourcePath, PdfDocumentOpenMode.Import);
+        }
+        catch (Exception ex)
+        {
+            throw new ClaudeCliException(
+                $"This PDF is over the Claude CLI's 20 MB read limit and couldn't be split into smaller parts ({ex.Message}). Use the API path for this document.", ex);
+        }
+        using var _ = source;
+        var pageCount = source.PageCount;
+        if (pageCount < 1)
+        {
+            throw new ClaudeCliException("This PDF has no readable pages, so it can't be split for the Claude CLI. Use the API path for this document.");
         }
 
         var parts = new List<PdfPart>();
@@ -162,6 +190,7 @@ public class ClaudeCliWqmpExtractionClient : IWqmpExtractionClient
     /// <summary>Splits 1..<paramref name="pageCount"/> into the fewest even ranges whose average size fits.</summary>
     public static List<(int firstPage, int lastPage)> PlanPageRanges(int pageCount, long totalBytes, long maxPartBytes)
     {
+        ArgumentOutOfRangeException.ThrowIfLessThan(pageCount, 1);
         var partCount = (int)Math.Min(pageCount, Math.Max(1, (long)Math.Ceiling((double)totalBytes / maxPartBytes)));
         var pagesPerPart = (int)Math.Ceiling((double)pageCount / partCount);
         var ranges = new List<(int, int)>();
@@ -262,7 +291,7 @@ public class ClaudeCliWqmpExtractionClient : IWqmpExtractionClient
         ClaudeCliWqmpExtractionClient client,
         string folder,
         List<PdfPart> parts,
-        int pageCount,
+        int? pageCount,
         ConcurrentQueue<string> hiccups) : IWqmpExtractionSession
     {
         // No prompt cache shared between CLI processes, so nothing to warm.
@@ -273,7 +302,8 @@ public class ClaudeCliWqmpExtractionClient : IWqmpExtractionClient
         {
             var sw = Stopwatch.StartNew();
             var key = call.Category.Key;
-            var model = pageCount > LongContextPageThreshold ? $"{client._configuration.ClaudeModelId}[1m]" : client._configuration.ClaudeModelId;
+            // An unknown page count gets the long context too: a smaller window can't hold a long plan.
+            var model = pageCount is null or > LongContextPageThreshold ? $"{client._configuration.ClaudeModelId}[1m]" : client._configuration.ClaudeModelId;
 
             var arguments = new List<string>
             {
@@ -312,7 +342,7 @@ public class ClaudeCliWqmpExtractionClient : IWqmpExtractionClient
             {
                 var problem = run.ReadProblems.FirstOrDefault();
                 throw new ClaudeCliException(
-                    $"The Claude CLI didn't read the whole PDF on {key} ({unread.Count} of {parts.Count} file(s) never came back as a document)" +
+                    $"The Claude CLI didn't read the whole PDF on {key} ({unread.Count} of {parts.Count} file(s) never came back from the Read tool)" +
                     (problem != null ? $": {Tail(problem, 300)}" : "."));
             }
 
@@ -352,8 +382,9 @@ public class ClaudeCliWqmpExtractionClient : IWqmpExtractionClient
         {
             return "The Claude CLI isn't logged in. Run `claude` once and sign in, then try the extraction again.";
         }
-        if (text.Contains("limit", StringComparison.OrdinalIgnoreCase) &&
-            (text.Contains("usage", StringComparison.OrdinalIgnoreCase) || text.Contains("reached", StringComparison.OrdinalIgnoreCase)))
+        // Claude Code's plan-limit wording ("Claude AI usage limit reached", "You've hit your limit").
+        // Rate limits and context-size errors fall through to the generic message.
+        if (text.Contains("usage limit", StringComparison.OrdinalIgnoreCase) || text.Contains("hit your limit", StringComparison.OrdinalIgnoreCase))
         {
             return $"Your Claude plan's usage limit was reached (Claude CLI: {Tail(text, 300)}).";
         }
@@ -371,6 +402,9 @@ public class ClaudeCliWqmpExtractionClient : IWqmpExtractionClient
             RedirectStandardError = true,
             UseShellExecute = false,
             CreateNoWindow = true,
+            // Explicit UTF-8 (no BOM) both ways: on Windows the default is the console code page,
+            // which mangles the prompts' non-ASCII characters (≤, –, ✓).
+            StandardInputEncoding = new UTF8Encoding(false),
             StandardOutputEncoding = Encoding.UTF8,
             StandardErrorEncoding = Encoding.UTF8,
         };
@@ -410,15 +444,11 @@ public class ClaudeCliWqmpExtractionClient : IWqmpExtractionClient
             while ((line = await process.StandardOutput.ReadLineAsync(timeoutCts.Token)) != null)
             {
                 run.Feed(line);
-                // The init event names the credential before the first request goes out. Anything
-                // but "none" (the developer's own login) means an API key, which this path must
-                // never spend: stop before it does.
-                if (run.ApiKeySource != null && run.ApiKeySource != ClaudeCliRun.LoginApiKeySource)
+                // This path must never spend an API key; see ClaudeCliRun.CredentialProblem.
+                if (run.CredentialProblem is { } credentialProblem)
                 {
                     try { process.Kill(entireProcessTree: true); } catch (InvalidOperationException) { }
-                    throw new ClaudeCliException(
-                        $"The Claude CLI was about to use an API key (apiKeySource={run.ApiKeySource}) instead of your Claude login, so the extraction was stopped. " +
-                        "Remove the key from your Claude Code setup (ANTHROPIC_API_KEY, apiKeyHelper) and sign in with `claude`.");
+                    throw new ClaudeCliException(credentialProblem);
                 }
                 if (run.Started) responseStarted?.TrySetResult();
             }
@@ -483,6 +513,20 @@ public sealed class ClaudeCliRun
     public int ExitCode { get; set; }
     public string StdErr { get; set; }
 
+    /// <summary>
+    /// Why the run must stop, or null. The init event names the credential before the first
+    /// request goes out: anything but "none" (the developer's own login) means an API key. A run
+    /// that answers without ever naming its credential is stopped too (fail closed), unless it
+    /// only reports an error, so "not logged in" still gets its own message.
+    /// </summary>
+    public string CredentialProblem =>
+        ApiKeySource != null && ApiKeySource != LoginApiKeySource
+            ? $"The Claude CLI was about to use an API key (apiKeySource={ApiKeySource}) instead of your Claude login, so the extraction was stopped. " +
+              "Remove the key from your Claude Code setup (ANTHROPIC_API_KEY, apiKeyHelper) and sign in with `claude`."
+            : ApiKeySource == null && (Started || Result is { IsError: false })
+                ? "The Claude CLI didn't say which credential it was using, so the extraction was stopped (it must be your Claude login, never an API key). Update Claude Code and try again."
+                : null;
+
     public void Feed(string line)
     {
         if (string.IsNullOrWhiteSpace(line)) return;
@@ -519,7 +563,9 @@ public sealed class ClaudeCliRun
                     if ((string)block["type"] != "tool_result" || block["tool_use_id"] is not JsonValue toolUseID) continue;
                     if (!_readToolFiles.TryGetValue((string)toolUseID, out var fileName)) continue;
 
-                    if (block["content"] is JsonArray content && content.Any(c => (string)c?["type"] == "document"))
+                    // A whole-file read returns a document block; a paged read (only possible
+                    // where poppler is installed) returns page images. Either way the file was read.
+                    if (block["content"] is JsonArray content && content.Any(c => (string)c?["type"] is "document" or "image"))
                     {
                         DocumentsRead.Add(fileName);
                     }

@@ -72,7 +72,14 @@ namespace Neptune.Tests
         }
 
         [TestMethod]
-        public void WritePdfParts_SmallPdfIsCopiedWhole()
+        public void PlanPageRanges_RefusesAPdfWithNoPages()
+        {
+            Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
+                ClaudeCliWqmpExtractionClient.PlanPageRanges(pageCount: 0, totalBytes: 40L * 1024 * 1024, maxPartBytes: 18L * 1024 * 1024));
+        }
+
+        [TestMethod]
+        public void WritePdfParts_SmallPdfIsMovedWhole()
         {
             var folder = NewTempFolder();
             try
@@ -81,10 +88,52 @@ namespace Neptune.Tests
 
                 var (parts, pageCount) = ClaudeCliWqmpExtractionClient.WritePdfParts(source, folder, maxPartBytes: 10L * 1024 * 1024);
 
-                Assert.AreEqual(3, pageCount);
+                Assert.AreEqual((int?)3, pageCount);
                 Assert.AreEqual(1, parts.Count);
                 Assert.AreEqual(new ClaudeCliWqmpExtractionClient.PdfPart("document.pdf", 1, 3), parts[0]);
                 Assert.IsTrue(File.Exists(Path.Combine(folder, "document.pdf")));
+                Assert.IsFalse(File.Exists(source));
+            }
+            finally
+            {
+                Directory.Delete(folder, true);
+            }
+        }
+
+        [TestMethod]
+        public void WritePdfParts_SmallPdfThatCantBeParsedIsStillUsed()
+        {
+            // Claude may read a PDF that PDFsharp can't (the API path never parses it locally), so
+            // an unsplit PDF only loses its page count.
+            var folder = NewTempFolder();
+            try
+            {
+                var source = Path.Combine(folder, "source.pdf");
+                File.WriteAllText(source, "%PDF-1.4 not really a pdf");
+
+                var (parts, pageCount) = ClaudeCliWqmpExtractionClient.WritePdfParts(source, folder, maxPartBytes: 10L * 1024 * 1024);
+
+                Assert.IsNull(pageCount);
+                Assert.AreEqual("document.pdf", parts.Single().FileName);
+                Assert.IsTrue(File.Exists(Path.Combine(folder, "document.pdf")));
+            }
+            finally
+            {
+                Directory.Delete(folder, true);
+            }
+        }
+
+        [TestMethod]
+        public void WritePdfParts_LargePdfThatCantBeParsedFailsClearly()
+        {
+            var folder = NewTempFolder();
+            try
+            {
+                var source = Path.Combine(folder, "source.pdf");
+                File.WriteAllText(source, "%PDF-1.4 " + new string('x', 4096));
+
+                var ex = Assert.ThrowsExactly<ClaudeCliException>(() => ClaudeCliWqmpExtractionClient.WritePdfParts(source, folder, maxPartBytes: 1024));
+                StringAssert.Contains(ex.Message, "couldn't be split");
             }
             finally
             {
@@ -103,7 +152,7 @@ namespace Neptune.Tests
 
                 var (parts, pageCount) = ClaudeCliWqmpExtractionClient.WritePdfParts(source, folder, maxPartBytes);
 
-                Assert.AreEqual(12, pageCount);
+                Assert.AreEqual((int?)12, pageCount);
                 Assert.IsTrue(parts.Count >= 2);
                 Assert.AreEqual(1, parts.First().FirstPage);
                 Assert.AreEqual(12, parts.Last().LastPage);
@@ -182,9 +231,41 @@ namespace Neptune.Tests
             withKey.Feed("""{"type":"system","subtype":"init","apiKeySource":"ANTHROPIC_API_KEY"}""");
             Assert.AreEqual("ANTHROPIC_API_KEY", withKey.ApiKeySource);
 
+            StringAssert.Contains(withKey.CredentialProblem, "apiKeySource=ANTHROPIC_API_KEY");
+
             var unreported = new ClaudeCliRun();
             unreported.Feed("""{"type":"system","subtype":"init"}""");
             Assert.AreNotEqual(ClaudeCliRun.LoginApiKeySource, unreported.ApiKeySource);
+            Assert.IsNotNull(unreported.CredentialProblem);
+
+            var login = new ClaudeCliRun();
+            login.Feed("""{"type":"system","subtype":"init","apiKeySource":"none"}""");
+            login.Feed("""{"type":"assistant","message":{"content":[]}}""");
+            Assert.IsNull(login.CredentialProblem);
+        }
+
+        [TestMethod]
+        public void CliRun_FailsClosedWhenTheCredentialIsNeverReported()
+        {
+            // No init event at all: stop as soon as the model answers.
+            var answered = new ClaudeCliRun();
+            answered.Feed("""{"type":"assistant","message":{"content":[]}}""");
+            Assert.IsNotNull(answered.CredentialProblem);
+
+            // An error-only run still gets its own message ("not logged in").
+            var errorOnly = new ClaudeCliRun();
+            errorOnly.Feed("""{"type":"result","is_error":true,"result":"Not logged in · Please run /login","usage":{}}""");
+            Assert.IsNull(errorOnly.CredentialProblem);
+        }
+
+        [TestMethod]
+        public void CliRun_CountsAPagedReadAsRead()
+        {
+            var run = new ClaudeCliRun();
+            run.Feed("""{"type":"assistant","message":{"content":[{"type":"tool_use","id":"t1","name":"Read","input":{"file_path":"/tmp/x/document.pdf","pages":"1-20"}}]}}""");
+            run.Feed("""{"type":"user","message":{"content":[{"type":"tool_result","tool_use_id":"t1","content":[{"type":"image","source":{"type":"base64"}}]}]}}""");
+
+            CollectionAssert.AreEquivalent(new[] { "document.pdf" }, run.DocumentsRead.ToArray());
         }
 
         [TestMethod]
@@ -203,7 +284,10 @@ namespace Neptune.Tests
         {
             StringAssert.Contains(ClaudeCliWqmpExtractionClient.DescribeCliError("Not logged in · Please run /login", "WQMP"), "isn't logged in");
             StringAssert.Contains(ClaudeCliWqmpExtractionClient.DescribeCliError("Claude AI usage limit reached|1760000000", "WQMP"), "usage limit");
+            StringAssert.Contains(ClaudeCliWqmpExtractionClient.DescribeCliError("You've hit your limit · resets 5pm", "WQMP"), "usage limit");
             StringAssert.Contains(ClaudeCliWqmpExtractionClient.DescribeCliError("something else broke", "Parcels"), "failed on Parcels: something else broke");
+            // A rate limit isn't the plan's usage limit.
+            StringAssert.Contains(ClaudeCliWqmpExtractionClient.DescribeCliError("Rate limit reached, retry later", "Parcels"), "failed on Parcels");
         }
 
         [TestMethod]

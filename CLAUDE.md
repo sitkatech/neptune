@@ -181,7 +181,7 @@ Locally, WQMP AI extraction goes through **your own Claude Code login**, not an 
 - **How it works:** `ClaudeCliWqmpExtractionClient` writes the PDF to a temp folder and runs `claude -p` per category with only the Read tool. Read sends a whole PDF as one document block (the same input the API path sends), but only up to 20 MB, so larger PDFs are split into page-range parts with PDFsharp. Plans over 80 pages use the 1M-context model variant. The Files API and the cached `AnthropicFileID` aren't touched, and remote file deletes are skipped.
 - **It never uses a key.** The CLI is started without `ANTHROPIC_API_KEY`/`ANTHROPIC_AUTH_TOKEN` and without your Claude settings. If its init event reports any credential other than your login (`apiKeySource` other than `none`), the run is stopped before the first request.
 - **Failures name the cause:** CLI not found, not logged in, your plan's usage limit, a PDF part that didn't come back as a document. There's no fallback to an API key.
-- **Caveats:** calls count against your Claude plan's usage limits. Results aren't comparable to production: there's no shared prompt cache, and the CLI thinks more by default. For accuracy numbers use `Neptune.Eval run --api` with the eval workspace key (see `Neptune.Eval/README.md`).
+- **Caveats:** calls count against your Claude plan's usage limits. Results aren't comparable to production: there's no shared prompt cache, and the CLI thinks more by default. For accuracy numbers use `Neptune.Eval run --api` with the eval workspace key in `EvalAnthropicApiKey`; Eval never reads `AnthropicApiKey` (see `Neptune.Eval/README.md`).
 
 ## Key Domain Entities
 

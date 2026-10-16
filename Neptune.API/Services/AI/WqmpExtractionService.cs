@@ -91,6 +91,11 @@ public class WqmpExtractionService
         _logger.LogInformation("Document ready (elapsed {ElapsedMs}ms); invoking 4 category extractions via the Claude {ExtractionPath}...",
             totalSw.ElapsedMilliseconds, _client.PathName);
 
+        // NPT-1133: one failed category cancels the others. A failure like "not logged in" or a
+        // usage limit would otherwise leave the other three running (up to 15 minutes each on the
+        // CLI path) before the user saw the error.
+        using var categoriesCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+
         // Per-category extraction. `responseStarted` is signalled when the response begins,
         // i.e. once this call's cache write is readable.
         async Task<(string output, WqmpExtractionCallUsageDto usage)> ExtractCategoryAsync(string key, PromptTemplate template, string schema, bool expectArray,
@@ -114,7 +119,16 @@ public class WqmpExtractionService
                 Prompt = _promptTemplateService.Render(template, templateModel),
             };
 
-            var result = await session.ExtractCategoryAsync(call, responseStarted, cancellationToken);
+            WqmpCategoryCallResult result;
+            try
+            {
+                result = await session.ExtractCategoryAsync(call, responseStarted, categoriesCts.Token);
+            }
+            catch
+            {
+                categoriesCts.Cancel();
+                throw;
+            }
             var output = result.OutputJson ?? (expectArray ? "[]" : "{}");
 
             if (!IsValidJson(output))
@@ -155,7 +169,20 @@ public class WqmpExtractionService
         var tasks = new List<Task<(string output, WqmpExtractionCallUsageDto usage)>> { firstTask };
         tasks.AddRange(categoryConfigs.Where(kvp => kvp.Key != firstKey).Select(kvp =>
             ExtractCategoryAsync(kvp.Key, kvp.Value.template, kvp.Value.schema, kvp.Value.expectArray)));
-        var results = await Task.WhenAll(tasks);
+        (string output, WqmpExtractionCallUsageDto usage)[] results;
+        try
+        {
+            results = await Task.WhenAll(tasks);
+        }
+        catch (Exception) when (!cancellationToken.IsCancellationRequested)
+        {
+            // WhenAll rethrows the first faulted task in list order, which can be a sibling we
+            // cancelled; surface the failure that caused the cancellation instead.
+            var cause = tasks.Where(t => t.IsFaulted).Select(t => t.Exception!.InnerException)
+                .FirstOrDefault(e => e is not OperationCanceledException);
+            if (cause != null) System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture(cause).Throw();
+            throw;
+        }
         var keys = categoryConfigs.Keys.ToList();
         var map = new Dictionary<string, string>();
         var callUsage = new List<WqmpExtractionCallUsageDto>();

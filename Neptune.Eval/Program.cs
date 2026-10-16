@@ -69,22 +69,18 @@ public static class Program
         using var host = BuildHost(options, repoRoot);
         var configuration = host.Services.GetRequiredService<Microsoft.Extensions.Options.IOptions<NeptuneConfiguration>>().Value;
         var model = configuration.ClaudeModelId;
-        string extractionPath;
-        using (var clientScope = host.Services.CreateScope())
-        {
-            extractionPath = clientScope.ServiceProvider.GetRequiredService<IWqmpExtractionClient>().PathName;
-        }
+        var extractionPath = options.Api ? "API" : "CLI";
         Console.WriteLine($"Selected {documents.Count} document(s) ({string.Join(", ", documents.GroupBy(d => d.PdfType).Select(g => $"{g.Count()} {g.Key}"))}), " +
                           $"{documents.Sum(d => d.Pages)} pages total, model {model}, {extractionPath} path.");
         if (options.Api && string.IsNullOrWhiteSpace(configuration.AnthropicApiKey))
         {
-            Console.WriteLine("--api needs AnthropicApiKey. Use the eval workspace key (see README), never the shared key.");
+            Console.WriteLine("--api needs EvalAnthropicApiKey: the eval workspace key (see README), never the shared key.");
             return 1;
         }
         if (!options.Yes)
         {
             Console.WriteLine(options.Api
-                ? "This calls the Anthropic API and spends credits on the key in AnthropicApiKey. Re-run with --yes to proceed."
+                ? "This calls the Anthropic API and spends credits on the key in EvalAnthropicApiKey. Re-run with --yes to proceed."
                 : "This runs the Claude CLI and uses your Claude plan's usage limits. Re-run with --yes to proceed.");
             return 2;
         }
@@ -143,6 +139,13 @@ public static class Program
                 services.Configure<NeptuneConfiguration>(context.Configuration);
                 var configuration = context.Configuration.Get<NeptuneConfiguration>()!;
 
+                // NPT-1133: --api runs spend only the key in EvalAnthropicApiKey (the eval
+                // workspace key). AnthropicApiKey is ignored, so a shared key reaching this host
+                // through the Key Vault or a secrets file can never be spent by an eval.
+                var evalApiKey = context.Configuration["EvalAnthropicApiKey"] ?? "";
+                configuration.AnthropicApiKey = evalApiKey;
+                services.PostConfigure<NeptuneConfiguration>(c => c.AnthropicApiKey = evalApiKey);
+
                 services.AddDbContext<NeptuneDbContext>(c => c.UseSqlServer(configuration.DatabaseConnectionString, x =>
                 {
                     x.CommandTimeout((int)TimeSpan.FromMinutes(10).TotalSeconds);
@@ -198,7 +201,7 @@ public sealed class EvalOptions
 
         run     Extract each selected document with the production WqmpExtractionService, save the
                 raw output under Neptune.Eval/runs/, then score it. Runs through your Claude CLI login
-                by default; --api uses the Anthropic API with AnthropicApiKey (the eval workspace key)
+                by default; --api uses the Anthropic API with EvalAnthropicApiKey (the eval workspace key)
                 and spends credits. --yes required either way.
         score   Re-score a saved run against the current ground truth (no API calls).
         select  Rebuild eval-set.json: classify candidate PDFs (downloads them from blob storage;
