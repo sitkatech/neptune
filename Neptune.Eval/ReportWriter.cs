@@ -13,7 +13,14 @@ public static class ReportWriter
         var md = new StringBuilder();
         md.AppendLine($"# Extraction eval: {run.Label}");
         md.AppendLine();
-        md.AppendLine($"Model `{run.Model}` · started {run.StartedAt:yyyy-MM-dd HH:mm} UTC · {scores.Count} documents · scored {DateTime.Now:yyyy-MM-dd HH:mm}");
+        md.AppendLine($"Model `{run.Model}` · {run.ExtractionPath} path · started {run.StartedAt:yyyy-MM-dd HH:mm} UTC · {scores.Count} documents · scored {DateTime.Now:yyyy-MM-dd HH:mm}");
+        if (run.ExtractionPath == "CLI")
+        {
+            md.AppendLine();
+            md.AppendLine("> **CLI path, not comparable to production.** These extractions ran through the Claude CLI, not the Anthropic API that QA/Prod use. " +
+                          "Use them to iterate on prompts; take accuracy numbers and model comparisons from an `--api` run. " +
+                          "Costs are list-price equivalents for comparison; nothing was billed to an API key.");
+        }
         if (!Pricing.IsKnown(run.Model))
         {
             md.AppendLine();

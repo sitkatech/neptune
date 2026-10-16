@@ -67,17 +67,26 @@ public static class Program
         }
 
         using var host = BuildHost(options, repoRoot);
-        var model = host.Services.GetRequiredService<Microsoft.Extensions.Options.IOptions<NeptuneConfiguration>>().Value.ClaudeModelId;
+        var configuration = host.Services.GetRequiredService<Microsoft.Extensions.Options.IOptions<NeptuneConfiguration>>().Value;
+        var model = configuration.ClaudeModelId;
+        var extractionPath = options.Api ? "API" : "CLI";
         Console.WriteLine($"Selected {documents.Count} document(s) ({string.Join(", ", documents.GroupBy(d => d.PdfType).Select(g => $"{g.Count()} {g.Key}"))}), " +
-                          $"{documents.Sum(d => d.Pages)} pages total, model {model}.");
+                          $"{documents.Sum(d => d.Pages)} pages total, model {model}, {extractionPath} path.");
+        if (options.Api && string.IsNullOrWhiteSpace(configuration.AnthropicApiKey))
+        {
+            Console.WriteLine("--api needs EvalAnthropicApiKey: the eval workspace key (see README), never the shared key.");
+            return 1;
+        }
         if (!options.Yes)
         {
-            Console.WriteLine("This calls the Anthropic API and spends credits on the shared key. Re-run with --yes to proceed.");
+            Console.WriteLine(options.Api
+                ? "This calls the Anthropic API and spends credits on the key in EvalAnthropicApiKey. Re-run with --yes to proceed."
+                : "This runs the Claude CLI and uses your Claude plan's usage limits. Re-run with --yes to proceed.");
             return 2;
         }
 
         var runDirectory = Path.Combine(evalDir, "runs", $"{DateTime.Now:yyyyMMdd-HHmm}-{options.Label}");
-        var runner = new EvalRunner(host.Services, runDirectory, model, options);
+        var runner = new EvalRunner(host.Services, runDirectory, model, extractionPath, options);
         var result = await runner.RunAsync(documents);
 
         await using (var scope = host.Services.CreateAsyncScope())
@@ -114,6 +123,9 @@ public static class Program
                 {
                     config.AddInMemoryCollection(new Dictionary<string, string?> { ["ClaudeModelId"] = options.Model });
                 }
+                // NPT-1133: the CLI unless --api asked for the paid path. Set last so a
+                // ClaudeCliEnabled in the secrets file can't override the command line.
+                config.AddInMemoryCollection(new Dictionary<string, string?> { ["ClaudeCliEnabled"] = options.Api ? "false" : "true" });
             })
             .ConfigureLogging(logging =>
             {
@@ -127,6 +139,13 @@ public static class Program
                 services.Configure<NeptuneConfiguration>(context.Configuration);
                 var configuration = context.Configuration.Get<NeptuneConfiguration>()!;
 
+                // NPT-1133: --api runs spend only the key in EvalAnthropicApiKey (the eval
+                // workspace key). AnthropicApiKey is ignored, so a shared key reaching this host
+                // through the Key Vault or a secrets file can never be spent by an eval.
+                var evalApiKey = context.Configuration["EvalAnthropicApiKey"] ?? "";
+                configuration.AnthropicApiKey = evalApiKey;
+                services.PostConfigure<NeptuneConfiguration>(c => c.AnthropicApiKey = evalApiKey);
+
                 services.AddDbContext<NeptuneDbContext>(c => c.UseSqlServer(configuration.DatabaseConnectionString, x =>
                 {
                     x.CommandTimeout((int)TimeSpan.FromMinutes(10).TotalSeconds);
@@ -137,8 +156,11 @@ public static class Program
                 // Read prompts straight from the repo so prompt edits take effect without a rebuild.
                 services.AddSingleton<IPromptTemplateService>(_ =>
                     new PromptTemplateService(Path.Combine(repoRoot, "Neptune.API", "Services", "AI", "Prompts")));
+                services.AddScoped<WqmpPdfBlobReader>();
                 services.AddScoped<AnthropicFileService>();
                 services.AddScoped<WqmpExtractionService>();
+                // Eval is a local tool, so the CLI path is always allowed here.
+                WqmpExtractionClientRegistration.Add(services, configuration, cliAllowed: true, context.HostingEnvironment.EnvironmentName);
                 // Same client options as Neptune.API/Startup.cs (no HttpClient timeout; the service
                 // bounds each category call with its own 4-minute token).
                 services.AddSingleton(_ => new AnthropicClient(new Anthropic.Core.ClientOptions
@@ -173,12 +195,14 @@ public sealed class EvalOptions
         Usage:
           dotnet run --project Neptune.Eval -- run [--split dev|test|all] [--ids 123,456] [--limit N]
                                                    [--label name] [--model claude-...] [--concurrency N]
-                                                   [--person-id N] [--verbose] --yes
+                                                   [--person-id N] [--api] [--verbose] --yes
           dotnet run --project Neptune.Eval -- score <run directory>
           dotnet run --project Neptune.Eval -- select [--seed N]
 
         run     Extract each selected document with the production WqmpExtractionService, save the
-                raw output under Neptune.Eval/runs/, then score it. Spends Anthropic credits: --yes required.
+                raw output under Neptune.Eval/runs/, then score it. Runs through your Claude CLI login
+                by default; --api uses the Anthropic API with EvalAnthropicApiKey (the eval workspace key)
+                and spends credits. --yes required either way.
         score   Re-score a saved run against the current ground truth (no API calls).
         select  Rebuild eval-set.json: classify candidate PDFs (downloads them from blob storage;
                 no API calls). Overwrites the checked-in set, so only run it to change the set.
@@ -193,6 +217,8 @@ public sealed class EvalOptions
     public int Concurrency { get; private set; } = 2;
     public int PersonID { get; private set; } = 1;
     public bool Yes { get; private set; }
+    /// <summary>NPT-1133: use the Anthropic API instead of the Claude CLI.</summary>
+    public bool Api { get; private set; }
     public bool Verbose { get; private set; }
     public string? RunDirectory { get; private set; }
     public int Seed { get; private set; } = 1132;
@@ -228,6 +254,7 @@ public sealed class EvalOptions
                 case "--concurrency": o.Concurrency = Math.Max(1, int.Parse(Next())); break;
                 case "--person-id": o.PersonID = int.Parse(Next()); break;
                 case "--yes": o.Yes = true; break;
+                case "--api": o.Api = true; break;
                 case "--verbose": o.Verbose = true; break;
                 default: return null;
             }

@@ -9,7 +9,7 @@
 # are intentionally NOT in the repo:
 #   - azureSubscription ............ service-connection name (like the main pipeline)
 #   - secretSendGridApiKey ......... (secret) dev SendGrid key (optional)
-#   - secretAnthropicApiKey ........ (secret) dev Anthropic key (optional)
+#   (No Anthropic key: local AI extraction uses the Claude CLI login, NPT-1133.)
 #
 # VERIFY before first run: the tfstate account/container/RG below match
 # Neptune's actual tfstate setup, and the pipeline SP holds Key Vault Data
@@ -82,7 +82,6 @@ stages:
                 -var "projectNumber=$(projectNumber)"
                 -var "devReaderGroupObjectId=$(devReaderGroupObjectId)"
                 -var "secretSendGridApiKey=$(secretSendGridApiKey)"
-                -var "secretAnthropicApiKey=$(secretAnthropicApiKey)"
 
   - stage: DeployTerraform
     displayName: Deploy Terraform (with Approval)

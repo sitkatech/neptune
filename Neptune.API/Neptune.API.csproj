@@ -7,6 +7,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Anthropic" Version="12.40.0" />
+    <PackageReference Include="PDFsharp" Version="6.2.1" />
     <PackageReference Include="Auth0.AspNetCore.Authentication" Version="1.10.0" />
     <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.5.1" />
     <PackageReference Include="Azure.Identity" Version="1.21.0" />

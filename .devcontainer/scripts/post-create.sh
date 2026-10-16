@@ -20,7 +20,7 @@ npx --yes ng analytics disable --global 2>/dev/null || true
 npx --yes ng config --global cli.completion.prompted true 2>/dev/null || true
 
 echo "==> Generating appsecrets.json for devcontainer..."
-# Local-only values. Real SendGrid/Anthropic/Blob come from the dev Key Vault
+# Local-only values. Real SendGrid/Blob come from the dev Key Vault
 # (KeyVaultName) or a .developer.env override; the API reads the local SQL
 # Server directly (no passwordless AAD in the devcontainer).
 cat > "$WORKSPACE/Neptune.API/appsecrets.json" <<SECRETS
@@ -30,7 +30,7 @@ cat > "$WORKSPACE/Neptune.API/appsecrets.json" <<SECRETS
   "HangfirePassword": "password#1",
   "SendGridApiKey": "${SENDGRID_API_KEY:-not-a-real-key}",
   "AzureBlobStorageConnectionString": "${AZURE_BLOB_STORAGE_CONNECTION_STRING:-}",
-  "AnthropicApiKey": "${ANTHROPIC_API_KEY:-not-a-real-key}",
+  "AnthropicApiKey": "",
   "ClaudeModelId": "claude-sonnet-4-6"
 }
 SECRETS

@@ -62,12 +62,6 @@ variable "secretSendGridApiKey" {
   default   = ""
 }
 
-variable "secretAnthropicApiKey" {
-  type      = string
-  sensitive = true
-  default   = ""
-}
-
 terraform {
   required_version = ">= 1.1"
   backend "azurerm" {
@@ -261,14 +255,9 @@ resource "azurerm_key_vault_secret" "sendGridApiKey" {
   depends_on   = [azurerm_role_assignment.pipeline_secrets_officer]
 }
 
-resource "azurerm_key_vault_secret" "anthropicApiKey" {
-  count        = var.secretAnthropicApiKey != "" && !can(regex("^[$][(]", var.secretAnthropicApiKey)) ? 1 : 0
-  name         = "AnthropicApiKey"
-  value        = var.secretAnthropicApiKey
-  key_vault_id = azurerm_key_vault.dev.id
-  tags         = local.tags
-  depends_on   = [azurerm_role_assignment.pipeline_secrets_officer]
-}
+# NPT-1133: no AnthropicApiKey in the dev vault. Local WQMP extraction runs through each
+# developer's own Claude CLI login; the shared key is for QA and Prod only. Neptune.Eval's
+# paid --api runs take the eval workspace key from EvalAnthropicApiKey instead.
 
 output "key_vault_name" {
   value = azurerm_key_vault.dev.name

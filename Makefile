@@ -5,6 +5,14 @@ BUILD_DIR := $(WORKSPACE)/Build
 API_PORT ?= 8250
 WEB_PORT ?= 8252
 
+# ESA laptops: Cato TLS inspection re-signs platform.claude.com, so the Claude CLI that local AI
+# extraction runs (NPT-1133) must trust the Cato root. When the developer has exported it (see
+# CLAUDE.md), hand it to everything make starts; elsewhere the file is absent and this is a no-op.
+CORP_ROOT_CERT := $(WORKSPACE)/docker-compose/corp-root.crt
+ifneq ($(wildcard $(CORP_ROOT_CERT)),)
+export NODE_EXTRA_CA_CERTS ?= $(CORP_ROOT_CERT)
+endif
+
 help: ## Show available targets
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2}'
 

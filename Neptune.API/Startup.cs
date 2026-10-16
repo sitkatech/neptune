@@ -45,9 +45,11 @@ namespace Neptune.API
         public Startup(IWebHostEnvironment environment, IConfiguration configuration)
         {
             Configuration = configuration;
+            Environment = environment;
         }
 
         public IConfiguration Configuration { get; }
+        public IWebHostEnvironment Environment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -139,8 +141,11 @@ namespace Neptune.API
                 new AzureBlobStorageService(sp.GetRequiredService<IOptions<NeptuneConfiguration>>().Value.AzureBlobStorageConnectionString));
             services.AddScoped<ImpersonationService>();
             services.AddSingleton<IPromptTemplateService, PromptTemplateService>();
+            services.AddScoped<WqmpPdfBlobReader>();
             services.AddScoped<AnthropicFileService>();
             services.AddScoped<WqmpExtractionService>();
+            // NPT-1133: the Claude CLI path defaults on in Development and is refused anywhere else.
+            WqmpExtractionClientRegistration.Add(services, configuration, cliAllowed: Environment.IsDevelopment(), Environment.EnvironmentName);
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped(s => s.GetService<IHttpContextAccessor>().HttpContext);
