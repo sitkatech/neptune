@@ -463,8 +463,8 @@ public class ClaudeCliWqmpExtractionClient : IWqmpExtractionClient
 
         run.ExitCode = process.ExitCode;
         lock (stderr) run.StdErr = stderr.ToString();
-        _logger.LogInformation("Claude CLI finished {Category}: exit={ExitCode}, turns={Turns}, documents read={DocumentsRead}",
-            category, run.ExitCode, run.Result?.NumTurns, run.DocumentsRead.Count);
+        _logger.LogInformation("Claude CLI finished {Category}: exit={ExitCode}, turns={Turns}, documents read={DocumentsRead}, apiKeySource={ApiKeySource}",
+            category, run.ExitCode, run.Result?.NumTurns, run.DocumentsRead.Count, run.ApiKeySource);
         return run;
     }
 
