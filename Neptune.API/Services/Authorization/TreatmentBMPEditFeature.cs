@@ -1,39 +1,12 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
 using Neptune.EFModels.Entities;
 
 namespace Neptune.API.Services.Authorization
 {
-    public class TreatmentBMPEditFeature() : BaseAuthorizationAttribute([RoleEnum.SitkaAdmin, RoleEnum.Admin, RoleEnum.JurisdictionManager, RoleEnum.JurisdictionEditor])
+    public class TreatmentBMPEditFeature() : JurisdictionScopedFeature(EditRoles)
     {
-        protected override void OnAuthorizationCore(AuthorizationFilterContext context, NeptuneDbContext dbContext, Person? user)
-        {
-            if (!context.RouteData.Values.TryGetValue("treatmentBMPID", out var idObj) || !int.TryParse(idObj?.ToString(), out var treatmentBMPID))
-            {
-                return;
-            }
+        protected override string RouteKey => "treatmentBMPID";
 
-            var treatmentBMP = TreatmentBMPs.GetByIDForFeatureContextCheck(dbContext, treatmentBMPID);
-
-            // Authorization filters run before EntityNotFoundAttribute — translate a
-            // nonexistent BMP into the 404 that attribute would have produced, rather than
-            // throwing (which surfaced as a 500).
-            if (treatmentBMP == null)
-            {
-                context.Result = new NotFoundResult();
-                return;
-            }
-
-            if (user == null || user.IsAnonymousOrUnassigned())
-            {
-                context.Result = new ForbidResult();
-                return;
-            }
-
-            if (!user.IsAssignedToStormwaterJurisdiction(treatmentBMP.StormwaterJurisdictionID))
-            {
-                context.Result = new ForbidResult();
-            }
-        }
+        protected override int? GetStormwaterJurisdictionID(NeptuneDbContext dbContext, int id) =>
+            TreatmentBMPs.GetByIDForFeatureContextCheck(dbContext, id)?.StormwaterJurisdictionID;
     }
 }

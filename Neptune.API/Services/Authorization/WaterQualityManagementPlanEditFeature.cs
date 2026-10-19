@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
 using Neptune.EFModels.Entities;
 
 namespace Neptune.API.Services.Authorization
@@ -13,36 +11,11 @@ namespace Neptune.API.Services.Authorization
     /// have, and (b) jurisdiction-blind, letting any Manager modify any jurisdiction's
     /// WQMP documents.
     /// </summary>
-    public class WaterQualityManagementPlanEditFeature() : BaseAuthorizationAttribute([RoleEnum.SitkaAdmin, RoleEnum.Admin, RoleEnum.JurisdictionManager, RoleEnum.JurisdictionEditor])
+    public class WaterQualityManagementPlanEditFeature() : JurisdictionScopedFeature(EditRoles)
     {
-        protected override void OnAuthorizationCore(AuthorizationFilterContext context, NeptuneDbContext dbContext, Person? user)
-        {
-            if (!context.RouteData.Values.TryGetValue("waterQualityManagementPlanID", out var idObj) || !int.TryParse(idObj?.ToString(), out var waterQualityManagementPlanID))
-            {
-                return;
-            }
+        protected override string RouteKey => "waterQualityManagementPlanID";
 
-            var waterQualityManagementPlan = WaterQualityManagementPlans.GetByIDForFeatureContextCheck(dbContext, waterQualityManagementPlanID);
-
-            // Authorization filters run before EntityNotFoundAttribute — translate a
-            // nonexistent WQMP into the 404 that attribute would have produced, rather
-            // than throwing (which would 500).
-            if (waterQualityManagementPlan == null)
-            {
-                context.Result = new NotFoundResult();
-                return;
-            }
-
-            if (user == null || user.IsAnonymousOrUnassigned())
-            {
-                context.Result = new ForbidResult();
-                return;
-            }
-
-            if (!user.IsAssignedToStormwaterJurisdiction(waterQualityManagementPlan.StormwaterJurisdictionID))
-            {
-                context.Result = new ForbidResult();
-            }
-        }
+        protected override int? GetStormwaterJurisdictionID(NeptuneDbContext dbContext, int id) =>
+            WaterQualityManagementPlans.GetByIDForFeatureContextCheck(dbContext, id)?.StormwaterJurisdictionID;
     }
 }

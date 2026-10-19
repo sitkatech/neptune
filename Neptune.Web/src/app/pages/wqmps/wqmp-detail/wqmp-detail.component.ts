@@ -137,6 +137,11 @@ export class WqmpDetailComponent implements OnInit, OnChanges {
         return this.authenticationService.doesCurrentUserHaveJurisdictionEditPermission();
     }
 
+    // NPT-1129: deleting a verification is Manager-only (the API gates it with WaterQualityManagementPlanManageFeature).
+    public get currentPersonCanManage(): boolean {
+        return this.authenticationService.doesCurrentUserHaveJurisdictionManagePermission();
+    }
+
     public get isAnonymousOrUnassigned(): boolean {
         return !this.currentUser || this.currentUser.RoleID == RoleEnum.Unassigned;
     }
@@ -398,11 +403,13 @@ export class WqmpDetailComponent implements OnInit, OnChanges {
                         ActionIcon: "fas fa-edit",
                         ActionHandler: () => this.router.navigate(["/water-quality-management-plans", wqmpID, "verifications", verifyID]),
                     });
-                    actions.push({
-                        ActionName: "Delete",
-                        ActionIcon: "fas fa-trash text-danger",
-                        ActionHandler: () => this.confirmDeleteVerification(verifyID, params.data.VerificationDate),
-                    });
+                    if (this.currentPersonCanManage) {
+                        actions.push({
+                            ActionName: "Delete",
+                            ActionIcon: "fas fa-trash text-danger",
+                            ActionHandler: () => this.confirmDeleteVerification(verifyID, params.data.VerificationDate),
+                        });
+                    }
                 }
                 return actions;
             }),
@@ -637,7 +644,8 @@ export class WqmpDetailComponent implements OnInit, OnChanges {
     // NPT-995 rework: Delete moved off the wizard sign-off step into a row action on
     // the verifications grid. Mirrors the project-list deleteModal pattern. Gated by
     // the same currentPersonCanEdit + IsDraft conditions as the action column itself,
-    // so finalized verifications can't be removed accidentally.
+    // so finalized verifications can't be removed accidentally. NPT-1129: also gated by
+    // currentPersonCanManage, since deleting a verification is Manager-only.
     confirmDeleteVerification(verifyID: number, verificationDate: string | null | undefined): void {
         const dateText = verificationDate ? new Date(verificationDate).toLocaleDateString() : "this draft";
         this.confirmService
