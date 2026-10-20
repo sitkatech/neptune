@@ -352,7 +352,7 @@ namespace Neptune.API.Controllers
         }
 
         [HttpPost("{waterQualityManagementPlanID}/verifications")]
-        [JurisdictionEditFeature]
+        [WaterQualityManagementPlanEditFeature]
         [EntityNotFound(typeof(WaterQualityManagementPlan), "waterQualityManagementPlanID")]
         public async Task<ActionResult<WaterQualityManagementPlanVerifyDetailDto>> CreateVerification(
             [FromRoute] int waterQualityManagementPlanID, [FromBody] WaterQualityManagementPlanVerifyUpsertDto dto)
@@ -362,7 +362,7 @@ namespace Neptune.API.Controllers
         }
 
         [HttpPut("{waterQualityManagementPlanID}/verifications/{waterQualityManagementPlanVerifyID}")]
-        [JurisdictionEditFeature]
+        [WaterQualityManagementPlanEditFeature]
         [EntityNotFound(typeof(WaterQualityManagementPlan), "waterQualityManagementPlanID")]
         [EntityNotFound(typeof(WaterQualityManagementPlanVerify), "waterQualityManagementPlanVerifyID")]
         public async Task<ActionResult<WaterQualityManagementPlanVerifyDetailDto>> UpdateVerification(
@@ -377,7 +377,7 @@ namespace Neptune.API.Controllers
         }
 
         [HttpDelete("{waterQualityManagementPlanID}/verifications/{waterQualityManagementPlanVerifyID}")]
-        [JurisdictionEditFeature]
+        [WaterQualityManagementPlanManageFeature]
         [EntityNotFound(typeof(WaterQualityManagementPlan), "waterQualityManagementPlanID")]
         [EntityNotFound(typeof(WaterQualityManagementPlanVerify), "waterQualityManagementPlanVerifyID")]
         public async Task<IActionResult> DeleteVerification(
@@ -394,7 +394,7 @@ namespace Neptune.API.Controllers
         // legacy MVC SupportingDocumentation panel (single FileResource per verify). Draft-only —
         // finalized verifications are locked.
         [HttpPost("{waterQualityManagementPlanID}/verifications/{waterQualityManagementPlanVerifyID}/supporting-documentation")]
-        [JurisdictionEditFeature]
+        [WaterQualityManagementPlanEditFeature]
         [Consumes("multipart/form-data")]
         [RequestSizeLimit(400 * 1024 * 1024)]
         [RequestFormLimits(MultipartBodyLengthLimit = 400 * 1024 * 1024)]
@@ -432,7 +432,7 @@ namespace Neptune.API.Controllers
         }
 
         [HttpDelete("{waterQualityManagementPlanID}/verifications/{waterQualityManagementPlanVerifyID}/supporting-documentation")]
-        [JurisdictionEditFeature]
+        [WaterQualityManagementPlanEditFeature]
         [EntityNotFound(typeof(WaterQualityManagementPlan), "waterQualityManagementPlanID")]
         [EntityNotFound(typeof(WaterQualityManagementPlanVerify), "waterQualityManagementPlanVerifyID")]
         public async Task<IActionResult> DeleteVerificationSupportingDocumentation(

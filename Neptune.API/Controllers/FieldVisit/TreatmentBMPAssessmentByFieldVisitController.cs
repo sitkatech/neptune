@@ -32,7 +32,7 @@ public class TreatmentBMPAssessmentByFieldVisitController(NeptuneDbContext dbCon
     }
 
     [HttpPost("{treatmentBMPAssessmentTypeID}")]
-    [JurisdictionEditFeature]
+    [FieldVisitEditFeature]
     [EntityNotFound(typeof(FieldVisit), "fieldVisitID")]
     public async Task<ActionResult<TreatmentBMPAssessmentDetailDto>> Create([FromRoute] int fieldVisitID, [FromRoute] int treatmentBMPAssessmentTypeID)
     {

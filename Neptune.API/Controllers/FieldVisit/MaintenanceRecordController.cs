@@ -45,7 +45,7 @@ public class MaintenanceRecordController(NeptuneDbContext dbContext, ILogger<Mai
     }
 
     [HttpPost("/field-visits/{fieldVisitID}/maintenance-record")]
-    [JurisdictionEditFeature]
+    [FieldVisitEditFeature]
     [EntityNotFound(typeof(FieldVisit), "fieldVisitID")]
     public async Task<ActionResult<MaintenanceRecordDetailDto>> CreateForFieldVisit([FromRoute] int fieldVisitID)
     {
@@ -54,7 +54,7 @@ public class MaintenanceRecordController(NeptuneDbContext dbContext, ILogger<Mai
     }
 
     [HttpPut("{maintenanceRecordID}")]
-    [JurisdictionEditFeature]
+    [MaintenanceRecordEditFeature]
     [EntityNotFound(typeof(MaintenanceRecord), "maintenanceRecordID")]
     public async Task<ActionResult<MaintenanceRecordDetailDto>> Update([FromRoute] int maintenanceRecordID, [FromBody] MaintenanceRecordUpsertDto upsertDto)
     {
@@ -66,7 +66,7 @@ public class MaintenanceRecordController(NeptuneDbContext dbContext, ILogger<Mai
     // record. Editors can create/update maintenance records on visits they're performing but
     // can't delete them.
     [HttpDelete("{maintenanceRecordID}")]
-    [JurisdictionManageFeature]
+    [MaintenanceRecordManageFeature]
     [EntityNotFound(typeof(MaintenanceRecord), "maintenanceRecordID")]
     public async Task<IActionResult> Delete([FromRoute] int maintenanceRecordID)
     {

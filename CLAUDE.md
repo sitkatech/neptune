@@ -114,18 +114,24 @@ Custom `BaseAuthorizationAttribute` (implements `IAuthorizationFilter`). Derived
 | `JurisdictionEditFeature` | Admin, SitkaAdmin, JurisdictionManager, JurisdictionEditor (role check only — no jurisdiction match) |
 | `TreatmentBMPEditFeature` | Same as JurisdictionEditFeature + jurisdiction match against the routed TreatmentBMP |
 | `WaterQualityManagementPlanEditFeature` | Same as JurisdictionEditFeature + jurisdiction match against the routed WQMP |
+| `WaterQualityManagementPlanManageFeature` | Same as JurisdictionManageFeature + jurisdiction match against the routed WQMP |
+| `FieldVisitEditFeature` / `FieldVisitManageFeature` | Edit / Manage roles + jurisdiction match against the routed field visit's BMP |
+| `MaintenanceRecordEditFeature` / `MaintenanceRecordManageFeature` | Edit / Manage roles + jurisdiction match against the routed maintenance record's BMP |
+| `TreatmentBMPAssessmentEditFeature` | Same as JurisdictionEditFeature + jurisdiction match against the routed assessment's BMP (also covers its photo endpoints) |
 | `UserViewFeature` | Any authenticated user |
 | `LoggedInUnclassifiedFeature` | Unassigned users |
 
-Note: the plain `Jurisdiction*Feature` attributes check **role only** — jurisdiction scoping must come from an entity-scoped attribute (the `*EditFeature` variants above, which resolve the route id and require `IsAssignedToStormwaterJurisdiction`) or an in-controller check against the caller's assigned jurisdictions.
+Note: the plain `Jurisdiction*Feature` attributes check **role only** — jurisdiction scoping must come from an entity-scoped attribute (the `*EditFeature` / `*ManageFeature` variants above, which resolve the route id and require `IsAssignedToStormwaterJurisdiction`) or an in-controller check against the caller's assigned jurisdictions. Every write endpoint routed by a record id should use one of these, not `JurisdictionEditFeature` / `JurisdictionManageFeature`.
+
+To scope a new record type, derive from `JurisdictionScopedFeature` (`Neptune.API/Services/Authorization/`): pass `EditRoles` or `ManageRoles`, set `RouteKey` to the route parameter name, and implement `GetStormwaterJurisdictionID` with a projection-only lookup that returns null when the record doesn't exist (see `FieldVisits.GetStormwaterJurisdictionIDForFeatureContextCheck`). The base returns 404 for a missing record before 403 for an out-of-jurisdiction caller, and Admin/SitkaAdmin always pass the jurisdiction match. Its public `Evaluate` lets tests check the decision without an HTTP context (see `JurisdictionScopedFeatureTests`).
 
 Roles: Admin(1), SitkaAdmin(2), JurisdictionManager(3), JurisdictionEditor(4), Unassigned(5), Viewer(6), ExternalViewer(7).
 
-**JurisdictionEditor vs JurisdictionManager:** The two roles are nearly identical — both operate within their assigned jurisdiction. Editors should be able to do almost everything Managers can. The narrow exceptions where Manager-only (`[JurisdictionManageFeature]`) is correct:
-- **Deleting primary records** — WQMPs, BMPs, verifications
-- **Attestation/verification actions** — marking BMPs as verified, promoting a WQMP from Draft to Active
+**JurisdictionEditor vs JurisdictionManager:** The two roles are nearly identical — both operate within their assigned jurisdiction. Editors should be able to do almost everything Managers can. The narrow exceptions where Manager-only (`[JurisdictionManageFeature]`, or a scoped `*ManageFeature` on a record-routed endpoint) is correct:
+- **Deleting primary records** — WQMPs, BMPs, verifications, field visits, maintenance records
+- **Attestation/verification actions** — marking BMPs as verified, promoting a WQMP from Draft to Active, verifying / marking provisional / returning a field visit to edit
 
-Everything else — CRUD on supporting data (documents, attributes, delineations), creating WQMPs from PDF upload, running AI extraction, editing metadata — should use `[JurisdictionEditFeature]`. When an endpoint or UI gate is set to `[JurisdictionManageFeature]`, verify it falls into one of the above exceptions before assuming the restriction is correct.
+Everything else — CRUD on supporting data (documents, attributes, delineations), creating WQMPs from PDF upload, running AI extraction, editing metadata — should use `[JurisdictionEditFeature]` (or a scoped `*EditFeature` on a record-routed endpoint). When an endpoint or UI gate is Manager-only, verify it falls into one of the above exceptions before assuming the restriction is correct.
 
 ### Background Jobs (Hangfire)
 

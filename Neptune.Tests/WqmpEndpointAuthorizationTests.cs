@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Neptune.API.Controllers;
 using Neptune.API.Services.Authorization;
 using Neptune.EFModels.Entities;
+using Neptune.Tests.Helpers;
 
 namespace Neptune.Tests
 {
@@ -70,13 +71,7 @@ namespace Neptune.Tests
         [TestMethod]
         public void WaterQualityManagementPlanEditFeature_GrantsJurisdictionEditor()
         {
-            // grantedRoles is a primary-constructor parameter captured on BaseAuthorizationAttribute;
-            // locate its compiler-generated backing field by type rather than by (unstable) name.
-            var attribute = new WaterQualityManagementPlanEditFeature();
-            var rolesField = typeof(BaseAuthorizationAttribute)
-                .GetFields(BindingFlags.NonPublic | BindingFlags.Instance)
-                .Single(f => typeof(IEnumerable<RoleEnum>).IsAssignableFrom(f.FieldType));
-            var grantedRoles = ((IEnumerable<RoleEnum>)rolesField.GetValue(attribute)!).ToList();
+            var grantedRoles = AuthorizationAttributeHelpers.GetGrantedRoles(new WaterQualityManagementPlanEditFeature());
 
             CollectionAssert.AreEquivalent(
                 new List<RoleEnum> { RoleEnum.SitkaAdmin, RoleEnum.Admin, RoleEnum.JurisdictionManager, RoleEnum.JurisdictionEditor },

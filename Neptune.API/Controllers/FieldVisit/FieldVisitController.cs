@@ -45,7 +45,7 @@ public class FieldVisitController(NeptuneDbContext dbContext, ILogger<FieldVisit
     }
 
     [HttpPost("/treatment-bmps/{treatmentBMPID}/field-visits")]
-    [JurisdictionEditFeature]
+    [TreatmentBMPEditFeature]
     [EntityNotFound(typeof(TreatmentBMP), "treatmentBMPID")]
     public async Task<ActionResult<FieldVisitDto>> Create([FromRoute] int treatmentBMPID, [FromBody] FieldVisitCreateDto createDto)
     {
@@ -54,7 +54,7 @@ public class FieldVisitController(NeptuneDbContext dbContext, ILogger<FieldVisit
     }
 
     [HttpPut("{fieldVisitID}/date-and-type")]
-    [JurisdictionEditFeature]
+    [FieldVisitEditFeature]
     [EntityNotFound(typeof(FieldVisit), "fieldVisitID")]
     public async Task<ActionResult<FieldVisitDto>> UpdateDateAndType([FromRoute] int fieldVisitID, [FromBody] FieldVisitUpsertDto upsertDto)
     {
@@ -63,7 +63,7 @@ public class FieldVisitController(NeptuneDbContext dbContext, ILogger<FieldVisit
     }
 
     [HttpPut("{fieldVisitID}/inventory-updated")]
-    [JurisdictionEditFeature]
+    [FieldVisitEditFeature]
     [EntityNotFound(typeof(FieldVisit), "fieldVisitID")]
     public async Task<ActionResult<FieldVisitDto>> UpdateInventoryUpdated([FromRoute] int fieldVisitID, [FromBody] FieldVisitInventoryUpdatedDto dto)
     {
@@ -75,7 +75,7 @@ public class FieldVisitController(NeptuneDbContext dbContext, ILogger<FieldVisit
     // — they signal the field visit's regulatory record is finalized. JurisdictionEditor can
     // perform field visits and edit them while in progress but cannot attest to the result.
     [HttpPost("{fieldVisitID}/verify")]
-    [JurisdictionManageFeature]
+    [FieldVisitManageFeature]
     [EntityNotFound(typeof(FieldVisit), "fieldVisitID")]
     public async Task<ActionResult<FieldVisitDto>> Verify([FromRoute] int fieldVisitID)
     {
@@ -84,7 +84,7 @@ public class FieldVisitController(NeptuneDbContext dbContext, ILogger<FieldVisit
     }
 
     [HttpPost("{fieldVisitID}/mark-provisional")]
-    [JurisdictionManageFeature]
+    [FieldVisitManageFeature]
     [EntityNotFound(typeof(FieldVisit), "fieldVisitID")]
     public async Task<ActionResult<FieldVisitDto>> MarkProvisional([FromRoute] int fieldVisitID)
     {
@@ -93,7 +93,7 @@ public class FieldVisitController(NeptuneDbContext dbContext, ILogger<FieldVisit
     }
 
     [HttpPost("{fieldVisitID}/return-to-edit")]
-    [JurisdictionManageFeature]
+    [FieldVisitManageFeature]
     [EntityNotFound(typeof(FieldVisit), "fieldVisitID")]
     public async Task<ActionResult<FieldVisitDto>> ReturnToEdit([FromRoute] int fieldVisitID)
     {
@@ -105,7 +105,7 @@ public class FieldVisitController(NeptuneDbContext dbContext, ILogger<FieldVisit
     // post-wrap-up attestation actions (Verify / Mark Provisional / Return to Edit) need the
     // Manager gate.
     [HttpPost("{fieldVisitID}/finalize")]
-    [JurisdictionEditFeature]
+    [FieldVisitEditFeature]
     [EntityNotFound(typeof(FieldVisit), "fieldVisitID")]
     public async Task<ActionResult<FieldVisitDto>> Finalize([FromRoute] int fieldVisitID)
     {
@@ -115,7 +115,7 @@ public class FieldVisitController(NeptuneDbContext dbContext, ILogger<FieldVisit
 
     // NPT-984: Delete Field Visit is Manager-only — destructive, removes the field record.
     [HttpDelete("{fieldVisitID}")]
-    [JurisdictionManageFeature]
+    [FieldVisitManageFeature]
     [EntityNotFound(typeof(FieldVisit), "fieldVisitID")]
     public async Task<IActionResult> Delete([FromRoute] int fieldVisitID)
     {

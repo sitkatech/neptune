@@ -66,7 +66,7 @@ public class TreatmentBMPAssessmentController(NeptuneDbContext dbContext, ILogge
     }
 
     [HttpPut("{treatmentBMPAssessmentID}/observations")]
-    [JurisdictionEditFeature]
+    [TreatmentBMPAssessmentEditFeature]
     [EntityNotFound(typeof(TreatmentBMPAssessment), "treatmentBMPAssessmentID")]
     public async Task<ActionResult<TreatmentBMPAssessmentDetailDto>> UpsertObservations([FromRoute] int treatmentBMPAssessmentID, [FromBody] TreatmentBMPAssessmentUpsertDto upsertDto)
     {
@@ -75,7 +75,7 @@ public class TreatmentBMPAssessmentController(NeptuneDbContext dbContext, ILogge
     }
 
     [HttpPost("{treatmentBMPAssessmentID}/copy-from-initial")]
-    [JurisdictionEditFeature]
+    [TreatmentBMPAssessmentEditFeature]
     [EntityNotFound(typeof(TreatmentBMPAssessment), "treatmentBMPAssessmentID")]
     public async Task<ActionResult<TreatmentBMPAssessmentDetailDto>> CopyFromInitial([FromRoute] int treatmentBMPAssessmentID)
     {
@@ -84,7 +84,7 @@ public class TreatmentBMPAssessmentController(NeptuneDbContext dbContext, ILogge
     }
 
     [HttpDelete("{treatmentBMPAssessmentID}")]
-    [JurisdictionEditFeature]
+    [TreatmentBMPAssessmentEditFeature]
     [EntityNotFound(typeof(TreatmentBMPAssessment), "treatmentBMPAssessmentID")]
     public async Task<IActionResult> Delete([FromRoute] int treatmentBMPAssessmentID)
     {
