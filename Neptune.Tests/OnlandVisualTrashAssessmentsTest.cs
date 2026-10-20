@@ -21,6 +21,7 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Neptune.EFModels.Entities;
 
@@ -29,20 +30,22 @@ namespace Neptune.Tests
     /// <summary>
     /// Covers the NPT-1065 progress-score rule: a progress score requires at least 1 completed
     /// progress OVTA within the last 5 years (previously 2 within 4 years). The score is the rounded
-    /// average of the top 3 most recent qualifying assessments.
+    /// average of the top 3 most recent qualifying assessments, with ties rounding up (NPT-1136).
     /// </summary>
     [TestClass]
     public class OnlandVisualTrashAssessmentsTest
     {
         // NumericValue mapping from OnlandVisualTrashAssessmentScore.Binding.cs: A=4, B=3, C=2, D=1
-        private static OnlandVisualTrashAssessment BuildAssessment(
+        internal static OnlandVisualTrashAssessment BuildAssessment(
             OnlandVisualTrashAssessmentScore score,
             DateOnly completedDate,
             bool isProgressAssessment = true,
-            bool isComplete = true)
+            bool isComplete = true,
+            int id = 0)
         {
             return new OnlandVisualTrashAssessment
             {
+                OnlandVisualTrashAssessmentID = id,
                 OnlandVisualTrashAssessmentStatusID = isComplete
                     ? OnlandVisualTrashAssessmentStatus.Complete.OnlandVisualTrashAssessmentStatusID
                     : OnlandVisualTrashAssessmentStatus.InProgress.OnlandVisualTrashAssessmentStatusID,
@@ -52,7 +55,10 @@ namespace Neptune.Tests
             };
         }
 
-        private static DateOnly Today => DateOnly.FromDateTime(DateTime.UtcNow);
+        internal static DateOnly Today => DateOnly.FromDateTime(DateTime.UtcNow);
+
+        internal static OnlandVisualTrashAssessmentScore ScoreFromLetter(string letter) =>
+            OnlandVisualTrashAssessmentScore.All.Single(x => x.OnlandVisualTrashAssessmentScoreDisplayName == letter);
 
         [TestMethod]
         public void SingleCompletedProgressAssessmentWithinFiveYearsProducesScore()
@@ -127,6 +133,57 @@ namespace Neptune.Tests
 
             Assert.AreEqual(OnlandVisualTrashAssessmentScore.A, result,
                 "Only the top 3 most recent assessments should be averaged.");
+        }
+
+        [TestMethod]
+        // NPT-1136: ties round up (toward the better letter), not banker's rounding.
+        [DataRow("A,B", "A", DisplayName = "3.5 (A+B) -> A")]
+        [DataRow("B,C", "B", DisplayName = "2.5 (B+C) -> B")]
+        [DataRow("C,D", "C", DisplayName = "1.5 (C+D) -> C")]
+        // Non-ties still round to the nearest letter.
+        [DataRow("A,A,B", "A", DisplayName = "3.67 (A,A,B) -> A")]
+        [DataRow("B,C,C", "C", DisplayName = "2.33 (B,C,C) -> C")]
+        [DataRow("A,B,B", "B", DisplayName = "3.33 (A,B,B) -> B")]
+        public void ProgressScoreRoundsMidpointUp(string letters, string expectedLetter)
+        {
+            var assessments = letters.Split(',')
+                .Select((letter, i) => BuildAssessment(ScoreFromLetter(letter), Today.AddDays(-i)))
+                .ToList();
+
+            var result = OnlandVisualTrashAssessments.CalculateProgressScore(assessments);
+
+            Assert.AreEqual(ScoreFromLetter(expectedLetter), result);
+        }
+
+        [TestMethod]
+        public void SameDayAssessmentsAtTheTopThreeBoundaryBreakTiesOnID()
+        {
+            // The 3rd and 4th most recent share a CompletedDate; the higher ID is the newer one and wins
+            // (matches the ROW_NUMBER order in dbo.vOnlandVisualTrashAssessmentAreaProgress).
+            // Top 3 = A, A, A (ID 4) -> A. If the D (ID 3) were picked instead: (4+4+1)/3 = 3 -> B.
+            var sameDay = Today.AddDays(-20);
+            var assessments = new List<OnlandVisualTrashAssessment>
+            {
+                BuildAssessment(OnlandVisualTrashAssessmentScore.D, sameDay, id: 3),
+                BuildAssessment(OnlandVisualTrashAssessmentScore.A, sameDay, id: 4),
+                BuildAssessment(OnlandVisualTrashAssessmentScore.A, Today, id: 1),
+                BuildAssessment(OnlandVisualTrashAssessmentScore.A, Today.AddDays(-10), id: 2),
+            };
+
+            var result = OnlandVisualTrashAssessments.CalculateProgressScore(assessments);
+
+            Assert.AreEqual(OnlandVisualTrashAssessmentScore.A, result);
+        }
+
+        [TestMethod]
+        [DataRow(3.5, "A")]
+        [DataRow(2.5, "B")]
+        [DataRow(1.5, "C")]
+        [DataRow(11.0 / 3, "A")]
+        [DataRow(7.0 / 3, "C")]
+        public void FromAverageNumericValueRoundsMidpointUp(double average, string expectedLetter)
+        {
+            Assert.AreEqual(ScoreFromLetter(expectedLetter), OnlandVisualTrashAssessmentScore.FromAverageNumericValue(average));
         }
     }
 }

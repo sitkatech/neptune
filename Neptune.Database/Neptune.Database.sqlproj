@@ -448,6 +448,7 @@
     <None Include="Scripts\ReleaseScripts\039 - MakeValid on invalid Delineation geometries (recurrence).sql" />
     <None Include="Scripts\ReleaseScripts\040 - NPT-943 Normalize WQMP MaintenanceContactState.sql" />
     <None Include="Scripts\ReleaseScripts\041 - NPT-1120 Clear cached Anthropic file ids so PDFs re-upload.sql" />
+    <None Include="Scripts\ReleaseScripts\042 - NPT-1136 Recalculate OVTA scores with midpoint-up rounding.sql" />
     <Build Include="dbo\Tables\dbo.WaterQualityManagementPlanExtractionResult.sql" />
     <Build Include="dbo\Tables\dbo.AITokenUsage.sql" />
   </ItemGroup>
