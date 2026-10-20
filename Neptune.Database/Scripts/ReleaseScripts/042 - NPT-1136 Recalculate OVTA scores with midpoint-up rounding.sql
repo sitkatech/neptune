@@ -57,7 +57,8 @@ BEGIN
 				--OnlandVisualTrashAssessmentStatusName = Complete
 			WHERE ovta2.OnlandVisualTrashAssessmentStatusID = 2
 			  AND ovta2.IsProgressAssessment = 1
-			  AND ovta2.CompletedDate >= DATEADD(year, -5, CAST(GETDATE() AS date))
+			  -- UTC to match the DateTime.UtcNow cutoff in CalculateProgressScore
+			  AND ovta2.CompletedDate >= DATEADD(year, -5, CAST(GETUTCDATE() AS date))
 		) ranked
 		WHERE rn <= 3
 		GROUP BY OnlandVisualTrashAssessmentAreaID

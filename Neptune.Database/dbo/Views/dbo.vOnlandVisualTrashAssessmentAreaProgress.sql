@@ -27,7 +27,8 @@ From (
 			inner join dbo.OnlandVisualTrashAssessmentScore score
 				on ovta.OnlandVisualTrashAssessmentScoreID = score.OnlandVisualTrashAssessmentScoreID
 		where ovta.OnlandVisualTrashAssessmentStatusID = 2 -- Complete
-			and IsProgressAssessment = 1 and CompletedDate >= DATEADD(year, -5, CAST(CURRENT_TIMESTAMP AS date))
+			-- UTC to match the DateTime.UtcNow cutoff in CalculateProgressScore
+			and IsProgressAssessment = 1 and CompletedDate >= DATEADD(year, -5, CAST(GETUTCDATE() AS date))
 		) subq
 	where RoWNumber <=3
 	group by (OnlandVisualTrashAssessmentAreaID)
