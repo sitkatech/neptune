@@ -5615,6 +5615,19 @@
         }
       }
     },
+    "/parcels/enqueue-geometry-4326-backfill": {
+      "post": {
+        "tags": [
+          "Parcel"
+        ],
+        "operationId": "EnqueueGeometry4326Backfill_Parcel",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/precipitation-zones/enqueue-refresh": {
       "post": {
         "tags": [

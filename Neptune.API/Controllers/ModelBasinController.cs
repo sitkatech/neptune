@@ -22,6 +22,6 @@ public class ModelBasinController(
     public IActionResult EnqueueRefresh()
     {
         BackgroundJob.Enqueue<OCGISService>(x => x.RefreshModelBasins());
-        return Ok("Model Basins refresh has been queued.");
+        return Ok();
     }
 }

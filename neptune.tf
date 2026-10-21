@@ -978,3 +978,25 @@ resource "datadog_monitor" "anthropic_credit_balance" {
   tags              = ["env:${var.environment}", "managed:terraformed", "team:${var.team}"]
 }
 
+# NPT-1140: the County GIS parcel sync (and the Geometry4326 backfill) log "ParcelSyncFailed" on
+# any failure. They run as Hangfire jobs inside neptune-api. The sync rolls back and leaves the
+# old parcels in place, so this alert means the parcel data is stale, not gone.
+resource "datadog_monitor" "parcel_sync_failed" {
+  name    = "Neptune parcel sync failed"
+  type    = "log alert"
+  query   = "logs(\"service:neptune-api env:${var.environment} \\\"ParcelSyncFailed\\\"\").index(\"*\").rollup(\"count\").last(\"5m\") > 0"
+  message = <<-EOT
+    {{#is_alert}}The County GIS parcel sync in Neptune (${var.environment}) failed. The existing parcels were left in place, and the Admin who queued it plus all SitkaAdmins were emailed the reason and counts. The triggering log line has the reason (OCGIS error, projection failure, or a rolled-back swap). Re-queue it from Data Hub > County GIS once the cause is fixed.{{/is_alert}}
+    {{#is_recovery}}No new parcel sync failures in Neptune (${var.environment}).{{/is_recovery}}
+    Notify @rlee@esassoc.com @sgordon@esassoc.com @team-${var.team}${var.environment == "qa" ? "-qa" : ""}
+  EOT
+
+  monitor_thresholds {
+    critical = 0
+  }
+
+  notify_no_data    = false
+  renotify_interval = 0
+  tags              = ["env:${var.environment}", "managed:terraformed", "team:${var.team}"]
+}
+

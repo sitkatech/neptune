@@ -33,4 +33,7 @@ public partial class ParcelStaging
     [StringLength(5)]
     [Unicode(false)]
     public string? ParcelZipCode { get; set; }
+
+    [Column(TypeName = "geometry")]
+    public Geometry? Geometry4326 { get; set; }
 }

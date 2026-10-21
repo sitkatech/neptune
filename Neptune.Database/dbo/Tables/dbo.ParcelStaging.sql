@@ -5,6 +5,7 @@ CREATE TABLE [dbo].[ParcelStaging](
 	[ParcelAreaInSquareFeet] [float] NOT NULL,
 	[ParcelAddress] [varchar](150) NULL,
 	[ParcelCityState] [varchar](100) NULL,
-	[ParcelZipCode] [varchar](5) NULL
+	[ParcelZipCode] [varchar](5) NULL,
+	[Geometry4326] [geometry] NULL
 )
 GO

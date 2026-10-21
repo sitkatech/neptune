@@ -22,6 +22,6 @@ public class PrecipitationZoneController(
     public IActionResult EnqueueRefresh()
     {
         BackgroundJob.Enqueue<OCGISService>(x => x.RefreshPrecipitationZones());
-        return Ok("Precipitation Zones refresh has been queued.");
+        return Ok();
     }
 }
