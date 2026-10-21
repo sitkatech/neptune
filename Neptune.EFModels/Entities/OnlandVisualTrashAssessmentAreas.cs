@@ -118,8 +118,8 @@ public static class OnlandVisualTrashAssessmentAreas
         }
 
         var average = completedAndIsBaselineAssessment.Average(x => x.OnlandVisualTrashAssessmentScore.NumericValue);
-        var round = (int)Math.Round(average);
-        return OnlandVisualTrashAssessmentScore.All.SingleOrDefault(x => x.NumericValue == round);
+        // Midpoint-up rounding is deliberate (NPT-1136); see FromAverageNumericValue.
+        return OnlandVisualTrashAssessmentScore.FromAverageNumericValue(average);
     }
 
     public static FeatureCollection GetAssessmentAreaByIDAsFeatureCollection(NeptuneDbContext dbContext, int onlandVisualTrashAssessmentAreaID)

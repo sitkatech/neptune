@@ -90,4 +90,6 @@ GO
 GO
 :r ".\041 - NPT-1120 Clear cached Anthropic file ids so PDFs re-upload.sql"
 GO
+:r ".\042 - NPT-1136 Recalculate OVTA scores with midpoint-up rounding.sql"
+GO
 
