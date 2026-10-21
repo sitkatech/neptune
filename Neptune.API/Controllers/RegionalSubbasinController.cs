@@ -71,7 +71,7 @@ public class RegionalSubbasinController : SitkaController<RegionalSubbasinContro
     public IActionResult EnqueueRefresh()
     {
         BackgroundJob.Enqueue<RegionalSubbasinRefreshJob>(x => x.RunJob());
-        return Ok("Regional Subbasin refresh has been queued.");
+        return Ok();
     }
 
     [HttpPost("/graph-trace-as-feature-collection-from-point")]

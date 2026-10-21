@@ -19,6 +19,14 @@ public static class People
         return persons;
     }
 
+    public static async Task<List<string>> ListEmailAddressesForActiveSitkaAdminsAsync(NeptuneDbContext dbContext)
+    {
+        return await GetImpl(dbContext).AsNoTracking()
+            .Where(x => x.IsActive && x.RoleID == (int)RoleEnum.SitkaAdmin && x.Email != null)
+            .Select(x => x.Email)
+            .ToListAsync();
+    }
+
     public static async Task<List<PersonSimpleDto>> ListAsSimpleDtoAsync(NeptuneDbContext dbContext)
     {
         var people = await GetImpl(dbContext)

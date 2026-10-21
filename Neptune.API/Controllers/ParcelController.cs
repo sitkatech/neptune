@@ -80,8 +80,22 @@ namespace Neptune.API.Controllers
         [AdminFeature]
         public IActionResult EnqueueRefresh()
         {
-            BackgroundJob.Enqueue<OCGISService>(x => x.RefreshParcels());
-            return Ok("Parcels refresh has been queued.");
+            var personID = CallingUser.PersonID;
+            BackgroundJob.Enqueue<OCGISService>(x => x.RefreshParcels(personID));
+            // NPT-1140: no body. A string body goes out as text/plain, which the generated client
+            // tries to parse as JSON, so the Data Hub buttons reported "Failed to queue" even
+            // though the job was queued. Same for the other enqueue-refresh endpoints.
+            return Ok();
+        }
+
+        // NPT-1140: fills in missing parcel map geometry (Geometry4326) without a full re-sync.
+        [HttpPost("enqueue-geometry-4326-backfill")]
+        [AdminFeature]
+        public IActionResult EnqueueGeometry4326Backfill()
+        {
+            var personID = CallingUser.PersonID;
+            BackgroundJob.Enqueue<OCGISService>(x => x.BackfillParcelGeometry4326(personID));
+            return Ok();
         }
     }
 }

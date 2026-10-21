@@ -22,6 +22,6 @@ public class OCTAPrioritizationController(
     public IActionResult EnqueueRefresh()
     {
         BackgroundJob.Enqueue<OCGISService>(x => x.RefreshOCTAPrioritizations());
-        return Ok("OCTA Prioritization refresh has been queued.");
+        return Ok();
     }
 }

@@ -12,6 +12,13 @@
             [disabledTooltip]="adminOnlyTooltip"
             (action)="refresh('parcels', 'Parcels')"
         ></data-hub-action-button>
+        <data-hub-action-button
+            label="Fill In Missing Map Geometry"
+            icon="refresh"
+            [disabled]="!isAdmin() || refreshing() !== null"
+            [disabledTooltip]="adminOnlyTooltip"
+            (action)="backfillParcelGeometry()"
+        ></data-hub-action-button>
 
         <h3>Regional Subbasins</h3>
         <custom-rich-text [customRichTextTypeID]="NeptunePageTypeEnum.RegionalSubbasinsDataHub"></custom-rich-text>

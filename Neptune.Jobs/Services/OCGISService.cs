@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Net.Http.Json;
+using System.Net.Mail;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Azure.Storage.Blobs;
@@ -174,39 +175,211 @@ public class OCGISService(
         await dbContext.SaveChangesAsync();
     }
 
-    public async Task RefreshParcels()
+    // NPT-1140: the parcel sync repairs and projects every parcel in C# *before* staging, in bounded
+    // batches, then swaps staging into the live tables in one verified transaction. Any failure
+    // leaves the existing parcels in place, logs ParcelSyncFailed (Datadog monitor in neptune.tf)
+    // and emails the Admin who queued it plus all SitkaAdmins.
+    public async Task RefreshParcels(int personID)
     {
         dbContext.Database.SetCommandTimeout(30000);
-        await dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pParcelStagingDelete");
-
-        var parcelFromEsris = await RetrieveParcels();
-        var parcelStagings = parcelFromEsris.Select(x =>
+        var counts = new ParcelSyncCounts();
+        var stage = "fetching parcels from OCGIS";
+        try
         {
-            var parcelGeometry = x.Geometry;
-            parcelGeometry.SRID = Proj4NetHelper.NAD_83_HARN_CA_ZONE_VI_SRID;
-            return new ParcelStaging()
+            await dbContext.Database.ExecuteSqlRawAsync("EXEC dbo.pParcelStagingDelete");
+
+            var parcelFromEsris = await RetrieveParcels();
+            counts.Fetched = parcelFromEsris.Count;
+            if (counts.Fetched == 0)
             {
-                Geometry = parcelGeometry,
-                ParcelNumber = x.ParcelNumber,
-                ParcelAreaInSquareFeet = x.ParcelAreaInSquareFeet,
-                ParcelAddress = x.ParcelAddress,
-                ParcelCityState = x.ParcelCityState,
-                ParcelZipCode = x.ParcelZipCode
+                throw new RemoteServiceException("OCGIS returned no parcels.");
+            }
 
-            };
-        }).ToList();
-        dbContext.ParcelStagings.AddRange(parcelStagings);
-        await dbContext.SaveChangesAsync();
+            stage = "repairing, projecting and staging parcels";
+            var batch = new List<ParcelStaging>(ParcelGeometries.ProjectionBatchSize);
+            for (var i = 0; i < parcelFromEsris.Count; i++)
+            {
+                var parcelFromEsri = parcelFromEsris[i];
+                // drop our reference as we go so staged geometries can be collected
+                parcelFromEsris[i] = null!;
 
-        if (parcelStagings.Count > 0)
+                if (string.IsNullOrWhiteSpace(parcelFromEsri.ParcelNumber))
+                {
+                    counts.BlankParcelNumber++;
+                    continue;
+                }
+
+                if (parcelFromEsri.Geometry != null)
+                {
+                    parcelFromEsri.Geometry.SRID = Proj4NetHelper.NAD_83_HARN_CA_ZONE_VI_SRID;
+                }
+
+                var repair = PolygonalGeometryRepair.Repair(parcelFromEsri.Geometry);
+                if (repair.Outcome == PolygonalRepairOutcome.Skipped)
+                {
+                    counts.Skipped.Add(new SkippedParcel(parcelFromEsri.ParcelNumber, repair.SkipReason!));
+                    continue;
+                }
+
+                if (repair.Outcome == PolygonalRepairOutcome.Repaired)
+                {
+                    counts.Repaired++;
+                }
+
+                Geometry geometry4326;
+                try
+                {
+                    // reprojection can introduce tiny self-intersections in a valid native shape
+                    geometry4326 = repair.Geometry!.ProjectTo4326().MakeValid();
+                }
+                catch (Exception ex)
+                {
+                    throw new InvalidOperationException($"Could not project parcel {parcelFromEsri.ParcelNumber} to EPSG:4326: {ex.Message}", ex);
+                }
+
+                batch.Add(new ParcelStaging
+                {
+                    Geometry = repair.Geometry,
+                    Geometry4326 = geometry4326,
+                    ParcelNumber = parcelFromEsri.ParcelNumber,
+                    ParcelAreaInSquareFeet = parcelFromEsri.ParcelAreaInSquareFeet,
+                    ParcelAddress = parcelFromEsri.ParcelAddress,
+                    ParcelCityState = parcelFromEsri.ParcelCityState,
+                    ParcelZipCode = parcelFromEsri.ParcelZipCode
+                });
+
+                if (batch.Count == ParcelGeometries.ProjectionBatchSize)
+                {
+                    counts.Staged += await SaveParcelStagingBatch(batch);
+                }
+            }
+            counts.Staged += await SaveParcelStagingBatch(batch);
+
+            if (counts.Staged == 0)
+            {
+                throw new InvalidOperationException("No parcels were left to load after skipping invalid ones.");
+            }
+
+            stage = "swapping staged parcels into the live tables";
+            await Parcels.SwapFromStagingAsync(dbContext, counts.Staged);
+        }
+        catch (Exception ex)
         {
-            // first wipe the dependent WQMPParcel table, then wipe the old parcels
-            await dbContext.Database.ExecuteSqlRawAsync("EXECUTE dbo.pParcelUpdateFromStaging");
+            var reason = $"Failed while {stage}: {ex.Message}";
+            Logger.LogError(ex, "ParcelSyncFailed: {Reason} (Fetched={Fetched}, Staged={Staged}, Repaired={Repaired}, Skipped={Skipped}, BlankParcelNumber={BlankParcelNumber})",
+                reason, counts.Fetched, counts.Staged, counts.Repaired, counts.Skipped.Count, counts.BlankParcelNumber);
+            await SendParcelEmail(personID, "Parcel Sync Failed",
+                "The County GIS parcel sync failed. The parcels that were in Orange County Stormwater Tools before the sync have been left in place.\n\n" +
+                $"Reason: {reason}\n\n{counts.Describe()}");
+            throw;
+        }
 
-            // we need to get the 4326 representation of the geometry; unfortunately can't do it in sql
-            var parcels = dbContext.ParcelGeometries.ToList();
-            parcels.AsParallel().ForAll(x => x.Geometry4326 = x.GeometryNative.ProjectTo4326());
-            await dbContext.SaveChangesAsync();
+        Logger.LogInformation("ParcelSyncCompleted: Fetched={Fetched}, Staged={Staged}, Repaired={Repaired}, Skipped={Skipped}, BlankParcelNumber={BlankParcelNumber}",
+            counts.Fetched, counts.Staged, counts.Repaired, counts.Skipped.Count, counts.BlankParcelNumber);
+        if (counts.Skipped.Count > 0)
+        {
+            await SendParcelEmail(personID, "Parcel Sync Completed with Skipped Parcels",
+                "The County GIS parcel sync completed, but some parcels had geometries that couldn't be repaired into valid polygons and were not loaded.\n\n" +
+                $"{counts.Describe()}\n\n{counts.DescribeSkipped(50)}");
+        }
+    }
+
+    // NPT-1140: restores Geometry4326 for parcels that are already loaded (the 2026-09-23 sync loaded
+    // every parcel but ran out of memory before projecting them, so the parcel map layer was empty).
+    public async Task BackfillParcelGeometry4326(int personID)
+    {
+        dbContext.Database.SetCommandTimeout(30000);
+        try
+        {
+            var missingBefore = await ParcelGeometries.CountMissing4326Async(dbContext);
+            Logger.LogInformation("ParcelGeometry4326Backfill started: {Missing} parcels without Geometry4326", missingBefore);
+            var filled = await ParcelGeometries.Backfill4326Async(dbContext,
+                total => Logger.LogInformation("ParcelGeometry4326Backfill progress: {Filled} of {Missing}", total, missingBefore));
+            var fixedWaterQualityManagementPlanIDs = await WaterQualityManagementPlanBoundaries.Backfill4326FromNativeAsync(dbContext);
+            Logger.LogInformation("ParcelGeometry4326Backfill completed: {Filled} parcels filled in; WQMP boundaries re-projected: {WaterQualityManagementPlanIDs}",
+                filled, string.Join(", ", fixedWaterQualityManagementPlanIDs));
+            var wqmpLine = fixedWaterQualityManagementPlanIDs.Count == 0
+                ? ""
+                : $"\n\nAlso restored the map boundary of {fixedWaterQualityManagementPlanIDs.Count} WQMP(s) whose boundary was saved while parcels were missing it (WQMP IDs: {string.Join(", ", fixedWaterQualityManagementPlanIDs)}).";
+            await SendParcelEmail(personID, "Parcel Geometry Backfill Completed",
+                $"Filled in the map geometry (EPSG:4326) for {filled:N0} of {missingBefore:N0} parcels that were missing it.{wqmpLine}");
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "ParcelSyncFailed: {Reason}", $"Geometry4326 backfill failed: {ex.Message}");
+            await SendParcelEmail(personID, "Parcel Geometry Backfill Failed",
+                $"Filling in the parcel map geometry failed: {ex.Message}\n\nRows that were already filled in are kept; it is safe to queue the backfill again.");
+            throw;
+        }
+    }
+
+    private async Task<int> SaveParcelStagingBatch(List<ParcelStaging> batch)
+    {
+        if (batch.Count == 0)
+        {
+            return 0;
+        }
+
+        var count = batch.Count;
+        dbContext.ParcelStagings.AddRange(batch);
+        await dbContext.SaveChangesAsync();
+        dbContext.ChangeTracker.Clear();
+        batch.Clear();
+        return count;
+    }
+
+    // Email errors are logged, never thrown: they must not hide the sync's own failure.
+    private async Task SendParcelEmail(int personID, string subject, string body)
+    {
+        try
+        {
+            var recipients = await People.ListEmailAddressesForActiveSitkaAdminsAsync(dbContext);
+            var person = await dbContext.People.AsNoTracking().SingleOrDefaultAsync(x => x.PersonID == personID);
+            if (!string.IsNullOrWhiteSpace(person?.Email))
+            {
+                recipients.Add(person.Email);
+            }
+
+            var mailMessage = new MailMessage
+            {
+                Subject = subject,
+                Body = body,
+                From = new MailAddress(neptuneJobConfiguration.Value.DoNotReplyEmail, "Orange County Stormwater Tools")
+            };
+            foreach (var email in recipients.Where(x => !string.IsNullOrWhiteSpace(x)).Distinct(StringComparer.OrdinalIgnoreCase))
+            {
+                mailMessage.To.Add(email);
+            }
+
+            if (mailMessage.To.Count > 0)
+            {
+                await sitkaSmtpClientService.Send(mailMessage);
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Failed to send parcel sync email '{Subject}': {ErrorMessage}", subject, ex.Message);
+        }
+    }
+
+    public record SkippedParcel(string ParcelNumber, string Reason);
+
+    public class ParcelSyncCounts
+    {
+        public int Fetched { get; set; }
+        public int Staged { get; set; }
+        public int Repaired { get; set; }
+        public int BlankParcelNumber { get; set; }
+        public List<SkippedParcel> Skipped { get; } = [];
+
+        public string Describe() =>
+            $"Fetched from OCGIS: {Fetched:N0}\nStaged: {Staged:N0}\nRepaired: {Repaired:N0}\nSkipped (invalid geometry): {Skipped.Count:N0}\nSkipped (no parcel number): {BlankParcelNumber:N0}";
+
+        public string DescribeSkipped(int maxListed)
+        {
+            var lines = Skipped.Take(maxListed).Select(x => $"{x.ParcelNumber}: {x.Reason}");
+            var more = Skipped.Count > maxListed ? $"\n...and {Skipped.Count - maxListed:N0} more ({Skipped.Count:N0} total)" : "";
+            return "Skipped parcels:\n" + string.Join("\n", lines) + more;
         }
     }
 
