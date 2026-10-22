@@ -36,6 +36,6 @@ public class HRUCharacteristicController(
     public IActionResult EnqueueRefresh()
     {
         BackgroundJob.Enqueue<HRURefreshJob>(x => x.RunJob(null));
-        return Ok("HRU refresh has been queued.");
+        return Ok();
     }
 }

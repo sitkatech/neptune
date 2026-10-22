@@ -79,6 +79,26 @@ public static class WaterQualityManagementPlanBoundaries
         return oldGeometryNative;
     }
 
+    /// <summary>
+    /// NPT-1140: while parcels had no Geometry4326 (2026-09-23 sync), boundaries saved from parcel
+    /// selection got a native geometry but an empty Geometry4326 (the 4326 union skips null parcel
+    /// geometries), so they didn't draw on maps. Re-derives Geometry4326 from GeometryNative for
+    /// those. Returns the WQMP IDs that were fixed.
+    /// </summary>
+    public static async Task<List<int>> Backfill4326FromNativeAsync(NeptuneDbContext dbContext)
+    {
+        var boundaries = await dbContext.WaterQualityManagementPlanBoundaries
+            .Where(x => x.GeometryNative != null && (x.Geometry4326 == null || x.Geometry4326.IsEmpty))
+            .ToListAsync();
+        foreach (var boundary in boundaries)
+        {
+            boundary.Geometry4326 = boundary.GeometryNative!.ProjectTo4326().MakeValid();
+        }
+
+        await dbContext.SaveChangesAsync();
+        return boundaries.Select(x => x.WaterQualityManagementPlanID).ToList();
+    }
+
     public static double? CalculateAcreage(NeptuneDbContext dbContext, int waterQualityManagementPlanID)
     {
         return CalculateAcreage(GetByWaterQualityManagementPlanID(dbContext, waterQualityManagementPlanID));

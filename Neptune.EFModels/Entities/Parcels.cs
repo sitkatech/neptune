@@ -146,6 +146,72 @@ namespace Neptune.EFModels.Entities
             return await dbContext.Parcels.AsNoTracking().MaxAsync(x => (DateTime?)x.LastUpdate);
         }
 
+        /// <summary>
+        /// NPT-1140: replaces Parcel, ParcelGeometry and WaterQualityManagementPlanParcel with the
+        /// contents of ParcelStaging in one transaction. The swap is verified before commit (every
+        /// staged parcel loaded, no missing Geometry4326); any failure rolls back and the parcels
+        /// that were there before stay in place. Reuses a caller's transaction through a savepoint
+        /// (the integration tests wrap each test in one and roll it back).
+        /// </summary>
+        public static async Task SwapFromStagingAsync(NeptuneDbContext dbContext, int expectedParcelCount)
+        {
+            const string savepointName = "ParcelSwapFromStaging";
+            var outerTransaction = dbContext.Database.CurrentTransaction;
+            await using var ownTransaction = outerTransaction == null ? await dbContext.Database.BeginTransactionAsync() : null;
+            if (outerTransaction != null)
+            {
+                await outerTransaction.CreateSavepointAsync(savepointName);
+            }
+
+            try
+            {
+                await dbContext.Database.ExecuteSqlRawAsync("EXECUTE dbo.pParcelUpdateFromStaging");
+
+                var parcelCount = await dbContext.Parcels.CountAsync();
+                if (parcelCount != expectedParcelCount)
+                {
+                    throw new InvalidOperationException($"Parcel swap loaded {parcelCount:N0} parcels but {expectedParcelCount:N0} were staged.");
+                }
+
+                var missing4326Count = await ParcelGeometries.CountMissing4326Async(dbContext);
+                if (missing4326Count > 0)
+                {
+                    throw new InvalidOperationException($"Parcel swap left {missing4326Count:N0} parcels without a Geometry4326.");
+                }
+
+                if (ownTransaction != null)
+                {
+                    await ownTransaction.CommitAsync();
+                }
+                else
+                {
+                    await outerTransaction!.ReleaseSavepointAsync(savepointName);
+                }
+            }
+            catch
+            {
+                // A SQL error inside the procedure (xact_abort on) has already rolled the whole
+                // transaction back server-side, so this rollback can itself fail; don't let that
+                // hide the original exception.
+                try
+                {
+                    if (ownTransaction != null)
+                    {
+                        await ownTransaction.RollbackAsync();
+                    }
+                    else
+                    {
+                        await outerTransaction!.RollbackToSavepointAsync(savepointName);
+                    }
+                }
+                catch (Exception)
+                {
+                    // already rolled back
+                }
+                throw;
+            }
+        }
+
         public static List<ParcelDisplayDto> Search(NeptuneDbContext dbContext, string term)
         {
             var searchString = term.Trim();

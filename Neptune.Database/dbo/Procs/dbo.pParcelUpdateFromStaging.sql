@@ -4,13 +4,14 @@ as
 begin
 
 
+    -- NPT-1140: the caller (Parcels.SwapFromStagingAsync) runs this inside a transaction and
+    -- verifies the result before committing, so a failure anywhere leaves the old parcels in place.
+    -- Staging rows are already repaired and projected to 4326 in C#, so nothing is filtered here.
+    set xact_abort on
+
     delete from dbo.WaterQualityManagementPlanParcel
     truncate table dbo.ParcelGeometry
     delete from dbo.Parcel
-    DBCC CHECKIDENT ('dbo.WaterQualityManagementPlanParcel', RESEED, 0);
-    DBCC CHECKIDENT ('dbo.Parcel', RESEED, 0);
-
-    update dbo.ParcelStaging set [Geometry] = [Geometry].MakeValid() where [Geometry].STIsValid() = 0
 
     set identity_insert dbo.Parcel on
 
@@ -22,16 +23,14 @@ begin
     , ps.ParcelAreaInSquareFeet / 43560
     , GETUTCDATE()
     from dbo.ParcelStaging ps
-    where len(ps.ParcelNumber) > 0 and ps.[Geometry].STIsValid() = 1
     order by ps.ParcelStagingID, ps.ParcelNumber
 
     set identity_insert dbo.Parcel off
 
-    insert into dbo.ParcelGeometry(ParcelID, GeometryNative)
-    select p.ParcelID, ps.[Geometry]
+    insert into dbo.ParcelGeometry(ParcelID, GeometryNative, Geometry4326)
+    select p.ParcelID, ps.[Geometry], ps.Geometry4326
     from dbo.ParcelStaging ps
     join dbo.Parcel p on ps.ParcelStagingID = p.ParcelID
-    where len(ps.ParcelNumber) > 0 and ps.[Geometry].STIsValid() = 1
     order by ps.ParcelStagingID, ps.ParcelNumber
 
 

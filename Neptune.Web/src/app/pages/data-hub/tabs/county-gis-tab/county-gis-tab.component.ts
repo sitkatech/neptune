@@ -21,7 +21,7 @@ import { ConfirmService } from "src/app/shared/services/confirm/confirm.service"
 import { DataHubActionButtonComponent } from "../../components/data-hub-action-button/data-hub-action-button.component";
 import { DataHubQuickLinksComponent } from "../../components/data-hub-quick-links/data-hub-quick-links.component";
 
-type RefreshKey = "parcels" | "regional-subbasins" | "hru-characteristics" | "model-basins" | "precipitation-zones" | "octa-prioritizations";
+type RefreshKey = "parcels" | "parcel-geometry" | "regional-subbasins" | "hru-characteristics" | "model-basins" | "precipitation-zones" | "octa-prioritizations";
 
 @Component({
     selector: "county-gis-tab",
@@ -86,10 +86,39 @@ export class CountyGisTabComponent {
             });
     }
 
+    // NPT-1140: fills in the parcel map geometry (EPSG:4326) for parcels missing it, without a full re-sync.
+    public backfillParcelGeometry(): void {
+        this.confirmService
+            .confirm({
+                title: "Fill In Missing Parcel Map Geometry",
+                message:
+                    "Fill in the map geometry for any parcels that are missing it? This doesn't re-sync parcels from OC Survey.<br /><br />This can take a little while to run. You'll get an email when it finishes.",
+                buttonTextYes: "Fill In",
+                buttonTextNo: "Cancel",
+                buttonClassYes: "btn-primary",
+            })
+            .then((confirmed) => {
+                if (!confirmed) return;
+                this.refreshing.set("parcel-geometry");
+                this.callRefresh("parcel-geometry").subscribe({
+                    next: () => {
+                        this.refreshing.set(null);
+                        this.alertService.pushAlert(new Alert("Parcel map geometry backfill has been queued.", AlertContext.Success, true));
+                    },
+                    error: () => {
+                        this.refreshing.set(null);
+                        this.alertService.pushAlert(new Alert("Failed to queue the parcel map geometry backfill.", AlertContext.Danger, true));
+                    },
+                });
+            });
+    }
+
     private callRefresh(key: RefreshKey): Observable<unknown> {
         switch (key) {
             case "parcels":
                 return this.parcelService.enqueueRefreshParcel();
+            case "parcel-geometry":
+                return this.parcelService.enqueueGeometry4326BackfillParcel();
             case "regional-subbasins":
                 return this.regionalSubbasinService.enqueueRefreshRegionalSubbasin();
             case "hru-characteristics":
