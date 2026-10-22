@@ -74,6 +74,8 @@ Source/Neptune.GeoServer/data_dir/logs/
 /Neptune.GeoServer/data_dir/.updatepassword.lock
 /Neptune.GeoServer/data_dir/logs
 /Neptune.GeoServer/data_dir/security
+# Legend thumbnails GeoServer generates at startup
+/Neptune.GeoServer/data_dir/legendsamples/
 /Neptune.API/appsecrets.json
 /Neptune.ExternalAPI/appsecrets.json
 /*.user

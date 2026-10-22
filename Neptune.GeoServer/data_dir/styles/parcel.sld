@@ -24,6 +24,9 @@
                 </Rule>
                 <Rule>
                     <Name>Label</Name>
+                    <!-- Labels only from zoom 16 in (~1:8,500). Without a limit GeoServer labels every
+                         parcel in the tile: ~52K at zoom 12, 15 s per tile vs 0.5 s unlabeled. -->
+                    <MaxScaleDenominator>10000</MaxScaleDenominator>
                     <TextSymbolizer>
                         <Label>
                             <ogc:PropertyName>ParcelNumber</ogc:PropertyName>
