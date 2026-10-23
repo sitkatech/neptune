@@ -92,4 +92,6 @@ GO
 GO
 :r ".\042 - NPT-1136 Recalculate OVTA scores with midpoint-up rounding.sql"
 GO
+:r ".\043 - NPT-1137 Add Field Definitions for Simple BMP grid.sql"
+GO
 

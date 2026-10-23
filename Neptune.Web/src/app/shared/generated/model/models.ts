@@ -133,6 +133,7 @@ export * from './project-upsert-dto';
 export * from './project-workflow-progress-dto';
 export * from './project-workflow-progress-dto-steps';
 export * from './quick-bmp-dto';
+export * from './quick-bmp-grid-dto';
 export * from './quick-bmp-merge-skip-dto';
 export * from './quick-bmp-upsert-dto';
 export * from './regional-subbasin-dto';

@@ -12615,6 +12615,47 @@
         "x-optional-auth": true
       }
     },
+    "/water-quality-management-plans/quick-bmps/grid": {
+      "get": {
+        "tags": [
+          "WaterQualityManagementPlan"
+        ],
+        "operationId": "ListQuickBMPsAsGridDto_WaterQualityManagementPlan",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/QuickBMPGridDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/QuickBMPGridDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/QuickBMPGridDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-anonymous": true,
+        "x-optional-auth": true
+      }
+    },
     "/water-quality-management-plans/download-gdb": {
       "post": {
         "tags": [
@@ -20557,6 +20598,94 @@
           "DryWeatherFlowOverrideID": {
             "type": "integer",
             "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "QuickBMPGridDto": {
+        "type": "object",
+        "properties": {
+          "QuickBMPID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "QuickBMPName": {
+            "type": "string",
+            "nullable": true
+          },
+          "TreatmentBMPTypeID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "TreatmentBMPTypeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "NumberOfIndividualBMPs": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "WaterQualityManagementPlanID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "WaterQualityManagementPlanName": {
+            "type": "string",
+            "nullable": true
+          },
+          "StormwaterJurisdictionID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "StormwaterJurisdictionName": {
+            "type": "string",
+            "nullable": true
+          },
+          "WaterQualityManagementPlanStatusDisplayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "HydrologicSubareaName": {
+            "type": "string",
+            "nullable": true
+          },
+          "PercentOfSiteTreated": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "CalculatedBoundaryAcreage": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "DrainageAreaTreatedAcres": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "PercentCaptured": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "PercentRetained": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "DryWeatherFlowOverrideID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "DryWeatherFlowOverrideDisplayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "QuickBMPNote": {
+            "type": "string",
             "nullable": true
           }
         },

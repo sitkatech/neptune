@@ -192,6 +192,7 @@ model/project-upsert-dto.ts
 model/project-workflow-progress-dto-steps.ts
 model/project-workflow-progress-dto.ts
 model/quick-bmp-dto.ts
+model/quick-bmp-grid-dto.ts
 model/quick-bmp-merge-skip-dto.ts
 model/quick-bmp-upsert-dto.ts
 model/regional-subbasin-dto.ts
