@@ -20,7 +20,24 @@ public class NeptuneConfiguration : NeptuneJobConfiguration
     public string OCGISBaseUrl { get; set; }
 
     public string AnthropicApiKey { get; set; }
-    public string ClaudeModelId { get; set; } = "claude-sonnet-4-6";
+    public string ClaudeModelId { get; set; } = "claude-sonnet-5-5";
+    /// <summary>
+    /// NPT-1132: extraction effort (low, medium, high, xhigh, max), sent as output_config.effort
+    /// on every category call and as --effort on the CLI path. Unset means the model's default,
+    /// which is high; Sonnet 5.x thinks by default, so set this when moving to it.
+    /// </summary>
+    public string ClaudeEffort { get; set; }
+
+    /// <summary>
+    /// NPT-1133: send WQMP AI extraction through the developer's own Claude Code CLI login
+    /// instead of the API key. Unset means "on in Development, off elsewhere" (Startup resolves
+    /// it); the API refuses to start if it's true outside Development.
+    /// </summary>
+    public bool? ClaudeCliEnabled { get; set; }
+    /// <summary>The <c>claude</c> executable; a full path when it isn't on PATH.</summary>
+    public string ClaudeCliPath { get; set; } = "claude";
+    /// <summary>Per-category ceiling on a CLI call. Longer than the API path's 4 minutes: the CLI reads the PDF itself first.</summary>
+    public int ClaudeCliTimeoutMinutes { get; set; } = 15;
 
     // NPT-998: Azure Blob paths for the bulk-upload .xlsx/.csv templates the user downloads
     // from the Data Hub upload pages. Same values as Neptune.WebMvc.Common.WebConfiguration so

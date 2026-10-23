@@ -47,6 +47,30 @@ services:
       neptune.db:
         condition: service_healthy
 
+  # Serves the SPA's map layers (OCStormwater workspace) from neptune.db. Same image and
+  # extension as the neptune-geoserver Helm chart; the datastore credentials come from
+  # geoserver-environment.properties. Admin UI: http://localhost:${GEOSERVER_PORT}/geoserver
+  geoserver:
+    image: kartoza/geoserver:3.0.1
+    environment:
+      ENABLE_JSONP: "true"
+      CATALINA_OPTS: "-DALLOW_ENV_PARAMETRIZATION=true"
+      ENV_PROPERTIES: /opt/geoserver/geoserver-environment.properties
+      STABLE_EXTENSIONS: sqlserver-plugin
+      TOMCAT_EXTRAS: "false"
+      ROOT_WEBAPP_REDIRECT: "true"
+      SAMPLE_DATA: "false"
+      GEOSERVER_ADMIN_USER: admin
+      GEOSERVER_ADMIN_PASSWORD: ${GEOSERVER_ADMIN_PASSWORD:-password#1}
+    ports:
+      - "${GEOSERVER_PORT:-8254}:8080"
+    volumes:
+      - ../Neptune.GeoServer/data_dir:/opt/geoserver/data_dir
+      - ./geoserver-environment.properties:/opt/geoserver/geoserver-environment.properties:ro
+    depends_on:
+      neptune.db:
+        condition: service_healthy
+
 volumes:
   node_modules:
   sqldata:

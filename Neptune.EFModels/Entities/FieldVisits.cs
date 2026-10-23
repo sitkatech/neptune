@@ -6,6 +6,17 @@ namespace Neptune.EFModels.Entities;
 
 public static class FieldVisits
 {
+    // NPT-1129: projection-only lookup for the jurisdiction-scoped authorization gates. Returns the
+    // owning BMP's StormwaterJurisdictionID, or null when the field visit doesn't exist.
+    public static int? GetStormwaterJurisdictionIDForFeatureContextCheck(NeptuneDbContext dbContext, int fieldVisitID)
+    {
+        return dbContext.FieldVisits
+            .AsNoTracking()
+            .Where(x => x.FieldVisitID == fieldVisitID)
+            .Select(x => (int?)x.TreatmentBMP.StormwaterJurisdictionID)
+            .SingleOrDefault();
+    }
+
     public static IQueryable<FieldVisit> GetImpl(NeptuneDbContext dbContext)
     {
         return dbContext.FieldVisits

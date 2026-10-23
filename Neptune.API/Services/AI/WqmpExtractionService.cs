@@ -7,10 +7,6 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
-using Anthropic;
-using Anthropic.Exceptions;
-using Anthropic.Models.Beta.Messages;
-using BetaRole = Anthropic.Models.Beta.Messages.Role;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -29,8 +25,7 @@ public class WqmpExtractionService
     private static readonly Lazy<string> QuickBmpSchema = new(BuildQuickBmpSchemaJson);
     private static readonly Lazy<string> SourceControlBmpSchema = new(BuildSourceControlBmpSchemaJson);
 
-    private readonly AnthropicClient _anthropic;
-    private readonly AnthropicFileService _anthropicFileService;
+    private readonly IWqmpExtractionClient _client;
     private readonly NeptuneDbContext _dbContext;
     private readonly IPromptTemplateService _promptTemplateService;
     private readonly ILogger<WqmpExtractionService> _logger;
@@ -38,16 +33,14 @@ public class WqmpExtractionService
     private readonly IHostEnvironment _environment;
 
     public WqmpExtractionService(
-        AnthropicClient anthropic,
-        AnthropicFileService anthropicFileService,
+        IWqmpExtractionClient client,
         NeptuneDbContext dbContext,
         IPromptTemplateService promptTemplateService,
         ILogger<WqmpExtractionService> logger,
         IOptions<NeptuneConfiguration> configuration,
         IHostEnvironment environment)
     {
-        _anthropic = anthropic;
-        _anthropicFileService = anthropicFileService;
+        _client = client;
         _dbContext = dbContext;
         _promptTemplateService = promptTemplateService;
         _logger = logger;
@@ -59,16 +52,8 @@ public class WqmpExtractionService
         int waterQualityManagementPlanDocumentID, int personID, CancellationToken cancellationToken)
     {
         var totalSw = Stopwatch.StartNew();
-        _logger.LogInformation("Starting WQMP extraction for documentID={DocumentID}, personID={PersonID}, model={Model}",
-            waterQualityManagementPlanDocumentID, personID, _configuration.ClaudeModelId);
-
-        // NPT-1044: upload to Anthropic Files API once and cache the file_id on the document.
-        // The Files-API source path on the Beta Messages API supports up to 500 MB per file
-        // — vs. 32 MB on the URL-source path we used previously — and dodges the SAS-URL
-        // expiry race we used to see on long-running extractions.
-        var fileID = await _anthropicFileService.EnsureUploadedFileIDAsync(waterQualityManagementPlanDocumentID, cancellationToken);
-        _logger.LogInformation("Anthropic file ID resolved for documentID={DocumentID}: {FileID}. Building domain context...",
-            waterQualityManagementPlanDocumentID, fileID);
+        _logger.LogInformation("Starting WQMP extraction for documentID={DocumentID}, personID={PersonID}, model={Model}, path={ExtractionPath}",
+            waterQualityManagementPlanDocumentID, personID, _configuration.ClaudeModelId, _client.PathName);
 
         var domainContext = await BuildDomainContext();
 
@@ -86,7 +71,6 @@ public class WqmpExtractionService
             "If a field is not found in the document: set Value, ExtractionEvidence, and DocumentSource to empty strings and set every BoundingBox number (PageNumber, X, Y, Width, Height) to 0. Do not add or rename properties.\n" +
             $"ExtractedValueSchema: {ExtractedValueSchema.Value}";
 
-        // Build all 4 tools upfront — identical across all parallel calls so the tools-level cache is shared.
         var categoryConfigs = new Dictionary<string, (PromptTemplate template, string schema, bool expectArray)>
         {
             ["WQMP"] = (PromptTemplate.ExtractWqmpFields, WqmpSchema.Value, false),
@@ -95,21 +79,27 @@ public class WqmpExtractionService
             ["SourceControlBMPs"] = (PromptTemplate.ExtractSourceControlBMPs, SourceControlBmpSchema.Value, true),
         };
 
-        var allTools = categoryConfigs.Select(kvp => BuildToolForCategory(kvp.Key, kvp.Value.schema)).ToList();
-
-        _logger.LogInformation("Domain context ready (elapsed {ElapsedMs}ms); invoking 4 category extractions via Claude (first warms the cache)...",
-            totalSw.ElapsedMilliseconds);
-
         // NPT-1132: failures this method recovers from silently (empty fallbacks, retries),
         // surfaced on the result so the extraction eval can count them.
         var hiccups = new System.Collections.Concurrent.ConcurrentQueue<string>();
 
-        // Per-category extraction. The prompt names the category's tool; ToolChoice is the same
-        // `auto` on every call (see below). A 4-minute per-category timeout prevents a single
-        // stalled call from hanging the whole extraction. `streamStarted` is signalled when the
-        // response begins streaming, i.e. once this call's cache write is readable.
+        // NPT-1133: the client gets the document in front of Claude (Files API upload, or a temp
+        // folder for the CLI); everything else here is shared by both paths.
+        await using var session = await _client.OpenDocumentAsync(waterQualityManagementPlanDocumentID,
+            categoryConfigs.Select(kvp => new WqmpExtractionCategory(kvp.Key, kvp.Value.schema)).ToList(), hiccups, cancellationToken);
+
+        _logger.LogInformation("Document ready (elapsed {ElapsedMs}ms); invoking 4 category extractions via the Claude {ExtractionPath}...",
+            totalSw.ElapsedMilliseconds, _client.PathName);
+
+        // NPT-1133: one failed category cancels the others. A failure like "not logged in" or a
+        // usage limit would otherwise leave the other three running (up to 15 minutes each on the
+        // CLI path) before the user saw the error.
+        using var categoriesCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+
+        // Per-category extraction. `responseStarted` is signalled when the response begins,
+        // i.e. once this call's cache write is readable.
         async Task<(string output, WqmpExtractionCallUsageDto usage)> ExtractCategoryAsync(string key, PromptTemplate template, string schema, bool expectArray,
-            TaskCompletionSource streamStarted = null)
+            TaskCompletionSource responseStarted = null)
         {
             var catSw = Stopwatch.StartNew();
             _logger.LogInformation("Starting extraction category: {Category}", key);
@@ -121,185 +111,78 @@ public class WqmpExtractionService
                 ExtractedValueSchema = ExtractedValueSchema.Value,
                 Schema = schema,
             };
-            var prompt = _promptTemplateService.Render(template, templateModel);
-            var toolName = $"emit_{key.ToLower()}_extraction";
-
-            // System prompt: evidence instructions (cached — stable across all 4 calls)
-            var systemBlocks = new List<BetaTextBlockParam>
+            var call = new WqmpCategoryCall
             {
-                new() { Text = evidenceInstructions, CacheControl = new BetaCacheControlEphemeral() },
+                Category = new WqmpExtractionCategory(key, schema),
+                SystemPrompt = evidenceInstructions,
+                DomainContext = domainContext,
+                Prompt = _promptTemplateService.Render(template, templateModel),
             };
 
-            // Single attempt: build params bound to a specific file_id and stream the response.
-            // Factored out so the outer retry can rebuild the message with a refreshed id
-            // when Anthropic 404s on a stale cached file_id.
-            async Task<(string output, WqmpExtractionCallUsageDto usage)> AttemptAsync(string attemptFileID)
-            {
-                using var categoryCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-                categoryCts.CancelAfter(TimeSpan.FromMinutes(4));
-
-                // User message: PDF document (referenced by file_id, cached) + domain context (cached) + per-category prompt (varies)
-                var messageContent = new List<BetaContentBlockParam>
-                {
-                    new BetaRequestDocumentBlock { Source = new BetaFileDocumentSource { FileID = attemptFileID } },
-                    new BetaTextBlockParam { Text = $"DomainContext:\n{domainContext}", CacheControl = new BetaCacheControlEphemeral() },
-                    new BetaTextBlockParam { Text = $"{prompt}\n\nReturn your extraction by calling the `{toolName}` tool exactly once. Do not call any other tool and do not reply with text." },
-                };
-
-                var parameters = new MessageCreateParams
-                {
-                    Model = _configuration.ClaudeModelId,
-                    // NPT-1054: bumped from 8192 → 16384. Sonnet 4.5+ uses interleaved thinking
-                    // by default when tool_use is in play; thinking tokens count toward the same
-                    // output budget. On the SourceControlBMPs call with a longer prompt + a
-                    // 65-page PDF, Claude consumed all 8192 tokens on thinking and never reached
-                    // the tool call (stop_reason=max_tokens, no text or input_json captured).
-                    MaxTokens = 16384,
-                    // The Files-API source variant (BetaFileDocumentSource) is gated behind
-                    // this beta header on the Messages endpoint. Without it the request gets
-                    // routed to the standard validator and rejected with
-                    // "Input tag 'file' found using 'type' does not match any of the
-                    // expected tags: 'base64', 'content', 'text', 'url'".
-                    Betas = ["files-api-2025-04-14"],
-                    System = systemBlocks,
-                    Messages = [new() { Role = BetaRole.User, Content = messageContent }],
-                    Tools = allTools.Select(t => (BetaToolUnion)t).ToList(),
-                    // NPT-1132: the same ToolChoice on every category call. A tool_choice change
-                    // between requests invalidates the messages cache, which is where the PDF
-                    // sits, so forcing a different tool per category (the previous design) made
-                    // all four calls re-cache the whole PDF at 1.25x. The prompt's last line names
-                    // the tool instead; the stream handler below checks which tool was called.
-                    // `auto` is also what Sonnet 5.5 / Opus 5.5 require (they reject forced tools).
-                    ToolChoice = new BetaToolChoiceAuto { DisableParallelToolUse = true },
-                };
-
-                // Stream the response — keeps the HTTP connection alive via SSE so there's no
-                // HttpClient.Timeout to worry about, even for large PDFs on a cold cache.
-                var toolInputJson = new System.Text.StringBuilder();
-                long cachedTokens = 0;
-                long cacheCreationTokens = 0;
-                long inputTokens = 0;
-                long outputTokens = 0;
-                string stopReason = null;
-                var inExpectedTool = false;
-                string otherToolCalled = null;
-
-                await foreach (var evt in _anthropic.Beta.Messages.CreateStreaming(parameters, categoryCts.Token))
-                {
-                    if (evt.TryPickContentBlockStart(out var blockStart))
-                    {
-                        // With ToolChoice=auto the model picks the tool; only keep the input of
-                        // the one this category asked for.
-                        inExpectedTool = false;
-                        if (blockStart.ContentBlock.TryPickBetaToolUse(out var toolUse))
-                        {
-                            inExpectedTool = toolUse.Name == toolName;
-                            if (!inExpectedTool) otherToolCalled = toolUse.Name;
-                        }
-                    }
-                    else if (evt.TryPickContentBlockDelta(out var delta))
-                    {
-                        // Tool-use input arrives as input_json_delta chunks
-                        if (inExpectedTool && delta.Delta.TryPickInputJson(out var jsonDelta))
-                        {
-                            toolInputJson.Append(jsonDelta.PartialJson);
-                        }
-                    }
-                    else if (evt.TryPickDelta(out var msgDelta))
-                    {
-                        // message_delta carries usage info
-                        if (msgDelta.Usage != null)
-                        {
-                            outputTokens = msgDelta.Usage.OutputTokens;
-                        }
-                        stopReason = msgDelta.Delta?.StopReason?.ToString() ?? stopReason;
-                    }
-                    else if (evt.TryPickStart(out var msgStart))
-                    {
-                        if (msgStart.Message?.Usage != null)
-                        {
-                            inputTokens = msgStart.Message.Usage.InputTokens;
-                            cachedTokens = msgStart.Message.Usage.CacheReadInputTokens ?? 0;
-                            cacheCreationTokens = msgStart.Message.Usage.CacheCreationInputTokens ?? 0;
-                        }
-                        streamStarted?.TrySetResult();
-                    }
-                }
-
-                if (toolInputJson.Length == 0)
-                {
-                    hiccups.Enqueue(otherToolCalled != null
-                        ? $"{key}: called {otherToolCalled} instead of {toolName}"
-                        : $"{key}: no tool output (stop_reason={stopReason})");
-                }
-                else if (stopReason != null && stopReason.Contains("max_tokens", StringComparison.OrdinalIgnoreCase))
-                {
-                    hiccups.Enqueue($"{key}: hit max_tokens");
-                }
-
-                var output = toolInputJson.Length > 0 ? toolInputJson.ToString() : (expectArray ? "[]" : "{}");
-
-                if (!IsValidJson(output))
-                {
-                    _logger.LogError("Streamed tool output returned invalid JSON for {Category} after {ElapsedMs}ms. Using empty fallback.",
-                        key, catSw.ElapsedMilliseconds);
-                    hiccups.Enqueue($"{key}: invalid JSON, empty fallback used");
-                    output = expectArray ? "[]" : "{}";
-                }
-                else
-                {
-                    // NPT-1106 round 3: the strict schemas express "not found" as sentinels
-                    // ("" strings / all-zero BoundingBox) to stay under the 16-union strict
-                    // compilation cap. Convert them back to nulls here so the stored
-                    // ExtractionResultJson keeps the original null-based contract the SPA
-                    // review wizard and the approve endpoint consume.
-                    output = NormalizeNotFoundSentinels(output);
-                    _logger.LogInformation("Finished extraction category: {Category} in {ElapsedMs}ms ({OutputChars} chars, cached={CachedTokens})",
-                        key, catSw.ElapsedMilliseconds, output.Length, cachedTokens);
-                }
-
-                return (output, new WqmpExtractionCallUsageDto
-                {
-                    Category = key,
-                    InputTokens = inputTokens,
-                    CacheCreationInputTokens = cacheCreationTokens,
-                    CacheReadInputTokens = cachedTokens,
-                    OutputTokens = outputTokens,
-                    StopReason = stopReason,
-                    ElapsedMs = catSw.ElapsedMilliseconds,
-                });
-            }
-
-            // Retry once on a stale-file_id 404 — invalidate the cached id and re-upload
-            // (serialized across the 4 parallel calls inside RefreshFileIDAsync), then retry.
+            WqmpCategoryCallResult result;
             try
             {
-                return await AttemptAsync(fileID);
+                result = await session.ExtractCategoryAsync(call, responseStarted, categoriesCts.Token);
             }
-            catch (AnthropicNotFoundException ex)
+            catch
             {
-                _logger.LogWarning(ex, "Anthropic 404 on {Category} for documentID={DocumentID} (likely stale file_id); refreshing and retrying once.",
-                    key, waterQualityManagementPlanDocumentID);
-                hiccups.Enqueue($"{key}: stale file_id 404, re-uploaded and retried");
-                var refreshedFileID = await _anthropicFileService.RefreshFileIDAsync(
-                    waterQualityManagementPlanDocumentID, fileID, cancellationToken);
-                return await AttemptAsync(refreshedFileID);
+                categoriesCts.Cancel();
+                throw;
             }
+            var output = result.OutputJson ?? (expectArray ? "[]" : "{}");
+
+            if (!IsValidJson(output))
+            {
+                _logger.LogError("Category output was invalid JSON for {Category} after {ElapsedMs}ms. Using empty fallback.",
+                    key, catSw.ElapsedMilliseconds);
+                hiccups.Enqueue($"{key}: invalid JSON, empty fallback used");
+                output = expectArray ? "[]" : "{}";
+            }
+            else
+            {
+                // NPT-1106 round 3: the strict schemas express "not found" as sentinels
+                // ("" strings / all-zero BoundingBox) to stay under the 16-union strict
+                // compilation cap. Convert them back to nulls here so the stored
+                // ExtractionResultJson keeps the original null-based contract the SPA
+                // review wizard and the approve endpoint consume.
+                output = NormalizeNotFoundSentinels(output);
+                _logger.LogInformation("Finished extraction category: {Category} in {ElapsedMs}ms ({OutputChars} chars, cached={CachedTokens})",
+                    key, catSw.ElapsedMilliseconds, output.Length, result.Usage.CacheReadInputTokens);
+            }
+
+            return (output, result.Usage);
         }
 
         // NPT-1132: a cache entry is readable only once the response that wrote it begins
         // streaming, so four simultaneous calls each paid to cache the whole PDF. Start the first
         // category, wait until its stream begins (or it fails), then start the rest so they read
-        // the PDF from the cache (0.1x) instead of writing it again (1.25x).
+        // the PDF from the cache (0.1x) instead of writing it again (1.25x). The CLI path has no
+        // shared cache to warm, so it starts all four at once.
         var firstKey = categoryConfigs.Keys.First();
         var firstStreamStarted = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
         var firstConfig = categoryConfigs[firstKey];
         var firstTask = ExtractCategoryAsync(firstKey, firstConfig.template, firstConfig.schema, firstConfig.expectArray, firstStreamStarted);
-        await Task.WhenAny(firstStreamStarted.Task, firstTask);
+        if (session.WarmCacheWithFirstCategory)
+        {
+            await Task.WhenAny(firstStreamStarted.Task, firstTask);
+        }
         var tasks = new List<Task<(string output, WqmpExtractionCallUsageDto usage)>> { firstTask };
         tasks.AddRange(categoryConfigs.Where(kvp => kvp.Key != firstKey).Select(kvp =>
             ExtractCategoryAsync(kvp.Key, kvp.Value.template, kvp.Value.schema, kvp.Value.expectArray)));
-        var results = await Task.WhenAll(tasks);
+        (string output, WqmpExtractionCallUsageDto usage)[] results;
+        try
+        {
+            results = await Task.WhenAll(tasks);
+        }
+        catch (Exception) when (!cancellationToken.IsCancellationRequested)
+        {
+            // WhenAll rethrows the first faulted task in list order, which can be a sibling we
+            // cancelled; surface the failure that caused the cancellation instead.
+            var cause = tasks.Where(t => t.IsFaulted).Select(t => t.Exception!.InnerException)
+                .FirstOrDefault(e => e is not OperationCanceledException);
+            if (cause != null) System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture(cause).Throw();
+            throw;
+        }
         var keys = categoryConfigs.Keys.ToList();
         var map = new Dictionary<string, string>();
         var callUsage = new List<WqmpExtractionCallUsageDto>();
@@ -533,7 +416,8 @@ public class WqmpExtractionService
                 CachedInputTokens = (int)cachedTokens,
                 OutputTokens = (int)outputTokens,
                 RequestDate = DateTime.UtcNow,
-                RequestContext = context
+                // NPT-1133: CLI-path calls spend the developer's Claude plan, not API credits.
+                RequestContext = _client.PathName == "API" ? context : $"{context} ({_client.PathName})"
             });
             await _dbContext.SaveChangesAsync();
         }
@@ -541,35 +425,6 @@ public class WqmpExtractionService
         {
             _logger.LogWarning(ex, "Failed to log token usage for {Context}", context);
         }
-    }
-
-    private static BetaTool BuildToolForCategory(string categoryKey, string jsonSchema)
-    {
-        var parsed = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(jsonSchema);
-        return new BetaTool
-        {
-            Name = $"emit_{categoryKey.ToLower()}_extraction",
-            Description = $"Emit the extracted {categoryKey} fields as structured JSON matching the required schema.",
-            // NPT-1106: strict tool use (GA, no beta header) — the API validates the tool input
-            // against the schema server-side, guaranteeing well-formed JSON that matches it
-            // exactly. Kills the recurring UnwrapItems failure class: `items` emitted as a
-            // double-encoded string with unescaped quotes / trailing commas that no regex
-            // cleanup could reliably repair. Strict requires additionalProperties:false +
-            // required on every object INCLUDING the root, so the schema JSON is passed to
-            // InputSchema wholesale via the raw-data constructor.
-            //
-            // Strict is per-category: the API compiles EVERY strict tool in the request into a
-            // grammar and rejects the request when the combined grammar is too large ("The
-            // compiled grammar is too large"). All four tools ride in every request so the
-            // prompt-cache prefix (tools -> system -> the large PDF) stays identical across the
-            // four parallel category calls — flipping Strict per call would split that cache
-            // four ways. Instead the WQMP tool (22 of the 33 ExtractedValue objects — the bulk
-            // of the grammar) stays non-strict: its single-object output has never exhibited
-            // the corruption class, which lives in the array categories' `items` handling
-            // (SourceControlBMPs above all — see NPT-1054). The three array tools stay strict.
-            Strict = categoryKey != "WQMP",
-            InputSchema = new(parsed ?? new Dictionary<string, JsonElement>()),
-        };
     }
 
     public async Task<string> BuildDomainContext()

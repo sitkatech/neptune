@@ -114,18 +114,24 @@ Custom `BaseAuthorizationAttribute` (implements `IAuthorizationFilter`). Derived
 | `JurisdictionEditFeature` | Admin, SitkaAdmin, JurisdictionManager, JurisdictionEditor (role check only — no jurisdiction match) |
 | `TreatmentBMPEditFeature` | Same as JurisdictionEditFeature + jurisdiction match against the routed TreatmentBMP |
 | `WaterQualityManagementPlanEditFeature` | Same as JurisdictionEditFeature + jurisdiction match against the routed WQMP |
+| `WaterQualityManagementPlanManageFeature` | Same as JurisdictionManageFeature + jurisdiction match against the routed WQMP |
+| `FieldVisitEditFeature` / `FieldVisitManageFeature` | Edit / Manage roles + jurisdiction match against the routed field visit's BMP |
+| `MaintenanceRecordEditFeature` / `MaintenanceRecordManageFeature` | Edit / Manage roles + jurisdiction match against the routed maintenance record's BMP |
+| `TreatmentBMPAssessmentEditFeature` | Same as JurisdictionEditFeature + jurisdiction match against the routed assessment's BMP (also covers its photo endpoints) |
 | `UserViewFeature` | Any authenticated user |
 | `LoggedInUnclassifiedFeature` | Unassigned users |
 
-Note: the plain `Jurisdiction*Feature` attributes check **role only** — jurisdiction scoping must come from an entity-scoped attribute (the `*EditFeature` variants above, which resolve the route id and require `IsAssignedToStormwaterJurisdiction`) or an in-controller check against the caller's assigned jurisdictions.
+Note: the plain `Jurisdiction*Feature` attributes check **role only** — jurisdiction scoping must come from an entity-scoped attribute (the `*EditFeature` / `*ManageFeature` variants above, which resolve the route id and require `IsAssignedToStormwaterJurisdiction`) or an in-controller check against the caller's assigned jurisdictions. Every write endpoint routed by a record id should use one of these, not `JurisdictionEditFeature` / `JurisdictionManageFeature`.
+
+To scope a new record type, derive from `JurisdictionScopedFeature` (`Neptune.API/Services/Authorization/`): pass `EditRoles` or `ManageRoles`, set `RouteKey` to the route parameter name, and implement `GetStormwaterJurisdictionID` with a projection-only lookup that returns null when the record doesn't exist (see `FieldVisits.GetStormwaterJurisdictionIDForFeatureContextCheck`). The base returns 404 for a missing record before 403 for an out-of-jurisdiction caller, and Admin/SitkaAdmin always pass the jurisdiction match. Its public `Evaluate` lets tests check the decision without an HTTP context (see `JurisdictionScopedFeatureTests`).
 
 Roles: Admin(1), SitkaAdmin(2), JurisdictionManager(3), JurisdictionEditor(4), Unassigned(5), Viewer(6), ExternalViewer(7).
 
-**JurisdictionEditor vs JurisdictionManager:** The two roles are nearly identical — both operate within their assigned jurisdiction. Editors should be able to do almost everything Managers can. The narrow exceptions where Manager-only (`[JurisdictionManageFeature]`) is correct:
-- **Deleting primary records** — WQMPs, BMPs, verifications
-- **Attestation/verification actions** — marking BMPs as verified, promoting a WQMP from Draft to Active
+**JurisdictionEditor vs JurisdictionManager:** The two roles are nearly identical — both operate within their assigned jurisdiction. Editors should be able to do almost everything Managers can. The narrow exceptions where Manager-only (`[JurisdictionManageFeature]`, or a scoped `*ManageFeature` on a record-routed endpoint) is correct:
+- **Deleting primary records** — WQMPs, BMPs, verifications, field visits, maintenance records
+- **Attestation/verification actions** — marking BMPs as verified, promoting a WQMP from Draft to Active, verifying / marking provisional / returning a field visit to edit
 
-Everything else — CRUD on supporting data (documents, attributes, delineations), creating WQMPs from PDF upload, running AI extraction, editing metadata — should use `[JurisdictionEditFeature]`. When an endpoint or UI gate is set to `[JurisdictionManageFeature]`, verify it falls into one of the above exceptions before assuming the restriction is correct.
+Everything else — CRUD on supporting data (documents, attributes, delineations), creating WQMPs from PDF upload, running AI extraction, editing metadata — should use `[JurisdictionEditFeature]` (or a scoped `*EditFeature` on a record-routed endpoint). When an endpoint or UI gate is Manager-only, verify it falls into one of the above exceptions before assuming the restriction is correct.
 
 ### Background Jobs (Hangfire)
 
@@ -146,7 +152,7 @@ Configured with SQL Server storage, 1 worker, 0 auto-retries. Dashboard at `/han
 | Overlay API | LGU/TGU/PLGU polygon overlays | `OverlayAPIBaseUrl` |
 | Azure Blob Storage | File/photo storage | `AzureBlobStorageConnectionString` |
 | SendGrid | Email notifications | `SendGridApiKey` |
-| Anthropic Claude | AI chat + WQMP document extraction | `AnthropicApiKey`, `ClaudeModelId` |
+| Anthropic Claude | WQMP document extraction (local: Claude CLI) | `AnthropicApiKey`, `ClaudeModelId`, `ClaudeCliEnabled` |
 
 ### Configuration & Secrets
 
@@ -154,24 +160,34 @@ Secrets loaded from a JSON file path specified by `SECRET_PATH` environment vari
 
 #### Renewing the Anthropic API key
 
-Dev, QA and Prod share **one** Anthropic API key. It **expires every 12 months** — current key expires **2027-03-01** (there's a team calendar reminder) — and when it lapses, all three environments break at once. An expired key fails every AI extraction with a 401; users see the generic "AI extraction is temporarily unavailable" message and the `Neptune Anthropic API account issue` Datadog monitor alerts (NPT-1131).
+QA and Prod share **one** Anthropic API key. Local development doesn't use it at all (see "Local AI extraction" below). It **expires every 12 months** — current key expires **2027-03-01** (there's a team calendar reminder) — and when it lapses, both environments break at once. An expired key fails every AI extraction with a 401; users see the generic "AI extraction is temporarily unavailable" message and the `Neptune Anthropic API account issue` Datadog monitor alerts (NPT-1131).
 
-How the key reaches the app — it's a secret variable on three Azure DevOps pipelines (set on the pipeline, not in the YAML):
+How the key reaches the app — it's a secret variable on two Azure DevOps pipelines (set on the pipeline, not in the YAML):
 
 | Pipeline | Variable | Terraform | Key Vault secret |
 |---|---|---|---|
 | QA | `anthropicApiKey` | `Build/azure-pipelines.yml` → `neptune.tf` (`azurerm_key_vault_secret.appAnthropicApiKey`) | `AnthropicApiKey` in the QA app vault |
 | Prod | `anthropicApiKey` | same | `AnthropicApiKey` in the prod app vault |
-| Dev TF | `secretAnthropicApiKey` | `Build/dev-tf/dev-terraform.yml` → `Build/dev-tf/Main.tf` | `AnthropicApiKey` in `neptune-keyvault-dev` (local dev / devcontainer) |
 
 Neptune.API reads the secret at **startup** via the Key Vault configuration provider (no reload interval).
 
 To renew (before expiry):
 1. Create a new key in the Anthropic Console (same organization/workspace as the current one — it must have credits and Files API access) and note its expiration date.
-2. Update the variable on all three pipelines (Dev TF, QA, Prod) — same new value in each.
-3. Run Dev TF, then QA, then Prod. Terraform writes the new value to each Key Vault secret. For QA/Prod the helm deploy rolls the API pods (image tag is `$(Build.BuildNumber)-$(environment)`), so they pick up the new key on startup; if you update a Key Vault secret any other way, restart the API pods yourself (`kubectl rollout restart`) — running pods keep the old key. Locally, restart `make api`.
+2. Update the variable on both pipelines (QA, Prod) — same new value in each.
+3. Run QA, then Prod. Terraform writes the new value to each Key Vault secret and the helm deploy rolls the API pods (image tag is `$(Build.BuildNumber)-$(environment)`), so they pick up the new key on startup. If you update a Key Vault secret any other way, restart the API pods yourself (`kubectl rollout restart`) — running pods keep the old key.
 4. Verify: run an AI extraction on a WQMP with an uploaded PDF and confirm it completes.
-5. Only after all three environments are on the new key, revoke the old key in the Anthropic Console (revoking it earlier breaks whichever environment still uses it). Then update the expiration date above and the calendar reminder.
+5. Only after both environments are on the new key, revoke the old key in the Anthropic Console (revoking it earlier breaks whichever environment still uses it). Then update the expiration date above and the calendar reminder.
+
+#### Local AI extraction (Claude CLI, NPT-1133)
+
+Locally, WQMP AI extraction goes through **your own Claude Code login**, not an API key, so local testing can't spend the shared credits.
+
+- **On by default in Development.** `ClaudeCliEnabled` defaults to `true` when `ASPNETCORE_ENVIRONMENT=Development` and `false` elsewhere. The API refuses to start if it's `true` in any other environment.
+- **Setup:** have Claude Code installed and run `claude` once to sign in. The devcontainer already has it (`make api`). Native `dotnet run` on Windows works if `claude` is on PATH; otherwise set `ClaudeCliPath`. The legacy VS docker-compose stack has no CLI, so use the devcontainer or `dotnet run` for AI testing.
+- **How it works:** `ClaudeCliWqmpExtractionClient` writes the PDF to a temp folder and runs `claude -p` per category with only the Read tool. Read sends a whole PDF as one document block (the same input the API path sends), but only up to 20 MB, so larger PDFs are split into page-range parts with PDFsharp. Plans over 80 pages use the 1M-context model variant. The Files API and the cached `AnthropicFileID` aren't touched, and remote file deletes are skipped.
+- **It never uses a key.** The CLI is started without `ANTHROPIC_API_KEY`/`ANTHROPIC_AUTH_TOKEN` and without your Claude settings. If its init event reports any credential other than your login (`apiKeySource` other than `none`), the run is stopped before the first request.
+- **Failures name the cause:** CLI not found, not logged in, your plan's usage limit, a PDF part that didn't come back as a document. There's no fallback to an API key.
+- **Caveats:** calls count against your Claude plan's usage limits. Results aren't comparable to production: there's no shared prompt cache, and the CLI thinks more by default. `Neptune.Eval run --api` measures the production path but spends real credits on the key passed in `EvalAnthropicApiKey` (there is no separate eval key), so keep it rare, small and budgeted; Eval never reads `AnthropicApiKey` (see `Neptune.Eval/README.md`).
 
 ## Key Domain Entities
 
@@ -233,5 +249,7 @@ Fix locally (do **not** commit any of this — each dev does it on their own mac
    ```
    It must go in `base` (not `final`) because Visual Studio's Fast Mode only builds the `base` stage and bind-mounts `/src` over it — the `final` stage isn't used for debug runs.
 4. Rebuild from Visual Studio (Build → Rebuild forces VS to discard the cached base image). Outbound HTTPS to Cato-intercepted endpoints now resolves cleanly inside the container.
+
+**Claude CLI in the devcontainer (NPT-1133):** Cato also intercepts `platform.claude.com`, so `claude` inside the devcontainer fails with `SELF_SIGNED_CERT_IN_CHAIN` and local AI extraction can't run. With the cert exported as in step 1, `make api` passes it to the CLI automatically (the Makefile sets `NODE_EXTRA_CA_CERTS` when `docker-compose/corp-root.crt` exists). To sign in, run `NODE_EXTRA_CA_CERTS=/workspace/docker-compose/corp-root.crt claude` once, or add that variable to `.devcontainer/.developer.env` so every terminal has it.
 
 The cert is valid until 2034 — re-export only if Cato rotates it. If `api.anthropic.com` starts working without the patch (Cato bypass added by IT), drop the local edits.

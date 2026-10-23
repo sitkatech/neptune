@@ -34,11 +34,16 @@ public sealed class PromptTemplateService : IPromptTemplateService
         // ExtractionResultJson contract is unchanged.
         // NPT-1132: v4 added field guidance for ApprovalDate, TrashCaptureStatusType and
         // HydromodificationAppliesType; v5 treats catch basin / inlet inserts as Partial trash
-        // capture (the convention in the records) instead of excluding filters.
-        [PromptTemplate.ExtractWqmpFields] = "v5",
+        // capture (the convention in the records) instead of excluding filters. v6 (Sonnet 5.5):
+        // the controlled-vocabulary fields are classified from what the plan describes; the
+        // "don't infer" rule now covers only factual fields. Sonnet 5.5 read v5's blanket rule
+        // literally and left land use, development type, subarea and trash capture blank.
+        [PromptTemplate.ExtractWqmpFields] = "v6",
         // NPT-1132: v4 states the 8-digit APN formats and rules out tract/lot/permit numbers.
         [PromptTemplate.ExtractParcels] = "v4",
-        [PromptTemplate.ExtractQuickBMPs] = "v4",
+        // NPT-1132: v5 (Sonnet 5.5) states one object per distinct BMP with the unit count in
+        // NumberOfIndividualBMPs; 5.5 otherwise emitted one row per unit or subarea.
+        [PromptTemplate.ExtractQuickBMPs] = "v5",
         [PromptTemplate.ExtractSourceControlBMPs] = "v4",
     };
 

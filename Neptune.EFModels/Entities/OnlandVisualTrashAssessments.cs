@@ -438,11 +438,16 @@ public static class OnlandVisualTrashAssessments
             return null;
         }
 
-        var average = completedAndIsProgressAssessment.OrderByDescending(x => x.CompletedDate).Take(3).Average(x => x.OnlandVisualTrashAssessmentScore.NumericValue);
+        // CompletedDate has no time component, so break same-day ties on ID (newest first) to pick the
+        // same top 3 as dbo.vOnlandVisualTrashAssessmentAreaProgress.
+        var average = completedAndIsProgressAssessment
+            .OrderByDescending(x => x.CompletedDate)
+            .ThenByDescending(x => x.OnlandVisualTrashAssessmentID)
+            .Take(3)
+            .Average(x => x.OnlandVisualTrashAssessmentScore.NumericValue);
 
-        var onlandVisualTrashAssessmentScore = OnlandVisualTrashAssessmentScore.All.Single(x => x.NumericValue == Math.Round(average));
-
-        return onlandVisualTrashAssessmentScore;
+        // Midpoint-up rounding is deliberate (NPT-1136); see FromAverageNumericValue.
+        return OnlandVisualTrashAssessmentScore.FromAverageNumericValue(average);
     }
 
     public static FeatureCollection GetAssessmentAreaByIDAsFeatureCollection(NeptuneDbContext dbContext, int onlandVisualTrashAssessmentID)

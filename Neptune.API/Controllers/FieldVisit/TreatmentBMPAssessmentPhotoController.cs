@@ -34,7 +34,7 @@ public class TreatmentBMPAssessmentPhotoController(
     }
 
     [HttpPost]
-    [JurisdictionEditFeature]
+    [TreatmentBMPAssessmentEditFeature]
     [EntityNotFound(typeof(TreatmentBMPAssessment), "treatmentBMPAssessmentID")]
     public async Task<ActionResult<TreatmentBMPAssessmentPhotoDto>> Create([FromRoute] int treatmentBMPAssessmentID, [FromForm] TreatmentBMPAssessmentPhotoCreateDto createDto)
     {
@@ -51,7 +51,7 @@ public class TreatmentBMPAssessmentPhotoController(
     }
 
     [HttpPut("{treatmentBMPAssessmentPhotoID}")]
-    [JurisdictionEditFeature]
+    [TreatmentBMPAssessmentEditFeature]
     [EntityNotFound(typeof(TreatmentBMPAssessment), "treatmentBMPAssessmentID")]
     [EntityNotFound(typeof(TreatmentBMPAssessmentPhoto), "treatmentBMPAssessmentPhotoID")]
     public async Task<ActionResult<TreatmentBMPAssessmentPhotoDto>> UpdateCaption(
@@ -64,7 +64,7 @@ public class TreatmentBMPAssessmentPhotoController(
     }
 
     [HttpDelete("{treatmentBMPAssessmentPhotoID}")]
-    [JurisdictionEditFeature]
+    [TreatmentBMPAssessmentEditFeature]
     [EntityNotFound(typeof(TreatmentBMPAssessment), "treatmentBMPAssessmentID")]
     [EntityNotFound(typeof(TreatmentBMPAssessmentPhoto), "treatmentBMPAssessmentPhotoID")]
     public async Task<IActionResult> Delete([FromRoute] int treatmentBMPAssessmentID, [FromRoute] int treatmentBMPAssessmentPhotoID)

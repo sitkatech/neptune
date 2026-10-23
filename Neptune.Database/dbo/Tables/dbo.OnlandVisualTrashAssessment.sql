@@ -39,9 +39,12 @@ GO
 -- Both do ROW_NUMBER() OVER (PARTITION BY OnlandVisualTrashAssessmentAreaID ORDER BY CompletedDate DESC);
 -- without this index the trash-analysis-areas grid re-scanned + re-sorted this table ~1,680x (4.4M rows, ~2s).
 -- Key order + DESC matches the window so the seek is already ordered; includes cover the projected columns.
+-- NPT-1136: the progress view also breaks same-day ties on OnlandVisualTrashAssessmentID DESC and filters on
+-- OnlandVisualTrashAssessmentStatusID, so the ID is keyed DESC after the date and the status is included.
 CREATE NONCLUSTERED INDEX [IX_OnlandVisualTrashAssessment_OnlandVisualTrashAssessmentAreaID_CompletedDate] ON [dbo].[OnlandVisualTrashAssessment]
 (
 	[OnlandVisualTrashAssessmentAreaID] ASC,
-	[CompletedDate] DESC
+	[CompletedDate] DESC,
+	[OnlandVisualTrashAssessmentID] DESC
 )
-INCLUDE ([OnlandVisualTrashAssessmentScoreID], [IsProgressAssessment])
+INCLUDE ([OnlandVisualTrashAssessmentScoreID], [IsProgressAssessment], [OnlandVisualTrashAssessmentStatusID])

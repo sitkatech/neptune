@@ -69,6 +69,11 @@ export class WqmpVerificationsComponent {
         return this.authenticationService.doesCurrentUserHaveJurisdictionEditPermission();
     }
 
+    // NPT-1129: deleting a verification is Manager-only (the API gates it with WaterQualityManagementPlanManageFeature).
+    public get currentPersonCanManage(): boolean {
+        return this.authenticationService.doesCurrentUserHaveJurisdictionManagePermission();
+    }
+
     ngOnInit(): void {
         this.columnDefs = [
             this.utilityFunctionsService.createActionsColumnDef((params: any) => {
@@ -87,11 +92,13 @@ export class WqmpVerificationsComponent {
                         ActionIcon: "fas fa-edit",
                         ActionHandler: () => this.router.navigate(["/water-quality-management-plans", wqmpID, "verifications", verifyID]),
                     });
-                    actions.push({
-                        ActionName: "Delete",
-                        ActionIcon: "fas fa-trash text-danger",
-                        ActionHandler: () => this.confirmDeleteVerification(wqmpID, verifyID, params.data.WaterQualityManagementPlanName, params.data.VerificationDate),
-                    });
+                    if (this.currentPersonCanManage) {
+                        actions.push({
+                            ActionName: "Delete",
+                            ActionIcon: "fas fa-trash text-danger",
+                            ActionHandler: () => this.confirmDeleteVerification(wqmpID, verifyID, params.data.WaterQualityManagementPlanName, params.data.VerificationDate),
+                        });
+                    }
                 }
                 return actions;
             }),
@@ -145,7 +152,8 @@ export class WqmpVerificationsComponent {
 
     // NPT-995 rework: Delete moved off the wizard sign-off step into a row action.
     // Mirrors the project-list deleteModal pattern. Gated by currentPersonCanEdit +
-    // IsDraft (set on the action push), so finalized verifications stay locked.
+    // IsDraft (set on the action push), so finalized verifications stay locked, and by
+    // currentPersonCanManage since NPT-1129 made delete Manager-only.
     confirmDeleteVerification(wqmpID: number, verifyID: number, wqmpName: string | null | undefined, verificationDate: string | null | undefined): void {
         const dateText = verificationDate ? new Date(verificationDate).toLocaleDateString() : "this draft";
         const nameText = wqmpName ? ` for <strong>${this.escapeHtml(wqmpName)}</strong>` : "";

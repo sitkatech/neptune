@@ -10,12 +10,16 @@ Measures how accurately WQMP AI extraction fills the review wizard, so changes t
 
 Run from the repo root inside the devcontainer, which already has the database, blob and Key Vault configuration. `--artifacts-path` keeps this build out of the `bin`/`obj` folders that `make api`'s `dotnet watch` is using.
 
-```bash
-# Baseline on the dev split (spends Anthropic credits; prints the selection and stops without --yes)
-dotnet run --project Neptune.Eval --artifacts-path /tmp/neptune-eval-artifacts -- run --split dev --label baseline --yes
+**Two paths (NPT-1133):**
+- **Default: the Claude CLI**, signed in as you. No API credits, but it uses your Claude plan's limits, so keep these runs small (`--ids`, `--limit`). Use them to iterate on prompts. The scorecard is labelled "CLI path, not comparable to production": there's no shared prompt cache and the CLI thinks more by default.
+- **`--api`: the Anthropic API**, the same path QA/Prod use. It's the only way to measure production cost and production-path accuracy, but there is no separate eval key: a key handed to it spends the same credits QA and Prod depend on. Use it rarely, on a few documents, with the budget agreed first (the October 2026 eval runs used up the monthly limit and stopped extraction in every environment). It spends only the key passed in **`EvalAnthropicApiKey`** for that run. Eval ignores `AnthropicApiKey`, so a key that reaches it through the Key Vault or a secrets file is never spent by accident.
 
-# A couple of documents first, to check the setup
+```bash
+# Prompt iteration through the CLI (prints the selection and stops without --yes)
 dotnet run --project Neptune.Eval --artifacts-path /tmp/neptune-eval-artifacts -- run --ids 1234,5678 --label smoke --yes
+
+# Budgeted API-path check on a few documents (spends credits on the key you pass)
+EvalAnthropicApiKey=<key> dotnet run --project Neptune.Eval --artifacts-path /tmp/neptune-eval-artifacts -- run --ids 1234,5678 --label api-check --api --yes
 
 # Re-score a saved run after changing the scorer (free)
 dotnet run --project Neptune.Eval --artifacts-path /tmp/neptune-eval-artifacts -- score Neptune.Eval/runs/<run>
@@ -28,11 +32,13 @@ dotnet run --project Neptune.Eval --artifacts-path /tmp/neptune-eval-artifacts -
 | `--split dev\|test\|all` | Which part of the eval set to run. Defaults to `dev`. |
 | `--ids` | Run specific WQMPs instead of a split. |
 | `--limit N` | Run only the first N documents. |
-| `--model claude-…` | Override `ClaudeModelId`. Sonnet 5.5 and Opus 5.5 reject the forced tool choice the service uses today, so they need the Phase 2 rework first. |
+| `--model claude-…` | Override `ClaudeModelId`. |
+| `--effort low\|medium\|high\|xhigh\|max` | Override `ClaudeEffort` (sent as `output_config.effort`, or `--effort` on the CLI). Recorded on the scorecard. |
 | `--concurrency N` | Documents in flight at once. Defaults to 2. |
 | `--label name` | Name used in the run folder and scorecard title. |
+| `--api` | Use the Anthropic API instead of the Claude CLI. Needs `EvalAnthropicApiKey`; spends real credits. |
 
-**Cost.** Every `run` spends credits on the Anthropic key that Dev, QA and Prod share. Agree a budget before running the full set. The scorecard reports cost per document.
+**Cost.** An `--api` run spends credits on the key in `EvalAnthropicApiKey`. Agree a budget before running the full set; the scorecard reports cost per document. A CLI run shows the same list-price figures for comparison, but nothing is billed to a key.
 
 ## Eval set (`eval-set.json`)
 
