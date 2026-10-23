@@ -183,10 +183,14 @@ export class WqmpsComponent {
         this.activeTab = next;
         if (next !== "wqmps") {
             // @switch destroys the hybrid map/grid; drop the stale map so its layers wait for the new
-            // map's onMapLoad when the user comes back to the WQMP tab.
+            // map's onMapLoad when the user comes back to the WQMP tab. Also drop the selection: the
+            // recreated hybrid grid applies a non-null selectedValue in its first ngOnChanges, before
+            // onGridReady has set gridApi, and throws.
             this.mapIsReady = false;
             this.map = undefined;
             this.layerControl = undefined;
+            this.selectedWaterQualityManagementPlanID = undefined;
+            this.zoomOnNextSelection = true;
             this.alertService.removeAlertByUniqueCode(WqmpsComponent.NO_BOUNDARY_ALERT);
         }
         this.router.navigate([], {
