@@ -21,7 +21,7 @@ function stripBase(apiBaseUrl: string, uri: string): string | null {
 
 const ANON_EXACT: ExactMap = {
   'DELETE': [],
-  'GET': ["/","/custom-attribute-types","/field-definitions","/jurisdictions/bounding-box","/jurisdictions/user-viewable","/land-use-blocks","/observation-types","/support-requests/site-key","/training-videos","/trash-generating-units/last-update-date","/treatment-bmp-type-custom-attribute-types","/treatment-bmp-types","/treatment-bmp-types/cards","/treatment-bmps","/treatment-bmps/verified/feature-collection","/water-quality-management-plans/grid"],
+  'GET': ["/","/custom-attribute-types","/field-definitions","/jurisdictions/bounding-box","/jurisdictions/user-viewable","/land-use-blocks","/observation-types","/support-requests/site-key","/training-videos","/trash-generating-units/last-update-date","/treatment-bmp-type-custom-attribute-types","/treatment-bmp-types","/treatment-bmp-types/cards","/treatment-bmps","/treatment-bmps/verified/feature-collection","/water-quality-management-plans/grid","/water-quality-management-plans/quick-bmps/grid"],
   'POST': ["/support-requests"],
   'PUT': [],
 };

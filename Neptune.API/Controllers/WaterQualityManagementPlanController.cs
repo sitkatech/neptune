@@ -69,6 +69,16 @@ namespace Neptune.API.Controllers
             return Ok(gridDtos);
         }
 
+        // NPT-1137: Simple BMP tab on the WQMP list page. Same access and WQMP scoping as "grid" above.
+        [HttpGet("quick-bmps/grid")]
+        [AllowAnonymous]
+        [OptionalAuth]
+        public async Task<ActionResult<List<QuickBMPGridDto>>> ListQuickBMPsAsGridDto()
+        {
+            var gridDtos = await QuickBMPs.ListViewableByPersonAsGridDtoAsync(DbContext, CallingUser);
+            return Ok(gridDtos);
+        }
+
         // NPT-943: export WQMP boundary polygons + attributes to a File Geodatabase. The Index page
         // sends its post-filter WQMP IDs; the Data Hub tab sends an empty list (⇒ all viewable).
         // Write-only (JurisdictionEditFeature); the export is scoped to the caller's jurisdictions so
